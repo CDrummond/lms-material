@@ -45,9 +45,16 @@ Vue.component('lms-toolbar', {
             </v-btn>
  
             <v-card class="volume-popup">
-              <v-list>
-                <b>Volume: {{playerVolume}} %</b>
-                <v-slider step="5" v-model="playerVolume"></v-slider>
+              <v-container grid-list-md text-xs-center>
+                <v-layout row wrap>
+                <v-flex xs12>{{playerVolume}} %</v-flex>
+                <v-flex xs12>
+                <v-layout>
+                  <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
+                  <v-slider step="5" v-model="playerVolume" class="vol-slider"></v-slider>
+                  <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+                </v-layout>
+                </v-flex>
               </v-list>
             </v-card>
           </v-menu>
@@ -103,6 +110,20 @@ Vue.component('lms-toolbar', {
                 // TODO show settings dialog
             } else {
                 bus.$emit('toolbarAction', id);
+            }
+        },
+        volumeDown() {
+            if (this.playerVolume<=5) {
+                this.playerVolume = 0;
+            } else {
+                this.playerVolume -= 5;
+            }
+        },
+        volumeUp() {
+            if (this.playerVolume>=95) {
+                this.playerVolume = 100;
+            } else {
+                this.playerVolume += 5;
             }
         }
     },

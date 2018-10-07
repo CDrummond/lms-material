@@ -1,0 +1,60 @@
+- Devices
+  - Chrome on Android seems to cache pages, so updates not showing?
+  - Check on iOS
+  
+- Bugs:
+  - Volume control on Android
+  - Search underline goes over bottom nav
+    - Vuetify issue?
+    - change to dialog prompt for input?
+
+- Browse
+  - YouTube icon not showing? Not sure why, URL is correct!
+  - Add cancel button to right/left of progress so that can cancel current action - in case of long searches
+  - Add 'Play random album' to artist and genre lists
+  - Rename playlists
+  - Random Mix
+    - "album", "sort:random"
+  - Favorites:
+    - Re-order favorites
+    - Add artist, album, genre, year, playlist to favorite
+    - Navigate into favorites
+    - Rename favorite
+    - TuneIn images in favourites
+  - Replace ... menu with a play button/long press menu?
+  - Use (e.g.) ["can", "favorites", "items", "?"] to check if should show items in browse page??
+
+- Now Playing
+  - Drag time slider?
+  - Set butons to disabled when appropriate
+  - Enlarge cover image if too small
+
+- PlayQueue
+  - Drag'n'drop editing
+  - Only update whilst visible?
+
+- Misc
+  - Complete WebApp support
+  - Desktop UI - expand the 3 pages into 1
+  - Add text input dialog, and use for search and rename
+  - Synchronisation
+  - Smarter polling
+    - Only poll status every 5 seconds
+      - at start of song, and near end poll every (e.g.) 0.5 seconds
+    - Create timer to advance song progress - re-adust on each poll
+    - or use ["time", "?"] to just obtain time position every second?
+      
+  - +/- buttons in volume control
+  - i18n
+
+- Settings
+  - UI:
+    - Album sort
+    - Dark theme
+    - Auto scroll playqueue
+  - player settings:
+    - dont stop the music
+        [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "?"]] => returns setting
+        [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "XXX"]] to set
+    - replaygain
+    - alarms

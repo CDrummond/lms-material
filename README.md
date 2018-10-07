@@ -3,9 +3,9 @@
 **NOTE** This is currently under development, and is not ready for regular
 usage.
 
-![Browse](screenshots/browse.png)
-![Now Playing](screenshots/now-playing.png)
-![Queue](screenshots/queue.png)
+![Browse](screenshots/browse.png =270x)
+![Now Playing](screenshots/now-playing.png =270x)
+![Queue](screenshots/queue.png =270x)
 
 
 ## Features

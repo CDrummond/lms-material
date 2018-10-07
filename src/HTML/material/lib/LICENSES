@@ -1,0 +1,36 @@
+axios
+    URL: https://github.com/axios/axios
+    License: MIT
+
+vue-lazyload
+    URL: https://github.com/hilongjw/vue-lazyload
+    License: MIT
+
+vue
+    Version 2.5.14
+    URL: https://github.com/vuejs/vue
+    License: MIT
+
+vue-observe-visibility
+    URL: https://github.com/Akryum/vue-observe-visibility
+    License: MIT
+
+vue-router
+    URL: https://github.com/vuejs/vue-router
+    License: MIT
+
+vuetify-confirm:
+    URL: https://github.com/yariksav/vuetify-confirm
+    License: MIT
+    Modified: Swapped location of True/False buttons
+    
+vuetify
+    Version: 1.0.17
+    URL: https://github.com/vuetifyjs/vuetify
+    License: MIT
+
+vuex    
+    Version: 2.0.0
+    URL: https://github.com/vuejs/vuex
+    License: MIT
+

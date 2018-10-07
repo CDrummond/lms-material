@@ -1,0 +1,214 @@
+/*
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+html { 
+    overflow-y: auto; 
+    margin:0px;
+}
+
+body {
+    height:100%; 
+    margin:0; 
+    padding:0;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+/* Chrome (android) seems to add blue underlines? Remove these... */
+/*.bottom-nav > a {
+    color: transparent !important;
+}*/
+a {
+    text-decoration: none;
+}
+
+.lms-app {
+    min-height:400px;
+}
+
+.lms-toolbar {
+    height:56px !important;
+}
+
+.lms-footer {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    padding:0 !important;
+    max-height:56px !important;
+}
+
+.lms-bottom-nav {
+    position:relative !important;
+    height:58px !important;
+    top:-59px !important;
+}
+
+.lms-bottom-nav-button {
+    width:33.3333% !important;
+    max-width:250px !important;
+}
+
+.lms-list-page {
+    margin-top:56px !important;
+    margin-bottom:56px !important;
+}
+
+/* Make action buttons in lists closer together */
+.list__tile__action {
+    min-width: 48px !important;
+    max-width: 48px !important;
+}
+
+.padding {
+    height:8px;
+}
+
+.toolbar-title {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+ 
+.toolbar-subtitle {
+    font-size:75% !important;
+    font-weight: 300;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+ 
+.volume-popup {
+    padding:8px 16px 16px 16px;
+    min-width: 450px;
+}
+ 
+@media only screen and (max-width: 600px) {
+    .volume-popup {
+        width: 75vw;
+    }
+}
+
+.toolbar-menu {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.browse-details {
+    position:fixed; 
+    top:56px;
+    width:100vw; 
+    height:56px; 
+    white-space:nowrap; 
+    overflow-x:hidden;
+    overflow-y:hidden;
+    padding-right:15px;
+    z-index:5;
+}
+
+.browse-pad {
+    height:56px; 
+}
+
+.browse-header-button {
+    min-width:30px;
+    max-width:30px;
+}
+
+.circ {
+    border:1px solid;
+    border-radius: 50%;
+}
+
+.np-page {
+    position: fixed; 
+    top:64px; /* l-toolbar.height */
+    bottom:56px; /* l-footer.height */
+    width:100%;
+    /*border: 1px solid red;*/
+}
+
+.ellipsis {
+    text-overflow:ellipsis; 
+    overflow: hidden; 
+    white-space: nowrap;
+}
+
+.np-text {
+    font-weight:800; 
+    font-size:150%;
+    margin:0px 8px 0px 8px; 
+    /*height:32px; */
+    text-align: center;
+}
+
+.np-subtext {
+    font-weight:400; 
+    margin:0px 8px 0px 8px; 
+    /*height:22px; */
+    text-align: center;
+}
+
+.np-image {
+    display: block;
+    height:auto;
+    max-height:100%; 
+    max-width:100%; 
+    margin-left: auto;
+    margin-right: auto;
+    padding:8px 8px 242px 8px; /* t, r, b, l */
+}
+
+.np-pos {
+    font-size: 75%;
+    font-weight: 400;
+    font-family: monospace, monospace;
+    text-align: left;
+}
+
+.np-duration {
+    font-size: 75%;
+    font-weight: 400;
+    font-family: monospace, monospace;
+    text-align: right;
+}
+
+.np-slider {
+    height: 42px;
+    margin:-22px 0px 42px 8px;
+}
+
+.np-controls {
+    font-weight:400;
+    padding:8px 8px 16px 8px; /* t, r, b, l */
+    /*height:22px; */
+    width:100%;
+    position:absolute; 
+    bottom:0px; 
+    /*border: 1px solid blue;*/
+}
+
+.lms-footer .router-link-exact-active .btn {
+    opacity: 1 !important;
+}
+
+.shuffle-albums {
+    border: 1px solid;
+    border-radius: 50%;
+    padding:-1px;
+}
+
+.pq-current {
+    border: 1px solid rgba(64, 64, 255, 0.5);
+    border-radius: 4px;
+    background-color:rgba(64, 64, 198, 0.25);
+}
+

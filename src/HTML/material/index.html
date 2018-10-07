@@ -1,0 +1,57 @@
+<!--
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+-->
+ 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>SlimServer</title>
+    <!--<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">-->
+    <link href='./font/font.css' rel="stylesheet">
+    <link href="./lib/vuetify.min.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
+    <link rel="icon" href="./images/icon.png">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" sizes="128x128" href="./images/icon.png">
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <v-app class="lms-app" :dark="useDark">
+        <div style="position:fixed; top:0; height:0">
+           <lms-server></lms-server>
+        </div>
+        <lms-toolbar></lms-toolbar>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+        <lms-bottomnav></lms-bottomnav>
+      </v-app>
+    </div>
+
+    <script src="./lib/axios.min.js"></script>
+    <script src="./lib/vue.min.js"></script>
+    <script src="./lib/vue-router.min.js"></script>
+    <script src="./lib/vuetify.min.js"></script>
+    <script src="./lib/vuex.min.js"></script>
+    <script src="./lib/vue-lazyload.js"></script>
+    <script src="./lib/vuetify-confirm.min.js"></script>
+    <script src="./lib/vue-observe-visibility.min.js"></script>
+    <script src="./js/constants.js"></script>
+    <script src="./js/utils.js"></script>
+    <script src="./js/noplayers.js"></script>
+    <script src="./js/toolbar.js"></script>
+    <script src="./js/bottomnav.js"></script>
+    <script src="./js/browse-resp.js"></script>
+    <script src="./js/browse-page.js"></script>
+    <script src="./js/nowplaying-page.js"></script>
+    <script src="./js/queue-page.js"></script>
+    <script src="./js/server.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
+

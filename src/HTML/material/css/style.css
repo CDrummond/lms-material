@@ -86,14 +86,39 @@ a {
 }
  
 .volume-popup {
-    padding:8px 16px 16px 16px;
-    min-width: 450px;
+    padding:0px; /*16px 16px 0px 16px;*/
+    max-height: 112px !important;
 }
- 
+
+.vol-slider {
+    margin-top: -10px !important;
+    padding-left:16px;
+    padding-right:2px;
+}
+
+@media only screen and (min-width: 600px) {
+    .volume-popup {
+        width: 500px !important;
+    }
+
+    .vol-slider {
+        width: 350px;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     .volume-popup {
-        width: 75vw;
+        width: 350px !important;
     }
+
+    .vol-slider {
+        max-width: 225px;
+    }
+}
+
+.vol-btn {
+    width: 32px;
+    height: 32px;
 }
 
 .toolbar-menu {

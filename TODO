@@ -3,7 +3,6 @@
   - Check on iOS
   
 - Bugs:
-  - Volume control on Android
   - Search underline goes over bottom nav
     - Vuetify issue?
     - change to dialog prompt for input?
@@ -43,8 +42,6 @@
       - at start of song, and near end poll every (e.g.) 0.5 seconds
     - Create timer to advance song progress - re-adust on each poll
     - or use ["time", "?"] to just obtain time position every second?
-      
-  - +/- buttons in volume control
   - i18n
 
 - Settings

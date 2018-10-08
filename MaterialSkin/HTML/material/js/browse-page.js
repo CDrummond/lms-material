@@ -236,11 +236,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.artistImages=false;
     },
     methods: {
+        playerId() {
+            return this.$store.state.player ? this.$store.state.player.id : "";
+        },
         fetchItems(item, params) {
             this.fetchingItems = true;
             this.current = item;
             //console.log("FETCH command:" + item.command + " params:" + params + " limit:" + item.limit);
-            lmsList(this.$store.state.player.id, item.command, params, 0, item.limit).then(({data}) => {
+            lmsList(this.playerId(), item.command, params, 0, item.limit).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.artistImages);
 
@@ -312,7 +315,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.$confirm("Delete '"+item.title+"'?", {buttonTrueText: 'Delete', buttonFalseText: 'Cancel'}).then(res => {
                     if (res) {
                         if (item.url.startsWith("playlist_id:")) {
-                            lmsCommand(this.$store.state.player.id, ["playlists", "delete", item.url]).then(({datax}) => {
+                            lmsCommand(this.playerId(), ["playlists", "delete", item.url]).then(({datax}) => {
                                 this.refreshList();
                             });
                         }
@@ -320,7 +323,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 });
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
                 // TODO: How to actually add artists, etc?
-                lmsCommand(this.$store.state.player.id, ["favorites", "add", item.url, "title:"+item.title]).them(({data})=> {
+                lmsCommand(this.playerId(), ["favorites", "add", item.url, "title:"+item.title]).them(({data})=> {
                     this.snackbarMsg = "Added to favorites!";
                     this.showSnackBar = true;
                 }).catch(err => {
@@ -330,7 +333,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm("Remove '"+item.title+"' from favourites?", {buttonTrueText: 'Remove', buttonFalseText: 'Cancel'}).then(res => {
                     if (res) {
-                        lmsCommand(this.$store.state.player.id, ["favorites", "delete", item.url]).then(({datax}) => {
+                        lmsCommand(this.playerId(), ["favorites", "delete", item.url]).then(({datax}) => {
                             this.refreshList();
                         });
                     }
@@ -348,7 +351,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.showSnackBar = true;
                     return;
                 }
-                lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                lmsCommand(this.playerId(), command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     if (act===PLAY_ACTION.cmd) {
                         this.$router.push('/nowplaying');
@@ -365,7 +368,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         refreshList() {
             var pos=document.documentElement.scrollTop;
             this.fetchingItems = true;
-            lmsList(this.$store.state.player.id, this.current.command, this.current.params, 0, this.current.limit).then(({data}) => {
+            lmsList(this.playerId(), this.current.command, this.current.params, 0, this.current.limit).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.artistImages);
                 this.headerSubTitle="Total: "+this.listSize;
@@ -432,7 +435,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
                 if (bottomOfWindow) {
                     this.fetchingItems = true;
-                    lmsList(this.$store.state.player.id, this.current.command, this.current.params, this.items.length).then(({data}) => {
+                    lmsList(this.playerId(), this.current.command, this.current.params, this.items.length).then(({data}) => {
                         this.fetchingItems = false;
                         var resp = parseBrowseResp(data, this.current, this.artistImages);
                         if (resp && resp.items) {

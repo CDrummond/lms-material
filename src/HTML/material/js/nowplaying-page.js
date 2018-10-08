@@ -27,7 +27,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                <v-btn flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
                <v-btn flat icon v-else @click="doAction(['playlist', 'repeat', 2])" style="opacity:0.5"><v-icon>repeat</v-icon></v-btn>
               </v-flex>
-              <v-flex xs6><v-btn flat icon @click="previous()"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+              <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
             </v-layout>
           </v-flex>
           <v-flex xs4>
@@ -56,14 +56,6 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
     methods: {
         doAction(command) {
             bus.$emit('playerCommand', command);
-        },
-        previous() {
-            if (this.$store.state.playerStatus && this.$store.state.playerStatus.current && 
-                this.$store.state.playerStatus.current.canseek && this.$store.state.playerStatus.current.time>2) {
-                this.doAction(['time', 0]);
-            } else {
-                this.doAction(['playlist', 'index', '-1']);
-            }
         },
         sliderChanged(e) {
             if (this.$store.state.playerStatus && this.$store.state.playerStatus.current && 

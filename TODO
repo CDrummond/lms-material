@@ -37,6 +37,7 @@
   - Desktop UI - expand the 3 pages into 1
   - Add text input dialog, and use for search and rename
   - Synchronisation
+  - Group player management
   - Smarter polling
     - Only poll status every 5 seconds
       - at start of song, and near end poll every (e.g.) 0.5 seconds

@@ -153,6 +153,10 @@ a {
     border-radius: 50%;
 }
 
+.browse-text {
+    padding: 16px;
+}
+
 .np-page {
     position: fixed; 
     top:64px; /* l-toolbar.height */

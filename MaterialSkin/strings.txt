@@ -1,0 +1,5 @@
+MATERIAL_SKIN
+	EN	Material Skin
+	
+PLUGIN_MATERIAL_SKIN
+	EN	Material themed skin, suitable for mobile use.

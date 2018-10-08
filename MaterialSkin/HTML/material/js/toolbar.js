@@ -22,8 +22,8 @@ Vue.component('lms-toolbar', {
                 <v-list-tile @click="setPlayer(item.id)">
                   <v-list-tile-content>
                     <v-list-tile-title>
-                     <v-icon v-if="player && item.id === player.id">radio_button_checked</v-icon>
-                     <v-icon v-else>radio_button_unchecked</v-icon>
+                     <v-icon small v-if="player && item.id === player.id">radio_button_checked</v-icon>
+                     <v-icon small v-else>radio_button_unchecked</v-icon>
                      <v-icon v-if="item.isgroup">speaker_group</v-icon>
                      <v-icon v-else>speaker</v-icon>
                      {{item.name}}

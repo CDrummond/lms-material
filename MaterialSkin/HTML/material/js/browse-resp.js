@@ -21,7 +21,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
                                   icon: artistImages ? undefined : "person",
                                   params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:yearalbum"], // TODO: Make configurable
-                                  actions: [PLAY_ACTION, ADD_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -61,7 +61,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["artists"],
                                   //icon: "label",
                                   params: ["genre_id:"+ i.genre_id],
-                                  actions: [PLAY_ACTION, ADD_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -121,7 +121,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["albums"],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
                                   params: ["artist_id:"+ i.id, "tags:jly", "sort:yearalbum"], // TODO: Make configurable
-                                  actions: [PLAY_ACTION, ADD_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -193,7 +193,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["artists"],
                                   //icon: "label",
                                   params: ["genre_id:"+ i.id],
-                                  actions: [PLAY_ACTION, ADD_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -245,7 +245,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["albums"],
                                   //icon: "date_range",
                                   params: ["year:"+ i.year, "tags:ajly"],
-                                  actions: [PLAY_ACTION, ADD_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION], // TODO , DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });

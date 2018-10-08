@@ -18,17 +18,26 @@ Vue.component('lms-toolbar', {
        
             <v-list>
               <template v-for="(item, index) in players">
+                <v-divider v-if="item.isgroup && index>0 && !players[index-1].isgroup" ></v-divider>
                 <v-list-tile @click="setPlayer(item.id)">
                   <v-list-tile-content>
-                    <v-list-tile-title v-if="player && item.id === player.id"><v-icon>check</v-icon> {{item.name}}</v-list-tile-title>
-                    <v-list-tile-title v-else><v-icon>speaker</v-icon> {{item.name}}</v-list-tile-title>
+                    <v-list-tile-title>
+                     <v-icon v-if="player && item.id === player.id">radio_button_checked</v-icon>
+                     <v-icon v-else>radio_button_unchecked</v-icon>
+                     <v-icon v-if="item.isgroup">speaker_group</v-icon>
+                     <v-icon v-else>speaker</v-icon>
+                     {{item.name}}
+                   </v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
-              </template>
-              <v-divider></v-divider>
-              <v-list-tile>
-                <v-list-tile-title><v-icon>link</v-icon> Synchronise</v-list-tile-title> <!-- TODO -->
-              </v-list-tile>
+             </template>
+             <v-divider v-if="players && players.length>0" ></v-divider>
+             <v-list-tile v-if="playerGroups" @click="bus.$emit('manageGroups')">
+               <v-list-tile-content><v-list-tile-title>Manage player groups</v-list-tile-title></v-list-tile-content>
+             </v-list-tile>
+             <v-list-tile v-else @click="bus.$emit('synchronise')">
+               <v-list-tile-content><v-list-tile-title>Synchronise</v-list-tile-title></v-list-tile-content>
+             </v-list-tile>
             </v-list>
           </v-menu>
           <v-spacer></v-spacer>
@@ -76,6 +85,7 @@ Vue.component('lms-toolbar', {
     data() {
         return { playerVolume:-1, 
                  playerVolumeCurrent:-1,
+                 playerGroups: false,
                  menuItems: TB_MENU_ITEMS
                }
     },
@@ -92,6 +102,9 @@ Vue.component('lms-toolbar', {
                     this.menuItems.splice(index, 1);
                 }
             });
+        }.bind(this));
+        bus.$on('playerGroups', function(playerGroups) {
+            this.playerGroups = playerGroups;
         }.bind(this));
     },
     methods: {

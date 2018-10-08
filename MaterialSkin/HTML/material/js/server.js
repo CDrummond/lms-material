@@ -51,11 +51,15 @@ var lmsServer = Vue.component('lms-server', {
                     for (i=0; i<data.result.players_loop.length; ++i) {
                         var player = { id: data.result.players_loop[i].playerid,
                                        name: data.result.players_loop[i].name,
-                                       canpoweroff: data.result.players_loop[i].canpoweroff
+                                       canpoweroff: data.result.players_loop[i].canpoweroff,
+                                       isgroup: 'group'===data.result.players_loop[i].model
                                       };
                         players.push(player);
                     }
                     this.$store.commit('setPlayers', players.sort(function(a, b) {
+                                                                        if (a.isgroup!=b.isgroup) {
+                                                                            return a.isgroup ? 1 : -1;
+                                                                        }
                                                                         var nameA = a.name.toUpperCase();
                                                                         var nameB = b.name.toUpperCase();
                                                                         if (nameA < nameB) {
@@ -150,6 +154,13 @@ var lmsServer = Vue.component('lms-server', {
         lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 bus.$emit('artistImages', 1==data.result._p2);
+            }
+        });
+
+        // Player groups plugin
+        lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
+            if (data && data.result && data.result._can) {
+                bus.$emit('playerGroups', 1==data.result._can);
             }
         });
     },

@@ -6,7 +6,6 @@
   - Search underline goes over bottom nav
     - Vuetify issue?
     - change to dialog prompt for input?
-  - Check usage of this.$store.state.player.id when there is no player. lmsList/Command should handle this.
 
 - Browse
   - YouTube icon not showing? Not sure why, URL is correct!

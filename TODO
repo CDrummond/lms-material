@@ -6,6 +6,7 @@
   - Search underline goes over bottom nav
     - Vuetify issue?
     - change to dialog prompt for input?
+  - Check usage of this.$store.state.player.id when there is no player. lmsList/Command should handle this.
 
 - Browse
   - YouTube icon not showing? Not sure why, URL is correct!
@@ -36,14 +37,16 @@
   - Complete WebApp support
   - Desktop UI - expand the 3 pages into 1
   - Add text input dialog, and use for search and rename
-  - Synchronisation
-  - Group player management
+  - Synchronisation / Group management
+   - Add separate component for this (as is done for noplayers)
   - Smarter polling
     - Only poll status every 5 seconds
       - at start of song, and near end poll every (e.g.) 0.5 seconds
     - Create timer to advance song progress - re-adust on each poll
     - or use ["time", "?"] to just obtain time position every second?
   - i18n
+  - Add 'Manage all' to volume popup to manage all volumes (only if more than 1 player)
+  - Add link to Default/settings/index.html
 
 - Settings
   - UI:

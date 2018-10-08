@@ -10,7 +10,7 @@ const ADD_ACTION              = {title:"Append to queue",              cmd:"add"
 const ADD_RANDOM_ALBUM_ACTION = {title:"Append random album to queue", cmd:"random",    icon:"help_outline"};
 const RENAME_ACTION           = {title:"Rename",                       cmd:"rename",    icon:"edit"};
 const DELETE_ACTION           = {title:"Delete",                       cmd:"delete",    icon:"delete"};
-const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",    icon:"favorite"};
+const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",    icon:"favorite_border"};
 const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites",       cmd:"removefav", icon:"delete_outline"};
 const DIVIDER                 = {divider:true};
 const SEARCH_TERM_PLACEHOLDER = "XXXXXX";
@@ -326,8 +326,18 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     }
                 });
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
-                // TODO: How to actually add artists, etc?
-                lmsCommand(this.playerId(), ["favorites", "add", item.url, "title:"+item.title]).them(({data})=> {
+                var url = item.url;
+                if (item.url.startsWith("genre_id:")) {
+                    url="db:genre.name="+encodeURI(i.title);
+                } else if (item.url.startsWith("artist_id:")) {
+                    url="db:contributor.name="+encodeURI(i.title);
+                } else if (item.url.startsWith("album_id:")) {
+                    url="db:album.name="+encodeURI(i.title);
+                } else if (item.url.startsWith("year:")) {
+                    url="db:year.id="+encodeURI(i.title);
+                }
+
+                lmsCommand(this.playerId(), ["favorites", "add", url, "title:"+item.title]).then(({data})=> {
                     this.showMessage("Added to favorites!");
                 }).catch(err => {
                     this.showMessage("Failed to add to favorites!");

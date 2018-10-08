@@ -5,12 +5,13 @@
  * MIT license.
  */
 
-const PLAY_ACTION             = {title:"Play now",               cmd:"load",      icon:"play_circle_outline"};
-const ADD_ACTION              = {title:"Append to queue",        cmd:"add",       icon:"add_circle_outline"};
-const RENAME_ACTION           = {title:"Rename",                 cmd:"rename",    icon:"edit"};
-const DELETE_ACTION           = {title:"Delete",                 cmd:"delete",    icon:"delete"};
-const ADD_TO_FAV_ACTION       = {title:"Add to favourites",      cmd:"addfav",    icon:"favorite"};
-const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites", cmd:"removefav", icon:"delete_outline"};
+const PLAY_ACTION             = {title:"Play now",                     cmd:"load",      icon:"play_circle_outline"};
+const ADD_ACTION              = {title:"Append to queue",              cmd:"add",       icon:"add_circle_outline"};
+const ADD_RANDOM_ALBUM_ACTION = {title:"Append random album to queue", cmd:"random",    icon:"help_outline"};
+const RENAME_ACTION           = {title:"Rename",                       cmd:"rename",    icon:"edit"};
+const DELETE_ACTION           = {title:"Delete",                       cmd:"delete",    icon:"delete"};
+const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",    icon:"favorite"};
+const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites",       cmd:"removefav", icon:"delete_outline"};
 const DIVIDER                 = {divider:true};
 const SEARCH_TERM_PLACEHOLDER = "XXXXXX";
 
@@ -239,6 +240,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         playerId() {
             return this.$store.state.player ? this.$store.state.player.id : "";
         },
+        showMessage(msg) {
+            this.snackbarMsg = msg ? msg : "Something went wrong!";
+            this.showSnackBar = true;
+        },
         fetchItems(item, params) {
             this.fetchingItems = true;
             this.current = item;
@@ -273,8 +278,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 document.documentElement.scrollTop=0;
             }).catch(err => {
                 this.fetchingItems = false;
-                this.snackbarMsg = "Something went wrong!";
-                this.showSnackBar = true;
+                this.showMessage();
             });
         },
         browse(item) {
@@ -324,11 +328,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
                 // TODO: How to actually add artists, etc?
                 lmsCommand(this.playerId(), ["favorites", "add", item.url, "title:"+item.title]).them(({data})=> {
-                    this.snackbarMsg = "Added to favorites!";
-                    this.showSnackBar = true;
+                    this.showMessage("Added to favorites!");
                 }).catch(err => {
-                    this.snackbarMsg = "Failed to add to favorites!";
-                    this.showSnackBar = true;
+                    this.showMessage("Failed to add to favorites!");
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm("Remove '"+item.title+"' from favourites?", {buttonTrueText: 'Remove', buttonFalseText: 'Cancel'}).then(res => {
@@ -337,6 +339,38 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             this.refreshList();
                         });
                     }
+                });
+            } else if (act===ADD_RANDOM_ALBUM_ACTION.cmd) {
+                this.fetchingItems = true;
+                var params = [];
+                item.params.forEach(p => { params.push(p); });
+                params.push("sort:random");
+                lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
+                    this.fetchingItems = false;
+                    var resp = parseBrowseResp(data, this.current, this.artistImages);
+                    if (1===resp.items.length) {
+                        var item = resp.items[0];
+                        var command = [];
+                        if (item.url) {
+                            command = ["playlistcontrol", "cmd:add", item.url];
+                        } else if (item.app && item.id) {
+                            command = [item.app, "playlist", act, "item_id:"+item.id];
+                        }
+                        this.fetchingItems = true;
+                        lmsCommand(this.playerId(), command).then(({data}) => {
+                            this.fetchingItems = false;
+                            bus.$emit('refreshStatus');
+                            this.showMessage("Added '" + item.title + "'");
+                        }).catch(err => {
+                            this.fetchingItems = false;
+                            this.showMessage();
+                        });
+                    } else {
+                        this.showMessage("Failed to find an album!");
+                    }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                    this.showMessage();
                 });
             } else {
                 var command = [];
@@ -347,8 +381,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
 
                 if (command.length===0) {
-                    this.snackbarMsg = "Don't know how to handle this!";
-                    this.showSnackBar = true;
+                    this.showMessage("Don't know how to handle this!");
                     return;
                 }
                 lmsCommand(this.playerId(), command).then(({data}) => {
@@ -356,9 +389,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (act===PLAY_ACTION.cmd) {
                         this.$router.push('/nowplaying');
                     } else {
-                        this.snackbarMsg = "Added '" + this.current.title + "'";
-                        this.showSnackBar = true;
+                        this.showMessage("Added '" + this.current.title + "'");
                     }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                    this.showMessage();
                 });
             }
         },
@@ -387,8 +422,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 });
             }).catch(err => {
                 this.fetchingItems = false;
-                this.snackbarMsg = "Something went wrong!";
-                this.showSnackBar = true;
+                this.showMessage();
             });
         },
         goHome() {

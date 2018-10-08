@@ -31,11 +31,11 @@ Vue.component('lms-toolbar', {
                   </v-list-tile-content>
                 </v-list-tile>
              </template>
-             <v-divider v-if="players && players.length>0" ></v-divider>
-             <v-list-tile v-if="playerGroups" @click="bus.$emit('manageGroups')">
+             <v-divider v-if="players && players.length>1" ></v-divider>
+             <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
                <v-list-tile-content><v-list-tile-title>Manage player groups</v-list-tile-title></v-list-tile-content>
              </v-list-tile>
-             <v-list-tile v-else @click="bus.$emit('synchronise')">
+             <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
                <v-list-tile-content><v-list-tile-title>Synchronise</v-list-tile-title></v-list-tile-content>
              </v-list-tile>
             </v-list>

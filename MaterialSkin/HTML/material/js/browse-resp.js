@@ -338,7 +338,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       title: i.name,
                                       command: parent.command,
                                       image: resolveImage(i.icon, i.image),
-                                      icon: "folder",
+                                      icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
                                       params: ["item_id:"+i.id, "want_url:1"],
                                       type: "group",
                                       url: parent.url+i.cmd+i.id,

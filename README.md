@@ -18,8 +18,8 @@ usage.
 
 ## Installation
 
-To install, simply copy (or symlink) the ```material``` directory into the
-server's skin directory.
+To install, simply copy (or symlink) the ```MaterialSkin``` directory into the
+server's ```Plugin``` directory.
 
 ## Usage
 

@@ -1,15 +1,17 @@
 <?xml version='1.0' standalone='yes'?>
 <extensions>
-  <module>Plugins::LMSMaterialSkin::Plugin</module>
+  <module>Plugins::MaterialSkin::Plugin</module>
   <description>A material skin for LMS</description>
   <creator>Craig Drummond</creator>
   <version>0.0.1</version>
   <defaultState>enabled</defaultState>
+  <type>2</type>
+  <enforce>1</enforce>
   <homepageURL>https://github.com/CDrummond/lms-material</homepageURL>
   <targetApplication>
     <minVersion>7.9.0</minVersion>
     <maxVersion>*</maxVersion>
     <id>SlimServer</id>
   </targetApplication>
-  <name>LMS material skin</name>
+  <name>Material skin</name>
 </extensions>

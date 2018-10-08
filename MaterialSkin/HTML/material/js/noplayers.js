@@ -5,14 +5,14 @@
  * MIT license.
  */
  
-Vue.component('lms-bottombar', {
+Vue.component('lms-noplayer', {
     template: `
-    <v-dialog v-model="player" persistent fullscreen>
+    <v-dialog v-model="noPlayer" persistent fullscreen>
         <v-card style="width:100%; height:100%; display: flex; justify-content: center; align-items: center;">
           <table>
             <tr>
               <td style="text-align: center; padding-bottom: 32px;">
-                <h2>Looing for players...</h2>
+                <h2>Looking for players...</h2>
               </td>
             </tr>
             <tr>
@@ -29,8 +29,8 @@ Vue.component('lms-bottombar', {
         return { }
     },
     computed: {
-        player () {
-            return this.$store.state.player
+        noPlayer () {
+            return !this.$store.state.players || this.$store.state.players.length<1
         }
     }
 })

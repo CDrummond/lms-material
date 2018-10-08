@@ -38,7 +38,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
               <v-divider v-else-if="index>0 && !items[index-1].header && (undefined===item.separateArtists || item.separateArtists==separateArtists)" :inset="item.inset"></v-divider>
 
-              <v-list-tile v-if="!item.header && (undefined===item.separateArtists || item.separateArtists==separateArtists)" avatar @click="browse(item)" :key="item.url">
+              <p v-if="item.type=='text'" class="browse-text">
+                {{item.title}}
+              </p>
+              <v-list-tile v-else-if="!item.header && (undefined===item.separateArtists || item.separateArtists==separateArtists)" avatar @click="browse(item)" :key="item.url">
                 <v-list-tile-avatar v-if="item.image" :tile="true">
                   <img v-lazy="item.image">
                 </v-list-tile-avatar>

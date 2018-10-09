@@ -23,7 +23,7 @@ function lmsCommand(playerid, command) {
 
 function lmsList(playerid, command, params, start, batchSize) {
     var cmdParams = command.slice();
-    cmdParams = [].concat(cmdParams, [start, start+(undefined===batchSize ? LMS_MATCH_SIZE : batchSize)]);
+    cmdParams = [].concat(cmdParams, [start, start+(undefined===batchSize ? LMS_BATCH_SIZE : batchSize)]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }
@@ -45,7 +45,7 @@ var lmsServer = Vue.component('lms-server', {
         },
         refreshServerStatus: function () {
             //console.log("Refresh");
-            lmsCommand("", ["serverstatus", 0, LMS_MATCH_SIZE]).then(({data}) => {
+            lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result && data.result.players_loop) {
                     var players = [];
                     for (i=0; i<data.result.players_loop.length; ++i) {

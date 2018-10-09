@@ -13,10 +13,8 @@
   - Rename playlists
   - Random Mix
   - Favorites:
-    - Re-order favorites
-    - Navigate into favorites
     - Rename favorite
-    - TuneIn images in favourites
+    - Images
   - Replace ... menu with a play button/long press menu?
   - Use (e.g.) ["can", "favorites", "items", "?"] to check if should show items in browse page??
 

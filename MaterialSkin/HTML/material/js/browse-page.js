@@ -370,7 +370,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         lmsCommand(this.playerId(), command).then(({data}) => {
                             this.fetchingItems = false;
                             bus.$emit('refreshStatus');
-                            this.showMessage("Added '" + item.title + "'");
+                            this.showMessage("Appended '" + item.title + "' to the play queue");
                         }).catch(err => {
                             this.fetchingItems = false;
                             this.showMessage();
@@ -399,7 +399,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (act===PLAY_ACTION.cmd) {
                         this.$router.push('/nowplaying');
                     } else {
-                        this.showMessage("Added '" + this.current.title + "'");
+                        this.showMessage("Appended '" + item.title + "' to the play queue");
                     }
                 }).catch(err => {
                     this.fetchingItems = false;

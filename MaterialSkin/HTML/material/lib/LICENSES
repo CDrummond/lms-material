@@ -22,7 +22,8 @@ vue-router
 vuetify-confirm:
     URL: https://github.com/yariksav/vuetify-confirm
     License: MIT
-    Modified: Swapped location of True/False buttons
+    Modified: Swapped location of True/False buttons, remove default setting of
+              button colours.
     
 vuetify
     Version: 1.0.17

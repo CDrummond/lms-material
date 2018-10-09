@@ -64,10 +64,8 @@ var lmsQueue = Vue.component("LmsQueue", {
     <div>
       <v-dialog v-model="dialog.show" persistent max-width="500px">
         <v-card>
-          <v-card-title v-if="dialog.title">
-            <span class="headline">{{dialog.title}}</span>
-          </v-card-title>
           <v-card-text>
+            <span v-if="dialog.title">{{dialog.title}}</span>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
@@ -155,7 +153,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             if (PQ_SAVE_ACTION.id===id) {
                 this.dialog={show: true, title: "Save play queue", hint: "Name", ok: "Save", value: undefined };
             } else if (PQ_CLEAR_ACTION.id===id) {
-                this.$confirm("Remove all tracks from queue'?", 
+                this.$confirm("Remove all tracks from queue?",
                               {buttonTrueText: 'Clear', buttonFalseText: 'Cancel'}).then(res => {
                     if (res) {
                         bus.$emit('playerCommand', ["playlist", "clear"]);

@@ -81,6 +81,7 @@ var lmsQueue = Vue.component("LmsQueue", {
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
       <v-list class="lms-list-page" v-observe-visibility="visibilityChanged">
         <template v-for="(item, index) in items">
           <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index===currentIndex}" :id="'track'+index">
@@ -121,6 +122,7 @@ var lmsQueue = Vue.component("LmsQueue", {
         return {
             items: [],
             currentIndex: -1,
+            snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined}
         }
     },
@@ -169,6 +171,8 @@ var lmsQueue = Vue.component("LmsQueue", {
                 if (name.length>1) {
                     this.dialog.show = false;
                     lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({datax}) => {
+                    }).catch(err => {
+                        this.snackbar={ msg:"Failed to save play queue", show: true};
                     });
                 }
             }

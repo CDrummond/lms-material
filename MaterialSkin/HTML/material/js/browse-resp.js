@@ -66,52 +66,6 @@ function parseBrowseResp(data, parent, artistImages) {
                               });
                 });
             }
-        } else if ("favorites"===parent.type) { // TODO: Combine with loop_loop below!!!!
-            if (data.result.loop_loop) {
-                // TODO: Detect acrtist, albums, tracks, genres?
-                var streams=[];
-                var other=[]; 
-                data.result.loop_loop.forEach(i => {
-                    if (i.url && (i.url.startsWith("http://") || i.url.startsWith("https://"))) {
-                        streams.push({
-                                  title: i.name,
-                                  command: ["favorites"],
-                                  //icon: "wifi_tethering",
-                                  // TODO ?? params: ["favorite_id:"+ i.id, "tags:jly"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION],
-                                  type: "track",
-                                  app: "favorites",
-                                  id: i.id
-                              });
-                    } else {
-                        other.push({
-                                  title: i.name,
-                                  command: ["favorites"],
-                                  //icon: "audio"===i.type ? "music_note" : "playlist"===i.type ? "list" : "favorite", // TODO: Album covers? Artist images?
-                                  // TODO ?? params: ["favorite_id:"+ i.id, "tags:jly"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION],
-                                  type: "track", // TODO: i.hasitems>0 ? group : track
-                                  app: "favorites",
-                                  id: i.id
-                              });
-                    }
-                });
-                if (streams.length>0 && other.length>0) {
-                    resp.items.push({header: "Streams"});
-                    resp.items = [].concat(resp.items, streams);
-                    resp.items.push({header: "Other"});
-                    resp.items = [].concat(resp.items, other);
-                    var numStreams = (streams.length+1)/2;
-                    var numOther = (other.length+1)/2;
-                    resp.subtitle=(1==numStreams ? "1 Stream" : (numStreams+" Streams")) + ", " + (numOther+" Other");
-                } else if (streams.length>0) {
-                    resp.items = streams;
-                    resp.subtitle=1==data.result.loop_loop.length ? "1 Stream" : (data.result.loop_loop.length+" Streams");                    
-                } else {
-                    resp.items = other;
-                    resp.subtitle=1==data.result.loop_loop.length ? "1 Favourite" : (data.result.loop_loop.length+" Favourites");
-                }
-            }
         } else {
             if (data.result.artists_loop) {
                 data.result.artists_loop.forEach(i => {
@@ -303,22 +257,32 @@ function parseBrowseResp(data, parent, artistImages) {
                 resp.subtitle=1==data.result.count ? "1 App" : (data.result.count+" Apps");
             } else if (data.result.loop_loop) {
                 data.result.loop_loop.forEach(i => {
-                    if (i.isaudio === 1) {
+                    if (i.hasitems>0) {
+                        resp.items.push({
+                                      title: i.name,
+                                      command: parent.command,
+                                      image: resolveImage(i.icon, i.image),
+                                      icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
+                                      params: ["item_id:"+i.id, "want_url:1"],
+                                      type: "group",
+                                      url: parent.url+i.cmd+i.id,
+                                      app: parent.app,
+                                      actions: "favorites"===parent.type ? [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION] : undefined,  //TODO [ADD_TO_FAV_ACTION] ??
+                                   });
+                    } else if (i.isaudio === 1) {
                         resp.items.push({
                                       title: i.name,
                                       url: i.url,
                                       image: resolveImage(i.icon, i.image),
-                                      icon: "wifi_tethering",
-                                      type: i.hasitems ? "group" : "track",
-                                      command: i.hasitems ? [parent.app, "items"] : undefined,
-                                      params: i.hasitems ? ["item_id:"+i.id, "want_url:1"] : undefined,
-                                      actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                      icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note", 
+                                      type: "track",
+                                      actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
                                       app: parent.app,
                                       id: i.id
                                    });
                     } else if ("text"===i.type) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       type: "text",
                                       id: i.id
                                    });
@@ -333,20 +297,13 @@ function parseBrowseResp(data, parent, artistImages) {
                                       url: parent.url+i.cmd+i.id,
                                       app: parent.app
                                    });
-                    } else if (i.hasitems>0) {
-                        resp.items.push({
-                                      title: i.name,
-                                      command: parent.command,
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
-                                      params: ["item_id:"+i.id, "want_url:1"],
-                                      type: "group",
-                                      url: parent.url+i.cmd+i.id,
-                                      app: parent.app,
-                                      //TODO actions: [ADD_TO_FAV_ACTION] 
-                                   });
                     }
                 });
+
+                if (data.result.loop_loop.length === data.result.count && parent.id===undefined && "favorites"===parent.type) {
+                    // Have all favourites, so sort...
+                    resp.items.sort(itemSort);
+                }
             }
         }
     }

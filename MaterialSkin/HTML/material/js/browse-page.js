@@ -165,6 +165,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["want_url:1"],
                 icon: "favorite",
                 type: "favorites",
+                batchsize: 250,
                 url: "top:/fa"
             },
             {
@@ -213,7 +214,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 command: "albums",
                 params: ["tags:jlya", "sort:new"],
                 icon: "new_releases",
-                limit: 100,
                 type: "group",
                 url: "more:/nm"
             },
@@ -247,8 +247,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         fetchItems(item, params) {
             this.fetchingItems = true;
             this.current = item;
-            //console.log("FETCH command:" + item.command + " params:" + params + " limit:" + item.limit);
-            lmsList(this.playerId(), item.command, params, 0, item.limit).then(({data}) => {
+            //console.log("FETCH command:" + item.command + " params:" + params + " batchsize:" + item.batchsize);
+            lmsList(this.playerId(), item.command, params, 0, item.batchsize).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.artistImages);
 
@@ -328,16 +328,16 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
                 var url = item.url;
                 if (item.url.startsWith("genre_id:")) {
-                    url="db:genre.name="+encodeURI(i.title);
+                    url="db:genre.name="+encodeURI(item.title);
                 } else if (item.url.startsWith("artist_id:")) {
-                    url="db:contributor.name="+encodeURI(i.title);
+                    url="db:contributor.name="+encodeURI(item.title);
                 } else if (item.url.startsWith("album_id:")) {
-                    url="db:album.name="+encodeURI(i.title);
+                    url="db:album.name="+encodeURI(item.title);
                 } else if (item.url.startsWith("year:")) {
-                    url="db:year.id="+encodeURI(i.title);
+                    url="db:year.id="+encodeURI(item.title);
                 }
 
-                lmsCommand(this.playerId(), ["favorites", "add", url, "title:"+item.title]).then(({data})=> {
+                lmsCommand(this.playerId(), ["favorites", "add", "url:"+url, "title:"+item.title]).then(({data})=> {
                     this.showMessage("Added to favorites!");
                 }).catch(err => {
                     this.showMessage("Failed to add to favorites!");
@@ -345,7 +345,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm("Remove '"+item.title+"' from favourites?", {buttonTrueText: 'Remove', buttonFalseText: 'Cancel'}).then(res => {
                     if (res) {
-                        lmsCommand(this.playerId(), ["favorites", "delete", item.url]).then(({datax}) => {
+                        lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+item.id]).then(({datax}) => {
                             this.refreshList();
                         });
                     }
@@ -413,7 +413,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         refreshList() {
             var pos=document.documentElement.scrollTop;
             this.fetchingItems = true;
-            lmsList(this.playerId(), this.current.command, this.current.params, 0, this.current.limit).then(({data}) => {
+            lmsList(this.playerId(), this.current.command, this.current.params, 0, this.current.batchsize).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.artistImages);
                 this.headerSubTitle="Total: "+this.listSize;

@@ -21,9 +21,9 @@ function lmsCommand(playerid, command) {
     return axios(args);
 }
 
-function lmsList(playerid, command, params, start, itemCount) {
+function lmsList(playerid, command, params, start, batchSize) {
     var cmdParams = command.slice();
-    cmdParams = [].concat(cmdParams, [start, start+(undefined===itemCount ? LMS_MATCH_SIZE : itemCount)]);
+    cmdParams = [].concat(cmdParams, [start, start+(undefined===batchSize ? LMS_MATCH_SIZE : batchSize)]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }

@@ -160,7 +160,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["playlists", "tracks"],
                                   //icon: "list",
                                   params: ["playlist_id:"+ i.id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, /*TODO RENAME_ACTION,*/ DELETE_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                                   type: "group"
                               });
                 });
@@ -222,7 +222,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       command: [i.cmd, "items"],
                                       image: resolveImage(i.icon, i.image),
                                       icon: "search",
-                                      params: ["want_url:1", "search:"+SEARCH_TERM_PLACEHOLDER],
+                                      params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                       type: "xmlsearch",
                                       url: parent.url+i.cmd,
                                       app: i.cmd
@@ -247,7 +247,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       command: [i.cmd, "items"],
                                       image: resolveImage(i.icon, i.image),
                                       icon: "search",
-                                      params: ["want_url:1", "search:"+SEARCH_TERM_PLACEHOLDER],
+                                      params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                       type: "xmlsearch",
                                       url: parent.url+i.cmd,
                                       app: i.cmd
@@ -256,6 +256,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 });
                 resp.subtitle=1==data.result.count ? "1 App" : (data.result.count+" Apps");
             } else if (data.result.loop_loop) {
+                var topLevelFavourites = parent.id===undefined && "favorites"===parent.type;
                 data.result.loop_loop.forEach(i => {
                     if (i.hasitems>0) {
                         resp.items.push({
@@ -267,7 +268,12 @@ function parseBrowseResp(data, parent, artistImages) {
                                       type: "group",
                                       url: parent.url+i.cmd+i.id,
                                       app: parent.app,
-                                      actions: "favorites"===parent.type ? [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION] : undefined,  //TODO [ADD_TO_FAV_ACTION] ??
+                                      actions: "favorites"===parent.type 
+                                                    ? topLevelFavourites
+                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                        : [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION]
+                                                    : undefined,
+                                      id: i.id
                                    });
                     } else if (i.isaudio === 1) {
                         resp.items.push({
@@ -276,7 +282,9 @@ function parseBrowseResp(data, parent, artistImages) {
                                       image: resolveImage(i.icon, i.image),
                                       icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note", 
                                       type: "track",
-                                      actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
+                                      actions: topLevelFavourites
+                                                    ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                    : [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
                                       app: parent.app,
                                       id: i.id
                                    });
@@ -292,7 +300,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       command: [i.cmd ? i.cmd : parent.command[0], "items"],
                                       image: resolveImage(i.icon, i.image),
                                       icon: "search",
-                                      params: ["want_url:1", "item_id:"+i.id, "search:"+SEARCH_TERM_PLACEHOLDER],
+                                      params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
                                       type: "xmlsearch", // Hack, so that we don't think this is library search...
                                       url: parent.url+i.cmd+i.id,
                                       app: parent.app
@@ -300,7 +308,7 @@ function parseBrowseResp(data, parent, artistImages) {
                     }
                 });
 
-                if (data.result.loop_loop.length === data.result.count && parent.id===undefined && "favorites"===parent.type) {
+                if (data.result.loop_loop.length === data.result.count && topLevelFavourites) {
                     // Have all favourites, so sort...
                     resp.items.sort(itemSort);
                 }

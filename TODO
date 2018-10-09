@@ -10,13 +10,10 @@
 - Browse
   - YouTube icon not showing? Not sure why, URL is correct!
   - Add cancel button to right/left of progress so that can cancel current action - in case of long searches
-  - Rename playlists
   - Random Mix
   - Favorites:
-    - Rename favorite
     - Images
   - Replace ... menu with a play button/long press menu?
-  - Use (e.g.) ["can", "favorites", "items", "?"] to check if should show items in browse page??
 
 - Now Playing
   - Drag time slider?
@@ -26,6 +23,8 @@
 - PlayQueue
   - Drag'n'drop editing
   - Only update whilst visible?
+  - Add menu item to scroll to current track
+  - Show total tracks and duration somewhere
 
 - Misc
   - Complete WebApp support
@@ -44,9 +43,12 @@
 
 - Settings
   - UI:
-    - Album sort
-    - Dark theme
-    - Auto scroll playqueue
+    - Dark
+    - Sort albums under artists [......]
+    - Sort albums [.....]
+    - Use composer role for genres [.......]
+    - Auto-scroll playqueue to curent track
+
   - player settings:
     - dont stop the music
         [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "?"]] => returns setting

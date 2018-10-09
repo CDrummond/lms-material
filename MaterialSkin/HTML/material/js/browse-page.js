@@ -5,19 +5,39 @@
  * MIT license.
  */
 
-const PLAY_ACTION             = {title:"Play now",                     cmd:"load",      icon:"play_circle_outline"};
-const ADD_ACTION              = {title:"Append to queue",              cmd:"add",       icon:"add_circle_outline"};
-const ADD_RANDOM_ALBUM_ACTION = {title:"Append random album to queue", cmd:"random",    icon:"help_outline"};
-const RENAME_ACTION           = {title:"Rename",                       cmd:"rename",    icon:"edit"};
-const DELETE_ACTION           = {title:"Delete",                       cmd:"delete",    icon:"delete"};
-const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",    icon:"favorite_border"};
-const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites",       cmd:"removefav", icon:"delete_outline"};
+const PLAY_ACTION             = {title:"Play now",                     cmd:"load",       icon:"play_circle_outline"};
+const ADD_ACTION              = {title:"Append to queue",              cmd:"add",        icon:"add_circle_outline"};
+const ADD_RANDOM_ALBUM_ACTION = {title:"Append random album to queue", cmd:"random",     icon:"help_outline"};
+const RENAME_PL_ACTION        = {title:"Rename",                       cmd:"rename-pl",  icon:"edit"};
+const RENAME_FAV_ACTION       = {title:"Rename",                       cmd:"rename-fav", icon:"edit"};
+const DELETE_ACTION           = {title:"Delete",                       cmd:"delete",     icon:"delete"};
+const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",     icon:"favorite_border"};
+const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites",       cmd:"removefav",  icon:"delete_outline"};
 const DIVIDER                 = {divider:true};
-const SEARCH_TERM_PLACEHOLDER = "XXXXXX";
+const TERM_PLACEHOLDER        = "XXXXXX";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
         <div class="lms-list-page">
+          <v-dialog v-model="dialog.show" persistent max-width="500px">
+            <v-card>
+              <v-card-text>
+                <span v-if="dialog.title">{{dialog.title}}</span>
+                <v-container grid-list-md>
+                  <v-layout wrap>
+                    <v-flex xs12>
+                      <v-text-field :label="dialog.hint" v-model="dialog.value"></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? 'Cancel' : dialog.cancel}}</v-btn>
+                <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? 'OK' : dialog.ok}}</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
           <v-toolbar v-if="headerTitle" class="browse-details">
             <v-btn flat icon @click="goHome()"><v-icon>home</v-icon></v-btn>
@@ -90,6 +110,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             items: [],
             fetchingItems: false,
             snackbar:{ show: false, msg: undefined},
+            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             separateArtists: false
         }
     },
@@ -138,7 +159,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             {
                 title: "Search",
                 command: ["search"],
-                params: ["tags:jlyAdt", "extended:1", "term:"+SEARCH_TERM_PLACEHOLDER],
+                params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
                 icon: "search",
                 type: "search",
                 url: "top:/sr"
@@ -306,19 +327,39 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 return;
             }
             var params = [];
-            item.params.forEach(p => { params.push(p.replace(SEARCH_TERM_PLACEHOLDER, event.target._value)); });
+            item.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, event.target._value)); });
             this.fetchItems(item, params);
         },
+        dialogResponse(val) {
+            if (val && this.dialog.value) {
+                var str = this.dialog.value.trim();
+                if (str.length>1 && str!==this.dialog.hint) {
+                    this.dialog.show = false;
+                    var command = [];
+                    this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
+                    lmsCommand(this.playerId(), command).then(({datax}) => {
+                        this.refreshList();
+                    }).catch(err => {
+                        this.showMessage(dialog.command.length>2 && dialog.command[1]==='rename' ? "Renamed failed" : "Failed");
+                    });
+                }
+            }
+        },
         itemAction(act, item) {
-            if (act===RENAME_ACTION.cmd) {
-                console.log("RENAME", item);
-                // TODO
+            if (act===RENAME_PL_ACTION.cmd) {
+                this.dialog = { show:true, title:"Rename playlist", hint:item.value, value:item.title, ok: "Rename", cancel:undefined,
+                                command:["playlists", "rename", item.url, "newname:"+TERM_PLACEHOLDER]};
+            } else if (act==RENAME_FAV_ACTION.cmd) {
+                this.dialog = { show:true, title:"Rename favorite", hint:item.value, value:item.title, ok: "Rename", cancel:undefined,
+                                command:["favorites", "rename", "item_id:"+item.id, "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm("Delete '"+item.title+"'?", {buttonTrueText: 'Delete', buttonFalseText: 'Cancel'}).then(res => {
                     if (res) {
                         if (item.url.startsWith("playlist_id:")) {
                             lmsCommand(this.playerId(), ["playlists", "delete", item.url]).then(({datax}) => {
                                 this.refreshList();
+                            }).catch(err => {
+                                this.showMessage("Failed to delete playlist");
                             });
                         }
                     }
@@ -345,6 +386,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (res) {
                         lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+item.id]).then(({datax}) => {
                             this.refreshList();
+                        }).catch(err => {
+                            this.showMessage("Failed to remove favourite");
                         });
                     }
                 });

@@ -18,7 +18,7 @@ const SEARCH_TERM_PLACEHOLDER = "XXXXXX";
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
         <div class="lms-list-page">
-          <v-snackbar v-model="showSnackBar" :multi-line="true" :timeout="2500" top>{{ snackbarMsg }}</v-snackbar>
+          <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
           <v-toolbar v-if="headerTitle" class="browse-details">
             <v-btn flat icon @click="goHome()"><v-icon>home</v-icon></v-btn>
             <v-btn flat icon @click="goBack()"><v-icon>arrow_back</v-icon></v-btn>
@@ -89,8 +89,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         return {
             items: [],
             fetchingItems: false,
-            snackbarMsg: undefined,
-            showSnackBar: false,
+            snackbar:{ show: false, msg: undefined},
             separateArtists: false
         }
     },
@@ -241,8 +240,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             return this.$store.state.player ? this.$store.state.player.id : "";
         },
         showMessage(msg) {
-            this.snackbarMsg = msg ? msg : "Something went wrong!";
-            this.showSnackBar = true;
+            this.snackbar = {msg: msg ? msg : "Something went wrong!", show: true};
         },
         fetchItems(item, params) {
             this.fetchingItems = true;

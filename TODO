@@ -14,6 +14,7 @@
   - Favorites:
     - Images
   - Replace ... menu with a play button/long press menu?
+  - Clicking on details text should popup a menu showing history (i.e. like a breadcrumb)
 
 - Now Playing
   - Drag time slider?
@@ -22,9 +23,12 @@
 
 - PlayQueue
   - Drag'n'drop editing
+    - https://github.com/timruffles/mobile-drag-drop
+    - Use cover as drag handle
   - Only update whilst visible?
   - Add menu item to scroll to current track
   - Show total tracks and duration somewhere
+  - Place track duration on subtitle line, and use subtitle font
 
 - Misc
   - Complete WebApp support
@@ -40,6 +44,11 @@
   - i18n
   - Add 'Manage all' to volume popup to manage all volumes (only if more than 1 player)
   - Add link to Default/settings/index.html
+  - Add support for artist/song info (e.g. lyrics).
+    - Need to check relevant plugin is installed.
+  - Add swipe support to switch pages
+  - Create release script
+  - Call clearInterval/clearTimer in beforeDestroy()
 
 - Settings
   - UI:

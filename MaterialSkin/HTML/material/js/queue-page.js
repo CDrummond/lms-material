@@ -5,9 +5,9 @@
  * MIT license.
  */
 
-const PQ_PLAY_NOW_ACTION =  { title: 'Play now',          cmd: 'playnow',  icon: 'play_circle_outline'   };
-const PQ_PLAY_NEXT_ACTION = { title: 'Play next',         cmd: 'playnext', icon: 'play_circle_filled'    };
-const PQ_REMOVE_ACTION =    { title: 'Remove from queue', cmd: 'remove',   icon: 'remove_circle_outline' };
+const PQ_PLAY_NOW_ACTION =  { title: 'Play now',              cmd: 'playnow',  icon: 'play_circle_outline'   };
+const PQ_PLAY_NEXT_ACTION = { title: 'Move to next in queue', cmd: 'playnext', icon: 'play_circle_filled'    };
+const PQ_REMOVE_ACTION =    { title: 'Remove from queue',     cmd: 'remove',   icon: 'remove_circle_outline' };
 
 const PQ_SAVE_ACTION  = { id: "pq:save",  title: "Save queue"  };
 const PQ_CLEAR_ACTION = { id: "pq:clear", title: "Clear queue" };

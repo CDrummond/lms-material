@@ -127,30 +127,29 @@ a {
     text-overflow: ellipsis;
 }
 
+.browse-title {
+    padding-top: 4px;
+}
+
 .browse-details {
     position:fixed; 
     top:56px;
-    width:100vw; 
-    height:56px; 
-    white-space:nowrap; 
+    width:100vw;
+    height:48px;
+    white-space:nowrap;
     overflow-x:hidden;
     overflow-y:hidden;
     padding-right:15px;
-    z-index:5;
+    z-index:1;
+    float: left;
 }
 
 .browse-pad {
-    height:56px; 
+    height:48px;
 }
 
-.browse-header-button {
-    min-width:30px;
-    max-width:30px;
-}
-
-.circ {
-    border:1px solid;
-    border-radius: 50%;
+.toolbar-button {
+    margin:4px;
 }
 
 .browse-text {

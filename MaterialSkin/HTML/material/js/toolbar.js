@@ -41,14 +41,14 @@ Vue.component('lms-toolbar', {
             </v-list>
           </v-menu>
           <v-spacer></v-spacer>
-          <v-btn icon v-if="playerStatus && playerStatus.isOn && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])">
+          <v-btn icon v-if="playerStatus && playerStatus.isOn && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
             <v-icon>pause_circle_outline</v-icon>
           </v-btn>
-          <v-btn icon v-else-if="playerStatus && playerStatus.isOn" @click.native="doAction(['play'])">
+          <v-btn icon v-else-if="playerStatus && playerStatus.isOn" @click.native="doAction(['play'])" class="toolbar-button">
             <v-icon>play_circle_outline</v-icon>
           </v-btn>
           <v-menu v-if="playerStatus && playerStatus.isOn" @click.native="setVolumeSlider">
-            <v-btn slot="activator" icon flat>
+            <v-btn slot="activator" icon flat class="toolbar-button">
               <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
               <v-icon v-else="playerStatus.volume===0">volume_mute</v-icon>
             </v-btn>

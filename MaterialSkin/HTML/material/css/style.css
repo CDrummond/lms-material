@@ -127,24 +127,35 @@ a {
     text-overflow: ellipsis;
 }
 
-.browse-title {
-    padding-top: 4px;
+.lms-toolbar > .toolbar__content {
+    height: 56px !important;
+    margin-left: -7px;
+    margin-right: 0px;
 }
 
-.browse-details {
+.subtoolbar-title {
+    padding-top: 0px;
+}
+
+.subtoolbar {
     position:fixed; 
     top:56px;
     width:100vw;
-    height:48px;
+    height:48px !important;
     white-space:nowrap;
     overflow-x:hidden;
     overflow-y:hidden;
-    padding-right:15px;
+    padding-right:8px;
+    padding-bottom:0px;
     z-index:1;
     float: left;
 }
 
-.browse-pad {
+.pq-details {
+    padding-left: 17px;
+}
+
+.subtoolbar-pad {
     height:48px;
 }
 
@@ -238,5 +249,11 @@ a {
     border: 1px solid rgba(64, 64, 255, 0.5);
     border-radius: 4px;
     background-color:rgba(64, 64, 198, 0.25);
+}
+
+.pq-text {
+    padding-top:10px; /* TODO: This should not be required! */
+    display: table-cell !important;
+    vertical-align: middle !important;
 }
 

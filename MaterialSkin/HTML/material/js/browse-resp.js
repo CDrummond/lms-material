@@ -258,7 +258,24 @@ function parseBrowseResp(data, parent, artistImages) {
             } else if (data.result.loop_loop) {
                 var topLevelFavourites = parent.id===undefined && "favorites"===parent.type;
                 data.result.loop_loop.forEach(i => {
-                    if (i.hasitems>0) {
+                    if ("text"===i.type || "textarea"===i.type) {
+                        resp.items.push({
+                                      title: i.name ? i.name : i.title,
+                                      type: "text",
+                                      id: i.id
+                                   });
+                    } else if ("search"===i.type) {
+                        resp.items.push({
+                                      title: i.name,
+                                      command: [i.cmd ? i.cmd : parent.command[0], "items"],
+                                      image: resolveImage(i.icon, i.image),
+                                      icon: "search",
+                                      params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
+                                      type: "xmlsearch", // Hack, so that we don't think this is library search...
+                                      url: parent.url+i.cmd+i.id,
+                                      app: parent.app
+                                   });
+                    } else if (i.hasitems>0) {
                         resp.items.push({
                                       title: i.name,
                                       command: parent.command,
@@ -287,23 +304,6 @@ function parseBrowseResp(data, parent, artistImages) {
                                                     : [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
                                       app: parent.app,
                                       id: i.id
-                                   });
-                    } else if ("text"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      type: "text",
-                                      id: i.id
-                                   });
-                    } else if ("search"===i.type) {
-                        resp.items.push({
-                                      title: i.name,
-                                      command: [i.cmd ? i.cmd : parent.command[0], "items"],
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: "search",
-                                      params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
-                                      type: "xmlsearch", // Hack, so that we don't think this is library search...
-                                      url: parent.url+i.cmd+i.id,
-                                      app: parent.app
                                    });
                     }
                 });

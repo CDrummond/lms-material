@@ -39,11 +39,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             </v-card>
           </v-dialog>
           <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
-          <v-card v-if="headerTitle" class="browse-details">
+          <v-card v-if="headerTitle" class="subtoolbar">
             <v-layout>
               <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
               <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
-              <v-layout row wrap class="browse-title">
+              <v-layout row wrap class="subtoolbar-title">
                 <v-flex class="xs12 toolbar-title">{{headerTitle}}</v-flex>
                 <div class="toolbar-subtitle">{{headerSubTitle}}</div>
               </v-layout>
@@ -53,7 +53,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               </template>
             </v-layout>
           </v-card>
-          <div v-if="headerTitle" class="browse-pad"></div>
+          <div v-if="headerTitle" class="subtoolbar-pad"></div>
           <v-progress-linear v-if="fetchingItems" :indeterminate="true"></v-progress-linear>
           <v-list>
             <template v-for="(item, index) in items">

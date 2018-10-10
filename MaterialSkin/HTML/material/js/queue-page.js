@@ -82,7 +82,16 @@ var lmsQueue = Vue.component("LmsQueue", {
         </v-card>
       </v-dialog>
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
-      <v-list class="lms-list-page" v-observe-visibility="visibilityChanged">
+      <v-card class="subtoolbar pq-details">
+        <v-layout>
+          <v-flex class="pq-text">{{playerStatus.playlist.count | displayCount}} {{duration | displayTime(true)}}</v-flex>
+          <v-spacer></v-spacer>
+          <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
+          <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
+        </v-layout>
+      </v-card>
+      <div class="subtoolbar-pad"></div>
+      <v-list class="lms-list-page">
         <template v-for="(item, index) in items">
           <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index===currentIndex}" :id="'track'+index">
             <v-list-tile-avatar v-if="item.image" :tile="true">
@@ -123,7 +132,8 @@ var lmsQueue = Vue.component("LmsQueue", {
             items: [],
             currentIndex: -1,
             snackbar:{ show: false, msg: undefined},
-            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined}
+            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
+            duration: 0.0
         }
     },
     created() {
@@ -148,23 +158,25 @@ var lmsQueue = Vue.component("LmsQueue", {
                 this.scrollToCurrent();
             }
         }.bind(this));
-        bus.$on('toolbarAction', function(id) {
+    },
+    methods: {
+        save() {
             if (this.items.length<1) {
                 return;
             }
-            if (PQ_SAVE_ACTION.id===id) {
-                this.dialog={show: true, title: "Save play queue", hint: "Name", ok: "Save", value: undefined };
-            } else if (PQ_CLEAR_ACTION.id===id) {
-                this.$confirm("Remove all tracks from queue?",
-                              {buttonTrueText: 'Clear', buttonFalseText: 'Cancel'}).then(res => {
-                    if (res) {
-                        bus.$emit('playerCommand', ["playlist", "clear"]);
-                    }
-                });
+            this.dialog={show: true, title: "Save play queue", hint: "Name", ok: "Save", value: undefined };
+        },
+        clear() {
+            if (this.items.length<1) {
+                return;
             }
-        }.bind(this));
-    },
-    methods: {
+            this.$confirm("Remove all tracks from queue?",
+                          {buttonTrueText: 'Clear', buttonFalseText: 'Cancel'}).then(res => {
+                if (res) {
+                    bus.$emit('playerCommand', ["playlist", "clear"]);
+                }
+            });
+        },
         dialogResponse(val) {
             if (val && this.dialog.value) {
                 var name = this.dialog.value.trim();
@@ -188,6 +200,16 @@ var lmsQueue = Vue.component("LmsQueue", {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             }
         },
+        getDuration() {
+            if (this.items.length>0) {
+                // Get total duration of queue
+                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
+                    this.duration = data.result && data.result["playlist duration"] ? data.result["playlist duration"] : 0.0;
+                });
+            } else {
+                this.duration = 0.0;
+            }
+        },
         fetchItems() {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
@@ -209,6 +231,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                 if (needUpdate) {
                     this.scheduleUpdate();
                 } else {
+                    this.getDuration();
                     this.$nextTick(function () {
                         this.scrollToCurrent();
                     });
@@ -241,7 +264,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.items = resp.items;
                     this.timestamp = resp.timestamp;
                     this.fetchingItems = false;
-
+                    this.getDuration();
                     this.$nextTick(function () {
                         document.documentElement.scrollTop=currentPos>0 ? currentPos : 0;
                     });
@@ -267,26 +290,31 @@ var lmsQueue = Vue.component("LmsQueue", {
                 // Offset of -68 below to take into account toolbar
                 this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
             }
-        },
-        visibilityChanged (isVisible, entry) {
-            if (isVisible) {
-                bus.$emit('addToolbarActions', [PQ_SAVE_ACTION, PQ_CLEAR_ACTION]);
-            } else {
-                bus.$emit('removeToolbarActions', [PQ_SAVE_ACTION, PQ_CLEAR_ACTION]);
-            }
         }
     },
     computed: {
-        playerStatus () {;
+        playerStatus() {;
             return this.$store.state.playerStatus
         }
     },
     filters: {
-        displayTime: function (value) {
+        displayTime: function (value, bracket) {
             if (!value) {
                 return '';
             }
+            if (bracket) {
+                if (value<0.000000000001) {
+                    return '';
+                }
+                return " (" + formatSeconds(Math.floor(value)) + ")";
+            }
             return formatSeconds(Math.floor(value));
+        },
+        displayCount: function (value) {
+            if (!value) {
+                return '';
+            }
+            return 1===value ? "1 Track" : (value+" Tracks");
         }
     }
 });

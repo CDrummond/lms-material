@@ -34,8 +34,15 @@
   - Complete WebApp support
   - Desktop UI - expand the 3 pages into 1
   - Add text input dialog, and use for search and rename
-  - Synchronisation / Group management
-   - Add separate component for this (as is done for noplayers)
+  - Synchronisation
+  - Group management
+    - Will need to add code to Plugin.pm to allow groups to be created/removed
+      if (Slim::Utils::PluginManager->isEnabled('Slim::Plugin::XXX::Plugin')) {
+          require Slim::Plugin::XXX::Plugin
+      }
+    ["groupmac", ["playergroup", 0, 100]] lists group details
+    ["groupmac", ["playerpref", "playername", "X"]] sets group name
+    ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
   - Smarter polling
     - Only poll status every 5 seconds
       - at start of song, and near end poll every (e.g.) 0.5 seconds
@@ -49,6 +56,9 @@
   - Add swipe support to switch pages
   - Create release script
   - Call clearInterval/clearTimer in beforeDestroy()
+  - Handle case where active player is removed
+  - Power on/off players
+  - When setting initial player, choose powered on ones first
 
 - Settings
   - UI:
@@ -62,5 +72,6 @@
     - dont stop the music
         [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "?"]] => returns setting
         [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "XXX"]] to set
+        [ "playermac", ["dontstopthemusicsettings", 0, 1]] => returns all options, and indicates which one is set
     - replaygain
     - alarms

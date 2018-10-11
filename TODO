@@ -8,7 +8,6 @@
     - change to dialog prompt for input?
 
 - Browse
-  - YouTube icon not showing? Not sure why, URL is correct!
   - Add cancel button to right/left of progress so that can cancel current action - in case of long searches
   - Random Mix
   - Favorites:
@@ -43,6 +42,8 @@
     ["groupmac", ["playergroup", 0, 100]] lists group details
     ["groupmac", ["playerpref", "playername", "X"]] sets group name
     ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
+    Add create/delete/edit/list to JSNO API in Groups plugin itself.
+
   - Smarter polling
     - Only poll status every 5 seconds
       - at start of song, and near end poll every (e.g.) 0.5 seconds

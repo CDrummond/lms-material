@@ -14,7 +14,9 @@ const DELETE_ACTION           = {title:"Delete",                       cmd:"dele
 const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",     icon:"favorite_border"};
 const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites",       cmd:"removefav",  icon:"delete_outline"};
 const DIVIDER                 = {divider:true};
-const TERM_PLACEHOLDER        = "XXXXXX";
+const TERM_PLACEHOLDER        = "-XXXXXX-";
+const ALBUM_SORT_PLACEHOLDER  = "-XXXASXXX-";
+const ARTIST_ALBUM_SORT_PLACEHOLDER = "-XXXAASXXX-";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
@@ -139,7 +141,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             {
                 title: "Albums",
                 command: ["albums"],
-                params: ["tags:jlya", "sort:album"], // TODO: Make configurable
+                params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
                 type: "group",
                 url: "top:/al"
@@ -219,7 +221,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             {
                 title: "Compilations",
                 command: ["albums"],
-                params: ["compilation:1", "tags:jlya", "sort:album"], // TODO: Make configurable
+                params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
                 type: "group",
                 url: "more:/co",
@@ -256,7 +258,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.actions=[];
-        this.artistImages=false;
+        this.artistImages=false;  
     },
     methods: {
         playerId() {
@@ -322,7 +324,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 document.documentElement.scrollTop=0;
                 return;
             }
-            this.fetchItems(item, item.params);
+            this.fetchItems(item, this.adjustParams(item.params));
         },
         search(event, item) {
             if (this.fetchingItems) {
@@ -456,7 +458,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         refreshList() {
             var pos=document.documentElement.scrollTop;
             this.fetchingItems = true;
-            lmsList(this.playerId(), this.current.command, this.current.params, 0, this.current.batchsize).then(({data}) => {
+            lmsList(this.playerId(), this.current.command, this.adjustParams(this.current.params), 0, this.current.batchsize).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.artistImages);
                 this.headerSubTitle="Total: "+this.listSize;
@@ -522,7 +524,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
                 if (bottomOfWindow) {
                     this.fetchingItems = true;
-                    lmsList(this.playerId(), this.current.command, this.current.params, this.items.length).then(({data}) => {
+                    lmsList(this.playerId(), this.current.command, this.adjustParams(this.current.params), this.items.length).then(({data}) => {
                         this.fetchingItems = false;
                         var resp = parseBrowseResp(data, this.current, this.artistImages);
                         if (resp && resp.items) {
@@ -536,6 +538,16 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
             };
         },
+        adjustParams(origParams) {
+            if (undefined!=origParams) {
+                var params = [];
+                origParams.forEach(p => { params.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
+                                                       .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)); });
+                return params;
+            } else {
+                return origParams;
+            }
+        }
     },
     mounted() {
         this.scroll();
@@ -545,6 +557,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
         bus.$on('artistImages', function(artistImages) {
             this.artistImages = artistImages;
+        }.bind(this));
+
+        bus.$on('albumSortChanged', function(act) {
+            this.goHome();
         }.bind(this));
     }
 });

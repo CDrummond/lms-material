@@ -286,6 +286,9 @@ var lmsQueue = Vue.component("LmsQueue", {
             };
         },
         scrollToCurrent() {
+            if (!this.$store.state.autoScrollQueue) {
+                return;
+            }
             if (this.items.length>5 && this.currentIndex<=this.items.length) {
                 // Offset of -68 below to take into account toolbar
                 this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});

@@ -20,7 +20,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["albums"],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
                                   icon: artistImages ? undefined : "person",
-                                  params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:yearalbum"], // TODO: Make configurable
+                                  params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
@@ -74,7 +74,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   title: i.artist,
                                   command: ["albums"],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
-                                  params: ["artist_id:"+ i.id, "tags:jly", "sort:yearalbum"], // TODO: Make configurable
+                                  params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });

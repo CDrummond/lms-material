@@ -21,16 +21,15 @@
   </head>
   <body>
     <div id="app" v-cloak>
-      <v-app class="lms-app" :dark="useDark">
-        <div style="position:fixed; top:0; height:0">
-           <lms-server></lms-server>
-        </div>
+      <v-app class="lms-app" :dark="darkUi">
+        <lms-server></lms-server>
         <lms-toolbar></lms-toolbar>
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
         <lms-bottomnav></lms-bottomnav>
         <lms-noplayer></lms-noplayer>
+        <lms-ui-settings></lms-ui-settings>
       </v-app>
     </div>
 
@@ -52,6 +51,7 @@
     <script src="./js/nowplaying-page.js"></script>
     <script src="./js/queue-page.js"></script>
     <script src="./js/server.js"></script>
+    <script src="./js/ui-settings.js"></script>
     <script src="./js/main.js"></script>
   </body>
 </html>

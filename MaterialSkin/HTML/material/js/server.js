@@ -48,14 +48,15 @@ var lmsServer = Vue.component('lms-server', {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result && data.result.players_loop) {
                     var players = [];
-                    for (i=0; i<data.result.players_loop.length; ++i) {
-                        var player = { id: data.result.players_loop[i].playerid,
-                                       name: data.result.players_loop[i].name,
-                                       canpoweroff: data.result.players_loop[i].canpoweroff,
-                                       isgroup: 'group'===data.result.players_loop[i].model
-                                      };
-                        players.push(player);
-                    }
+                    data.result.players_loop.forEach(i => {
+                        players.push({ id: i.playerid,
+                                       name: i.name,
+                                       canpoweroff: 1===i.canpoweroff,
+                                       ison: 1===i.power,
+                                       isconnected: 1===i.connected,
+                                       isgroup: 'group'===i.model
+                                      });
+                    });
                     this.$store.commit('setPlayers', players.sort(function(a, b) {
                                                                         if (a.isgroup!=b.isgroup) {
                                                                             return a.isgroup ? 1 : -1;

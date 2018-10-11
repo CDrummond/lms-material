@@ -257,3 +257,8 @@ a {
     vertical-align: middle !important;
 }
 
+.settings-radio-group {
+    padding-left: 16px;
+    margin-top:-32px !important;
+}
+

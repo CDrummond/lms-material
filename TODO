@@ -61,13 +61,6 @@
   - When setting initial player, choose powered on ones first
 
 - Settings
-  - UI:
-    - Dark
-    - Sort albums under artists [......]
-    - Sort albums [.....]
-    - Use composer role for genres [.......]
-    - Auto-scroll playqueue to curent track
-
   - player settings:
     - dont stop the music
         [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "?"]] => returns setting

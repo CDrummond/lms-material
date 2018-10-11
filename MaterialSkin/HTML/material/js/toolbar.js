@@ -5,7 +5,8 @@
  * MIT license.
  */
 
-const TB_MENU_ITEMS = [ {id:'tb:settings', title:'Settings'}];
+const TB_UI_SETTINGS = {id:'tb:settings', title:'Settings'};
+const TB_MENU_ITEMS = [ TB_UI_SETTINGS ];
 
 Vue.component('lms-toolbar', {
     template: `
@@ -119,11 +120,7 @@ Vue.component('lms-toolbar', {
             this.playerVolume = this.playerVolumeCurrent;
         },
         menuAction(id) {
-            if (id===TB_MENU_ITEMS[0]) {
-                // TODO show settings dialog
-            } else {
-                bus.$emit('toolbarAction', id);
-            }
+            bus.$emit('toolbarAction', id);
         },
         volumeDown() {
             if (this.playerVolume<=5) {

@@ -63,9 +63,4 @@
 
 - Settings
   - player settings:
-    - dont stop the music
-        [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "?"]] => returns setting
-        [ "playermac", ["playerpref", "plugin.dontstopthemusic:provider", "XXX"]] to set
-        [ "playermac", ["dontstopthemusicsettings", 0, 1]] => returns all options, and indicates which one is set
-    - replaygain
     - alarms

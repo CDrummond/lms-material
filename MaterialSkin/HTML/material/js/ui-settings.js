@@ -20,33 +20,13 @@ Vue.component('lms-ui-settings', {
             </v-list-tile>
 
             <v-subheader>Browse</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-title>Sort albums under artists by:</v-list-tile-title>
+            <v-list-tile avatar class="settings-select">
+              <v-select :items="albumSorts" label="Sort albums under artists by" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
-            <div class="settings-radio-group">
-              <v-radio-group v-model="artistAlbumSort">
-                <v-radio label="Album" value="album"></v-radio>
-                <v-radio label="Artist, Album" value="artistalbum"></v-radio>
-                <v-radio label="Artist, Year, Album" value="artflow"></v-radio>
-                <v-radio label="Year, Album" value="yearalbum"></v-radio>
-                <v-radio label="Year, Artist, Album" value="yearartistalbum"></v-radio>
-              </v-radio-group>
-            </div>
-
-            <v-list-tile avatar>
-              <v-list-tile-title>Sort albums under artists by:</v-list-tile-title>
+            <v-list-tile avatar class="settings-select">
+              <v-select :items="albumSorts" label="Sort album list by" v-model="albumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-
-            <div class="settings-radio-group">
-              <v-radio-group v-model="albumSort">
-                <v-radio label="Album" value="album"></v-radio>
-                <v-radio label="Artist, Album" value="artistalbum"></v-radio>
-                <v-radio label="Artist, Year, Album" value="artflow"></v-radio>
-                <v-radio label="Year, Album" value="yearalbum"></v-radio>
-                <v-radio label="Year, Artist, Album" value="yearartistalbum"></v-radio>
-              </v-radio-group>
-            </div>
             
             <v-subheader>Queue</v-subheader>
             <v-list-tile avatar>
@@ -68,6 +48,13 @@ Vue.component('lms-ui-settings', {
             artistAlbumSort:'yearalbum',
             albumSort:'album',
             autoScrollQueue:true,
+            albumSorts:[
+                { key:"album",           label:"Album"},
+                { key:"artistalbum",     label:"Artist, Album"},
+                { key:"artflow",         label:"Artist, Year, Album"},
+                { key:"yearalbum",       label:"Year, Album"},
+                { key:"yearartistalbum", label:"Year, Artist, Album"}
+                ]
         }
     },
     mounted() {

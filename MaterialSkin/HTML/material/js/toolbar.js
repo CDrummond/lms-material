@@ -5,8 +5,9 @@
  * MIT license.
  */
 
-const TB_UI_SETTINGS = {id:'tb:settings', title:'Settings'};
-const TB_MENU_ITEMS = [ TB_UI_SETTINGS ];
+const TB_UI_SETTINGS     = {id:'tb:settings', title:'Settings'};
+const TB_PLAYER_SETTINGS = {id:"tb:playersettings", title:'Player Settings'};
+const TB_MENU_ITEMS = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS ];
 
 Vue.component('lms-toolbar', {
     template: `

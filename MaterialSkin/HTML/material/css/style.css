@@ -145,6 +145,7 @@ a {
     white-space:nowrap;
     overflow-x:hidden;
     overflow-y:hidden;
+    padding-top:2px;
     padding-right:8px;
     padding-bottom:0px;
     z-index:1;

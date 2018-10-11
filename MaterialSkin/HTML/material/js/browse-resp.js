@@ -312,6 +312,8 @@ function parseBrowseResp(data, parent, artistImages) {
                     // Have all favourites, so sort...
                     resp.items.sort(itemSort);
                 }
+            } else if (0===data.result.count && data.result.networkerror) {
+                resp.items.push({title: "Failed to retrieve listing. (" + data.result.networkerror + ")", type: "text"});
             }
         }
     }

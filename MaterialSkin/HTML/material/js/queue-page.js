@@ -94,7 +94,7 @@ var lmsQueue = Vue.component("LmsQueue", {
       <div class="subtoolbar-pad"></div>
       <v-list class="lms-list-page">
         <template v-for="(item, index) in items">
-          <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index===currentIndex}" :id="'track'+index">
+          <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
             <v-list-tile-avatar v-if="item.image" :tile="true">
               <img v-lazy="item.image">
             </v-list-tile-avatar>
@@ -295,6 +295,43 @@ var lmsQueue = Vue.component("LmsQueue", {
                 // Offset of -68 below to take into account toolbar
                 this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
             }
+        },
+        dragStart(which, ev) {
+            ev.dataTransfer.dropEffect = 'move';
+            ev.dataTransfer.setData('Text', this.id);
+            this.dragIndex = which;
+            this.stopScrolling = false;
+        },
+        dragOver(ev) {
+            // Drag over item at top/bottom of list to start scrolling
+            this.stopScrolling = true;
+            if (ev.clientY < 110) {
+                this.stopScrolling = false;
+                this.scrollList(-5)
+            }
+
+            if (ev.clientY > (window.innerHeight - 70)) {
+                this.stopScrolling = false;
+                this.scrollList(5)
+            }
+            ev.preventDefault(); // Otherwise drop is never called!
+        },
+        scrollList(step) {
+            var scrollY = document.documentElement.scrollTop;
+            document.documentElement.scrollTop = scrollY + step;
+            if (!this.stopScrolling) {
+                setTimeout(function () {
+                    this.scrollList(step);
+                }.bind(this), 100);
+            }
+        },
+        drop(to, ev) {
+            this.stopScrolling = true;
+            ev.preventDefault();
+            if (this.dragIndex!=undefined && to!=this.dragIndex) {
+                bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
+            }
+            this.dragIndex = undefined;
         }
     },
     computed: {

@@ -5,7 +5,7 @@ Vue.component('lms-player-settings', {
         <v-card>
           <v-toolbar color="primary" dark app class="lms-toolbar">
             <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-            <v-toolbar-title>'{{player ? player.name : 'No Player'}}' Settings</v-toolbar-title>
+            <v-toolbar-title>'{{playerName}}' Settings</v-toolbar-title>
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
           <v-list three-line subheader class="settings-list">
@@ -27,6 +27,7 @@ Vue.component('lms-player-settings', {
     data() {
         return {
             show: false,
+            playerName: undefined,
             crossfade: undefined,
             replaygain: undefined,
             dstm: undefined,
@@ -49,11 +50,13 @@ Vue.component('lms-player-settings', {
     },
     mounted() {
         bus.$on('toolbarAction', function(act) {
-            if (act==TB_PLAYER_SETTINGS.id) {
+            if (act==TB_PLAYER_SETTINGS.id && this.$store.state.player) {
                 this.dstmItems=[];
                 this.crossfade='0';
                 this.replaygain='0';
-                lmsCommand(this.playerId(), ["dontstopthemusicsetting"]).then(({data}) => {
+                this.playerId = this.$store.state.player.id;
+                this.playerName = this.$store.state.player.name;
+                lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {
                         data.result.item_loop.forEach(i => {
                             if (i.actions && i.actions.do && i.actions.do.cmd) {
@@ -65,12 +68,12 @@ Vue.component('lms-player-settings', {
                         });
                     }
                 });
-                lmsCommand(this.playerId(), ["playerpref", "transitionType", "?"]).then(({data}) => {
+                lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
                         this.crossfade=data.result._p2;
                     }
                 });
-                lmsCommand(this.playerId(), ["playerpref", "replayGainMode", "?"]).then(({data}) => {
+                lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
                         this.replaygain=data.result._p2;
                     }
@@ -83,18 +86,11 @@ Vue.component('lms-player-settings', {
         close() {
             this.show=false;
             if (this.dstmItems.length>1) {
-                lmsCommand(this.playerId(), ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
+                lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
             }
-            lmsCommand(this.playerId(), ["playerpref", "transitionType", this.crossfade]);
-            lmsCommand(this.playerId(), ["playerpref", "replayGainMode", this.replaygain]);
-        },
-        playerId() {
-            return this.$store.state.player ? this.$store.state.player.id : "";
-        }
-    },
-    computed: {
-        player () {
-            return this.$store.state.player
+            lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
+            lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
+            this.playerId = undefined;
         }
     }
 })

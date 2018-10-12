@@ -143,6 +143,11 @@ var lmsServer = Vue.component('lms-server', {
                 this.refreshStatus();
             });
         }.bind(this));
+        bus.$on('power', function(state) {
+            lmsCommand(this.$store.state.player.id, ["power", state]).then(({data}) => {
+                this.refreshServerStatus();
+            });
+        }.bind(this));
         
         // All Artists + Album Artists, or just Artists?
         lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {

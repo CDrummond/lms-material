@@ -25,22 +25,30 @@ Vue.component('lms-toolbar', {
                 <v-list-tile @click="setPlayer(item.id)">
                   <v-list-tile-content>
                     <v-list-tile-title>
-                     <v-icon small v-if="player && item.id === player.id && players && players.length>1">radio_button_checked</v-icon>
-                     <v-icon small v-else-if="players && players.length>1">radio_button_unchecked</v-icon>
-                     <v-icon v-if="item.isgroup">speaker_group</v-icon>
-                     <v-icon v-else>speaker</v-icon>
-                     {{item.name}}
-                   </v-list-tile-title>
+                      <v-icon small v-if="player && item.id === player.id && players && players.length>1">radio_button_checked</v-icon>
+                      <v-icon small v-else-if="players && players.length>1">radio_button_unchecked</v-icon>
+                      <v-icon v-if="item.isgroup">speaker_group</v-icon>
+                      <v-icon v-else>speaker</v-icon>&nbsp;{{item.name}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
-             </template>
-             <v-divider v-if="players && players.length>1" ></v-divider>
-             <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
-               <v-list-tile-content><v-list-tile-title>Manage player groups</v-list-tile-title></v-list-tile-content>
-             </v-list-tile>
-             <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
-               <v-list-tile-content><v-list-tile-title>Synchronise</v-list-tile-title></v-list-tile-content>
-             </v-list-tile>
+              </template>
+              <v-divider></v-divider>
+              <v-list-tile @click="togglePower()">
+                <v-list-tile-content v-if="player && player.ison">
+                  <v-list-tile-title class="pm-icon-indent"><v-icon color="primary">power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-content v-else>
+                  <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed-icon">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-divider v-if="players && players.length>1" ></v-divider>
+              <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
+                <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;Manage player groups</v-list-tile-title></v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
+                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;Synchronise</v-list-tile-title></v-list-tile-content>
+              </v-list-tile>
             </v-list>
           </v-menu>
           <v-spacer></v-spacer>
@@ -140,6 +148,17 @@ Vue.component('lms-toolbar', {
             } else {
                 this.playerVolume += 5;
             }
+        },
+        togglePower() {
+            if (this.$store.state.player.ison) {
+                this.$confirm("Switch off '"+this.$store.state.player.name+"'?", {buttonTrueText: 'Switch Off', buttonFalseText: 'Cancel'}).then(res => {
+                    if (res) {
+                        bus.$emit('power', "1");
+                    }
+                });
+            } else {
+                bus.$emit('power', "0");
+            }
         }
     },
     watch: {
@@ -173,6 +192,6 @@ Vue.component('lms-toolbar', {
                 }
             }
             return "Nothing playing";
-        }
+        },
     }
 })

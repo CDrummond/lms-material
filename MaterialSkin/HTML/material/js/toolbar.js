@@ -5,9 +5,10 @@
  * MIT license.
  */
 
-const TB_UI_SETTINGS     = {id:'tb:settings', title:'Settings'};
+const TB_UI_SETTINGS     = {id:'tb:settings',       title:'Settings'};
 const TB_PLAYER_SETTINGS = {id:"tb:playersettings", title:'Player Settings'};
-const TB_MENU_ITEMS = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS ];
+const TB_SERVER_SETTINGS = {id:"tb:serversettings", title:'Server Settings', href:'../Default/settings/index.html'};
+const TB_MENU_ITEMS = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS ];
 
 Vue.component('lms-toolbar', {
     template: `
@@ -75,7 +76,10 @@ Vue.component('lms-toolbar', {
             </v-btn>
             <v-list>
               <template v-for="(item, index) in menuItems">
-                <v-list-tile @click="menuAction(item.id)">
+                <v-list-tile v-if="item.href" :href="item.href" target="_blank">
+                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile v-else @click="menuAction(item.id)">
                   <v-list-tile-title>{{item.title}}</v-list-tile-title>
                 </v-list-tile>
               </template>

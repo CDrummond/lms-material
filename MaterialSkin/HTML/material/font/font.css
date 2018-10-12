@@ -4,7 +4,7 @@
   font-weight: 400;
   src: url('MaterialIcons.ttf') format('truetype');
 }
-/* Uncomment to force use of Roboto on all systems
+
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
@@ -29,7 +29,7 @@
   font-weight: 700;
   src: local('Roboto Bold'), local('Roboto-Bold'), url(Roboto-Bold.ttf) format('truetype');
 }
-*/
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;

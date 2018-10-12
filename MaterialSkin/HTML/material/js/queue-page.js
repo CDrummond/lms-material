@@ -102,8 +102,8 @@ var lmsQueue = Vue.component("LmsQueue", {
               <v-icon>{{item.icon}}</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title v-html="item.title"></v-list-tile-title>
-              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+              <v-list-tile-title>{{item.title}}</v-list-tile-title>
+              <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
             <v-list-tile-action v-if="item.actions && item.actions.length>1" @click.stop=""> <!-- @click.stop stops even going to list item (navigate) -->

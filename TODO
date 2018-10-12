@@ -21,9 +21,6 @@
   - Enlarge cover image if too small
 
 - PlayQueue
-  - Drag'n'drop editing
-    - https://github.com/timruffles/mobile-drag-drop
-    - Use cover as drag handle
   - Only update whilst visible?
 
 - Misc

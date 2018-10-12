@@ -320,6 +320,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
+                this.headerSubTitle = "Extra browse modes";
                 this.listSize = this.items.length;
                 document.documentElement.scrollTop=0;
                 return;

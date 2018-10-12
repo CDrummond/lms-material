@@ -7,8 +7,8 @@ Vue.component('lms-ui-settings', {
             <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
             <v-toolbar-title>Settings</v-toolbar-title>
           </v-toolbar>
-          <div class="lms-toolbar"></div>
-          <v-list three-line subheader>
+          <div class="settings-toolbar-pad"></div>
+          <v-list three-line subheader class="settings-list">
             <v-subheader>General</v-subheader>
             <v-list-tile avatar>
               <v-list-tile-action><v-checkbox v-model="darkUi"></v-checkbox></v-list-tile-action>
@@ -19,11 +19,11 @@ Vue.component('lms-ui-settings', {
             </v-list-tile>
 
             <v-subheader>Browse</v-subheader>
-            <v-list-tile avatar class="settings-select">
+            <v-list-tile avatar>
               <v-select :items="albumSorts" label="Sort albums under artists by" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
-            <v-list-tile avatar class="settings-select">
+            <v-list-tile avatar>
               <v-select :items="albumSorts" label="Sort album list by" v-model="albumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             

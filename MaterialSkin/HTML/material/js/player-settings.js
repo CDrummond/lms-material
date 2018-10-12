@@ -7,16 +7,16 @@ Vue.component('lms-player-settings', {
             <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
             <v-toolbar-title>'{{player ? player.name : 'No Player'}}' Settings</v-toolbar-title>
           </v-toolbar>
-          <div class="lms-toolbar"></div>
-          <v-list three-line subheader>
+          <div class="settings-toolbar-pad"></div>
+          <v-list three-line subheader class="settings-list">
             <v-subheader>Audio</v-subheader>
-            <v-list-tile avatar class="settings-select">
+            <v-list-tile avatar>
               <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-            <v-list-tile avatar class="settings-select">
+            <v-list-tile avatar>
               <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-            <v-list-tile avatar class="settings-select" vi-f="dstmItems && dstmItems.length>1">
+            <v-list-tile avatar vi-f="dstmItems && dstmItems.length>1">
               <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
              </v-list-tile>
           </v-list>

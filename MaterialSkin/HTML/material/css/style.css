@@ -261,9 +261,9 @@ a {
 }
 
 .pq-current {
-    border: 1px solid rgba(64, 64, 255, 0.5);
+    border: 1px solid rgba(16, 16, 255, 0.75);
     border-radius: 4px;
-    background-color:rgba(64, 64, 198, 0.25);
+    background-color:rgba(16, 16, 255, 0.15);
 }
 
 .pq-text {

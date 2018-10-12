@@ -48,7 +48,6 @@
     - or use ["time", "?"] to just obtain time position every second?
   - i18n
   - Add 'Manage all' to volume popup to manage all volumes (only if more than 1 player)
-  - Add link to Default/settings/index.html
   - Add support for artist/song info (e.g. lyrics).
     - Need to check relevant plugin is installed.
   - Add swipe support to switch pages

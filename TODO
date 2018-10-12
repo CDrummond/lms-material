@@ -29,7 +29,6 @@
 - Misc
   - Complete WebApp support
   - Desktop UI - expand the 3 pages into 1
-  - Synchronisation
   - Group management
     - Will need to add code to Plugin.pm to allow groups to be created/removed
       if (Slim::Utils::PluginManager->isEnabled('Slim::Plugin::XXX::Plugin')) {

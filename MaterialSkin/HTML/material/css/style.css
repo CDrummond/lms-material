@@ -260,6 +260,12 @@ a {
     vertical-align: middle !important;
 }
 
+.pq-time {
+    font-size:90%;
+    margin-right:-16px;
+    opacity:0.75;
+}
+
 .settings-list {
     max-width:600px;
     margin: auto;

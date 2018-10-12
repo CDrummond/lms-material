@@ -84,7 +84,7 @@ var lmsQueue = Vue.component("LmsQueue", {
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
         <v-layout>
-          <v-flex class="pq-text">{{playerStatus.playlist.count | displayCount}} {{duration | displayTime(true)}}</v-flex>
+          <v-flex class="pq-text" v-if="playerStatus">{{playerStatus.playlist.count | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
           <v-btn flat icon @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
           <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>

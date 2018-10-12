@@ -52,9 +52,7 @@
   - Add swipe support to switch pages
   - Create release script
   - Call clearInterval/clearTimer in beforeDestroy()
-  - Handle case where active player is removed
   - Power on/off players
-  - When setting initial player, choose powered on ones first
 
 - Settings
   - player settings:

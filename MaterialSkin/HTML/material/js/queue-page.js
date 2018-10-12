@@ -321,5 +321,11 @@ var lmsQueue = Vue.component("LmsQueue", {
             }
             return 1===value ? "1 Track" : (value+" Tracks");
         }
+    },
+    beforeDestroy() {
+        if (undefined!==this.updateTimer) {
+            clearTimeout(this.updateTimer);
+            this.updateTimer = undefined;
+        }
     }
 });

@@ -127,7 +127,7 @@ var lmsServer = Vue.component('lms-server', {
     created: function() {    
         this.refreshServerStatus();
 
-        setInterval(function () {
+        this.serverStatusRefreshInterval = setInterval(function () {
             this.refreshServerStatus();
         }.bind(this), LMS_SERVER_STATUS_REFRESH);
         this.statusRefreshTimer = setTimeout(function () {
@@ -169,6 +169,16 @@ var lmsServer = Vue.component('lms-server', {
         '$store.state.player': function (newVal) {
             bus.$emit("playerChanged");
             this.refreshStatus();
+        }
+    },
+    beforeDestroy() {
+        if (undefined!==this.serverStatusRefreshInterval) {
+            clearInterval(this.serverStatusRefreshInterval);
+            this.serverStatusRefreshInterval = undefined;
+        }
+        if (undefined!==this.statusRefreshTimer) {
+            clearTimeout(this.statusRefreshTimer);
+            this.statusRefreshTimer = undefined;
         }
     }
 });

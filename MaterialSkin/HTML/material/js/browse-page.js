@@ -75,8 +75,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 </v-list-tile-avatar>
 
                 <v-list-tile-content v-if="item.type!='search' && item.type!='xmlsearch'">
-                  <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                  <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
                 </v-list-tile-content>
 
                 <v-list-tile-content v-else>

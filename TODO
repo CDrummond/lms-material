@@ -25,14 +25,11 @@
     - https://github.com/timruffles/mobile-drag-drop
     - Use cover as drag handle
   - Only update whilst visible?
-  - Add menu item to scroll to current track
-  - Show total tracks and duration somewhere
-  - Place track duration on subtitle line, and use subtitle font
+  - Add action to scroll to current track
 
 - Misc
   - Complete WebApp support
   - Desktop UI - expand the 3 pages into 1
-  - Add text input dialog, and use for search and rename
   - Synchronisation
   - Group management
     - Will need to add code to Plugin.pm to allow groups to be created/removed

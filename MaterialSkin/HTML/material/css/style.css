@@ -133,6 +133,18 @@ a {
     margin-right: -8px;
 }
 
+.pm-noicon-indent {
+    margin-left: 44px;
+}
+
+.pm-icon-indent {
+    margin-left: 20px;
+}
+
+.dimmed-icon {
+    opacity:0.25;
+}
+
 .subtoolbar-title {
     padding-top: 0px;
 }

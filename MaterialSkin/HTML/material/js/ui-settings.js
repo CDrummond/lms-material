@@ -4,9 +4,8 @@ Vue.component('lms-ui-settings', {
       <v-dialog v-model="show" fullscreen transition="dialog-bottom-transition" app>
         <v-card>
           <v-toolbar color="primary" dark app class="lms-toolbar">
+            <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
             <v-toolbar-title>Settings</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn flat icon @click.native="close"><v-icon>close</b-icon></v-btn>
           </v-toolbar>
           <div class="lms-toolbar"></div>
           <v-list three-line subheader>

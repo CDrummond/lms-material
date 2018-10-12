@@ -259,11 +259,6 @@ a {
 }
 
 .settings-select {
-    max-width: 350px !important;
-}
-
-.settings-radio-group {
-    padding-left: 16px;
-    margin-top:-32px !important;
+    max-width: 600px !important;
 }
 

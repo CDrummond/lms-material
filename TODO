@@ -25,7 +25,6 @@
     - https://github.com/timruffles/mobile-drag-drop
     - Use cover as drag handle
   - Only update whilst visible?
-  - Add action to scroll to current track
 
 - Misc
   - Complete WebApp support

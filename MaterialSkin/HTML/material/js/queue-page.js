@@ -86,6 +86,7 @@ var lmsQueue = Vue.component("LmsQueue", {
         <v-layout>
           <v-flex class="pq-text">{{playerStatus.playlist.count | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
+          <v-btn flat icon @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
           <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
           <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>
@@ -155,7 +156,9 @@ var lmsQueue = Vue.component("LmsQueue", {
                 this.scheduleUpdate();
             } else if (currentIndex!==this.currentIndex) {
                 this.currentIndex = currentIndex;
-                this.scrollToCurrent();
+                if (this.$store.state.autoScrollQueue) {
+                    this.scrollToCurrent();
+                }
             }
         }.bind(this));
     },
@@ -232,9 +235,11 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.scheduleUpdate();
                 } else {
                     this.getDuration();
-                    this.$nextTick(function () {
-                        this.scrollToCurrent();
-                    });
+                    if (this.$store.state.autoScrollQueue) {
+                        this.$nextTick(function () {
+                            this.scrollToCurrent();
+                        });
+                    }
                 }
             }).catch(err => {
                 this.fetchingItems = false;
@@ -286,9 +291,6 @@ var lmsQueue = Vue.component("LmsQueue", {
             };
         },
         scrollToCurrent() {
-            if (!this.$store.state.autoScrollQueue) {
-                return;
-            }
             if (this.items.length>5 && this.currentIndex<=this.items.length) {
                 // Offset of -68 below to take into account toolbar
                 this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
@@ -296,7 +298,7 @@ var lmsQueue = Vue.component("LmsQueue", {
         }
     },
     computed: {
-        playerStatus() {;
+        playerStatus() {
             return this.$store.state.playerStatus
         }
     },

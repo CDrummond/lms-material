@@ -48,6 +48,22 @@ const store = new Vuex.Store({
     mutations: {
         setPlayers(state, players) {
             state.players=players;
+            if (state.player) {
+                // Cehck current player is still valid
+                var found = false;
+                if (players) {
+                    for (i=0; i<state.players.length; ++i) {
+                        if (state.players[i].id === state.player.id) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    state.player = null;
+                }
+            }
+
             if (players && !state.player) {
                 var config = localStorage.getItem(LS_PREFIX+'player');
                 if (config) {
@@ -57,7 +73,25 @@ const store = new Vuex.Store({
                         }
                     });
                 }
-                if (!state.player) {
+                if (!state.player) { /* Choose first powered on player */
+                    for (i=0; i<state.players.length; ++i) {
+                        if (state.players[i].ison) {
+                            state.player=state.players[i];
+                            localStorage.setItem(LS_PREFIX+'player', state.player.id);
+                            break;
+                        }
+                    }
+                }
+                if (!state.player) { /* Choose first connected on player */
+                    for (i=0; i<state.players.length; ++i) {
+                        if (state.players[i].isconnected) {
+                            state.player=state.players[i];
+                            localStorage.setItem(LS_PREFIX+'player', state.player.id);
+                            break;
+                        }
+                    }
+                }
+                if (!state.player && state.players.length>0) { /* Choose first player */
                     state.player=state.players[0];
                     localStorage.setItem(LS_PREFIX+'player', state.player.id);
                 }

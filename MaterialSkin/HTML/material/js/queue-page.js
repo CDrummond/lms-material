@@ -61,7 +61,8 @@ function parseResp(data) {
 
 var lmsQueue = Vue.component("LmsQueue", {
   template: `
-    <div v-touch="{ left: () => swipe('l'), right: () => swipe('r')}" style="width:100%; height:100%"> <!-- needed so that swipe works on empty area -->
+  <!-- style below is needed so that swipe works on empty area -->
+    <div v-touch="{ left: () => swipe('l'), right: () => swipe('r')}" style="width:100%; height:100%"> 
       <v-dialog v-model="dialog.show" persistent max-width="500px">
         <v-card>
           <v-card-text>
@@ -142,14 +143,18 @@ var lmsQueue = Vue.component("LmsQueue", {
         this.timestamp = 0;
         this.currentIndex = -1;
         this.items = [];
+        this.isVisible = true;
+        this.autoScrollRequired = false;
     },
     mounted() {
         this.scroll();
+
         this.listSize = this.items.length;
         bus.$on('playerChanged', function() {
 	        this.items=[];
 	        this.timestamp=0;
         }.bind(this));
+
         bus.$on('playListDetails', function(currentIndex, timestamp) {
             if (timestamp!==this.timestamp) {
                 this.timestamp = timestamp;
@@ -159,6 +164,25 @@ var lmsQueue = Vue.component("LmsQueue", {
                 if (this.$store.state.autoScrollQueue) {
                     this.scrollToCurrent();
                 }
+            }
+        }.bind(this));
+
+        // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
+        // page, so that it can be restored when going back here.
+        bus.$on('routeChange', function(from, to, pos) {
+            this.isVisible = '/queue'==to;
+            if (this.isVisible) {
+                if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
+                    this.$nextTick(function () {
+                        this.scrollToCurrent();
+                    });
+                } else if (this.previousScrollPos!==undefined) {
+                    this.$nextTick(function () {
+                        document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
+                    });
+                }
+            } else if (from=='/queue') {
+                this.previousScrollPos = pos;
             }
         }.bind(this));
     },
@@ -291,9 +315,14 @@ var lmsQueue = Vue.component("LmsQueue", {
             };
         },
         scrollToCurrent() {
+            this.autoScrollRequired = false;
             if (this.items.length>5 && this.currentIndex<=this.items.length) {
-                // Offset of -68 below to take into account toolbar
-                this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
+                if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the brows/nowplaying page!
+                    // Offset of -68 below to take into account toolbar
+                    this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
+                } else {
+                    this.autoScrollRequired = true;
+                }
             }
         },
         dragStart(which, ev) {

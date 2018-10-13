@@ -258,21 +258,23 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.actions=[];
-        this.artistImages=false;  
+        this.artistImages=false;
+        this.previousScrollPos=0;
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
         // page, so that it can be restored when going back here.
         bus.$on('routeChange', function(from, to, pos) {
             if (to=='/browse') {
-                if (this.previousScrollPos!==undefined) {
-                    this.$nextTick(function () {
-                        document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
-                    });
-                }
+                this.$nextTick(function () {
+                    document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
+                });
             } else if (from=='/browse') {
                 this.previousScrollPos = pos;
             }
         }.bind(this));
+        this.$nextTick(function () {
+            document.documentElement.scrollTop=0;
+        });
     },
     methods: {
         playerId() {

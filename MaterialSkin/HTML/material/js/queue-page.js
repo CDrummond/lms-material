@@ -145,6 +145,7 @@ var lmsQueue = Vue.component("LmsQueue", {
         this.items = [];
         this.isVisible = true;
         this.autoScrollRequired = false;
+        this.previousScrollPos = 0;
     },
     mounted() {
         this.scroll();
@@ -176,7 +177,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.$nextTick(function () {
                         this.scrollToCurrent();
                     });
-                } else if (this.previousScrollPos!==undefined) {
+                } else {
                     this.$nextTick(function () {
                         document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
                     });
@@ -185,6 +186,10 @@ var lmsQueue = Vue.component("LmsQueue", {
                 this.previousScrollPos = pos;
             }
         }.bind(this));
+
+        this.$nextTick(function () {
+            document.documentElement.scrollTop=0;
+        });
     },
     methods: {
         save() {

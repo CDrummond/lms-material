@@ -7,7 +7,7 @@
  
 var lmsNowPlaying = Vue.component("LmsNowPlaying", {
     template: `
-      <div class="np-page" v-if="playerStatus  && playerStatus.isOn">
+      <div class="np-page" v-if="playerStatus && playerStatus.isOn" v-touch="{ left: () => swipe('l'), right: () => swipe('r')}">
         <p class="np-text ellipsis" v-if="playerStatus.current && playerStatus.current.title">{{playerStatus.current.title}}</p>
         <p class="np-text" v-else>&nbsp;</p>
         <p class="np-subtext ellipsis" v-if="playerStatus.current && playerStatus.current.artist">{{playerStatus.current.artist}}</p>
@@ -64,6 +64,13 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 const pos = e.clientX - rect.x;
                 const width = rect.width;
                 this.doAction(['time', Math.floor(this.$store.state.playerStatus.current.duration * pos / rect.width)]);
+            }
+        },
+        swipe(direction) {
+            if ('l'==direction) {
+                this.$router.push('/queue');
+            } else if ('r'==direction) {
+                this.$router.push('/browse');
             }
         }
     },

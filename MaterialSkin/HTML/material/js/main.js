@@ -29,6 +29,9 @@ let router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    // Inform that we are about to change page (from->to) and indicate current scroll position
+    // Position is required so that browse/queue can restore their current scroll on page change
+    bus.$emit('routeChange', from.path, to.path, document.documentElement.scrollTop);
     next()
 })
 

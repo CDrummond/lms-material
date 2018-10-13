@@ -61,7 +61,7 @@ function parseResp(data) {
 
 var lmsQueue = Vue.component("LmsQueue", {
   template: `
-    <div>
+    <div v-touch="{ left: () => swipe('l'), right: () => swipe('r')}" style="width:100%; height:100%"> <!-- needed so that swipe works on empty area -->
       <v-dialog v-model="dialog.show" persistent max-width="500px">
         <v-card>
           <v-card-text>
@@ -332,6 +332,13 @@ var lmsQueue = Vue.component("LmsQueue", {
                 bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
             }
             this.dragIndex = undefined;
+        },
+        swipe(direction) {
+            if ('l'==direction) {
+                this.$router.push('/browse');
+            } else if ('r'==direction) {
+                this.$router.push('/nowplaying');
+            }
         }
     },
     computed: {

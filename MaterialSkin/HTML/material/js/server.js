@@ -164,11 +164,13 @@ var lmsServer = Vue.component('lms-server', {
         });
 
         // Player groups plugin
+        /* TODO: Enable, and implement!
         lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
             if (data && data.result && data.result._can) {
                 bus.$emit('playerGroups', 1==data.result._can);
             }
         });
+        */
     },
     watch: {
         '$store.state.player': function (newVal) {

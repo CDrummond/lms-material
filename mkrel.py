@@ -66,11 +66,13 @@ def updateInstallXml(version):
             f.write(line)
 
 def createZip(version):
+    info("Creating ZIP")
     zipFile="lms-material-%s" % version
     shutil.make_archive(zipFile, 'zip', 'MaterialSkin')
     return zipFile+".zip"
 
 def getSha1Sum(zipFile):
+    info("Generatin SHA1")
     sha1 = hashlib.sha1()
     with open(zipFile, 'rb') as f:
         while True:

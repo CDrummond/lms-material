@@ -24,8 +24,18 @@ usage.
 
 ## Installation
 
-To install, simply copy (or symlink) the ```MaterialSkin``` directory into the
-server's ```Plugin``` directory.
+Using LMS GUI:
+
+1. Open the LMS web page (e.g. `http://localhost:9000`)
+2. Click on Settings
+3. Select the Plugins tab
+4. At bottom of the page add the repo URL: `https://raw.githubusercontent.com/CDrummond/lms-material/master/public.xml`
+5. Install the plugin and enable as usual
+
+Manually:
+
+Copy (or symlink) the ```MaterialSkin``` directory into the server's `Plugin` directory.
+
 
 ## Usage
 

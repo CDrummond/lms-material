@@ -13,8 +13,14 @@ usage.
 1. Browse local library - Artists, Album Artists (if not set for single list),
    Genres, Playlists, Years, Composers, etc.
 2. Browse Radio, Favourites, and Apps
-3. Now playing view
-4. Play queue view
+3. Add, delete, and rename favourites
+4. Add, delete, and rename playlists
+5. Now playing
+6. Play queue with drag'n'drop editing
+7. Swipe left/right on mobile to change views
+8. UI settings; dark theme, album sort, auto scroll play queue
+9. Player settings; crossfade, replay gain, dont stop the music
+10. Sync support
 
 ## Installation
 

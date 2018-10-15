@@ -296,3 +296,8 @@ a {
 .alarm-entry {
     height: 64px !important;
 }
+
+.alarm-dialog {
+    max-width: 200px !important;
+}
+

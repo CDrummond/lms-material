@@ -48,7 +48,3 @@
   - Add 'Manage all' to volume popup to manage all volumes (only if more than 1 player)
   - Add support for artist/song info (e.g. lyrics).
     - Need to check relevant plugin is installed.
-
-- Settings
-  - player settings:
-    - alarms

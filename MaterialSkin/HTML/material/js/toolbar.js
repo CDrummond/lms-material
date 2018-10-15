@@ -117,9 +117,15 @@ Vue.component('lms-toolbar', {
                 }
             });
         }.bind(this));
-        bus.$on('playerGroups', function(playerGroups) {
-            this.playerGroups = playerGroups;
-        }.bind(this));
+
+        // Player groups plugin
+        /* TODO: Enable, and implement!
+        lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
+            if (data && data.result && data.result._can) {
+                this.playerGroups = 1==data.result._can;
+            }
+        });
+        */
     },
     methods: {
         setPlayer(name) {

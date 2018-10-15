@@ -35,7 +35,7 @@ Vue.component('lms-player-settings', {
 
             <v-subheader>Scheduled alarms</v-subheader>
             <template v-for="(item, index) in alarms.scheduled">
-              <v-list-tile style="width:100%; float:left; height:64px">
+              <v-list-tile class="alarm-entry">
                 <v-switch v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-switch>
                 <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button" style="margin-top:-22px"><v-icon>edit</v-icon></v-btn>
                 <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button" style="margin-top:-22px"><v-icon>delete</v-icon></v-btn>

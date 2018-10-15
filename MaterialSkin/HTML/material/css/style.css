@@ -292,3 +292,7 @@ a {
 .lms-dialog {
     padding: 16px;
 }
+
+.alarm-entry {
+    height: 64px !important;
+}

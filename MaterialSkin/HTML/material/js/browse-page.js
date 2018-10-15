@@ -203,22 +203,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         ];
         this.other = [
             {
-                title: "Composers",
-                command: ["artists"],
-                params: ["role_id:COMPOSER"],
-                icon: "group",
-                type: "group",
-                url: "more:/comp"
-            },
-            {
-                title: "Conductors",
-                command: ["artists"],
-                params: ["role_id:CONDUCTOR"],
-                icon: "group",
-                type: "group",
-                url: "more:/cond"
-            },   
-            {
                 title: "Compilations",
                 command: ["albums"],
                 params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
@@ -587,6 +571,55 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 this.artistImages = 1==data.result._p2;
+            }
+        });
+
+        // Additional browse modes?
+        lmsCommand("", ["pref", "plugin.extendedbrowsemodes:additionalMenuItems", "?"]).then(({data}) => {
+            var haveExtra = false;
+            if (data && data.result && data.result._p2 && data.result._p2.length>0) {
+                haveExtra = true;
+                for (var i = data.result._p2.length; i-- > 0; ) {
+                    var item = { title: data.result._p2[i].name,
+                                 command: [data.result._p2[i].feed],
+                                 url: "ebm:/"+data.result._p2[i].id,
+                                 type: "group",
+                                 icon: "artists"==data.result._p2[i].feed ? "group" : "album"
+                               };
+
+                    if (data.result._p2[i].params) {
+                        var params=[];
+                        if (data.result._p2[i].params.role_id) {
+                            params.push("role_id:"+data.result._p2[i].params.role_id);
+                        }
+                        if (data.result._p2[i].params.genre_id) {
+                            params.push("genre_id:"+data.result._p2[i].params.genre_id);
+                        }
+                        if (params.length>0) {
+                            item.params = params;
+                        }
+                    }
+                    this.other.unshift(item);
+                }
+            }
+
+            if (!haveExtra) {
+                this.other.unshift({
+                                    title: "Conductors",
+                                    command: ["artists"],
+                                    params: ["role_id:CONDUCTOR"],
+                                    icon: "group",
+                                    type: "group",
+                                    url: "more:/cond"
+                                   });
+                this.other.unshift({
+                                    title: "Composers",
+                                    command: ["artists"],
+                                    params: ["role_id:COMPOSER"],
+                                    icon: "group",
+                                    type: "group",
+                                    url: "more:/comp"
+                                   });
             }
         });
 

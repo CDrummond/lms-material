@@ -1,3 +1,8 @@
+0.0.2
+-----
+1. Query additional browse modes plugin for extra browse modes. If none,
+   fallback to conductors and composers.
+
 0.0.1
 -----
 1. Initial release

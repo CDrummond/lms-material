@@ -1,3 +1,11 @@
+/*
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+const DAYS_OF_WEEK = ['Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat', 'Sun'];
 
 Vue.component('lms-player-settings', {
     template: `
@@ -9,16 +17,42 @@ Vue.component('lms-player-settings', {
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
           <v-list three-line subheader class="settings-list">
-            <v-subheader>Audio</v-subheader>
-            <v-list-tile avatar>
+            <v-header>Audio</v-header>
+            <v-list-tile>
               <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-            <v-list-tile avatar>
+            <v-list-tile>
               <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-            <v-list-tile avatar vi-f="dstmItems && dstmItems.length>1">
+            <v-list-tile vi-f="dstmItems && dstmItems.length>1">
               <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
-             </v-list-tile>
+            </v-list-tile>
+
+            <v-header>Alarms</v-header>
+            <v-list-tile>
+              <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
+            </v-list-tile>
+
+            <v-subheader>Scheduled alarms</v-subheader>
+            <template v-for="(item, index) in alarms.scheduled">
+              <v-list-tile style="width:100%; float:left; height:64px">
+                <v-switch v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-switch>
+                <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button" style="margin-top:-22px"><v-icon>edit</v-icon></v-btn>
+                <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button" style="margin-top:-22px"><v-icon>delete</v-icon></v-btn>
+              </v-list-tile>
+              <v-divider v-if="(index+1 < alarms.scheduled.length)"></v-divider>
+            </template>
+            <v-btn flat icon @click.stop="addAlarm()"><v-icon>alarm_add</v-icon></v-btn>
+            <v-subheader>Alarm settings</v-subheader>
+            <v-list-tile>
+              <v-text-field label="Volume (%)" v-model="alarms.volume" type="number"></v-text-field>
+            </v-list-tile>
+            <v-list-tile>
+              <v-text-field label="Snooze (minutes)" v-model="alarms.snooze" type="number"></v-text-field>
+            </v-list-tile>
+            <v-list-tile>
+              <v-text-field label="Timeout (minutes)" v-model="alarms.timeout" type="number"></v-text-field>
+            </v-list-tile>
           </v-list>
         </v-card>
       </v-dialog>
@@ -45,7 +79,21 @@ Vue.component('lms-player-settings', {
                 { key:'2', label:"Album gain"},
                 { key:'3', label:"Smart gain"}
                 ],
-            dstmItems: []
+            dstmItems: [],
+            alarms: {
+                on: true,
+                volume: 100,
+                snooze: 9,
+                timeout: 60,
+                fade: true,
+                scheduled: []
+            },
+            alarmShuffeItems:[
+                { key:'0', label:"Don't shuffle"},
+                { key:'1', label:"Shuffle by song"},
+                { key:'2', label:"Shuffle by album"},
+                ],
+            alarmSounds:[]
         }
     },
     mounted() {
@@ -78,6 +126,61 @@ Vue.component('lms-player-settings', {
                         this.replaygain=data.result._p2;
                     }
                 });
+
+                this.alarms.on=true;
+                this.alarms.volume=100;
+                this.alarms.snooze=0;
+                this.alarms.timeout=0;
+                this.alarms.fade=true;
+                lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        this.fade=1==data.result._p2;
+                    }
+                });
+                lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        this.timeout=data.result._p2;
+                    }
+                });
+                lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        this.snooze=data.result._p2;
+                    }
+                });
+                lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        this.on=1==data.result._p2;
+                    }
+                });
+                lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        this.volume=data.result._p2;
+                    }
+                });
+                this.alarmSounds=[];
+                this.alarms.scheduled=[];
+                lmsList(this.playerId, ["alarm", "playlists"], undefined, 0).then(({data}) => {
+                    if (data && data.result && data.result.item_loop) {
+                        data.result.item_loop.forEach(i => {
+                            if (!i.url) {
+                                this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:'Current play queue'});
+                            } else {
+                                this.alarmSounds.push({key:i.url, label:i.category+": "+i.title});
+                            }
+                        });
+                    }
+                    if (this.alarmSounds.length<1) {
+                        this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:'Current play queue'});
+                    }
+
+                    lmsList(this.playerId, ["alarms", 0, 100], undefined, 0).then(({data}) => {
+                        if (data && data.result && data.result.alarms_loop) {
+                            data.result.alarms_loop.forEach(i => {
+                                this.alarms.scheduled.push(i);
+                            });
+                        }
+                    });
+                 });
                 this.show = true;
             }
         }.bind(this));
@@ -90,8 +193,37 @@ Vue.component('lms-player-settings', {
             }
             lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
             lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
+            lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
+            lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout]);
+            lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze]);
+            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on]);
+            lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
             this.playerId = undefined;
+        },
+        toggleAlarm(alarm) {
+             lmsCommand(this.playerId, ["alarm", "enabled:"+alarm.enabled, "id:"+alarm.id]);
+        },
+        addAlarm() {
+        },
+        editAlarm(alarm) {
+        },
+        deleteAlarm(alarm) {
+            this.$confirm("Delete alarm?",
+                          {buttonTrueText: 'Delete', buttonFalseText: 'Cancel'}).then(res => {
+                if (res) {
+                    lmsCommand(this.playerId, ["alarm", "delete", "id:"+alarm.id]);
+                }
+            });
         }
-    }
+    },
+    filters: {
+        formatAlarm: function (value) {
+            var days=[];
+            value.dow.split(",").forEach(d => {
+                days.push(DAYS_OF_WEEK[parseInt(d)]);
+            });
+            return formatTime(value.time)+" "+days.join(", ");
+        }
+    },
 })
 

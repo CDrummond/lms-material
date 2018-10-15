@@ -189,6 +189,8 @@ var lmsQueue = Vue.component("LmsQueue", {
 
         this.$nextTick(function () {
             document.documentElement.scrollTop=0;
+            // In case we missed the initial status update, ask for one now - so that we get queue quicker
+            bus.$emit('refreshStatus');
         });
     },
     methods: {

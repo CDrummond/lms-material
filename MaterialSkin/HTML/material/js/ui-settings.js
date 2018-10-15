@@ -1,3 +1,9 @@
+/*
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
 
 Vue.component('lms-ui-settings', {
     template: `
@@ -9,31 +15,23 @@ Vue.component('lms-ui-settings', {
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
           <v-list three-line subheader class="settings-list">
-            <v-subheader>General</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-action><v-checkbox v-model="darkUi"></v-checkbox></v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Dark theme</v-list-tile-title>
-                <v-list-tile-sub-title>Use dark background with white text</v-list-tile-sub-title>
-              </v-list-tile-content>
+            <v-header>General</v-header>
+            <v-list-tile>
+              <v-switch v-model="darkUi" label="Use dark theme"></v-switch>
             </v-list-tile>
 
-            <v-subheader>Browse</v-subheader>
-            <v-list-tile avatar>
+            <v-header>Browse</v-header>
+            <v-list-tile>
               <v-select :items="albumSorts" label="Sort albums under artists by" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
-            <v-list-tile avatar>
+            <v-list-tile>
               <v-select :items="albumSorts" label="Sort album list by" v-model="albumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             
-            <v-subheader>Queue</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-action><v-checkbox v-model="autoScrollQueue"></v-checkbox></v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Auto-scroll</v-list-tile-title>
-                <v-list-tile-sub-title>Scroll queue when current track changes</v-list-tile-sub-title>
-              </v-list-tile-content>
+            <v-header>Queue</v-header>
+            <v-list-tile>
+              <v-switch v-model="autoScrollQueue" label="Auto-scroll to current track"></v-switch>
             </v-list-tile>
           </v-list>
         </v-card>

@@ -14,7 +14,7 @@ Vue.component('lms-ui-settings', {
             <v-toolbar-title>Settings</v-toolbar-title>
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
-          <v-list three-line subheader class="settings-list">
+          <v-list two-line subheader class="settings-list">
             <v-header>General</v-header>
             <v-list-tile>
               <v-switch v-model="darkUi" label="Use dark theme"></v-switch>

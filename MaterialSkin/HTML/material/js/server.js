@@ -148,29 +148,6 @@ var lmsServer = Vue.component('lms-server', {
                 this.refreshServerStatus();
             });
         }.bind(this));
-        
-        // All Artists + Album Artists, or just Artists?
-        lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                bus.$emit('useUnifiedArtistsList', 1==data.result._p2);
-            }
-        });
-        
-        // Artist images?
-        lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                bus.$emit('artistImages', 1==data.result._p2);
-            }
-        });
-
-        // Player groups plugin
-        /* TODO: Enable, and implement!
-        lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
-            if (data && data.result && data.result._can) {
-                bus.$emit('playerGroups', 1==data.result._can);
-            }
-        });
-        */
     },
     watch: {
         '$store.state.player': function (newVal) {

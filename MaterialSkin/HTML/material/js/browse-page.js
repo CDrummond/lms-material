@@ -575,13 +575,20 @@ var lmsBrowse = Vue.component("LmsBrowse", {
     },
     mounted() {
         this.scroll();
-        bus.$on('useUnifiedArtistsList', function(useUnifiedArtistsList) {
-            this.separateArtists = !useUnifiedArtistsList;
-        }.bind(this));
 
-        bus.$on('artistImages', function(artistImages) {
-            this.artistImages = artistImages;
-        }.bind(this));
+        // All Artists + Album Artists, or just Artists?
+        lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2) {
+                this.separateArtists = 1!= data.result._p2;
+            }
+        });
+
+        // Artist images?
+        lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2) {
+                this.artistImages = 1==data.result._p2;
+            }
+        });
 
         bus.$on('albumSortChanged', function(act) {
             this.goHome();

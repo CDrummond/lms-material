@@ -67,15 +67,16 @@ Vue.component('lms-toolbar', {
             <v-card class="volume-popup">
               <v-container grid-list-md text-xs-center>
                 <v-layout row wrap>
-                <v-flex xs12>{{playerVolume}} %</v-flex>
-                <v-flex xs12>
-                <v-layout>
-                  <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-                  <v-slider step="5" v-model="playerVolume" class="vol-slider"></v-slider>
-                  <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+                  <v-flex xs12>{{playerVolume}} %</v-flex>
+                  <v-flex xs12>
+                    <v-layout>
+                      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
+                      <v-slider step="5" v-model="playerVolume" class="vol-slider"></v-slider>
+                      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+                    </v-layout>
+                  </v-flex>
                 </v-layout>
-                </v-flex>
-              </v-list>
+              </v-container>
             </v-card>
           </v-menu>
             <v-menu bottom left>

@@ -279,6 +279,11 @@ a {
     opacity:0.75;
 }
 
+.dialog--fullscreen > .card {
+    padding-left:8px !important;
+    padding-right:8px !important;
+}
+
 .settings-list {
     max-width:600px;
     margin: auto;

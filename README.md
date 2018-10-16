@@ -19,7 +19,7 @@ usage.
 6. Play queue with drag'n'drop editing
 7. Swipe left/right on mobile to change views
 8. UI settings; dark theme, album sort, auto scroll play queue
-9. Player settings; crossfade, replay gain, dont stop the music
+9. Player settings; crossfade, replay gain, dont stop the music, alarms
 10. Sync support
 
 ## Installation

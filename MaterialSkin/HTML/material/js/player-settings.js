@@ -63,26 +63,30 @@ Vue.component('lms-player-settings', {
           <v-card-title>{{alarmDialog.id ? "Edit Alarm" : "Create Alarm"}}</v-card-title>
           <v-list two-line subheader class="settings-list">
             <v-list-tile>
-              <v-menu ref="menu" :close-on-content-click="false" v-model="alarmDialog.timepicker" :nudge-right="40" :return-value.sync="alarmDialog.time"
-                      lazy transition="scale-transition" offset-y full-width max-width="290px">
-                <v-text-field slot="activator" v-model="alarmDialog.time" label="Start time" prepend-icon="access_time" readonly></v-text-field>
-                <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width @change="$refs.menu.save(alarmDialog.time)"></v-time-picker>
-              </v-menu>
+              <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
+                        persistent lazy full-width max-width="290px">
+                <v-text-field slot="activator" v-model="formattedTime" label="Start time" prepend-icon="access_time" readonly></v-text-field>
+                <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width>
+                  <v-spacer></v-spacer>
+                  <v-btn flat @click="alarmDialog.timepicker = false">Cancel</v-btn>
+                  <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">OK</v-btn>
+                </v-time-picker>
+              </v-dialog>
             </v-list-tile>
             <v-subheader>Days</v-subheader>
             <v-list-tile>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Monday" value="0"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Tuesday" value="1"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Monday" value="1"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Tuesday" value="2"></v-switch></v-flex>
             </v-list-tile>
             <v-list-tile>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Wednesday" value="2"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Thursday" value="3"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Wednesday" value="3"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Thursday" value="4"></v-switch></v-flex>
             </v-list-tile>
+            <v-list-tile><v-switch v-model="alarmDialog.dow" label="Friday" value="5"></v-switch></v-list-tile>
             <v-list-tile>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Friday" value="4"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Saturday" value="5"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Saturday" value="6"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Sunday" value="0"></v-switch></v-flex>
             </v-list-tile>
-            <v-list-tile><v-switch v-model="alarmDialog.dow" label="Sunday" value="6"></v-switch></v-list-tile>
             <v-subheader>Options</v-subheader>
             <v-list-tile>
               <v-select :items="alarmSounds" label="Sound" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
@@ -151,6 +155,15 @@ Vue.component('lms-player-settings', {
             }
         }
     },
+    computed: {
+        formattedTime() {
+            if (!this.alarmDialog.time) {
+                return "";
+            }
+            var parts = this.alarmDialog.time.split(":");
+            return formatTime((parseInt(parts[0])*60*60)+(parseInt(parts[1])*60), false);
+        }
+    },
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_PLAYER_SETTINGS.id && this.$store.state.player) {
@@ -189,27 +202,27 @@ Vue.component('lms-player-settings', {
                 this.alarms.fade=true;
                 lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
-                        this.fade=1==data.result._p2;
+                        this.alarms.fade=1==data.result._p2;
                     }
                 });
                 lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
-                        this.timeout=data.result._p2;
+                        this.alarms.timeout=Math.floor(parseInt(data.result._p2)/60);
                     }
                 });
                 lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
-                        this.snooze=data.result._p2;
+                        this.alarms.snooze=Math.floor(parseInt(data.result._p2)/60);
                     }
                 });
                 lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
-                        this.on=1==data.result._p2;
+                        this.alarms.on=1==data.result._p2;
                     }
                 });
                 lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
-                        this.volume=data.result._p2;
+                        this.alarms.volume=data.result._p2;
                     }
                 });
                 this.alarmSounds=[];
@@ -243,9 +256,9 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
             lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
             lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
-            lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout]);
-            lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze]);
-            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on]);
+            lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
+            lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
+            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
             this.playerId = undefined;
         },
@@ -265,12 +278,12 @@ Vue.component('lms-player-settings', {
             });
         },
         addAlarm() {
-            this.alarmDialog = { show: true, id: undefined, time: formatTime(0), dow:["0", "1", "2", "3", "4"], repeat: false,
+            this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["0", "1", "2", "3", "4"], repeat: false,
                                  url: 'CURRENT_PLAYLIST', shuffle: this.alarmShuffeItems[0].key };
         },
         editAlarm(alarm) {
-            this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time), dow: alarm.dow.split(","),
-                                 repeat: "1"==(""+alarm.repeat) ? true : false, url: alarm.url, enabled: alarm.enabled };
+            this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time, true), dow: alarm.dow.split(","),
+                                 repeat: 1==alarm.repeat ? true : false, url: alarm.url, enabled: 1==alarm.enabled };
         },
         saveAlarm() {
             var parts = this.alarmDialog.time.split(":");
@@ -279,7 +292,7 @@ Vue.component('lms-player-settings', {
             if (this.alarmDialog.id) {
                 cmd.push("update");
                 cmd.push("id:"+this.alarmDialog.id);
-                cmd.push("enabled:"+(this.alarmDialog.enabled));
+                cmd.push("enabled:"+(this.alarmDialog.enabled ? 1 : 0));
             } else {
                 cmd.push("add");
                 cmd.push("enabled:1");
@@ -310,9 +323,16 @@ Vue.component('lms-player-settings', {
         formatAlarm: function (value) {
             var days=[];
             value.dow.split(",").forEach(d => {
-                days.push(DAYS_OF_WEEK[parseInt(d)]);
+                // LMS has Sun->Sat, but I prefer Mon->Sun
+                var day = parseInt(d);
+                if (day == 0) {
+                    day = 6;
+                } else {
+                    day--;
+                }
+                days.push(DAYS_OF_WEEK[day]);
             });
-            return formatTime(value.time)+" "+days.join(", ");
+            return formatTime(value.time, false)+" "+days.join(", ");
         }
     },
 })

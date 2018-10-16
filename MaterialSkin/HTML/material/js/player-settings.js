@@ -30,7 +30,7 @@ Vue.component('lms-player-settings', {
             </v-list-tile>
 
             <v-header>Alarms</v-header>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
             </v-list-tile>
 
@@ -62,7 +62,7 @@ Vue.component('lms-player-settings', {
         <v-card>
           <v-card-title>{{alarmDialog.id ? "Edit Alarm" : "Create Alarm"}}</v-card-title>
           <v-list two-line subheader class="settings-list">
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
                         persistent lazy full-width max-width="290px">
                 <v-text-field slot="activator" v-model="formattedTime" label="Start time" prepend-icon="access_time" readonly></v-text-field>
@@ -74,29 +74,29 @@ Vue.component('lms-player-settings', {
               </v-dialog>
             </v-list-tile>
             <v-subheader>Days</v-subheader>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
              <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Monday" value="1"></v-switch></v-flex>
              <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Tuesday" value="2"></v-switch></v-flex>
             </v-list-tile>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
              <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Wednesday" value="3"></v-switch></v-flex>
              <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Thursday" value="4"></v-switch></v-flex>
             </v-list-tile>
-            <v-list-tile><v-switch v-model="alarmDialog.dow" label="Friday" value="5"></v-switch></v-list-tile>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.dow" label="Friday" value="5"></v-switch></v-list-tile>
+            <v-list-tile class="settings-compact-row">
              <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Saturday" value="6"></v-switch></v-flex>
              <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Sunday" value="0"></v-switch></v-flex>
             </v-list-tile>
             <v-subheader>Options</v-subheader>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-select :items="alarmSounds" label="Sound" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             <!-- TODO ????
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-select :items="alarmShuffeItems" label="Shuffle" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             -->
-            <v-list-tile><v-switch v-model="alarmDialog.repeat" label="Repeat"></v-switch></v-list-tile>
+            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.repeat" label="Repeat"></v-switch></v-list-tile>
           </v-list>
           <v-card-actions>
             <v-spacer></v-spacer>

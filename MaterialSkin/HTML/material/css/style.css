@@ -290,7 +290,11 @@ a {
 }
 
 .settings-toolbar-pad {
-    height: 80px; /* Make space for toolbar */
+    height: 72px; /* Make space for toolbar */
+}
+
+.settings-compact-row {
+    height: 48px !important;
 }
 
 .lms-dialog {

@@ -40,7 +40,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
+          <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
           <v-card v-if="headerTitle" class="subtoolbar">
             <v-layout>
               <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
@@ -264,8 +264,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         playerId() {
             return this.$store.state.player ? this.$store.state.player.id : "";
         },
-        showMessage(msg) {
-            this.snackbar = {msg: msg ? msg : "Something went wrong!", show: true};
+        showMessage(msg, color) {
+            this.snackbar = {msg: msg ? msg : "Something went wrong!", show: true, color: undefined==color ? 'error' : color };
         },
         fetchItems(item, params) {
             this.fetchingItems = true;
@@ -382,7 +382,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
 
                 lmsCommand(this.playerId(), ["favorites", "add", "url:"+url, "title:"+item.title]).then(({data})=> {
-                    this.showMessage("Added to favorites!");
+                    this.showMessage("Added to favorites!", '');
                 }).catch(err => {
                     this.showMessage("Failed to add to favorites!");
                 });
@@ -416,7 +416,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         lmsCommand(this.playerId(), command).then(({data}) => {
                             this.fetchingItems = false;
                             bus.$emit('refreshStatus');
-                            this.showMessage("Appended '" + item.title + "' to the play queue");
+                            this.showMessage("Appended '" + item.title + "' to the play queue", '');
                         }).catch(err => {
                             this.fetchingItems = false;
                             this.showMessage();
@@ -445,7 +445,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (act===PLAY_ACTION.cmd) {
                         this.$router.push('/nowplaying');
                     } else {
-                        this.showMessage("Appended '" + item.title + "' to the play queue");
+                        this.showMessage("Appended '" + item.title + "' to the play queue", '');
                     }
                 }).catch(err => {
                     this.fetchingItems = false;

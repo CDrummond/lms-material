@@ -27,24 +27,27 @@
   - Only update whilst visible?
 
 - Misc
+  - i18n
+    - Obtain locale from LMS - ["",["pref","language", "?"]]
+    - Lazy load translations
   - Complete WebApp support
-  - Desktop UI - expand the 3 pages into 1
+    - Correct icon
+    - Hide navigation bar
+    - Fullscreen
+    - Handle back button (navigate back in browse)
+  - Add support for artist/song info (e.g. lyrics).
+    - Need to check relevant plugin is installed.
   - Group management
-    - Will need to add code to Plugin.pm to allow groups to be created/removed
-      if (Slim::Utils::PluginManager->isEnabled('Slim::Plugin::XXX::Plugin')) {
-          require Slim::Plugin::XXX::Plugin
-      }
-    ["groupmac", ["playergroup", 0, 100]] lists group details
-    ["groupmac", ["playerpref", "playername", "X"]] sets group name
-    ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
-    Add create/delete/edit/list to JSNO API in Groups plugin itself.
-
+    - Add create/delete/edit/list to JSON API in Groups plugin itself.
+      ["groupmac", ["playergroup", 0, 100]] lists group details
+      ["groupmac", ["playerpref", "playername", "X"]] sets group name
+      ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
+  - Add 'Manage all' to players/settings menu
+     - Manage all volumes
+     - Power on/off
   - Smarter polling
     - Only poll status every 5 seconds
       - at start of song, and near end poll every (e.g.) 0.5 seconds
-    - Create timer to advance song progress - re-adust on each poll
+    - Create timer to advance song progress - re-adjust on each poll
     - or use ["time", "?"] to just obtain time position every second?
-  - i18n
-  - Add 'Manage all' to volume popup to manage all volumes (only if more than 1 player)
-  - Add support for artist/song info (e.g. lyrics).
-    - Need to check relevant plugin is installed.
+  - Desktop UI - expand the 3 pages into 1. Will needs scrolling fix (above)

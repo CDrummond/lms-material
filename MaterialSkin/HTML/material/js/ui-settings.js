@@ -57,6 +57,7 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_UI_SETTINGS.id) {
+                bus.$emit('dialog', 'ui-settings', true);
                 this.darkUi = this.$store.state.darkUi;
                 this.artistAlbumSort = this.$store.state.artistAlbumSort;
                 this.albumSort = this.$store.state.albumSort;
@@ -68,6 +69,7 @@ Vue.component('lms-ui-settings', {
     methods: {
         close() {
             this.show=false;
+            bus.$emit('dialog', 'ui-settings', false);
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
                                                   artistAlbumSort:this.artistAlbumSort,
                                                   albumSort:this.albumSort,

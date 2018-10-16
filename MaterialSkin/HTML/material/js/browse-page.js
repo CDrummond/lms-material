@@ -20,7 +20,7 @@ const ARTIST_ALBUM_SORT_PLACEHOLDER = "-XXXAASXXX-";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
-        <div class="lms-list-page" v-touch="{ left: () => swipe('l'), right: () => swipe('r')}">
+        <div class="lms-list-page">
           <v-dialog v-model="dialog.show" persistent max-width="500px">
             <v-card>
               <v-card-text>
@@ -547,13 +547,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 return params;
             } else {
                 return origParams;
-            }
-        },
-        swipe(direction) {
-            if ('l'==direction) {
-                this.$router.push('/nowplaying');
-            } else if ('r'==direction) {
-                this.$router.push('/queue');
             }
         }
     },

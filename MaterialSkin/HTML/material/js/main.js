@@ -172,10 +172,38 @@ var app = new Vue({
             lmsServerAddress = "http://"+res[1]+":9000";
         }
         this.$store.commit('initUiSettings');
+
+        bus.$on('dialog', function(name, open) {
+            this.dialogOpen = open;
+        }.bind(this));
     },
     computed: {
         darkUi() {
             return this.$store.state.darkUi;
+        }
+    },
+    methods: {
+        swipe(direction) {
+            if (this.dialogOpen) {
+                return;
+            }
+            if ('l'==direction) {
+                if (this.$route.path=='/browse') {
+                    this.$router.push('/nowplaying');
+                } else if (this.$route.path=='/nowplaying') {
+                    this.$router.push('/queue');
+                } else if (this.$route.path=='/queue') {
+                    this.$router.push('/browse');
+                }
+            } else if ('r'==direction) {
+                if (this.$route.path=='/browse') {
+                    this.$router.push('/queue');
+                } else if (this.$route.path=='/nowplaying') {
+                    this.$router.push('/browse');
+                } else if (this.$route.path=='/queue') {
+                    this.$router.push('/nowplaying');
+                }
+            }
         }
     },
     store,

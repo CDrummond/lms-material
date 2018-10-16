@@ -167,6 +167,7 @@ Vue.component('lms-player-settings', {
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_PLAYER_SETTINGS.id && this.$store.state.player) {
+                bus.$emit('dialog', 'player-settings', true);
                 this.dstmItems=[];
                 this.crossfade='0';
                 this.replaygain='0';
@@ -242,13 +243,14 @@ Vue.component('lms-player-settings', {
                     }
 
                     this.loadAlarms();
-                 });
+                });
                 this.show = true;
             }
         }.bind(this));
     },
     methods: {
         close() {
+            bus.$emit('dialog', 'player-settings', false);
             this.show=false;
             if (this.dstmItems.length>1) {
                 lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);

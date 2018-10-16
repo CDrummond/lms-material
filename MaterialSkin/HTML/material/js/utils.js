@@ -25,13 +25,17 @@ function formatSeconds(secs) {
              .join(":");
 }
 
-function formatTime(secs) {
+function formatTime(secs, twentyFour) {
     var sec_num = parseInt(secs, 10)
     var hours   = Math.floor(sec_num / 3600) % 24
     var minutes = Math.floor(sec_num / 60) % 60
-    return [hours,minutes]
-             .map(v => v < 10 ? "0" + v : v)
-             .join(":");
+    if (twentyFour) {
+        return [hours,minutes]
+                 .map(v => v < 10 ? "0" + v : v)
+                 .join(":");
+    } else {
+        return (hours%12 || 12)+":"+(minutes<10 ? "0" : "")+minutes+" "+(hours<12 ? "AM" : "PM");
+    }
 }
 
 function resolveImage(icon, image) {

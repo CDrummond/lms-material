@@ -185,6 +185,10 @@ var app = new Vue({
     methods: {
         swipe(direction) {
             if (this.dialogOpen) {
+                if ('r'==direction) {
+                    console.log("CLOSE");
+                    bus.$emit('closeDialog');
+                }
                 return;
             }
             if ('l'==direction) {

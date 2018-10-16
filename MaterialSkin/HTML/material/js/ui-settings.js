@@ -65,6 +65,12 @@ Vue.component('lms-ui-settings', {
                 this.show = true;
             }
         }.bind(this));
+
+        bus.$on('closeDialog', function() {
+            if (this.show) {
+                this.close();
+            }
+        }.bind(this));
     },
     methods: {
         close() {

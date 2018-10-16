@@ -247,6 +247,12 @@ Vue.component('lms-player-settings', {
                 this.show = true;
             }
         }.bind(this));
+
+        bus.$on('closeDialog', function() {
+            if (this.show && !this.alarmDialog.show) {
+                this.close();
+            }
+        }.bind(this));
     },
     methods: {
         close() {

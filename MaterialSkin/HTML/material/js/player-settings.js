@@ -14,11 +14,11 @@ Vue.component('lms-player-settings', {
         <v-card>
           <v-toolbar color="primary" dark app class="lms-toolbar">
             <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-            <v-toolbar-title>'{{playerName}}' Settings</v-toolbar-title>
+            <v-toolbar-title>{{playerName}}</v-toolbar-title>
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
           <v-list two-line subheader class="settings-list">
-            <v-header>Audio</v-header>
+            <v-header>{{i18n('Audio')}}</v-header>
             <v-list-tile>
               <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
             </v-list-tile>
@@ -29,12 +29,12 @@ Vue.component('lms-player-settings', {
               <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
-            <v-header>Alarms</v-header>
+            <v-header>{{i18n('Alarms')}}</v-header>
             <v-list-tile class="settings-compact-row">
               <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
             </v-list-tile>
 
-            <v-subheader>Scheduled alarms</v-subheader>
+            <v-subheader>{{i18n('Scheduled alarms')}}</v-subheader>
             <template v-for="(item, index) in alarms.scheduled">
               <v-list-tile class="alarm-entry">
                 <v-switch v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-switch>
@@ -44,15 +44,15 @@ Vue.component('lms-player-settings', {
               <v-divider v-if="(index+1 < alarms.scheduled.length)"></v-divider>
             </template>
             <v-btn flat icon @click.stop="addAlarm()"><v-icon>alarm_add</v-icon></v-btn>
-            <v-subheader>Alarm settings</v-subheader>
+            <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
             <v-list-tile>
-              <v-text-field label="Volume (%)" v-model="alarms.volume" type="number"></v-text-field>
+              <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
             </v-list-tile>
             <v-list-tile>
-              <v-text-field label="Snooze (minutes)" v-model="alarms.snooze" type="number"></v-text-field>
+              <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
             </v-list-tile>
             <v-list-tile>
-              <v-text-field label="Timeout (minutes)" v-model="alarms.timeout" type="number"></v-text-field>
+              <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
             </v-list-tile>
           </v-list>
         </v-card>
@@ -60,48 +60,48 @@ Vue.component('lms-player-settings', {
 
       <v-dialog v-model="alarmDialog.show" width="500">
         <v-card>
-          <v-card-title>{{alarmDialog.id ? "Edit Alarm" : "Create Alarm"}}</v-card-title>
+          <v-card-title>{{alarmDialog.id ? i18n("Edit Alarm") : i18n("Create Alarm")}}</v-card-title>
           <v-list two-line subheader class="settings-list">
             <v-list-tile class="settings-compact-row">
               <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
                         persistent lazy full-width max-width="290px">
-                <v-text-field slot="activator" v-model="formattedTime" label="Start time" prepend-icon="access_time" readonly></v-text-field>
+                <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
                 <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width>
                   <v-spacer></v-spacer>
-                  <v-btn flat @click="alarmDialog.timepicker = false">Cancel</v-btn>
-                  <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">OK</v-btn>
+                  <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+                  <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
                 </v-time-picker>
               </v-dialog>
             </v-list-tile>
-            <v-subheader>Days</v-subheader>
+            <v-subheader>{{i18n('Days')}}</v-subheader>
             <v-list-tile class="settings-compact-row">
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Monday" value="1"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Tuesday" value="2"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-switch></v-flex>
             </v-list-tile>
             <v-list-tile class="settings-compact-row">
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Wednesday" value="3"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Thursday" value="4"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-switch></v-flex>
             </v-list-tile>
-            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.dow" label="Friday" value="5"></v-switch></v-list-tile>
+            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-switch></v-list-tile>
             <v-list-tile class="settings-compact-row">
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Saturday" value="6"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" label="Sunday" value="0"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-switch></v-flex>
+             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-switch></v-flex>
             </v-list-tile>
-            <v-subheader>Options</v-subheader>
+            <v-subheader>{{i18n('Options')}}</v-subheader>
             <v-list-tile class="settings-compact-row">
-              <v-select :items="alarmSounds" label="Sound" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
+              <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             <!-- TODO ????
             <v-list-tile class="settings-compact-row">
-              <v-select :items="alarmShuffeItems" label="Shuffle" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
+              <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             -->
-            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.repeat" label="Repeat"></v-switch></v-list-tile>
+            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.repeat" :label="i18n('Repeat')"></v-switch></v-list-tile>
           </v-list>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn flat @click="alarmDialog.show = false">Cancel</v-btn>
-            <v-btn flat @click="saveAlarm()">{{alarmDialog.id ? "Save" : "Create"}}</v-btn>
+            <v-btn flat @click="alarmDialog.show = false">{{i18n('Cancel')}}</v-btn>
+            <v-btn flat @click="saveAlarm()">{{alarmDialog.id ? i18n("Save") : i18n("Create")}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -115,20 +115,8 @@ Vue.component('lms-player-settings', {
             crossfade: undefined,
             replaygain: undefined,
             dstm: undefined,
-            
-            crossfadeItems:[
-                { key:'0', label:"No fade"},
-                { key:'1', label:"Crossfade"},
-                { key:'2', label:"Fade in"},
-                { key:'3', label:"Fade out"},
-                { key:'4', label:"Fade in and out"}
-                ],
-            replaygainItems:[
-                { key:'0', label:"None"},
-                { key:'1', label:"Track gain"},
-                { key:'2', label:"Album gain"},
-                { key:'3', label:"Smart gain"}
-                ],
+            crossfadeItems:[],
+            replaygainItems:[],
             dstmItems: [],
             alarms: {
                 on: true,
@@ -138,11 +126,7 @@ Vue.component('lms-player-settings', {
                 fade: true,
                 scheduled: []
             },
-            alarmShuffeItems:[
-                { key:'0', label:"Don't shuffle"},
-                { key:'1', label:"Shuffle by song"},
-                { key:'2', label:"Shuffle by album"},
-                ],
+            alarmShuffeItems:[],
             alarmSounds:[],
             alarmDialog: {
                 show: false,
@@ -165,6 +149,11 @@ Vue.component('lms-player-settings', {
         }
     },
     mounted() {
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
+
         bus.$on('toolbarAction', function(act) {
             if (act==TB_PLAYER_SETTINGS.id && this.$store.state.player) {
                 bus.$emit('dialog', 'player-settings', true);
@@ -232,14 +221,14 @@ Vue.component('lms-player-settings', {
                     if (data && data.result && data.result.item_loop) {
                         data.result.item_loop.forEach(i => {
                             if (!i.url) {
-                                this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:'Current play queue'});
+                                this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:i18n('Current play queue')});
                             } else {
                                 this.alarmSounds.push({key:i.url, label:i.category+": "+i.title});
                             }
                         });
                     }
                     if (this.alarmSounds.length<1) {
-                        this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:'Current play queue'});
+                        this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:i18n('Current play queue')});
                     }
 
                     this.loadAlarms();
@@ -255,6 +244,26 @@ Vue.component('lms-player-settings', {
         }.bind(this));
     },
     methods: {
+        initItems() {
+            this.crossfadeItems=[
+                { key:'0', label:i18n("No fade")},
+                { key:'1', label:i18n("Crossfade")},
+                { key:'2', label:i18n("Fade in")},
+                { key:'3', label:i18n("Fade out")},
+                { key:'4', label:i18n("Fade in and out)")}
+                ];
+            this.replaygainItems=[
+                { key:'0', label:i18n("None")},
+                { key:'1', label:i18n("Track gain")},
+                { key:'2', label:i18n("Album gain")},
+                { key:'3', label:i18n("Smart gain")}
+                ];
+            this.alarmShuffeItems=[
+                { key:'0', label:i18n("Don't shuffle")},
+                { key:'1', label:i18n("Shuffle by song")},
+                { key:'2', label:i18n("Shuffle by album")},
+                ];
+        },
         close() {
             bus.$emit('dialog', 'player-settings', false);
             this.show=false;
@@ -317,14 +326,21 @@ Vue.component('lms-player-settings', {
             this.alarmDialog.show = false;
         },
         deleteAlarm(alarm) {
-            this.$confirm("Delete alarm?",
-                          {buttonTrueText: 'Delete', buttonFalseText: 'Cancel'}).then(res => {
+            this.$confirm(i18n("Delete alarm?"),
+                          {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand(this.playerId, ["alarm", "delete", "id:"+alarm.id]).then(({data}) => {
                         this.loadAlarms();
                     });
                 }
             });
+        },
+        i18n(str) {
+            if (this.show) {
+                return i18n(str);
+            } else {
+                return str;
+            }
         }
     },
     filters: {

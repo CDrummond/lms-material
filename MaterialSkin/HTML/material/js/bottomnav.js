@@ -21,11 +21,23 @@ Vue.component('lms-bottomnav', {
     props: [],
     data() {
         return {
-            items: [
-                { text: 'Browse',  icon: 'music_note',          type: 'browse' },
-                { text: 'Playing', icon: 'play_circle_outline', type: 'nowplaying' },
-                { text: 'Queue',   icon: 'list',                type: 'queue' },
-            ]
+            items: []
+        }
+    },
+    created() {
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
+    },
+    methods: {
+        initItems() {
+            this.items = [
+                          { text: i18n('Browse'),  icon: 'music_note',          type: 'browse' },
+                          { text: i18n('Playing'), icon: 'play_circle_outline', type: 'nowplaying' },
+                          { text: i18n('Queue'),   icon: 'list',                type: 'queue' },
+                         ];
         }
     }
 })
+

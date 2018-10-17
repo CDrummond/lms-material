@@ -11,27 +11,27 @@ Vue.component('lms-ui-settings', {
         <v-card>
           <v-toolbar color="primary" dark app class="lms-toolbar">
             <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-            <v-toolbar-title>Settings</v-toolbar-title>
+            <v-toolbar-title>{{i18n('Settings')}}</v-toolbar-title>
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
           <v-list two-line subheader class="settings-list">
-            <v-header>General</v-header>
+            <v-header>{{i18n('General')}}</v-header>
             <v-list-tile>
-              <v-switch v-model="darkUi" label="Use dark theme"></v-switch>
+              <v-switch v-model="darkUi" :label="i18n('Use dark theme')"></v-switch>
             </v-list-tile>
 
-            <v-header>Browse</v-header>
+            <v-header>{{i18n('Browse')}}</v-header>
             <v-list-tile>
-              <v-select :items="albumSorts" label="Sort albums under artists by" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
+              <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
             <v-list-tile>
-              <v-select :items="albumSorts" label="Sort album list by" v-model="albumSort" item-text="label" item-value="key"></v-select>
+              <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             
-            <v-header>Queue</v-header>
+            <v-header>{{i18n('Queue')}}</v-header>
             <v-list-tile>
-              <v-switch v-model="autoScrollQueue" label="Auto-scroll to current track"></v-switch>
+              <v-switch v-model="autoScrollQueue" :label="i18n('Auto-scroll to current track')"></v-switch>
             </v-list-tile>
           </v-list>
         </v-card>
@@ -45,13 +45,7 @@ Vue.component('lms-ui-settings', {
             artistAlbumSort:'yearalbum',
             albumSort:'album',
             autoScrollQueue:true,
-            albumSorts:[
-                { key:"album",           label:"Album"},
-                { key:"artistalbum",     label:"Artist, Album"},
-                { key:"artflow",         label:"Artist, Year, Album"},
-                { key:"yearalbum",       label:"Year, Album"},
-                { key:"yearartistalbum", label:"Year, Artist, Album"}
-                ]
+            albumSorts:[]
         }
     },
     mounted() {
@@ -71,8 +65,22 @@ Vue.component('lms-ui-settings', {
                 this.close();
             }
         }.bind(this));
+
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
     },
     methods: {
+        initItems() {
+            this.albumSorts=[
+                { key:"album",           label:i18n("Album")},
+                { key:"artistalbum",     label:i18n("Artist, Album")},
+                { key:"artflow",         label:i18n("Artist, Year, Album")},
+                { key:"yearalbum",       label:i18n("Year, Album")},
+                { key:"yearartistalbum", label:i18n("Year, Artist, Album")}
+                ];
+        },
         close() {
             this.show=false;
             bus.$emit('dialog', 'ui-settings', false);
@@ -81,6 +89,13 @@ Vue.component('lms-ui-settings', {
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                 } );
+        },
+        i18n(str) {
+            if (this.show) {
+                return i18n(str);
+            } else {
+                return str;
+            }
         }
     }
 })

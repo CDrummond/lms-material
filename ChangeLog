@@ -3,6 +3,7 @@
 1. Query additional browse modes plugin for extra browse modes. If none,
    fallback to conductors and composers.
 2. Alarms.
+3. i18n
 
 0.0.1
 -----

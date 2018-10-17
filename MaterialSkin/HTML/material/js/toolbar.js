@@ -16,7 +16,7 @@ Vue.component('lms-toolbar', {
           <v-menu bottom class="toolbar-menu">
             <v-toolbar-title slot="activator">
               {{player ? player.name : 'No Player'}} <v-icon>arrow_drop_down</v-icon>
-              <div class="toolbar-subtitle">{{songInfo}}</div>
+              <div class="toolbar-subtitle">{{songInfo ? songInfo : 'Nothing playing'}}</div>
             </v-toolbar-title>
        
             <v-list>
@@ -52,13 +52,13 @@ Vue.component('lms-toolbar', {
             </v-list>
           </v-menu>
           <v-spacer></v-spacer>
-          <v-btn icon v-if="playerStatus && playerStatus.isOn && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+          <v-btn icon v-if="playerStatus.isOn && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
             <v-icon>pause_circle_outline</v-icon>
           </v-btn>
-          <v-btn icon v-else-if="playerStatus && playerStatus.isOn" @click.native="doAction(['play'])" class="toolbar-button">
+          <v-btn icon v-else-if="playerStatus.isOn" @click.native="doAction(['play'])" class="toolbar-button">
             <v-icon>play_circle_outline</v-icon>
           </v-btn>
-          <v-menu v-if="playerStatus && playerStatus.isOn" @click.native="setVolumeSlider">
+          <v-menu v-if="playerStatus.isOn" @click.native="setVolumeSlider">
             <v-btn slot="activator" icon flat class="toolbar-button">
               <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
               <v-icon v-else="playerStatus.volume===0">volume_mute</v-icon>
@@ -98,7 +98,9 @@ Vue.component('lms-toolbar', {
     `,
     props: [],
     data() {
-        return { playerVolume:-1, 
+        return { songInfo:undefined,
+                 playerStatus: { isOn: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined } },
+                 playerVolume:-1,
                  playerVolumeCurrent:-1,
                  playerGroups: false,
                  menuItems: TB_MENU_ITEMS
@@ -127,6 +129,36 @@ Vue.component('lms-toolbar', {
             }
         });
         */
+
+        bus.$on('playerStatus', function(playerStatus) {
+            if (playerStatus.isOn!=this.playerStatus.isOn) {
+                this.playerStatus.isOn = playerStatus.isOn;
+            }
+            if (playerStatus.isPlaying!=this.playerStatus.isPlaying) {
+                this.playerStatus.isPlaying = playerStatus.isPlaying;
+            }
+            if (playerStatus.volume!=this.playerStatus.volume) {
+                this.playerStatus.volume = playerStatus.volume;
+            }
+
+
+            if (playerStatus.current.title!=this.playerStatus.current.title || playerStatus.current.artist!=this.playerStatus.current.artist) {
+                this.playerStatus.current.title=playerStatus.current.title;
+                this.playerStatus.current.artist=playerStatus.current.artist;
+
+                if (this.playerStatus.current.title) {
+                    if (this.playerStatus.current.artist) {
+                        this.songInfo=this.playerStatus.current.title+" - "+this.playerStatus.current.artist;
+                    } else {
+                        this.songInfo=this.playerStatus.current.title;
+                    }
+                } else if (this.playerStatus.current.artist) {
+                    this.songInfo=this.playerStatus.current.artist;
+                } else {
+                    this.songInfo=undefined;
+                }
+            }
+        }.bind(this));
     },
     methods: {
         setPlayer(name) {
@@ -136,7 +168,7 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', command);
         },
         setVolumeSlider() {
-            this.playerVolumeCurrent = this.$store.state.playerStatus.volume;
+            this.playerVolumeCurrent = this.playerStatus.volume;
             this.playerVolume = this.playerVolumeCurrent;
         },
         menuAction(id) {
@@ -182,23 +214,6 @@ Vue.component('lms-toolbar', {
         },
         players () {
             return this.$store.state.players
-        },
-        playerStatus () {
-            return this.$store.state.playerStatus
-        },
-        songInfo() {
-            if (this.$store.state.playerStatus && this.$store.state.playerStatus.current) {
-                if (this.$store.state.playerStatus.current.title) {
-                    if (this.$store.state.playerStatus.current.artist) {
-                        return this.$store.state.playerStatus.current.title+" - "+this.$store.state.playerStatus.current.artist;
-                    } else {
-                        return this.$store.state.playerStatus.current.title;
-                    }
-                } else if (this.$store.state.playerStatus.current.artist) {
-                    return this.$store.state.playerStatus.current.artist;
-                }
-            }
-            return "Nothing playing";
-        },
+        }
     }
 })

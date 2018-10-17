@@ -41,7 +41,6 @@ const store = new Vuex.Store({
     state: {
         players: null, // List of players
         player: null, // Current player (from list)
-        playerStatus: null, // Status of current player
         unifiedArtistsList: true,
         darkUi: true,
         artistAlbumSort:'yearalbum',
@@ -50,9 +49,25 @@ const store = new Vuex.Store({
     },
     mutations: {
         setPlayers(state, players) {
+            var changed = !state.players || state.players.length!=players.length;
+            if (!changed) {
+                for (i=0; i<state.players.length; ++i) {
+                    var a = state.players[i];
+                    var b = players[i];
+                    if (a.id!=b.id || a.name!=b.name || a.canpoweroff!=b.canpoweroff ||  a.ison!=b.ison ||  a.isconnected!=b.isconnected ||  a.isgroup!=b.isgroup) {
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!changed) {
+                return;
+            }
+
             state.players=players;
             if (state.player) {
-                // Cehck current player is still valid
+                // Check current player is still valid
                 var found = false;
                 if (players) {
                     for (i=0; i<state.players.length; ++i) {
@@ -110,9 +125,6 @@ const store = new Vuex.Store({
                     }
                 }
             }
-        },
-        setPlayerStatus(state, status) {
-            state.playerStatus=status;
         },
         setUseUnifiedArtistsList(state, val) {
             state.unifiedArtistsList = val;

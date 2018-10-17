@@ -84,7 +84,7 @@ var lmsQueue = Vue.component("LmsQueue", {
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
         <v-layout>
-          <v-flex class="pq-text" v-if="playerStatus">{{playerStatus.playlist.count | displayCount}} {{duration | displayTime(true)}}</v-flex>
+          <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
           <v-btn flat icon @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
           <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
@@ -134,6 +134,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             currentIndex: -1,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
+            trackCount:0,
             duration: 0.0
         }
     },
@@ -155,17 +156,22 @@ var lmsQueue = Vue.component("LmsQueue", {
 	        this.timestamp=0;
         }.bind(this));
 
-        bus.$on('playListDetails', function(currentIndex, timestamp) {
-            if (timestamp!==this.timestamp) {
-                this.timestamp = timestamp;
+        bus.$on('playerStatus', function(playerStatus) {
+            if (playerStatus.playlist.count!=this.trackCount) {
+                this.trackCount = playerStatus.playlist.count;
+            }
+            if (playerStatus.playlist.timestamp!==this.timestamp) {
+                this.timestamp = playerStatus.playlist.timestamp;
                 this.scheduleUpdate();
-            } else if (currentIndex!==this.currentIndex) {
-                this.currentIndex = currentIndex;
+            } else if (playerStatus.playlist.current!==this.currentIndex) {
+                this.currentIndex = playerStatus.playlist.current;
                 if (this.$store.state.autoScrollQueue) {
                     this.scrollToCurrent();
                 }
             }
         }.bind(this));
+        // Refresh status now, in case we were mounted after initial status call
+        bus.$emit('refreshStatus');
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
         // page, so that it can be restored when going back here.
@@ -367,11 +373,6 @@ var lmsQueue = Vue.component("LmsQueue", {
                 bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
             }
             this.dragIndex = undefined;
-        }
-    },
-    computed: {
-        playerStatus() {
-            return this.$store.state.playerStatus
         }
     },
     filters: {

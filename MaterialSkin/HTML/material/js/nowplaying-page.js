@@ -7,12 +7,12 @@
  
 var lmsNowPlaying = Vue.component("LmsNowPlaying", {
     template: `
-      <div class="np-page" v-if="playerStatus && playerStatus.isOn">
-        <p class="np-text ellipsis" v-if="playerStatus.current && playerStatus.current.title">{{playerStatus.current.title}}</p>
+      <div class="np-page" v-if="playerStatus.isOn">
+        <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
         <p class="np-text" v-else>&nbsp;</p>
-        <p class="np-subtext ellipsis" v-if="playerStatus.current && playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+        <p class="np-subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
         <p class="np-subtext" v-else>&nbsp;</p>
-        <p class="np-subtext ellipsis" v-if="playerStatus.current && playerStatus.current.album">{{playerStatus.current.album}}</p>
+        <p class="np-subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
         <p class="np-subtext" v-else>&nbsp;</p>
         <img :src="cover" class="np-image"></img>
 
@@ -49,46 +49,89 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
 `,
     props: [],
     data() {
-        return { }
+        return { cover:undefined,
+                 coverFromPlayer:undefined,
+                 playerStatus: {
+                    isOn: 1,
+                    isPlaying: 1,
+                    current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined },
+                    playlist: { shuffle:0, repeat: 0 },
+                 }
+                };
     },
-    created() {
+    mounted() {
+        bus.$on('playerStatus', function(playerStatus) {
+            // Has cover changed?
+            if (playerStatus.current.artwork_url!=this.playerStatus.current.artwork_url ||
+                playerStatus.current.coverid!=this.playerStatus.current.coverid ||
+                this.coverFromPlayer!=this.$store.state.player.id) {
+                this.playerStatus.current.artwork_url = playerStatus.current.artwork_url;
+                this.playerStatus.current.coverid = playerStatus.current.coverid;
+                this.coverFromPlayer = this.$store.state.player.id
+
+                this.cover = undefined;
+                if (this.playerStatus.current.artwork_url) {
+                    this.cover=resolveImage(null, this.playerStatus.current.artwork_url);
+                }
+                if (undefined==this.cover && this.playerStatus.current.coverid) {
+                    this.cover=lmsServerAddress+"/music/"+this.playerStatus.current.coverid+"/cover.jpg";
+                }
+                if (undefined==this.cover) {
+                    this.cover=lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
+                }
+            }
+
+            // Have other items changed
+            if (playerStatus.isOn!=this.playerStatus.isOn) {
+                this.playerStatus.isOn = playerStatus.isOn;
+            }
+            if (playerStatus.isPlaying!=this.playerStatus.isPlaying) {
+                this.playerStatus.isPlaying = playerStatus.isPlaying;
+            }
+            if (playerStatus.current.canseek!=this.playerStatus.current.canseek) {
+                this.playerStatus.current.canseek = playerStatus.current.canseek;
+            }
+            if (playerStatus.current.duration!=this.playerStatus.current.duration) {
+                this.playerStatus.current.duration = playerStatus.current.duration;
+            }
+            if (playerStatus.current.time!=this.playerStatus.current.time) {
+                this.playerStatus.current.time = playerStatus.current.time;
+            }
+            if (playerStatus.current.title!=this.playerStatus.current.title) {
+                this.playerStatus.current.title = playerStatus.current.title;
+            }
+            if (playerStatus.current.artist!=this.playerStatus.current.artist) {
+                this.playerStatus.current.artist = playerStatus.current.artist;
+            }
+            if (playerStatus.current.album!=this.playerStatus.current.album) {
+                this.playerStatus.current.album = playerStatus.current.album;
+            }
+            if (playerStatus.playlist.shuffle!=this.playerStatus.playlist.shuffle) {
+                this.playerStatus.playlist.shuffle = playerStatus.playlist.shuffle;
+            }
+            if (playerStatus.playlist.repeat!=this.playerStatus.playlist.repeat) {
+                this.playerStatus.playlist.repeat = playerStatus.playlist.repeat;
+            }
+        }.bind(this));
+        // Refresh status now, in case we were mounted after initial status call
+        bus.$emit('refreshStatus');
     },
     methods: {
         doAction(command) {
             bus.$emit('playerCommand', command);
         },
         sliderChanged(e) {
-            if (this.$store.state.playerStatus && this.$store.state.playerStatus.current && 
-                this.$store.state.playerStatus.current.canseek && this.$store.state.playerStatus.current.duration>3) {
+            if (this.playerStatus.current.canseek && this.playerStatus.current.duration>3) {
                 const rect = document.getElementById("pos-slider").getBoundingClientRect();
                 const pos = e.clientX - rect.x;
                 const width = rect.width;
-                this.doAction(['time', Math.floor(this.$store.state.playerStatus.current.duration * pos / rect.width)]);
+                this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
             }
-        }
-    },
-    computed: {
-        cover() {
-            if (this.$store.state.playerStatus && this.$store.state.playerStatus.current) {
-                if (this.$store.state.playerStatus.current.artwork_url) {
-                    return resolveImage(null, this.$store.state.playerStatus.current.artwork_url);
-                }
-                if (this.$store.state.playerStatus.current.coverid) {
-                    return lmsServerAddress+"/music/"+this.$store.state.playerStatus.current.coverid+"/cover.jpg";
-                }
-            }
-            if (this.$store.state.player&& this.$store.state.player.id) {
-                return lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
-            }
-            return "images/nocover.jpg";
-        },
-        playerStatus () {;
-            return this.$store.state.playerStatus
         }
     },
     filters: {
         displayTime: function (value) {
-            if (!value) {
+            if (undefined==value) {
                 return '';
             }
             return formatSeconds(Math.floor(value));

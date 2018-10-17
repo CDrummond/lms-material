@@ -97,7 +97,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                       <template v-for="(action, index) in item.actions">
                         <v-divider v-if="action.divider"></v-divider>
                         <v-list-tile v-else @click="itemAction(action.cmd, item)">
-                          <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+                          <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{i18n(action.title)}}</v-list-tile-title>
                         </v-list-tile>
                       </template>
                     </v-list>
@@ -119,123 +119,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         }
     },
     created() {
-        this.top = [
-            { header: "My Music", url: "top:/mmh" },
-            {
-                title: "Artists",
-                command: ["artists"],
-                params: [],
-                icon: "group",
-                type: "group",
-                url: "top:/ar",
-            },
-            {
-                title: "Album Artists",
-                command: ["artists"],
-                params: ["role_id:ALBUMARTIST"],
-                icon: "group",
-                type: "group",
-                url: "top:/aar",
-                separateArtists: true
-            },
-            {
-                title: "Albums",
-                command: ["albums"],
-                params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
-                icon: "album",
-                type: "group",
-                url: "top:/al"
-            },
-            {
-                title: "Genres",
-                command: ["genres"],
-                icon: "label",
-                type: "group",
-                url: "top:/ge"
-            },
-            {
-                title: "Playlists",
-                command: ["playlists"],
-                icon: "list",
-                type: "group",
-                url: "top:/pl"
-            },
-            {
-                title: "Search",
-                command: ["search"],
-                params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
-                icon: "search",
-                type: "search",
-                url: "top:/sr"
-            },
-            {
-                title: "More",
-                icon: "more_horiz",
-                url: "top:/more",
-                type: "group",
-            },
-            { header: "Other Music", id:"omh" },
-            {
-                title: "Radio",
-                command: ["radios"],
-                params: ["want_url:1"],
-                icon: "radio",
-                type: "group",
-                url: "top:/ra"
-            },
-            {
-                title: "Favourites",
-                command: ["favorites", "items"],
-                params: ["want_url:1"],
-                icon: "favorite",
-                type: "favorites",
-                batchsize: 250,
-                url: "top:/fa"
-            },
-            {
-                title: "Apps",
-                command: ["apps"],
-                params: ["want_url:1"],
-                icon: "apps",
-                type: "group",
-                url: "top:/ap"
-            }
-        ];
-        this.other = [
-            {
-                title: "Compilations",
-                command: ["albums"],
-                params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
-                icon: "album",
-                type: "group",
-                url: "more:/co",
-            },
-            {
-                title: "Years",
-                command: ["years"],
-                icon: "date_range",
-                type: "group",
-                url: "more:/yr"
-            },
-            {
-                title: "New Music",
-                command: "albums",
-                params: ["tags:jlya", "sort:new"],
-                icon: "new_releases",
-                type: "group",
-                url: "more:/nm"
-            },
-            /*
-            {
-                title: "Random Mix",
-                command: ["random-mix"],
-                icon: "shuffle",
-                type: "group",
-                url: "more:/rm"
-            },*/
-          ];
-        this.items = this.top;
-        this.listSize = this.top.length;
         this.history=[];
         this.fetchingItems = false;
         this.current = null;
@@ -244,6 +127,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.actions=[];
         this.artistImages=false;
         this.previousScrollPos=0;
+        this.initItems();
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
         // page, so that it can be restored when going back here.
@@ -259,13 +143,138 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.$nextTick(function () {
             document.documentElement.scrollTop=0;
         });
+
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
     },
     methods: {
+        initItems() {
+        this.top = [
+            { header: i18n("My Music"), url: "top:/mmh" },
+            {
+                title: i18n("Artists"),
+                command: ["artists"],
+                params: [],
+                icon: "group",
+                type: "group",
+                url: "top:/ar",
+            },
+            {
+                title: i18n("Album Artists"),
+                command: ["artists"],
+                params: ["role_id:ALBUMARTIST"],
+                icon: "group",
+                type: "group",
+                url: "top:/aar",
+                separateArtists: true
+            },
+            {
+                title: i18n("Albums"),
+                command: ["albums"],
+                params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
+                icon: "album",
+                type: "group",
+                url: "top:/al"
+            },
+            {
+                title: i18n("Genres"),
+                command: ["genres"],
+                icon: "label",
+                type: "group",
+                url: "top:/ge"
+            },
+            {
+                title: i18n("Playlists"),
+                command: ["playlists"],
+                icon: "list",
+                type: "group",
+                url: "top:/pl"
+            },
+            {
+                title: i18n("Search"),
+                command: ["search"],
+                params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
+                icon: "search",
+                type: "search",
+                url: "top:/sr"
+            },
+            {
+                title: i18n("More"),
+                icon: "more_horiz",
+                url: "top:/more",
+                type: "group",
+            },
+            { header: i18n("Other Music"), id:"omh" },
+            {
+                title: i18n("Radio"),
+                command: ["radios"],
+                params: ["want_url:1"],
+                icon: "radio",
+                type: "group",
+                url: "top:/ra"
+            },
+            {
+                title: i18n("Favourites"),
+                command: ["favorites", "items"],
+                params: ["want_url:1"],
+                icon: "favorite",
+                type: "favorites",
+                batchsize: 250,
+                url: "top:/fa"
+            },
+            {
+                title: i18n("Apps"),
+                command: ["apps"],
+                params: ["want_url:1"],
+                icon: "apps",
+                type: "group",
+                url: "top:/ap"
+            }
+        ];
+        this.other = [
+            {
+                title: i18n("Compilations"),
+                command: ["albums"],
+                params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
+                icon: "album",
+                type: "group",
+                url: "more:/co",
+            },
+            {
+                title: i18n("Years"),
+                command: ["years"],
+                icon: "date_range",
+                type: "group",
+                url: "more:/yr"
+            },
+            {
+                title: i18n("New Music"),
+                command: "albums",
+                params: ["tags:jlya", "sort:new"],
+                icon: "new_releases",
+                type: "group",
+                url: "more:/nm"
+            },
+            /*
+            {
+                title: i18n("Random Mix"),
+                command: ["random-mix"],
+                icon: "shuffle",
+                type: "group",
+                url: "more:/rm"
+            },*/
+            ];
+            if (this.history.length<1) {
+                this.items = this.top;
+                this.listSize = this.top.length;
+            }
+        },
         playerId() {
             return this.$store.state.player ? this.$store.state.player.id : "";
         },
         showMessage(msg, color) {
-            this.snackbar = {msg: msg ? msg : "Something went wrong!", show: true, color: undefined==color ? 'error' : color };
+            this.snackbar = {msg: msg ? msg : i18n("Something went wrong!"), show: true, color: undefined==color ? 'error' : color };
         },
         fetchItems(item, params) {
             this.fetchingItems = true;
@@ -296,7 +305,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {
-                    this.headerSubTitle="Total: "+this.listSize;
+                    this.headerSubTitle=i18n("Total: %1", this.listSize);
                 }
                 document.documentElement.scrollTop=0;
             }).catch(err => {
@@ -320,7 +329,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
-                this.headerSubTitle = "Extra browse modes";
+                this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
                 document.documentElement.scrollTop=0;
                 return;
@@ -345,26 +354,26 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();
                     }).catch(err => {
-                        this.showMessage(dialog.command.length>2 && dialog.command[1]==='rename' ? "Renamed failed" : "Failed");
+                        this.showMessage(dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Renamed failed") : i18n("Failed"));
                     });
                 }
             }
         },
         itemAction(act, item) {
             if (act===RENAME_PL_ACTION.cmd) {
-                this.dialog = { show:true, title:"Rename playlist", hint:item.value, value:item.title, ok: "Rename", cancel:undefined,
+                this.dialog = { show:true, title:i18n("Rename playlist"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["playlists", "rename", item.url, "newname:"+TERM_PLACEHOLDER]};
             } else if (act==RENAME_FAV_ACTION.cmd) {
-                this.dialog = { show:true, title:"Rename favorite", hint:item.value, value:item.title, ok: "Rename", cancel:undefined,
+                this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["favorites", "rename", "item_id:"+item.id, "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION.cmd) {
-                this.$confirm("Delete '"+item.title+"'?", {buttonTrueText: 'Delete', buttonFalseText: 'Cancel'}).then(res => {
+                this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         if (item.url.startsWith("playlist_id:")) {
                             lmsCommand(this.playerId(), ["playlists", "delete", item.url]).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
-                                this.showMessage("Failed to delete playlist");
+                                this.showMessage(i18n("Failed to delete playlist"));
                             });
                         }
                     }
@@ -382,17 +391,17 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
 
                 lmsCommand(this.playerId(), ["favorites", "add", "url:"+url, "title:"+item.title]).then(({data})=> {
-                    this.showMessage("Added to favorites!", '');
+                    this.showMessage(i18n("Added to favorites!"), '');
                 }).catch(err => {
-                    this.showMessage("Failed to add to favorites!");
+                    this.showMessage(i18n("Failed to add to favorites!"));
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
-                this.$confirm("Remove '"+item.title+"' from favourites?", {buttonTrueText: 'Remove', buttonFalseText: 'Cancel'}).then(res => {
+                this.$confirm(i18n("Remove '%1' from favourites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+item.id]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
-                            this.showMessage("Failed to remove favourite");
+                            this.showMessage(i18n("Failed to remove favourite"));
                         });
                     }
                 });
@@ -416,13 +425,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         lmsCommand(this.playerId(), command).then(({data}) => {
                             this.fetchingItems = false;
                             bus.$emit('refreshStatus');
-                            this.showMessage("Appended '" + item.title + "' to the play queue", '');
+                            this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
                         }).catch(err => {
                             this.fetchingItems = false;
                             this.showMessage();
                         });
                     } else {
-                        this.showMessage("Failed to find an album!");
+                        this.showMessage(i18n("Failed to find an album!"));
                     }
                 }).catch(err => {
                     this.fetchingItems = false;
@@ -437,7 +446,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
 
                 if (command.length===0) {
-                    this.showMessage("Don't know how to handle this!");
+                    this.showMessage(i18n("Don't know how to handle this!"));
                     return;
                 }
                 lmsCommand(this.playerId(), command).then(({data}) => {
@@ -445,7 +454,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (act===PLAY_ACTION.cmd) {
                         this.$router.push('/nowplaying');
                     } else {
-                        this.showMessage("Appended '" + item.title + "' to the play queue", '');
+                        this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
                     }
                 }).catch(err => {
                     this.fetchingItems = false;
@@ -548,6 +557,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else {
                 return origParams;
             }
+        },
+        i18n(str) {
+            return i18n(str);
         }
     },
     mounted() {
@@ -598,7 +610,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
             if (!haveExtra) {
                 this.other.unshift({
-                                    title: "Conductors",
+                                    title: i18n("Conductors"),
                                     command: ["artists"],
                                     params: ["role_id:CONDUCTOR"],
                                     icon: "group",
@@ -606,7 +618,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                     url: "more:/cond"
                                    });
                 this.other.unshift({
-                                    title: "Composers",
+                                    title: i18n("Composers"),
                                     command: ["artists"],
                                     params: ["role_id:COMPOSER"],
                                     icon: "group",

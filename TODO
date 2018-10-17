@@ -28,8 +28,8 @@
 
 - Misc
   - i18n
-    - Obtain locale from LMS - ["",["pref","language", "?"]]
-    - Lazy load translations
+    - Create script, or other method, to extract strings
+    - Create example json file
   - Complete WebApp support
     - Correct icon
     - Hide navigation bar

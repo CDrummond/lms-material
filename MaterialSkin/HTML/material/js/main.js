@@ -188,10 +188,30 @@ var app = new Vue({
         bus.$on('dialog', function(name, open) {
             this.dialogOpen = open;
         }.bind(this));
+
+        var that = this;
+        lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2) {
+                var lang = data.result._p2.toLowerCase();
+                if (lang != 'en') {
+                    axios.get("lang/"+lang+".json").then(function (resp) {
+                        setTranslation(eval(resp.data));
+                        axios.defaults.headers.common['Accept-Language'] = lang;
+                        document.querySelector('html').setAttribute('lang', lang);
+                        bus.$emit('langChanged');
+                    }).catch(err => {
+                        window.console.error(err);
+                    });
+                }
+            }
+        });
     },
     computed: {
         darkUi() {
             return this.$store.state.darkUi;
+        },
+        lang() {
+            return this.$store.state.lang;
         }
     },
     methods: {
@@ -220,6 +240,11 @@ var app = new Vue({
                     this.$router.push('/nowplaying');
                 }
             }
+        }
+    },
+    filters: {
+        i18n: function (value) {
+            return i18n(value);
         }
     },
     store,

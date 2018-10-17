@@ -15,8 +15,8 @@ Vue.component('lms-toolbar', {
         <v-toolbar fixed dense app class="lms-toolbar">
           <v-menu bottom class="toolbar-menu">
             <v-toolbar-title slot="activator">
-              {{player ? player.name : 'No Player'}} <v-icon>arrow_drop_down</v-icon>
-              <div class="toolbar-subtitle">{{songInfo ? songInfo : 'Nothing playing'}}</div>
+              {{player ? player.name : i18n('No Player')}} <v-icon>arrow_drop_down</v-icon>
+              <div class="toolbar-subtitle">{{undefined===songInfo ? i18n('Nothing playing') : songInfo}}</div>
             </v-toolbar-title>
        
             <v-list>
@@ -86,10 +86,10 @@ Vue.component('lms-toolbar', {
             <v-list>
               <template v-for="(item, index) in menuItems">
                 <v-list-tile v-if="item.href" :href="item.href" target="_blank">
-                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                  <v-list-tile-title>{{i18n(item.title)}}</v-list-tile-title>
                 </v-list-tile>
                 <v-list-tile v-else @click="menuAction(item.id)">
-                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                  <v-list-tile-title>{{i18n(item.title)}}</v-list-tile-title>
                 </v-list-tile>
               </template>
             </v-list>
@@ -190,7 +190,7 @@ Vue.component('lms-toolbar', {
         },
         togglePower() {
             if (this.$store.state.player.ison) {
-                this.$confirm("Switch off '"+this.$store.state.player.name+"'?", {buttonTrueText: 'Switch Off', buttonFalseText: 'Cancel'}).then(res => {
+                this.$confirm(i18n("Switch off '%1'?", this.$store.state.player.name), {buttonTrueText: i18n('Switch Off'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         bus.$emit('power', "1");
                     }
@@ -198,6 +198,9 @@ Vue.component('lms-toolbar', {
             } else {
                 bus.$emit('power', "0");
             }
+        },
+        i18n(str) {
+            return i18n(str);
         }
     },
     watch: {

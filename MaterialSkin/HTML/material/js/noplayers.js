@@ -12,7 +12,7 @@ Vue.component('lms-noplayer', {
           <table>
             <tr>
               <td style="text-align: center; padding-bottom: 32px;">
-                <h2>Looking for players...</h2>
+                <h2>{{i18n('Looking for players...')}}</h2>
               </td>
             </tr>
             <tr>
@@ -31,6 +31,11 @@ Vue.component('lms-noplayer', {
     computed: {
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1
+        }
+    },
+    methods: {
+        i18n(str) {
+            return i18n(str);
         }
     }
 })

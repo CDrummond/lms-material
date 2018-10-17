@@ -12,7 +12,7 @@ function parseBrowseResp(data, parent, artistImages) {
         //console.log("RESP", data.result, parent);
         if ("search" === parent.type) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
-                resp.items.push({header: "Artists"});
+                resp.items.push({header: i18n("Artists")});
                 data.result.contributors_loop.forEach(i => {
                     resp.items.push({
                                   url: "artist_id:"+i.contributor_id,
@@ -27,7 +27,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 });
             }
             if (data.result.albums_loop && data.result.albums_count>0) {
-                resp.items.push({header: "Albums"});
+                resp.items.push({header: i18n("Albums")});
                 data.result.albums_loop.forEach(i => {
                     resp.items.push({
                                   url: "album_id:"+i.album_id,
@@ -41,7 +41,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 });
             }
             if (data.result.tracks_loop && data.result.tracks_count>0) {
-                resp.items.push({header: "Tracks"});
+                resp.items.push({header: i18n("Tracks")});
                 data.result.tracks_loop.forEach(i => {
                     resp.items.push({
                                   url: "track_id:"+i.track_id,
@@ -53,7 +53,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 });
             }
             if (data.result.genres_loop && data.result.genres_count>0) {
-                resp.items.push({header: "Genres"});
+                resp.items.push({header: i18n("Genres")});
                 data.result.genres_loop.forEach(i => {
                     resp.items.push({
                                   url: "genre_id:"+i.genre_id,
@@ -79,7 +79,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "group"
                               });
                 });
-                resp.subtitle=1==data.result.count ? "1 Artist" : (data.result.count+" Artists");
+                resp.subtitle=i18np("1 Artist", "%1 Artists", data.result.count);
             } else if (data.result.albums_loop) {
                 resp.actions=[ADD_ACTION, PLAY_ACTION];
                 data.result.albums_loop.forEach(i => {
@@ -89,7 +89,7 @@ function parseBrowseResp(data, parent, artistImages) {
                     }
                     var title = i.album;
                     var subtitle;
-                    if ("artist" === parent) {
+                    if (parent.command && parent.command.length>0 && parent.command[0]==="artists") {
                         subtitle = i.year && i.year>1900 ? i.year : undefined;
                     } else {
                         subtitle = i.artist;
@@ -108,11 +108,11 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "group"
                               });
                 });
-                if ("newmusic"===parent) {
-                    resp.subtitle=1==data.result.albums_loop.length ? "Newest Album" : (data.result.albums_loop.length+" Newest Albums");
-                } else {
-                    resp.subtitle=1==data.result.count ? "1 Album" : (data.result.count+" Albums");
-                }
+                /*if ("newmusic"===parent) {
+                    resp.subtitle=i18np("Newest Album", "%1 Newest Albums", data.result.albums_loop.length);
+                } else {*/
+                    resp.subtitle=i18np("1 Album", "%1 Albums", data.result.count);
+                //}
             } else if (data.result.titles_loop) {
                 resp.actions=[ADD_ACTION, PLAY_ACTION];
                 var duration=0;
@@ -135,7 +135,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "track"
                               });
                 });
-                resp.subtitle=1===data.result.count ? "1 Track" : (data.result.count+" Tracks");
+                resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
                 if (data.result.titles_loop.length===data.result.count) {
                     resp.subtitle+=" ("+formatSeconds(duration)+")";
                 }
@@ -151,7 +151,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "group"
                               });
                 });
-                resp.subtitle=1==data.result.count ? "1 Genre" : (data.result.count+" Genres");
+                resp.subtitle=i18np("1 Genre", "%1 Genres", data.result.count);
             } else if (data.result.playlists_loop) {
                 data.result.playlists_loop.forEach(i => {
                     resp.items.push({
@@ -164,7 +164,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "group"
                               });
                 });
-                resp.subtitle=1==data.result.count ? "1 Playlist" : (data.result.count+" Playlists");
+                resp.subtitle=i18np("1 Playlist", "%1 Playlists", data.result.count);
             } else if (data.result.playlisttracks_loop) {
                 resp.actions=[ADD_ACTION, PLAY_ACTION];
                 data.result.playlisttracks_loop.forEach(i => {
@@ -190,7 +190,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "track"
                               });
                 });
-                resp.subtitle=1===data.result.count ? "1 Track" : (data.result.count+" Tracks");
+                resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
             } else if (data.result.years_loop) {
                 data.result.years_loop.forEach(i => {
                     resp.items.push({
@@ -203,7 +203,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   type: "group"
                               });
                 });
-                resp.subtitle=1==data.result.count ? "1 Year" : (data.result.count+" Years");
+                resp.subtitle=i18np("1 Year", "%1 Years", data.result.count);
             } else if (data.result.radioss_loop) {
                 data.result.radioss_loop.forEach(i => {
                     if ("xmlbrowser"===i.type) {
@@ -254,7 +254,7 @@ function parseBrowseResp(data, parent, artistImages) {
                               });
                     }
                 });
-                resp.subtitle=1==data.result.count ? "1 App" : (data.result.count+" Apps");
+                resp.subtitle=i18np("1 App", "%1 Apps", data.result.count);
             } else if (data.result.loop_loop) {
                 var topLevelFavourites = parent.id===undefined && "favorites"===parent.type;
                 data.result.loop_loop.forEach(i => {
@@ -313,7 +313,7 @@ function parseBrowseResp(data, parent, artistImages) {
                     resp.items.sort(itemSort);
                 }
             } else if (0===data.result.count && data.result.networkerror) {
-                resp.items.push({title: "Failed to retrieve listing. (" + data.result.networkerror + ")", type: "text"});
+                resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
             }
         }
     }

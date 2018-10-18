@@ -28,9 +28,6 @@
 
 - Misc
   - Complete WebApp support
-    - Correct icon
-    - Hide navigation bar
-    - Fullscreen
     - Handle back button (navigate back in browse)
   - Add support for artist/song info (e.g. lyrics).
     - Need to check relevant plugin is installed.

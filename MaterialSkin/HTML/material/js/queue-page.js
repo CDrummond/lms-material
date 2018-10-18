@@ -392,7 +392,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             if (!value) {
                 return '';
             }
-            return i18n("1 Track", "%n Tracks", value);
+            return i18np("1 Track", "%1 Tracks", value);
         }
     },
     beforeDestroy() {

@@ -11,7 +11,7 @@ sub initPlugin {
 
     foreach $d (@dirs) {
         my $path = catdir($baseDir, $d);
-        if opendir(dir, $path) {
+        if (opendir(dir, $path)) {
             my @entries = readdir(dir);
             close(dir);
 

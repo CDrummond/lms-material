@@ -57,28 +57,11 @@ Vue.component('lms-toolbar', {
           <v-btn icon v-else-if="playerStatus.isOn" @click.native="doAction(['play'])" class="toolbar-button">
             <v-icon>play_circle_outline</v-icon>
           </v-btn>
-          <v-menu v-if="playerStatus.isOn" @click.native="setVolumeSlider">
-            <v-btn slot="activator" icon flat class="toolbar-button">
-              <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
-              <v-icon v-else="playerStatus.volume===0">volume_mute</v-icon>
-            </v-btn>
- 
-            <v-card class="volume-popup">
-              <v-container grid-list-md text-xs-center>
-                <v-layout row wrap>
-                  <v-flex xs12>{{playerVolume}} %</v-flex>
-                  <v-flex xs12>
-                    <v-layout>
-                      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-                      <v-slider step="5" v-model="playerVolume" class="vol-slider"></v-slider>
-                      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
-                    </v-layout>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card>
-          </v-menu>
-            <v-menu bottom left>
+          <v-btn icon flat class="toolbar-button" v-if="playerStatus.isOn" @click="bus.$emit('volume')">
+            <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
+            <v-icon v-else="playerStatus.volume===0">volume_mute</v-icon>
+          </v-btn>
+          <v-menu bottom left>
             <v-btn slot="activator" icon>
               <v-icon>more_vert</v-icon>
             </v-btn>
@@ -99,8 +82,6 @@ Vue.component('lms-toolbar', {
     data() {
         return { songInfo:undefined,
                  playerStatus: { isOn: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined } },
-                 playerVolume:-1,
-                 playerVolumeCurrent:-1,
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, syncrhonise:undefined,managegroups:undefined,nothingplaying:undefined},
@@ -143,7 +124,6 @@ Vue.component('lms-toolbar', {
                 this.playerStatus.volume = playerStatus.volume;
             }
 
-
             if (playerStatus.current.title!=this.playerStatus.current.title || playerStatus.current.artist!=this.playerStatus.current.artist) {
                 this.playerStatus.current.title=playerStatus.current.title;
                 this.playerStatus.current.artist=playerStatus.current.artist;
@@ -182,26 +162,8 @@ Vue.component('lms-toolbar', {
         doAction(command) {
             bus.$emit('playerCommand', command);
         },
-        setVolumeSlider() {
-            this.playerVolumeCurrent = this.playerStatus.volume;
-            this.playerVolume = this.playerVolumeCurrent;
-        },
         menuAction(id) {
             bus.$emit('toolbarAction', id);
-        },
-        volumeDown() {
-            if (this.playerVolume<=5) {
-                this.playerVolume = 0;
-            } else {
-                this.playerVolume -= 5;
-            }
-        },
-        volumeUp() {
-            if (this.playerVolume>=95) {
-                this.playerVolume = 100;
-            } else {
-                this.playerVolume += 5;
-            }
         },
         togglePower() {
             if (this.$store.state.player.ison) {
@@ -216,14 +178,6 @@ Vue.component('lms-toolbar', {
         },
         i18n(str) {
             return i18n(str);
-        }
-    },
-    watch: {
-        'playerVolume': function(newVal) {
-            if (this.playerVolumeCurrent !== newVal) {
-                this.playerVolumeCurrent = newVal;
-                bus.$emit('playerCommand', ["mixer", "volume", newVal]);
-            }
         }
     },
     computed: {

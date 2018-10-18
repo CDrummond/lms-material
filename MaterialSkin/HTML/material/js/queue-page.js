@@ -73,8 +73,8 @@ var lmsQueue = Vue.component("LmsQueue", {
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? 'Cancel' : dialog.cancel}}</v-btn>
-            <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? 'OK' : dialog.ok}}</v-btn>
+            <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
+            <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -132,7 +132,8 @@ var lmsQueue = Vue.component("LmsQueue", {
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             trackCount:0,
-            duration: 0.0
+            duration: 0.0,
+            trans: { ok: undefined, cancel: undefined }
         }
     },
     created() {
@@ -205,6 +206,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             PQ_PLAY_NOW_ACTION =  { title:i18n('Play now'),              cmd: 'playnow',  icon: 'play_circle_outline'   };
             PQ_PLAY_NEXT_ACTION = { title:i18n('Move to next in queue'), cmd: 'playnext', icon: 'play_circle_filled'    };
             PQ_REMOVE_ACTION =    { title:i18n('Remove from queue'),     cmd: 'remove',   icon: 'remove_circle_outline' };
+            this.trans: { ok:i18n('OK'), cancel: i18n('Cancel') };
         },
         save() {
             if (this.items.length<1) {

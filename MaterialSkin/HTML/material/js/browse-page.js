@@ -35,8 +35,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? i18n('Cancel') : dialog.cancel}}</v-btn>
-                <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? i18n('OK') : dialog.ok}}</v-btn>
+                <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
+                <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -97,7 +97,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                       <template v-for="(action, index) in item.actions">
                         <v-divider v-if="action.divider"></v-divider>
                         <v-list-tile v-else @click="itemAction(action.cmd, item)">
-                          <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{i18n(action.title)}}</v-list-tile-title>
+                          <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
                         </v-list-tile>
                       </template>
                     </v-list>
@@ -115,7 +115,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             fetchingItems: false,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
-            separateArtists: false
+            separateArtists: false,
+            trans: { ok:undefined, cancel: undefined }
         }
     },
     created() {
@@ -158,6 +159,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         DELETE_ACTION           = {title:i18n("Delete"),                       cmd:"delete",     icon:"delete"};
         ADD_TO_FAV_ACTION       = {title:i18n("Add to favorites"),             cmd:"addfav",     icon:"favorite_border"};
         REMOVE_FROM_FAV_ACTION  = {title:i18n("Remove from favorites"),        cmd:"removefav",  icon:"delete_outline"};
+        this.trans: { ok:i18n('OK'), cancel: i18n('Cancel') };
 
         this.top = [
             { header: i18n("My Music"), url: "top:/mmh" },
@@ -566,9 +568,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else {
                 return origParams;
             }
-        },
-        i18n(str) {
-            return i18n(str);
         }
     },
     mounted() {

@@ -14,8 +14,8 @@ Vue.component('lms-toolbar', {
         <v-toolbar fixed dense app class="lms-toolbar">
           <v-menu bottom class="toolbar-menu">
             <v-toolbar-title slot="activator">
-              {{player ? player.name : i18n('No Player')}} <v-icon>arrow_drop_down</v-icon>
-              <div class="toolbar-subtitle">{{undefined===songInfo ? i18n('Nothing playing') : songInfo}}</div>
+              {{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon>
+              <div class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
             </v-toolbar-title>
        
             <v-list>
@@ -43,10 +43,10 @@ Vue.component('lms-toolbar', {
 
               <v-divider v-if="players && players.length>1" ></v-divider>
               <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
-                <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{i18n('Manage player groups'}}</v-list-tile-title></v-list-tile-content>
+                <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{trans.managegroups}}</v-list-tile-title></v-list-tile-content>
               </v-list-tile>
               <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
-                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{i18n('Synchronise')}}</v-list-tile-title></v-list-tile-content>
+                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.syncrhonise}}</v-list-tile-title></v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-menu>
@@ -102,7 +102,8 @@ Vue.component('lms-toolbar', {
                  playerVolume:-1,
                  playerVolumeCurrent:-1,
                  playerGroups: false,
-                 menuItems: []
+                 menuItems: [],
+                 trans:{noplayer:undefined, syncrhonise:undefined,managegroups:undefined,nothingplaying:undefined},
                }
     },
     mounted() {
@@ -172,6 +173,8 @@ Vue.component('lms-toolbar', {
             TB_PLAYER_SETTINGS = {id:"tb:playersettings", title:i18n('Player Settings')};
             TB_SERVER_SETTINGS = {id:"tb:serversettings", title:i18n('Server Settings'), href:'../Default/settings/index.html'};
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS ];
+            this.trans = {noplayer:i18n('No Player'), syncrhonise:i18n('Synchronise'),
+                          managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing')};
         },
         setPlayer(name) {
             this.$store.commit('setPlayer', name);

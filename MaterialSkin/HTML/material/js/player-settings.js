@@ -250,7 +250,7 @@ Vue.component('lms-player-settings', {
                 { key:'1', label:i18n("Crossfade")},
                 { key:'2', label:i18n("Fade in")},
                 { key:'3', label:i18n("Fade out")},
-                { key:'4', label:i18n("Fade in and out)")}
+                { key:'4', label:i18n("Fade in and out")}
                 ];
             this.replaygainItems=[
                 { key:'0', label:i18n("None")},
@@ -284,9 +284,7 @@ Vue.component('lms-player-settings', {
             lmsList(this.playerId, ["alarms"], ["filter:all"], 0).then(({data}) => {
                 if (data && data.result && data.result.alarms_loop) {
                     this.alarms.scheduled = [];
-                    console.log(data.result);
                     data.result.alarms_loop.forEach(i => {
-                    console.log(i);
                         i.enabled=1==i.enabled;
                         this.alarms.scheduled.push(i);
                     });

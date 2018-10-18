@@ -11,8 +11,8 @@ const ADD_RANDOM_ALBUM_ACTION = {title:"Append random album to queue", cmd:"rand
 const RENAME_PL_ACTION        = {title:"Rename",                       cmd:"rename-pl",  icon:"edit"};
 const RENAME_FAV_ACTION       = {title:"Rename",                       cmd:"rename-fav", icon:"edit"};
 const DELETE_ACTION           = {title:"Delete",                       cmd:"delete",     icon:"delete"};
-const ADD_TO_FAV_ACTION       = {title:"Add to favourites",            cmd:"addfav",     icon:"favorite_border"};
-const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favourites",       cmd:"removefav",  icon:"delete_outline"};
+const ADD_TO_FAV_ACTION       = {title:"Add to favorites",             cmd:"addfav",     icon:"favorite_border"};
+const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favorites",        cmd:"removefav",  icon:"delete_outline"};
 const DIVIDER                 = {divider:true};
 const TERM_PLACEHOLDER        = "-XXXXXX-";
 const ALBUM_SORT_PLACEHOLDER  = "-XXXASXXX-";
@@ -215,7 +215,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 url: "top:/ra"
             },
             {
-                title: i18n("Favourites"),
+                title: i18n("Favorites"),
                 command: ["favorites", "items"],
                 params: ["want_url:1"],
                 icon: "favorite",
@@ -373,7 +373,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             lmsCommand(this.playerId(), ["playlists", "delete", item.url]).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
-                                this.showMessage(i18n("Failed to delete playlist"));
+                                this.showMessage(i18n("Failed to delete playlist!"));
                             });
                         }
                     }
@@ -391,17 +391,17 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
 
                 lmsCommand(this.playerId(), ["favorites", "add", "url:"+url, "title:"+item.title]).then(({data})=> {
-                    this.showMessage(i18n("Added to favorites!"), '');
+                    this.showMessage(i18n("Added to favorites"), '');
                 }).catch(err => {
                     this.showMessage(i18n("Failed to add to favorites!"));
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
-                this.$confirm(i18n("Remove '%1' from favourites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
+                this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+item.id]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
-                            this.showMessage(i18n("Failed to remove favourite"));
+                            this.showMessage(i18n("Failed to remove favorite!"));
                         });
                     }
                 });

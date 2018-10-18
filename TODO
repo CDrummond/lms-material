@@ -9,6 +9,7 @@
   - Scrolling browse and queue lists actually scrolls the whole page. This causes scrolling in
     one to affect the other. A (slightly) hacky-ish work-around is in place, where the page
     position is saved/restored on route change. Would be better to scroll just the list.
+  - 'Infinite' scroll not working on Android
 
 - Browse
   - Add cancel button to right/left of progress so that can cancel current action - in case of long searches
@@ -31,6 +32,15 @@
     - Handle back button (navigate back in browse)
   - Add support for artist/song info (e.g. lyrics).
     - Need to check relevant plugin is installed.
+      ["", ["musicartistinfo", "localfiles", 0, 0]]
+    - Lyrics
+      ["", ["musicartistinfo", "lyrics", "artist:NAME", "title:TRACK"]]
+    - Biography
+      ["", ["musicartistinfo", "biography", "artist:NAME"]]
+      ["", ["musicartistinfo", "biography", "artist_id:ID"]]
+    - Review
+      ["", ["musicartistinfo", "albumreview", "artist:NAME", "album:NAME"]]
+      ["", ["musicartistinfo", "albumreview", "album_id:ID"]]
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
       ["groupmac", ["playergroup", 0, 100]] lists group details

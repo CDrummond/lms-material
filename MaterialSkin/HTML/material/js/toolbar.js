@@ -43,10 +43,10 @@ Vue.component('lms-toolbar', {
 
               <v-divider v-if="players && players.length>1" ></v-divider>
               <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
-                <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;Manage player groups</v-list-tile-title></v-list-tile-content>
+                <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{i18n('Manage player groups'}}</v-list-tile-title></v-list-tile-content>
               </v-list-tile>
               <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
-                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;Synchronise</v-list-tile-title></v-list-tile-content>
+                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{i18n('Synchronise')}}</v-list-tile-title></v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-menu>

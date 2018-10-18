@@ -27,9 +27,6 @@
   - Only update whilst visible?
 
 - Misc
-  - i18n
-    - Create script, or other method, to extract strings
-    - Create example json file
   - Complete WebApp support
     - Correct icon
     - Hide navigation bar

@@ -1,12 +1,12 @@
 {
   "name": "SlimServer Mobile UI",
   "short_name": "SlimServer",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
+  "theme_color": "#424242",
+  "background_color": "#424242",
   "display": "standalone",
   "orientation": "portrait",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "/material",
+  "start_url": "/material",
   "icons": [
     {
       "src": "images/icon.png",

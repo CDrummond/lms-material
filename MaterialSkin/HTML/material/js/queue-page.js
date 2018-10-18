@@ -177,13 +177,11 @@ var lmsQueue = Vue.component("LmsQueue", {
             this.isVisible = '/queue'==to;
             if (this.isVisible) {
                 if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
-                    this.$nextTick(function () {
-                        this.scrollToCurrent();
-                    });
+                    this.scheduleUpdate();
                 } else {
-                    this.$nextTick(function () {
+                    setTimeout(function () {
                         document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
-                    });
+                    }.bind(this), 50);
                 }
             } else if (from=='/queue') {
                 this.previousScrollPos = pos;

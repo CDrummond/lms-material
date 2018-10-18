@@ -242,11 +242,6 @@ var app = new Vue({
             }
         }
     },
-    filters: {
-        i18n: function (value) {
-            return i18n(value);
-        }
-    },
     store,
     router,
     lmsServer

@@ -5,14 +5,14 @@
  * MIT license.
  */
 
-const PLAY_ACTION             = {title:"Play now",                     cmd:"load",       icon:"play_circle_outline"};
-const ADD_ACTION              = {title:"Append to queue",              cmd:"add",        icon:"add_circle_outline"};
-const ADD_RANDOM_ALBUM_ACTION = {title:"Append random album to queue", cmd:"random",     icon:"help_outline"};
-const RENAME_PL_ACTION        = {title:"Rename",                       cmd:"rename-pl",  icon:"edit"};
-const RENAME_FAV_ACTION       = {title:"Rename",                       cmd:"rename-fav", icon:"edit"};
-const DELETE_ACTION           = {title:"Delete",                       cmd:"delete",     icon:"delete"};
-const ADD_TO_FAV_ACTION       = {title:"Add to favorites",             cmd:"addfav",     icon:"favorite_border"};
-const REMOVE_FROM_FAV_ACTION  = {title:"Remove from favorites",        cmd:"removefav",  icon:"delete_outline"};
+var PLAY_ACTION             = { };
+var ADD_ACTION              = { };
+var ADD_RANDOM_ALBUM_ACTION = { };
+var RENAME_PL_ACTION        = { };
+var RENAME_FAV_ACTION       = { };
+var DELETE_ACTION           = { };
+var ADD_TO_FAV_ACTION       = { };
+var REMOVE_FROM_FAV_ACTION  = { };
 const DIVIDER                 = {divider:true};
 const TERM_PLACEHOLDER        = "-XXXXXX-";
 const ALBUM_SORT_PLACEHOLDER  = "-XXXASXXX-";
@@ -35,8 +35,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? 'Cancel' : dialog.cancel}}</v-btn>
-                <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? 'OK' : dialog.ok}}</v-btn>
+                <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? i18n('Cancel') : dialog.cancel}}</v-btn>
+                <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? i18n('OK') : dialog.ok}}</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -127,7 +127,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.actions=[];
         this.artistImages=false;
         this.previousScrollPos=0;
-        this.initItems();
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
         // page, so that it can be restored when going back here.
@@ -147,9 +146,19 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
+        this.initItems();
     },
     methods: {
         initItems() {
+        PLAY_ACTION             = {title:i18n("Play now"),                     cmd:"load",       icon:"play_circle_outline"};
+        ADD_ACTION              = {title:i18n("Append to queue"),              cmd:"add",        icon:"add_circle_outline"};
+        ADD_RANDOM_ALBUM_ACTION = {title:i18n("Append random album to queue"), cmd:"random",     icon:"help_outline"};
+        RENAME_PL_ACTION        = {title:i18n("Rename"),                       cmd:"rename-pl",  icon:"edit"};
+        RENAME_FAV_ACTION       = {title:i18n("Rename"),                       cmd:"rename-fav", icon:"edit"};
+        DELETE_ACTION           = {title:i18n("Delete"),                       cmd:"delete",     icon:"delete"};
+        ADD_TO_FAV_ACTION       = {title:i18n("Add to favorites"),             cmd:"addfav",     icon:"favorite_border"};
+        REMOVE_FROM_FAV_ACTION  = {title:i18n("Remove from favorites"),        cmd:"removefav",  icon:"delete_outline"};
+
         this.top = [
             { header: i18n("My Music"), url: "top:/mmh" },
             {

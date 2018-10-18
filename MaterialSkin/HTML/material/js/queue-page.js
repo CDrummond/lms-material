@@ -5,9 +5,9 @@
  * MIT license.
  */
 
-const PQ_PLAY_NOW_ACTION =  { title: 'Play now',              cmd: 'playnow',  icon: 'play_circle_outline'   };
-const PQ_PLAY_NEXT_ACTION = { title: 'Move to next in queue', cmd: 'playnext', icon: 'play_circle_filled'    };
-const PQ_REMOVE_ACTION =    { title: 'Remove from queue',     cmd: 'remove',   icon: 'remove_circle_outline' };
+var PQ_PLAY_NOW_ACTION =  { };
+var PQ_PLAY_NEXT_ACTION = { };
+var PQ_REMOVE_ACTION =    { };
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -112,7 +112,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                   <template v-for="(action, actIndex) in item.actions">
                     <v-divider v-if="action.divider"></v-divider>
                     <v-list-tile v-else @click="itemAction(action.cmd, item, index)">
-                      <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{i18n(action.title)}}</v-list-tile-title>
+                      <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
                     </v-list-tile>
                    </template>
                 </v-list>
@@ -194,8 +194,18 @@ var lmsQueue = Vue.component("LmsQueue", {
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
         });
+        
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
     },
     methods: {
+        initItems() {
+            PQ_PLAY_NOW_ACTION =  { title:i18n('Play now'),              cmd: 'playnow',  icon: 'play_circle_outline'   };
+            PQ_PLAY_NEXT_ACTION = { title:i18n('Move to next in queue'), cmd: 'playnext', icon: 'play_circle_filled'    };
+            PQ_REMOVE_ACTION =    { title:i18n('Remove from queue'),     cmd: 'remove',   icon: 'remove_circle_outline' };
+        },
         save() {
             if (this.items.length<1) {
                 return;

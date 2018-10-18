@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+#
+# LMS-Material
+#
+# Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+# MIT license.
+#
+
 import sys
 import requests
 import shutil

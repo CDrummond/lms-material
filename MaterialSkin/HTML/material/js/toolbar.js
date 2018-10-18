@@ -5,10 +5,9 @@
  * MIT license.
  */
 
-const TB_UI_SETTINGS     = {id:'tb:settings',       title:'Settings'};
-const TB_PLAYER_SETTINGS = {id:"tb:playersettings", title:'Player Settings'};
-const TB_SERVER_SETTINGS = {id:"tb:serversettings", title:'Server Settings', href:'../Default/settings/index.html'};
-const TB_MENU_ITEMS = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS ];
+var TB_UI_SETTINGS     = { };
+var TB_PLAYER_SETTINGS = { };
+var TB_SERVER_SETTINGS = { };
 
 Vue.component('lms-toolbar', {
     template: `
@@ -86,10 +85,10 @@ Vue.component('lms-toolbar', {
             <v-list>
               <template v-for="(item, index) in menuItems">
                 <v-list-tile v-if="item.href" :href="item.href" target="_blank">
-                  <v-list-tile-title>{{i18n(item.title)}}</v-list-tile-title>
+                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
                 </v-list-tile>
                 <v-list-tile v-else @click="menuAction(item.id)">
-                  <v-list-tile-title>{{i18n(item.title)}}</v-list-tile-title>
+                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
                 </v-list-tile>
               </template>
             </v-list>
@@ -103,10 +102,11 @@ Vue.component('lms-toolbar', {
                  playerVolume:-1,
                  playerVolumeCurrent:-1,
                  playerGroups: false,
-                 menuItems: TB_MENU_ITEMS
+                 menuItems: []
                }
     },
     mounted() {
+        /*
         bus.$on('addToolbarActions', function(actions) {
             actions.forEach(i => {
                 this.menuItems.push(i);
@@ -120,6 +120,7 @@ Vue.component('lms-toolbar', {
                 }
             });
         }.bind(this));
+        */
 
         // Player groups plugin
         /* TODO: Enable, and implement!
@@ -159,8 +160,19 @@ Vue.component('lms-toolbar', {
                 }
             }
         }.bind(this));
+        
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
     },
     methods: {
+        initItems() {
+            TB_UI_SETTINGS     = {id:'tb:settings',       title:i18n('Settings')};
+            TB_PLAYER_SETTINGS = {id:"tb:playersettings", title:i18n('Player Settings')};
+            TB_SERVER_SETTINGS = {id:"tb:serversettings", title:i18n('Server Settings'), href:'../Default/settings/index.html'};
+            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS ];
+        },
         setPlayer(name) {
             this.$store.commit('setPlayer', name);
         },

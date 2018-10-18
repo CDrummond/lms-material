@@ -1,3 +1,9 @@
+/*
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
 
 Vue.component('lms-sync-dialog', {
     template: `

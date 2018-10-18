@@ -5,9 +5,9 @@
  * MIT license.
  */
 
-var PQ_PLAY_NOW_ACTION =  { };
-var PQ_PLAY_NEXT_ACTION = { };
-var PQ_REMOVE_ACTION =    { };
+var PQ_PLAY_NOW_ACTION =  { cmd: 'playnow',  icon: 'play_circle_outline'   };
+var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'    };
+var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline' };
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -203,10 +203,10 @@ var lmsQueue = Vue.component("LmsQueue", {
     },
     methods: {
         initItems() {
-            PQ_PLAY_NOW_ACTION =  { title:i18n('Play now'),              cmd: 'playnow',  icon: 'play_circle_outline'   };
-            PQ_PLAY_NEXT_ACTION = { title:i18n('Move to next in queue'), cmd: 'playnext', icon: 'play_circle_filled'    };
-            PQ_REMOVE_ACTION =    { title:i18n('Remove from queue'),     cmd: 'remove',   icon: 'remove_circle_outline' };
-            this.trans: { ok:i18n('OK'), cancel: i18n('Cancel') };
+            PQ_PLAY_NOW_ACTION.title=i18n('Play now');
+            PQ_PLAY_NEXT_ACTION.title=i18n('Move to next in queue');
+            PQ_REMOVE_ACTION.title=i18n('Remove from queue');
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
         },
         save() {
             if (this.items.length<1) {

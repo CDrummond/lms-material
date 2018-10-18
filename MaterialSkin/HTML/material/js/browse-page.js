@@ -5,14 +5,14 @@
  * MIT license.
  */
 
-var PLAY_ACTION             = { };
-var ADD_ACTION              = { };
-var ADD_RANDOM_ALBUM_ACTION = { };
-var RENAME_PL_ACTION        = { };
-var RENAME_FAV_ACTION       = { };
-var DELETE_ACTION           = { };
-var ADD_TO_FAV_ACTION       = { };
-var REMOVE_FROM_FAV_ACTION  = { };
+var PLAY_ACTION             = {cmd:"load",       icon:"play_circle_outline"};
+var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
+var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"help_outline"};
+var RENAME_PL_ACTION        = {cmd:"rename-pl",  icon:"edit"};
+var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
+var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
+var ADD_TO_FAV_ACTION       = {cmd:"addfav",     icon:"favorite_border"};
+var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  icon:"delete_outline"};
 const DIVIDER                 = {divider:true};
 const TERM_PLACEHOLDER        = "-XXXXXX-";
 const ALBUM_SORT_PLACEHOLDER  = "-XXXASXXX-";
@@ -151,15 +151,15 @@ var lmsBrowse = Vue.component("LmsBrowse", {
     },
     methods: {
         initItems() {
-        PLAY_ACTION             = {title:i18n("Play now"),                     cmd:"load",       icon:"play_circle_outline"};
-        ADD_ACTION              = {title:i18n("Append to queue"),              cmd:"add",        icon:"add_circle_outline"};
-        ADD_RANDOM_ALBUM_ACTION = {title:i18n("Append random album to queue"), cmd:"random",     icon:"help_outline"};
-        RENAME_PL_ACTION        = {title:i18n("Rename"),                       cmd:"rename-pl",  icon:"edit"};
-        RENAME_FAV_ACTION       = {title:i18n("Rename"),                       cmd:"rename-fav", icon:"edit"};
-        DELETE_ACTION           = {title:i18n("Delete"),                       cmd:"delete",     icon:"delete"};
-        ADD_TO_FAV_ACTION       = {title:i18n("Add to favorites"),             cmd:"addfav",     icon:"favorite_border"};
-        REMOVE_FROM_FAV_ACTION  = {title:i18n("Remove from favorites"),        cmd:"removefav",  icon:"delete_outline"};
-        this.trans: { ok:i18n('OK'), cancel: i18n('Cancel') };
+        PLAY_ACTION.title=i18n("Play now");
+        ADD_ACTION.title=i18n("Append to queue");
+        ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
+        RENAME_PL_ACTION.title=i18n("Rename");
+        RENAME_FAV_ACTION.title=i18n("Rename");
+        DELETE_ACTION.title=i18n("Delete");
+        ADD_TO_FAV_ACTION.title=i18n("Add to favorites");
+        REMOVE_FROM_FAV_ACTION.title=i18n("Remove from favorites");
+        this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
 
         this.top = [
             { header: i18n("My Music"), url: "top:/mmh" },

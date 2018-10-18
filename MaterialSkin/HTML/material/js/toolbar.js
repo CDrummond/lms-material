@@ -5,9 +5,9 @@
  * MIT license.
  */
 
-var TB_UI_SETTINGS     = { };
-var TB_PLAYER_SETTINGS = { };
-var TB_SERVER_SETTINGS = { };
+var TB_UI_SETTINGS     = {id:'tb:settings'       };
+var TB_PLAYER_SETTINGS = {id:"tb:playersettings" };
+var TB_SERVER_SETTINGS = {id:"tb:serversettings", href:'../Default/settings/index.html'};
 
 Vue.component('lms-toolbar', {
     template: `
@@ -169,9 +169,9 @@ Vue.component('lms-toolbar', {
     },
     methods: {
         initItems() {
-            TB_UI_SETTINGS     = {id:'tb:settings',       title:i18n('Settings')};
-            TB_PLAYER_SETTINGS = {id:"tb:playersettings", title:i18n('Player Settings')};
-            TB_SERVER_SETTINGS = {id:"tb:serversettings", title:i18n('Server Settings'), href:'../Default/settings/index.html'};
+            TB_UI_SETTINGS.title=i18n('Settings');
+            TB_PLAYER_SETTINGS.title=i18n('Player Settings');
+            TB_SERVER_SETTINGS.title=i18n('Server Settings');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS ];
             this.trans = {noplayer:i18n('No Player'), syncrhonise:i18n('Synchronise'),
                           managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing')};

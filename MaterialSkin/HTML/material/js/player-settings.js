@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const DAYS_OF_WEEK = ['Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat', 'Sun'];
+var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
 
 Vue.component('lms-player-settings', {
     template: `
@@ -263,6 +263,7 @@ Vue.component('lms-player-settings', {
                 { key:'1', label:i18n("Shuffle by song")},
                 { key:'2', label:i18n("Shuffle by album")},
                 ];
+            DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
         },
         close() {
             bus.$emit('dialog', 'player-settings', false);
@@ -280,10 +281,13 @@ Vue.component('lms-player-settings', {
             this.playerId = undefined;
         },
         loadAlarms() {
-            lmsList(this.playerId, ["alarms", 0, 100], undefined, 0).then(({data}) => {
+            lmsList(this.playerId, ["alarms"], ["filter:all"], 0).then(({data}) => {
                 if (data && data.result && data.result.alarms_loop) {
                     this.alarms.scheduled = [];
+                    console.log(data.result);
                     data.result.alarms_loop.forEach(i => {
+                    console.log(i);
+                        i.enabled=1==i.enabled;
                         this.alarms.scheduled.push(i);
                     });
                 }
@@ -346,16 +350,18 @@ Vue.component('lms-player-settings', {
     filters: {
         formatAlarm: function (value) {
             var days=[];
-            value.dow.split(",").forEach(d => {
-                // LMS has Sun->Sat, but I prefer Mon->Sun
-                var day = parseInt(d);
-                if (day == 0) {
-                    day = 6;
+            // LMS has Sun->Sat, but I prefer Mon->Sun. So, if Sun is used, place at end
+            var haveSun=false;
+            value.dow.split(",").sort().forEach(d => {
+                if (d==='0') {
+                    haveSun=true;
                 } else {
-                    day--;
+                    days.push(DAYS_OF_WEEK[d]);
                 }
-                days.push(DAYS_OF_WEEK[day]);
             });
+            if (haveSun) {
+                days.push(DAYS_OF_WEEK[0]);
+            }
             return formatTime(value.time, false)+" "+days.join(", ");
         }
     },

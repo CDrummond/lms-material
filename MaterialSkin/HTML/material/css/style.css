@@ -85,55 +85,11 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
 }
- 
-.volume-popup {
-    padding:0px; /*16px 16px 0px 16px;*/
-}
 
 .vol-slider {
     margin-top: -10px !important;
     padding-left:16px;
     padding-right:2px;
-}
-
-@media only screen and (min-width: 700px) {
-    .volume-popup {
-        width: 500px !important;
-    }
-
-    .vol-slider {
-        width: 350px;
-    }
-}
-
-@media only screen and (max-width: 700px) {
-    .volume-popup {
-        max-width: 400px !important;
-    }
-
-    .vol-slider {
-        max-width: 225px;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .volume-popup {
-        width: 80vw !important;
-    }
-
-    .vol-slider {
-        max-width: 200px;
-    }
-}
-
-@media only screen and (max-width: 300px) {
-    .volume-popup {
-        width: 90vw !important;
-    }
-
-    .vol-slider {
-        max-width: 150px;
-    }
 }
 
 .vol-btn {

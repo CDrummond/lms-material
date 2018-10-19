@@ -542,9 +542,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (this.fetchingItems || !this.items || !this.current || this.listSize<=this.items.length) {
                     return;
                 }
-                let bottomOfWindow = (document.documentElement.scrollTop + window.innerHeight) >= (document.documentElement.offsetHeight-300);
 
-                if (bottomOfWindow) {
+                if (window.innerHeight+window.scrollY >= (document.documentElement.offsetHeight-300)) {
                     this.fetchingItems = true;
                     lmsList(this.playerId(), this.current.command, this.adjustParams(this.current.params), this.items.length).then(({data}) => {
                         this.fetchingItems = false;

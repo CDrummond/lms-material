@@ -9,10 +9,11 @@
   - Scrolling browse and queue lists actually scrolls the whole page. This causes scrolling in
     one to affect the other. A (slightly) hacky-ish work-around is in place, where the page
     position is saved/restored on route change. Would be better to scroll just the list.
-  - 'Infinite' scroll not working on Android
+  - Drag'n'drop
+    - Not working on Android Firefox
+    - Desktop firefox has drag thumbnail much higher than item being dragged.
 
 - Browse
-  - Add cancel button to right/left of progress so that can cancel current action - in case of long searches
   - Random Mix
   - Favorites:
     - Images

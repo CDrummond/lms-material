@@ -83,28 +83,30 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 </v-list-tile-content>
                 
                 <v-list-tile-action v-if="item.actions && 1===item.actions.length" @click.stop="itemAction(item.actions[0].cmd, item)">
-                  <v-btn icon ripple>
+                  <v-btn icon>
                     <v-icon>{{item.actions[0].icon}}</v-icon>
                   </v-btn>
                 </v-list-tile-action>
-                <v-list-tile-action v-if="item.actions && item.actions.length>1" @click.stop=""> <!-- @click.stop stops even going to list item (navigate) -->
-                  <v-menu offset-y>
-                    <v-btn icon ripple slot="activator">
-                      <v-icon>more_vert</v-icon>
-                    </v-btn>
-                    <v-list>
-                      <template v-for="(action, index) in item.actions">
-                        <v-divider v-if="action.divider"></v-divider>
-                        <v-list-tile v-else @click="itemAction(action.cmd, item)">
-                          <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
-                        </v-list-tile>
-                      </template>
-                    </v-list>
-                  </v-menu>
+                <v-list-tile-action v-if="item.actions && item.actions.length>1" @click.stop="itemMenu(item, $event)">
+                  <v-btn icon>
+                    <v-icon>more_vert</v-icon>
+                  </v-btn>
                 </v-list-tile-action>
               </v-list-tile>
             </div></recycle-list></template>
           </v-list>
+
+          <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
+            <v-list v-if="menu.item">
+              <template v-for="(action, index) in menu.item.actions">
+                <v-divider v-if="action.divider"></v-divider>
+                <v-list-tile v-else @click="itemAction(action.cmd, menu.item)">
+                  <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+                </v-list-tile>
+              </template>
+            </v-list>
+          </v-menu>
+
         </div>
       `,
     props: [],
@@ -114,7 +116,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             fetchingItems: false,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
-            trans: { ok:undefined, cancel: undefined }
+            trans: { ok:undefined, cancel: undefined },
+            menu: { show:false, item: undefined, x:0, y:0}
         }
     },
     created() {
@@ -421,7 +424,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 var params = [];
                 item.params.forEach(p => { params.push(p); });
                 params.push("sort:random");
-                lmsList(this.pl <!-- <template v-for="(item, index) in items"> -->ayerId(), ["albums"], params, 0, 1).then(({data}) => {
+                lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
                     this.fetchingItems = false;
                     var resp = parseBrowseResp(data, this.current, this.artistImages);
                     if (1===resp.items.length) {
@@ -472,6 +475,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.showMessage();
                 });
             }
+        },
+        itemMenu(item, event) {
+            this.menu={show:true, item:item, x:event.clientX, y:event.clientY};
         },
         headerAction(act) {
             this.itemAction(act, this.current);

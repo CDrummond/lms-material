@@ -104,25 +104,26 @@ var lmsQueue = Vue.component("LmsQueue", {
               <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-            <v-list-tile-action v-if="item.actions && item.actions.length>1" @click.stop=""> <!-- @click.stop stops even going to list item (navigate) -->
-              <v-menu offset-y>
-                <v-btn icon ripple slot="activator">
-                  <v-icon>more_vert</v-icon>
-                </v-btn>
-                <v-list>
-                  <template v-for="(action, actIndex) in item.actions">
-                    <v-divider v-if="action.divider"></v-divider>
-                    <v-list-tile v-else @click="itemAction(action.cmd, item, index)">
-                      <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
-                    </v-list-tile>
-                   </template>
-                </v-list>
-              </v-menu>
+            <v-list-tile-action v-if="item.actions && item.actions.length>1" @click.stop="itemMenu(item, index, $event)">
+              <v-btn icon>
+                <v-icon>more_vert</v-icon>
+              </v-btn>
             </v-list-tile-action>
           </v-list-tile>
           <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
         </div></recycle-list></template>
       </v-list>
+
+      <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
+        <v-list v-if="menu.item">
+          <template v-for="(action, index) in menu.item.actions">
+            <v-divider v-if="action.divider"></v-divider>
+            <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
+              <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+            </v-list-tile>
+          </template>
+        </v-list>
+      </v-menu>
     </div>
 `,
     props: [],
@@ -134,7 +135,8 @@ var lmsQueue = Vue.component("LmsQueue", {
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             trackCount:0,
             duration: 0.0,
-            trans: { ok: undefined, cancel: undefined }
+            trans: { ok: undefined, cancel: undefined },
+            menu: { show:false, item: undefined, x:0, y:0, index:0}
         }
     },
     created() {
@@ -246,6 +248,9 @@ var lmsQueue = Vue.component("LmsQueue", {
             } else if (PQ_REMOVE_ACTION.cmd===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             }
+        },
+        itemMenu(item, index, event) {
+            this.menu={show:true, item:item, index:index, x:event.clientX, y:event.clientY};
         },
         getDuration() {
             if (this.items.length>0) {

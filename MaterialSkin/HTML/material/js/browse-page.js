@@ -58,14 +58,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
           <div v-if="headerTitle" class="subtoolbar-pad"></div>
           <v-progress-linear v-if="fetchingItems" :indeterminate="true"></v-progress-linear>
           <v-list>
-            <template v-for="(item, index) in items">
+            <!-- <template v-for="(item, index) in items"> -->
+            <template><recycle-list :items="items" :item-height="56" pool-size="1000" page-mode><div slot-scope="{item, index}">
               <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
-              <v-divider v-else-if="index>0 && !items[index-1].header" :inset="item.inset"></v-divider>
+              <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
-              <p v-if="item.type=='text'" class="browse-text">
-                {{item.title}}
-              </p>
+              <p v-if="item.type=='text'" class="browse-text">{{item.title}}</p>
               <v-list-tile v-else-if="!item.header" avatar @click="browse(item)" :key="item.url">
                 <v-list-tile-avatar v-if="item.image" :tile="true">
                   <img v-lazy="item.image">
@@ -104,7 +103,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                   </v-menu>
                 </v-list-tile-action>
               </v-list-tile>
-            </template>
+            </div></recycle-list></template>
           </v-list>
         </div>
       `,
@@ -422,7 +421,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 var params = [];
                 item.params.forEach(p => { params.push(p); });
                 params.push("sort:random");
-                lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
+                lmsList(this.pl <!-- <template v-for="(item, index) in items"> -->ayerId(), ["albums"], params, 0, 1).then(({data}) => {
                     this.fetchingItems = false;
                     var resp = parseBrowseResp(data, this.current, this.artistImages);
                     if (1===resp.items.length) {

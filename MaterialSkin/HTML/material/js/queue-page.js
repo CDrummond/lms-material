@@ -326,9 +326,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                 if (this.fetchingItems || this.listSize<=this.items.length) {
                     return;
                 }
-                let bottomOfWindow = (document.documentElement.scrollTop + window.innerHeight) >= (document.documentElement.offsetHeight-300);
-
-                if (bottomOfWindow) {
+                if (window.innerHeight+window.scrollY >= (document.documentElement.offsetHeight-300)) {
                     this.fetchItems();
                 }
             };

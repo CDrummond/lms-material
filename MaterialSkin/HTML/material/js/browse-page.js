@@ -141,14 +141,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.previousScrollPos = pos;
             }
         }.bind(this));
-        this.$nextTick(function () {
-            document.documentElement.scrollTop=0;
-        });
 
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
         this.initItems();
+        this.$nextTick(function () {
+            document.documentElement.scrollTop=0;
+        });
     },
     methods: {
         initItems() {

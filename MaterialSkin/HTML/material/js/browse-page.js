@@ -61,12 +61,12 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             <template v-for="(item, index) in items">
               <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
-              <v-divider v-else-if="index>0 && !items[index-1].header && (undefined===item.separateArtists || item.separateArtists==separateArtists)" :inset="item.inset"></v-divider>
+              <v-divider v-else-if="index>0 && !items[index-1].header" :inset="item.inset"></v-divider>
 
               <p v-if="item.type=='text'" class="browse-text">
                 {{item.title}}
               </p>
-              <v-list-tile v-else-if="!item.header && (undefined===item.separateArtists || item.separateArtists==separateArtists)" avatar @click="browse(item)" :key="item.url">
+              <v-list-tile v-else-if="!item.header" avatar @click="browse(item)" :key="item.url">
                 <v-list-tile-avatar v-if="item.image" :tile="true">
                   <img v-lazy="item.image">
                 </v-list-tile-avatar>
@@ -115,7 +115,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             fetchingItems: false,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
-            separateArtists: false,
             trans: { ok:undefined, cancel: undefined }
         }
     },
@@ -164,21 +163,12 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.top = [
             { header: i18n("My Music"), url: "top:/mmh" },
             {
-                title: i18n("Artists"),
+                title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                 command: ["artists"],
                 params: [],
                 icon: "group",
                 type: "group",
                 url: "top:/ar",
-            },
-            {
-                title: i18n("Album Artists"),
-                command: ["artists"],
-                params: ["role_id:ALBUMARTIST"],
-                icon: "group",
-                type: "group",
-                url: "top:/aar",
-                separateArtists: true
             },
             {
                 title: i18n("Albums"),
@@ -243,6 +233,17 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 url: "top:/ap"
             }
         ];
+        if (this.separateArtists) {
+            this.top.splice(2, 0,
+                        {
+                            title: i18n("Album Artists"),
+                            command: ["artists"],
+                            params: ["role_id:ALBUMARTIST"],
+                            icon: "group",
+                            type: "group",
+                            url: "top:/aar"
+                        });
+        }
         this.other = [
             {
                 title: i18n("Compilations"),
@@ -577,6 +578,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 this.separateArtists = 1!= data.result._p2;
+                if (this.separateArtists) {
+                    this.initItems();
+                }
             }
         });
 

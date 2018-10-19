@@ -2,13 +2,18 @@ axios
     URL: https://github.com/axios/axios
     License: MIT
 
+vue
+    Version: 0.5.0
+    URL: https://github.com/w3c/IntersectionObserver
+    License: W3C Software and Document License.
+
 mobile-drag-drop
-    Version 2.3.0-rc.1
+    Version: 2.3.0-rc.1
     URL: https://github.com/timruffles/mobile-drag-drop
     License: MIT
 
 vue
-    Version 2.5.14
+    Version: 2.5.14
     URL: https://github.com/vuejs/vue
     License: MIT
 
@@ -17,7 +22,7 @@ vue-lazyload
     License: MIT
 
 vue-observe-visibility
-    Version 0.4.3
+    Version: 0.4.3
     URL: https://github.com/Akryum/vue-observe-visibility
     License: MIT
 
@@ -26,7 +31,7 @@ vue-router
     License: MIT
 
 vue-virtual-scroller:
-    Version 0.12.2
+    Version: 0.12.2
     URL: https://github.com/Akryum/vue-virtual-scroller
     License: MIT
 

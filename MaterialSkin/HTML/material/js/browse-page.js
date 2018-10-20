@@ -135,7 +135,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         bus.$on('routeChange', function(from, to, pos) {
             if (to=='/browse') {
                 setTimeout(function () {
-                    document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
+                    setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
                 }.bind(this), 50);
             } else if (from=='/browse') {
                 this.previousScrollPos = pos;
@@ -146,17 +146,18 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.initItems();
         }.bind(this));
         this.initItems();
-        this.$nextTick(function () {
-            document.documentElement.scrollTop=0;
-        });
+        setTimeout(function () {
+            setScrollTop(0);
+        }.bind(this), 50);
 
         window.addEventListener('scroll', () => {
             if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
                 return;
             }
             const scrollY = window.scrollY;
-            const visible = document.documentElement.clientHeight;
-            const pageHeight = document.documentElement.scrollHeight;
+            const el = getScrollElement();
+            const visible = el.clientHeight;
+            const pageHeight = el.scrollHeight;
             const bottomOfPage = visible + scrollY >= (pageHeight-300);
 
             if (bottomOfPage || pageHeight < visible) {
@@ -330,7 +331,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 prev.headerTitle = this.headerTitle;
                 prev.headerSubTitle = this.headerSubTitle;
                 prev.actions = this.actions;
-                prev.pos=document.documentElement.scrollTop;
+                prev.pos=getScrollTop();
                 this.history.push(prev);
                 this.headerTitle=item.title;
                 
@@ -346,7 +347,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 } else {
                     this.headerSubTitle=i18n("Total: %1", this.listSize);
                 }
-                document.documentElement.scrollTop=0;
+                setScrollTop(0);
             }).catch(err => {
                 this.fetchingItems = false;
                 this.showMessage();
@@ -364,13 +365,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 prev.headerTitle = this.headerTitle;
                 prev.headerSubTitle = this.headerSubTitle;
                 prev.actions = this.actions;
-                prev.pos=document.documentElement.scrollTop;
+                prev.pos=getScrollTop();
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
-                document.documentElement.scrollTop=0;
+                setScrollTop(0);
                 return;
             }
             this.fetchItems(item, this.adjustParams(item.params));
@@ -508,7 +509,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.itemAction(act, this.current);
         },
         refreshList() {
-            var pos=document.documentElement.scrollTop;
+            var pos=getScrollTop();
             this.fetchingItems = true;
             lmsList(this.playerId(), this.current.command, this.adjustParams(this.current.params), 0, this.current.batchsize).then(({data}) => {
                 this.fetchingItems = false;
@@ -523,9 +524,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 }
-                
                 this.$nextTick(function () {
-                    document.documentElement.scrollTop=pos>0 ? pos : 0;
+                    setScrollTop(pos>0 ? pos : 0);
                 });
             }).catch(err => {
                 this.fetchingItems = false;
@@ -545,7 +545,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerSubTitle=null;
             this.actions=[];
             this.$nextTick(function () {
-                document.documentElement.scrollTop=prev>0 ? prev : 0 ;
+                setScrollTop(prev>0 ? prev : 0);
             });
         },
         goBack() {
@@ -564,7 +564,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.actions = prev.actions;
             this.$nextTick(function () {
-                document.documentElement.scrollTop=prev.pos>0 ? prev.pos : 0;
+                setScrollTop(prev.pos>0 ? prev.pos : 0);
             });
         },
         adjustParams(origParams) {

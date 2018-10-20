@@ -153,8 +153,9 @@ var lmsQueue = Vue.component("LmsQueue", {
                 return;
             }
             const scrollY = window.scrollY;
-            const visible = document.documentElement.clientHeight;
-            const pageHeight = document.documentElement.scrollHeight;
+            const el = getScrollElement();
+            const visible = el.clientHeight;
+            const pageHeight = el.scrollHeight;
             const bottomOfPage = visible + scrollY >= (pageHeight-300);
 
             if (bottomOfPage || pageHeight < visible) {
@@ -195,7 +196,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.scheduleUpdate();
                 } else {
                     setTimeout(function () {
-                        document.documentElement.scrollTop=this.previousScrollPos>0 ? this.previousScrollPos : 0;
+                        setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
                     }.bind(this), 50);
                 }
             } else if (from=='/queue') {
@@ -208,11 +209,11 @@ var lmsQueue = Vue.component("LmsQueue", {
         }.bind(this));
         this.initItems();
 
-        this.$nextTick(function () {
-            document.documentElement.scrollTop=0;
+        setTimeout(function () {
+            setScrollTop(0);
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
-        });
+        }.bind(this), 50);
     },
     methods: {
         initItems() {
@@ -322,7 +323,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             if (this.items.length===0) {
                 this.fetchItems();
             } else {
-                var currentPos = document.documentElement.scrollTop;
+                var currentPos = getScrollTop();
                 this.fetchingItems = true;
 
                 lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], 0, this.items.length < 50 ? 50 : this.items.length).then(({data}) => {
@@ -332,7 +333,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.fetchingItems = false;
                     this.getDuration();
                     this.$nextTick(function () {
-                        document.documentElement.scrollTop=currentPos>0 ? currentPos : 0;
+                        setScrollTop(currentPos>0 ? currentPos : 0);
                     });
                 }).catch(err => {
                     this.fetchingItems = false;
@@ -371,8 +372,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             ev.preventDefault(); // Otherwise drop is never called!
         },
         scrollList(step) {
-            var scrollY = document.documentElement.scrollTop;
-            document.documentElement.scrollTop = scrollY + step;
+            setScrollTop(getScrollTop() + step);
             if (!this.stopScrolling) {
                 setTimeout(function () {
                     this.scrollList(step);

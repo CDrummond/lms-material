@@ -77,3 +77,19 @@ function itemSort(a, b) {
     return 0;
 }
 
+function getScrollElement() {
+    return document.scrollingElement || document.documentElement;
+}
+
+function setScrollTop(val) {
+    var el = getScrollElement();
+    // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
+    el.style['-webkit-overflow-scrolling'] = 'auto';
+    el.scrollTop=val;
+    el.style['-webkit-overflow-scrolling'] = 'touch';
+}
+
+function getScrollTop() {
+    return getScrollElement().scrollTop;
+}
+

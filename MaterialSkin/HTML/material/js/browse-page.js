@@ -149,6 +149,31 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.$nextTick(function () {
             document.documentElement.scrollTop=0;
         });
+
+        window.addEventListener('scroll', () => {
+            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
+                return;
+            }
+            const scrollY = window.scrollY;
+            const visible = document.documentElement.clientHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+            const bottomOfPage = visible + scrollY >= (pageHeight-300);
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchingItems = true;
+                lmsList(this.playerId(), this.current.command, this.adjustParams(this.current.params), this.items.length).then(({data}) => {
+                    this.fetchingItems = false;
+                    var resp = parseBrowseResp(data, this.current, this.artistImages);
+                    if (resp && resp.items) {
+                        resp.items.forEach(i => {
+                            this.items.push(i);
+                        });
+                    }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                });
+            }
+        });
     },
     methods: {
         initItems() {
@@ -542,28 +567,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 document.documentElement.scrollTop=prev.pos>0 ? prev.pos : 0;
             });
         },
-        scroll () { // Infinite scroll...
-            window.onscroll = () => {
-                if (this.fetchingItems || !this.items || !this.current || this.listSize<=this.items.length) {
-                    return;
-                }
-
-                if (window.innerHeight+window.scrollY >= (document.documentElement.offsetHeight-300)) {
-                    this.fetchingItems = true;
-                    lmsList(this.playerId(), this.current.command, this.adjustParams(this.current.params), this.items.length).then(({data}) => {
-                        this.fetchingItems = false;
-                        var resp = parseBrowseResp(data, this.current, this.artistImages);
-                        if (resp && resp.items) {
-                            resp.items.forEach(i => {
-                                this.items.push(i);
-                            });
-                        }
-                    }).catch(err => {
-                        this.fetchingItems = false;
-                    });
-                }
-            };
-        },
         adjustParams(origParams) {
             if (undefined!=origParams) {
                 var params = [];
@@ -576,8 +579,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         }
     },
     mounted() {
-        this.scroll();
-
         // All Artists + Album Artists, or just Artists?
         lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {

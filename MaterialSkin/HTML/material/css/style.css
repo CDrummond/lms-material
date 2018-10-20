@@ -226,6 +226,20 @@ a {
     /*border: 1px solid blue;*/
 }
 
+.np-info {
+    max-width:800px;
+    display: block;
+    height:auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.np-info-text {
+    text-align: center;
+    height:calc(100vh - 222px);
+    overflow:auto;
+}
+
 .lms-footer .router-link-exact-active .btn {
     opacity: 1 !important;
 }

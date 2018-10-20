@@ -200,7 +200,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             document.documentElement.scrollTop=0;
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
-        });s
+        });
     },
     methods: {
         initItems() {

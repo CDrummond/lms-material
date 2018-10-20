@@ -91,7 +91,7 @@ var lmsQueue = Vue.component("LmsQueue", {
       <div class="subtoolbar-pad"></div>
       <v-list class="lms-list-page">
         <!-- <template v-for="(item, index) in items"> -->
-        <template><recycle-list :items="items" :item-height="56" pool-size="1000" page-mode><div slot-scope="{item, index}">
+        <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">
           <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
             <v-list-tile-avatar v-if="item.image" :tile="true">
               <img v-lazy="item.image">

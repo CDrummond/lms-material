@@ -190,7 +190,7 @@ a {
 .np-image {
     display: block;
     height:auto;
-    max-height:100%; 
+    max-height:calc((var(--vh, 1vh)*100) - 120px); /* Work-around chrome mobile 100vh - see main.js */
     max-width:100%; 
     margin-left: auto;
     margin-right: auto;
@@ -236,7 +236,7 @@ a {
 
 .np-info-text {
     text-align: center;
-    height:calc(100vh - 222px);
+    height:calc((var(--vh, 1vh)*100) - 222px); /* Work-around chrome mobile 100vh - see main.js */
     overflow:auto;
 }
 

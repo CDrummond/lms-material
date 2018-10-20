@@ -205,6 +205,21 @@ var app = new Vue({
                 }
             }
         });
+
+
+        // Work-around 100vh behaviour in mobile chrome
+        // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        let vh = window.innerHeight * 0.01;
+        let lastWinHeight = window.innerHeight;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        window.addEventListener('resize', () => {
+            // Only update if changed by more than 2 pixels - to save updating too often
+            if (Math.abs(lastWinHeight-window.innerHeight)>2) {
+                let vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+                lastWinHeight = window.innerHeight;
+            }
+        });
     },
     computed: {
         darkUi() {

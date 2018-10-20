@@ -29,17 +29,6 @@
 - Misc
   - Complete WebApp support
     - Handle back button (navigate back in browse)
-  - Add support for artist/song info (e.g. lyrics).
-    - Need to check relevant plugin is installed.
-      ["", ["musicartistinfo", "localfiles", 0, 0]]
-    - Lyrics
-      ["", ["musicartistinfo", "lyrics", "artist:NAME", "title:TRACK"]]
-    - Biography
-      ["", ["musicartistinfo", "biography", "artist:NAME"]]
-      ["", ["musicartistinfo", "biography", "artist_id:ID"]]
-    - Review
-      ["", ["musicartistinfo", "albumreview", "artist:NAME", "album:NAME"]]
-      ["", ["musicartistinfo", "albumreview", "album_id:ID"]]
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
       ["groupmac", ["playergroup", 0, 100]] lists group details

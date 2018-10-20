@@ -1,7 +1,3 @@
-- Devices
-  - Chrome on Android seems to cache pages, so updates not showing?
-  - Check on iOS
-  
 - Bugs:
   - Search underline goes over bottom nav
     - Vuetify issue?
@@ -11,7 +7,9 @@
     position is saved/restored on route change. Would be better to scroll just the list.
   - Drag'n'drop
     - Not working on Android Firefox
+    - Not working on iOS
     - Desktop firefox has drag thumbnail much higher than item being dragged.
+  - Queue sometimes not 100% displayed with iOS,  dragging up/down causes items to be shown.
 
 - Browse
   - Random Mix

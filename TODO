@@ -9,19 +9,16 @@
     - Not working on Android Firefox
     - Not working on iOS
     - Desktop firefox has drag thumbnail much higher than item being dragged.
-  - Queue sometimes not 100% displayed with iOS,  dragging up/down causes items to be shown.
+  - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
 
 - Browse
   - Random Mix
-  - Favorites:
-    - Images
+  - Favorites images
   - Replace ... menu with a play button/long press menu?
-  - Clicking on details text should popup a menu showing history (i.e. like a breadcrumb)
 
 - Now Playing
   - Drag time slider?
   - Set butons to disabled when appropriate
-  - Enlarge cover image if too small
 
 - PlayQueue
   - Only update whilst visible?

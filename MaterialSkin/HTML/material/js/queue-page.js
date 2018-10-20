@@ -147,10 +147,22 @@ var lmsQueue = Vue.component("LmsQueue", {
         this.isVisible = true;
         this.autoScrollRequired = false;
         this.previousScrollPos = 0;
+
+        window.addEventListener('scroll', () => {
+            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/queue') {
+                return;
+            }
+            const scrollY = window.scrollY;
+            const visible = document.documentElement.clientHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+            const bottomOfPage = visible + scrollY >= (pageHeight-300);
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchItems();
+            }
+        });
     },
     mounted() {
-        this.scroll();
-
         this.listSize = this.items.length;
         bus.$on('playerChanged', function() {
 	        this.items=[];
@@ -326,16 +338,6 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.fetchingItems = false;
                 });
             }
-        },
-        scroll () { // Infinite scroll...
-            window.onscroll = () => {
-                if (this.fetchingItems || this.listSize<=this.items.length) {
-                    return;
-                }
-                if (window.innerHeight+window.scrollY >= (document.documentElement.offsetHeight-300)) {
-                    this.fetchItems();
-                }
-            };
         },
         scrollToCurrent() {
             this.autoScrollRequired = false;

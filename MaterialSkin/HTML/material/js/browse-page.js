@@ -59,7 +59,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
           <v-progress-linear v-if="fetchingItems" :indeterminate="true"></v-progress-linear>
           <v-list>
             <!-- <template v-for="(item, index) in items"> -->
-            <template><recycle-list :items="items" :item-height="56" pool-size="1000" page-mode><div slot-scope="{item, index}">
+            <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">
               <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
               <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>

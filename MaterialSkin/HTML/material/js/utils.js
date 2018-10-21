@@ -44,7 +44,7 @@ function resolveImage(icon, image) {
     }
     if (image) {
         if (image.includes("://") && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
-            return icon;
+            return image;
         }
         if (image.startsWith("/")) {
             return lmsServerAddress+image; //+"/image_100x100_o";

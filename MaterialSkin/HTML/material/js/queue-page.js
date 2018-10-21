@@ -195,9 +195,9 @@ var lmsQueue = Vue.component("LmsQueue", {
                 if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
                     this.scheduleUpdate();
                 } else {
-                    setTimeout(function () {
+                    this.$nextTick(function () {
                         setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                    }.bind(this), 50);
+                    });
                 }
             } else if (from=='/queue') {
                 this.previousScrollPos = pos;
@@ -209,11 +209,11 @@ var lmsQueue = Vue.component("LmsQueue", {
         }.bind(this));
         this.initItems();
 
-        setTimeout(function () {
+        this.$nextTick(function () {
             setScrollTop(0);
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
-        }.bind(this), 50);
+        });
     },
     methods: {
         initItems() {

@@ -134,9 +134,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         // page, so that it can be restored when going back here.
         bus.$on('routeChange', function(from, to, pos) {
             if (to=='/browse') {
-                setTimeout(function () {
+                this.$nextTick(function () {
                     setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                }.bind(this), 50);
+                });
             } else if (from=='/browse') {
                 this.previousScrollPos = pos;
             }
@@ -146,9 +146,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.initItems();
         }.bind(this));
         this.initItems();
-        setTimeout(function () {
+        this.$nextTick(function () {
             setScrollTop(0);
-        }.bind(this), 50);
+        });
 
         window.addEventListener('scroll', () => {
             if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {

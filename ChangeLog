@@ -1,3 +1,9 @@
+0.0.3
+-----
+1. Fix loading radio stations.
+2. When retrieving browse items, if 'isaudio==1' then treat as audio even if
+   'hasitems==1'
+
 0.0.2
 -----
 1. Query additional browse modes plugin for extra browse modes. If none,

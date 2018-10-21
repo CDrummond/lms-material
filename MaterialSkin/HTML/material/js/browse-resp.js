@@ -275,6 +275,19 @@ function parseBrowseResp(data, parent, artistImages) {
                                       url: parent.url+i.cmd+i.id,
                                       app: parent.app
                                    });
+                    } else if (i.isaudio === 1) {
+                        resp.items.push({
+                                      title: i.name,
+                                      url: i.url,
+                                      image: resolveImage(i.icon, i.image),
+                                      icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
+                                      type: "track",
+                                      actions: topLevelFavourites
+                                                    ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                    : [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
+                                      app: parent.app,
+                                      id: i.id
+                                   });
                     } else if (i.hasitems>0) {
                         resp.items.push({
                                       title: i.name,
@@ -290,19 +303,6 @@ function parseBrowseResp(data, parent, artistImages) {
                                                         ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
                                                         : [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION]
                                                     : undefined,
-                                      id: i.id
-                                   });
-                    } else if (i.isaudio === 1) {
-                        resp.items.push({
-                                      title: i.name,
-                                      url: i.url,
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note", 
-                                      type: "track",
-                                      actions: topLevelFavourites
-                                                    ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                    : [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
-                                      app: parent.app,
                                       id: i.id
                                    });
                     }

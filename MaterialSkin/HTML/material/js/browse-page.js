@@ -480,7 +480,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else {
                 var command = [];
                 if (item.url) {
-                    command = ["playlist", act=="load" ? "play" : "add", item.url];
+                    command = ["playlist", act=="load" ? "play" : "add", item.url, item.title];
                 } else if (item.app && item.id) {
                     command = [item.app, "playlist", act, "item_id:"+item.id];
                 }

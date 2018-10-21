@@ -1,7 +1,7 @@
 0.0.3
 -----
 1. Fix loading radio stations.
-2. When retrieving browse items, if 'isaudio==1' then treat as audio even if
+2. When retrieving browse items, if 'isaudio==1' then add audio actions, even if
    'hasitems==1'
 
 0.0.2

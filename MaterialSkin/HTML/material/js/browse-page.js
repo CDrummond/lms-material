@@ -324,30 +324,27 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.artistImages);
 
-                var prev = {};
-                prev.items = this.items;
-                prev.listSize = this.listSize;
-                prev.current = this.current;
-                prev.headerTitle = this.headerTitle;
-                prev.headerSubTitle = this.headerSubTitle;
-                prev.actions = this.actions;
-                prev.pos=getScrollTop();
-                this.history.push(prev);
-                this.headerTitle=item.title;
-                
-                if (data && data.result) {
+                if (data && data.result && data.result.count>0) {
+                    var prev = {};
+                    prev.items = this.items;
+                    prev.listSize = this.listSize;
+                    prev.current = this.current;
+                    prev.headerTitle = this.headerTitle;
+                    prev.headerSubTitle = this.headerSubTitle;
+                    prev.actions = this.actions;
+                    prev.pos=getScrollTop();
+                    this.history.push(prev);
+                    this.headerTitle=item.title;
                     this.listSize = data.result.count;
-                } else {
-                    this.listize = 0;
+                    this.items=resp.items;
+                    this.actions=resp.actions;
+                    if (resp.subtitle) {
+                        this.headerSubTitle=resp.subtitle;
+                    } else {
+                        this.headerSubTitle=i18n("Total: %1", this.listSize);
+                    }
+                    setScrollTop(0);
                 }
-                this.items=resp.items;
-                this.actions=resp.actions;
-                if (resp.subtitle) {
-                    this.headerSubTitle=resp.subtitle;
-                } else {
-                    this.headerSubTitle=i18n("Total: %1", this.listSize);
-                }
-                setScrollTop(0);
             }).catch(err => {
                 this.fetchingItems = false;
                 this.showMessage();

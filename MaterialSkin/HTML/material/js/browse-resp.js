@@ -287,8 +287,8 @@ function parseBrowseResp(data, parent, artistImages) {
                                       app: parent.app,
                                       actions: "favorites"===parent.type 
                                                     ? topLevelFavourites
-                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                        : [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION]
+                                                        ? [/*PLAY_ACTION, ADD_ACTION, DIVIDER, */RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                        : [/*PLAY_ACTION, ADD_ACTION, DIVIDER, */REMOVE_FROM_FAV_ACTION]
                                                     : i.isaudio === 1
                                                         ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
                                                         : undefined,

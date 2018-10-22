@@ -20,7 +20,6 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
             </template>
           </v-tabs>
           <v-card>
-            <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>

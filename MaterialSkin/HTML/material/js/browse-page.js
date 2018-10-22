@@ -477,7 +477,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else {
                 var command = [];
                 if (item.url) {
-                    command = ["playlist", act=="load" ? "play" : "add", item.url, item.title];
+                    // TODO: There must be a better way for this. Perhaps these should not be using URL!
+                    if (item.url.startsWith("artist_id:") || item.url.startsWith("album_id:") || item.url.startsWith("genre_id:") ||
+                        item.url.startsWith("track_id:") || item.url.startsWith("year:") || item.url.startsWith("year_id:") ||
+                        item.url.startsWith("playlist_id:") || item.url.startsWith("folder_id:") || item.url.startsWith("playlist_name:")) {
+                        command = ["playlistcontrol", "cmd:"+act, item.url];
+                    } else {
+                        command = ["playlist", act=="load" ? "play" : "add", item.url, item.title];
+                    }
                 } else if (item.app && item.id) {
                     command = [item.app, "playlist", act, "item_id:"+item.id];
                 }

@@ -21,6 +21,8 @@
   - Usage of URL/ID in list items which determins playlistcontrol or playlist is used.
     Suggest we remove URLs unless needed. Then artist, albums, etc, can juse use ID.
     Would be cleaner.
+  - Can't play a non stream favourite - produces error dialog stating don't now how to handle.
+    For now, the play/append actions have been removed.
 
 - Now Playing
   - Drag time slider?

@@ -239,6 +239,10 @@ a {
     overflow:auto;
 }
 
+.np-playpause {
+    margin-top: 2px !important;
+}
+
 .lms-footer .router-link-exact-active .btn {
     opacity: 1 !important;
 }

@@ -5,32 +5,52 @@
   - Scrolling browse and queue lists actually scrolls the whole page. This causes scrolling in
     one to affect the other. A (slightly) hacky-ish work-around is in place, where the page
     position is saved/restored on route change. Would be better to scroll just the list.
+    Can probably use --vh setting (as per no playing details) to set list size/pos
   - Drag'n'drop
     - Not working on Android Firefox
-    - Not working on iOS
+    - Not working on iOS - github.com/Bernardo-Castilho/gragdroptouch
     - Desktop firefox has drag thumbnail much higher than item being dragged.
   - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
+  - Does not work if set as default, can't find files
+  - YouTube cover did not show on now-playing, until refresh?
 
 - Browse
   - Random Mix
   - Favorites images
   - Replace ... menu with a play button/long press menu?
+  - Apps:
+     Band's Campout
+     - Covers?
+     - Navigation is a bit odd
 
 - Now Playing
   - Drag time slider?
   - Set butons to disabled when appropriate
+  - If durayion is 0, don't show progress
 
 - PlayQueue
   - Only update whilst visible?
 
 - Misc
+  - Minify JS into 1 minified file, and minify css
+    devlopers.google.com/closure/compiler - for JS. Need to pass JS files in order that they
+    appear in index.html
+    yuicompressor.jar for css
   - Complete WebApp support
     - Handle back button (navigate back in browse)
+  - Virtual libraries
+    - Get list via: ["",["libraries", 0, 100]]
+    - Add selection (if any present) to settings dialog, and set vuex/cookie with id
+    - Replace "My Music" with library name
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
       ["groupmac", ["playergroup", 0, 100]] lists group details
       ["groupmac", ["playerpref", "playername", "X"]] sets group name
       ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
+  - Add 'About dialog'
+     - Server version
+     - Skin Version
+     - Artist, Album, Track count (in virtual library?)
   - Add 'Manage all' to players/settings menu
      - Manage all volumes
      - Power on/off

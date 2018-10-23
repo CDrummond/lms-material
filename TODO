@@ -22,7 +22,6 @@
 - Now Playing
   - Drag time slider?
   - Set butons to disabled when appropriate
-  - If duration is 0, don't show progress
 
 - PlayQueue
   - Only update whilst visible?

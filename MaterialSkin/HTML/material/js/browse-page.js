@@ -403,7 +403,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                 command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};
             } else if (act==RENAME_FAV_ACTION.cmd) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                command:["favorites", "rename", "item_id:"+item.id, "title:"+TERM_PLACEHOLDER]};
+                                command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -436,7 +436,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+item.id]).then(({datax}) => {
+                        lmsCommand(this.playerId(), ["favorites", "delete", item.id]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
                             this.showMessage(i18n("Failed to remove favorite!"));
@@ -474,7 +474,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (item.url) {
                     command = ["playlist", act=="load" ? "play" : "add", item.url, item.title];
                 } else if (item.app && item.id) {
-                    command = [item.app, "playlist", act, "item_id:"+item.id];
+                    command = [item.app, "playlist", act, item.id];
                 } else if (item.id) {
                     command = ["playlistcontrol", "cmd:"+act, item.id];
                 }

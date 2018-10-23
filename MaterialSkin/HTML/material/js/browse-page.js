@@ -451,16 +451,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
                     this.fetchingItems = false;
                     var resp = parseBrowseResp(data, this.current, this.artistImages);
-                    if (1===resp.items.length) {
+                    if (1===resp.items.length && resp.items[0].id) {
                         var item = resp.items[0];
-                        var command = [];
-                        if (item.id) {
-                            command = ["playlistcontrol", "cmd:add", item.id];
-                        } else if (item.app && item.id) {
-                            command = [item.app, "playlist", act, "item_id:"+item.id];
-                        }
                         this.fetchingItems = true;
-                        lmsCommand(this.playerId(), command).then(({data}) => {
+                        lmsCommand(this.playerId(), ["playlistcontrol", "cmd:add", item.id]).then(({data}) => {
                             this.fetchingItems = false;
                             bus.$emit('refreshStatus');
                             this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');

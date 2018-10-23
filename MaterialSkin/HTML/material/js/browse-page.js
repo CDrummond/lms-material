@@ -280,14 +280,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
                 type: "group",
-                id: "more:/co",
+                id: "top:/co",
             },
             {
                 title: i18n("Years"),
                 command: ["years"],
                 icon: "date_range",
                 type: "group",
-                id: "more:/yr"
+                id: "top:/yr"
             },
             {
                 title: i18n("New Music"),
@@ -295,7 +295,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["tags:jlya", "sort:new"],
                 icon: "new_releases",
                 type: "group",
-                id: "more:/nm"
+                id: "top:/nm"
             },
             /*
             {
@@ -303,7 +303,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 command: ["random-mix"],
                 icon: "shuffle",
                 type: "group",
-                id: "more:/rm"
+                id: "top:/rm"
             },*/
             ];
             if (this.history.length<1) {
@@ -325,7 +325,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.artistImages);
 
-                if (data && data.result && data.result.count>0) {
+                if (item.id.startsWith("top:/") || (data && data.result && data.result.count>0)) {
                     var prev = {};
                     prev.items = this.items;
                     prev.listSize = this.listSize;
@@ -598,7 +598,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 for (var i = data.result._p2.length; i-- > 0; ) {
                     var item = { title: data.result._p2[i].name,
                                  command: [data.result._p2[i].feed],
-                                 id: "ebm:/"+data.result._p2[i].id,
+                                 id: "top:/ebm-"+data.result._p2[i].id,
                                  type: "group",
                                  icon: "artists"==data.result._p2[i].feed ? "group" : "album"
                                };
@@ -626,7 +626,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                     params: ["role_id:CONDUCTOR"],
                                     icon: "group",
                                     type: "group",
-                                    id: "more:/cond"
+                                    id: "top:/cond"
                                    });
                 this.other.unshift({
                                     title: i18n("Composers"),
@@ -634,7 +634,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                     params: ["role_id:COMPOSER"],
                                     icon: "group",
                                     type: "group",
-                                    id: "more:/comp"
+                                    id: "top:/comp"
                                    });
             }
         });

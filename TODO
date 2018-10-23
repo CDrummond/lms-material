@@ -18,16 +18,11 @@
   - Random Mix
   - Favorites images
   - Replace ... menu with a play button/long press menu?
-  - Usage of URL/ID in list items which determins playlistcontrol or playlist is used.
-    Suggest we remove URLs unless needed. Then artist, albums, etc, can juse use ID.
-    Would be cleaner.
-  - Can't play a non stream favourite - produces error dialog stating don't now how to handle.
-    For now, the play/append actions have been removed.
 
 - Now Playing
   - Drag time slider?
   - Set butons to disabled when appropriate
-  - If durayion is 0, don't show progress
+  - If duration is 0, don't show progress
 
 - PlayQueue
   - Only update whilst visible?

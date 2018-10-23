@@ -15,7 +15,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 resp.items.push({header: i18n("Artists")});
                 data.result.contributors_loop.forEach(i => {
                     resp.items.push({
-                                  url: "artist_id:"+i.contributor_id,
+                                  id: "artist_id:"+i.contributor_id,
                                   title: i.contributor,
                                   command: ["albums"],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
@@ -30,7 +30,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 resp.items.push({header: i18n("Albums")});
                 data.result.albums_loop.forEach(i => {
                     resp.items.push({
-                                  url: "album_id:"+i.album_id,
+                                  id: "album_id:"+i.album_id,
                                   title: i.album,
                                   command: ["tracks"],
                                   image: lmsServerAddress+"/music/" + i.artwork + "/cover_100x100_o"  ,
@@ -44,7 +44,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 resp.items.push({header: i18n("Tracks")});
                 data.result.tracks_loop.forEach(i => {
                     resp.items.push({
-                                  url: "track_id:"+i.track_id,
+                                  id: "track_id:"+i.track_id,
                                   title: i.track,
                                   image: lmsServerAddress+"/music/" + i.coverid + "/cover_100x100_o"  ,
                                   actions: [PLAY_ACTION, ADD_ACTION],
@@ -56,7 +56,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 resp.items.push({header: i18n("Genres")});
                 data.result.genres_loop.forEach(i => {
                     resp.items.push({
-                                  url: "genre_id:"+i.genre_id,
+                                  id: "genre_id:"+i.genre_id,
                                   title: i.genre,
                                   command: ["artists"],
                                   //icon: "label",
@@ -70,7 +70,7 @@ function parseBrowseResp(data, parent, artistImages) {
             if (data.result.artists_loop) {
                 data.result.artists_loop.forEach(i => {
                     resp.items.push({
-                                  url: "artist_id:"+i.id,
+                                  id: "artist_id:"+i.id,
                                   title: i.artist,
                                   command: ["albums"],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
@@ -98,7 +98,7 @@ function parseBrowseResp(data, parent, artistImages) {
                         }
                     }
                     resp.items.push({
-                                  url: "album_id:"+i.id,
+                                  id: "album_id:"+i.id,
                                   title: title,
                                   subtitle: subtitle,
                                   command: ["tracks"],
@@ -126,7 +126,7 @@ function parseBrowseResp(data, parent, artistImages) {
                     }
                     duration+=i.duration;
                     resp.items.push({
-                                  url: "track_id:"+i.id,
+                                  id: "track_id:"+i.id,
                                   title: title,
                                   subtitle: formatSeconds(i.duration),
                                   command: ["tracks"],
@@ -142,7 +142,7 @@ function parseBrowseResp(data, parent, artistImages) {
             } else if (data.result.genres_loop) {
                 data.result.genres_loop.forEach(i => {
                     resp.items.push({
-                                  url: "genre_id:"+i.id,
+                                  id: "genre_id:"+i.id,
                                   title: i.genre,
                                   command: ["artists"],
                                   //icon: "label",
@@ -155,7 +155,7 @@ function parseBrowseResp(data, parent, artistImages) {
             } else if (data.result.playlists_loop) {
                 data.result.playlists_loop.forEach(i => {
                     resp.items.push({
-                                  url: "playlist_id:"+i.id,
+                                  id: "playlist_id:"+i.id,
                                   title: i.playlist,
                                   command: ["playlists", "tracks"],
                                   //icon: "list",
@@ -181,7 +181,7 @@ function parseBrowseResp(data, parent, artistImages) {
                         }
                     }
                     resp.items.push({
-                                  url: "track_id:"+i.id,
+                                  id: "track_id:"+i.id,
                                   title: title,
                                   subtitle: subtitle,
                                   command: ["tracks"],
@@ -194,7 +194,7 @@ function parseBrowseResp(data, parent, artistImages) {
             } else if (data.result.years_loop) {
                 data.result.years_loop.forEach(i => {
                     resp.items.push({
-                                  url: "year:"+i.year,
+                                  id: "year:"+i.year,
                                   title: i.year,
                                   command: ["albums"],
                                   //icon: "date_range",
@@ -213,7 +213,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       image: resolveImage(i.icon, i.image),
                                       params: ["want_url:1"],
                                       type: "group",
-                                      url: parent.url+i.cmd,
+                                      id: parent.id+i.cmd,
                                       app: i.cmd
                               });
                     } else if ("xmlbrowser_search"===i.type) {
@@ -224,7 +224,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       icon: "search",
                                       params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                       type: "xmlsearch",
-                                      url: parent.url+i.cmd,
+                                      id: parent.id+i.cmd,
                                       app: i.cmd
                               });
                     }
@@ -238,7 +238,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       image: resolveImage(i.icon, i.image),
                                       params: ["want_url:1"],
                                       type: "group",
-                                      url: parent.url+i.cmd,
+                                      id: parent.url+i.cmd,
                                       app: i.cmd
                               });
                     } else if ("xmlbrowser_search"===i.type) {
@@ -249,14 +249,14 @@ function parseBrowseResp(data, parent, artistImages) {
                                       icon: "search",
                                       params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                       type: "xmlsearch",
-                                      url: parent.url+i.cmd,
+                                      id: parent.id+i.cmd,
                                       app: i.cmd
                               });
                     }
                 });
                 resp.subtitle=i18np("1 App", "%1 Apps", data.result.count);
             } else if (data.result.loop_loop) {
-                var topLevelFavourites = parent.id===undefined && "favorites"===parent.type;
+                var topLevelFavourites = "favorites"===parent.type && parent.id.startsWith("top:/");
                 data.result.loop_loop.forEach(i => {
                     if ("text"===i.type || "textarea"===i.type) {
                         resp.items.push({
@@ -272,7 +272,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                       icon: "search",
                                       params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
                                       type: "xmlsearch", // Hack, so that we don't think this is library search...
-                                      url: parent.url+i.cmd+i.id,
+                                      id: parent.url+i.cmd+i.id,
                                       app: parent.app
                                    });
                     } else if (i.hasitems>0) {
@@ -287,8 +287,8 @@ function parseBrowseResp(data, parent, artistImages) {
                                       app: parent.app,
                                       actions: "favorites"===parent.type 
                                                     ? topLevelFavourites
-                                                        ? [/*PLAY_ACTION, ADD_ACTION, DIVIDER, */RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                        : [/*PLAY_ACTION, ADD_ACTION, DIVIDER, */REMOVE_FROM_FAV_ACTION]
+                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                        : [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION]
                                                     : i.isaudio === 1
                                                         ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
                                                         : undefined,

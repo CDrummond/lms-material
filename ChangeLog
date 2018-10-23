@@ -6,6 +6,7 @@
 3. Fix setting as Default.
 4. When browsing apps, do not navigate into an item with 0 entries. YouTube
    app sets 'isaudio==1' and 'hasitems==1' for music URLs.
+5. Support Virtual Libraries.
 
 0.0.2
 -----

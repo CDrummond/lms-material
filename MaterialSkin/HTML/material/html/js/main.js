@@ -45,7 +45,8 @@ const store = new Vuex.Store({
         darkUi: true,
         artistAlbumSort:'yearalbum',
         albumSort:'album',
-        autoScrollQueue:true
+        autoScrollQueue:true,
+        library: null
     },
     mutations: {
         setPlayers(state, players) {
@@ -166,7 +167,18 @@ const store = new Vuex.Store({
             if (undefined!=val) {
                 state.autoScrollQueue = true == val;
             }
-        }
+            val = localStorage.getItem(LS_PREFIX+'library');
+            if (undefined!=val) {
+                state.library = val;
+            }
+        },
+        setLibrary(state, lib) {
+            if (state.library!=lib) {
+                state.library = lib;
+                localStorage.setItem(LS_PREFIX+'library', state.library);
+                bus.$emit('libraryChanged');
+            }
+        },
     }
 })
 

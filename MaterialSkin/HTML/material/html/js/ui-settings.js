@@ -29,6 +29,10 @@ Vue.component('lms-ui-settings', {
               <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             
+            <v-list-tile v-if="libraries.length>0">
+              <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+            </v-list-tile>
+
             <v-header>{{i18n('Queue')}}</v-header>
             <v-list-tile>
               <v-switch v-model="autoScrollQueue" :label="i18n('Auto-scroll to current track')"></v-switch>
@@ -45,7 +49,9 @@ Vue.component('lms-ui-settings', {
             artistAlbumSort:'yearalbum',
             albumSort:'album',
             autoScrollQueue:true,
-            albumSorts:[]
+            albumSorts:[],
+            library: null,
+            libraries: []
         }
     },
     mounted() {
@@ -57,6 +63,30 @@ Vue.component('lms-ui-settings', {
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.show = true;
+
+                lmsList("", ["libraries"]).then(({data}) => {
+                    if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                        data.result.folder_loop.forEach(i => {
+                            this.libraries.push(i);
+                        });
+                        this.libraries.sort(function(a, b) {
+                                                                var nameA = a.name.toUpperCase();
+                                                                var nameB = b.name.toUpperCase();
+                                                                if (nameA < nameB) {
+                                                                    return -1;
+                                                                }
+                                                                if (nameA > nameB) {
+                                                                    return 1;
+                                                                }
+                                                                return 0;
+                                                            });
+                        this.libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
+                        this.library = this.$store.state.library;
+                        if (!this.library) {
+                            this.library=this.libraries[0].id;
+                        }
+                    }
+                });
             }
         }.bind(this));
 
@@ -89,6 +119,9 @@ Vue.component('lms-ui-settings', {
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                 } );
+            if (this.libraries.length>0) {
+                this.$store.commit('setLibrary', this.library);
+            }
         },
         i18n(str) {
             if (this.show) {

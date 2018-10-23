@@ -320,6 +320,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         fetchItems(item, params) {
             this.fetchingItems = true;
             this.current = item;
+
+            // Add library id, if set
+            if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library &&
+                ("artists" == item.command[0] || "albums" == item.command[0] || "genres" == item.command[0] || "tracks" == item.command[0])) {
+                params.push("library_id:"+this.$store.state.library);
+            }
+
             //console.log("FETCH command:" + item.command + " params:" + params + " batchsize:" + item.batchsize);
             lmsList(this.playerId(), item.command, params, 0, item.batchsize).then(({data}) => {
                 this.fetchingItems = false;
@@ -570,6 +577,27 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else {
                 return origParams;
             }
+        },
+        setLibrary() {
+            this.top[0].header=i18n("My Music");
+            if (0==this.history.length) {
+                this.items[0].header=this.top[0].header;
+            }
+            lmsList("", ["libraries"]).then(({data}) => {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                    data.result.folder_loop.forEach(i => {
+                        if (i.id == this.$store.state.library) {
+                            if (i.id!=LMS_DEFAULT_LIBRARY) {
+                                this.top[0].header=i.name;
+                                if (0==this.history.length) {
+                                    this.items[0].header=this.top[0].header;
+                                }
+                            }
+                            return;
+                        }
+                    });
+                }
+            });
         }
     },
     mounted() {
@@ -642,5 +670,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         bus.$on('albumSortChanged', function(act) {
             this.goHome();
         }.bind(this));
+        bus.$on('libraryChanged', function(act) {
+            this.goHome();
+            this.setLibrary();
+        }.bind(this));
+        this.setLibrary();
     }
 });

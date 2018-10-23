@@ -129,7 +129,6 @@ function parseBrowseResp(data, parent, artistImages) {
                                   id: "track_id:"+i.id,
                                   title: title,
                                   subtitle: formatSeconds(i.duration),
-                                  command: ["tracks"],
                                   //icon: "music_note",
                                   actions: [PLAY_ACTION, ADD_ACTION],
                                   type: "track"
@@ -184,7 +183,6 @@ function parseBrowseResp(data, parent, artistImages) {
                                   id: "track_id:"+i.id,
                                   title: title,
                                   subtitle: subtitle,
-                                  command: ["tracks"],
                                   //icon: "music_note",
                                   actions: [PLAY_ACTION, ADD_ACTION],
                                   type: "track"

@@ -1,7 +1,4 @@
 - Bugs:
-  - Search underline goes over bottom nav
-    - Vuetify issue?
-    - change to dialog prompt for input?
   - Scrolling browse and queue lists actually scrolls the whole page. This causes scrolling in
     one to affect the other. A (slightly) hacky-ish work-around is in place, where the page
     position is saved/restored on route change. Would be better to scroll just the list.
@@ -11,7 +8,7 @@
     - Not working on iOS - github.com/Bernardo-Castilho/gragdroptouch
     - Desktop firefox has drag thumbnail much higher than item being dragged.
   - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
-  - YouTube cover did not show on now-playing, until refresh?
+  - Band's Campout "Listen to songs (without comments)" does not work, nothing added to queue.
 
 - Browse
   - Random Mix

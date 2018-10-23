@@ -171,6 +171,9 @@ function parseBrowseResp(data, parent, artistImages) {
                     if (i.artist) {
                         title+=" - " + i.artist;
                     }
+                    if (!title) {
+                        title=i18n("Unknown");
+                    }
                     var subtitle = i.duration>0 ? formatSeconds(i.duration) : undefined;
                     if (i.album) {
                         if (subtitle) {

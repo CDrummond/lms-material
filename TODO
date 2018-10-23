@@ -26,10 +26,6 @@
   - Only update whilst visible?
 
 - Misc
-  - Minify JS into 1 minified file, and minify css
-    devlopers.google.com/closure/compiler - for JS. Need to pass JS files in order that they
-    appear in index.html
-    yuicompressor.jar for css
   - Complete WebApp support
     - Handle back button (navigate back in browse)
   - Virtual libraries

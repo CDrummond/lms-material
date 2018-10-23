@@ -1,8 +1,11 @@
 0.0.3
 -----
-1. Fix loading radio stations.
+1. Fix loading URL items (e.g. Radio stations).
 2. When retrieving browse items, if 'isaudio==1' then add audio actions, even if
    'hasitems==1'
+3. Fix setting as Default.
+4. When browsing apps, do not navigate into an item with 0 entries. YouTube
+   app sets 'isaudio==1' and 'hasitems==1' for music URLs.
 
 0.0.2
 -----

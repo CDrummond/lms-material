@@ -205,8 +205,14 @@ var app = new Vue({
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 var lang = data.result._p2.toLowerCase();
+                if (lang == 'en') {
+                    var language = (window.navigator.userLanguage || window.navigator.language).toLowerCase();
+                    if (language != 'en-us') {
+                        lang = language;
+                    }
+                }
                 if (lang != 'en') {
-                    axios.get("lang/"+lang+".json").then(function (resp) {
+                    axios.get("html/lang/"+lang+".json").then(function (resp) {
                         setTranslation(eval(resp.data));
                         axios.defaults.headers.common['Accept-Language'] = lang;
                         document.querySelector('html').setAttribute('lang', lang);

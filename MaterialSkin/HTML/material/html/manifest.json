@@ -9,7 +9,7 @@
   "start_url": "/material",
   "icons": [
     {
-      "src": "images/icon.png",
+      "src": "html/images/icon.png",
       "sizes": "128x128",
       "type": "image/png"
     }

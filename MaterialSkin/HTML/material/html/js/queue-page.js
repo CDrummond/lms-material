@@ -78,7 +78,7 @@ var lmsQueue = Vue.component("LmsQueue", {
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
+      <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
         <v-layout>
           <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
@@ -224,6 +224,9 @@ var lmsQueue = Vue.component("LmsQueue", {
             PQ_REMOVE_ACTION.title=i18n('Remove from queue');
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
         },
+        showMessage(msg, color) {
+            this.snackbar = {msg: msg, show: true, color: undefined==color ? 'error' : color };
+        },
         save() {
             if (this.items.length<1) {
                 return;
@@ -248,7 +251,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.dialog.show = false;
                     lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({datax}) => {
                     }).catch(err => {
-                        this.snackbar={ msg:i18n("Failed to save play queue!"), show: true};
+                        this.showMessage(i18n("Failed to save play queue!"), 'error');
                     });
                 }
             }

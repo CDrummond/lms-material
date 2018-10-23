@@ -1,3 +1,8 @@
+0.0.4
+-----
+1. Fix retreival of language files.
+2. Add en-gb translation.
+
 0.0.3
 -----
 1. Fix loading URL items (e.g. Radio stations).

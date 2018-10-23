@@ -44,9 +44,9 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
           </v-menu>
 
           <v-layout text-xs-center row wrap class="np-controls">
-            <v-flex xs6 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
-            <v-flex xs6 class="np-duration" v-if="!info.show">{{playerStatus.current.duration | displayTime}}</v-flex>
-            <v-flex xs12 v-if="!info.show"><v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider></v-flex>
+            <v-flex xs6 class="np-pos" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.time | displayTime}}</v-flex>
+            <v-flex xs6 class="np-duration" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.duration | displayTime}}</v-flex>
+            <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0"><v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider></v-flex>
             <v-flex xs4>
               <v-layout text-xs-center>
                 <v-flex xs6>

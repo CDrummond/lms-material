@@ -128,6 +128,6 @@ def updateAll(path, ext):
             update(os.path.join(path, f))
 
 
-extractAll('MaterialSkin/HTML/material/js', '.js')
-updateAll('MaterialSkin/HTML/material/lang', '.json')
+extractAll('MaterialSkin/HTML/material/html/js', '.js')
+updateAll('MaterialSkin/HTML/material/html/lang', '.json')
 

@@ -90,8 +90,9 @@ var lmsQueue = Vue.component("LmsQueue", {
       </v-card>
       <div class="subtoolbar-pad"></div>
       <v-list class="lms-list-page">
-        <!-- <template v-for="(item, index) in items"> -->
-        <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">
+        <template v-for="(item, index) in items">
+        <!-- TODO: Fix and re-use virtual scroller -->
+        <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
           <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
             <v-list-tile-avatar v-if="item.image" :tile="true">
               <img v-lazy="item.image">
@@ -111,7 +112,8 @@ var lmsQueue = Vue.component("LmsQueue", {
             </v-list-tile-action>
           </v-list-tile>
           <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
-        </div></recycle-list></template>
+        <!-- </div></recycle-list></template> -->
+        </v-template>
       </v-list>
 
       <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

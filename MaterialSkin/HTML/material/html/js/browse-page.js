@@ -58,8 +58,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
           <div v-if="headerTitle" class="subtoolbar-pad"></div>
           <v-progress-linear v-if="fetchingItems" :indeterminate="true"></v-progress-linear>
           <v-list>
-            <!-- <template v-for="(item, index) in items"> -->
-            <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">
+            <template v-for="(item, index) in items">
+            <!-- TODO: Fix and re-use virtual scroller -->
+            <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
               <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
               <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
@@ -93,7 +94,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                   </v-btn>
                 </v-list-tile-action>
               </v-list-tile>
-            </div></recycle-list></template>
+            <!-- </div></recycle-list></template> -->
+            </v-template>
           </v-list>
 
           <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

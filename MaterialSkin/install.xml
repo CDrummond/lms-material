@@ -1,5 +1,6 @@
 <?xml version='1.0' standalone='yes'?>
 <extensions>
+  <id>478c0d2a-a83b-41e8-88c0-f04f8c9cff85</id>
   <module>Plugins::MaterialSkin::Plugin</module>
   <description>PLUGIN_MATERIAL_SKIN</description>
   <creator>Craig Drummond</creator>

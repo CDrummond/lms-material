@@ -6,6 +6,9 @@
 4. Fix restoring dark/light status.
 5. If asked to scroll to current track, and its not in currently fetched list
    of items - then fetch to current index + 50
+6. For app entries that have isuadio=1 and hasitems=1 and there are actually
+   child items, then use playall/addall. Fixes playing BandCampout weeklies
+   "Listen to songs (without comments)" entries.
 
 0.0.3
 -----

@@ -283,7 +283,8 @@ var lmsQueue = Vue.component("LmsQueue", {
         fetchItems() {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
-            lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], this.items.length).then(({data}) => {
+            var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
+            lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data);
                 if (this.items.length && resp.items.length) {
                     resp.items.forEach(i => {
@@ -331,7 +332,8 @@ var lmsQueue = Vue.component("LmsQueue", {
                 var currentPos = getScrollTop();
                 this.fetchingItems = true;
 
-                lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], 0, this.items.length < 50 ? 50 : this.items.length).then(({data}) => {
+                lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], 0,
+                        this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
                     var resp = parseResp(data);
                     this.items = resp.items;
                     this.timestamp = resp.timestamp;
@@ -347,10 +349,15 @@ var lmsQueue = Vue.component("LmsQueue", {
         },
         scrollToCurrent() {
             this.autoScrollRequired = false;
-            if (this.items.length>5 && this.currentIndex<=this.items.length) {
+            if (this.items.length>5) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the brows/nowplaying page!
                     // Offset of -68 below to take into account toolbar
-                    this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
+                    if (this.currentIndex<=this.items.length) {
+                        this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -68, duration: 500});
+                    } else {
+                        this.autoScrollRequired = true;
+                        this.fetchItems();
+                    }
                 } else {
                     this.autoScrollRequired = true;
                 }

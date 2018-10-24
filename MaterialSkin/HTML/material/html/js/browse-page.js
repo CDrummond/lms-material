@@ -483,7 +483,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (item.url) {
                     command = ["playlist", act=="load" ? "play" : "add", item.url, item.title];
                 } else if (item.app && item.id) {
-                    if (item.type=="group") {
+                    if (item.type=="group" && item.app!="favorites") { // favorites does not like playall/addall????
                         // Some app playlists are not playlists! Check if there really are sub-items. If there are
                         // then we use playall/addall - else use item action
                         // YouTube app
@@ -491,14 +491,12 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         //    so playall/addall fail - and need to use load/add
                         //  - playlist seatch also has isuadio=1 and hasitems=1, but there are items
                         //
-                        command = [item.app, "playlist", act=="load" ? "playall" : "addall", item.id];
                         lmsList(this.playerId(), item.command, item.params, 0, 0).then(({data}) => {
                             if (data && data.result && data.result.count>0) {
                                 command = [item.app, "playlist", act=="load" ? "playall" : "addall", item.id];
                             } else {
                                 command = [item.app, "playlist", act, item.id];
                             }
-
                             lmsCommand(this.playerId(), command).then(({data}) => {
                                 bus.$emit('refreshStatus');
                                 if (act===PLAY_ACTION.cmd) {
@@ -524,7 +522,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.showMessage(i18n("Don't know how to handle this!"));
                     return;
                 }
-
                 lmsCommand(this.playerId(), command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     if (act===PLAY_ACTION.cmd) {

@@ -9,6 +9,7 @@
 6. For app entries that have isuadio=1 and hasitems=1 and there are actually
    child items, then use playall/addall. Fixes playing BandCampout weeklies
    "Listen to songs (without comments)" entries.
+7. Fix scrolling to more search results.
 
 0.0.3
 -----

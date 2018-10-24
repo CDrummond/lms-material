@@ -387,9 +387,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             if (this.fetchingItems) {
                 return;
             }
-            var params = [];
-            item.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, event.target._value)); });
-            this.fetchItems(item, params);
+            this.searchTerm = event.target._value;
+            this.fetchItems(item, this.adjustParams(item.params));
         },
         dialogResponse(val) {
             if (val && this.dialog.value) {
@@ -603,7 +602,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             if (undefined!=origParams) {
                 var params = [];
                 origParams.forEach(p => { params.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
-                                                       .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)); });
+                                                       .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)
+                                                       .replace(TERM_PLACEHOLDER, this.searchTerm)); });
                 return params;
             } else {
                 return origParams;

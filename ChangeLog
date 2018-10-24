@@ -2,6 +2,7 @@
 -----
 1. Fix retreival of language files.
 2. Add en-gb translation.
+3. Add "id" tag to install.xml file.
 
 0.0.3
 -----

@@ -483,7 +483,39 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (item.url) {
                     command = ["playlist", act=="load" ? "play" : "add", item.url, item.title];
                 } else if (item.app && item.id) {
-                    command = [item.app, "playlist", act, item.id];
+                    if (item.type=="group") {
+                        // Some app playlists are not playlists! Check if there really are sub-items. If there are
+                        // then we use playall/addall - else use item action
+                        // YouTube app
+                        //  - music search returns items marked isuadio=1 and hasitems=1 But there are no items.
+                        //    so playall/addall fail - and need to use load/add
+                        //  - playlist seatch also has isuadio=1 and hasitems=1, but there are items
+                        //
+                        command = [item.app, "playlist", act=="load" ? "playall" : "addall", item.id];
+                        lmsList(this.playerId(), item.command, item.params, 0, 0).then(({data}) => {
+                            if (data && data.result && data.result.count>0) {
+                                command = [item.app, "playlist", act=="load" ? "playall" : "addall", item.id];
+                            } else {
+                                command = [item.app, "playlist", act, item.id];
+                            }
+
+                            lmsCommand(this.playerId(), command).then(({data}) => {
+                                bus.$emit('refreshStatus');
+                                if (act===PLAY_ACTION.cmd) {
+                                    this.$router.push('/nowplaying');
+                                } else {
+                                    this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
+                                }
+                            }).catch(err => {
+                                this.showMessage();
+                            });
+                        }).catch(err => {
+                            this.showMessage();
+                        });
+                        return; // The above is done in a promise, so stop here...
+                    } else {
+                        command = [item.app, "playlist", act, item.id];
+                    }
                 } else if (item.id) {
                     command = ["playlistcontrol", "cmd:"+act, item.id];
                 }
@@ -492,6 +524,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.showMessage(i18n("Don't know how to handle this!"));
                     return;
                 }
+
                 lmsCommand(this.playerId(), command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     if (act===PLAY_ACTION.cmd) {
@@ -500,7 +533,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
                     }
                 }).catch(err => {
-                    this.fetchingItems = false;
                     this.showMessage();
                 });
             }

@@ -153,7 +153,7 @@ const store = new Vuex.Store({
         initUiSettings(state) {
             var val = localStorage.getItem(LS_PREFIX+'darkUi');
             if (undefined!=val) {
-                state.darkUi = true == val;
+                state.darkUi = "true" == val;
             }
             val = localStorage.getItem(LS_PREFIX+'artistAlbumSort');
             if (undefined!=val) {
@@ -165,7 +165,7 @@ const store = new Vuex.Store({
             }
             val = localStorage.getItem(LS_PREFIX+'autoScrollQueue');
             if (undefined!=val) {
-                state.autoScrollQueue = true == val;
+                state.autoScrollQueue = "true" == val;
             }
             val = localStorage.getItem(LS_PREFIX+'library');
             if (undefined!=val) {

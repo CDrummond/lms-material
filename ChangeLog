@@ -10,6 +10,7 @@
    child items, then use playall/addall. Fixes playing BandCampout weeklies
    "Listen to songs (without comments)" entries.
 7. Fix scrolling to more search results.
+8. Dim speaker/group icon of powered off players.
 
 0.0.3
 -----

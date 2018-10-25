@@ -86,7 +86,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                     playlist: { shuffle:0, repeat: 0 },
                  },
                  info: { installed: false, show: false, tab:0,
-                         tabs: [ { title:undefined, text: "Wibble" }, { title:undefined, text: "Wobble" }, { title:undefined, text: "abc" } ] },
+                         tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
                  trans: { close: undefined }
                 };

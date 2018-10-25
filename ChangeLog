@@ -1,6 +1,6 @@
 0.0.4
 -----
-1. Fix retreival of language files.
+1. Fix retrieval of language files.
 2. Add en-gb translation.
 3. Add "id" tag to install.xml file.
 4. Fix restoring dark/light status.

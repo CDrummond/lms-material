@@ -14,6 +14,10 @@
   - Random Mix
   - Favorites images
   - Replace ... menu with a play button/long press menu?
+  - Use SlimBrowse to browse app entries
+  - Rember if "More" is the current top level and restore upon restart
+  - Split Artist and Album lists in A..C, D..E, etc sub-lists if more than 300(?) in total? Split into blocks of 100?
+    [ "artists", 0, 1, "tags:CCZ"]
 
 - Now Playing
   - Drag time slider?

@@ -136,9 +136,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         // page, so that it can be restored when going back here.
         bus.$on('routeChange', function(from, to, pos) {
             if (to=='/browse') {
-                this.$nextTick(function () {
+                setTimeout(function () {
                     setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                });
+                }.bind(this), 100);
             } else if (from=='/browse') {
                 this.previousScrollPos = pos;
             }

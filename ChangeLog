@@ -11,6 +11,7 @@
    "Listen to songs (without comments)" entries.
 7. Fix scrolling to more search results.
 8. Dim speaker/group icon of powered off players.
+9. Fetch more items when into last 20% of current list.
 
 0.0.3
 -----

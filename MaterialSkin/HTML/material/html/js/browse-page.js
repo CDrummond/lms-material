@@ -160,7 +160,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             const el = getScrollElement();
             const visible = el.clientHeight;
             const pageHeight = el.scrollHeight;
-            const bottomOfPage = visible + scrollY >= (pageHeight*0.8);
+            const pad = (visible*2.5);
+            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
 
             if (bottomOfPage || pageHeight < visible) {
                 this.fetchingItems = true;

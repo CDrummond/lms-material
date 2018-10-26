@@ -7,7 +7,7 @@
 
 var PLAY_ACTION             = {cmd:"load",       icon:"play_circle_outline"};
 var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
-var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"help_outline"};
+var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"album"};
 var RENAME_PL_ACTION        = {cmd:"rename-pl",  icon:"edit"};
 var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};

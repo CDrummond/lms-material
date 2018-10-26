@@ -21,7 +21,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
                                   icon: artistImages ? undefined : "person",
                                   params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -35,7 +35,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["tracks"],
                                   image: lmsServerAddress+"/music/" + i.artwork + "/cover_100x100_o"  ,
                                   params: ["album_id:"+ i.album_id, "tags:Adt", "sort:tracknum"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -61,7 +61,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["artists"],
                                   //icon: "label",
                                   params: ["genre_id:"+ i.genre_id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -75,7 +75,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["albums"],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
                                   params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -104,7 +104,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["tracks"],
                                   image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover_100x100_o"  ,
                                   params: ["album_id:"+ i.id, "tags:Adt", "sort:tracknum"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -146,7 +146,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["artists"],
                                   //icon: "label",
                                   params: ["genre_id:"+ i.id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -159,7 +159,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["playlists", "tracks"],
                                   //icon: "list",
                                   params: ["playlist_id:"+ i.id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                                   type: "group"
                               });
                 });
@@ -200,7 +200,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   command: ["albums"],
                                   //icon: "date_range",
                                   params: ["year:"+ i.year, "tags:ajly"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, ADD_TO_FAV_ACTION],
+                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
@@ -288,10 +288,10 @@ function parseBrowseResp(data, parent, artistImages) {
                                       app: parent.app,
                                       actions: "favorites"===parent.type 
                                                     ? topLevelFavourites
-                                                        ? [PLAY_ACTION, ADD_ACTION, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                        : [PLAY_ACTION, ADD_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                        : [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION]
                                                     : i.isaudio === 1
-                                                        ? [PLAY_ACTION, ADD_ACTION, ADD_TO_FAV_ACTION]
+                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
                                                         : undefined,
                                       id: "item_id:"+i.id
                                    });
@@ -303,8 +303,8 @@ function parseBrowseResp(data, parent, artistImages) {
                                       icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
                                       type: "track",
                                       actions: topLevelFavourites
-                                                    ? [PLAY_ACTION, ADD_ACTION, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                    : [PLAY_ACTION, ADD_ACTION, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
+                                                    ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                    : [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
                                       app: parent.app,
                                       id: "item_id:"+i.id
                                    });

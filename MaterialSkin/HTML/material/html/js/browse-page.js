@@ -13,7 +13,6 @@ var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
 var ADD_TO_FAV_ACTION       = {cmd:"addfav",     icon:"favorite_border"};
 var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  icon:"delete_outline"};
-const DIVIDER                 = {divider:true};
 const TERM_PLACEHOLDER        = "-XXXXXX-";
 const ALBUM_SORT_PLACEHOLDER  = "-XXXASXXX-";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "-XXXAASXXX-";
@@ -101,8 +100,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
           <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
             <v-list v-if="menu.item">
               <template v-for="(action, index) in menu.item.actions">
-                <v-divider v-if="action.divider"></v-divider>
-                <v-list-tile v-else @click="itemAction(action.cmd, menu.item)">
+                <v-list-tile @click="itemAction(action.cmd, menu.item)">
                   <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
                 </v-list-tile>
               </template>

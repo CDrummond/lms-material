@@ -65,7 +65,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
               <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
-              <p v-if="item.type=='text'" class="browse-text">{{item.title}}</p>
+              <p v-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
               <v-list-tile v-else-if="!item.header" avatar @click="browse(item)" :key="item.id">
                 <v-list-tile-avatar v-if="item.image" :tile="true">
                   <img v-lazy="item.image">
@@ -108,8 +108,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               </template>
             </v-list>
           </v-menu>
-
-        </div>
+       </div>
       `,
     props: [],
     data() {

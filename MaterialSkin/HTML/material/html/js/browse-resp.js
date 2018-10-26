@@ -308,6 +308,30 @@ function parseBrowseResp(data, parent, artistImages) {
                                       app: parent.app,
                                       id: "item_id:"+i.id
                                    });
+                        if (i.description && 1==data.result.count) {
+                            data.result.count+=1;
+                            data.result.loop_loop.length+=1;
+
+                            var details;
+                            if (i.line1) {
+                                details = "<b>"+i.line1+"</b>";
+                                if (i.line2) {
+                                    details += "<br/><br/>"+i.line2;
+                                }
+                            }
+
+                            if (details) {
+                                details += "<br/><br/>"+i.description;
+                            } else {
+                                details = i.description;
+                            }
+
+                            resp.items.push({
+                                      title: details,
+                                      type: "text",
+                                      id: i.id+"-descr"
+                                   });
+                        }
                     }
                 });
 

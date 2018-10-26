@@ -2,6 +2,8 @@
 -----
 1. When listing browse items, check for title if name is not set. Fixes
    podcast listing.
+2. If browse listing only has 1 item with description, then show description
+   under item. Mainly for podcasts.
 
 0.0.4
 -----

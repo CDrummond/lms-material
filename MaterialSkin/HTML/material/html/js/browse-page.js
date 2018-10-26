@@ -436,10 +436,24 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     url="db:year.id="+encodeURI(item.title);
                 }
 
-                lmsCommand(this.playerId(), ["favorites", "add", "url:"+url, "title:"+item.title]).then(({data})=> {
-                    this.showMessage(i18n("Added to favorites"), '');
+                lmsCommand(this.playerId(), ["favorites", "exists", url]).then(({data})=> {
+                    if (data && data.result && data.result.exists==1) {
+                        this.showMessage(i18n("Already in favorites"), '');
+                    } else {
+                        var command = ["favorites", "add", "url:"+url, "title:"+item.title];
+                        if ("group"==item.type) {
+                            command.push("isaudio:0");
+                            command.push("hasitems:1");
+                            command.push("type:link");
+                        }
+                        lmsCommand(this.playerId(), command).then(({data})=> {
+                            this.showMessage(i18n("Added to favorites"), '');
+                        }).catch(err => {
+                            this.showMessage(i18n("Failed to add to favorites!"));
+                        });
+                    }
                 }).catch(err => {
-                    this.showMessage(i18n("Failed to add to favorites!"));
+                        this.showMessage(i18n("Failed to add to favorites!"));
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {

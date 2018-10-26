@@ -289,10 +289,14 @@ function parseBrowseResp(data, parent, artistImages) {
                                       actions: "favorites"===parent.type 
                                                     ? topLevelFavourites
                                                         ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                        : [PLAY_ACTION, ADD_ACTION, DIVIDER, REMOVE_FROM_FAV_ACTION]
+                                                        : [PLAY_ACTION, ADD_ACTION]
                                                     : i.isaudio === 1
-                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
-                                                        : undefined,
+                                                        ? i.url
+                                                            ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
+                                                            : [PLAY_ACTION, ADD_ACTION]
+                                                        : i.url
+                                                            ? [ADD_TO_FAV_ACTION]
+                                                            : undefined,
                                       id: "item_id:"+i.id
                                    });
                     } else if (i.isaudio === 1) {
@@ -302,9 +306,13 @@ function parseBrowseResp(data, parent, artistImages) {
                                       image: resolveImage(i.icon, i.image),
                                       icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
                                       type: "track",
-                                      actions: topLevelFavourites
-                                                    ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                    : [PLAY_ACTION, ADD_ACTION, DIVIDER, "favorites"===parent.type ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION],
+                                      actions: "favorites"===parent.type
+                                                    ? topLevelFavourites
+                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                        : [PLAY_ACTION, ADD_ACTION]
+                                                    : i.url
+                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
+                                                        : [PLAY_ACTION, ADD_ACTION],
                                       app: parent.app,
                                       id: "item_id:"+i.id
                                    });

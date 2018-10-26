@@ -1,3 +1,8 @@
+0.0.5
+-----
+1. When listing browse items, check for title if name is not set. Fixes
+   podcast listing.
+
 0.0.4
 -----
 1. Fix retrieval of language files.

@@ -209,7 +209,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 data.result.radioss_loop.forEach(i => {
                     if ("xmlbrowser"===i.type) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       command: [i.cmd, "items"],
                                       image: resolveImage(i.icon, i.image),
                                       params: ["want_url:1"],
@@ -219,7 +219,7 @@ function parseBrowseResp(data, parent, artistImages) {
                               });
                     } else if ("xmlbrowser_search"===i.type) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       command: [i.cmd, "items"],
                                       image: resolveImage(i.icon, i.image),
                                       icon: "search",
@@ -234,7 +234,7 @@ function parseBrowseResp(data, parent, artistImages) {
                 data.result.appss_loop.forEach(i => {
                     if ("xmlbrowser"===i.type) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       command: [i.cmd, "items"],
                                       image: resolveImage(i.icon, i.image),
                                       params: ["want_url:1"],
@@ -244,7 +244,7 @@ function parseBrowseResp(data, parent, artistImages) {
                               });
                     } else if ("xmlbrowser_search"===i.type) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       command: [i.cmd, "items"],
                                       image: resolveImage(i.icon, i.image),
                                       icon: "search",
@@ -267,7 +267,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                    });
                     } else if ("search"===i.type) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       command: [i.cmd ? i.cmd : parent.command[0], "items"],
                                       image: resolveImage(i.icon, i.image),
                                       icon: "search",
@@ -278,7 +278,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                    });
                     } else if (i.hasitems>0) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       command: parent.command,
                                       image: resolveImage(i.icon, i.image),
                                       icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
@@ -297,7 +297,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                    });
                     } else if (i.isaudio === 1) {
                         resp.items.push({
-                                      title: i.name,
+                                      title: i.name ? i.name : i.title,
                                       url: i.url,
                                       image: resolveImage(i.icon, i.image),
                                       icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",

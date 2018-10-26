@@ -4,6 +4,8 @@
    podcast listing.
 2. If browse listing only has 1 item with description, then show description
    under item. Mainly for podcasts.
+3. Improve how favorites are added.
+4. When adding a favorite, check if it already exists.
 
 0.0.4
 -----

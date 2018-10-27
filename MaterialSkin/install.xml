@@ -4,7 +4,7 @@
   <module>Plugins::MaterialSkin::Plugin</module>
   <description>PLUGIN_MATERIAL_SKIN</description>
   <creator>Craig Drummond</creator>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
   <defaultState>enabled</defaultState>
   <type>2</type>
   <enforce>1</enforce>

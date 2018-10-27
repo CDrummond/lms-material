@@ -13,9 +13,12 @@
 - Browse
   - Random Mix
   - Favorites images
+    Saved with (e.g.) "icon:imageproxy/mai/artist/20728/image.png"
+    Need to use SlimBrowse to obtain image!
   - Replace ... menu with a play button/long press menu?
   - Use SlimBrowse to browse app entries
-  - Rember if "More" is the current top level and restore upon restart
+    ["favorites", "items", 0, 100, "menu:favorites"]
+  - Remember if "More" is the current top level and restore upon restart
   - Split Artist and Album lists in A..C, D..E, etc sub-lists if more than 300(?) in total? Split into blocks of 100?
     [ "artists", 0, 1, "tags:CCZ"]
 

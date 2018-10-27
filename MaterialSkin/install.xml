@@ -7,7 +7,6 @@
   <version>0.0.5</version>
   <defaultState>enabled</defaultState>
   <type>2</type>
-  <enforce>1</enforce>
   <homepageURL>https://github.com/CDrummond/lms-material</homepageURL>
   <targetApplication>
     <minVersion>7.9.0</minVersion>

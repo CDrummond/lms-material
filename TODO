@@ -11,13 +11,16 @@
   - Band's Campout "Listen to songs (without comments)" does not work, nothing added to queue.
 
 - Browse
+  - SlimBrowse for all?
+    - At least for Apps/Radio/Favorites
+    - Need to fix album sorts
+    - Extra metadata?
+    - Full handle commands
+      - 'More'
+      - Check all
+    - Remove 'All Songs' entry?
   - Random Mix
-  - Favorites images
-    Saved with (e.g.) "icon:imageproxy/mai/artist/20728/image.png"
-    Need to use SlimBrowse to obtain image!
   - Replace ... menu with a play button/long press menu?
-  - Use SlimBrowse to browse app entries
-    ["favorites", "items", 0, 100, "menu:favorites"]
   - Remember if "More" is the current top level and restore upon restart
   - Split Artist and Album lists in A..C, D..E, etc sub-lists if more than 300(?) in total? Split into blocks of 100?
     [ "artists", 0, 1, "tags:CCZ"]

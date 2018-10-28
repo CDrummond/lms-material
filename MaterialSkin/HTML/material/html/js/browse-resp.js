@@ -168,6 +168,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             data.result.albums_loop.forEach(i => {
                 // Bug on my system? There is an 'No Album' entry with no tracks!
                 if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
+                    data.result.count--;
                     return;
                 }
                 resp.items.push({

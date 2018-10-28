@@ -194,9 +194,8 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             data.result.titles_loop.forEach(i => {
                 var title = i.title;
                 if (i.tracknum>0) {
-                     //title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
-                     // Be consistent with SlimBrowse format...
-                     title = i.tracknum + ". " + title;
+                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
+                     //title = i.tracknum + ". " + title; // SlimBrowse format
                 }
                 if (i.trackartist && i.albumartist && i.trackartist !== i.albumartist) {
                      title+=" - " + i.trackartist;

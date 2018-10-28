@@ -34,9 +34,12 @@ function parseResp(data) {
                 var subtitle = i.artist;
                 if (i.album) {
                     if (subtitle) {
-                        subtitle+=" ("+i.album+")";
+                        subtitle+=" - " + i.album;
                     } else {
                         sbtitle=i.album;
+                    }
+                    if (i.year) {
+                        subtitle+=" (" + i.year + ")";
                     }
                 }
                 var image = queueItemCover(i);
@@ -285,7 +288,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
-            lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], this.items.length, fetchCount).then(({data}) => {
+            lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuyK"], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data);
                 if (this.items.length && resp.items.length) {
                     resp.items.forEach(i => {

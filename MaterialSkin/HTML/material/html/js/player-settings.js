@@ -22,7 +22,7 @@ Vue.component('lms-player-settings', {
             <v-list-tile>
               <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-            <v-list-tile>
+            <v-list-tile v-if="!isgroup">
               <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
             </v-list-tile>
             <v-list-tile vi-f="dstmItems && dstmItems.length>1">
@@ -112,6 +112,7 @@ Vue.component('lms-player-settings', {
         return {
             show: false,
             playerName: undefined,
+            isgroup: false,
             crossfade: undefined,
             replaygain: undefined,
             dstm: undefined,
@@ -162,6 +163,7 @@ Vue.component('lms-player-settings', {
                 this.replaygain='0';
                 this.playerId = this.$store.state.player.id;
                 this.playerName = this.$store.state.player.name;
+                this.isgroup = this.$store.state.player.isgroup;
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {
                         data.result.item_loop.forEach(i => {
@@ -179,11 +181,13 @@ Vue.component('lms-player-settings', {
                         this.crossfade=data.result._p2;
                     }
                 });
-                lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
-                    if (data && data.result && undefined!=data.result._p2) {
-                        this.replaygain=data.result._p2;
-                    }
-                });
+                if (!this.isgroup) {
+                    lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result._p2) {
+                            this.replaygain=data.result._p2;
+                        }
+                    });
+                }
 
                 this.alarms.on=true;
                 this.alarms.volume=100;
@@ -272,7 +276,9 @@ Vue.component('lms-player-settings', {
                 lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
             }
             lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
-            lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
+            if (!this.isgroup) {
+                lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
+            }
             lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
             lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);

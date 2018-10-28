@@ -1,3 +1,7 @@
+0.0.6
+-----
+1. Initial work on SlimBrowse - only used in favorites so far.
+
 0.0.5
 -----
 1. When listing browse items, check for title if name is not set. Fixes

@@ -3,6 +3,7 @@
 1. Initial work on SlimBrowse - only used in favorites so far.
 2. Dutch, German, and French translations.
 3. Group players have no replaygain setting.
+4. Show album year in play queue.
 
 0.0.5
 -----

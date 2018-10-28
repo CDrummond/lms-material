@@ -60,12 +60,7 @@ function resolveImage(icon, image) {
     return lmsServerAddress+"/"+icon.replace(".png", "_50x50.png");
 }
 
-function itemSort(a, b) {
-    var at = "group"==a.type ? 0 : "track"==a.type ? ("music_note"==a.icon ? 1 : 2) : 3;
-    var bt = "group"==b.type ? 0 : "track"==b.type ? ("music_note"==b.icon ? 1 : 2) : 3;
-    if (at!=bt) {
-        return at<bt ? -1 : 1;
-    }
+function titleSort(a, b) {
     var titleA = a.title.toUpperCase();
     var titleB = b.title.toUpperCase();
     if (titleA < titleB) {
@@ -75,6 +70,15 @@ function itemSort(a, b) {
         return 1;
     }
     return 0;
+}
+
+function itemSort(a, b) {
+    var at = "group"==a.type ? 0 : "track"==a.type ? ("music_note"==a.icon ? 1 : 2) : 3;
+    var bt = "group"==b.type ? 0 : "track"==b.type ? ("music_note"==b.icon ? 1 : 2) : 3;
+    if (at!=bt) {
+        return at<bt ? -1 : 1;
+    }
+    return titleSort(a, b);
 }
 
 function getScrollElement() {

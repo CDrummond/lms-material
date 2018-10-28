@@ -5,12 +5,13 @@
  * MIT license.
  */
 
-function parseBrowseResp(data, parent, artistImages) {
-    var resp = {items: [], subtitle: undefined, actions:[] };
+function parseBrowseResp(data, parent, artistImages, idStart) {
+    var resp = {items: [], baseActions:[] };
 
     if (data && data.result) {
-        //console.log("RESP", data.result, parent);
-        if ("search" === parent.type) {
+        //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
+        if (parent.id && TOP_SEARCH_ID===parent.id) {
+            // TODO: Convert each of these into SlimBrowse!!!!
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 resp.items.push({header: i18n("Artists")});
                 data.result.contributors_loop.forEach(i => {
@@ -18,11 +19,12 @@ function parseBrowseResp(data, parent, artistImages) {
                                   id: "artist_id:"+i.contributor_id,
                                   title: i.contributor,
                                   command: ["albums"],
+                                  params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
                                   icon: artistImages ? undefined : "person",
-                                  params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
-                                  type: "group"
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                  type: "group",
+                                  favIcon: artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
                               });
                 });
             }
@@ -33,10 +35,11 @@ function parseBrowseResp(data, parent, artistImages) {
                                   id: "album_id:"+i.album_id,
                                   title: i.album,
                                   command: ["tracks"],
-                                  image: lmsServerAddress+"/music/" + i.artwork + "/cover_100x100_o"  ,
                                   params: ["album_id:"+ i.album_id, "tags:Adt", "sort:tracknum"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
-                                  type: "group"
+                                  image: lmsServerAddress+"/music/" + i.artwork + "/cover_100x100_o"  ,
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                  type: "group",
+                                  favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
                               });
                 });
             }
@@ -47,7 +50,7 @@ function parseBrowseResp(data, parent, artistImages) {
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
                                   image: lmsServerAddress+"/music/" + i.coverid + "/cover_100x100_o"  ,
-                                  actions: [PLAY_ACTION, ADD_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                                   type: "track"
                               });
                 });
@@ -59,299 +62,373 @@ function parseBrowseResp(data, parent, artistImages) {
                                   id: "genre_id:"+i.genre_id,
                                   title: i.genre,
                                   command: ["artists"],
-                                  //icon: "label",
                                   params: ["genre_id:"+ i.genre_id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
-                                  type: "group"
-                              });
-                });
-            }
-        } else {
-            if (data.result.artists_loop) {
-                data.result.artists_loop.forEach(i => {
-                    resp.items.push({
-                                  id: "artist_id:"+i.id,
-                                  title: i.artist,
-                                  command: ["albums"],
-                                  image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
-                                  params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
-                                  type: "group"
-                              });
-                });
-                resp.subtitle=i18np("1 Artist", "%1 Artists", data.result.count);
-            } else if (data.result.albums_loop) {
-                resp.actions=[ADD_ACTION, PLAY_ACTION];
-                data.result.albums_loop.forEach(i => {
-                    // Bug on my system? There is an 'No Album' entry with no tracks!
-                    if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
-                        return;
-                    }
-                    var title = i.album;
-                    var subtitle;
-                    if (parent.command && parent.command.length>0 && parent.command[0]==="artists") {
-                        subtitle = i.year && i.year>1900 ? i.year : undefined;
-                    } else {
-                        subtitle = i.artist;
-                        if (i.year && i.year>1900) {
-                            title+=" (" + i.year + ")";
-                        }
-                    }
-                    resp.items.push({
-                                  id: "album_id:"+i.id,
-                                  title: title,
-                                  subtitle: subtitle,
-                                  command: ["tracks"],
-                                  image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover_100x100_o"  ,
-                                  params: ["album_id:"+ i.id, "tags:Adt", "sort:tracknum"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
-                                  type: "group"
-                              });
-                });
-                /*if ("newmusic"===parent) {
-                    resp.subtitle=i18np("Newest Album", "%1 Newest Albums", data.result.albums_loop.length);
-                } else {*/
-                    resp.subtitle=i18np("1 Album", "%1 Albums", data.result.count);
-                //}
-            } else if (data.result.titles_loop) {
-                resp.actions=[ADD_ACTION, PLAY_ACTION];
-                var duration=0;
-                data.result.titles_loop.forEach(i => {
-                    var title = i.title;
-                    if (i.tracknum>0) {
-                         title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
-                    }
-                    if (i.trackartist && i.albumartist && i.trackartist !== i.albumartist) {
-                         title+=" - " + i.trackartist;
-                    }
-                    duration+=i.duration;
-                    resp.items.push({
-                                  id: "track_id:"+i.id,
-                                  title: title,
-                                  subtitle: formatSeconds(i.duration),
-                                  //icon: "music_note",
-                                  actions: [PLAY_ACTION, ADD_ACTION],
-                                  type: "track"
-                              });
-                });
-                resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
-                if (data.result.titles_loop.length===data.result.count) {
-                    resp.subtitle+=" ("+formatSeconds(duration)+")";
-                }
-            } else if (data.result.genres_loop) {
-                data.result.genres_loop.forEach(i => {
-                    resp.items.push({
-                                  id: "genre_id:"+i.id,
-                                  title: i.genre,
-                                  command: ["artists"],
                                   //icon: "label",
-                                  params: ["genre_id:"+ i.id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group"
                               });
                 });
-                resp.subtitle=i18np("1 Genre", "%1 Genres", data.result.count);
-            } else if (data.result.playlists_loop) {
-                data.result.playlists_loop.forEach(i => {
-                    resp.items.push({
-                                  id: "playlist_id:"+i.id,
-                                  title: i.playlist,
-                                  command: ["playlists", "tracks"],
-                                  //icon: "list",
-                                  params: ["playlist_id:"+ i.id],
-                                  actions: [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
-                                  type: "group"
-                              });
-                });
-                resp.subtitle=i18np("1 Playlist", "%1 Playlists", data.result.count);
-            } else if (data.result.playlisttracks_loop) {
-                resp.actions=[ADD_ACTION, PLAY_ACTION];
-                data.result.playlisttracks_loop.forEach(i => {
-                    var title = i.title;
-                    if (i.artist) {
-                        title+=" - " + i.artist;
-                    }
-                    if (!title) {
-                        title=i18n("Unknown");
-                    }
-                    var subtitle = i.duration>0 ? formatSeconds(i.duration) : undefined;
-                    if (i.album) {
-                        if (subtitle) {
-                            subtitle+=" ("+i.album+")";
-                        } else {
-                            sbtitle=i.album;
-                        }
-                    }
-                    resp.items.push({
-                                  id: "track_id:"+i.id,
-                                  title: title,
-                                  subtitle: subtitle,
-                                  //icon: "music_note",
-                                  actions: [PLAY_ACTION, ADD_ACTION],
-                                  type: "track"
-                              });
-                });
-                resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
-            } else if (data.result.years_loop) {
-                data.result.years_loop.forEach(i => {
-                    resp.items.push({
-                                  id: "year:"+i.year,
-                                  title: i.year,
-                                  command: ["albums"],
-                                  //icon: "date_range",
-                                  params: ["year:"+ i.year, "tags:ajly"],
-                                  actions: [PLAY_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
-                                  type: "group"
-                              });
-                });
-                resp.subtitle=i18np("1 Year", "%1 Years", data.result.count);
-            } else if (data.result.radioss_loop) {
-                data.result.radioss_loop.forEach(i => {
-                    if ("xmlbrowser"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      command: [i.cmd, "items"],
-                                      image: resolveImage(i.icon, i.image),
-                                      params: ["want_url:1"],
-                                      type: "group",
-                                      id: parent.id+i.cmd,
-                                      app: i.cmd
-                              });
-                    } else if ("xmlbrowser_search"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      command: [i.cmd, "items"],
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: "search",
-                                      params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
-                                      type: "xmlsearch",
-                                      id: parent.id+i.cmd,
-                                      app: i.cmd
-                              });
-                    }
-                });
-            } else if (data.result.appss_loop) {
-                data.result.appss_loop.forEach(i => {
-                    if ("xmlbrowser"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      command: [i.cmd, "items"],
-                                      image: resolveImage(i.icon, i.image),
-                                      params: ["want_url:1"],
-                                      type: "group",
-                                      id: parent.url+i.cmd,
-                                      app: i.cmd
-                              });
-                    } else if ("xmlbrowser_search"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      command: [i.cmd, "items"],
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: "search",
-                                      params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
-                                      type: "xmlsearch",
-                                      id: parent.id+i.cmd,
-                                      app: i.cmd
-                              });
-                    }
-                });
-                resp.subtitle=i18np("1 App", "%1 Apps", data.result.count);
-            } else if (data.result.loop_loop) {
-                var topLevelFavourites = "favorites"===parent.type && parent.id.startsWith("top:/");
-                data.result.loop_loop.forEach(i => {
-                    if ("text"===i.type || "textarea"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      type: "text",
-                                      id: i.id
-                                   });
-                    } else if ("search"===i.type) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      command: [i.cmd ? i.cmd : parent.command[0], "items"],
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: "search",
-                                      params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
-                                      type: "xmlsearch", // Hack, so that we don't think this is library search...
-                                      id: parent.url+i.cmd+i.id,
-                                      app: parent.app
-                                   });
-                    } else if (i.hasitems>0) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      command: parent.command,
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
-                                      params: ["item_id:"+i.id, "want_url:1"],
-                                      type: "group",
-                                      url: i.url,
-                                      app: parent.app,
-                                      actions: "favorites"===parent.type 
-                                                    ? topLevelFavourites
-                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                        : [PLAY_ACTION, ADD_ACTION]
-                                                    : i.isaudio === 1
-                                                        ? i.url
-                                                            ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
-                                                            : [PLAY_ACTION, ADD_ACTION]
-                                                        : i.url
-                                                            ? [ADD_TO_FAV_ACTION]
-                                                            : undefined,
-                                      id: "item_id:"+i.id
-                                   });
-                    } else if (i.isaudio === 1) {
-                        resp.items.push({
-                                      title: i.name ? i.name : i.title,
-                                      url: i.url,
-                                      image: resolveImage(i.icon, i.image),
-                                      icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
-                                      type: "track",
-                                      actions: "favorites"===parent.type
-                                                    ? topLevelFavourites
-                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                        : [PLAY_ACTION, ADD_ACTION]
-                                                    : i.url
-                                                        ? [PLAY_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
-                                                        : [PLAY_ACTION, ADD_ACTION],
-                                      app: parent.app,
-                                      id: "item_id:"+i.id
-                                   });
-                        if (i.description && 1==data.result.count) {
-                            data.result.count+=1;
-                            data.result.loop_loop.length+=1;
-
-                            var details;
-                            if (i.line1) {
-                                details = "<b>"+i.line1+"</b>";
-                                if (i.line2) {
-                                    details += "<br/><br/>"+i.line2;
-                                }
-                            }
-
-                            if (details) {
-                                details += "<br/><br/>"+i.description;
-                            } else {
-                                details = i.description;
-                            }
-
-                            resp.items.push({
-                                      title: details,
-                                      type: "text",
-                                      id: i.id+"-descr"
-                                   });
-                        }
-                    }
-                });
-
-                if (data.result.loop_loop.length === data.result.count && topLevelFavourites) {
-                    // Have all favourites, so sort...
-                    resp.items.sort(itemSort);
-                }
-            } else if (0===data.result.count && data.result.networkerror) {
-                resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
             }
+        } else if (data.result.item_loop) {  // SlimBrowse response
+            var playAction = false;
+            var addAction = false;
+            var insertAction = false;
+            var moreAction = false;
+            var isFavorites = parent && parent.id && parent.id==TOP_FAV_ID;
+            var isPlaylists = parent && parent.id && parent.id==TOP_PLAYLISTS_ID;
+            if (data.result.base && data.result.base.actions) {
+                resp.baseActions = data.result.base.actions;
+                playAction = undefined != resp.baseActions[PLAY_ACTION.cmd];
+                addAction = undefined != resp.baseActions[ADD_ACTION.cmd];
+                insertAction = undefined != resp.baseActions[INSERT_ACTION.cmd];
+                if (undefined!=resp.baseActions[MORE_ACTION.cmd] && undefined!=resp.baseActions[MORE_ACTION.cmd].params) {
+                    moreAction = false;
+                    for(var key in resp.baseActions[MORE_ACTION.cmd].params) {
+                        if (key != "menu") {
+                        console.log(key);
+                            moreAction=true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            data.result.item_loop.forEach(i => {
+                var text = i.text.split(/\r?\n/);
+                i.title = text[0];
+                if (text.length>1) {
+                    i.subtitle = text[1];
+                } else {
+                    i.title=i.text;
+                }
+                i.text = undefined;
+                i.image = resolveImage(i.icon ? i.icon : i["icon-id"]);
+
+                i.menuActions=[];
+                if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay") {
+                    if (playAction) {
+                        i.menuActions.push(PLAY_ACTION);
+                    }
+                    if (insertAction) {
+                        i.menuActions.push(INSERT_ACTION);
+                    }
+                    if (addAction) {
+                        i.menuActions.push(ADD_ACTION);
+                    }
+                }
+                if ((playAction || insertAction || addAction) && (isFavorites || i.presetParams || isPlaylists || moreAction)) {
+                    i.menuActions.push(DIVIDER);
+                }
+                if (isFavorites) {
+                    i.menuActions.push(RENAME_FAV_ACTION);
+                    i.menuActions.push(REMOVE_FROM_FAV_ACTION);
+                } else if (i.presetParams) {
+                    i.menuActions.push(ADD_TO_FAV_ACTION);
+                }
+                if (isPlaylists) {
+                    i.menuActions.push(RENAME_PL_ACTION);
+                    i.menuActions.push(DELETE_ACTION);
+                }
+                if (moreAction) {
+                    i.menuActions.push(MORE_ACTION);
+                }
+
+                if (isPlaylists && i.commonParams.playlist_id) {
+                    i.id = "playlist_id:"+i.commonParams.playlist_id;
+                } else if (i.params && i.params.item_id) {
+                    i.id = "item_id:"+i.params.item_id;
+                } else {
+                    i.id=parent.id+"."+idStart;
+                    idStart++;
+                }
+                resp.items.push(i);
+                // TODO: Text fields, podcast descriptions, etc...
+            });
+
+            if (data.result.item_loop.length === data.result.count && isFavorites) {
+                // Have all favourites, so sort...
+                resp.items.sort(titleSort);
+            }
+        } else if (data.result.artists_loop) {
+            data.result.artists_loop.forEach(i => {
+                resp.items.push({
+                              id: "artist_id:"+i.id,
+                              title: i.artist,
+                              command: ["albums"],
+                              image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
+                              params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              type: "group",
+                              favIcon: artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
+                          });
+            });
+            resp.subtitle=i18np("1 Artist", "%1 Artists", data.result.count);
+        } else if (data.result.albums_loop) {
+            resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
+            data.result.albums_loop.forEach(i => {
+                // Bug on my system? There is an 'No Album' entry with no tracks!
+                if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
+                    return;
+                }
+                resp.items.push({
+                              id: "album_id:"+i.id,
+                              title: i.album,
+                              subtitle: i.artist ? i.artist : i.year && i.year>1900 ? i.year : undefined,
+                              command: ["tracks"],
+                              image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover_100x100_o"  ,
+                              params: ["album_id:"+ i.id, "tags:Adt", "sort:tracknum"],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              type: "group",
+                              favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
+                          });
+            });
+            //if ("newmusic"===parent) {
+            //    resp.subtitle=i18np("Newest Album", "%1 Newest Albums", data.result.albums_loop.length);
+            //} else {
+                resp.subtitle=i18np("1 Album", "%1 Albums", data.result.count);
+            //}
+        } else if (data.result.titles_loop) {
+            resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
+            var duration=0;
+            data.result.titles_loop.forEach(i => {
+                var title = i.title;
+                if (i.tracknum>0) {
+                     //title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
+                     // Be consistent with SlimBrowse format...
+                     title = i.tracknum + ". " + title;
+                }
+                if (i.trackartist && i.albumartist && i.trackartist !== i.albumartist) {
+                     title+=" - " + i.trackartist;
+                }
+                duration+=i.duration;
+                resp.items.push({
+                              id: "track_id:"+i.id,
+                              title: title,
+                              subtitle: formatSeconds(i.duration),
+                              //icon: "music_note",
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              type: "track"
+                          });
+            });
+            resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
+            if (data.result.titles_loop.length===data.result.count) {
+                resp.subtitle+=" ("+formatSeconds(duration)+")";
+            }
+        } else if (data.result.genres_loop) {
+            data.result.genres_loop.forEach(i => {
+                resp.items.push({
+                              id: "genre_id:"+i.id,
+                              title: i.genre,
+                              command: ["artists"],
+                              //icon: "label",
+                              params: ["genre_id:"+ i.id],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              type: "group"
+                          });
+            });
+            resp.subtitle=i18np("1 Genre", "%1 Genres", data.result.count);
+        } else if (data.result.playlists_loop) {
+            data.result.playlists_loop.forEach(i => {
+                resp.items.push({
+                              id: "playlist_id:"+i.id,
+                              title: i.playlist,
+                              command: ["playlists", "tracks"],
+                              //icon: "list",
+                              params: ["playlist_id:"+ i.id],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
+                              type: "group"
+                          });
+            });
+            resp.subtitle=i18np("1 Playlist", "%1 Playlists", data.result.count);
+        } else if (data.result.playlisttracks_loop) {
+            resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
+            data.result.playlisttracks_loop.forEach(i => {
+                var title = i.title;
+                if (i.artist) {
+                    title+=" - " + i.artist;
+                }
+                if (!title) {
+                    title=i18n("Unknown");
+                }
+                var subtitle = i.duration>0 ? formatSeconds(i.duration) : undefined;
+                if (i.album) {
+                    if (subtitle) {
+                        subtitle+=" ("+i.album+")";
+                    } else {
+                        sbtitle=i.album;
+                    }
+                }
+                resp.items.push({
+                              id: "track_id:"+i.id,
+                              title: title,
+                              subtitle: subtitle,
+                              //icon: "music_note",
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              type: "track"
+                          });
+            });
+            resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
+        } else if (data.result.years_loop) {
+            data.result.years_loop.forEach(i => {
+                resp.items.push({
+                              id: "year:"+i.year,
+                              title: i.year,
+                              command: ["albums"],
+                              //icon: "date_range",
+                              params: ["year:"+ i.year, "tags:ajly"],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              type: "group"
+                          });
+            });
+            resp.subtitle=i18np("1 Year", "%1 Years", data.result.count);
+        } else if (data.result.radioss_loop) {
+            data.result.radioss_loop.forEach(i => {
+                if ("xmlbrowser"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  command: [i.cmd, "items"],
+                                  image: resolveImage(i.icon, i.image),
+                                  params: ["want_url:1"],
+                                  type: "group",
+                                  id: parent.id+i.cmd,
+                                  app: i.cmd
+                          });
+                } else if ("xmlbrowser_search"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  command: [i.cmd, "items"],
+                                  image: resolveImage(i.icon, i.image),
+                                  icon: "search",
+                                  params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
+                                  type: "xmlsearch",
+                                  id: parent.id+i.cmd,
+                                  app: i.cmd
+                          });
+                }
+            });
+        } else if (data.result.appss_loop) {
+            data.result.appss_loop.forEach(i => {
+                if ("xmlbrowser"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  command: [i.cmd, "items"],
+                                  image: resolveImage(i.icon, i.image),
+                                  params: ["want_url:1"],
+                                  type: "group",
+                                  id: parent.url+i.cmd,
+                                  app: i.cmd
+                          });
+                } else if ("xmlbrowser_search"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  command: [i.cmd, "items"],
+                                  image: resolveImage(i.icon, i.image),
+                                  icon: "search",
+                                  params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
+                                  type: "xmlsearch",
+                                  id: parent.id+i.cmd,
+                                  app: i.cmd
+                          });
+                }
+            });
+            resp.subtitle=i18np("1 App", "%1 Apps", data.result.count);
+            if (data.result.appss_loop.length === data.result.count) {
+                // Have all apps, so sort...
+                resp.items.sort(titleSort);
+            }
+        } else if (data.result.loop_loop) {
+            var topLevelFavourites = "favorites"===parent.type && parent.id.startsWith("top:/");
+            data.result.loop_loop.forEach(i => {
+                if ("text"===i.type || "textarea"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  type: "text",
+                                  id: i.id
+                               });
+                } else if ("search"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  command: [i.cmd ? i.cmd : parent.command[0], "items"],
+                                  image: resolveImage(i.icon, i.image),
+                                  icon: "search",
+                                  params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
+                                  type: "xmlsearch", // Hack, so that we don't think this is library search...
+                                  id: parent.url+i.cmd+i.id,
+                                  app: parent.app
+                               });
+                } else if (i.hasitems>0) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  command: parent.command,
+                                  image: resolveImage(i.icon, i.image),
+                                  icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
+                                  params: ["item_id:"+i.id, "want_url:1"],
+                                  type: "group",
+                                  url: i.url,
+                                  app: parent.app,
+                                  menuActions: "favorites"===parent.type
+                                                ? topLevelFavourites
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                                                : i.isaudio === 1
+                                                    ? i.url
+                                                        ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
+                                                        : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                                                    : i.url
+                                                        ? [ADD_TO_FAV_ACTION]
+                                                        : undefined,
+                                  id: "item_id:"+i.id
+                               });
+                } else if (i.isaudio === 1) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  url: i.url,
+                                  image: resolveImage(i.icon, i.image),
+                                  icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
+                                  type: "track",
+                                  menuActions: "favorites"===parent.type
+                                                ? topLevelFavourites
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
+                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                                                : i.url
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
+                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                  app: parent.app,
+                                  id: "item_id:"+i.id
+                               });
+                    if (i.description && 1==data.result.count) {
+                        data.result.count+=1;
+                        data.result.loop_loop.length+=1;
+                        var details;
+                        if (i.line1) {
+                            details = "<b>"+i.line1+"</b>";
+                            if (i.line2) {
+                                 details += "<br/><br/>"+i.line2;
+                            }
+                        }
+                        if (details) {
+                            details += "<br/><br/>"+i.description;
+                        } else {
+                            details = i.description;
+                        }
+
+                        resp.items.push({
+                                  title: details,
+                                  type: "text",
+                                  id: i.id+"-descr"
+                               });
+                    }
+                }
+            });
+            if (data.result.loop_loop.length === data.result.count && topLevelFavourites) {
+                // Have all favourites, so sort...
+                resp.items.sort(itemSort);
+            }
+        } else if (0===data.result.count && data.result.networkerror) {
+            resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         }
     }
+
     return resp;
 }
 

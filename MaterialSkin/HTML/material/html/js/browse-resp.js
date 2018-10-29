@@ -72,28 +72,41 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
         } else if (data.result.indexList) {
             var start=0;
             var end=0;
-            var lastWasNull = false;
-            data.result.indexList.forEach(i => {
-                // TODO???? Hmmm... Seems to be caused by 'No Album'
-                if (i[0]===null || lastWasNull) {
-                    if (lastWasNull) {
-                        lastWasNull=false;
-                    } else {
-                        lastWasNull=true;
-                        start++;
+            var first = null;
+
+            // Look for first valid key? Looks like 'No Album' messes up album txtkeys? First 2 seem to be garbage...
+            if (data.result.artists_loop) {
+                for (var i=0; i<data.result.artists_loop.length; ++i) {
+                    if (data.result.artists_loop[i].textkey!=null && data.result.artists_loop[i].textkey!=undefined && data.result.artists_loop[i].textkey!="") {
+                        first = data.result.artists_loop[i].textkey;
+                        break;
                     }
-                    return;
                 }
-                resp.items.push({
-                                title: i[0],
-                                subtitle: i18n("Total: %1", i[1]),
-                                range: {start: start, count: i[1]},
-                                type: "group",
-                                command: parent.command,
-                                params: parent.params
-                                });
-                start += i[1];
-                lastWasNull=false;
+            } else if (data.result.albums_loop) {
+                for (var i=0; i<data.result.albums_loop.length; ++i) {
+                    if (data.result.albums_loop[i].textkey!=null && data.result.albums_loop[i].textkey!=undefined && data.result.albums_loop[i].textkey!="") {
+                        first = data.result.albums_loop[i].textkey;
+                        break;
+                    }
+                }
+            }
+            var foundFirst = first===null;
+            data.result.indexList.forEach(i => {
+                // With artist list, VA has key of " " but in textkey list its "#" !!!
+                if (foundFirst || i[0]===first || (first===" " && i[0]==="#")) {
+                    foundFirst = true;
+                }
+                if (foundFirst) {
+                    resp.items.push({
+                                    title: i[0],
+                                    subtitle: i18n("Total: %1", i[1]),
+                                    range: {start: start, count: i[1]},
+                                    type: "group",
+                                    command: parent.command,
+                                    params: parent.params
+                                    });
+                    start += i[1];
+                }
             });
             data.result.count=resp.items.length;
             resp.subtitle=i18np("1 Category", "%1 Categories", data.result.count);

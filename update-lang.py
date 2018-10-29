@@ -99,7 +99,7 @@ def update(path):
                 first=False
                 f.write("\n")
             if i in values:
-                f.write('"%s":"%s"' % (i, values[i]))
+                f.write('"%s":"%s"' % (i, values[i].encode("utf-8")))
             else:
                 f.write('"%s":""' % i)
         f.write("\n}\n")

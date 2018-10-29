@@ -21,6 +21,9 @@ const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "__ALBUM_SORT__";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
 const TOP_ID_PREFIX = "top:/";
+const TOP_ARTISTS_ID = TOP_ID_PREFIX+"ar";
+const TOP_ALBUM_ARTISTS_ID = TOP_ID_PREFIX+"aar";
+const TOP_ALBUMS_ID = TOP_ID_PREFIX+"al";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_FAV_ID = TOP_ID_PREFIX+"fav";
@@ -175,7 +178,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             if (bottomOfPage || pageHeight < visible) {
                 this.fetchingItems = true;
                 var command = this.buildCommand(this.current);
-                lmsList(this.playerId(), command.command, command.params, this.items.length).then(({data}) => {
+                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
+                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+
+                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                     this.fetchingItems = false;
                     var resp = parseBrowseResp(data, this.current, this.artistImages, this.items.length);
                     if (resp && resp.items) {
@@ -217,7 +223,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: [],
                 icon: "group",
                 type: "group",
-                id: TOP_ID_PREFIX+"ar",
+                id: TOP_ARTISTS_ID,
             },
             {
                 title: i18n("Albums"),
@@ -228,7 +234,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
                 type: "group",
-                id: TOP_ID_PREFIX+"al"
+                id: TOP_ALBUMS_ID
             },
             {
                 title: i18n("Genres"),
@@ -291,7 +297,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 icon: "favorite",
                 type: "favorites",
                 app: "favorites",
-                batchsize: 250,
                 id: TOP_FAV_ID
             },
             {
@@ -318,7 +323,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             params: ["role_id:ALBUMARTIST"],
                             icon: "group",
                             type: "group",
-                            id: TOP_ID_PREFIX+"aar"
+                            id: TOP_ALBUM_ARTISTS_ID
                         });
         }
         this.other = [
@@ -377,12 +382,12 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         showMessage(msg) {
             this.snackbar = {msg: msg, show: true };
         },
-        fetchItems(item) {
+        fetchItems(command, item, batchSize) {
             this.fetchingItems = true;
-
-            var command = this.buildCommand(item);
-            //console.log("FETCH command:" + command.command + " params:" + command.params + " batchsize:" + item.batchsize);
-            lmsList(this.playerId(), command.command, command.params, 0, item.batchsize).then(({data}) => {
+            //console.log("FETCH command:" + command.command + " params:" + command.params);
+            var start = item.range ? item.range.start : 0;
+            var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize;
+            lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.artistImages, 0);
 
@@ -401,7 +406,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.currentBaseActions = this.baseActions;
                     this.history.push(prev);
                     this.headerTitle=item.title;
-                    this.listSize = data.result.count;
+                    this.listSize = item.range ? item.range.count : data.result.count;
                     this.items=resp.items;
                     this.baseActions=resp.baseActions;
                     this.menuActions=[];
@@ -446,16 +451,26 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
                 setScrollTop(0);
-                return;
+            } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) && (item.command[0]=="artists" || item.command[0]=="albums")) {
+                var command = { command: [ item.command[0] ], params: ["tags:CCZ"]};
+                item.params.forEach(i => {
+                    if (i.startsWith("sort:")) {
+                        command.params.push(i.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort));
+                    } else if (!i.startsWith("tags:")) {
+                        command.params.push(i);
+                    }
+                });
+                this.fetchItems(command, item, 1);
+            } else {
+                this.fetchItems(this.buildCommand(item), item);
             }
-            this.fetchItems(item);
         },
         search(event, item) {
             if (this.fetchingItems) {
                 return;
             }
             this.searchTerm = event.target._value;
-            this.fetchItems(item);
+            this.fetchItems(this.buildCommand(item), item);
         },
         dialogResponse(val) {
             if (val && this.dialog.value) {
@@ -679,7 +694,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             var pos=getScrollTop();
             this.fetchingItems = true;
             var command = this.buildCommand(this.current);
-            lmsList(this.playerId(), command.command, command.params, 0, this.current.batchsize).then(({data}) => {
+            lmsList(this.playerId(), command.command, command.params, 0).then(({data}) => {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.artistImages, 0);
                 this.items=resp.items;
@@ -900,7 +915,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             }
         });
 
-        bus.$on('albumSortChanged', function(act) {
+        bus.$on('browseDisplayChanged', function(act) {
             this.goHome();
         }.bind(this));
         bus.$on('libraryChanged', function(act) {

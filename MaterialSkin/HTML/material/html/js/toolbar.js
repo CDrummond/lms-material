@@ -57,9 +57,9 @@ Vue.component('lms-toolbar', {
           <v-btn icon v-else-if="playerStatus.isOn" @click.native="doAction(['play'])" class="toolbar-button">
             <v-icon>play_circle_outline</v-icon>
           </v-btn>
-          <v-btn icon flat class="toolbar-button" v-if="playerStatus.isOn" @click="bus.$emit('volume')">
+          <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed-icon': playerStatus.volume<0}" v-if="playerStatus.isOn" @click="bus.$emit('volume')">
             <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
-            <v-icon v-else="playerStatus.volume===0">volume_mute</v-icon>
+            <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
           </v-btn>
           <v-menu bottom left>
             <v-btn slot="activator" icon>

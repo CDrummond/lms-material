@@ -272,11 +272,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             { header: i18n("Other Music"), id:"omh" },
             {
                 title: i18n("Radio"),
-                // SlimBrowse method - disabled for now
-                //command: ["radios"],
-                //params: ["menu:radio"],
                 command: ["radios"],
-                params: ["want_url:1"],
+                params: ["menu:radio"],
+                // Non-SlimBrowse
+                //command: ["radios"],
+                //params: ["want_url:1"],
                 icon: "radio",
                 type: "group",
                 id: TOP_ID_PREFIX+"ra"

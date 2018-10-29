@@ -69,6 +69,34 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                               });
                 });
             }
+        } else if (data.result.indexList) {
+            var start=0;
+            var end=0;
+            var lastWasNull = false;
+            data.result.indexList.forEach(i => {
+                // TODO???? Hmmm... Seems to be caused by 'No Album'
+                if (i[0]===null || lastWasNull) {
+                    if (lastWasNull) {
+                        lastWasNull=false;
+                    } else {
+                        lastWasNull=true;
+                        start++;
+                    }
+                    return;
+                }
+                resp.items.push({
+                                title: i[0],
+                                subtitle: i18n("Total: %1", i[1]),
+                                range: {start: start, count: i[1]},
+                                type: "group",
+                                command: parent.command,
+                                params: parent.params
+                                });
+                start += i[1];
+                lastWasNull=false;
+            });
+            data.result.count=resp.items.length;
+            resp.subtitle=i18np("1 Category", "%1 Categories", data.result.count);
         } else if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;
@@ -193,7 +221,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                               favIcon: artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
                           });
             });
-            resp.subtitle=i18np("1 Artist", "%1 Artists", data.result.count);
+            resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : data.result.count);
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             data.result.albums_loop.forEach(i => {
@@ -217,7 +245,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             //if ("newmusic"===parent) {
             //    resp.subtitle=i18np("Newest Album", "%1 Newest Albums", data.result.albums_loop.length);
             //} else {
-                resp.subtitle=i18np("1 Album", "%1 Albums", data.result.count);
+                resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : data.result.count);
             //}
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];

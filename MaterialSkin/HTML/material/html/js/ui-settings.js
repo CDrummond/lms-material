@@ -33,6 +33,10 @@ Vue.component('lms-ui-settings', {
               <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
             </v-list-tile>
 
+            <v-list-tile>
+              <v-switch v-model="splitArtistsAndAlbums" :label="i18n('Split artist (and album) lists into A..Z')"></v-switch>
+            </v-list-tile>
+
             <v-header>{{i18n('Queue')}}</v-header>
             <v-list-tile>
               <v-switch v-model="autoScrollQueue" :label="i18n('Auto-scroll to current track')"></v-switch>
@@ -48,6 +52,7 @@ Vue.component('lms-ui-settings', {
             darkUi: true,
             artistAlbumSort:'yearalbum',
             albumSort:'album',
+            splitArtistsAndAlbums: false,
             autoScrollQueue:true,
             albumSorts:[],
             library: null,
@@ -62,6 +67,7 @@ Vue.component('lms-ui-settings', {
                 this.artistAlbumSort = this.$store.state.artistAlbumSort;
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
+                this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.show = true;
 
                 lmsList("", ["libraries"]).then(({data}) => {
@@ -118,6 +124,7 @@ Vue.component('lms-ui-settings', {
                                                   artistAlbumSort:this.artistAlbumSort,
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
+                                                  splitArtistsAndAlbums:this.splitArtistsAndAlbums
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);

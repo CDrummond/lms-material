@@ -45,6 +45,7 @@ const store = new Vuex.Store({
         darkUi: true,
         artistAlbumSort:'yearalbum',
         albumSort:'album',
+        splitArtistsAndAlbums:false,
         autoScrollQueue:true,
         library: null
     },
@@ -131,6 +132,7 @@ const store = new Vuex.Store({
             state.unifiedArtistsList = val;
         },
         setUiSettings(state, val) {
+            var browseDisplayChanged = false;
             if (state.darkUi!=val.darkUi) {
                 state.darkUi = val.darkUi;
                 localStorage.setItem(LS_PREFIX+'darkUi', state.darkUi);
@@ -138,17 +140,23 @@ const store = new Vuex.Store({
             if (state.artistAlbumSort!=val.artistAlbumSort) {
                 state.artistAlbumSort = val.artistAlbumSort;
                 localStorage.setItem(LS_PREFIX+'artistAlbumSort', state.artistAlbumSort);
-                bus.$emit('albumSortChanged');
+                browseDisplayChanged = true;
             }
             if (state.albumSort!=val.albumSort) {
                 state.albumSort = val.albumSort;
                 localStorage.setItem(LS_PREFIX+'albumSort', state.albumSort);
-                bus.$emit('albumSortChanged');
+                browseDisplayChanged = true;
+            }
+            if (state.splitArtistsAndAlbums!=val.splitArtistsAndAlbums) {
+                state.splitArtistsAndAlbums = val.splitArtistsAndAlbums;
+                localStorage.setItem(LS_PREFIX+'splitArtistsAndAlbums', state.splitArtistsAndAlbums);
+                browseDisplayChanged = true;
             }
             if (state.autoScrollQueue!=val.autoScrollQueue) {
                 state.autoScrollQueue = val.autoScrollQueue;
                 localStorage.setItem(LS_PREFIX+'autoScrollQueue', state.autoScrollQueue);
             }
+            bus.$emit('browseDisplayChanged');
         },
         initUiSettings(state) {
             var val = localStorage.getItem(LS_PREFIX+'darkUi');
@@ -170,6 +178,10 @@ const store = new Vuex.Store({
             val = localStorage.getItem(LS_PREFIX+'library');
             if (undefined!=val) {
                 state.library = val;
+            }
+            val = localStorage.getItem(LS_PREFIX+'splitArtistsAndAlbums');
+            if (undefined!=val) {
+                state.splitArtistsAndAlbums = "true" == val;
             }
         },
         setLibrary(state, lib) {

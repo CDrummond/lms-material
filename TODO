@@ -5,13 +5,13 @@
     Can probably use --vh setting (as per no playing details) to set list size/pos
   - Drag'n'drop
     - Not working on Android Firefox
-    - Not working on iOS - github.com/Bernardo-Castilho/gragdroptouch
+    - Not working on iOS - github.com/Bernardo-Castilho/dragdroptouch
     - Desktop firefox has drag thumbnail much higher than item being dragged.
   - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
 
 - Browse
   - SlimBrowse
-    - USe for app browser - need to handle Band's Campout "Listen to songs (without comments)" case
+    - Use for app browser - need to handle Band's Campout "Listen to songs (without comments)" case
     - Fully handle commands
       - 'More'
       - Check all
@@ -23,6 +23,7 @@
   - Split Artist and Album lists in A..C, D..E, etc sub-lists if more than 300(?) in total? Split into blocks of 100?
     [ "artists", 0, 1, "tags:CCZ"]
   - Before showing menu, check if item is in favourites - and adjust entries?
+  - Make favorourites re-orderable
   - Add 'More' action to non-SlimBrowse Artist, Album, Track
     ["artistinfo", "items", 0, 100, "menu:1", "artist_id:XXX", "library_id:XXX"]
     ["albuminfo", "items", 0, 100, "menu:1", "artist_id:XXX", "album_id:XXX", "library_id:XXX]

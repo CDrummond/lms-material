@@ -489,7 +489,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     }
                 });
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
-                var favUrl;
+                var favUrl = item.url;
                 var favIcon = item.favIcon;
                 var favType;
                 var favTitle = item.title;
@@ -511,6 +511,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 } else if (item.id.startsWith("year:")) {
                     favUrl="db:year.id="+encodeURI(item.title);
                     favIcon="html/images/years.png";
+                } else if (item.id.startsWith("playlist_id:")) {
+                    favIcon="html/images/playlists.png";
                 }
 
                 if (!favIcon && item.image) {

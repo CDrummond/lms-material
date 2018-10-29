@@ -54,10 +54,15 @@ function resolveImage(icon, image) {
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
         return icon;
     }
-    if (icon.startsWith("/")) {
-        return lmsServerAddress+icon.replace(".png", "_50x50.png");
+    
+    var idx = icon.lastIndexOf(".png");
+    if (idx>0) {
+        icon = icon.substring(0, idx)+"_50x50.png";
     }
-    return lmsServerAddress+"/"+icon.replace(".png", "_50x50.png");
+    if (icon.startsWith("/")) {
+        return lmsServerAddress+icon;
+    }
+    return lmsServerAddress+"/"+icon;
 }
 
 function titleSort(a, b) {

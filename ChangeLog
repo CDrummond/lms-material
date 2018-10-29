@@ -6,6 +6,7 @@
 4. Show album year in play queue.
 5. Don't sort favorites - as the order can be determined in default web UI.
 6. Ensure volume is only ever adjusted whilst dialog is shown.
+7. Add insert action.
 
 0.0.5
 -----

@@ -104,6 +104,10 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 i.text = undefined;
                 i.image = resolveImage(i.icon ? i.icon : i["icon-id"]);
 
+                if (!i.image && i.commonParams && i.commonParams.album_id) {
+                    i.image = resolveImage("music/0/cover");
+                }
+
                 i.menuActions=[];
                 if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay") {
                     if (playAction) {
@@ -133,7 +137,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     i.menuActions.push(MORE_ACTION);
                 }
 
-                if (isPlaylists && i.commonParams.playlist_id) {
+                if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {
                     i.id = "item_id:"+i.params.item_id;

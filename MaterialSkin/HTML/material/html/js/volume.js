@@ -47,10 +47,13 @@ Vue.component('lms-volume', {
         bus.$on('volume', function() {
             lmsCommand(this.$store.state.player.id, ["mixer", "volume", "?"]).then(({data}) => {
                 if (data && data.result && data.result._volume) {
-                    this.playerVolumeCurrent = parseInt(data.result && data.result._volume);
-                    this.playerVolumePrev = parseInt(data.result && data.result._volume);
-                    this.playerVolume = parseInt(data.result && data.result._volume);
-                    this.show = true;
+                    var vol = parseInt(data.result._volume);
+                    if (vol>=0) {
+                        this.playerVolumeCurrent = vol;
+                        this.playerVolumePrev = vol;
+                        this.playerVolume = vol;
+                        this.show = true;
+                    }
                 }
             });
         }.bind(this));
@@ -80,7 +83,7 @@ Vue.component('lms-volume', {
     },
     watch: {
         'playerVolume': function(newVal) {
-            if (this.show && this.playerVolumeCurrent !== newVal) {
+            if (this.show && newVal>=0 && this.playerVolumeCurrent !== newVal) {
                 this.playerVolumePrev = this.playerVolumeCurrent;
                 this.playerVolumeCurrent = newVal;
                 bus.$emit('playerCommand', ["mixer", "volume", newVal]);

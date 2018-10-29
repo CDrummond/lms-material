@@ -87,7 +87,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (data && data.result) {
                         var player = { isOn: data.result.power,
                                        isPlaying: data.result.mode === "play" && !data.result.waitingToPlay,
-                                       volume: 0,
+                                       volume: -1,
                                        playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                                        current: { canseek: 0, time: 0, duration: 0 }
                                      };

@@ -76,6 +76,8 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             var moreAction = false;
             var isFavorites = parent && parent.id && parent.id==TOP_FAV_ID;
             var isPlaylists = parent && parent.id && parent.id==TOP_PLAYLISTS_ID;
+            var haveWithIcons = false;
+            var haveWithoutIcons = false;
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
                 playAction = undefined != resp.baseActions[PLAY_ACTION.cmd];
@@ -108,9 +110,14 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 i.image = resolveImage(i.icon ? i.icon : i["icon-id"]);
 
                 if (!i.image && i.commonParams && i.commonParams.album_id) {
-                    i.image = resolveImage("music/0/cover");
+                    i.image = resolveImage("music/0/cover_50x50");
                 }
 
+                if (i.image) {
+                    haveWithIcons = true;
+                } else {
+                    haveWithoutIcons = true;
+                }
                 i.menuActions=[];
                 if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay") {
                     if (playAction) {
@@ -157,6 +164,13 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                 type: "text",
                                 id: parent.id+"."+idStart
                                });
+            } else if (haveWithoutIcons && haveWithIcons && resp.items.length == data.result.count) {
+                var defCover = parent.image ? parent.image : resolveImage("music/0/cover_50x50");
+                resp.items.forEach(i => {
+                    if (!i.image) {
+                        i.image = defCover;
+                    }
+                });
             }
         } else if (data.result.artists_loop) {
             data.result.artists_loop.forEach(i => {

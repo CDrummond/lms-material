@@ -4,6 +4,7 @@
 2. Dutch, German, and French translations.
 3. Group players have no replaygain setting.
 4. Show album year in play queue.
+5. Don't sort favorites - as the order can be determined in default web UI.
 
 0.0.5
 -----

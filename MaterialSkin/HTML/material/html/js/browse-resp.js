@@ -377,7 +377,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                                         ? [ADD_TO_FAV_ACTION]
                                                         : undefined,
                                   id: "item_id:"+i.id,
-                                  favIcon = i.image ? i.image : i.icon
+                                  favIcon: i.image ? i.image : i.icon
                                });
                 } else if (i.isaudio === 1) {
                     resp.items.push({
@@ -395,7 +395,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                                     : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                                   app: parent.app,
                                   id: "item_id:"+i.id,
-                                  favIcon = i.image ? i.image : i.icon
+                                  favIcon: i.image ? i.image : i.icon
                                });
                     if (i.description && 1==data.result.count) {
                         data.result.count+=1;

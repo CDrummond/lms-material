@@ -148,11 +148,6 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 resp.items.push(i);
                 // TODO: Text fields, podcast descriptions, etc...
             });
-
-            if (data.result.item_loop.length === data.result.count && isFavorites) {
-                // Have all favourites, so sort...
-                resp.items.sort(titleSort);
-            }
         } else if (data.result.artists_loop) {
             data.result.artists_loop.forEach(i => {
                 resp.items.push({
@@ -424,10 +419,6 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     }
                 }
             });
-            if (data.result.loop_loop.length === data.result.count && topLevelFavourites) {
-                // Have all favourites, so sort...
-                resp.items.sort(itemSort);
-            }
         } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         }

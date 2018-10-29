@@ -452,7 +452,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.listSize = this.items.length;
                 setScrollTop(0);
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) && (item.command[0]=="artists" || item.command[0]=="albums")) {
-                var command = { command: [ item.command[0] ], params: ["tags:CCZ"]};
+                var command = { command: [ item.command[0] ], params: ["tags:CCZs"]};
                 item.params.forEach(i => {
                     if (i.startsWith("sort:")) {
                         command.params.push(i.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort));
@@ -460,7 +460,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         command.params.push(i);
                     }
                 });
-                this.fetchItems(command, item, 1);
+                this.fetchItems(command, item, 5);
             } else {
                 this.fetchItems(this.buildCommand(item), item);
             }

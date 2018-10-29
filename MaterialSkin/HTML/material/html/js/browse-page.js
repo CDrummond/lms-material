@@ -414,7 +414,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (resp.subtitle) {
                         this.headerSubTitle=resp.subtitle;
                     } else {
-                        this.generateSubTitle(command);
+                        this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
                     setScrollTop(0);
                 }
@@ -683,7 +683,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {
-                    this.generateSubTitle(command)
+                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                 }
                 if (data && data.result) {
                     this.listSize = data.result.count;
@@ -734,63 +734,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.$nextTick(function () {
                 setScrollTop(prev.pos>0 ? prev.pos : 0);
             });
-        },
-        generateSubTitle(command) {
-            // Generate a sub-title. Mainly intended for SlimBrowse results
-            if (command) {
-                var args = command.command;
-                if (command.params) {
-                    command.params.forEach(i => {
-                        args.push(i);
-                    });
-                }
-                //console.log(args);
-                var set = false;
-                args.forEach(i => {
-                    if (i==="mode:artists") {
-                        this.headerSubTitle=i18np("1 Artist", "%1 Artists", this.listSize);
-                        set = true;
-                        return;
-                    } else if (i==="mode:albums") {
-                        this.headerSubTitle=i18np("1 Album", "%1 Albums", this.listSize);
-                        set = true;
-                        return;
-                    } else if (i==="mode:tracks") {
-                        // TODO: Total duration!
-                        this.headerSubTitle=i18np("1 Track", "%1 Tracks", this.listSize);
-                        set = true;
-                        return;
-                    } else if (i==="mode:playlistTracks") {
-                        // TODO: Total duration!
-                        this.headerSubTitle=i18np("1 Track", "%1 Tracks", this.listSize);
-                        set = true;
-                        return;
-                    } else if (i==="mode:genres") {
-                        this.headerSubTitle=i18np("1 Genre", "%1 Genres", this.listSize);
-                        set = true;
-                        return;
-                    } else if (i==="mode:years") {
-                        this.headerSubTitle=i18np("1 Year", "%1 Years", this.listSize);
-                        set = true;
-                        return;
-                    } else if (i==="mode:playlists") {
-                        this.headerSubTitle=i18np("1 Playlist", "%1 Playlists", this.listSize);
-                        set = true;
-                        return;
-                    } /*else if (i==="menu:favorites") {
-                        this.headerSubTitle=i18np("1 Favorite", "%1 Favorites", this.listSize);
-                        set = true;
-                        return;
-                    } */else if (i==="myapps") {
-                        this.headerSubTitle=i18np("1 App", "%1 Apps", this.listSize);
-                        set = true;
-                        return;
-                    }
-                });
-            }
-            if (!set) {
-                this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
-            }
         },
         buildCommand(item, commandName) {
             var cmd = {command: [], params: [] };

@@ -9,7 +9,7 @@ var PLAY_ACTION             = {cmd:"play",       icon:"play_circle_outline"};
 var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
 var INSERT_ACTION           = {cmd:"add-hold",   icon:"format_indent_increase"};
 var MORE_ACTION             = {cmd:"more",       icon:"more_horiz"};
-
+var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"album"};
 var RENAME_PL_ACTION        = {cmd:"rename-pl",  icon:"edit"};
 var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
@@ -196,6 +196,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         initItems() {
         PLAY_ACTION.title=i18n("Play now");
         ADD_ACTION.title=i18n("Append to queue");
+        ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
         INSERT_ACTION.title=i18n("Play next");
         MORE_ACTION.title=i18n("More");
         RENAME_PL_ACTION.title=i18n("Rename");
@@ -549,6 +550,32 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             this.showMessage(i18n("Failed to remove favorite!"));
                         });
                     }
+                });
+            } else if (act===ADD_RANDOM_ALBUM_ACTION.cmd) {
+                this.fetchingItems = true;
+                var params = [];
+                item.params.forEach(p => { params.push(p); });
+                params.push("sort:random");
+                lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
+                    this.fetchingItems = false;
+                    var resp = parseBrowseResp(data, this.current, this.artistImages);
+                    if (1===resp.items.length && resp.items[0].id) {
+                        var item = resp.items[0];
+                        this.fetchingItems = true;
+                        lmsCommand(this.playerId(), ["playlistcontrol", "cmd:add", item.id]).then(({data}) => {
+                            this.fetchingItems = false;
+                            bus.$emit('refreshStatus');
+                            this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
+                        }).catch(err => {
+                            this.fetchingItems = false;
+                            this.showMessage();
+                        });
+                    } else {
+                        this.showMessage(i18n("Failed to find an album!"));
+                    }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                    this.showMessage();
                 });
             } else if (act===MORE_ACTION.cmd) {
                 alert("More action not currently implemented, sorry!!!");

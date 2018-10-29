@@ -183,6 +183,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             this.items.push(i);
                         });
                     }
+                    if (data && data.result && data.result.count) {
+                        this.listSize = data.result.count;
+                    }
                 }).catch(err => {
                     this.fetchingItems = false;
                 });

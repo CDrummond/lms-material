@@ -612,7 +612,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                     } else if (act===ADD_ACTION.cmd) {
                                         this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
                                     } else if (act==="insert") {
-                                        this.showMessage(i18n("Inserted '%1' to the play queue", item.title), '');
+                                        this.showMessage(i18n("Inserted '%1' into the play queue", item.title), '');
                                     }
                                 }).catch(err => {
                                     this.showMessage();
@@ -649,7 +649,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     } else if (act===ADD_ACTION.cmd) {
                         this.showMessage(i18n("Appended '%1' to the play queue", item.title), '');
                     } else if (act==="insert") {
-                        this.showMessage(i18n("Inserted '%1' to the play queue", item.title), '');
+                        this.showMessage(i18n("Inserted '%1' into the play queue", item.title), '');
                     }
                 }).catch(err => {
                     this.showMessage();

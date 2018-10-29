@@ -21,7 +21,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   command: ["albums"],
                                   params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
-                                  icon: artistImages ? undefined : "person",
+                                  //icon: artistImages ? undefined : "person",
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group",
                                   favIcon: artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
@@ -297,7 +297,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd, "items"],
                                   image: resolveImage(i.icon, i.image),
-                                  icon: "search",
+                                  //icon: "search",
                                   params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                   type: "xmlsearch",
                                   id: parent.id+i.cmd,
@@ -322,7 +322,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd, "items"],
                                   image: resolveImage(i.icon, i.image),
-                                  icon: "search",
+                                  //icon: "search",
                                   params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                   type: "xmlsearch",
                                   id: parent.id+i.cmd,
@@ -349,7 +349,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd ? i.cmd : parent.command[0], "items"],
                                   image: resolveImage(i.icon, i.image),
-                                  icon: "search",
+                                  //icon: "search",
                                   params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
                                   type: "xmlsearch", // Hack, so that we don't think this is library search...
                                   id: parent.url+i.cmd+i.id,
@@ -360,7 +360,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   title: i.name ? i.name : i.title,
                                   command: parent.command,
                                   image: resolveImage(i.icon, i.image),
-                                  icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
+                                  //icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
                                   params: ["item_id:"+i.id, "want_url:1"],
                                   type: "group",
                                   url: i.url,
@@ -384,7 +384,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   title: i.name ? i.name : i.title,
                                   url: i.url,
                                   image: resolveImage(i.icon, i.image),
-                                  icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
+                                  //icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
                                   type: "track",
                                   menuActions: "favorites"===parent.type
                                                 ? topLevelFavourites

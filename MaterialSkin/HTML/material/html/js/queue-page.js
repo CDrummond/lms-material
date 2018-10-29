@@ -228,9 +228,12 @@ var lmsQueue = Vue.component("LmsQueue", {
             PQ_REMOVE_ACTION.title=i18n('Remove from queue');
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
         },
-        showMessage(msg, color) {
-            this.snackbar = {msg: msg, show: true, color: undefined==color ? 'error' : color };
+        showError(msg) {
+            this.snackbar = {msg: msg + (err ? " (" + err+")" : ""), show: true, color: 'error' };
         },
+        /*showMessage(msg) {
+            this.snackbar = {msg: msg, show: true };
+        },*/
         save() {
             if (this.items.length<1) {
                 return;
@@ -255,7 +258,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.dialog.show = false;
                     lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({datax}) => {
                     }).catch(err => {
-                        this.showMessage(i18n("Failed to save play queue!"), 'error');
+                        this.showError(err, i18n("Failed to save play queue!"));
                     });
                 }
             }

@@ -83,16 +83,16 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 playAction = undefined != resp.baseActions[PLAY_ACTION.cmd];
                 addAction = undefined != resp.baseActions[ADD_ACTION.cmd];
                 insertAction = undefined != resp.baseActions[INSERT_ACTION.cmd];
+                /*
                 if (undefined!=resp.baseActions[MORE_ACTION.cmd] && undefined!=resp.baseActions[MORE_ACTION.cmd].params) {
-                    moreAction = false;
                     for(var key in resp.baseActions[MORE_ACTION.cmd].params) {
                         if (key != "menu") {
-                        console.log(key);
                             moreAction=true;
                             break;
                         }
                     }
                 }
+                */
             }
 
             data.result.item_loop.forEach(i => {

@@ -8,11 +8,10 @@
     - Not working on iOS - github.com/Bernardo-Castilho/gragdroptouch
     - Desktop firefox has drag thumbnail much higher than item being dragged.
   - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
-  - Band's Campout "Listen to songs (without comments)" does not work, nothing added to queue.
 
 - Browse
-  - SlimBrowse for all?
-    - At least for Apps/Radio/Favorites
+  - SlimBrowse
+    - USe for app browser - need to handle Band's Campout "Listen to songs (without comments)" case
     - Fully handle commands
       - 'More'
       - Check all

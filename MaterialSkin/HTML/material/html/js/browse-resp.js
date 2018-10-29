@@ -94,6 +94,9 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             }
 
             data.result.item_loop.forEach(i => {
+                if (!i.text) {
+                    return;
+                }
                 var text = i.text.split(/\r?\n/);
                 i.title = text[0];
                 if (text.length>1) {
@@ -148,6 +151,13 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 resp.items.push(i);
                 // TODO: Text fields, podcast descriptions, etc...
             });
+            if (0==resp.items.length && data.result.window && data.result.window.textarea) {
+                resp.items.push({
+                                title: data.result.window.textarea,
+                                type: "text",
+                                i.id=parent.id+"."+idStart;
+                               });
+            }
         } else if (data.result.artists_loop) {
             data.result.artists_loop.forEach(i => {
                 resp.items.push({

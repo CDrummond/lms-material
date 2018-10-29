@@ -428,7 +428,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         },
         browse(item) {
             // itemplay => touch item to play, don't want as its inconsistent
-            if ("search"==item.type || "xmlsearch"==item.type || "audio"==item.type || "itemplay"==item.style) {
+            if ("search"==item.type || "xmlsearch"==item.type || "audio"==item.type  || "track"==item.type || "text"==item.type || "itemplay"==item.style) {
                 return;
             }
             if (TOP_MORE_ID===item.id) {

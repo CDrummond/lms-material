@@ -155,6 +155,14 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     i.id=parent.id+"."+idStart;
                     idStart++;
                 }
+                if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
+                    i.actions.go.cmd.forEach(a => {
+                        if ("search" == a) {
+                            i.type = "search";
+                            return;
+                        }
+                    });
+                }
                 resp.items.push(i);
                 // TODO: Text fields, podcast descriptions, etc...
             });
@@ -323,7 +331,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   image: resolveImage(i.icon, i.image),
                                   //icon: "search",
                                   params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
-                                  type: "xmlsearch",
+                                  type: "search",
                                   id: parent.id+i.cmd,
                                   app: i.cmd
                           });
@@ -348,7 +356,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   image: resolveImage(i.icon, i.image),
                                   //icon: "search",
                                   params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
-                                  type: "xmlsearch",
+                                  type: "search",
                                   id: parent.id+i.cmd,
                                   app: i.cmd
                           });
@@ -375,7 +383,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   image: resolveImage(i.icon, i.image),
                                   //icon: "search",
                                   params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
-                                  type: "xmlsearch", // Hack, so that we don't think this is library search...
+                                  type: "search",
                                   id: parent.url+i.cmd+i.id,
                                   app: parent.app
                                });

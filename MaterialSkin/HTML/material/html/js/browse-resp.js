@@ -155,7 +155,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 resp.items.push({
                                 title: data.result.window.textarea,
                                 type: "text",
-                                i.id=parent.id+"."+idStart;
+                                i.id: parent.id+"."+idStart,
                                });
             }
         } else if (data.result.artists_loop) {

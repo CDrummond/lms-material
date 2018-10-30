@@ -71,6 +71,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             }
         } else if (data.result.indexList) {
             var start=0;
+            var isArtists = data.result.artists_loop;
 
             // Look for first valid key? Looks like 'No Album' messes up album txtkeys? First 2 seem to be garbage...
             if (data.result.artists_loop) {
@@ -88,19 +89,55 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     }
                 }
             }
+
+            var prevItem = undefined;
+            var maxCount = data.result.count <= 500 ? 50 : data.result.count <= 1000 ? 100 : 200;
             for (var i=start; i<data.result.indexList.length; ++i) {
                 var name = data.result.indexList[i][0];
                 var count = data.result.indexList[i][1];
-                resp.items.push({
+                var item = {
                                 title: name,
-                                subtitle: i18n("Total: %1", count),
                                 range: {start: start, count: count},
                                 type: "group",
                                 command: parent.command,
                                 params: parent.params
-                                });
-                 start += count;
+                            };
+
+                if (prevItem) {
+                    if (prevItem.range.count + count > maxCount) {
+                        if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
+                            prevItem.title += " .. " + prevItem.subtitle;
+                        }
+                        prevItem.subtitle = isArtists 
+                                                ? i18np("1 Artist", "%1 Artists", prevItem.range.count) 
+                                                : i18np("1 Album", "%1 Albums", prevItem.range.count);
+                        resp.items.push(prevItem);
+                        prevItem = item;
+                    } else {
+                        prevItem.subtitle = name;
+                        prevItem.range.count += count;
+                    }
+                } else if (item.range.count >= maxCount) {
+                    item.subtitle = isArtists 
+                                        ? i18np("1 Artist", "%1 Artists", count)
+                                        : i18np("1 Album", "%1 Albums", count);
+                    resp.items.push(item);
+                } else {
+                    prevItem = item;
+                    prevItem.subtitle = name;
+                }
+                start += count;
             }
+            if (prevItem) {
+                if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
+                    prevItem.title += " .. " + prevItem.subtitle;
+                }
+                prevItem.subtitle = isArtists 
+                                        ? i18np("1 Artist", "%1 Artists", prevItem.range.count) 
+                                        : i18np("1 Album", "%1 Albums", prevItem.range.count);
+                resp.items.push(prevItem);
+            }
+
             data.result.count=resp.items.length;
             resp.subtitle=i18np("1 Category", "%1 Categories", data.result.count);
         } else if (data.result.item_loop) {  // SlimBrowse response

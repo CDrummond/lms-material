@@ -83,10 +83,10 @@ var lmsQueue = Vue.component("LmsQueue", {
       </v-dialog>
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
-        <v-layout v-if="playerIsOn">
+        <v-layout>
           <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
-          <v-btn flat icon @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
+          <v-btn flat icon v-if="playerIsOn" @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
           <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
           <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>
@@ -108,7 +108,7 @@ var lmsQueue = Vue.component("LmsQueue", {
               <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-            <v-list-tile-action v-if="playerIsOn && item.actions && item.actions.length>1" @click.stop="itemMenu(item, index, $event)">
+            <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
               <v-btn icon>
                 <v-icon>more_vert</v-icon>
               </v-btn>

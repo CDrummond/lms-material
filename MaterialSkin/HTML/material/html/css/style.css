@@ -28,6 +28,15 @@ a {
     text-decoration: none;
 }
 
+.about-header {
+    font-weight: 600;
+    padding-bottom: 0px;
+}
+
+.about-indent {
+    padding-left:16px;
+}
+
 .lms-app {
     min-height:400px;
 }

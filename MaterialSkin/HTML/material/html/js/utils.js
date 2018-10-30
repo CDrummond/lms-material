@@ -38,6 +38,11 @@ function formatTime(secs, twentyFour) {
     }
 }
 
+function formatDate(timestamp) {
+    var date = new Date(timestamp * 1000);
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+}
+
 function resolveImage(icon, image) {
     if (!icon && !image) {
         return null;

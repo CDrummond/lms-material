@@ -47,10 +47,6 @@
       ["groupmac", ["playergroup", 0, 100]] lists group details
       ["groupmac", ["playerpref", "playername", "X"]] sets group name
       ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
-  - Add 'About dialog'
-     - Server version
-     - Skin Version
-     - Artist, Album, Track count (in virtual library?)
   - Add 'Manage all' to players/settings menu
      - Manage all volumes
      - Power on/off

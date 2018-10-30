@@ -17,7 +17,7 @@ Vue.component('lms-player-settings', {
             <v-toolbar-title>{{playerName}}</v-toolbar-title>
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
-          <v-list two-line subheader class="settings-list">
+          <v-list one-line subheader class="settings-list">
             <v-header>{{i18n('Audio')}}</v-header>
             <v-list-tile>
               <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>

@@ -2,6 +2,7 @@
 -----
 1. Add option to split artists and albums into A..Z groups.
 2. Fix power on/off.
+3. Show play queue even if player is off.
 
 0.0.6
 -----

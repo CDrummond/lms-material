@@ -107,8 +107,8 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                         if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
                             prevItem.title += " .. " + prevItem.subtitle;
                         }
-                        prevItem.subtitle = isArtists 
-                                                ? i18np("1 Artist", "%1 Artists", prevItem.range.count) 
+                        prevItem.subtitle = isArtists
+                                                ? i18np("1 Artist", "%1 Artists", prevItem.range.count)
                                                 : i18np("1 Album", "%1 Albums", prevItem.range.count);
                         resp.items.push(prevItem);
                         prevItem = item;
@@ -117,7 +117,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                         prevItem.range.count += count;
                     }
                 } else if (item.range.count >= maxCount) {
-                    item.subtitle = isArtists 
+                    item.subtitle = isArtists
                                         ? i18np("1 Artist", "%1 Artists", count)
                                         : i18np("1 Album", "%1 Albums", count);
                     resp.items.push(item);
@@ -131,8 +131,8 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
                     prevItem.title += " .. " + prevItem.subtitle;
                 }
-                prevItem.subtitle = isArtists 
-                                        ? i18np("1 Artist", "%1 Artists", prevItem.range.count) 
+                prevItem.subtitle = isArtists
+                                        ? i18np("1 Artist", "%1 Artists", prevItem.range.count)
                                         : i18np("1 Album", "%1 Albums", prevItem.range.count);
                 resp.items.push(prevItem);
             }

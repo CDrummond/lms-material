@@ -85,27 +85,26 @@ var lmsServer = Vue.component('lms-server', {
                 lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:adclK"]).then(({data}) => {
                     var nextInterval = LMS_STATUS_REFRESH_MAX;
                     if (data && data.result) {
-                        var player = { isOn: data.result.power,
+                        var player = { ison: data.result.power,
                                        isPlaying: data.result.mode === "play" && !data.result.waitingToPlay,
                                        volume: -1,
                                        playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                                        current: { canseek: 0, time: 0, duration: 0 }
                                      };
-                        if (player.isOn) {
-                            player.volume = data.result["mixer volume"];
-                            player.playlist = { shuffle: data.result["playlist shuffle"],
-                                                repeat: data.result["playlist repeat"],
-                                                duration: data.result["playlist duration"],
-                                                name: data.result.playlist_name,
-                                                current: undefined==data.result.playlist_cur_index ? -1 : parseInt(data.result.playlist_cur_index),
-                                                count: data.result.playlist_tracks,
-                                                timestamp: undefined===data.result.playlist_timestamp ? 0 : data.result.playlist_timestamp
-                                              };
-                            if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
-                                player.current = data.result.playlist_loop[0];
-                                player.current.time = data.result.time;
-                                player.current.canseek = data.result.can_seek;
-                            }
+
+                        player.volume = data.result["mixer volume"];
+                        player.playlist = { shuffle: data.result["playlist shuffle"],
+                                            repeat: data.result["playlist repeat"],
+                                            duration: data.result["playlist duration"],
+                                            name: data.result.playlist_name,
+                                            current: undefined==data.result.playlist_cur_index ? -1 : parseInt(data.result.playlist_cur_index),
+                                            count: data.result.playlist_tracks,
+                                            timestamp: undefined===data.result.playlist_timestamp ? 0 : data.result.playlist_timestamp
+                                          };
+                        if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
+                            player.current = data.result.playlist_loop[0];
+                            player.current.time = data.result.time;
+                            player.current.canseek = data.result.can_seek;
                         }
 
                         bus.$emit('playerStatus', player);
@@ -147,6 +146,7 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('power', function(state) {
             lmsCommand(this.$store.state.player.id, ["power", state]).then(({data}) => {
                 this.refreshServerStatus();
+                this.refreshStatus();
             });
         }.bind(this));
     },

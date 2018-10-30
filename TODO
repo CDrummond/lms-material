@@ -20,8 +20,6 @@
   - Replace ... menu with a play button/long press menu?
   - Remember if "More" is the current top level and restore upon restart
     - Or remember last top-level item that was open
-  - Split Artist and Album lists in A..C, D..E, etc sub-lists if more than 300(?) in total? Split into blocks of 100?
-    [ "artists", 0, 1, "tags:CCZ"]
   - Before showing menu, check if item is in favourites - and adjust entries?
   - Make favorourites re-orderable
   - Add 'More' action to non-SlimBrowse Artist, Album, Track

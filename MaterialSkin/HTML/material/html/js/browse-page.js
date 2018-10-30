@@ -451,7 +451,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
                 setScrollTop(0);
-            } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) && (item.command[0]=="artists" || item.command[0]=="albums")) {
+            } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) && item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {
                 var command = { command: [ item.command[0] ], params: ["tags:CCZs"]};
                 item.params.forEach(i => {
                     if (i.startsWith("sort:")) {

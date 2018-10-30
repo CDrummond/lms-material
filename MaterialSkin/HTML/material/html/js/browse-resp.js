@@ -169,6 +169,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 if (!i.text) {
                     return;
                 }
+                var addedPlayAction = false;
                 var text = i.text.split(/\r?\n/);
                 i.title = text[0];
                 if (text.length>1) {
@@ -192,15 +193,18 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay") {
                     if (playAction) {
                         i.menuActions.push(PLAY_ACTION);
+                        addedPlayAction = true;
                     }
                     if (insertAction) {
                         i.menuActions.push(INSERT_ACTION);
+                        addedPlayAction = true;
                     }
                     if (addAction) {
                         i.menuActions.push(ADD_ACTION);
+                        addedPlayAction = true;
                     }
                 }
-                if ((playAction || insertAction || addAction) && (isFavorites || i.presetParams || isPlaylists || moreAction)) {
+                if (addedPlayAction && (isFavorites || i.presetParams || isPlaylists || moreAction)) {
                     i.menuActions.push(DIVIDER);
                 }
                 if (isFavorites) {

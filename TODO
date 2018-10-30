@@ -20,8 +20,13 @@
   - Replace ... menu with a play button/long press menu?
   - Remember if "More" is the current top level and restore upon restart
     - Or remember last top-level item that was open
-  - Before showing menu, check if item is in favourites - and adjust entries?
-  - Make favorourites re-orderable
+  - Favourites
+    - Before showing menu, check if item is in favourites - and adjust entries?
+    - Re-orderable
+    - Create folder (place in sub-toolbar)
+    - Move items into / out-of folders
+    - Add to favourites should display list of folders to add to (if there are any folders).
+    - Action to add new favourite (place in sub-toolbar)
   - Add 'More' action to non-SlimBrowse Artist, Album, Track
     ["artistinfo", "items", 0, 100, "menu:1", "artist_id:XXX", "library_id:XXX"]
     ["albuminfo", "items", 0, 100, "menu:1", "artist_id:XXX", "album_id:XXX", "library_id:XXX]

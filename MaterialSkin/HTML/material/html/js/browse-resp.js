@@ -71,43 +71,36 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             }
         } else if (data.result.indexList) {
             var start=0;
-            var end=0;
-            var first = null;
 
             // Look for first valid key? Looks like 'No Album' messes up album txtkeys? First 2 seem to be garbage...
             if (data.result.artists_loop) {
                 for (var i=0; i<data.result.artists_loop.length; ++i) {
                     if (data.result.artists_loop[i].textkey!=null && data.result.artists_loop[i].textkey!=undefined && data.result.artists_loop[i].textkey!="") {
-                        first = data.result.artists_loop[i].textkey;
+                        start = i;
                         break;
                     }
                 }
             } else if (data.result.albums_loop) {
                 for (var i=0; i<data.result.albums_loop.length; ++i) {
                     if (data.result.albums_loop[i].textkey!=null && data.result.albums_loop[i].textkey!=undefined && data.result.albums_loop[i].textkey!="") {
-                        first = data.result.albums_loop[i].textkey;
+                        fstart = i;
                         break;
                     }
                 }
             }
-            var foundFirst = first===null;
-            data.result.indexList.forEach(i => {
-                // With artist list, VA has key of " " but in textkey list its "#" !!!
-                if (foundFirst || i[0]===first || (first===" " && i[0]==="#")) {
-                    foundFirst = true;
-                }
-                if (foundFirst) {
-                    resp.items.push({
-                                    title: i[0],
-                                    subtitle: i18n("Total: %1", i[1]),
-                                    range: {start: start, count: i[1]},
-                                    type: "group",
-                                    command: parent.command,
-                                    params: parent.params
-                                    });
-                    start += i[1];
-                }
-            });
+            for (var i=start; i<data.result.indexList.length; ++i) {
+                var name = data.result.indexList[i][0];
+                var count = data.result.indexList[i][1];
+                resp.items.push({
+                                title: name,
+                                subtitle: i18n("Total: %1", count),
+                                range: {start: start, count: count},
+                                type: "group",
+                                command: parent.command,
+                                params: parent.params
+                                });
+                 start += count;
+            }
             data.result.count=resp.items.length;
             resp.subtitle=i18np("1 Category", "%1 Categories", data.result.count);
         } else if (data.result.item_loop) {  // SlimBrowse response

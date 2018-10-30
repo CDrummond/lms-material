@@ -16,7 +16,7 @@ function queueItemCover(item) {
     if (item.coverid) {
         return lmsServerAddress+"/music/"+item.coverid+"/cover.jpg";
     }
-    return "images/nocover.jpg";
+    return resolveImage("music/0/cover_50x50");
 }
 
 function parseResp(data) {

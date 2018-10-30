@@ -35,7 +35,7 @@ Vue.component('lms-information-dialog', {
             <p class="about-header">{{i18n('Players')}}</p>
             <template v-for="(item, index) in players">
               <p class="about-indent">{{item.name}}
-                <i> <template v-for="(info, index) in item.info">{{info}}</template></i>
+                <i> <template v-for="(info, index) in item.info">, {{info}}</template></i>
               </p>
             </template>
           </div>

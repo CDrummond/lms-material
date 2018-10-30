@@ -33,7 +33,7 @@ Vue.component('lms-toolbar', {
               </template>
               <v-divider v-if="player && player.canpoweroff"></v-divider>
               <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
-                <v-list-tile-content v-if="player && player.ison">
+                <v-list-tile-content v-if="playerStatus.ison">
                   <v-list-tile-title class="pm-icon-indent"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-content v-else>
@@ -51,13 +51,13 @@ Vue.component('lms-toolbar', {
             </v-list>
           </v-menu>
           <v-spacer></v-spacer>
-          <v-btn icon v-if="playerStatus.isOn && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+          <v-btn icon v-if="playerStatus.ison && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
             <v-icon>pause_circle_outline</v-icon>
           </v-btn>
-          <v-btn icon v-else-if="playerStatus.isOn" @click.native="doAction(['play'])" class="toolbar-button">
+          <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
             <v-icon>play_circle_outline</v-icon>
           </v-btn>
-          <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed-icon': playerStatus.volume<0}" v-if="playerStatus.isOn" @click="bus.$emit('volume')">
+          <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed-icon': playerStatus.volume<0}" v-if="playerStatus.ison" @click="bus.$emit('volume')">
             <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
             <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
           </v-btn>
@@ -81,7 +81,7 @@ Vue.component('lms-toolbar', {
     props: [],
     data() {
         return { songInfo:undefined,
-                 playerStatus: { isOn: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined } },
+                 playerStatus: { ison: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined } },
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, syncrhonise:undefined,managegroups:undefined,nothingplaying:undefined},
@@ -114,8 +114,8 @@ Vue.component('lms-toolbar', {
         */
 
         bus.$on('playerStatus', function(playerStatus) {
-            if (playerStatus.isOn!=this.playerStatus.isOn) {
-                this.playerStatus.isOn = playerStatus.isOn;
+            if (playerStatus.ison!=this.playerStatus.ison) {
+                this.playerStatus.ison = playerStatus.ison;
             }
             if (playerStatus.isPlaying!=this.playerStatus.isPlaying) {
                 this.playerStatus.isPlaying = playerStatus.isPlaying;
@@ -166,7 +166,7 @@ Vue.component('lms-toolbar', {
             bus.$emit('toolbarAction', id);
         },
         togglePower() {
-            if (this.$store.state.player.ison) {
+            if (this.playerStatus.ison) {
                 this.$confirm(i18n("Switch off '%1'?", this.$store.state.player.name), {buttonTrueText: i18n('Switch Off'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         bus.$emit('power', "0");
@@ -175,9 +175,6 @@ Vue.component('lms-toolbar', {
             } else {
                 bus.$emit('power', "1");
             }
-        },
-        i18n(str) {
-            return i18n(str);
         }
     },
     computed: {

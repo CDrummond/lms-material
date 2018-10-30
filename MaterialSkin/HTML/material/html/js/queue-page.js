@@ -83,7 +83,7 @@ var lmsQueue = Vue.component("LmsQueue", {
       </v-dialog>
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
-        <v-layout>
+        <v-layout v-if="playerIsOn">
           <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
           <v-btn flat icon @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
@@ -108,11 +108,12 @@ var lmsQueue = Vue.component("LmsQueue", {
               <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-            <v-list-tile-action v-if="item.actions && item.actions.length>1" @click.stop="itemMenu(item, index, $event)">
+            <v-list-tile-action v-if="playerIsOn && item.actions && item.actions.length>1" @click.stop="itemMenu(item, index, $event)">
               <v-btn icon>
                 <v-icon>more_vert</v-icon>
               </v-btn>
             </v-list-tile-action>
+            <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
           </v-list-tile>
           <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
         <!-- </div></recycle-list></template> -->
@@ -140,6 +141,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             trackCount:0,
             duration: 0.0,
+            playerIsOn: true,
             trans: { ok: undefined, cancel: undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0}
         }
@@ -177,8 +179,15 @@ var lmsQueue = Vue.component("LmsQueue", {
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
+            if (playerStatus.ison!=this.playerIsOn) {
+                this.playerIsOn = playerStatus.ison;
+            }
             if (playerStatus.playlist.count!=this.trackCount) {
                 this.trackCount = playerStatus.playlist.count;
+                if (0==this.trackCount) {
+                    this.items=[];
+                    this.timestamp=0;
+                }
             }
             if (playerStatus.playlist.timestamp!==this.timestamp) {
                 this.timestamp = playerStatus.playlist.timestamp;

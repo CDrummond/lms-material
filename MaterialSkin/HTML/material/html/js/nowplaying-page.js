@@ -7,7 +7,7 @@
  
 var lmsNowPlaying = Vue.component("LmsNowPlaying", {
     template: `
-      <div class="np-page" v-if="playerStatus.isOn">
+      <div class="np-page" v-if="playerStatus.ison">
         <div v-if="info.show" class="np-info">
           <v-tabs centered v-model="info.tab">
             <template v-for="(tab, index) in info.tabs">
@@ -80,7 +80,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
         return { cover:undefined,
                  coverFromPlayer:undefined,
                  playerStatus: {
-                    isOn: 1,
+                    ison: 1,
                     isPlaying: 1,
                     current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined },
                     playlist: { shuffle:0, repeat: 0 },
@@ -121,8 +121,8 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
             }
 
             // Have other items changed
-            if (playerStatus.isOn!=this.playerStatus.isOn) {
-                this.playerStatus.isOn = playerStatus.isOn;
+            if (playerStatus.ison!=this.playerStatus.ison) {
+                this.playerStatus.ison = playerStatus.ison;
             }
             if (playerStatus.isPlaying!=this.playerStatus.isPlaying) {
                 this.playerStatus.isPlaying = playerStatus.isPlaying;

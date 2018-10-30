@@ -11,7 +11,6 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
     if (data && data.result) {
         //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
-            // TODO: Convert each of these into SlimBrowse!!!!
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 resp.items.push({header: i18n("Artists")});
                 data.result.contributors_loop.forEach(i => {
@@ -235,7 +234,6 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     });
                 }
                 resp.items.push(i);
-                // TODO: Text fields, podcast descriptions, etc...
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
                 resp.items.push({
@@ -268,7 +266,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             data.result.albums_loop.forEach(i => {
-                // Bug on my system? There is an 'No Album' entry with no tracks!
+                // Bug on my system? There is a 'No Album' entry with no tracks!
                 if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
                     data.result.count--;
                     return;
@@ -285,11 +283,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                               favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
                           });
             });
-            //if ("newmusic"===parent) {
-            //    resp.subtitle=i18np("Newest Album", "%1 Newest Albums", data.result.albums_loop.length);
-            //} else {
-                resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : data.result.count);
-            //}
+            resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : data.result.count);
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;

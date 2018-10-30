@@ -44,6 +44,7 @@
 - Misc
   - Complete WebApp support
     - Handle back button (navigate back in browse)
+  - Improve layout of Information dialog
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
       ["groupmac", ["playergroup", 0, 100]] lists group details

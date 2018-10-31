@@ -466,10 +466,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             });
         },
         click(item, event) {
-            // itemplay => touch item to play, don't want as its inconsistent
             if ("search"==item.type || "text"==item.type) {
                 return;
             }
+
             if ("audio"==item.type  || "track"==item.type || "itemplay"==item.style) {
                 if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, event);

@@ -354,7 +354,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 title: i18n("Random Albums"),
                 command: ["albums"],
                 params: ["tags:jlya", "sort:random"],
-                icon: "album",
+                icon: "shuffle",
                 type: "group",
                 id: TOP_RANDOM_ALBUMS_ID
             },

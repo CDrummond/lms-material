@@ -35,8 +35,6 @@ router.beforeEach((to, from, next) => {
     next()
 })
 
-const LS_PREFIX="lms-material::";
-
 const store = new Vuex.Store({
     state: {
         players: null, // List of players
@@ -85,7 +83,7 @@ const store = new Vuex.Store({
             }
 
             if (players && !state.player) {
-                var config = localStorage.getItem(LS_PREFIX+'player');
+                var config = getLocalStorageVal('player');
                 if (config) {
                     state.players.forEach(p => {
                         if (p.id === config) {
@@ -97,7 +95,7 @@ const store = new Vuex.Store({
                     for (i=0; i<state.players.length; ++i) {
                         if (state.players[i].ison) {
                             state.player=state.players[i];
-                            localStorage.setItem(LS_PREFIX+'player', state.player.id);
+                            setLocalStorageVal('player', state.player.id);
                             break;
                         }
                     }
@@ -106,14 +104,14 @@ const store = new Vuex.Store({
                     for (i=0; i<state.players.length; ++i) {
                         if (state.players[i].isconnected) {
                             state.player=state.players[i];
-                            localStorage.setItem(LS_PREFIX+'player', state.player.id);
+                            setLocalStorageVal('player', state.player.id);
                             break;
                         }
                     }
                 }
                 if (!state.player && state.players.length>0) { /* Choose first player */
                     state.player=state.players[0];
-                    localStorage.setItem(LS_PREFIX+'player', state.player.id);
+                    setLocalStorageVal('player', state.player.id);
                 }
             }
         },
@@ -122,7 +120,7 @@ const store = new Vuex.Store({
                 for (i=0; i<state.players.length; ++i) {
                     if (state.players[i].id === id) {
                         state.player = state.players[i];
-                        localStorage.setItem(LS_PREFIX+'player', id);
+                        setLocalStorageVal('player', id);
                         break;
                     }
                 }
@@ -135,59 +133,41 @@ const store = new Vuex.Store({
             var browseDisplayChanged = false;
             if (state.darkUi!=val.darkUi) {
                 state.darkUi = val.darkUi;
-                localStorage.setItem(LS_PREFIX+'darkUi', state.darkUi);
+                setLocalStorageVal('darkUi', state.darkUi);
             }
             if (state.artistAlbumSort!=val.artistAlbumSort) {
                 state.artistAlbumSort = val.artistAlbumSort;
-                localStorage.setItem(LS_PREFIX+'artistAlbumSort', state.artistAlbumSort);
+                setLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
                 browseDisplayChanged = true;
             }
             if (state.albumSort!=val.albumSort) {
                 state.albumSort = val.albumSort;
-                localStorage.setItem(LS_PREFIX+'albumSort', state.albumSort);
+                setLocalStorageVal('albumSort', state.albumSort);
                 browseDisplayChanged = true;
             }
             if (state.splitArtistsAndAlbums!=val.splitArtistsAndAlbums) {
                 state.splitArtistsAndAlbums = val.splitArtistsAndAlbums;
-                localStorage.setItem(LS_PREFIX+'splitArtistsAndAlbums', state.splitArtistsAndAlbums);
+                setLocalStorageVal('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
                 browseDisplayChanged = true;
             }
             if (state.autoScrollQueue!=val.autoScrollQueue) {
                 state.autoScrollQueue = val.autoScrollQueue;
-                localStorage.setItem(LS_PREFIX+'autoScrollQueue', state.autoScrollQueue);
+                setLocalStorageVal('autoScrollQueue', state.autoScrollQueue);
             }
             bus.$emit('browseDisplayChanged');
         },
         initUiSettings(state) {
-            var val = localStorage.getItem(LS_PREFIX+'darkUi');
-            if (undefined!=val) {
-                state.darkUi = "true" == val;
-            }
-            val = localStorage.getItem(LS_PREFIX+'artistAlbumSort');
-            if (undefined!=val) {
-                state.artistAlbumSort = val;
-            }
-            val = localStorage.getItem(LS_PREFIX+'albumSort');
-            if (undefined!=val) {
-                state.albumSort = val;
-            }
-            val = localStorage.getItem(LS_PREFIX+'autoScrollQueue');
-            if (undefined!=val) {
-                state.autoScrollQueue = "true" == val;
-            }
-            val = localStorage.getItem(LS_PREFIX+'library');
-            if (undefined!=val) {
-                state.library = val;
-            }
-            val = localStorage.getItem(LS_PREFIX+'splitArtistsAndAlbums');
-            if (undefined!=val) {
-                state.splitArtistsAndAlbums = "true" == val;
-            }
+            state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
+            state.artistAlbumSort = getLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
+            state.albumSort = getLocalStorageVal('albumSort', state.albumSort);
+            state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
+            state.library = getLocalStorageVal('library', state.library);
+            state.splitArtistsAndAlbums = getLocalStorageBool('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
         },
         setLibrary(state, lib) {
             if (state.library!=lib) {
                 state.library = lib;
-                localStorage.setItem(LS_PREFIX+'library', state.library);
+                setLocalStorageVal('library', state.library);
                 bus.$emit('libraryChanged');
             }
         },
@@ -214,6 +194,10 @@ var app = new Vue({
         }.bind(this));
 
         var that = this;
+        var t = getLocalStorageVal('translation', undefined);
+        if (t!=undefined) {
+            setTranslation(JSON.parse(t));
+        }
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 var lang = data.result._p2.toLowerCase();
@@ -225,7 +209,9 @@ var app = new Vue({
                 }
                 if (lang != 'en') {
                     axios.get("html/lang/"+lang+".json").then(function (resp) {
-                        setTranslation(eval(resp.data));
+                        var trans = eval(resp.data);
+                        setLocalStorageVal('translation', JSON.stringify(trans));
+                        setTranslation(trans);
                         axios.defaults.headers.common['Accept-Language'] = lang;
                         document.querySelector('html').setAttribute('lang', lang);
                         bus.$emit('langChanged');

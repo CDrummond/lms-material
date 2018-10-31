@@ -141,7 +141,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.menuActions=[];
-        this.artistImages=false;
+        this.artistImages=getLocalStorageBool('artistImages', false);
+        this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.previousScrollPos=0;
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
@@ -200,19 +201,19 @@ var lmsBrowse = Vue.component("LmsBrowse", {
     },
     methods: {
         initItems() {
-        PLAY_ACTION.title=i18n("Play now");
-        ADD_ACTION.title=i18n("Append to queue");
-        ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
-        INSERT_ACTION.title=i18n("Play next");
-        MORE_ACTION.title=i18n("More");
-        RENAME_PL_ACTION.title=i18n("Rename");
-        RENAME_FAV_ACTION.title=i18n("Rename");
-        DELETE_ACTION.title=i18n("Delete");
-        ADD_TO_FAV_ACTION.title=i18n("Add to favorites");
-        REMOVE_FROM_FAV_ACTION.title=i18n("Remove from favorites");
-        this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
+            PLAY_ACTION.title=i18n("Play now");
+            ADD_ACTION.title=i18n("Append to queue");
+            ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
+            INSERT_ACTION.title=i18n("Play next");
+            MORE_ACTION.title=i18n("More");
+            RENAME_PL_ACTION.title=i18n("Rename");
+            RENAME_FAV_ACTION.title=i18n("Rename");
+            DELETE_ACTION.title=i18n("Delete");
+            ADD_TO_FAV_ACTION.title=i18n("Add to favorites");
+            REMOVE_FROM_FAV_ACTION.title=i18n("Remove from favorites");
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
 
-        this.top = [
+            this.top = [
             { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
             {
                 title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
@@ -311,22 +312,22 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 type: "group",
                 id: TOP_ID_PREFIX+"ap"
             }
-        ];
-        if (this.separateArtists) {
-            this.top.splice(2, 0,
-                        {
-                            title: i18n("Album Artists"),
-                            // SlimBrowse method - disabled for now
-                            //command: ["browselibrary", "items"],
-                            //params: ["menu:1", "mode:artists", "role_id:ALBUMARTIST"],
-                            command: ["artists"],
-                            params: ["role_id:ALBUMARTIST"],
-                            icon: "group",
-                            type: "group",
-                            id: TOP_ALBUM_ARTISTS_ID
-                        });
-        }
-        this.other = [
+            ];
+            if (this.separateArtists) {
+                this.top.splice(2, 0,
+                            {
+                                title: i18n("Album Artists"),
+                                // SlimBrowse method - disabled for now
+                                //command: ["browselibrary", "items"],
+                                //params: ["menu:1", "mode:artists", "role_id:ALBUMARTIST"],
+                                command: ["artists"],
+                                params: ["role_id:ALBUMARTIST"],
+                                icon: "group",
+                                type: "group",
+                                id: TOP_ALBUM_ARTISTS_ID
+                            });
+            }
+            this.other = [
             {
                 title: i18n("Compilations"),
                 // SlimBrowse method - TODO
@@ -847,9 +848,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 this.separateArtists = 1!= data.result._p2;
-                if (this.separateArtists) {
-                    this.initItems();
-                }
+                setLocalStorageVal('separateArtists', this.separateArtists);
+                this.initItems();
             }
         });
 
@@ -857,6 +857,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 this.artistImages = 1==data.result._p2;
+                setLocalStorageVal('artistImages', this.artistImages);
             }
         });
 

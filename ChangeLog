@@ -5,6 +5,8 @@
 3. Show play queue even if player is off.
 4. Add basic info dialog; shows server stats, players, and allows library to
    be rescanned.
+5. Cache certain settings (e.g. translation) to local storage, so that the
+   initial values are set to the cached values.
 
 0.0.6
 -----

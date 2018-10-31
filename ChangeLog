@@ -7,6 +7,8 @@
    be rescanned.
 5. Cache certain settings (e.g. translation) to local storage, so that the
    initial values are set to the cached values.
+6. Fix entries being removed from 'More' entry.
+7. Add 'Music Folder', and 'Random Albums', to 'More' browse entry.
 
 0.0.6
 -----

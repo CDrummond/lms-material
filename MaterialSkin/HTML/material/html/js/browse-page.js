@@ -25,6 +25,8 @@ const TOP_ARTISTS_ID = TOP_ID_PREFIX+"ar";
 const TOP_ALBUM_ARTISTS_ID = TOP_ID_PREFIX+"aar";
 const TOP_ALBUMS_ID = TOP_ID_PREFIX+"al";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
+const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
+const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_FAV_ID = TOP_ID_PREFIX+"fav";
 const TOP_PLAYLISTS_ID  = TOP_ID_PREFIX+"pl";
@@ -327,6 +329,15 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                 id: TOP_ALBUM_ARTISTS_ID
                             });
             }
+
+            var otherPrev = [];
+            if (this.other) {
+                if (this.other.length>5) {
+                    for (var i=0; i<this.other.length-5; ++i) {
+                        otherPrev.unshift(this.other[i]);
+                    }
+                }
+            }
             this.other = [
             {
                 title: i18n("Compilations"),
@@ -338,6 +349,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 icon: "album",
                 type: "group",
                 id: TOP_ID_PREFIX+"co",
+            },
+            {
+                title: i18n("Random Albums"),
+                command: ["albums"],
+                params: ["tags:jlya", "sort:random"],
+                icon: "album",
+                type: "group",
+                id: TOP_RANDOM_ALBUMS_ID
             },
             {
                 title: i18n("Years"),
@@ -359,7 +378,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["tags:jlya", "sort:new"],
                 icon: "new_releases",
                 type: "group",
-                id: TOP_ID_PREFIX+"nm"
+                id: TOP_NEW_MUSIC_ID
             },
             /*
             {   TODO!!!
@@ -368,10 +387,24 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 type: "group",
                 id: TOP_ID_PREFIX+"rm"
             },*/
+            {
+                title: i18n("Music Folder"),
+                command: ["musicfolder"],
+                params: ["type:audio", "tags:d"],
+                icon: "folder",
+                type: "group",
+                id: TOP_ID_PREFIX+"f"
+            },
             ];
+            otherPrev.forEach(i=> {
+                this.other.unshift(i);
+            });
             if (this.history.length<1) {
                 this.items = this.top;
-                this.listSize = this.top.length;
+                this.listSize = this.items.length;
+            } else if (1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
+                this.items = this.other;
+                this.listSize = this.items.length;
             }
         },
         playerId() {
@@ -452,7 +485,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
                 setScrollTop(0);
-            } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) && item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {
+            } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
+                       item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
+                       item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {
                 var command = { command: [ item.command[0] ], params: ["tags:CCZs"]};
                 item.params.forEach(i => {
                     if (i.startsWith("sort:")) {
@@ -890,29 +925,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
             }
 
-            if (!haveExtra) {
-                this.other.unshift({
-                                    title: i18n("Conductors"),
-                                    // SlimBrowse method - disabled for now
-                                    //command: ["browselibrary", "items"],
-                                    //params: ["menu:1", "mode:artists", "role_id:CONDUCTOR"],
-                                    command: ["artists"],
-                                    params: ["role_id:CONDUCTOR"],
-                                    icon: "group",
-                                    type: "group",
-                                    id: TOP_ID_PREFIX+"cond"
-                                   });
-                this.other.unshift({
-                                    title: i18n("Composers"),
-                                    // SlimBrowse method - disabled for now
-                                    //command: ["browselibrary", "items"],
-                                    //params: ["menu:1", "mode:artists", "role_id:COMPOSER"],
-                                    command: ["artists"],
-                                    params: ["role_id:COMPOSER"],
-                                    icon: "group",
-                                    type: "group",
-                                    id: TOP_ID_PREFIX+"comp"
-                                   });
+            if (haveExtra && 1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
+                this.items = this.other;
+                this.listSize = this.items.length;
             }
         });
 

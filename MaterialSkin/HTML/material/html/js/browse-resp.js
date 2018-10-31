@@ -381,6 +381,21 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                           });
             });
             resp.subtitle=i18np("1 Year", "%1 Years", data.result.count);
+        } else if (data.result.folder_loop) {
+            data.result.folder_loop.forEach(i => {
+                var isFolder = i.type==="folder";
+                resp.items.push({
+                              id: (isFolder ? "folder_id:" : "track_id:") + i.id,
+                              title: i.filename,
+                              subtitle: i.duration!="" && !isFolder ? i.duration : undefined,
+                              command: ["musicfolder"],
+                              params: ["folder_id:"+i.id, "type:audio", "tags:d"],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              type: isFolder ? "group" : "track",
+                              icon: isFolder ? "folder" : undefined
+                          });
+            });
+            resp.subtitle=i18np("1 Item", "%1 Items", data.result.count);
         } else if (data.result.radioss_loop) {
             data.result.radioss_loop.forEach(i => {
                 if ("xmlbrowser"===i.type) {

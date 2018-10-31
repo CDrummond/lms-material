@@ -107,3 +107,18 @@ function getScrollTop() {
     return getScrollElement().scrollTop;
 }
 
+const LS_PREFIX="lms-material::";
+
+function getLocalStorageBool(key, def) {
+    var val = localStorage.getItem(LS_PREFIX+key);
+    return undefined!=val ? "true" == val : def;
+}
+
+function getLocalStorageVal(key, def) {
+    var val = localStorage.getItem(LS_PREFIX+key);
+    return undefined!=val ? val : def;
+}
+
+function setLocalStorageVal(key, val) {
+    localStorage.setItem(LS_PREFIX+key, val);
+}

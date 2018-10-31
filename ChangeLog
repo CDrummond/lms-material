@@ -9,6 +9,7 @@
    initial values are set to the cached values.
 6. Fix entries being removed from 'More' entry.
 7. Add 'Music Folder', and 'Random Albums', to 'More' browse entry.
+8. Add option to show menu when clicking on a audio item.
 
 0.0.6
 -----

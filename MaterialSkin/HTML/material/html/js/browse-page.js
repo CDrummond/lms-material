@@ -79,7 +79,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
               <p v-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-              <v-list-tile v-else-if="!item.header" avatar @click="browse(item)" :key="item.id">
+              <v-list-tile v-else-if="!item.header" avatar @click="click(item, $event)" :key="item.id">
                 <v-list-tile-avatar v-if="item.image" :tile="true">
                   <img v-lazy="item.image">
                 </v-list-tile-avatar>
@@ -465,11 +465,18 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.showError(err);
             });
         },
-        browse(item) {
+        click(item, event) {
             // itemplay => touch item to play, don't want as its inconsistent
-            if ("search"==item.type || "audio"==item.type  || "track"==item.type || "text"==item.type || "itemplay"==item.style) {
+            if ("search"==item.type || "text"==item.type) {
                 return;
             }
+            if ("audio"==item.type  || "track"==item.type || "itemplay"==item.style) {
+                if (this.$store.state.showMenuAudio) {
+                    this.itemMenu(item, event);
+                }
+                return;
+            }
+
             if (TOP_MORE_ID===item.id) {
                 var prev = {};
                 prev.items = this.items;

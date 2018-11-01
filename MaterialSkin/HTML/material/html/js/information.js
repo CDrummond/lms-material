@@ -21,7 +21,7 @@ Vue.component('lms-information-dialog', {
               <p class="about-indent">{{item}}</p>
             </template>
             <v-menu bottom left v-if="!scanning">
-              <v-btn slot="activator" flat>Rescan</v-btn>
+              <v-btn slot="activator" flat>Rescan <v-icon>arrow_drop_down</v-icon></v-btn>
               <v-list>
                 <template v-for="(item, index) in rescans">
                   <v-list-tile @click="initiateScan(item.prompt, item.command)">

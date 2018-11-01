@@ -13,6 +13,7 @@
  8. Add option to show menu when clicking on a audio item.
  9. Add icon for iOS.
 10. Update Vue.js and Vuetify.js
+11. Sleep timer.
 
 0.0.6
 -----

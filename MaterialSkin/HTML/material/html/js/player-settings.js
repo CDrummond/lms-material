@@ -30,6 +30,25 @@ Vue.component('lms-player-settings', {
             </v-list-tile>
 
             <div class="settings-pad"></div>
+            <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
+
+            <v-list-tile v-if="sleep.timeLeft">
+              <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
+            </v-list-tile>
+            <v-list-tile v-else>
+              <v-menu bottom left>
+                <v-btn slot="activator" flat>Sleep in... <v-icon>arrow_drop_down</v-icon></v-btn>
+                <v-list>
+                  <template v-for="(item, index) in sleep.items">
+                    <v-list-tile @click="setSleepTimer(item.duration)"">
+                      <v-list-tile-title>{{item.label}}</v-list-tile-title>
+                    </v-list-tile>
+                  </template>
+                </v-list>
+              </v-menu>
+            </v-list-tile>
+
+            <div class="settings-pad"></div>
             <v-header>{{i18n('Alarms')}}</v-header>
             <v-list-tile>
               <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
@@ -128,6 +147,10 @@ Vue.component('lms-player-settings', {
                 fade: true,
                 scheduled: []
             },
+            sleep: {
+                timeLeft:undefined,
+                items:[]
+            },
             alarmShuffeItems:[],
             alarmSounds:[],
             alarmDialog: {
@@ -155,6 +178,12 @@ Vue.component('lms-player-settings', {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        bus.$on('playerStatus', function(playerStatus) {
+            if (playerStatus.will_sleep_in!=this.sleep.timeLeft) {
+                this.sleep.timeLeft = playerStatus.will_sleep_in;
+            }
+        }.bind(this));
 
         bus.$on('toolbarAction', function(act) {
             if (act==TB_PLAYER_SETTINGS.id && this.$store.state.player) {
@@ -269,6 +298,13 @@ Vue.component('lms-player-settings', {
                 { key:'2', label:i18n("Shuffle by album")},
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
+            this.sleep.items=[
+                { duration: 15*60, label:i18n("%1 minutes", 15)},
+                { duration: 30*60, label:i18n("%1 minutes", 30)},
+                { duration: 45*60, label:i18n("%1 minutes", 45)},
+                { duration: 60*60, label:i18n("%1 minutes", 60)},
+                { duration: 90*60, label:i18n("%1 minutes", 90)},
+                ];
         },
         close() {
             bus.$emit('dialog', 'player-settings', false);
@@ -350,6 +386,12 @@ Vue.component('lms-player-settings', {
             } else {
                 return str;
             }
+        },
+        setSleepTimer(duration) {
+            bus.$emit('playerCommand', ["sleep", duration]);
+        },
+        cancelSleep() {
+            bus.$emit('playerCommand', ["sleep", 0]);
         }
     },
     filters: {
@@ -368,6 +410,12 @@ Vue.component('lms-player-settings', {
                 days.push(DAYS_OF_WEEK[0]);
             }
             return formatTime(value.time, false)+" "+days.join(", ");
+        },
+        displayTime: function (value) {
+            if (undefined==value) {
+                return '';
+            }
+            return '('+formatSeconds(Math.floor(value))+')';
         }
     },
 })

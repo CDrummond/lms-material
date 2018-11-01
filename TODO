@@ -30,7 +30,6 @@
     - Add 'new favorite' to toolbar
     - Add 'Move to' to context menu
       - Allow creating new folders
-  - Random Mix
 
 - Now Playing
   - Drag time slider?
@@ -40,7 +39,6 @@
   - Only update whilst visible?
 
 - Misc
-  - Sleep timer support
   - Complete WebApp support
     - Handle back button (navigate back in browse)
   - Improve layout of Information dialog

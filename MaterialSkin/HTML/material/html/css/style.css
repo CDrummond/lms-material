@@ -70,6 +70,10 @@ a {
     width:100%;
 }
 
+.lms-search {
+    width:100%;
+}
+
 /* Make action buttons in lists closer together */
 .list__tile__action {
     min-width: 48px !important;

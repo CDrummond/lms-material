@@ -552,7 +552,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
                 var favUrl = item.url;
                 var favIcon = item.favIcon;
-                var favType;
+                var favType = "audio";
                 var favTitle = item.title;
 
                 if (item.presetParams && item.presetParams.favorites_url) {
@@ -587,10 +587,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         var command = ["favorites", "add", "url:"+favUrl, "title:"+favTitle];
                         if (favType) {
                             command.push("type:"+favType);
-                        } else if ("group"==item.type) {
-                            command.push("isaudio:0");
+                        }
+                        if ("group"==item.type) {
                             command.push("hasitems:1");
-                            command.push("type:link");
                         }
                         if (favIcon) {
                             command.push("icon:"+favIcon);

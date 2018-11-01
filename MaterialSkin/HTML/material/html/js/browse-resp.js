@@ -171,12 +171,17 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     return;
                 }
                 var addedPlayAction = false;
-                var text = i.text.split(/\r?\n/);
-                i.title = text[0];
-                if (text.length>1) {
-                    i.subtitle = text[1];
+
+                if ("text"==i.type) {
+                    i.title = i.text.replace(/\n/g, "<br/>");
                 } else {
-                    i.title=i.text;
+                    var text = i.text.split(/\r?\n/);
+                    i.title = text[0];
+                    if (text.length>1) {
+                        i.subtitle = text[1];
+                    } else {
+                        i.title=i.text;
+                    }
                 }
                 i.text = undefined;
                 i.image = resolveImage(i.icon ? i.icon : i["icon-id"]);
@@ -242,7 +247,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
                 resp.items.push({
-                                title: data.result.window.textarea,
+                                title: data.result.window.textarea.replace(/\n/g, "<br/>"),
                                 type: "text",
                                 id: parent.id+"."+idStart
                                });
@@ -457,7 +462,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             data.result.loop_loop.forEach(i => {
                 if ("text"===i.type || "textarea"===i.type) {
                     resp.items.push({
-                                  title: i.name ? i.name : i.title,
+                                  title: (i.name ? i.name : i.title).replace(/\n/g, "<br/>"),
                                   type: "text",
                                   id: i.id
                                });
@@ -531,7 +536,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                         }
 
                         resp.items.push({
-                                  title: details,
+                                  title: details.replace(/\n/g, "<br/>"),
                                   type: "text",
                                   id: i.id+"-descr"
                                });

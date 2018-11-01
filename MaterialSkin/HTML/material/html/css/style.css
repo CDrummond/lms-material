@@ -298,6 +298,14 @@ a {
     height: 72px; /* Make space for toolbar */
 }
 
+.settings-pad {
+    height: 32px;
+}
+
+.settings-sub-pad {
+    height: 16px;
+}
+
 .settings-compact-row {
     height: 48px !important;
 }

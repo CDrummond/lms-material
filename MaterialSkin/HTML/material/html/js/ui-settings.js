@@ -20,6 +20,7 @@ Vue.component('lms-ui-settings', {
               <v-switch v-model="darkUi" :label="i18n('Use dark theme')"></v-switch>
             </v-list-tile>
 
+            <div class="settings-pad"></div>
             <v-header>{{i18n('Browse')}}</v-header>
             <v-list-tile>
               <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
@@ -41,6 +42,7 @@ Vue.component('lms-ui-settings', {
               <v-switch v-model="showMenuAudio" :label="i18n('Show menu when clicking anywhere on a playable item')"></v-switch>
             </v-list-tile>
 
+            <div class="settings-pad"></div>
             <v-header>{{i18n('Queue')}}</v-header>
             <v-list-tile>
               <v-switch v-model="autoScrollQueue" :label="i18n('Auto-scroll to current track')"></v-switch>

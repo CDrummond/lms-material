@@ -17,7 +17,7 @@ Vue.component('lms-player-settings', {
             <v-toolbar-title>{{playerName}}</v-toolbar-title>
           </v-toolbar>
           <div class="settings-toolbar-pad"></div>
-          <v-list one-line subheader class="settings-list">
+          <v-list two-line subheader class="settings-list">
             <v-header>{{i18n('Audio')}}</v-header>
             <v-list-tile>
               <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
@@ -29,8 +29,9 @@ Vue.component('lms-player-settings', {
               <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
+            <div class="settings-pad"></div>
             <v-header>{{i18n('Alarms')}}</v-header>
-            <v-list-tile class="settings-compact-row">
+            <v-list-tile>
               <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
             </v-list-tile>
 

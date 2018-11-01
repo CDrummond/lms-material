@@ -167,6 +167,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
 
             data.result.item_loop.forEach(i => {
                 if (!i.text) {
+                    data.result.count--;
                     return;
                 }
                 var addedPlayAction = false;

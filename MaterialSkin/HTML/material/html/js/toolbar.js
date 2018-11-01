@@ -15,7 +15,7 @@ Vue.component('lms-toolbar', {
         <v-toolbar fixed dense app class="lms-toolbar">
           <v-menu bottom class="toolbar-menu">
             <v-toolbar-title slot="activator">
-              {{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon>
+              <v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon>
               <div class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
             </v-toolbar-title>
        
@@ -48,6 +48,11 @@ Vue.component('lms-toolbar', {
               </v-list-tile>
               <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
                 <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.syncrhonise}}</v-list-tile-title></v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile v-if="playerStatus.sleepTimer">
+                <v-list-tile-content>
+                  <v-list-tile-title class="pm-icon-indent"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
+                </v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-menu>
@@ -82,7 +87,7 @@ Vue.component('lms-toolbar', {
     props: [],
     data() {
         return { songInfo:undefined,
-                 playerStatus: { ison: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined } },
+                 playerStatus: { ison: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, syncrhonise:undefined,managegroups:undefined,nothingplaying:undefined},
@@ -123,6 +128,9 @@ Vue.component('lms-toolbar', {
             }
             if (playerStatus.volume!=this.playerStatus.volume) {
                 this.playerStatus.volume = playerStatus.volume;
+            }
+            if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
+                this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
             }
 
             if (playerStatus.current.title!=this.playerStatus.current.title || playerStatus.current.artist!=this.playerStatus.current.artist) {
@@ -186,5 +194,13 @@ Vue.component('lms-toolbar', {
         players () {
             return this.$store.state.players
         }
-    }
+    },
+    filters: {
+        displayTime: function (value) {
+            if (undefined==value) {
+                return '';
+            }
+            return formatSeconds(Math.floor(value));
+        }
+    },
 })

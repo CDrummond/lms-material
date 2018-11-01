@@ -325,17 +325,18 @@ Vue.component('lms-player-settings', {
         },
         loadAlarms() {
             lmsList(this.playerId, ["alarms"], ["filter:all"], 0).then(({data}) => {
+                this.alarms.scheduled = [];
                 if (data && data.result && data.result.alarms_loop) {
-                    this.alarms.scheduled = [];
                     data.result.alarms_loop.forEach(i => {
-                        i.enabled=1==i.enabled;
+                        i.enabled = 1 == i.enabled;
+                        i.repeat = 1 == i.repeat;
                         this.alarms.scheduled.push(i);
                     });
                 }
            });
         },
         toggleAlarm(alarm) {
-             lmsCommand(this.playerId, ["alarm", "enabled:"+alarm.enabled, "id:"+alarm.id]).then(({data}) => {
+             lmsCommand(this.playerId, ["alarm", "update", "enabled:"+(alarm.enabled ? 0 : 1), "id:"+alarm.id]).then(({data}) => {
                 this.loadAlarms();
             });
         },
@@ -345,7 +346,7 @@ Vue.component('lms-player-settings', {
         },
         editAlarm(alarm) {
             this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time, true), dow: alarm.dow.split(","),
-                                 repeat: 1==alarm.repeat ? true : false, url: alarm.url, enabled: 1==alarm.enabled };
+                                 repeat: alarm.repeat, url: alarm.url, enabled: alarm.enabled };
         },
         saveAlarm() {
             var parts = this.alarmDialog.time.split(":");

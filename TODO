@@ -26,11 +26,10 @@
   - Replace ... menu with a play button/long press menu?
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
-    - Re-orderable
-    - Create folder (place in sub-toolbar)
-    - Move items into / out-of folders
-    - Add to favourites should display list of folders to add to (if there are any folders).
-    - Action to add new favourite (place in sub-toolbar)
+    - Add 'sort' button to toolbar
+    - Add 'new favorite' to toolbar
+    - Add 'Move to' to context menu
+      - Allow creating new folders
   - Random Mix
 
 - Now Playing
@@ -41,6 +40,7 @@
   - Only update whilst visible?
 
 - Misc
+  - Sleep timer support
   - Complete WebApp support
     - Handle back button (navigate back in browse)
   - Improve layout of Information dialog

@@ -20,7 +20,7 @@ Vue.component('lms-information-dialog', {
             <template v-for="(item, index) in library">
               <p class="about-indent">{{item}}</p>
             </template>
-            <v-menu bottom left>
+            <v-menu bottom left v-if="!scanning">
               <v-btn slot="activator" flat>Rescan</v-btn>
               <v-list>
                 <template v-for="(item, index) in rescans">
@@ -51,7 +51,8 @@ Vue.component('lms-information-dialog', {
             players: [],
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
                        {title:undefined, prompt:undefined, command: ["rescan"]},
-                       {title:undefined, prompt:undefined, command: ["rescan", "playlists"]} ]
+                       {title:undefined, prompt:undefined, command: ["rescan", "playlists"]} ],
+            scanning: false
         }
     },
     mounted() {
@@ -103,13 +104,13 @@ Vue.component('lms-information-dialog', {
                         });
                     }
 
+                    this.scanning = undefined==data.result.lastscan || 1==data.result.scanning;
                     this.library=[ i18n("Total genres: %1", data.result["info total genres"]),
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    i18n("Total albums: %1", data.result["info total albums"]),
                                    i18n("Total songs: %1", data.result["info total songs"]),
                                    i18n("Total duration: %1", formatSeconds(data.result["info total duration"])),
-                                   i18n("Last scan: %1", undefined==data.result.lastscan || 1==data.result.scanning 
-                                        ? i18n("In progress") : formatDate(data.result.lastscan))];
+                                   i18n("Last scan: %1", this.scanning ? i18n("In progress") : formatDate(data.result.lastscan))];
 
                     if (data.result.lastscanfailed) {
                         this.library.push("Last scan failure: %1", data.result.lastscanfailed);

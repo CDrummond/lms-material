@@ -1,16 +1,18 @@
 0.0.7
 -----
-1. Add option to split artists and albums into A..Z groups.
-2. Fix power on/off.
-3. Show play queue even if player is off.
-4. Add basic info dialog; shows server stats, players, and allows library to
-   be rescanned.
-5. Cache certain settings (e.g. translation) to local storage, so that the
-   initial values are set to the cached values.
-6. Fix entries being removed from 'More' entry.
-7. Add 'Music Folder', and 'Random Albums', to 'More' browse entry.
-8. Add option to show menu when clicking on a audio item.
-9. Add icon for iOS.
+ 1. Add option to split artists and albums into A..Z groups.
+ 2. Fix power on/off.
+ 3. Show play queue even if player is off.
+ 4. Add basic info dialog; shows server stats, players, and allows library to
+    be rescanned.
+ 5. Cache certain settings (e.g. translation) to local storage, so that the
+    initial values are set to the cached values.
+ 6. Fix entries being removed from 'More' entry.
+ 7. Add 'Music Folder', 'Random Albums', and 'Random Mix' to 'More' browse
+    list.
+ 8. Add option to show menu when clicking on a audio item.
+ 9. Add icon for iOS.
+10. Update Vue.js and Vuetify.js
 
 0.0.6
 -----

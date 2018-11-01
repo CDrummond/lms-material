@@ -26,6 +26,7 @@ const TOP_ALBUM_ARTISTS_ID = TOP_ID_PREFIX+"aar";
 const TOP_ALBUMS_ID = TOP_ID_PREFIX+"al";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
+const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_FAV_ID = TOP_ID_PREFIX+"fav";
@@ -88,7 +89,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 </v-list-tile-avatar>
 
                 <v-list-tile-content v-if="item.type=='search'">
-                  <v-text-field single-line clearable :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
+                  <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
                 </v-list-tile-content>
 
                 <v-list-tile-content v-else>
@@ -123,6 +124,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
               </template>
             </v-list>
           </v-menu>
+
+          <lms-randommix></lms-randommix>
        </div>
       `,
     props: [],
@@ -332,8 +335,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
             var otherPrev = [];
             if (this.other) {
-                if (this.other.length>5) {
-                    for (var i=0; i<this.other.length-5; ++i) {
+                if (this.other.length>6) {
+                    for (var i=0; i<this.other.length-6; ++i) {
                         otherPrev.unshift(this.other[i]);
                     }
                 }
@@ -380,13 +383,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 type: "group",
                 id: TOP_NEW_MUSIC_ID
             },
-            /*
-            {   TODO!!!
+            {
                 title: i18n("Random Mix"),
                 icon: "shuffle",
-                type: "group",
-                id: TOP_ID_PREFIX+"rm"
-            },*/
+                id: TOP_RANDOM_MIX_ID
+            },
             {
                 title: i18n("Music Folder"),
                 command: ["musicfolder"],
@@ -492,6 +493,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
                 setScrollTop(0);
+            } else if (TOP_RANDOM_MIX_ID==item.id) {
+                bus.$emit('randomMix');
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
                        item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
                        item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {

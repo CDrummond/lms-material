@@ -476,7 +476,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             });
         },
         click(item, event) {
-            if ("search"==item.type || "text"==item.type) {
+            if ("search"==item.type) {
+                if (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) {
+                    event.target.scrollIntoView();
+                    //window.scrollBy(0, -64);
+                }
+                return;
+            }
+            if ("text"==item.type) {
                 return;
             }
 

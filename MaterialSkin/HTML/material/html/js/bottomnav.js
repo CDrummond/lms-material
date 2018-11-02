@@ -8,7 +8,7 @@
 Vue.component('lms-bottomnav', {
     template: `
         <v-footer height="auto" class="lms-footer">
-          <v-bottom-nav class="lms-bottom-nav" active.sync>
+          <v-bottom-nav class="lms-bottom-nav">
             <template v-for="(item, index) in items">
               <v-btn flat :to="item.type" class="lms-bottom-nav-button">
                 <span>{{item.text}}</span>

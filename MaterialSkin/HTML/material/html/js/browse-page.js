@@ -169,12 +169,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             }
         }.bind(this));
 
-        bus.$on('goBack', function() {
-            if (!this.fetchingItems && this.$route.path=='/browse' && this.history.length>0) {
-                this.goBack();
-            }
-        }.bind(this));
-
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));

@@ -265,7 +265,6 @@ var app = new Vue({
         window.addEventListener('popstate', function(event) {
             if (event.state && event.state.noBackExitsApp) {
                 window.history.pushState({ noBackExitsApp: true }, '');
-                bus.$emit('goBack');
             }
         }, false);
     },

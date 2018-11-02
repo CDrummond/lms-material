@@ -16,7 +16,7 @@ Vue.component('lms-ui-settings', {
           <div class="settings-toolbar-pad"></div>
           <v-list two-line subheader class="settings-list">
             <v-header>{{i18n('General')}}</v-header>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-switch v-model="darkUi" :label="i18n('Use dark theme')"></v-switch>
             </v-list-tile>
 
@@ -34,21 +34,21 @@ Vue.component('lms-ui-settings', {
               <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
             </v-list-tile>
 
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-switch v-model="splitArtistsAndAlbums" :label="i18n('Split artist (and album) lists into A..Z')"></v-switch>
             </v-list-tile>
 
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-switch v-model="showMenuAudio" :label="i18n('Show menu when clicking anywhere on a playable item')"></v-switch>
             </v-list-tile>
 
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-switch v-model="sortFavorites" :label="i18n('Sort favorites list')"></v-switch>
             </v-list-tile>
 
             <div class="settings-pad"></div>
             <v-header>{{i18n('Queue')}}</v-header>
-            <v-list-tile>
+            <v-list-tile class="settings-compact-row">
               <v-switch v-model="autoScrollQueue" :label="i18n('Auto-scroll to current track')"></v-switch>
             </v-list-tile>
           </v-list>

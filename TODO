@@ -21,8 +21,7 @@
     ["albuminfo", "items", 0, 100, "menu:1", "artist_id:XXX", "album_id:XXX", "library_id:XXX]
     ["trackinfo", "items", 0, 100, "menu:1", "artist_id:XXX", "album_id:XXX", "track_id:XXX", "library_id:XXX]
     Convert ["browselibrary", "items", "mode:albums(etc)"...] to non-slim-browse calls, for consistent UI
-    browse(item) -> click(item)
-    - click needs to allow itemplay for menu lists.
+  - click() needs to allow itemplay for menu lists.
   - Replace ... menu with a play button/long press menu?
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
@@ -40,7 +39,6 @@
 - Misc
   - Complete WebApp support
     - Handle back button (navigate back in browse)
-  - Improve layout of Information dialog
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
       ["groupmac", ["playergroup", 0, 100]] lists group details

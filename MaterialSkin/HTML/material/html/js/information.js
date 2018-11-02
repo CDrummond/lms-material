@@ -17,9 +17,9 @@ Vue.component('lms-information-dialog', {
           <div class="settings-list">
 
             <p class="about-header">{{i18n('Library')}}</p>
-            <template v-for="(item, index) in library">
-              <p class="about-indent">{{item}}</p>
-            </template>
+            <ul class="about-indent">
+              <template v-for="(item, index) in library"><li>{{item}}</li></template>
+            </ul>
             <v-menu bottom left v-if="!scanning">
               <v-btn slot="activator" flat>Rescan <v-icon>arrow_drop_down</v-icon></v-btn>
               <v-list>
@@ -35,7 +35,9 @@ Vue.component('lms-information-dialog', {
             <p class="about-header">{{i18n('Players')}}</p>
             <template v-for="(item, index) in players">
               <p class="about-indent">{{item.name}}
-                <i> <template v-for="(info, index) in item.info">, {{info}}</template></i>
+                <ul>
+                  <template v-for="(info, index) in item.info"><li>{{info}}</li></template>
+                </ul>
               </p>
             </template>
           </div>

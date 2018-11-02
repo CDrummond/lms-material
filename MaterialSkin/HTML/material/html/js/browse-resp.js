@@ -144,7 +144,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.id && parent.id==TOP_FAV_ID;
+            var isFavorites = parent && parent.isFavFolder;
             var isPlaylists = parent && parent.id && parent.id==TOP_PLAYLISTS_ID;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
@@ -216,6 +216,9 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 if (isFavorites) {
                     i.menuActions.push(RENAME_FAV_ACTION);
                     i.menuActions.push(REMOVE_FROM_FAV_ACTION);
+                    if (!i.type) {
+                        i.isFavFolder = true;
+                    }
                 } else if (i.presetParams) {
                     i.menuActions.push(ADD_TO_FAV_ACTION);
                 }
@@ -231,6 +234,8 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {
                     i.id = "item_id:"+i.params.item_id;
+                } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                    i.id = "item_id:"+i.actions.go.params.item_id;
                 } else {
                     i.id=parent.id+"."+idStart;
                     idStart++;

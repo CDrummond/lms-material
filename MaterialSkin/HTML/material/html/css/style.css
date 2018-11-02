@@ -171,6 +171,13 @@ a {
     padding: 16px;
 }
 
+.browse-progress {
+    position:absolute;
+    bottom:32px;
+    width:100vw;
+    height:100vh;
+}
+
 .np-page {
     position: fixed; 
     top:64px; /* l-toolbar.height */

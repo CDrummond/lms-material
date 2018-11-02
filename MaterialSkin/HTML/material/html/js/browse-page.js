@@ -71,7 +71,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             </v-layout>
           </v-card>
           <div v-if="headerTitle" class="subtoolbar-pad"></div>
-          <v-progress-linear v-if="fetchingItems" :indeterminate="true"></v-progress-linear>
+          <table class="browse-progress" v-if="fetchingItems">
+            <tr>
+              <td style="text-align: center;">
+                <v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular>
+              </td>
+            </tr>
+          </table>
           <v-list>
             <template v-for="(item, index) in items">
             <!-- TODO: Fix and re-use virtual scroller -->

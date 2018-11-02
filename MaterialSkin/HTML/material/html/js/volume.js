@@ -7,15 +7,14 @@
 
 Vue.component('lms-volume', {
     template: `
-        <v-dialog v-model="show" width=500> <!-- class="volume-popup"> -->
+        <v-dialog v-model="show" width=500>
           <v-card>
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
-                <v-flex xs12>{{playerVolume}} %</v-flex>
                 <v-flex xs12>
                   <v-layout>
                     <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-                    <v-slider step="1" v-model="playerVolume" class="vol-slider"></v-slider>
+                    <v-slider step="1" v-model="playerVolume" class="vol-slider" thumb-label="always"></v-slider>
                     <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
                   </v-layout>
                 </v-flex>
@@ -39,7 +38,8 @@ Vue.component('lms-volume', {
         this.playerVolumeCurrent = -1;
         this.playerVolumePrev = -1;
         bus.$on('playerStatus', function(playerStatus) {
-            if (playerStatus.volume!=this.playerVolume && playerStatus.volume!=this.playerVolumePrev) {
+            if (this.show && playerStatus.volume!=this.playerVolume && playerStatus.volume!=this.playerVolumePrev &&
+                (!this.lastUpdate || ((new Date())-this.lastUpdate)>500)) {
                 this.playerVolume = playerStatus.volume;
             }
         }.bind(this));
@@ -86,6 +86,7 @@ Vue.component('lms-volume', {
             if (this.show && newVal>=0 && this.playerVolumeCurrent !== newVal) {
                 this.playerVolumePrev = this.playerVolumeCurrent;
                 this.playerVolumeCurrent = newVal;
+                this.lastUpdate = new Date();
                 bus.$emit('playerCommand', ["mixer", "volume", newVal]);
             }
         }

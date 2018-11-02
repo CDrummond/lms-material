@@ -101,12 +101,12 @@ a {
 }
 
 .vol-slider {
-    margin-top: -10px !important;
-    padding-left:16px;
-    padding-right:2px;
+    padding-top:24px;
+    height: 48px;
 }
 
 .vol-btn {
+    margin-top: 40px;
     width: 32px;
     height: 32px;
 }

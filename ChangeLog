@@ -16,6 +16,8 @@
 11. Sleep timer.
 12. Add option to sort favorites.
 13. When using +/- buttons in volume dialog, round to nearest 5%
+14. Only react to status volume changes if more than half a second since volume
+    was set.
 
 0.0.6
 -----

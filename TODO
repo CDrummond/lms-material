@@ -26,7 +26,6 @@
   - Replace ... menu with a play button/long press menu?
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
-    - Add 'sort' button to toolbar
     - Add 'new favorite' to toolbar
     - Add 'Move to' to context menu
       - Allow creating new folders

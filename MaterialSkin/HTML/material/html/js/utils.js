@@ -91,6 +91,15 @@ function itemSort(a, b) {
     return titleSort(a, b);
 }
 
+function favSort(a, b) {
+    var at = a.isFavFolder ? 0 : 1;
+    var bt = b.isFavFolder ? 0 : 1;
+    if (at!=bt) {
+        return at<bt ? -1 : 1;
+    }
+    return titleSort(a, b);
+}
+
 function getScrollElement() {
     return document.scrollingElement || document.documentElement;
 }

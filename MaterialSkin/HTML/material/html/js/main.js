@@ -256,6 +256,18 @@ var app = new Vue({
                 timeout = undefined;
             });
         }, false);
+
+        // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-application-closes-de-app
+        window.addEventListener('load', function() {
+            window.history.pushState({ noBackExitsApp: true }, '')
+        }, false);
+
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.noBackExitsApp) {
+                window.history.pushState({ noBackExitsApp: true }, '');
+                bus.$emit('goBack');
+            }
+        }, false);
     },
     computed: {
         darkUi() {

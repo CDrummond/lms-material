@@ -266,10 +266,6 @@ a {
     margin-top: 2px !important;
 }
 
-.lms-footer .router-link-exact-active .btn {
-    opacity: 1 !important;
-}
-
 .shuffle-albums {
     border: 1px solid;
     border-radius: 50%;

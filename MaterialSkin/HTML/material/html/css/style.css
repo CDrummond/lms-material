@@ -203,10 +203,12 @@ a {
 .np-image {
     display: block;
     height:auto;
-    height:calc((var(--vh, 1vh)*100) - 120px); /* Work-around chrome mobile 100vh - see main.js */
+    width:auto;
+    max-height:calc((var(--vh, 1vh)*100) - 102px); /* Work-around chrome mobile 100vh - see main.js */
+    max-width:calc(100vw - 16px);
     margin-left: auto;
     margin-right: auto;
-    padding:8px 8px 242px 8px; /* t, r, b, l */
+    padding:8px 8px 232px 8px; /* t, r, b, l */
 }
 
 .np-pos {
@@ -224,8 +226,8 @@ a {
 }
 
 .np-slider {
-    height: 42px;
-    margin:-22px 0px 42px 8px;
+    height: 32px;
+    margin:-2px 12px 12px 8px;
 }
 
 .np-controls {
@@ -239,6 +241,7 @@ a {
 }
 
 .np-info {
+    margin-top:-8px;
     max-width:800px;
     display: block;
     height:auto;
@@ -248,7 +251,7 @@ a {
 
 .np-info-text {
     text-align: center;
-    height:calc((var(--vh, 1vh)*100) - 222px); /* Work-around chrome mobile 100vh - see main.js */
+    height:calc((var(--vh, 1vh)*100) - 212px); /* Work-around chrome mobile 100vh - see main.js */
     overflow:auto;
 }
 

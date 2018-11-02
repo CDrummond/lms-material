@@ -42,7 +42,6 @@ a {
 }
 
 .lms-toolbar {
-    padding-top:4px; /* Adjust padding for latest vuetify */
     height:56px !important;
 }
 
@@ -117,10 +116,10 @@ a {
     text-overflow: ellipsis;
 }
 
-.lms-toolbar > .toolbar__content {
+.lms-toolbar > .v-toolbar__content {
     height: 56px !important;
-    margin-left: -7px;
-    margin-right: -8px;
+    margin-left: -7px !important;
+    margin-right: -8px !important;
 }
 
 .pm-noicon-indent {
@@ -317,7 +316,21 @@ a {
 }
 
 .alarm-entry {
-    height: 64px !important;
+    height: 48px !important;
+}
+
+.alarm-divider {
+    margin-top:8px;
+    margin-bottom:-16px;
+    height:4px;
+}
+
+.alarm-sched-header {
+    height:22px;
+}
+
+.alarm-add {
+    margin-top: 16px;
 }
 
 .alarm-dialog {

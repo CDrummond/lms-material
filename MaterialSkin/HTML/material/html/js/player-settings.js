@@ -54,16 +54,16 @@ Vue.component('lms-player-settings', {
               <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
             </v-list-tile>
 
-            <v-subheader>{{i18n('Scheduled alarms')}}</v-subheader>
+            <v-subheader class="alarm-sched-header">{{i18n('Scheduled alarms')}}</v-subheader>
             <template v-for="(item, index) in alarms.scheduled">
               <v-list-tile class="alarm-entry">
                 <v-switch v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-switch>
-                <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button" style="margin-top:-22px"><v-icon>edit</v-icon></v-btn>
-                <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button" style="margin-top:-22px"><v-icon>delete</v-icon></v-btn>
+                <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
+                <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
               </v-list-tile>
-              <v-divider v-if="(index+1 < alarms.scheduled.length)"></v-divider>
+              <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
             </template>
-            <v-btn flat icon @click.stop="addAlarm()"><v-icon>alarm_add</v-icon></v-btn>
+            <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
             <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
             <v-list-tile>
               <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>

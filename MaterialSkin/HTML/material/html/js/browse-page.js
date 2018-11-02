@@ -303,7 +303,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 icon: "favorite",
                 type: "favorites",
                 app: "favorites",
-                id: TOP_FAV_ID
+                id: TOP_FAV_ID,
+                isFavFolder: true
             },
             {
                 title: i18n("Apps"),

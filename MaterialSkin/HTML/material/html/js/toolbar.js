@@ -32,7 +32,7 @@ Vue.component('lms-toolbar', {
                   </v-list-tile-content>
                 </v-list-tile>
               </template>
-              <v-divider v-if="player && player.canpoweroff"></v-divider>
+              <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
               <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
                 <v-list-tile-content v-if="playerStatus.ison">
                   <v-list-tile-title class="pm-icon-indent"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
@@ -42,16 +42,15 @@ Vue.component('lms-toolbar', {
                 </v-list-tile-content>
               </v-list-tile>
 
-              <v-divider v-if="players && players.length>1" ></v-divider>
               <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
                 <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{trans.managegroups}}</v-list-tile-title></v-list-tile-content>
               </v-list-tile>
               <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
-                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.syncrhonise}}</v-list-tile-title></v-list-tile-content>
+                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
               </v-list-tile>
               <v-list-tile v-if="playerStatus.sleepTimer">
                 <v-list-tile-content>
-                  <v-list-tile-title class="pm-icon-indent"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
+                  <v-list-tile-title class="pm-icon-indent dimmed-icon"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -90,7 +89,7 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
-                 trans:{noplayer:undefined, syncrhonise:undefined,managegroups:undefined,nothingplaying:undefined},
+                 trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined},
                }
     },
     mounted() {
@@ -163,7 +162,7 @@ Vue.component('lms-toolbar', {
             TB_SERVER_SETTINGS.title=i18n('Server Settings');
             TB_INFO.title=i18n('Information');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
-            this.trans = {noplayer:i18n('No Player'), syncrhonise:i18n('Synchronise'),
+            this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
                           managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing')};
         },
         setPlayer(name) {

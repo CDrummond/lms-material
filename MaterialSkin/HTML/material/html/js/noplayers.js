@@ -17,7 +17,7 @@ Vue.component('lms-noplayer', {
             </tr>
             <tr>
               <td style="text-align: center;">
-                <v-progress-circular size=72 width=6 indeterminate></v-progress-circular>
+                <v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular>
               </td>
             </tr>
           </table>

@@ -31,6 +31,7 @@ const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_FAV_ID = TOP_ID_PREFIX+"fav";
 const TOP_PLAYLISTS_ID  = TOP_ID_PREFIX+"pl";
+const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
@@ -316,7 +317,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["want_url:1"],
                 icon: "apps",
                 type: "group",
-                id: TOP_ID_PREFIX+"ap"
+                id: TOP_APPS_ID
             }
             ];
             if (this.separateArtists) {
@@ -460,6 +461,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     } else {
                         this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
+                    this.sortItems();
                     setScrollTop(0);
                 }
             }).catch(err => {
@@ -754,6 +756,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 } else {
                     this.listize = 0;
                 }
+                this.sortItems();
                 this.$nextTick(function () {
                     setScrollTop(pos>0 ? pos : 0);
                 });
@@ -761,6 +764,15 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = false;
                 this.showError(err);
             });
+        },
+        sortItems() {
+            if (this.current && this.listSize == this.items.length) {
+                if (this.current.id == TOP_APPS_ID) {
+                    this.items.sort(titleSort);
+                } else if (this.current.isFavFolder && this.$store.state.sortFavorites) {
+                    this.items.sort(favSort);
+                }
+            }
         },
         goHome() {
             if (this.fetchingItems) {

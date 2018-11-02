@@ -42,6 +42,10 @@ Vue.component('lms-ui-settings', {
               <v-switch v-model="showMenuAudio" :label="i18n('Show menu when clicking anywhere on a playable item')"></v-switch>
             </v-list-tile>
 
+            <v-list-tile>
+              <v-switch v-model="sortFavorites" :label="i18n('Sort favorites list')"></v-switch>
+            </v-list-tile>
+
             <div class="settings-pad"></div>
             <v-header>{{i18n('Queue')}}</v-header>
             <v-list-tile>
@@ -60,6 +64,7 @@ Vue.component('lms-ui-settings', {
             albumSort:'album',
             splitArtistsAndAlbums: false,
             showMenuAudio:false,
+            sortFavorites:false,
             autoScrollQueue:true,
             albumSorts:[],
             library: null,
@@ -75,6 +80,7 @@ Vue.component('lms-ui-settings', {
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
+                this.sortFavorites = this.$store.state.sortFavorites;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
                 this.show = true;
 
@@ -133,6 +139,7 @@ Vue.component('lms-ui-settings', {
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
+                                                  sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio
                                                 } );
             if (this.libraries.length>0) {

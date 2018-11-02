@@ -27,8 +27,8 @@ Vue.component('lms-toolbar', {
                     <v-list-tile-title>
                       <v-icon small v-if="player && item.id === player.id && players && players.length>1">radio_button_checked</v-icon>
                       <v-icon small v-else-if="players && players.length>1">radio_button_unchecked</v-icon>
-                      <v-icon v-if="item.isgroup" v-bind:class="{'dimmed-icon': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker_group</v-icon>
-                      <v-icon v-else v-bind:class="{'dimmed-icon': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker</v-icon>&nbsp;{{item.name}}</v-list-tile-title>
+                      <v-icon v-if="item.isgroup" v-bind:class="{'dimmed': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker_group</v-icon>
+                      <v-icon v-else v-bind:class="{'dimmed': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker</v-icon>&nbsp;{{item.name}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </template>
@@ -38,7 +38,7 @@ Vue.component('lms-toolbar', {
                   <v-list-tile-title class="pm-icon-indent"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-content v-else>
-                  <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed-icon">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>
+                  <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
 
@@ -50,7 +50,7 @@ Vue.component('lms-toolbar', {
               </v-list-tile>
               <v-list-tile v-if="playerStatus.sleepTimer">
                 <v-list-tile-content>
-                  <v-list-tile-title class="pm-icon-indent dimmed-icon"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
+                  <v-list-tile-title class="pm-icon-indent dimmed"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -62,7 +62,7 @@ Vue.component('lms-toolbar', {
           <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
             <v-icon>play_circle_outline</v-icon>
           </v-btn>
-          <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed-icon': playerStatus.volume<0}" v-if="playerStatus.ison" @click="bus.$emit('volume')">
+          <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed': playerStatus.volume<0}" v-if="playerStatus.ison" @click="bus.$emit('volume')">
             <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
             <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
           </v-btn>

@@ -52,7 +52,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 <v-flex xs6>
                  <v-btn flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
                  <v-btn flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
-                 <v-btn flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed-icon"><v-icon>repeat</v-icon></v-btn>
+                 <v-btn flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed"><v-icon>repeat</v-icon></v-btn>
                 </v-flex>
                 <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
               </v-layout>
@@ -67,7 +67,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 <v-flex xs6>
                   <v-btn flat icon v-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
                   <v-btn flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
-                  <v-btn flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed-icon"><v-icon>shuffle</v-icon></v-btn>
+                  <v-btn flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed"><v-icon>shuffle</v-icon></v-btn>
                 </v-flex>
               </v-layout>
             </v-flex>

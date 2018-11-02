@@ -45,6 +45,11 @@ a {
     height:56px !important;
 }
 
+/* Toolbar in settings dialogs - with latest Vuetify, text is to low? */
+.v-dialog > .v-card > .lms-toolbar > .v-toolbar__content {
+    margin-top:-4px;
+}
+
 .lms-footer {
     position:fixed;
     bottom:0;

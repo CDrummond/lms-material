@@ -15,6 +15,7 @@
 10. Update Vue.js and Vuetify.js
 11. Sleep timer.
 12. Add option to sort favorites.
+13. When using +/- buttons in volume dialog, round to nearest 5%
 
 0.0.6
 -----

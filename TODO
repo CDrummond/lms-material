@@ -49,7 +49,6 @@
   - Add 'Manage all' to players/settings menu
      - Manage all volumes
      - Power on/off
-  - When adjusting volume via buttons, round to nearest 5%
   - Smarter polling
     - Only poll status every 5 seconds
       - at start of song, and near end poll every (e.g.) 0.5 seconds

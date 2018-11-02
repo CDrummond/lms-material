@@ -15,7 +15,7 @@ Vue.component('lms-volume', {
                 <v-flex xs12>
                   <v-layout>
                     <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-                    <v-slider step="5" v-model="playerVolume" class="vol-slider"></v-slider>
+                    <v-slider step="1" v-model="playerVolume" class="vol-slider"></v-slider>
                     <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
                   </v-layout>
                 </v-flex>
@@ -63,14 +63,14 @@ Vue.component('lms-volume', {
             if (this.playerVolume<=5) {
                 this.playerVolume = 0;
             } else {
-                this.playerVolume -= 5;
+                this.playerVolume = Math.floor((this.playerVolume-5)/5)*5;
             }
         },
         volumeUp() {
             if (this.playerVolume>=95) {
                 this.playerVolume = 100;
             } else {
-                this.playerVolume += 5;
+                this.playerVolume = Math.floor((this.playerVolume+5)/5)*5;
             }
         },
         i18n(str) {

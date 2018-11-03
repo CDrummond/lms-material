@@ -28,9 +28,19 @@ Vue.component('lms-manage-players', {
                         <v-list-tile-title>{{player.name}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
                       </v-list-tile-content>
-                      <v-list-tile-action v-if="player.playIcon" @click.stop="playPause(index)">
+                      <v-list-tile-action v-if="player.playIcon" @click="prevTrack(index)">
+                        <v-btn icon>
+                            <v-icon>skip_previous</v-icon>
+                        </v-btn>
+                      </v-list-tile-action>
+                      <v-list-tile-action v-if="player.playIcon" @click="playPause(index)">
                         <v-btn icon>
                             <v-icon>{{player.playIcon}}</v-icon>
+                        </v-btn>
+                      </v-list-tile-action>
+                      <v-list-tile-action v-if="player.playIcon" @click="nextTrack(index)">
+                        <v-btn icon>
+                            <v-icon>skip_next</v-icon>
                         </v-btn>
                       </v-list-tile-action>
                     </v-list-tile>
@@ -152,8 +162,24 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(this.players[index].id, this.players[index].isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
-                    updatePlayer(index);
-                });
+                updatePlayer(index);
+            });
+        },
+        prevTrack(index) {
+            if (!this.show) {
+                return;
+            }
+            lmsCommand(this.players[index].id, ['button', 'jump_rew']).then(({data}) => {
+                updatePlayer(index);
+            });
+        },
+        nextTrack(index) {
+            if (!this.show) {
+                return;
+            }
+            lmsCommand(this.players[index].id, ['playlist', 'index', '+1']).then(({data}) => {
+                updatePlayer(index);
+            });
         },
         updateAll() {
             for (var i=0; i<this.players.length; ++i) {

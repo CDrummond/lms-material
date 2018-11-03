@@ -8,7 +8,8 @@
 var TB_UI_SETTINGS     = {id:'tb:settings'       };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", href:'../Default/settings/index.html'};
-var TB_INFO            = {id:"tb:info" };
+var TB_INFO            = {id:"tb:info"           };
+var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
 Vue.component('lms-toolbar', {
     template: `
@@ -56,7 +57,7 @@ Vue.component('lms-toolbar', {
             </v-list>
           </v-menu>
           <v-spacer></v-spacer>
-          <v-btn icon v-if="playerStatus.ison && playerStatus.isPlaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+          <v-btn icon v-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
             <v-icon>pause_circle_outline</v-icon>
           </v-btn>
           <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
@@ -86,7 +87,7 @@ Vue.component('lms-toolbar', {
     props: [],
     data() {
         return { songInfo:undefined,
-                 playerStatus: { ison: 1, isPlaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
+                 playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined},
@@ -122,8 +123,8 @@ Vue.component('lms-toolbar', {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
             }
-            if (playerStatus.isPlaying!=this.playerStatus.isPlaying) {
-                this.playerStatus.isPlaying = playerStatus.isPlaying;
+            if (playerStatus.isplaying!=this.playerStatus.isplaying) {
+                this.playerStatus.isplaying = playerStatus.isplaying;
             }
             if (playerStatus.volume!=this.playerStatus.volume) {
                 this.playerStatus.volume = playerStatus.volume;
@@ -161,7 +162,8 @@ Vue.component('lms-toolbar', {
             TB_PLAYER_SETTINGS.title=i18n('Player Settings');
             TB_SERVER_SETTINGS.title=i18n('Server Settings');
             TB_INFO.title=i18n('Information');
-            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
+            TB_MANAGE_PLAYERS.title=i18n('Manage Players');
+            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_MANAGE_PLAYERS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
                           managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing')};
         },

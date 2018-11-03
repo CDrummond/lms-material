@@ -19,6 +19,8 @@
 14. Only react to status volume changes if more than half a second since volume
     was set.
 15. Use circular progress, in middle of screen, when fetching browse items.
+16. Add 'Manage Players' dialog; allowing to control the volume, power, and
+    playback for all players.
 
 0.0.6
 -----

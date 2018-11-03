@@ -58,7 +58,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
               </v-layout>
             </v-flex>
             <v-flex xs4>
-              <v-btn flat icon large v-if="playerStatus.isPlaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+              <v-btn flat icon large v-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
               <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
             </v-flex>
             <v-flex xs4>
@@ -81,7 +81,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                  coverFromPlayer:undefined,
                  playerStatus: {
                     ison: 1,
-                    isPlaying: 1,
+                    isplaying: 1,
                     current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined },
                     playlist: { shuffle:0, repeat: 0 },
                  },
@@ -124,8 +124,8 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
             }
-            if (playerStatus.isPlaying!=this.playerStatus.isPlaying) {
-                this.playerStatus.isPlaying = playerStatus.isPlaying;
+            if (playerStatus.isplaying!=this.playerStatus.isplaying) {
+                this.playerStatus.isplaying = playerStatus.isplaying;
             }
             if (playerStatus.current.canseek!=this.playerStatus.current.canseek) {
                 this.playerStatus.current.canseek = playerStatus.current.canseek;

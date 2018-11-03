@@ -1,0 +1,217 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+Vue.component('lms-manage-players', {
+    template: `
+      <v-dialog v-model="show" fullscreen app>
+        <v-card>
+          <v-toolbar color="primary" dark app class="lms-toolbar">
+            <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+            <v-toolbar-title>{{i18n('Manage Players')}}</v-toolbar-title>
+          </v-toolbar>
+          <div class="settings-toolbar-pad"></div>
+   
+          <v-container grid-list-md>
+            <v-layout row wrap>
+              <template v-for="(player, index) in players">
+                <v-flex xs12>
+                  <v-list class="pmgr-playerlist">
+                    <v-list-tile>
+                      <v-list-tile-avatar v-if="player.image" :tile="true">
+                        <img v-lazy="player.image">
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>{{player.name}}</v-list-tile-title>
+                        <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                      <v-list-tile-action v-if="player.playIcon" @click.stop="playPause(index)">
+                        <v-btn icon>
+                            <v-icon>{{player.playIcon}}</v-icon>
+                        </v-btn>
+                      </v-list-tile-action>
+                    </v-list-tile>
+                  </v-list>
+                </v-flex xs12>
+                <v-flex xs12>
+                  <v-layout>
+                    <v-btn flat icon @click.stop="volumeDown(index)" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
+                    <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="vol-slider" thumb-label="always"></v-slider>
+                    <v-btn flat icon @click.stop="volumeUp(index)" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+                    <v-btn flat icon @click.stop="togglePower(index)" class="vol-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>                
+                  </v-layout>
+                </v-flex>
+                <v-flex xs12 v-if="(index+1 < players.length)"><v-divider style="margin-top:22px; margin-bottom:22px"></v-divider></v-flex>
+              </template>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-dialog>
+`,
+    props: [],
+    data() {
+        return {
+            show: false,
+            players: []
+        }
+    },
+    mounted() {
+        bus.$on('toolbarAction', function(act) {
+            if (act==TB_MANAGE_PLAYERS.id) {
+                bus.$emit('dialog', 'manage-players', true);
+                this.players = [];
+                this.$store.state.players.forEach(i => {
+                    i.track="...";
+                    this.players.push(i);
+                });
+                
+                this.updateAll();
+                this.timer = setInterval(function () {
+                    this.updateAll();
+                }.bind(this), 2000);
+                this.show = true;
+            }
+        }.bind(this));
+
+        bus.$on('closeDialog', function() {
+            if (this.show) {
+                this.close();
+            }
+        }.bind(this));
+    },
+    methods: {
+        close() {
+            this.show=false;
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = undefined;
+            }
+            bus.$emit('dialog', 'manage-players', false);
+        },
+        i18n(str) {
+            if (!this.show) {
+                return i18n(str);
+            } else {
+                return str;
+            }
+        },
+        volumeDown(index) {
+            if (!this.show) {
+                return;
+            }
+            if (this.players[index].volume<=5) {
+                this.setVolume(index, 0);
+            } else {
+                this.setVolume(index, Math.floor((this.players[index].volume-5)/5)*5);
+            }
+        },
+        volumeUp(index) {
+            if (!this.show) {
+                return;
+            }
+            if (this.playerVolume>=95) {
+                this.setVolume(index, 100);
+            } else {
+                this.setVolume(index, Math.floor((this.players[index].volume+5)/5)*5);
+            }
+        },
+        setVolume(index, vol) {
+            if (!this.show) {
+                return;
+            }
+            lmsCommand(this.players[index].id, ["mixer", "volume", vol]).then(({data}) => {
+                this.players[index].volume = vol;
+            });
+        },
+        volumeChanged(index) {
+            this.setVolume(index, this.players[index].volume);
+        },
+        togglePower(index) {
+            if (!this.show) {
+                return;
+            }
+            if (this.players[index].ison) {
+                this.$confirm(i18n("Switch off '%1'?", this.players[index].name), {buttonTrueText: i18n('Switch Off'), buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        lmsCommand(this.players[index].id, ["power", "0"]).then(({data}) => {
+                            updatePlayer(index);
+                        });
+                    }
+                });
+            } else {
+                lmsCommand(this.players[index].id, ["power", "1"]).then(({data}) => {
+                    updatePlayer(index);
+                });
+            }
+        },
+        playPause(index) {
+            if (!this.show) {
+                return;
+            }
+            lmsCommand(this.players[index].id, this.players[index].isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
+                    updatePlayer(index);
+                });
+        },
+        updateAll() {
+            for (var i=0; i<this.players.length; ++i) {
+                if (!this.players[i].updating && (undefined==this.players[i].lastUpdate || ((new Date())-this.players[i].lastUpdate)>500)) {
+                    this.updatePlayer(i);
+                }
+            }
+        },
+        updatePlayer(i) {
+            this.players[i].updating=true;
+            lmsCommand(this.players[i].id, ["status", "-", 1, "tags:adclK"]).then(({data}) => {
+                this.players[i].updating=false;
+                this.players[i].ison = 1==data.result.power;
+                this.players[i].isplaying = data.result.mode === "play" && !data.result.waitingToPlay;
+                this.players[i].volume = data.result["mixer volume"] ? data.result["mixer volume"] : 0;
+                if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
+                    this.players[i].playIcon = this.players[i].isplaying ? "pause_circle_outline" : "play_circle_outline";
+                    if (data.result.playlist_loop[0].title) {
+                        if (data.result.playlist_loop[0].artist) {
+                            this.players[i].track=data.result.playlist_loop[0].title+" - "+data.result.playlist_loop[0].artist;
+                        } else {
+                            this.players[i].track=data.result.playlist_loop[0].title;
+                        }
+                    } else if (data.result.playlist_loop[0].artist) {
+                        this.players[i].track=data.result.playlist_loop[0].artist;
+                    } else {
+                        this.players[i].track=i18n("Unknown");
+                    }
+
+                    if (data.result.playlist_loop[0].artwork_url) {
+                        this.players[i].image=resolveImage(null, data.result.playlist_loop[0].artwork_url);
+                    }
+                    if (undefined==this.image && data.result.playlist_loop[0].coverid) {
+                        this.players[i].image=lmsServerAddress+"/music/"+data.result.playlist_loop[0].coverid+"/cover.jpg";
+                    }
+                    if (undefined==this.image) {
+                        this.players[i].image=lmsServerAddress+"/music/current/cover.jpg?player=" + this.players[i].id;
+                    }
+                } else {
+                    this.players[i].image=lmsServerAddress+"/music/current/cover.jpg?player=" + this.players[i].id;
+                    this.players[i].track = i18n('Nothing playing');
+                    this.players[i].playIcon = undefined;
+                }
+            
+                this.players[i].lastUpdate = new Date();
+                // Cause view to update
+                this.$set(this.players, i, this.players[i]);
+            }).catch(err => {
+                window.console.error(err);
+                this.players[i].updating=false;
+            });
+        }
+    },
+    beforeDestroy() {
+        if (undefined!==this.timer) {
+            clearInterval(this.timer);
+            this.timer = undefined;
+        }
+    }
+})
+

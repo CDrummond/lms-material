@@ -153,16 +153,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 playAction = undefined != resp.baseActions[PLAY_ACTION.cmd];
                 addAction = undefined != resp.baseActions[ADD_ACTION.cmd];
                 insertAction = undefined != resp.baseActions[INSERT_ACTION.cmd];
-                /*
-                if (undefined!=resp.baseActions[MORE_ACTION.cmd] && undefined!=resp.baseActions[MORE_ACTION.cmd].params) {
-                    for(var key in resp.baseActions[MORE_ACTION.cmd].params) {
-                        if (key != "menu") {
-                            moreAction=true;
-                            break;
-                        }
-                    }
-                }
-                */
+                //moreAction = undefined!=resp.baseActions[MORE_ACTION.cmd];
             }
 
             data.result.item_loop.forEach(i => {
@@ -196,7 +187,7 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                     haveWithoutIcons = true;
                 }
                 i.menuActions=[];
-                if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay") {
+                if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
                     if (playAction) {
                         i.menuActions.push(PLAY_ACTION);
                         addedPlayAction = true;
@@ -210,23 +201,33 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                         addedPlayAction = true;
                     }
                 }
-                if (addedPlayAction && (isFavorites || i.presetParams || isPlaylists || moreAction)) {
-                    i.menuActions.push(DIVIDER);
-                }
+                var addedDivider = false;
                 if (isFavorites) {
+                    i.menuActions.push(DIVIDER);
+                    addedDivider = true;
                     i.menuActions.push(RENAME_FAV_ACTION);
                     i.menuActions.push(REMOVE_FROM_FAV_ACTION);
                     if (!i.type) {
                         i.isFavFolder = true;
                     }
                 } else if (i.presetParams) {
+                    i.menuActions.push(DIVIDER);
+                    addedDivider = true;
                     i.menuActions.push(ADD_TO_FAV_ACTION);
                 }
                 if (isPlaylists) {
+                    if (!addedDivider) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
                     i.menuActions.push(RENAME_PL_ACTION);
                     i.menuActions.push(DELETE_ACTION);
                 }
-                if (moreAction) {
+                if (moreAction && i.menuActions.length>0 && i.params && i.params.item_id) {
+                    if (!addedDivider) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
                     i.menuActions.push(MORE_ACTION);
                 }
 
@@ -247,6 +248,9 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                             return;
                         }
                     });
+                }
+                if (!i.type && i.style&& i.style=="itemNoAction") {
+                    i.type = "text";
                 }
                 resp.items.push(i);
             });

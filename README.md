@@ -21,6 +21,8 @@ usage.
 8. UI settings; dark theme, album sort, auto scroll play queue
 9. Player settings; crossfade, replay gain, dont stop the music, alarms
 10. Sync support
+11. Info dialog to show stats, and re-scan music
+12. Manage players; control volume, play/pause, show current track
 
 ## Installation
 

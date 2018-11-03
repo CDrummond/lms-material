@@ -101,7 +101,12 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
 
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
-            if (playerStatus.current.artwork_url!=this.playerStatus.current.artwork_url ||
+            if (playerStatus.playlist.count == 0) {
+                if (undefined===this.coverFromInfo || this.coverFromInfo) {
+                    this.cover=resolveImage("music/0/cover");
+                    this.coverFromInfo = false;
+                }
+            } else if (playerStatus.current.artwork_url!=this.playerStatus.current.artwork_url ||
                 playerStatus.current.coverid!=this.playerStatus.current.coverid ||
                 this.coverFromPlayer!=this.$store.state.player.id) {
                 this.playerStatus.current.artwork_url = playerStatus.current.artwork_url;
@@ -118,6 +123,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 if (undefined==this.cover) {
                     this.cover=lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
                 }
+                this.coverFromInfo = true;
             }
 
             // Have other items changed

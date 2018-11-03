@@ -22,7 +22,7 @@ Vue.component('lms-manage-players', {
                   <v-list class="pmgr-playerlist">
                     <v-list-tile>
                       <v-list-tile-avatar v-if="player.image" :tile="true">
-                        <img v-lazy="player.image">
+                        <img :src="player.image">
                       </v-list-tile-avatar>
                       <v-list-tile-content>
                         <v-list-tile-title>{{player.name}}</v-list-tile-title>
@@ -183,17 +183,18 @@ Vue.component('lms-manage-players', {
                         this.players[i].track=i18n("Unknown");
                     }
 
+                    this.players[i].image = undefined;
                     if (data.result.playlist_loop[0].artwork_url) {
                         this.players[i].image=resolveImage(null, data.result.playlist_loop[0].artwork_url);
                     }
-                    if (undefined==this.image && data.result.playlist_loop[0].coverid) {
+                    if (undefined==this.players[i].image && data.result.playlist_loop[0].coverid) {
                         this.players[i].image=lmsServerAddress+"/music/"+data.result.playlist_loop[0].coverid+"/cover.jpg";
                     }
-                    if (undefined==this.image) {
+                    if (undefined==this.players[i].image) {
                         this.players[i].image=lmsServerAddress+"/music/current/cover.jpg?player=" + this.players[i].id;
                     }
                 } else {
-                    this.players[i].image=lmsServerAddress+"/music/current/cover.jpg?player=" + this.players[i].id;
+                    this.players[i].image = resolveImage("music/0/cover_50x50");
                     this.players[i].track = i18n('Nothing playing');
                     this.players[i].playIcon = undefined;
                 }

@@ -14,11 +14,6 @@
     - Fully handle commands
       - 'More'
       - Check all
-    - Convert (e.g.) "1. Track" to "01 Track"
-  - Add 'More' action to non-SlimBrowse Artist, Album, Track
-    ["artistinfo", "items", 0, 100, "menu:1", "artist_id:XXX", "library_id:XXX"]
-    ["albuminfo", "items", 0, 100, "menu:1", "artist_id:XXX", "album_id:XXX", "library_id:XXX]
-    ["trackinfo", "items", 0, 100, "menu:1", "artist_id:XXX", "album_id:XXX", "track_id:XXX", "library_id:XXX]
     Convert ["browselibrary", "items", "mode:albums(etc)"...] to non-slim-browse calls, for consistent UI
   - click() needs to allow itemplay for menu lists.
   - Replace ... menu with a play button/long press menu?

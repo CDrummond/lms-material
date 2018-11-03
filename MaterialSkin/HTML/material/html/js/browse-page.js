@@ -426,6 +426,31 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         },
         fetchItems(command, item, batchSize) {
             this.fetchingItems = true;
+
+            // Is this a browselibrary from favourites? If so, convert to non-SlimBrowse
+            if (command.command.length==2 && "browselibrary"==command.command[0] && "items"==command.command[1]) {
+                var p=[];
+                var c=[];
+                command.params.forEach(i => {
+                    if (i.startsWith("mode:")) {
+                        var mode = i.split(":")[1];
+                        c.push(mode);
+                        if (mode=="tracks") {
+                            p.push("tags:Adt");
+                            p.push("sort:tracknum");
+                        } else if (mode=="albums") {
+                            p.push("tags:jlya");
+                        }
+                    } else if (!i.startsWith("menu:")) {
+                        p.push(i);
+                    }
+                });
+                if (c.length==1 && p.length>0) {
+                    command.command = c;
+                    command.params = p;
+                }
+            }
+
             //console.log("FETCH command:" + command.command + " params:" + command.params);
             var start = item.range ? item.range.start : 0;
             var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize;

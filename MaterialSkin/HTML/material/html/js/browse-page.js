@@ -315,12 +315,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             },
             {
                 title: i18n("Apps"),
-                // SlimBrowse method - disabled for now
-                //command: ["myapps", "items"],
-                //params: ["menu:1"],
+                command: ["myapps", "items"],
+                params: ["menu:1"],
                 // Non-SlimBrowse
-                command: ["apps"],
-                params: ["want_url:1"],
+                //command: ["apps"],
+                //params: ["want_url:1"],
                 icon: "apps",
                 type: "group",
                 id: TOP_APPS_ID
@@ -487,7 +486,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 return;
             }
 
-            if ("audio"==item.type  || "track"==item.type || "itemplay"==item.style) {
+            if ("audio"==item.type  || "track"==item.type /*|| "itemplay"==item.style || "item_play"==item.style ||
+                (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))*/) {
                 if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, event);
                 }
@@ -524,7 +524,15 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 });
                 this.fetchItems(command, item, 5);
             } else {
-                this.fetchItems(this.buildCommand(item), item);
+                var command = this.buildCommand(item);
+                if (command.command.length>2 && command.command[1]=="playlist") {
+                    // TODO: Is not a browse command
+                    if (this.$store.state.showMenuAudio) {
+                        this.itemMenu(item, event);
+                    }
+                    return;
+                }
+                this.fetchItems(command, item);
             }
         },
         search(event, item) {
@@ -659,9 +667,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.showError(err);
                 });
             } else if (act===MORE_ACTION.cmd) {
-                alert("More action not currently implemented, sorry!!!");
-                //var command = this.buildCommand(item, act);
-                //console.log(command.command, command.params);
+                this.fetchItems(this.buildCommand(item, act), item);
             } else {
                 var command = this.buildCommand(item, act);
                 if (command.command.length<1) {
@@ -672,39 +678,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (item.url) {
                         command.command = ["playlist", act, item.url, item.title];
                     } else if (item.app && item.id) {
-                        if (item.type=="group" && item.app!="favorites") { // favorites does not like playall/addall????
-                            // Some app playlists are not playlists! Check if there really are sub-items. If there are
-                            // then we use playall/addall - else use item action
-                            // YouTube app
-                            //  - music search returns items marked isaudio=1 and hasitems=1 But there are no items.
-                            //    so playall/addall fail - and need to use load/add
-                            //  - playlist seatch also has isuadio=1 and hasitems=1, but there are items
-                            //
-                            lmsList(this.playerId(), item.command, item.params, 0, 0).then(({data}) => {
-                                if (data && data.result && data.result.count>0) {
-                                    command.command = [item.app, "playlist", act+"all", item.id];
-                                } else {
-                                    command.command = [item.app, "playlist", (act=="play" ? "load" : act), item.id];
-                                }
-                                lmsCommand(this.playerId(), command).then(({data}) => {
-                                    bus.$emit('refreshStatus');
-                                    if (act===PLAY_ACTION.cmd) {
-                                        this.$router.push('/nowplaying');
-                                    } else if (act===ADD_ACTION.cmd) {
-                                        this.showMessage(i18n("Appended '%1' to the play queue", item.title));
-                                    } else if (act==="insert") {
-                                        this.showMessage(i18n("Inserted '%1' into the play queue", item.title));
-                                    }
-                                }).catch(err => {
-                                    this.showError(err);
-                                });
-                            }).catch(err => {
-                                this.showError(err);
-                            });
-                            return; // The above is done in a promise, so stop here...
-                        } else {
-                            command.command = [item.app, "playlist", act, item.id];
-                        }
+                        command.command = [item.app, "playlist", act, item.id];
                     } else if (item.id) {
                         command.command = ["playlistcontrol", "cmd:"+(act=="play" ? "load" : act), item.id];
                     }
@@ -867,9 +841,12 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             cmd.params.push(key+":"+command.params[key]);
                         }
                     }
+                    var isMore = "more" == commandName;
                     if (command.itemsParams && item[command.itemsParams]) {
                         for(var key in item[command.itemsParams]) {
-                            cmd.params.push(key+":"+item[command.itemsParams][key]);
+                            if (/*!isMore ||*/ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
+                                cmd.params.push(key+":"+item[command.itemsParams][key]);
+                            }
                         }
                     }
                 }

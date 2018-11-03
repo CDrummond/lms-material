@@ -343,3 +343,8 @@ a {
     max-width: 200px !important;
 }
 
+.pmgr-playerlist {
+    margin-left:-12px;
+    margin-right:-6px;
+}
+

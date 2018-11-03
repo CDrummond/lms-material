@@ -86,7 +86,7 @@ var lmsServer = Vue.component('lms-server', {
                     var nextInterval = LMS_STATUS_REFRESH_MAX;
                     if (data && data.result) {
                         var player = { ison: data.result.power,
-                                       isPlaying: data.result.mode === "play" && !data.result.waitingToPlay,
+                                       isplaying: data.result.mode === "play" && !data.result.waitingToPlay,
                                        volume: -1,
                                        playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                                        current: { canseek: 0, time: 0, duration: 0 },
@@ -109,7 +109,7 @@ var lmsServer = Vue.component('lms-server', {
                         }
 
                         bus.$emit('playerStatus', player);
-                        if (player.isPlaying) {
+                        if (player.isplaying) {
                             nextInterval = LMS_STATUS_REFRESH_MIN;
                         }
                     }

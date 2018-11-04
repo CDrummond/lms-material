@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-function parseBrowseResp(data, parent, artistImages, idStart) {
+function parseBrowseResp(data, parent, options, idStart) {
     var resp = {items: [], baseActions:[] };
 
     if (data && data.result) {
@@ -19,11 +19,11 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                                   title: i.contributor,
                                   command: ["albums"],
                                   params: ["artist_id:"+ i.contributor_id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
-                                  //icon: artistImages ? undefined : "person",
+                                  image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
+                                  //icon: options.artistImages ? undefined : "person",
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                                   type: "group",
-                                  favIcon: artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
+                                  favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
                               });
                 });
             }
@@ -292,11 +292,11 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               command: ["albums"],
-                              image: artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
+                              image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
                               params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                               type: "group",
-                              favIcon: artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
+                              favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
                           };
                 if (params.length>0) {
                     params.forEach(p => {
@@ -309,9 +309,10 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var params = [];
-            if (parent && parent.params) {
+            if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
                 parent.params.forEach(p => {
-                    if (p.startsWith("role_id:") || p.startsWith("artist_id:") || p.startsWith("genre_id:")) {
+                    if ( (!options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
+                         (!options.noGenreFilter && p.startsWith("genre_id:"))) {
                         params.push(p);
                     }
                 });

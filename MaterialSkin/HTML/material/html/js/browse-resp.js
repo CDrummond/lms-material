@@ -278,8 +278,17 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                 });
             }
         } else if (data.result.artists_loop) {
+            var params = [];
+            if (parent && parent.params) {
+                parent.params.forEach(p => {
+                    if (p.startsWith("role_id:") || p.startsWith("genre_id:")) {
+                        params.push(p);
+                    }
+                });
+            }
+
             data.result.artists_loop.forEach(i => {
-                resp.items.push({
+                var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               command: ["albums"],
@@ -288,18 +297,33 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                               type: "group",
                               favIcon: artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
-                          });
+                          };
+                if (params.length>0) {
+                    params.forEach(p => {
+                        artist.params.push(p);
+                    });
+                }
+                resp.items.push(artist);
             });
             resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : data.result.count);
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
+            var params = [];
+            if (parent && parent.params) {
+                parent.params.forEach(p => {
+                    if (p.startsWith("role_id:") || p.startsWith("artist_id:") || p.startsWith("genre_id:")) {
+                        params.push(p);
+                    }
+                });
+            }
+
             data.result.albums_loop.forEach(i => {
                 // Bug on my system? There is a 'No Album' entry with no tracks!
                 if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
                     data.result.count--;
                     return;
                 }
-                resp.items.push({
+                var album = {
                               id: "album_id:"+i.id,
                               title: i.album,
                               subtitle: i.artist ? i.artist : i.year && i.year>1900 ? i.year : undefined,
@@ -309,7 +333,13 @@ function parseBrowseResp(data, parent, artistImages, idStart) {
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
                               type: "group",
                               favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
-                          });
+                          };
+                if (params.length>0) {
+                    params.forEach(p => {
+                        album.params.push(p);
+                    });
+                }
+                resp.items.push(album);
             });
             resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : data.result.count);
         } else if (data.result.titles_loop) {

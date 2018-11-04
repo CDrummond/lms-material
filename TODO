@@ -22,6 +22,7 @@
       - Move to sub-folder
       - Move to parent folder
       - Allow creating new folders
+  - When brosing artist->albums, or genre->artist, etc. make passing of artist_id/genre_id optional
 
 - Misc
   - Group management

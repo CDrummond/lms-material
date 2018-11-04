@@ -4,6 +4,8 @@
 2. Check that ExtendedBrowseModes is enabled before querying its list of modes.
 3. Likewise, check DontStopTheMusic is enabled before showing its config items.
 4. Fix covers, etc, for Album listing from Additional Browse Modes.
+5. When using additional browse modes, pass role_id when locating albums by
+   (e.g.) composer.
 
 0.0.7
 -----

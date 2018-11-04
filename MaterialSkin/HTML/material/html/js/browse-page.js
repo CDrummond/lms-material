@@ -936,12 +936,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         });
 
         // Additional browse modes?
-        lmsCommand("", ["pref", "plugin.extendedbrowsemodes:additionalMenuItems", "?"]).then(({data}) => {
-            var haveExtra = false;
-            if (data && data.result && data.result._p2 && data.result._p2.length>0) {
-                haveExtra = true;
-                for (var i = data.result._p2.length; i-- > 0; ) {
-                    var item = { title: data.result._p2[i].name,
+        lmsCommand("", ["pref", "plugin.state:ExtendedBrowseModes", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
+                lmsCommand("", ["pref", "plugin.extendedbrowsemodes:additionalMenuItems", "?"]).then(({data}) => {
+                   var haveExtra = false;
+                   if (data && data.result && data.result._p2 && data.result._p2.length>0) {
+                        haveExtra = true;
+                        for (var i = data.result._p2.length; i-- > 0; ) {
+                            var item = { title: data.result._p2[i].name,
                                  // SlimBrowse method - disabled for now
                                  //command: ["browselibrary", "items"],
                                  //params: ["menu:1", "mode:"+data.result._p2[i].feed],
@@ -952,21 +954,23 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                  icon: "artists"==data.result._p2[i].feed ? "group" : "album"
                                };
 
-                    if (data.result._p2[i].params) {
-                        if (data.result._p2[i].params.role_id) {
-                            item.params.push("role_id:"+data.result._p2[i].params.role_id);
-                        }
-                        if (data.result._p2[i].params.genre_id) {
-                            item.params.push("genre_id:"+data.result._p2[i].params.genre_id);
+                            if (data.result._p2[i].params) {
+                                if (data.result._p2[i].params.role_id) {
+                                    item.params.push("role_id:"+data.result._p2[i].params.role_id);
+                                }
+                                if (data.result._p2[i].params.genre_id) {
+                                    item.params.push("genre_id:"+data.result._p2[i].params.genre_id);
+                                }
+                            }
+                            this.other.unshift(item);
                         }
                     }
-                    this.other.unshift(item);
-                }
-            }
 
-            if (haveExtra && 1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
-                this.items = this.other;
-                this.listSize = this.items.length;
+                    if (haveExtra && 1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
+                        this.items = this.other;
+                        this.listSize = this.items.length;
+                    }
+                });
             }
         });
 

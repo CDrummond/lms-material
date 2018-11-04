@@ -1,6 +1,7 @@
 0.0.8
 -----
 1. Only show 'Random Mix' if plugin is installed.
+2. Check that ExtendedBrowseModes is enabled before querying its list of modes.
 
 0.0.7
 -----

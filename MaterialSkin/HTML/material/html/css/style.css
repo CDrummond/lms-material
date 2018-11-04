@@ -209,10 +209,9 @@ a {
 
 .np-image {
     display: block;
-    height:auto;
-    width:auto;
-    max-height:calc((var(--vh, 1vh)*100) - 102px); /* Work-around chrome mobile 100vh - see main.js */
-    max-width:calc(100vw - 16px);
+object-fit: contain;
+    height:calc((var(--vh, 1vh)*100) - 102px); /* Work-around chrome mobile 100vh - see main.js */
+    width:calc(100vw - 16px);
     margin-left: auto;
     margin-right: auto;
     padding:8px 8px 232px 8px; /* t, r, b, l */

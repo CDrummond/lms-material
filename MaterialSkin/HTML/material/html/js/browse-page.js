@@ -84,10 +84,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
               <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
-              <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
+              <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
               <p v-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-              <v-list-tile v-else-if="!item.header" avatar @click="click(item, $event)" :key="item.id">
+              <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event)" :key="item.id">
                 <v-list-tile-avatar v-if="item.image" :tile="true">
                   <img v-lazy="item.image">
                 </v-list-tile-avatar>
@@ -155,6 +155,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.menuActions=[];
         this.artistImages=getLocalStorageBool('artistImages', false);
         this.separateArtists=getLocalStorageBool('separateArtists', false);
+        this.randomMix=getLocalStorageBool('randomMix', true);
         this.previousScrollPos=0;
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
@@ -393,7 +394,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             {
                 title: i18n("Random Mix"),
                 icon: "shuffle",
-                id: TOP_RANDOM_MIX_ID
+                id: TOP_RANDOM_MIX_ID,
+                disabled: !this.randomMix
             },
             {
                 title: i18n("Music Folder"),
@@ -965,6 +967,22 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             if (haveExtra && 1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
                 this.items = this.other;
                 this.listSize = this.items.length;
+            }
+        });
+
+        lmsCommand("", ["can", "randomplay", "?"]).then(({data}) => {
+            if (data && data.result && undefined!=data.result._can) {
+                var can = 1==data.result._can;
+                if (can!=this.randomMix) {
+                    this.randomMix = can;
+                    setLocalStorageVal('randomMix', this.randomMix);
+                    this.other.forEach(i => {
+                        if (i.id == TOP_RANDOM_MIX_ID) {
+                            i.disabled = !this.randomMix;
+                            return;
+                        }
+                    });
+                }
             }
         });
 

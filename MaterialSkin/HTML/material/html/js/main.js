@@ -272,6 +272,9 @@ var app = new Vue({
                 window.history.pushState({ noBackExitsApp: true }, '');
             }
         }, false);
+
+        // https://github.com/timruffles/mobile-drag-drop/issues/77
+        window.addEventListener( 'touchmove', function() {});
     },
     computed: {
         darkUi() {

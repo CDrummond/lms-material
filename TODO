@@ -3,10 +3,7 @@
     one to affect the other. A (slightly) hacky-ish work-around is in place, where the page
     position is saved/restored on route change. Would be better to scroll just the list.
     Can probably use --vh setting (as per no playing details) to set list size/pos
-  - Drag'n'drop
-    - Not working on Android Firefox
-    - Not working on iOS - github.com/Bernardo-Castilho/dragdroptouch
-    - Desktop firefox has drag thumbnail much higher than item being dragged.
+  - Drag'n'drop, not working on Android Firefox
   - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
 
 - Browse
@@ -14,7 +11,6 @@
     - Fully handle commands
       - 'More'
       - Check all
-    Convert ["browselibrary", "items", "mode:albums(etc)"...] to non-slim-browse calls, for consistent UI
   - click() needs to allow itemplay for menu lists.
   - Replace ... menu with a play button/long press menu?
   - Favourites

@@ -25,7 +25,7 @@ Vue.component('lms-player-settings', {
             <v-list-tile v-if="!isgroup">
               <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
             </v-list-tile>
-            <v-list-tile vi-f="dstmItems && dstmItems.length>1">
+            <v-list-tile v-if="dstmItems && dstmItems.length>1">
               <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
             </v-list-tile>
 
@@ -194,14 +194,18 @@ Vue.component('lms-player-settings', {
                 this.playerId = this.$store.state.player.id;
                 this.playerName = this.$store.state.player.name;
                 this.isgroup = this.$store.state.player.isgroup;
-                lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
-                    if (data.result && data.result.item_loop) {
-                        data.result.item_loop.forEach(i => {
-                            if (i.actions && i.actions.do && i.actions.do.cmd) {
-                                this.dstmItems.push({key: i.actions.do.cmd[2], label:i.text});
-                                if (1===i.radio) {
-                                    this.dstm = i.actions.do.cmd[2];
-                                }
+                lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
+                        lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
+                            if (data.result && data.result.item_loop) {
+                                data.result.item_loop.forEach(i => {
+                                    if (i.actions && i.actions.do && i.actions.do.cmd) {
+                                        this.dstmItems.push({key: i.actions.do.cmd[2], label:i.text});
+                                        if (1===i.radio) {
+                                            this.dstm = i.actions.do.cmd[2];
+                                        }
+                                    }
+                                });
                             }
                         });
                     }

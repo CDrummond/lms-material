@@ -4,7 +4,9 @@
     position is saved/restored on route change. Would be better to scroll just the list.
     Can probably use --vh setting (as per no playing details) to set list size/pos
   - Drag'n'drop, not working on Android Firefox
-  - Queue not always drawn completely with iOS,  dragging up/down causes items to be shown.
+  - Issues with virtual scroller
+    - Navigate into 'Apps' (when only have a few), and back out; not all items drawn
+    - disabld for now
 
 - Browse
   - SlimBrowse
@@ -17,14 +19,9 @@
     - Before showing menu, check if item is in favourites - and adjust entries?
     - Add 'new favorite' to toolbar
     - Add 'Move to' to context menu
+      - Move to sub-folder
+      - Move to parent folder
       - Allow creating new folders
-
-- Now Playing
-  - Drag time slider?
-  - Set butons to disabled when appropriate
-
-- PlayQueue
-  - Only update whilst visible?
 
 - Misc
   - Group management

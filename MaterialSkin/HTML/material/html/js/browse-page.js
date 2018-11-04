@@ -943,6 +943,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                    if (data && data.result && data.result._p2 && data.result._p2.length>0) {
                         haveExtra = true;
                         for (var i = data.result._p2.length; i-- > 0; ) {
+                            var isAlbums = "albums"==data.result._p2[i].feed;
                             var item = { title: data.result._p2[i].name,
                                  // SlimBrowse method - disabled for now
                                  //command: ["browselibrary", "items"],
@@ -951,8 +952,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                  params: [],
                                  id: TOP_ID_PREFIX+"ebm-"+data.result._p2[i].id,
                                  type: "group",
-                                 icon: "artists"==data.result._p2[i].feed ? "group" : "album"
+                                 icon: isAlbums ? "album" : "group"
                                };
+
+                            if (isAlbums) {
+                               item.params.push("tags:jlya");
+                               item.params.push("sort:"+ALBUM_SORT_PLACEHOLDER);
+                            }
 
                             if (data.result._p2[i].params) {
                                 if (data.result._p2[i].params.role_id) {

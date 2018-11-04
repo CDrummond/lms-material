@@ -209,7 +209,7 @@ a {
 
 .np-image {
     display: block;
-object-fit: contain;
+    object-fit: contain;
     height:calc((var(--vh, 1vh)*100) - 102px); /* Work-around chrome mobile 100vh - see main.js */
     width:calc(100vw - 16px);
     margin-left: auto;

@@ -2,6 +2,7 @@
 -----
 1. Only show 'Random Mix' if plugin is installed.
 2. Check that ExtendedBrowseModes is enabled before querying its list of modes.
+3. Likewise, check DontStopTheMusic is enabled before showing its config items.
 
 0.0.7
 -----

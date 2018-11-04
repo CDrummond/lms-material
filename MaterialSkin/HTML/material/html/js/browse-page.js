@@ -153,7 +153,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.menuActions=[];
-        this.artistImages=getLocalStorageBool('artistImages', false);
+        this.options={artistImages: getLocalStorageBool('artistImages', false),
+                      noGenreFilter: getLocalStorageBool('noGenreFilter', false),
+                      noRoleFilter: getLocalStorageBool('noRoleFilter', false),};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.previousScrollPos=0;
@@ -197,7 +199,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
                 lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                     this.fetchingItems = false;
-                    var resp = parseBrowseResp(data, this.current, this.artistImages, this.items.length);
+                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
                     if (resp && resp.items) {
                         resp.items.forEach(i => {
                             this.items.push(i);
@@ -458,7 +460,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize;
             lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                 this.fetchingItems = false;
-                var resp = parseBrowseResp(data, item, this.artistImages, 0);
+                var resp = parseBrowseResp(data, item, this.options, 0);
 
                 if (resp && resp.items && resp.items.length>0) {
                     var prev = {};
@@ -674,7 +676,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params.push("sort:random");
                 lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
                     this.fetchingItems = false;
-                    var resp = parseBrowseResp(data, this.current, this.artistImages);
+                    var resp = parseBrowseResp(data, this.current, this.options);
                     if (1===resp.items.length && resp.items[0].id) {
                         var item = resp.items[0];
                         this.fetchingItems = true;
@@ -758,7 +760,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             var command = this.buildCommand(this.current);
             lmsList(this.playerId(), command.command, command.params, 0).then(({data}) => {
                 this.fetchingItems = false;
-                var resp = parseBrowseResp(data, this.current, this.artistImages, 0);
+                var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
@@ -926,15 +928,27 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.initItems();
             }
         });
-
         // Artist images?
         lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
-                this.artistImages = 1==data.result._p2;
-                setLocalStorageVal('artistImages', this.artistImages);
+                this.options.artistImages = 1==data.result._p2;
+                setLocalStorageVal('artistImages', this.options.artistImages);
             }
         });
-
+        // Filer albums/tracks on genre?
+        lmsCommand("", ["pref", "noGenreFilter", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2) {
+                this.options.noGenreFilter = 1==data.result._p2;
+                setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
+            }
+        });
+        // Filter album/tracks on role?
+        lmsCommand("", ["pref", "noRoleFilter", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2) {
+                this.options.noRoleFilter = 1==data.result._p2;
+                setLocalStorageVal('noRoleFilter', this.options.noRoleFilter);
+            }
+        });
         // Additional browse modes?
         lmsCommand("", ["pref", "plugin.state:ExtendedBrowseModes", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {

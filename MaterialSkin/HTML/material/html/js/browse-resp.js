@@ -281,7 +281,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             var params = [];
             if (parent && parent.params) {
                 parent.params.forEach(p => {
-                    if (p.startsWith("role_id:") || p.startsWith("genre_id:")) {
+                    if (p.startsWith("role_id:") || (!options.noGenreFilter && p.startsWith("genre_id:"))) {
                         params.push(p);
                     }
                 });

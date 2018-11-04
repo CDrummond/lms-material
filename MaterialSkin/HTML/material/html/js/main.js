@@ -35,6 +35,11 @@ router.beforeEach((to, from, next) => {
     next()
 })
 
+// Work-around for bottomnav issue - see bottomnav.js
+router.afterEach((to, from) => {
+    bus.$emit('routeChanged', from.path, to.path);
+})
+
 const store = new Vuex.Store({
     state: {
         players: null, // List of players

@@ -17,11 +17,6 @@
   - Replace ... menu with a play button/long press menu?
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
-    - Add 'new favorite' to toolbar
-    - Add 'Move to' to context menu
-      - Move to sub-folder
-      - Move to parent folder
-      - Allow creating new folders
 
 - Misc
   - Group management

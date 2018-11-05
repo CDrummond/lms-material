@@ -460,7 +460,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();
                     }).catch(err => {
-                        this.showError(err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Renamed failed") : i18n("Failed"));
+                        this.showError(err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"));
                     });
                 }
             }

@@ -390,42 +390,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         fetchItems(command, item, batchSize) {
             this.fetchingItems = true;
             // Is this a browselibrary from favourites? If so, convert to non-SlimBrowse
-            if (command.command.length==2 && "browselibrary"==command.command[0] && "items"==command.command[1]) {
-                var p=[];
-                var c=[];
-                var canReplace = true;
-
-                command.params.forEach(i => {
-                    if (i.startsWith("mode:")) {
-                        var mode = i.split(":")[1];
-                        if (mode.startsWith("myMusicArtists")) {
-                            mode="artists";
-                        } else if (mode.startsWith("myMusicAlbums")) {
-                            mode="albums";
-                        } else if (mode=="vaalbums") {
-                            mode="albums";
-                            p.push("compilation:1");
-                        } else if (mode!="years" && mode!="genres") {
-                            canReplace = false;
-                            return;
-                        }
-                        c.push(mode);
-                        if (mode=="tracks") {
-                            p.push("tags:Adt");
-                            p.push("sort:tracknum");
-                        } else if (mode=="albums") {
-                            p.push("tags:jlya");
-                        }
-                    } else if (!i.startsWith("menu:")) {
-                        p.push(i);
-                    }
-                });
-
-                if (canReplace && c.length==1) {
-                    command.command = c;
-                    command.params = p;
-                }
-            }
+            command = this.convertToNonSlimBrowse(command);
 
             //console.log("FETCH command:" + command.command + " params:" + command.params);
             var start = item.range ? item.range.start : 0;
@@ -799,7 +764,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 setScrollTop(prev.pos>0 ? prev.pos : 0);
             });
         },
-        buildCommand(item, commandName) {
+        buildCommand(item, commandName, doReplacements) {
             var cmd = {command: [], params: [] };
 
             if (undefined==commandName) {
@@ -855,27 +820,29 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
             }
 
-            // Add library id, if set TODO: Is this OK for all commands???
-            if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library) {
-                var haveLibId = false;
-                cmd.params.forEach(p => {
-                    if (p.startsWith("library_id:")) {
-                        haveLibId = true;
-                        return;
+            if (undefined==doReplacements || doReplacements) {
+                // Add library id, if set TODO: Is this OK for all commands???
+                if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library) {
+                    var haveLibId = false;
+                        cmd.params.forEach(p => {
+                        if (p.startsWith("library_id:")) {
+                            haveLibId = true;
+                            return;
+                        }
+                    });
+                    if (!haveLibId) {
+                        cmd.params.push("library_id:"+this.$store.state.library);
                     }
-                });
-                if (!haveLibId) {
-                    cmd.params.push("library_id:"+this.$store.state.library);
-                }
-            }
+               }
 
-            // Replace sort and search terms
-            if (cmd.params.length>0) {
-                var modifiedParams = [];
-                cmd.params.forEach(p => { modifiedParams.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
-                                                               .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)
-                                                               .replace(TERM_PLACEHOLDER, this.searchTerm)); });
-                cmd.params = modifiedParams;
+                // Replace sort and search terms
+                if (cmd.params.length>0) {
+                    var modifiedParams = [];
+                    cmd.params.forEach(p => { modifiedParams.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
+                                                                   .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)
+                                                                   .replace(TERM_PLACEHOLDER, this.searchTerm)); });
+                    cmd.params = modifiedParams;
+                }
             }
             //console.log("COMMAND", cmd.command, cmd.params);
             return cmd;
@@ -903,6 +870,45 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         },
         getTop() {
             return this.$store.state.serverMenus ? this.serverTop : this.top;
+        },
+        convertToNonSlimBrowse(command) {
+            if (command.command.length==2 && "browselibrary"==command.command[0] && "items"==command.command[1]) {
+                var p=[];
+                var c=[];
+                var canReplace = true;
+
+                command.params.forEach(i => {
+                    if (i.startsWith("mode:")) {
+                        var mode = i.split(":")[1];
+                        if (mode.startsWith("myMusicArtists")) {
+                            mode="artists";
+                        } else if (mode.startsWith("myMusicAlbums")) {
+                            mode="albums";
+                        } else if (mode=="vaalbums") {
+                            mode="albums";
+                            p.push("compilation:1");
+                        } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres") {
+                            canReplace = false;
+                            return;
+                        }
+                        c.push(mode);
+                        if (mode=="tracks") {
+                            p.push("tags:Adt");
+                            p.push("sort:tracknum");
+                        } else if (mode=="albums") {
+                            p.push("tags:jlya");
+                        }
+                    } else if (!i.startsWith("menu:")) {
+                        p.push(i);
+                    }
+                });
+
+                if (canReplace && c.length==1) {
+                    return {command: c, params: p, modified: true}
+                }
+            }
+            command.modified = false;
+            return command;
         },
         addExtraItems(list, addMore) {
             list.push({
@@ -973,9 +979,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
+                                // Build command, and see if can convert to non-SlimBrowse
+                                var command = this.convertToNonSlimBrowse(this.buildCommand(c, "go", false));
                                 this.serverTop.push({
                                                         title: c.text,
-                                                        actions: c.actions,
+                                                        command: command.modified ? command.command : undefined,
+                                                        params: command.modified ? command.params : undefined,
+                                                        actions: command.modified ? undefined : c.actions,
                                                         id: TOP_ID_PREFIX+c.id,
                                                         weight: c.weight ? parseFloat(c.weight) : 100,
                                                         icon: c.id.startsWith("myMusicArtists")

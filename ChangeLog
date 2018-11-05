@@ -8,6 +8,7 @@
    (e.g.) composer.
 6. Respect server's "Filter Genres at the Album & Track Level" and
    "Filter Contributor Roles at the Album & Track Level" settings.
+7. Respect library_id setting for Additional Browse Modes.
 
 0.0.7
 -----

@@ -155,7 +155,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.menuActions=[];
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
-                      noRoleFilter: getLocalStorageBool('noRoleFilter', false),};
+                      noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.previousScrollPos=0;
@@ -883,7 +883,16 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
             // Add library id, if set TODO: Is this OK for all commands???
             if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library) {
-                cmd.params.push("library_id:"+this.$store.state.library);
+                var haveLibId = false;
+                cmd.params.forEach(p => {
+                    if (p.startsWith("library_id:")) {
+                        haveLibId = true;
+                        return;
+                    }
+                });
+                if (!haveLibId) {
+                    cmd.params.push("library_id:"+this.$store.state.library);
+                }
             }
 
             // Replace sort and search terms
@@ -975,13 +984,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             }
 
                             if (data.result._p2[i].params) {
-                                if (data.result._p2[i].params.role_id) {
-                                    item.params.push("role_id:"+data.result._p2[i].params.role_id);
-                                }
-                                if (data.result._p2[i].params.genre_id) {
-                                    item.params.push("genre_id:"+data.result._p2[i].params.genre_id);
+                                for(var key in data.result._p2[i].params) {
+                                    item.params.push(key+":"+data.result._p2[i].params[key]);
                                 }
                             }
+
                             this.other.unshift(item);
                         }
                     }

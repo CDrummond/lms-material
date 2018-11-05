@@ -233,51 +233,42 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
 
             this.top = [
-            { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
-            {
-                title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
-                command: ["artists"],
-                params: [],
-                icon: "group",
-                type: "group",
-                id: TOP_ID_PREFIX+"ar",
-            },
-            {
-                title: i18n("Albums"),
-                command: ["albums"],
-                params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
-                icon: "album",
-                type: "group",
-                id: TOP_ID_PREFIX+"al
-            },
-            {
-                title: i18n("Genres"),
-                command: ["genres"],
-                params: [],
-                icon: "label",
-                type: "group",
-                id: TOP_ID_PREFIX+"ge"
-            },
-            {
-                title: i18n("Playlists"),
-                command: ["playlists"],
-                params: [],
-                icon: "list",
-                type: "group",
-                id: TOP_ID_PREFIX+"pl"
-            } 
-            ];
+                { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
+                { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
+                  command: ["artists"],
+                  params: [],
+                  icon: "group",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"ar" },
+                { title: i18n("Albums"),
+                  command: ["albums"],
+                  params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
+                  icon: "album",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"al" },
+                {
+                  title: i18n("Genres"),
+                  command: ["genres"],
+                  params: [],
+                  icon: "label",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"ge" },
+                {
+                  title: i18n("Playlists"),
+                  command: ["playlists"],
+                  params: [],
+                  icon: "list",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"pl" } 
+                ];
             this.addExtraItems(this.top, true);
             if (this.separateArtists) {
-                this.top.splice(2, 0,
-                            {
-                                title: i18n("Album Artists"),
-                                command: ["artists"],
-                                params: ["role_id:ALBUMARTIST"],
-                                icon: "group",
-                                type: "group",
-                                id: TOP_ID_PREFIX+"aar"
-                            });
+                this.top.splice(2, 0, { title: i18n("Album Artists"),
+                                        command: ["artists"],
+                                        params: ["role_id:ALBUMARTIST"],
+                                        icon: "group",
+                                        type: "group",
+                                        id: TOP_ID_PREFIX+"aar" });
             }
 
             var otherPrev = [];
@@ -289,53 +280,41 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
             }
             this.other = [
-            {
-                title: i18n("Compilations"),
-                command: ["albums"],
-                params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
-                icon: "album",
-                type: "group",
-                id: TOP_ID_PREFIX+"co",
-            },
-            {
-                title: i18n("Random Albums"),
-                command: ["albums"],
-                params: ["tags:jlya", "sort:random"],
-                icon: "shuffle",
-                type: "group",
-                id: TOP_RANDOM_ALBUMS_ID
-            },
-            {
-                title: i18n("Years"),
-                command: ["years"],
-                params: [],
-                icon: "date_range",
-                type: "group",
-                id: TOP_ID_PREFIX+"yr"
-            },
-            {
-                title: i18n("New Music"),
-                command: ["albums"],
-                params: ["tags:jlya", "sort:new"],
-                icon: "new_releases",
-                type: "group",
-                id: TOP_NEW_MUSIC_ID
-            },
-            {
-                title: i18n("Random Mix"),
-                icon: "shuffle",
-                id: TOP_RANDOM_MIX_ID,
-                disabled: !this.randomMix
-            },
-            {
-                title: i18n("Music Folder"),
-                command: ["musicfolder"],
-                params: ["type:audio", "tags:d"],
-                icon: "folder",
-                type: "group",
-                id: TOP_ID_PREFIX+"f"
-            },
-            ];
+                { title: i18n("Compilations"),
+                  command: ["albums"],
+                  params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
+                  icon: "album",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"co" },
+                { title: i18n("Random Albums"),
+                  command: ["albums"],
+                  params: ["tags:jlya", "sort:random"],
+                  icon: "shuffle",
+                  type: "group",
+                  id: TOP_RANDOM_ALBUMS_ID },
+                { title: i18n("Years"),
+                  command: ["years"],
+                  params: [],
+                  icon: "date_range",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"yr" },
+                { title: i18n("New Music"),
+                  command: ["albums"],
+                  params: ["tags:jlya", "sort:new"],
+                  icon: "new_releases",
+                  type: "group",
+                  id: TOP_NEW_MUSIC_ID },
+                { title: i18n("Random Mix"),
+                  icon: "shuffle",
+                  id: TOP_RANDOM_MIX_ID,
+                  disabled: !this.randomMix },
+                { title: i18n("Music Folder"),
+                  command: ["musicfolder"],
+                  params: ["type:audio", "tags:d"],
+                  icon: "folder",
+                  type: "group",
+                  id: TOP_ID_PREFIX+"f" },
+                ];
             otherPrev.forEach(i=> {
                 this.other.unshift(i);
             });
@@ -880,49 +859,39 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             return command;
         },
         addExtraItems(list, addMore) {
-            list.push({
-                    title: i18n("Search"),
-                    command: ["search"],
-                    params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
-                    icon: "search",
-                    type: "search",
-                    id: TOP_ID_PREFIX+"search"
-                });
+            list.push({ title: i18n("Search"),
+                        command: ["search"],
+                        params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
+                        icon: "search",
+                        type: "search",
+                        id: TOP_ID_PREFIX+"search" });
             if (addMore) {
-                list.push({
-                        title: i18n("More"),
-                        icon: "more_horiz",
-                        id: TOP_MORE_ID,
-                        type: "group",
-                    });
+                list.push({ title: i18n("More"),
+                            icon: "more_horiz",
+                            id: TOP_MORE_ID,
+                            type: "group" });
             }
             list.push({ header: i18n("Other Music"), id:"omh" });
-            list.push({
-                    title: i18n("Radio"),
-                    command: ["radios"],
-                    params: ["menu:radio"],
-                    icon: "radio",
-                    type: "group",
-                    id: TOP_ID_PREFIX+"ra"
-                });
-            list.push({
-                    title: i18n("Favorites"),
-                    command: ["favaddExtraItemsorites", "items"],
-                    params: ["menu:favorites", "menu:1"],
-                    icon: "favorite",
-                    type: "favorites",
-                    app: "favorites",
-                    id: TOP_ID_PREFIX+"fav",
-                    isFavFolder: true
-                });
-            list.push({
-                    title: i18n("Apps"),
-                    command: ["myapps", "items"],
-                    params: ["menu:1"],
-                    icon: "apps",
-                    type: "group",
-                    id: TOP_APPS_ID
-                });
+            list.push({ title: i18n("Radio"),
+                        command: ["radios"],
+                        params: ["menu:radio"],
+                        icon: "radio",
+                        type: "group",
+                        id: TOP_ID_PREFIX+"ra" });
+            list.push({ title: i18n("Favorites"),
+                        command: ["favaddExtraItemsorites", "items"],
+                        params: ["menu:favorites", "menu:1"],
+                        icon: "favorite",
+                        type: "favorites",
+                        app: "favorites",
+                        id: TOP_ID_PREFIX+"fav",
+                        isFavFolder: true });
+            list.push({ title: i18n("Apps"),
+                        command: ["myapps", "items"],
+                        params: ["menu:1"],
+                        icon: "apps",
+                        type: "group",
+                        id: TOP_APPS_ID });
         },
         playerMenu() {
             if (this.serverTop.length>0 && this.serverTop[0].player==this.playerId()) {
@@ -938,61 +907,55 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
                                 // Build command, and see if can convert to non-SlimBrowse
                                 var command = this.convertToNonSlimBrowse(this.buildCommand(c, "go", false));
-                                this.serverTop.push({
-                                                        title: c.text,
-                                                        command: command.modified ? command.command : undefined,
-                                                        params: command.modified ? command.params : undefined,
-                                                        actions: command.modified ? undefined : c.actions,
-                                                        id: TOP_ID_PREFIX+c.id,
-                                                        weight: c.weight ? parseFloat(c.weight) : 100,
-                                                        icon: c.id.startsWith("myMusicArtists")
-                                                                ? "group"
-                                                                : c.id.startsWith("myMusicAlbums")
-                                                                    ? "album"
-                                                                    : c.id.startsWith("myMusicGenres")
-                                                                        ? "label"
-                                                                        : c.id.startsWith("myMusicPlaylists")
-                                                                            ? "list"
-                                                                            : c.id.startsWith("myMusicYears")
-                                                                                ? "date_range"
-                                                                                : c.id.startsWith("myMusicNewMusic")
-                                                                                    ? "new_releases"
-                                                                                        : c.id.startsWith("myMusicMusicFolder")
-                                                                                        ? "folder"
-                                                                                            : c.id.startsWith("myMusicFileSystem")
-                                                                                                ? "computer"
-                                                                                                : c.id.startsWith("myMusicRandomAlbums")
-                                                                                                    ? "shuffle"
-                                                                                                    : c.id.startsWith("myMusicTopTracks")
-                                                                                                        ? "arrow_upward"
-                                                                                                        : c.id.startsWith("myMusicFlopTracks")
-                                                                                                            ? "arrow_downward"
-                                                                                                            : c.icon
-                                                    });
+                                this.serverTop.push({ title: c.text,
+                                                      command: command.modified ? command.command : undefined,
+                                                      params: command.modified ? command.params : undefined,
+                                                      actions: command.modified ? undefined : c.actions,
+                                                      id: TOP_ID_PREFIX+c.id,
+                                                      weight: c.weight ? parseFloat(c.weight) : 100,
+                                                      icon: c.id.startsWith("myMusicArtists")
+                                                            ? "group"
+                                                            : c.id.startsWith("myMusicAlbums")
+                                                                ? "album"
+                                                                : c.id.startsWith("myMusicGenres")
+                                                                    ? "label"
+                                                                    : c.id.startsWith("myMusicPlaylists")
+                                                                        ? "list"
+                                                                        : c.id.startsWith("myMusicYears")
+                                                                            ? "date_range"
+                                                                            : c.id.startsWith("myMusicNewMusic")
+                                                                                ? "new_releases"
+                                                                                    : c.id.startsWith("myMusicMusicFolder")
+                                                                                    ? "folder"
+                                                                                        : c.id.startsWith("myMusicFileSystem")
+                                                                                            ? "computer"
+                                                                                            : c.id.startsWith("myMusicRandomAlbums")
+                                                                                                ? "shuffle"
+                                                                                                : c.id.startsWith("myMusicTopTracks")
+                                                                                                    ? "arrow_upward"
+                                                                                                    : c.id.startsWith("myMusicFlopTracks")
+                                                                                                        ? "arrow_downward"
+                                                                                                        : c.icon });
                             } else if (c.id=="randomplay") {
-                                this.serverTop.push({
-                                                        title: i18n("Random Mix"),
-                                                        icon: "shuffle",
-                                                        id: TOP_RANDOM_MIX_ID,
-                                                        weight: c.weight ? parseFloat(c.weight) : 100
-                                                    });
+                                this.serverTop.push({ title: i18n("Random Mix"),
+                                                      icon: "shuffle",
+                                                      id: TOP_RANDOM_MIX_ID,
+                                                      weight: c.weight ? parseFloat(c.weight) : 100 });
                             }
                         }
                     });
-                    this.serverTop.sort(function(a, b) {
-                                                                if (a.weight!=b.weight) {
-                                                                    return a.weight>b.weight
-                                                                }
-                                                                var title = a.title.toUpperCase();
-                                                                var title = b.title.toUpperCase();
-                                                                if (title < title) {
-                                                                    return -1;
-                                                                }
-                                                                if (title > title) {
-                                                                    return 1;
-                                                                }
-                                                                return 0;
-                                                           });
+                    this.serverTop.sort(function(a, b) {    if (a.weight!=b.weight) {
+                                                                return a.weight>b.weight
+                                                            }
+                                                            var title = a.title.toUpperCase();
+                                                            var title = b.title.toUpperCase();
+                                                            if (title < title) {
+                                                                return -1;
+                                                            }
+                                                            if (title > title) {
+                                                                return 1;
+                                                            }
+                                                            return 0; });
                     this.addExtraItems(this.serverTop, false);
                     this.serverTop[0].player=this.playerId();
                     if (this.$store.state.serverMenus && 0==this.history.length) {

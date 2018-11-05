@@ -295,7 +295,8 @@ a {
 }
 
 .settings-list {
-    max-width:800px;
+    width:100%;
+    max-width:700px;
     padding-left:8px;
     margin: auto;
 }

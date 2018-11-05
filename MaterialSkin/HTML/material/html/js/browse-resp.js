@@ -324,10 +324,18 @@ function parseBrowseResp(data, parent, options, idStart) {
                     data.result.count--;
                     return;
                 }
+                var subtitle = i.artist ? i.artist : undefined;
+                if (i.year && i.year>1900) {
+                    if (i.artist) {
+                        subtitle+=" (" + i.year + ")";
+                    } else {
+                        subtitle = i.year;
+                    }
+                }
                 var album = {
                               id: "album_id:"+i.id,
                               title: i.album,
-                              subtitle: i.artist ? i.artist : i.year && i.year>1900 ? i.year : undefined,
+                              subtitle: subtitle,
                               command: ["tracks"],
                               image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover_100x100_o"  ,
                               params: ["album_id:"+ i.id, "tags:Adt", "sort:tracknum"],

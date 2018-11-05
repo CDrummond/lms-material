@@ -7,73 +7,73 @@
  
 var lmsNowPlaying = Vue.component("LmsNowPlaying", {
     template: `
-      <div class="np-page" v-if="playerStatus.ison">
-        <div v-if="info.show" class="np-info">
-          <v-tabs centered v-model="info.tab">
-            <template v-for="(tab, index) in info.tabs">
-              <v-tab :key="index">{{tab.title}}</v-tab>
-              <v-tab-item :key="index">
-                <v-card flat>
-                  <v-card-text class="np-info-text" v-html="tab.text"></v-card-text>
-                </v-card>
-              </v-tab-item>
-            </template>
-          </v-tabs>
-          <v-card>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </div>
-        <div v-else>
-          <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
-          <p class="np-text" v-else>&nbsp;</p>
-          <p class="np-subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
-          <p class="np-subtext" v-else>&nbsp;</p>
-          <p class="np-subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-          <p class="np-subtext" v-else>&nbsp;</p>
-          <img v-if="!info.show" :src="cover" class="np-image" @contextmenu="showMenu"></img>
-          <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
-            <v-list>
-              <v-list-tile>
-                <v-list-tile-title @click="info.show=true">{{menu.text}}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+<div class="np-page" v-if="playerStatus.ison">
+ <div v-if="info.show" class="np-info">
+  <v-tabs centered v-model="info.tab">
+   <template v-for="(tab, index) in info.tabs">
+    <v-tab :key="index">{{tab.title}}</v-tab>
+    <v-tab-item :key="index">
+     <v-card flat>
+      <v-card-text class="np-info-text" v-html="tab.text"></v-card-text>
+     </v-card>
+    </v-tab-item>
+   </template>
+  </v-tabs>
+  <v-card>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
+    <v-spacer></v-spacer>
+   </v-card-actions>
+  </v-card>
+ </div>
+ <div v-else>
+  <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+  <p class="np-text" v-else>&nbsp;</p>
+  <p class="np-subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+  <p class="np-subtext" v-else>&nbsp;</p>
+  <p class="np-subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+  <p class="np-subtext" v-else>&nbsp;</p>
+  <img v-if="!info.show" :src="cover" class="np-image" @contextmenu="showMenu"></img>
+  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
+   <v-list>
+    <v-list-tile>
+     <v-list-tile-title @click="info.show=true">{{menu.text}}</v-list-tile-title>
+    </v-list-tile>
+   </v-list>
+  </v-menu>
 
-          <v-layout text-xs-center row wrap class="np-controls">
-            <v-flex xs6 class="np-pos" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.time | displayTime}}</v-flex>
-            <v-flex xs6 class="np-duration" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.duration | displayTime}}</v-flex>
-            <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0"><v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider></v-flex>
-            <v-flex xs4>
-              <v-layout text-xs-center>
-                <v-flex xs6>
-                 <v-btn flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
-                 <v-btn flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
-                 <v-btn flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed"><v-icon>repeat</v-icon></v-btn>
-                </v-flex>
-                <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
-              </v-layout>
-            </v-flex>
-            <v-flex xs4>
-              <v-btn flat icon large v-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-              <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
-            </v-flex>
-            <v-flex xs4>
-              <v-layout text-xs-center>
-                <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn></v-flex>
-                <v-flex xs6>
-                  <v-btn flat icon v-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-                  <v-btn flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
-                  <v-btn flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed"><v-icon>shuffle</v-icon></v-btn>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-div>
-      </div>
+  <v-layout text-xs-center row wrap class="np-controls">
+   <v-flex xs6 class="np-pos" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.time | displayTime}}</v-flex>
+   <v-flex xs6 class="np-duration" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.duration | displayTime}}</v-flex>
+   <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0"><v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider></v-flex>
+   <v-flex xs4>
+    <v-layout text-xs-center>
+     <v-flex xs6>
+      <v-btn flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+      <v-btn flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+      <v-btn flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed"><v-icon>repeat</v-icon></v-btn>
+     </v-flex>
+     <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+    </v-layout>
+   </v-flex>
+   <v-flex xs4>
+    <v-btn flat icon large v-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+    <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+   </v-flex>
+   <v-flex xs4>
+    <v-layout text-xs-center>
+     <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+     <v-flex xs6>
+      <v-btn flat icon v-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+      <v-btn flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+      <v-btn flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed"><v-icon>shuffle</v-icon></v-btn>
+     </v-flex>
+    </v-layout>
+   </v-flex>
+  </v-layout>
+ </v-div>
+</div>
 `,
     props: [],
     data() {

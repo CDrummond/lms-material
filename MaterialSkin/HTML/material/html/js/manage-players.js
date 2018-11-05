@@ -7,59 +7,53 @@
 
 Vue.component('lms-manage-players', {
     template: `
-      <v-dialog v-model="show" fullscreen app>
-        <v-card>
-          <v-toolbar color="primary" dark app class="lms-toolbar">
-            <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-            <v-toolbar-title>{{i18n('Manage Players')}}</v-toolbar-title>
-          </v-toolbar>
-          <div class="settings-toolbar-pad"></div>
+<v-dialog v-model="show" fullscreen app>
+ <v-card>
+  <v-toolbar color="primary" dark app class="lms-toolbar">
+   <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+   <v-toolbar-title>{{i18n('Manage Players')}}</v-toolbar-title>
+  </v-toolbar>
+  <div class="settings-toolbar-pad"></div>
    
-          <v-container grid-list-md>
-            <v-layout row wrap>
-              <template v-for="(player, index) in players">
-                <v-flex xs12>
-                  <v-list class="pmgr-playerlist">
-                    <v-list-tile>
-                      <v-list-tile-avatar v-if="player.image" :tile="true">
-                        <img :src="player.image">
-                      </v-list-tile-avatar>
-                      <v-list-tile-content>
-                        <v-list-tile-title>{{player.name}}</v-list-tile-title>
-                        <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action v-if="player.playIcon" @click="prevTrack(index)">
-                        <v-btn icon>
-                            <v-icon>skip_previous</v-icon>
-                        </v-btn>
-                      </v-list-tile-action>
-                      <v-list-tile-action v-if="player.playIcon" @click="playPause(index)">
-                        <v-btn icon>
-                            <v-icon>{{player.playIcon}}</v-icon>
-                        </v-btn>
-                      </v-list-tile-action>
-                      <v-list-tile-action v-if="player.playIcon" @click="nextTrack(index)">
-                        <v-btn icon>
-                            <v-icon>skip_next</v-icon>
-                        </v-btn>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                  </v-list>
-                </v-flex xs12>
-                <v-flex xs12>
-                  <v-layout>
-                    <v-btn flat icon @click.stop="volumeDown(index)" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-                    <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="vol-slider" thumb-label="always"></v-slider>
-                    <v-btn flat icon @click.stop="volumeUp(index)" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
-                    <v-btn flat icon @click.stop="togglePower(index)" class="vol-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>                
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12 v-if="(index+1 < players.length)"><v-divider style="margin-top:22px; margin-bottom:22px"></v-divider></v-flex>
-              </template>
-            </v-layout>
-          </v-container>
-        </v-card>
-      </v-dialog>
+  <v-container grid-list-md>
+   <v-layout row wrap>
+    <template v-for="(player, index) in players">
+     <v-flex xs12>
+      <v-list class="pmgr-playerlist">
+       <v-list-tile>
+        <v-list-tile-avatar v-if="player.image" :tile="true">
+         <img :src="player.image">
+        </v-list-tile-avatar>
+        <v-list-tile-content>
+         <v-list-tile-title>{{player.name}}</v-list-tile-title>
+         <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+        <v-list-tile-action v-if="player.playIcon" @click="prevTrack(index)">
+         <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
+        </v-list-tile-action>
+        <v-list-tile-action v-if="player.playIcon" @click="playPause(index)">
+          <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
+        </v-list-tile-action>
+        <v-list-tile-action v-if="player.playIcon" @click="nextTrack(index)">
+         <v-btn icon><v-icon>skip_next</v-icon></v-btn>
+        </v-list-tile-action>
+       </v-list-tile>
+      </v-list>
+     </v-flex xs12>
+     <v-flex xs12>
+      <v-layout>
+       <v-btn flat icon @click.stop="volumeDown(index)" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
+       <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="vol-slider" thumb-label="always"></v-slider>
+       <v-btn flat icon @click.stop="volumeUp(index)" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+       <v-btn flat icon @click.stop="togglePower(index)" class="vol-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
+      </v-layout>
+     </v-flex>
+     <v-flex xs12 v-if="(index+1 < players.length)"><v-divider style="margin-top:22px; margin-bottom:22px"></v-divider></v-flex>
+    </template>
+   </v-layout>
+  </v-container>
+ </v-card>
+</v-dialog>
 `,
     props: [],
     data() {

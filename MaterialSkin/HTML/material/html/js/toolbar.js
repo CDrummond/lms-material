@@ -13,76 +13,74 @@ var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
 Vue.component('lms-toolbar', {
     template: `
-        <v-toolbar fixed dense app class="lms-toolbar">
-          <v-menu bottom class="toolbar-menu">
-            <v-toolbar-title slot="activator">
-              <v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon>
-              <div class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
-            </v-toolbar-title>
+<v-toolbar fixed dense app class="lms-toolbar">
+ <v-menu bottom class="toolbar-menu">
+  <v-toolbar-title slot="activator">
+   <v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon>
+   <div class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
+  </v-toolbar-title>
        
-            <v-list>
-              <template v-for="(item, index) in players">
-                <v-divider v-if="item.isgroup && index>0 && !players[index-1].isgroup" ></v-divider>
-                <v-list-tile @click="setPlayer(item.id)">
-                  <v-list-tile-content>
-                    <v-list-tile-title>
-                      <v-icon small v-if="player && item.id === player.id && players && players.length>1">radio_button_checked</v-icon>
-                      <v-icon small v-else-if="players && players.length>1">radio_button_unchecked</v-icon>
-                      <v-icon v-if="item.isgroup" v-bind:class="{'dimmed': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker_group</v-icon>
-                      <v-icon v-else v-bind:class="{'dimmed': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker</v-icon>&nbsp;{{item.name}}</v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-              <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
-              <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
-                <v-list-tile-content v-if="playerStatus.ison">
-                  <v-list-tile-title class="pm-icon-indent"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-content v-else>
-                  <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
+  <v-list>
+   <template v-for="(item, index) in players">
+    <v-divider v-if="item.isgroup && index>0 && !players[index-1].isgroup" ></v-divider>
+    <v-list-tile @click="setPlayer(item.id)">
+     <v-list-tile-content>
+     <v-list-tile-title>
+      <v-icon small v-if="player && item.id === player.id && players && players.length>1">radio_button_checked</v-icon>
+      <v-icon small v-else-if="players && players.length>1">radio_button_unchecked</v-icon>
+      <v-icon v-if="item.isgroup" v-bind:class="{'dimmed': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker_group</v-icon>
+      <v-icon v-else v-bind:class="{'dimmed': !item.ison || (item.id === player.id && !playerStatus.ison)}">speaker</v-icon>&nbsp;{{item.name}}</v-list-tile-title>
+     </v-list-tile-content>
+    </v-list-tile>
+   </template>
+   <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
+   <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
+    <v-list-tile-content v-if="playerStatus.ison">
+     <v-list-tile-title class="pm-icon-indent"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
+    </v-list-tile-content>
+    <v-list-tile-content v-else>
+     <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>
+    </v-list-tile-content>
+   </v-list-tile>
 
-              <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
-                <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{trans.managegroups}}</v-list-tile-title></v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
-                <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-if="playerStatus.sleepTimer">
-                <v-list-tile-content>
-                  <v-list-tile-title class="pm-icon-indent dimmed"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
-          <v-spacer></v-spacer>
-          <v-btn icon v-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
-            <v-icon>pause_circle_outline</v-icon>
-          </v-btn>
-          <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
-            <v-icon>play_circle_outline</v-icon>
-          </v-btn>
-          <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed': playerStatus.volume<0}" v-if="playerStatus.ison" @click="bus.$emit('volume')">
-            <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
-            <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
-          </v-btn>
-          <v-menu bottom left>
-            <v-btn slot="activator" icon>
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-            <v-list>
-              <template v-for="(item, index) in menuItems">
-                <v-list-tile v-if="item.href" :href="item.href" target="_blank">
-                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile v-else @click="menuAction(item.id)">
-                  <v-list-tile-title>{{item.title}}</v-list-tile-title>
-                </v-list-tile>
-              </template>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
+   <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
+    <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{trans.managegroups}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
+    <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-list-tile v-if="playerStatus.sleepTimer">
+    <v-list-tile-content>
+     <v-list-tile-title class="pm-icon-indent dimmed"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
+    </v-list-tile-content>
+   </v-list-tile>
+  </v-list>
+ </v-menu>
+ <v-spacer></v-spacer>
+ <v-btn icon v-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+  <v-icon>pause_circle_outline</v-icon>
+ </v-btn>
+ <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
+  <v-icon>play_circle_outline</v-icon>
+ </v-btn>
+ <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed': playerStatus.volume<0}" v-if="playerStatus.ison" @click="bus.$emit('volume')">
+  <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
+  <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
+ </v-btn>
+ <v-menu bottom left>
+  <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
+  <v-list>
+   <template v-for="(item, index) in menuItems">
+    <v-list-tile v-if="item.href" :href="item.href" target="_blank">
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+    </v-list-tile>
+    <v-list-tile v-else @click="menuAction(item.id)">
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
+</v-toolbar>
     `,
     props: [],
     data() {

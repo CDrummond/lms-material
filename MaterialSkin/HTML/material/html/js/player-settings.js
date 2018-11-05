@@ -9,123 +9,123 @@ var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
 
 Vue.component('lms-player-settings', {
     template: `
-    <div>
-      <v-dialog v-model="show" fullscreen app>
-        <v-card>
-          <v-toolbar color="primary" dark app class="lms-toolbar">
-            <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-            <v-toolbar-title>{{playerName}}</v-toolbar-title>
-          </v-toolbar>
-          <div class="settings-toolbar-pad"></div>
-          <v-list two-line subheader class="settings-list">
-            <v-header>{{i18n('Audio')}}</v-header>
-            <v-list-tile>
-              <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
-            </v-list-tile>
-            <v-list-tile v-if="!isgroup">
-              <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
-            </v-list-tile>
-            <v-list-tile v-if="dstmItems && dstmItems.length>1">
-              <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
-            </v-list-tile>
+<div>
+ <v-dialog v-model="show" fullscreen app>
+  <v-card>
+   <v-toolbar color="primary" dark app class="lms-toolbar">
+    <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+   <v-toolbar-title>{{playerName}}</v-toolbar-title>
+  </v-toolbar>
+  <div class="settings-toolbar-pad"></div>
+  <v-list two-line subheader class="settings-list">
+   <v-header>{{i18n('Audio')}}</v-header>
+   <v-list-tile>
+    <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
+   </v-list-tile>
+   <v-list-tile v-if="!isgroup">
+    <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
+   </v-list-tile>
+   <v-list-tile v-if="dstmItems && dstmItems.length>1">
+    <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
+   </v-list-tile>
 
-            <div class="settings-pad"></div>
-            <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
+   <div class="settings-pad"></div>
+   <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
 
-            <v-list-tile v-if="sleep.timeLeft">
-              <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
-            </v-list-tile>
-            <v-list-tile v-else>
-              <v-menu bottom left>
-                <v-btn slot="activator" flat>Sleep in... <v-icon>arrow_drop_down</v-icon></v-btn>
-                <v-list>
-                  <template v-for="(item, index) in sleep.items">
-                    <v-list-tile @click="setSleepTimer(item.duration)"">
-                      <v-list-tile-title>{{item.label}}</v-list-tile-title>
-                    </v-list-tile>
-                  </template>
-                </v-list>
-              </v-menu>
-            </v-list-tile>
+   <v-list-tile v-if="sleep.timeLeft">
+    <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
+   </v-list-tile>
+   <v-list-tile v-else>
+    <v-menu bottom left>
+     <v-btn slot="activator" flat>Sleep in... <v-icon>arrow_drop_down</v-icon></v-btn>
+     <v-list>
+      <template v-for="(item, index) in sleep.items">
+       <v-list-tile @click="setSleepTimer(item.duration)"">
+        <v-list-tile-title>{{item.label}}</v-list-tile-title>
+       </v-list-tile>
+      </template>
+     </v-list>
+    </v-menu>
+   </v-list-tile>
 
-            <div class="settings-pad"></div>
-            <v-header>{{i18n('Alarms')}}</v-header>
-            <v-list-tile>
-              <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
-            </v-list-tile>
+   <div class="settings-pad"></div>
+    <v-header>{{i18n('Alarms')}}</v-header>
+    <v-list-tile>
+     <v-switch v-model="alarms.on" label="Enable alarms"></v-switch>
+    </v-list-tile>
 
-            <v-subheader class="alarm-sched-header">{{i18n('Scheduled alarms')}}</v-subheader>
-            <template v-for="(item, index) in alarms.scheduled">
-              <v-list-tile class="alarm-entry">
-                <v-switch v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-switch>
-                <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
-                <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
-              </v-list-tile>
-              <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
-            </template>
-            <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
-            <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
-            <v-list-tile>
-              <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
-            </v-list-tile>
-            <v-list-tile>
-              <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
-            </v-list-tile>
-            <v-list-tile>
-              <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
-            </v-list-tile>
-          </v-list>
-        </v-card>
-      </v-dialog>
+    <v-subheader class="alarm-sched-header">{{i18n('Scheduled alarms')}}</v-subheader>
+    <template v-for="(item, index) in alarms.scheduled">
+     <v-list-tile class="alarm-entry">
+      <v-switch v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-switch>
+      <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
+      <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
+     </v-list-tile>
+     <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
+    </template>
+    <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
+    <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
+    <v-list-tile>
+     <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
+    </v-list-tile>
+    <v-list-tile>
+     <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
+    </v-list-tile>
+    <v-list-tile>
+     <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
+    </v-list-tile>
+   </v-list>
+  </v-card>
+ </v-dialog>
 
-      <v-dialog v-model="alarmDialog.show" width="500">
-        <v-card>
-          <v-card-title>{{alarmDialog.id ? i18n("Edit Alarm") : i18n("Create Alarm")}}</v-card-title>
-          <v-list two-line subheader class="settings-list">
-            <v-list-tile class="settings-compact-row">
-              <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
-                        persistent lazy full-width max-width="290px">
-                <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
-                <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width>
-                  <v-spacer></v-spacer>
-                  <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
-                  <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
-                </v-time-picker>
-              </v-dialog>
-            </v-list-tile>
-            <v-subheader>{{i18n('Days')}}</v-subheader>
-            <v-list-tile class="settings-compact-row">
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-switch></v-flex>
-            </v-list-tile>
-            <v-list-tile class="settings-compact-row">
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-switch></v-flex>
-            </v-list-tile>
-            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-switch></v-list-tile>
-            <v-list-tile class="settings-compact-row">
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-switch></v-flex>
-             <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-switch></v-flex>
-            </v-list-tile>
-            <v-subheader>{{i18n('Options')}}</v-subheader>
-            <v-list-tile class="settings-compact-row">
-              <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
-            </v-list-tile>
-            <!-- TODO ????
-            <v-list-tile class="settings-compact-row">
-              <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
-            </v-list-tile>
-            -->
-            <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.repeat" :label="i18n('Repeat')"></v-switch></v-list-tile>
-          </v-list>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat @click="alarmDialog.show = false">{{i18n('Cancel')}}</v-btn>
-            <v-btn flat @click="saveAlarm()">{{alarmDialog.id ? i18n("Save") : i18n("Create")}}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+ <v-dialog v-model="alarmDialog.show" width="500">
+  <v-card>
+  <v-card-title>{{alarmDialog.id ? i18n("Edit Alarm") : i18n("Create Alarm")}}</v-card-title>
+  <v-list two-line subheader class="settings-list">
+   <v-list-tile class="settings-compact-row">
+    <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
+              persistent lazy full-width max-width="290px">
+     <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
+     <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width>
+      <v-spacer></v-spacer>
+      <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+      <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
+     </v-time-picker>
+    </v-dialog>
+   </v-list-tile>
+   <v-subheader>{{i18n('Days')}}</v-subheader>
+   <v-list-tile class="settings-compact-row">
+    <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-switch></v-flex>
+    <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-switch></v-flex>
+   </v-list-tile>
+   <v-list-tile class="settings-compact-row">
+    <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-switch></v-flex>
+    <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-switch></v-flex>
+   </v-list-tile>
+   <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-switch></v-list-tile>
+   <v-list-tile class="settings-compact-row">
+    <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-switch></v-flex>
+    <v-flex xs6><v-switch v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-switch></v-flex>
+   </v-list-tile>
+   <v-subheader>{{i18n('Options')}}</v-subheader>
+   <v-list-tile class="settings-compact-row">
+    <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
+   </v-list-tile>
+   <!-- TODO ????
+   <v-list-tile class="settings-compact-row">
+    <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
+   </v-list-tile>
+   -->
+   <v-list-tile class="settings-compact-row"><v-switch v-model="alarmDialog.repeat" :label="i18n('Repeat')"></v-switch></v-list-tile>
+  </v-list>
+  <v-card-actions>
+   <v-spacer></v-spacer>
+   <v-btn flat @click="alarmDialog.show = false">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat @click="saveAlarm()">{{alarmDialog.id ? i18n("Save") : i18n("Create")}}</v-btn>
+   </v-card-actions>
+  </v-card>
+ </v-dialog>
+</div>
 `,
     props: [],
     data() {

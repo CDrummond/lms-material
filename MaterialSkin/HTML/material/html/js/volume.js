@@ -7,25 +7,25 @@
 
 Vue.component('lms-volume', {
     template: `
-        <v-dialog v-model="show" width=500>
-          <v-card>
-            <v-container grid-list-md text-xs-center>
-              <v-layout row wrap>
-                <v-flex xs12>
-                  <v-layout>
-                    <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-                    <v-slider step="1" v-model="playerVolume" class="vol-slider" thumb-label="always"></v-slider>
-                    <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
-                  </v-layout>
-                </v-flex>
-              </v-layout>
-            </v-container>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn flat @click.native="show = false">Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+<v-dialog v-model="show" width=500>
+ <v-card>
+  <v-container grid-list-md text-xs-center>
+   <v-layout row wrap>
+    <v-flex xs12>
+     <v-layout>
+      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
+      <v-slider step="1" v-model="playerVolume" class="vol-slider" thumb-label="always"></v-slider>
+      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+     </v-layout>
+    </v-flex>
+   </v-layout>
+  </v-container>
+  <v-card-actions>
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="show = false">Close</v-btn>
+  </v-card-actions>
+ </v-card>
+</v-dialog>
     `,
     props: [],
     data() {

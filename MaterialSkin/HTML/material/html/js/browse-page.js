@@ -29,105 +29,98 @@ const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
-        <div class="lms-list-page">
-          <v-dialog v-model="dialog.show" persistent max-width="500px">
-            <v-card>
-              <v-card-text>
-                <span v-if="dialog.title">{{dialog.title}}</span>
-                <v-container grid-list-md>
-                  <v-layout wrap>
-                    <v-flex xs12>
-                      <v-text-field :label="dialog.hint" v-model="dialog.value"></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
-                <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
-          <v-card v-if="headerTitle" class="subtoolbar">
-            <v-layout>
-              <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
-              <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
-              <v-layout row wrap class="subtoolbar-title">
-                <v-flex class="xs12 toolbar-title">{{headerTitle}}</v-flex>
-                <div class="toolbar-subtitle">{{headerSubTitle}}</div>
-              </v-layout>
-              <v-spacer></v-spacer>
-              <template v-for="(action, index) in menuActions">
-                <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button"><v-icon>{{action.icon}}</v-icon></v-btn>
-              </template>
-            </v-layout>
-          </v-card>
-          <div v-if="headerTitle" class="subtoolbar-pad"></div>
-          <table class="browse-progress" v-if="fetchingItems">
-            <tr>
-              <td style="text-align: center;">
-                <v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular>
-              </td>
-            </tr>
-          </table>
-          <v-list>
-            <template v-for="(item, index) in items">
-            <!-- TODO: Fix and re-use virtual scroller -->
-            <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
-              <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
+<div class="lms-list-page">
+ <v-dialog v-model="dialog.show" persistent max-width="500px">
+  <v-card>
+   <v-card-text>
+    <span v-if="dialog.title">{{dialog.title}}</span>
+    <v-container grid-list-md>
+     <v-layout wrap>
+      <v-flex xs12>
+       <v-text-field :label="dialog.hint" v-model="dialog.value"></v-text-field>
+      </v-flex>
+     </v-layout>
+    </v-container>
+   </v-card-text>
+  <v-card-actions>
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
+   <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
+  </v-card-actions>
+  </v-card>
+ </v-dialog>
+ <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
+ <v-card v-if="headerTitle" class="subtoolbar">
+  <v-layout>
+   <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
+   <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
+   <v-layout row wrap class="subtoolbar-title">
+    <v-flex class="xs12 toolbar-title">{{headerTitle}}</v-flex>
+    <div class="toolbar-subtitle">{{headerSubTitle}}</div>
+   </v-layout>
+   <v-spacer></v-spacer>
+   <template v-for="(action, index) in menuActions">
+    <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button"><v-icon>{{action.icon}}</v-icon></v-btn>
+   </template>
+  </v-layout>
+ </v-card>
+ <div v-if="headerTitle" class="subtoolbar-pad"></div>
+ <table class="browse-progress" v-if="fetchingItems">
+  <tr>
+   <td style="text-align: center;">
+    <v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular>
+   </td>
+  </tr>
+ </table>
+ <v-list>
+  <template v-for="(item, index) in items">
+  <!-- TODO: Fix and re-use virtual scroller -->
+  <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
+   <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
-              <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
+   <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
-              <p v-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-              <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event)" :key="item.id">
-                <v-list-tile-avatar v-if="item.image" :tile="true">
-                  <img v-lazy="item.image">
-                </v-list-tile-avatar>
-                <v-list-tile-avatar v-else-if="item.icon" :tile="true">
-                  <v-icon>{{item.icon}}</v-icon>
-                </v-list-tile-avatar>
+   <p v-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
+   <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event)" :key="item.id">
+    <v-list-tile-avatar v-if="item.image" :tile="true">
+     <img v-lazy="item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+     <v-icon>{{item.icon}}</v-icon>
+    </v-list-tile-avatar>
 
-                <v-list-tile-content v-if="item.type=='search'">
-                  <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
-                </v-list-tile-content>
+    <v-list-tile-content v-if="item.type=='search'">
+     <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
+    </v-list-tile-content>
 
-                <v-list-tile-content v-else>
-                  <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-                </v-list-tile-content>
-                
-                <!--
-                <v-list-tile-action v-if="item.menuActions && 1===item.menuActions.length" @click.stop="itemAction(item.menuActions[0].cmd, item)">
-                  <v-btn icon>
-                    <v-icon>{{item.menuActions[0].icon}}</v-icon>
-                  </v-btn>
-                </v-list-tile-action>
-                -->
-                <v-list-tile-action v-if="item.menuActions && item.menuActions.length>0" @click.stop="itemMenu(item, $event)">
-                  <v-btn icon>
-                    <v-icon>more_vert</v-icon>
-                  </v-btn>
-                </v-list-tile-action>
-              </v-list-tile>
-            <!-- </div></recycle-list></template> -->
-            </v-template>
-          </v-list>
+    <v-list-tile-content v-else>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+    </v-list-tile-content>
 
-          <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
-            <v-list v-if="menu.item">
-              <template v-for="(action, index) in menu.item.menuActions">
-                <v-divider v-if="action.divider"></v-divider>
-                <v-list-tile v-else @click="itemAction(action.cmd, menu.item)">
-                  <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
-                </v-list-tile>
-              </template>
-            </v-list>
-          </v-menu>
+    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>0" @click.stop="itemMenu(item, $event)">
+     <v-btn icon>
+      <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+   </v-list-tile>
+  <!-- </div></recycle-list></template> -->
+  </v-template>
+ </v-list>
 
-          <lms-randommix></lms-randommix>
-       </div>
+ <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
+  <v-list v-if="menu.item">
+   <template v-for="(action, index) in menu.item.menuActions">
+    <v-divider v-if="action.divider"></v-divider>
+    <v-list-tile v-else @click="itemAction(action.cmd, menu.item)">
+     <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
+
+ <lms-randommix></lms-randommix>
+</div>
       `,
     props: [],
     data() {

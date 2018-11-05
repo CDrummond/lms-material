@@ -7,16 +7,16 @@
  
 Vue.component('lms-bottomnav', {
     template: `
-        <v-footer height="auto" class="lms-footer">
-          <v-bottom-nav class="lms-bottom-nav" :active.sync="route">
-            <template v-for="(item, index) in items">
-              <v-btn flat :to="item.route" class="lms-bottom-nav-button">
-                <span>{{item.text}}</span>
-                <v-icon>{{item.icon}}</v-icon>
-              </v-btn>
-            </template>
-          </v-bottom-nav>
-        </v-footer>
+<v-footer height="auto" class="lms-footer">
+ <v-bottom-nav class="lms-bottom-nav" :active.sync="route">
+  <template v-for="(item, index) in items">
+   <v-btn flat :to="item.route" class="lms-bottom-nav-button">
+    <span>{{item.text}}</span>
+    <v-icon>{{item.icon}}</v-icon>
+   </v-btn>
+  </template>
+ </v-bottom-nav>
+</v-footer>
 `,
     props: [],
     data() {

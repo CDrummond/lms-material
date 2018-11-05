@@ -7,42 +7,42 @@
 
 Vue.component('lms-information-dialog', {
     template: `
-      <v-dialog v-model="show" fullscreen app>
-        <v-card>
-          <v-toolbar color="primary" dark app class="lms-toolbar">
-            <v-btn flat icon @click.native="close()"><v-icon>arrow_back</b-icon></v-btn>
-            <v-toolbar-title>{{title}}</v-toolbar-title>
-          </v-toolbar>
-          <div class="settings-toolbar-pad"></div>
-          <div class="settings-list">
+<v-dialog v-model="show" fullscreen app>
+ <v-card>
+  <v-toolbar color="primary" dark app class="lms-toolbar">
+   <v-btn flat icon @click.native="close()"><v-icon>arrow_back</b-icon></v-btn>
+   <v-toolbar-title>{{title}}</v-toolbar-title>
+  </v-toolbar>
+   <div class="settings-toolbar-pad"></div>
+   <div class="settings-list">
 
-            <p class="about-header">{{i18n('Library')}}</p>
-            <ul class="about-indent">
-              <template v-for="(item, index) in library"><li>{{item}}</li></template>
-            </ul>
-            <v-menu bottom left v-if="!scanning">
-              <v-btn slot="activator" flat>Rescan <v-icon>arrow_drop_down</v-icon></v-btn>
-              <v-list>
-                <template v-for="(item, index) in rescans">
-                  <v-list-tile @click="initiateScan(item.prompt, item.command)">
-                    <v-list-tile-title>{{item.title}}</v-list-tile-title>
-                  </v-list-tile>
-                </template>
-              </v-list>
-            </v-menu>
-            <div style="height:24px"></div>
+   <p class="about-header">{{i18n('Library')}}</p>
+   <ul class="about-indent">
+    <template v-for="(item, index) in library"><li>{{item}}</li></template>
+   </ul>
+   <v-menu bottom left v-if="!scanning">
+    <v-btn slot="activator" flat>Rescan <v-icon>arrow_drop_down</v-icon></v-btn>
+    <v-list>
+     <template v-for="(item, index) in rescans">
+      <v-list-tile @click="initiateScan(item.prompt, item.command)">
+       <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      </v-list-tile>
+     </template>
+    </v-list>
+   </v-menu>
+   <div style="height:24px"></div>
 
-            <p class="about-header">{{i18n('Players')}}</p>
-            <template v-for="(item, index) in players">
-              <p class="about-indent">{{item.name}}
-                <ul>
-                  <template v-for="(info, index) in item.info"><li>{{info}}</li></template>
-                </ul>
-              </p>
-            </template>
-          </div>
-        </v-card>
-      </v-dialog>
+   <p class="about-header">{{i18n('Players')}}</p>
+   <template v-for="(item, index) in players">
+    <p class="about-indent">{{item.name}}
+     <ul>
+      <template v-for="(info, index) in item.info"><li>{{info}}</li></template>
+     </ul>
+    </p>
+   </template>
+  </div>
+ </v-card>
+</v-dialog>
 `,
     props: [],
     data() {

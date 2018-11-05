@@ -7,24 +7,24 @@
 
 Vue.component('lms-sync-dialog', {
     template: `
-      <v-dialog v-model="show" width="450" class="lms-dialog">
-        <v-card>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>{{i18n('Select which other player you would like to synchronise playback with.')}}</v-flex>
-                <v-flex xs12>
-                  <v-select :items="players" :label="i18n('Synchronise with')" v-model="sync" item-text="label" item-value="key"></v-select>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+<v-dialog v-model="show" width="450" class="lms-dialog">
+ <v-card>
+  <v-card-text>
+   <v-container grid-list-md>
+    <v-layout wrap>
+     <v-flex xs12>{{i18n('Select which other player you would like to synchronise playback with.')}}</v-flex>
+     <v-flex xs12>
+      <v-select :items="players" :label="i18n('Synchronise with')" v-model="sync" item-text="label" item-value="key"></v-select>
+     </v-flex>
+    </v-layout>
+   </v-container>
+  </v-card-text>
+  <v-card-actions>
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
+  </v-card-actions>
+ </v-card>
+</v-dialog>
 `,
     props: [],
     data() {

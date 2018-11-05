@@ -347,8 +347,27 @@ a {
     max-width: 200px !important;
 }
 
+.pmgr-toolbar-pad {
+    height: 56px;
+}
+
 .pmgr-playerlist {
     margin-left:-12px;
     margin-right:-6px;
 }
 
+.pmgr-divider {
+    margin-top:8px;
+    margin-bottom:8px;
+}
+
+.pmgr-vol-slider {
+    padding-top:8px;
+    height: 22px;
+}
+
+.pmgr-vol-btn {
+    margin-top: 24px;
+    width: 32px;
+    height: 32px;
+}

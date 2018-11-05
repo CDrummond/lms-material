@@ -13,7 +13,7 @@ Vue.component('lms-manage-players', {
    <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
    <v-toolbar-title>{{i18n('Manage Players')}}</v-toolbar-title>
   </v-toolbar>
-  <div class="settings-toolbar-pad"></div>
+  <div class="pmgr-toolbar-pad"></div>
    
   <v-container grid-list-md>
    <v-layout row wrap>
@@ -42,13 +42,13 @@ Vue.component('lms-manage-players', {
      </v-flex xs12>
      <v-flex xs12>
       <v-layout>
-       <v-btn flat icon @click.stop="volumeDown(index)" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
-       <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="vol-slider" thumb-label="always"></v-slider>
-       <v-btn flat icon @click.stop="volumeUp(index)" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
-       <v-btn flat icon @click.stop="togglePower(index)" class="vol-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
+       <v-btn flat icon @click.stop="volumeDown(index)" class="pmgr-vol-btn"><v-icon>volume_down</v-icon></v-btn>
+       <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="pmgr-vol-slider" thumb-label="always" thumb-size=28></v-slider>
+       <v-btn flat icon @click.stop="volumeUp(index)" class="pmgr-vol-btn"><v-icon>volume_up</v-icon></v-btn>
+       <v-btn flat icon @click.stop="togglePower(index)" class="pmgr-vol-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
       </v-layout>
      </v-flex>
-     <v-flex xs12 v-if="(index+1 < players.length)"><v-divider style="margin-top:22px; margin-bottom:22px"></v-divider></v-flex>
+     <v-flex xs12 v-if="(index+1 < players.length)"><v-divider class="pmgr-divider"></v-divider></v-flex>
     </template>
    </v-layout>
   </v-container>

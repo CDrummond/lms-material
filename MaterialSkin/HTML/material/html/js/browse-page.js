@@ -872,7 +872,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         type: "group",
                         id: TOP_ID_PREFIX+"ra" });
             list.push({ title: i18n("Favorites"),
-                        command: ["favaddExtraItemsorites", "items"],
+                        command: ["favorites", "items"],
                         params: ["menu:favorites", "menu:1"],
                         icon: "favorite",
                         type: "favorites",

@@ -35,7 +35,7 @@ Vue.component('lms-ui-settings', {
             </v-list-tile>
 
             <v-list-tile class="settings-compact-row">
-              <v-switch v-model="splitArtistsAndAlbums" v-bind:class="{'dimmed': serverMenus}" :label="i18n('Split artist (and album) lists into A..Z')"></v-switch>
+              <v-switch v-model="splitArtistsAndAlbums" :label="i18n('Split artist (and album) lists into A..Z')"></v-switch>
             </v-list-tile>
 
             <v-list-tile class="settings-compact-row">

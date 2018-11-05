@@ -938,18 +938,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             }
                         }
                     });
-                    this.serverTop.sort(function(a, b) {    if (a.weight!=b.weight) {
-                                                                return a.weight>b.weight
-                                                            }
-                                                            var title = a.title.toUpperCase();
-                                                            var title = b.title.toUpperCase();
-                                                            if (title < title) {
-                                                                return -1;
-                                                            }
-                                                            if (title > title) {
-                                                                return 1;
-                                                            }
-                                                            return 0; });
+                    this.serverTop.sort(function(a, b) { return a.weight!=b.weight ? a.weight>b.weight : titleSort(a, b); });
                     this.addExtraItems(this.serverTop, false);
                     this.serverTop[0].player=this.playerId();
                     if (this.$store.state.serverMenus && 0==this.history.length) {

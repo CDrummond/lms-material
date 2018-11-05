@@ -21,6 +21,7 @@ const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "__ALBUM_SORT__";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
 const TOP_ID_PREFIX = "top:/";
+const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
@@ -239,20 +240,19 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                   icon: "album",
                   type: "group",
                   id: TOP_ID_PREFIX+"al" },
-                {
-                  title: i18n("Genres"),
+                { title: i18n("Genres"),
                   command: ["genres"],
                   params: [],
                   icon: "label",
                   type: "group",
                   id: TOP_ID_PREFIX+"ge" },
-                {
-                  title: i18n("Playlists"),
+                { title: i18n("Playlists"),
                   command: ["playlists"],
                   params: [],
                   icon: "list",
                   type: "group",
-                  id: TOP_ID_PREFIX+"pl" } 
+                  id: TOP_ID_PREFIX+"pl",
+                  isPlaylists: true }
                 ];
             this.addExtraItems(this.top, true);
             if (this.separateArtists) {
@@ -857,7 +857,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
                         icon: "search",
                         type: "search",
-                        id: TOP_ID_PREFIX+"search" });
+                        id: TOP_SEARCH_ID });
             if (addMore) {
                 list.push({ title: i18n("More"),
                             icon: "more_horiz",
@@ -906,6 +906,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                                       actions: command.modified ? undefined : c.actions,
                                                       id: TOP_ID_PREFIX+c.id,
                                                       weight: c.weight ? parseFloat(c.weight) : 100,
+                                                      isPlaylists: c.id == "myMusicPlaylists",
                                                       icon: c.id.startsWith("myMusicArtists")
                                                             ? "group"
                                                             : c.id.startsWith("myMusicAlbums")

@@ -10,6 +10,7 @@
    "Filter Contributor Roles at the Album & Track Level" settings.
 7. Respect library_id setting for Additional Browse Modes.
 8. Add option to use browse modes as supplied by server.
+9. When listing albums (not under artist), use "Artist (Year)" as subtitle.
 
 0.0.7
 -----

@@ -242,9 +242,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
             {
                 title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
-                // SlimBrowse method - disabled for now
-                //command: ["browselibrary", "items"],
-                //params: ["menu:1", "mode:artists"],
                 command: ["artists"],
                 params: [],
                 icon: "group",
@@ -253,9 +250,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             },
             {
                 title: i18n("Albums"),
-                // SlimBrowse method - disabled for now
-                //command: ["browselibrary", "items"],
-                //params: ["menu:1", "mode:albums", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 command: ["albums"],
                 params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
@@ -264,9 +258,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             },
             {
                 title: i18n("Genres"),
-                // SlimBrowse method - disabled for now
-                //command: ["browselibrary", "items"],
-                //params: ["menu:1", "mode:genres"],
                 command: ["genres"],
                 params: [],
                 icon: "label",
@@ -275,9 +266,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             },
             {
                 title: i18n("Playlists"),
-                // SlimBrowse method - disabled for now
-                //command: ["browselibrary", "items"],
-                //params: ["menu:1", "mode:playlists"],
                 command: ["playlists"],
                 params: [],
                 icon: "list",
@@ -290,9 +278,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.top.splice(2, 0,
                             {
                                 title: i18n("Album Artists"),
-                                // SlimBrowse method - disabled for now
-                                //command: ["browselibrary", "items"],
-                                //params: ["menu:1", "mode:artists", "role_id:ALBUMARTIST"],
                                 command: ["artists"],
                                 params: ["role_id:ALBUMARTIST"],
                                 icon: "group",
@@ -312,9 +297,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.other = [
             {
                 title: i18n("Compilations"),
-                // SlimBrowse method - TODO
-                //command: ["albums"],
-                //params: [???]
                 command: ["albums"],
                 params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
@@ -331,9 +313,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             },
             {
                 title: i18n("Years"),
-                // SlimBrowse method - disabled for now
-                //command: ["browselibrary", "items"],
-                //params: ["menu:1", "mode:years"],
                 command: ["years"],
                 params: [],
                 icon: "date_range",
@@ -342,9 +321,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             },
             {
                 title: i18n("New Music"),
-                // SlimBrowse method - disabled for now
-                //command: ["browselibrary", "items"],
-                //params: ["menu:1", "mode:albums", "sort:new"],
                 command: ["albums"],
                 params: ["tags:jlya", "sort:new"],
                 icon: "new_releases",
@@ -913,9 +889,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         addExtraItems(list, addMore) {
             list.push({
                     title: i18n("Search"),
-                    // SlimBrowse method - TODO
-                    // command: [],
-                    // params: [],
                     command: ["search"],
                     params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
                     icon: "search",
@@ -935,9 +908,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     title: i18n("Radio"),
                     command: ["radios"],
                     params: ["menu:radio"],
-                    // Non-SlimBrowse
-                    //command: ["radios"],
-                    //params: ["want_url:1"],
                     icon: "radio",
                     type: "group",
                     id: TOP_ID_PREFIX+"ra"
@@ -946,9 +916,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     title: i18n("Favorites"),
                     command: ["favaddExtraItemsorites", "items"],
                     params: ["menu:favorites", "menu:1"],
-                    // Non-SlimBrowse
-                    //command: ["favorites", "items"],
-                        //params: ["want_url:1"],
                     icon: "favorite",
                     type: "favorites",
                     app: "favorites",
@@ -959,9 +926,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     title: i18n("Apps"),
                     command: ["myapps", "items"],
                     params: ["menu:1"],
-                    // Non-SlimBrowse
-                    //command: ["apps"],
-                    //params: ["want_url:1"],
                     icon: "apps",
                     type: "group",
                     id: TOP_APPS_ID
@@ -1085,9 +1049,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         for (var i = data.result._p2.length; i-- > 0; ) {
                             var isAlbums = "albums"==data.result._p2[i].feed;
                             var item = { title: data.result._p2[i].name,
-                                 // SlimBrowse method - disabled for now
-                                 //command: ["browselibrary", "items"],
-                                 //params: ["menu:1", "mode:"+data.result._p2[i].feed],
                                  command: [data.result._p2[i].feed],
                                  params: [],
                                  id: TOP_ID_PREFIX+"ebm-"+data.result._p2[i].id,

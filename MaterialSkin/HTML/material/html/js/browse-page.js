@@ -21,16 +21,10 @@ const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "__ALBUM_SORT__";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
 const TOP_ID_PREFIX = "top:/";
-const TOP_ARTISTS_ID = TOP_ID_PREFIX+"ar";
-const TOP_ALBUM_ARTISTS_ID = TOP_ID_PREFIX+"aar";
-const TOP_ALBUMS_ID = TOP_ID_PREFIX+"al";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
-const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
-const TOP_FAV_ID = TOP_ID_PREFIX+"fav";
-const TOP_PLAYLISTS_ID  = TOP_ID_PREFIX+"pl";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
@@ -246,7 +240,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: [],
                 icon: "group",
                 type: "group",
-                id: TOP_ARTISTS_ID,
+                id: TOP_ID_PREFIX+"ar",
             },
             {
                 title: i18n("Albums"),
@@ -254,7 +248,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
                 icon: "album",
                 type: "group",
-                id: TOP_ALBUMS_ID
+                id: TOP_ID_PREFIX+"al
             },
             {
                 title: i18n("Genres"),
@@ -270,7 +264,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 params: [],
                 icon: "list",
                 type: "group",
-                id: TOP_PLAYLISTS_ID
+                id: TOP_ID_PREFIX+"pl"
             } 
             ];
             this.addExtraItems(this.top, true);
@@ -282,7 +276,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                 params: ["role_id:ALBUMARTIST"],
                                 icon: "group",
                                 type: "group",
-                                id: TOP_ALBUM_ARTISTS_ID
+                                id: TOP_ID_PREFIX+"aar"
                             });
             }
 
@@ -612,8 +606,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchItems(this.buildCommand(item, act), item);
             } else {
                 var command = this.buildCommand(item, act);
-                if (command.command.length<1) {
-                    // Non slim-browse command
+                if (command.command.length<1) { // Non slim-browse command
                     if (INSERT_ACTION.cmd==act) {
                         act="insert";
                     }
@@ -863,7 +856,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         } else if (mode=="vaalbums") {
                             mode="albums";
                             p.push("compilation:1");
-                        } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres") {
+                        } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks") {
                             canReplace = false;
                             return;
                         }
@@ -893,7 +886,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
                     icon: "search",
                     type: "search",
-                    id: TOP_SEARCH_ID
+                    id: TOP_ID_PREFIX+"search"
                 });
             if (addMore) {
                 list.push({
@@ -919,7 +912,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     icon: "favorite",
                     type: "favorites",
                     app: "favorites",
-                    id: TOP_FAV_ID,
+                    id: TOP_ID_PREFIX+"fav",
                     isFavFolder: true
                 });
             list.push({

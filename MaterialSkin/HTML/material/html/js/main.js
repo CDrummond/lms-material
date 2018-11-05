@@ -44,7 +44,6 @@ const store = new Vuex.Store({
     state: {
         players: null, // List of players
         player: null, // Current player (from list)
-        unifiedArtistsList: true,
         darkUi: true,
         artistAlbumSort:'yearalbum',
         albumSort:'album',
@@ -133,9 +132,6 @@ const store = new Vuex.Store({
                     }
                 }
             }
-        },
-        setUseUnifiedArtistsList(state, val) {
-            state.unifiedArtistsList = val;
         },
         setUiSettings(state, val) {
             var browseDisplayChanged = false;

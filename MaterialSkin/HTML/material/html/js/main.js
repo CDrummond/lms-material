@@ -210,8 +210,13 @@ var app = new Vue({
         }
         this.$store.commit('initUiSettings');
 
+        this.openDialogs = new Set();
         bus.$on('dialog', function(name, open) {
-            this.dialogOpen = open;
+            if (open) {
+                this.openDialogs.add(name);
+            } else {
+                this.openDialogs.delete(name);
+            }
         }.bind(this));
 
         var that = this;
@@ -289,7 +294,7 @@ var app = new Vue({
     },
     methods: {
         swipe(direction) {
-            if (this.dialogOpen) {
+            if (this.openDialogs.length!=0) {
                 if ('r'==direction) {
                     bus.$emit('closeDialog');
                 }

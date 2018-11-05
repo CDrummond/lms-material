@@ -46,6 +46,10 @@ Vue.component('lms-ui-settings', {
               <v-switch v-model="sortFavorites" :label="i18n('Sort favorites list')"></v-switch>
             </v-list-tile>
 
+            <v-list-tile class="settings-compact-row">
+              <v-switch v-model="serverMenus" :label="i18n('Use modes as supplied by server')"></v-switch>
+            </v-list-tile>
+
             <div class="settings-pad"></div>
             <v-header>{{i18n('Queue')}}</v-header>
             <v-list-tile class="settings-compact-row">
@@ -65,6 +69,7 @@ Vue.component('lms-ui-settings', {
             splitArtistsAndAlbums: false,
             showMenuAudio:false,
             sortFavorites:false,
+            serverMenus:false,
             autoScrollQueue:true,
             albumSorts:[],
             library: null,
@@ -81,6 +86,7 @@ Vue.component('lms-ui-settings', {
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.sortFavorites = this.$store.state.sortFavorites;
+                this.serverMenus = this.$store.state.serverMenus;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
                 this.show = true;
 
@@ -140,7 +146,8 @@ Vue.component('lms-ui-settings', {
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                                   sortFavorites:this.sortFavorites,
-                                                  showMenuAudio:this.showMenuAudio
+                                                  showMenuAudio:this.showMenuAudio,
+                                                  serverMenus:this.serverMenus
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);

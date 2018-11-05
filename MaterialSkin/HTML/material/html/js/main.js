@@ -51,6 +51,7 @@ const store = new Vuex.Store({
         splitArtistsAndAlbums:false,
         sortFavorites:false,
         showMenuAudio:false,
+        serverMenus:false,
         autoScrollQueue:true,
         library: null
     },
@@ -170,6 +171,11 @@ const store = new Vuex.Store({
                 state.showMenuAudio = val.showMenuAudio;
                 setLocalStorageVal('showMenuAudio', state.showMenuAudio);
             }
+            if (state.serverMenus!=val.serverMenus) {
+                state.serverMenus = val.serverMenus;
+                setLocalStorageVal('serverMenus', state.serverMenus);
+                browseDisplayChanged = true;
+            }
             bus.$emit('browseDisplayChanged');
         },
         initUiSettings(state) {
@@ -181,6 +187,7 @@ const store = new Vuex.Store({
             state.splitArtistsAndAlbums = getLocalStorageBool('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
+            state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
         },
         setLibrary(state, lib) {
             if (state.library!=lib) {

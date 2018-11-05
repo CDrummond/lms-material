@@ -175,10 +175,20 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
+
         this.initItems();
         this.$nextTick(function () {
             setScrollTop(0);
         });
+
+        bus.$on('playerChanged', function() {
+            if (this.$store.state.serverMenus) {
+                this.playerMenu();
+            }
+        }.bind(this));
+        if (this.playerId() && this.$store.state.serverMenus) {
+            this.playerMenu();
+        }
 
         window.addEventListener('scroll', () => {
             if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
@@ -273,61 +283,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 icon: "list",
                 type: "group",
                 id: TOP_PLAYLISTS_ID
-            },
-            {
-                title: i18n("Search"),
-                // SlimBrowse method - TODO
-                // command: [],
-                // params: [],
-                command: ["search"],
-                params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
-                icon: "search",
-                type: "search",
-                id: TOP_SEARCH_ID
-            },
-            {
-                title: i18n("More"),
-                icon: "more_horiz",
-                id: TOP_MORE_ID,
-                type: "group",
-            },
-            { header: i18n("Other Music"), id:"omh" },
-            {
-                title: i18n("Radio"),
-                command: ["radios"],
-                params: ["menu:radio"],
-                // Non-SlimBrowse
-                //command: ["radios"],
-                //params: ["want_url:1"],
-                icon: "radio",
-                type: "group",
-                id: TOP_ID_PREFIX+"ra"
-            },
-            {
-                title: i18n("Favorites"),
-                command: ["favorites", "items"],
-                params: ["menu:favorites", "menu:1"],
-                // Non-SlimBrowse
-                //command: ["favorites", "items"],
-                //params: ["want_url:1"],
-                icon: "favorite",
-                type: "favorites",
-                app: "favorites",
-                id: TOP_FAV_ID,
-                isFavFolder: true
-            },
-            {
-                title: i18n("Apps"),
-                command: ["myapps", "items"],
-                params: ["menu:1"],
-                // Non-SlimBrowse
-                //command: ["apps"],
-                //params: ["want_url:1"],
-                icon: "apps",
-                type: "group",
-                id: TOP_APPS_ID
-            }
+            } 
             ];
+            this.addExtraItems(this.top, true);
             if (this.separateArtists) {
                 this.top.splice(2, 0,
                             {
@@ -411,8 +369,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             otherPrev.forEach(i=> {
                 this.other.unshift(i);
             });
+            this.serverTop=[this.top[0]];
             if (this.history.length<1) {
-                this.items = this.top;
+                this.items = this.getTop();
                 this.listSize = this.items.length;
             } else if (1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
                 this.items = this.other;
@@ -430,14 +389,26 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         },
         fetchItems(command, item, batchSize) {
             this.fetchingItems = true;
-
             // Is this a browselibrary from favourites? If so, convert to non-SlimBrowse
             if (command.command.length==2 && "browselibrary"==command.command[0] && "items"==command.command[1]) {
                 var p=[];
                 var c=[];
+                var canReplace = true;
+
                 command.params.forEach(i => {
                     if (i.startsWith("mode:")) {
                         var mode = i.split(":")[1];
+                        if (mode.startsWith("myMusicArtists")) {
+                            mode="artists";
+                        } else if (mode.startsWith("myMusicAlbums")) {
+                            mode="albums";
+                        } else if (mode=="vaalbums") {
+                            mode="albums";
+                            p.push("compilation:1");
+                        } else if (mode!="years" && mode!="genres") {
+                            canReplace = false;
+                            return;
+                        }
                         c.push(mode);
                         if (mode=="tracks") {
                             p.push("tags:Adt");
@@ -449,7 +420,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         p.push(i);
                     }
                 });
-                if (c.length==1 && p.length>0) {
+
+                if (canReplace && c.length==1) {
                     command.command = c;
                     command.params = p;
                 }
@@ -462,7 +434,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.options, 0);
 
-                if (resp && resp.items && resp.items.length>0) {
+                if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
                     var prev = {};
                     prev.items = this.items;
                     prev.baseActions = this.baseActions;
@@ -795,8 +767,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 return;
             }
             var prev = this.history.length>0 ? this.history[0].pos : 0;
-            this.items = this.top;
-            this.listSize = this.top.length;
+            this.items = this.getTop();
+            this.listSize = this.items.length;
             this.history=[];
             this.current = null;
             this.headerTitle = null;
@@ -853,9 +825,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                 ? item.actions["do"]
                                 : this.baseActions
                                     ? this.baseActions[commandName]
-                                    : "go" == commandName && this.baseActions["do"]
-                                        ? this.baseActions["do"]
-                                        : undefined;
+                                        ? this.baseActions[commandName]
+                                        : "go" == commandName && this.baseActions["do"]
+                                            ? this.baseActions["do"]
+                                            : undefined
+                                    : undefined;
 
                 if (command) {
                     cmd.command = [];
@@ -924,6 +898,139 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             return;
                         }
                     });
+                }
+            });
+        },
+        getTop() {
+            return this.$store.state.serverMenus ? this.serverTop : this.top;
+        },
+        addExtraItems(list, addMore) {
+            list.push({
+                    title: i18n("Search"),
+                    // SlimBrowse method - TODO
+                    // command: [],
+                    // params: [],
+                    command: ["search"],
+                    params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
+                    icon: "search",
+                    type: "search",
+                    id: TOP_SEARCH_ID
+                });
+            if (addMore) {
+                list.push({
+                        title: i18n("More"),
+                        icon: "more_horiz",
+                        id: TOP_MORE_ID,
+                        type: "group",
+                    });
+            }
+            list.push({ header: i18n("Other Music"), id:"omh" });
+            list.push({
+                    title: i18n("Radio"),
+                    command: ["radios"],
+                    params: ["menu:radio"],
+                    // Non-SlimBrowse
+                    //command: ["radios"],
+                    //params: ["want_url:1"],
+                    icon: "radio",
+                    type: "group",
+                    id: TOP_ID_PREFIX+"ra"
+                });
+            list.push({
+                    title: i18n("Favorites"),
+                    command: ["favaddExtraItemsorites", "items"],
+                    params: ["menu:favorites", "menu:1"],
+                    // Non-SlimBrowse
+                    //command: ["favorites", "items"],
+                        //params: ["want_url:1"],
+                    icon: "favorite",
+                    type: "favorites",
+                    app: "favorites",
+                    id: TOP_FAV_ID,
+                    isFavFolder: true
+                });
+            list.push({
+                    title: i18n("Apps"),
+                    command: ["myapps", "items"],
+                    params: ["menu:1"],
+                    // Non-SlimBrowse
+                    //command: ["apps"],
+                    //params: ["want_url:1"],
+                    icon: "apps",
+                    type: "group",
+                    id: TOP_APPS_ID
+                });
+        },
+        playerMenu() {
+            if (this.serverTop.length>0 && this.serverTop[0].player==this.playerId()) {
+                return;
+            }
+
+            lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
+                if (data && data.result && data.result.item_loop) {
+                    this.serverTop = [];
+                    this.serverTop.push({ header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" });
+                    data.result.item_loop.forEach(c => {
+                        if (c.node=="myMusic" && c.id) {
+                            if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
+                                this.serverTop.push({
+                                                        title: c.text,
+                                                        actions: c.actions,
+                                                        id: TOP_ID_PREFIX+c.id,
+                                                        weight: c.weight ? parseFloat(c.weight) : 100,
+                                                        icon: c.id.startsWith("myMusicArtists")
+                                                                ? "group"
+                                                                : c.id.startsWith("myMusicAlbums")
+                                                                    ? "album"
+                                                                    : c.id.startsWith("myMusicGenres")
+                                                                        ? "label"
+                                                                        : c.id.startsWith("myMusicPlaylists")
+                                                                            ? "list"
+                                                                            : c.id.startsWith("myMusicYears")
+                                                                                ? "date_range"
+                                                                                : c.id.startsWith("myMusicNewMusic")
+                                                                                    ? "new_releases"
+                                                                                        : c.id.startsWith("myMusicMusicFolder")
+                                                                                        ? "folder"
+                                                                                            : c.id.startsWith("myMusicFileSystem")
+                                                                                                ? "computer"
+                                                                                                : c.id.startsWith("myMusicRandomAlbums")
+                                                                                                    ? "shuffle"
+                                                                                                    : c.id.startsWith("myMusicTopTracks")
+                                                                                                        ? "arrow_upward"
+                                                                                                        : c.id.startsWith("myMusicFlopTracks")
+                                                                                                            ? "arrow_downward"
+                                                                                                            : c.icon
+                                                    });
+                            } else if (c.id=="randomplay") {
+                                this.serverTop.push({
+                                                        title: i18n("Random Mix"),
+                                                        icon: "shuffle",
+                                                        id: TOP_RANDOM_MIX_ID,
+                                                        weight: c.weight ? parseFloat(c.weight) : 100
+                                                    });
+                            }
+                        }
+                    });
+                    this.serverTop.sort(function(a, b) {
+                                                                if (a.weight!=b.weight) {
+                                                                    return a.weight>b.weight
+                                                                }
+                                                                var title = a.title.toUpperCase();
+                                                                var title = b.title.toUpperCase();
+                                                                if (title < title) {
+                                                                    return -1;
+                                                                }
+                                                                if (title > title) {
+                                                                    return 1;
+                                                                }
+                                                                return 0;
+                                                           });
+                    this.addExtraItems(this.serverTop, false);
+                    this.serverTop[0].player=this.playerId();
+                    if (this.$store.state.serverMenus && 0==this.history.length) {
+                        this.items = this.serverTop;
+                    }
                 }
             });
         }
@@ -1018,6 +1125,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         });
 
         bus.$on('browseDisplayChanged', function(act) {
+            if (this.playerId() && this.$store.state.serverMenus) {
+                this.playerMenu();
+            }
             this.goHome();
         }.bind(this));
         bus.$on('libraryChanged', function(act) {

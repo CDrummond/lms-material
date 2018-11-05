@@ -145,7 +145,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             var insertAction = false;
             var moreAction = false;
             var isFavorites = parent && parent.isFavFolder;
-            var isPlaylists = parent && parent.id && parent.id==TOP_PLAYLISTS_ID;
+            var isPlaylists = parent && parent.isPlaylists;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             if (data.result.base && data.result.base.actions) {

@@ -317,6 +317,10 @@ a {
     height: 48px !important;
 }
 
+.switch-label {
+    cursor: pointer;
+}
+
 .lms-dialog {
     padding: 16px;
 }

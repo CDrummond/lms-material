@@ -18,7 +18,7 @@ Vue.component('lms-ui-settings', {
    <v-header>{{i18n('General')}}</v-header>
 
    <v-list-tile>
-    <v-list-tile-content @click="darkUi = !darkUi">
+    <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
      <v-list-tile-title>{{i18n('Useark theme')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Light text on a dark background.')}}</v-list-tile-title>
     </v-list-tile-content>
@@ -43,7 +43,7 @@ Vue.component('lms-ui-settings', {
    <v-divider v-if="libraries.length>0"></v-divider>
 
    <v-list-tile>
-    <v-list-tile-content @click="splitArtistsAndAlbums = !splitArtistsAndAlbums">
+    <v-list-tile-content @click="splitArtistsAndAlbums = !splitArtistsAndAlbums" class="switch-label">
      <v-list-tile-title>{{i18n('Split artist (and album) lists into A..Z')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Useful when browsing a large list of artists, or albums.')}}</v-list-tile-title>
     </v-list-tile-content>
@@ -52,7 +52,7 @@ Vue.component('lms-ui-settings', {
    <v-divider></v-divider>
 
    <v-list-tile>
-    <v-list-tile-content @click="showMenuAudio = !showMenuAudio">
+    <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
     </v-list-tile-content>
@@ -61,7 +61,7 @@ Vue.component('lms-ui-settings', {
    <v-divider></v-divider>
    
    <v-list-tile>
-    <v-list-tile-content @click="sortFavorites = !sortFavorites">
+    <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
      <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
     </v-list-tile-content>
@@ -70,7 +70,7 @@ Vue.component('lms-ui-settings', {
    <v-divider></v-divider>
    
    <v-list-tile>
-    <v-list-tile-content @click="serverMenus = !serverMenus">
+    <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
      <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Obtain enabled categories (Artists, Albums, etc) from the server.')}}</v-list-tile-title>
     </v-list-tile-content>
@@ -81,7 +81,7 @@ Vue.component('lms-ui-settings', {
    <v-header>{{i18n('Queue')}}</v-header>
    
    <v-list-tile>
-    <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue">
+    <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
      <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-title>
     </v-list-tile-content>

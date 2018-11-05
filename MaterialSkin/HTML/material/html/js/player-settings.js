@@ -51,7 +51,7 @@ Vue.component('lms-player-settings', {
    <div class="settings-pad"></div>
     <v-header>{{i18n('Alarms')}}</v-header>
     <v-list-tile>
-     <v-list-tile-content @click="alarms.on = !alarms.on">
+     <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
       <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-title>
      </v-list-tile-content>
@@ -126,7 +126,7 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
    -->
    <v-list-tile>
-    <v-list-tile-content @click="alarmDialog.repeat = !alarmDialog.repeat">
+    <v-list-tile-content @click="alarmDialog.repeat = !alarmDialog.repeat" class="switch-label">
      <v-list-tile-title>{{i18n('Repeat')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Should alarms repeat')}}</v-list-tile-title>
     </v-list-tile-content>

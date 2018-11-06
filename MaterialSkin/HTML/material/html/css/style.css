@@ -6,7 +6,7 @@
  */
 
 html { 
-    overflow-y: auto; 
+    overflow-y: hidden;
     margin:0px;
 }
 
@@ -64,14 +64,26 @@ a {
     max-width:250px !important;
 }
 
-.lms-list-page {
-    margin-top:56px !important;
-    margin-bottom:56px !important;
+.lms-search {
     width:100%;
 }
 
-.lms-search {
-    width:100%;
+.lms-list {
+    position:fixed;
+    top:56px;
+    height:calc((var(--vh, 1vh)*100) - 112px);
+    width:100vw;
+    overflow:auto;
+    backface-visibility:hidden;
+}
+
+.lms-list-sub {
+    position:fixed;
+    top:102px;
+    height:calc((var(--vh, 1vh)*100) - 154px);
+    width:100vw;
+    overflow:auto;
+    backface-visibility:hidden;
 }
 
 /* Make action buttons in lists closer together */

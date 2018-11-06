@@ -30,7 +30,7 @@ const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
-<div class="lms-list-page">
+<div class>
  <v-dialog v-model="dialog.show" persistent max-width="500px">
   <v-card>
    <v-card-text>
@@ -65,7 +65,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    </template>
   </v-layout>
  </v-card>
- <div v-if="headerTitle" class="subtoolbar-pad"></div>
  <table class="browse-progress" v-if="fetchingItems">
   <tr>
    <td style="text-align: center;">
@@ -73,7 +72,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    </td>
   </tr>
  </table>
- <v-list>
+ <v-list v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
@@ -150,13 +149,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
         // page, so that it can be restored when going back here.
-        bus.$on('routeChange', function(from, to, pos) {
+        bus.$on('routeChange', function(from, to) {
             if (to=='/browse') {
                 setTimeout(function () {
-                    setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
+                    setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
                 }.bind(this), 100);
             } else if (from=='/browse') {
-                this.previousScrollPos = pos;
+                this.previousScrollPos = this.scrollElement.scrollTop;
             }
         }.bind(this));
 
@@ -165,9 +164,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         }.bind(this));
 
         this.initItems();
-        this.$nextTick(function () {
-            setScrollTop(0);
-        });
 
         bus.$on('playerChanged', function() {
             if (this.$store.state.serverMenus) {
@@ -177,40 +173,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         if (this.playerId() && this.$store.state.serverMenus) {
             this.playerMenu();
         }
-
-        window.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
-                return;
-            }
-            const scrollY = window.scrollY;
-            const el = getScrollElement();
-            const visible = el.clientHeight;
-            const pageHeight = el.scrollHeight;
-            const pad = (visible*2.5);
-            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchingItems = true;
-                var command = this.buildCommand(this.current);
-                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
-
-                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                    this.fetchingItems = false;
-                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
-                    if (resp && resp.items) {
-                        resp.items.forEach(i => {
-                            this.items.push(i);
-                        });
-                    }
-                    if (data && data.result && data.result.count) {
-                        this.listSize = data.result.count;
-                    }
-                }).catch(err => {
-                    this.fetchingItems = false;
-                });
-            }
-        });
     },
     methods: {
         initItems() {
@@ -351,7 +313,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     prev.headerTitle = this.headerTitle;
                     prev.headerSubTitle = this.headerSubTitle;
                     prev.menuActions = this.menuActions;
-                    prev.pos=getScrollTop();
+                    prev.pos=this.scrollElement.scrollTop;
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
                     this.history.push(prev);
@@ -375,7 +337,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
                     this.sortItems();
-                    setScrollTop(0);
+                    setScrollTop(this.scrollElement, 0);
                 }
             }).catch(err => {
                 this.fetchingItems = false;
@@ -410,13 +372,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 prev.headerTitle = this.headerTitle;
                 prev.headerSubTitle = this.headerSubTitle;
                 prev.menuActions = this.menuActions;
-                prev.pos=getScrollTop();
+                prev.pos=this.scrollElement.scrollTop;
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
-                setScrollTop(0);
+                setScrollTop(this.scrollElement, 0);
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('randomMix');
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
@@ -475,7 +437,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        if (item.id.startsWith("playlist_id:")) {
+                        if (item.id.startsWith("playlist:")) {
                             lmsCommand(this.playerId(), ["playlists", "delete", item.id]).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
@@ -507,7 +469,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 } else if (item.id.startsWith("year:")) {
                     favUrl="db:year.id="+encodeURI(item.title);
                     favIcon="html/images/years.png";
-                } else if (item.id.startsWith("playlist_id:")) {
+                } else if (item.id.startsWith("playlist:")) {
                     favIcon="html/images/playlists.png";
                 }
 
@@ -633,7 +595,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.itemAction(act, this.current);
         },
         refreshList() {
-            var pos=getScrollTop();
+            var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
             var command = this.buildCommand(this.current);
             lmsList(this.playerId(), command.command, command.params, 0).then(({data}) => {
@@ -652,7 +614,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
                 this.sortItems();
                 this.$nextTick(function () {
-                    setScrollTop(pos>0 ? pos : 0);
+                    setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                 });
             }).catch(err => {
                 this.fetchingItems = false;
@@ -681,7 +643,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerSubTitle=null;
             this.menuActions=[];
             this.$nextTick(function () {
-                setScrollTop(prev>0 ? prev : 0);
+                setScrollTop(this.scrollElement, prev>0 ? prev : 0);
             });
         },
         goBack() {
@@ -702,7 +664,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
             this.$nextTick(function () {
-                setScrollTop(prev.pos>0 ? prev.pos : 0);
+                setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
         buildCommand(item, commandName, doReplacements) {
@@ -1045,5 +1007,44 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.setLibrary();
         }.bind(this));
         this.setLibrary();
+
+        this.scrollElement = document.getElementById("browse-list");
+        this.scrollElement.addEventListener('scroll', () => {
+            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
+                return;
+            }
+            const scrollY = this.scrollElement.scrollTop;
+            const visible = this.scrollElement.clientHeight;
+            const pageHeight = this.scrollElement.scrollHeight;
+            const pad = (visible*2.5);
+
+            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchingItems = true;
+                var command = this.buildCommand(this.current);
+                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
+                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+
+                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                    this.fetchingItems = false;
+                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
+                    if (resp && resp.items) {
+                        resp.items.forEach(i => {
+                            this.items.push(i);
+                        });
+                    }
+                    if (data && data.result && data.result.count) {
+                        this.listSize = data.result.count;
+                    }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                });
+            }
+        });
+
+        this.$nextTick(function () {
+            setScrollTop(this.scrollElement, 0);
+        });
     }
 });

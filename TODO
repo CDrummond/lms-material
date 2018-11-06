@@ -1,8 +1,4 @@
 - Bugs:
-  - Scrolling browse and queue lists actually scrolls the whole page. This causes scrolling in
-    one to affect the other. A (slightly) hacky-ish work-around is in place, where the page
-    position is saved/restored on route change. Would be better to scroll just the list.
-    Can probably use --vh setting (as per no playing details) to set list size/pos
   - Drag'n'drop, not working on Android Firefox
   - Issues with virtual scroller
     - Navigate into 'Apps' (when only have a few), and back out; not all items drawn
@@ -29,4 +25,4 @@
       - at start of song, and near end poll every (e.g.) 0.5 seconds
     - Create timer to advance song progress - re-adjust on each poll
     - or use ["time", "?"] to just obtain time position every second?
-  - Desktop UI - expand the 3 pages into 1. Will needs scrolling fix (above)
+  - Desktop UI - expand the 3 pages into 1.

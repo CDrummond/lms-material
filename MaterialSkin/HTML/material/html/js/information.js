@@ -7,15 +7,15 @@
 
 Vue.component('lms-information-dialog', {
     template: `
-<v-dialog v-model="show" fullscreen app>
+<v-dialog v-model="show" scrollable fullscreen>
  <v-card>
-  <v-toolbar color="primary" dark app class="lms-toolbar">
-   <v-btn flat icon @click.native="close()"><v-icon>arrow_back</b-icon></v-btn>
-   <v-toolbar-title>{{title}}</v-toolbar-title>
-  </v-toolbar>
-   <div class="settings-toolbar-pad"></div>
-   <div class="settings-list">
-
+  <v-card-title class="settings-title">
+   <v-toolbar color="primary" dark app class="lms-toolbar">
+    <v-btn flat icon @click.native="close()"><v-icon>arrow_back</b-icon></v-btn>
+    <v-toolbar-title>{{title}}</v-toolbar-title>
+   </v-toolbar>
+  </v-card-title>
+  <v-card-text class="settings-list">
    <p class="about-header">{{i18n('Library')}}</p>
    <ul class="about-indent">
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
@@ -40,7 +40,7 @@ Vue.component('lms-information-dialog', {
      </ul>
     </p>
    </template>
-  </div>
+  </v-card-text>
  </v-card>
 </v-dialog>
 `,

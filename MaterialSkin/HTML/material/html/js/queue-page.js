@@ -91,8 +91,7 @@ var lmsQueue = Vue.component("LmsQueue", {
           <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>
       </v-card>
-      <div class="subtoolbar-pad"></div>
-      <v-list class="lms-list-page">
+      <v-list class="lms-list-sub"  id="queue-list">
         <template v-for="(item, index) in items">
         <!-- TODO: Fix and re-use virtual scroller -->
         <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
@@ -154,22 +153,6 @@ var lmsQueue = Vue.component("LmsQueue", {
         this.isVisible = true;
         this.autoScrollRequired = false;
         this.previousScrollPos = 0;
-
-        window.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/queue') {
-                return;
-            }
-            const scrollY = window.scrollY;
-            const el = getScrollElement();
-            const visible = el.clientHeight;
-            const pageHeight = el.scrollHeight;
-            const pad = (visible*2.5);
-            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchItems();
-            }
-        });
     },
     mounted() {
         this.listSize = this.items.length;
@@ -204,18 +187,18 @@ var lmsQueue = Vue.component("LmsQueue", {
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
         // page, so that it can be restored when going back here.
-        bus.$on('routeChange', function(from, to, pos) {
+        bus.$on('routeChange', function(from, to) {
             this.isVisible = '/queue'==to;
             if (this.isVisible) {
                 if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
                     this.scheduleUpdate();
                 } else {
                     setTimeout(function () {
-                        setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
+                        setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
                     }.bind(this), 100);
                 }
             } else if (from=='/queue') {
-                this.previousScrollPos = pos;
+                this.previousScrollPos = this.scrollElement.scrollTop;
             }
         }.bind(this));
         
@@ -224,8 +207,43 @@ var lmsQueue = Vue.component("LmsQueue", {
         }.bind(this));
         this.initItems();
 
+        this.scrollElement = document.getElementById("queue-list");
+        this.scrollElement.addEventListener('scroll', () => {
+            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/queue') {
+                return;
+            }
+            const scrollY = this.scrollElement.scrollTop;
+            const visible = this.scrollElement.clientHeight;
+            const pageHeight = this.scrollElement.scrollHeight;
+            const pad = (visible*2.5);
+
+            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchingItems = true;
+                var command = this.buildCommand(this.current);
+                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
+                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+
+                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                    this.fetchingItems = false;
+                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
+                    if (resp && resp.items) {
+                        resp.items.forEach(i => {
+                            this.items.push(i);
+                        });
+                    }
+                    if (data && data.result && data.result.count) {
+                        this.listSize = data.result.count;
+                    }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                });
+            }
+        });
+
         this.$nextTick(function () {
-            setScrollTop(0);
+            setScrollTop(this.scrollElement, 0);
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
         });
@@ -345,7 +363,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             if (this.items.length===0) {
                 this.fetchItems();
             } else {
-                var currentPos = getScrollTop();
+                var currentPos = this.scrollElement.scrollTop;
                 this.fetchingItems = true;
 
                 lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], 0,
@@ -356,7 +374,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.fetchingItems = false;
                     this.getDuration();
                     this.$nextTick(function () {
-                        setScrollTop(currentPos>0 ? currentPos : 0);
+                        setScrollTop(this.scrollElement, currentPos>0 ? currentPos : 0);
                     });
                 }).catch(err => {
                     this.fetchingItems = false;
@@ -400,7 +418,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             ev.preventDefault(); // Otherwise drop is never called!
         },
         scrollList(step) {
-            setScrollTop(getScrollTop() + step);
+            setScrollTop(this.scrollElement, this.scrollElement.scrollTop + step);
             if (!this.stopScrolling) {
                 setTimeout(function () {
                     this.scrollList(step);

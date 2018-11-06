@@ -13,6 +13,8 @@
  9. When listing albums (not under artist), use "Artist (Year)" as subtitle.
 10. Follow material style, and place text to the left of switches.
 11. Close full-screen dialogs (e.g. settings) via Escape key.
+12. Scroll lists, not page.
+13. Pinnable apps, etc.
 
 0.0.7
 -----

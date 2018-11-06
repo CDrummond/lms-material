@@ -1,5 +1,6 @@
 MATERIAL_SKIN
 	EN	Material Skin
-	
+
 PLUGIN_MATERIAL_SKIN
+	DE	Web Skin im Material Stil, für mobile Nutzung optimiert
 	EN	Material themed skin, suitable for mobile use.

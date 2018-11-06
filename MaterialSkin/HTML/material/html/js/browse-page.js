@@ -67,13 +67,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    </template>
   </v-layout>
  </v-card>
- <table class="browse-progress" v-if="fetchingItems">
-  <tr>
-   <td style="text-align: center;">
-    <v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular>
-   </td>
-  </tr>
- </table>
+ <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
  <v-list v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">

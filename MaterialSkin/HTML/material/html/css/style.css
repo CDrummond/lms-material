@@ -184,10 +184,13 @@ a {
 }
 
 .browse-progress {
-    position:absolute;
-    bottom:32px;
-    width:100vw;
-    height:100vh;
+    z-index:2;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 }
 
 .np-page {

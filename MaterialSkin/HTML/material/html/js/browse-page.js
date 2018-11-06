@@ -15,6 +15,8 @@ var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
 var ADD_TO_FAV_ACTION       = {cmd:"addfav",     icon:"favorite_border"};
 var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  icon:"delete_outline"};
+var PIN_ACTION              = {cmd:"pin",        icon:"star_border"};
+var UNPIN_ACTION            = {cmd:"unpin",      icon:"star"};
 
 const DIVIDER = {divider:true};
 const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
@@ -30,7 +32,7 @@ const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
-<div class="lms-list-page">
+<div class>
  <v-dialog v-model="dialog.show" persistent max-width="500px">
   <v-card>
    <v-card-text>
@@ -65,7 +67,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    </template>
   </v-layout>
  </v-card>
- <div v-if="headerTitle" class="subtoolbar-pad"></div>
  <table class="browse-progress" v-if="fetchingItems">
   <tr>
    <td style="text-align: center;">
@@ -73,7 +74,37 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    </td>
   </tr>
  </table>
- <v-list>
+ <v-list v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
+  <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
+  <template v-if="isTop" v-for="(item, index) in pinned">
+   <v-divider v-if="index>0 && pinned.length>index"></v-divider>
+
+   <v-list-tile avatar @click="click(item.item, $event)" :key="item.id">
+    <v-list-tile-avatar v-if="item.item.image" :tile="true">
+     <img v-lazy="item.item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.item.icon" :tile="true">
+     <v-icon>{{item.item.icon}}</v-icon>
+    </v-list-tile-avatar>
+
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+    </v-list-tile-content>
+
+    <v-list-tile-action v-if="item.item.menuActions && item.item.menuActions.length>1" @click.stop="itemMenu(item.item, $event)">
+     <v-btn icon>
+      <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else-if="item.item.menuActions && item.item.menuActions.length===1" @click.stop="itemAction(item.item.menuActions[0].cmd, item.item)">
+     <v-btn icon>
+      <v-icon>{{item.item.menuActions[0].icon}}</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+
+   </v-list-tile>
+  </template>
+
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
@@ -99,9 +130,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>0" @click.stop="itemMenu(item, $event)">
+    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" @click.stop="itemAction(item.menuActions[0].cmd, item)">
+     <v-btn icon>
+      <v-icon>{{item.menuActions[0].icon}}</v-icon>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -131,7 +167,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined },
-            menu: { show:false, item: undefined, x:0, y:0}
+            menu: { show:false, item: undefined, x:0, y:0},
+            isTop: true,
+            pinned: []
         }
     },
     created() {
@@ -143,20 +181,23 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.menuActions=[];
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
-                      noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
+                      noRoleFilter: getLocalStorageBool('noRoleFilter', false),
+                      pinned: new Set()};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.previousScrollPos=0;
+        this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
+        this.pinned.forEach( p => { this.options.pinned.add(p.id) });
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
         // page, so that it can be restored when going back here.
-        bus.$on('routeChange', function(from, to, pos) {
+        bus.$on('routeChange', function(from, to) {
             if (to=='/browse') {
                 setTimeout(function () {
-                    setScrollTop(this.previousScrollPos>0 ? this.previousScrollPos : 0);
+                    setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
                 }.bind(this), 100);
             } else if (from=='/browse') {
-                this.previousScrollPos = pos;
+                this.previousScrollPos = this.scrollElement.scrollTop;
             }
         }.bind(this));
 
@@ -165,9 +206,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         }.bind(this));
 
         this.initItems();
-        this.$nextTick(function () {
-            setScrollTop(0);
-        });
 
         bus.$on('playerChanged', function() {
             if (this.$store.state.serverMenus) {
@@ -177,40 +215,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         if (this.playerId() && this.$store.state.serverMenus) {
             this.playerMenu();
         }
-
-        window.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
-                return;
-            }
-            const scrollY = window.scrollY;
-            const el = getScrollElement();
-            const visible = el.clientHeight;
-            const pageHeight = el.scrollHeight;
-            const pad = (visible*2.5);
-            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchingItems = true;
-                var command = this.buildCommand(this.current);
-                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
-
-                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                    this.fetchingItems = false;
-                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
-                    if (resp && resp.items) {
-                        resp.items.forEach(i => {
-                            this.items.push(i);
-                        });
-                    }
-                    if (data && data.result && data.result.count) {
-                        this.listSize = data.result.count;
-                    }
-                }).catch(err => {
-                    this.fetchingItems = false;
-                });
-            }
-        });
     },
     methods: {
         initItems() {
@@ -224,7 +228,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             DELETE_ACTION.title=i18n("Delete");
             ADD_TO_FAV_ACTION.title=i18n("Add to favorites");
             REMOVE_FROM_FAV_ACTION.title=i18n("Remove from favorites");
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
+            PIN_ACTION.title=i18n("Pin to main page");
+            UNPIN_ACTION.title=i18n("Un-pin from main page");
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items') };
 
             this.top = [
                 { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
@@ -351,7 +357,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     prev.headerTitle = this.headerTitle;
                     prev.headerSubTitle = this.headerSubTitle;
                     prev.menuActions = this.menuActions;
-                    prev.pos=getScrollTop();
+                    prev.pos=this.scrollElement.scrollTop;
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
                     this.history.push(prev);
@@ -360,6 +366,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.items=resp.items;
                     this.baseActions=resp.baseActions;
                     this.menuActions=[];
+                    this.isTop = false;
 
                     if (this.current && this.current.menuActions) {
                         this.current.menuActions.forEach(i => {
@@ -375,7 +382,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
                     this.sortItems();
-                    setScrollTop(0);
+                    setScrollTop(this.scrollElement, 0);
                 }
             }).catch(err => {
                 this.fetchingItems = false;
@@ -410,13 +417,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 prev.headerTitle = this.headerTitle;
                 prev.headerSubTitle = this.headerSubTitle;
                 prev.menuActions = this.menuActions;
-                prev.pos=getScrollTop();
+                prev.pos=this.scrollElement.scrollTop;
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
-                setScrollTop(0);
+                setScrollTop(this.scrollElement, 0);
+                this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('randomMix');
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
@@ -475,7 +483,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        if (item.id.startsWith("playlist_id:")) {
+                        if (item.id.startsWith("playlist:")) {
                             lmsCommand(this.playerId(), ["playlists", "delete", item.id]).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
@@ -507,7 +515,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 } else if (item.id.startsWith("year:")) {
                     favUrl="db:year.id="+encodeURI(item.title);
                     favIcon="html/images/years.png";
-                } else if (item.id.startsWith("playlist_id:")) {
+                } else if (item.id.startsWith("playlist:")) {
                     favIcon="html/images/playlists.png";
                 }
 
@@ -576,6 +584,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 });
             } else if (act===MORE_ACTION.cmd) {
                 this.fetchItems(this.buildCommand(item, act), item);
+            } else if (act===PIN_ACTION.cmd) {
+                this.pin(item, true);
+            } else if (act===UNPIN_ACTION.cmd) {
+                this.pin(item, false);
             } else {
                 var command = this.buildCommand(item, act);
                 if (command.command.length<1) { // Non slim-browse command
@@ -633,7 +645,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.itemAction(act, this.current);
         },
         refreshList() {
-            var pos=getScrollTop();
+            var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
             var command = this.buildCommand(this.current);
             lmsList(this.playerId(), command.command, command.params, 0).then(({data}) => {
@@ -652,7 +664,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
                 this.sortItems();
                 this.$nextTick(function () {
-                    setScrollTop(pos>0 ? pos : 0);
+                    setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                 });
             }).catch(err => {
                 this.fetchingItems = false;
@@ -680,8 +692,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerTitle = null;
             this.headerSubTitle=null;
             this.menuActions=[];
+            this.isTop = true;
             this.$nextTick(function () {
-                setScrollTop(prev>0 ? prev : 0);
+                setScrollTop(this.scrollElement, prev>0 ? prev : 0);
             });
         },
         goBack() {
@@ -702,7 +715,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
             this.$nextTick(function () {
-                setScrollTop(prev.pos>0 ? prev.pos : 0);
+                setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
         buildCommand(item, commandName, doReplacements) {
@@ -946,6 +959,40 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     }
                 }
             });
+        },
+        pin(item, add) {
+            var before = this.pinned;
+            var index = -1;
+            for (var i=0; i<this.pinned.length; ++i) {
+                if (this.pinned[i].id === item.id) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (add && index==-1) {
+                this.pinned.push({id: item.id, title: item.title, item: item});
+                this.options.pinned.add(item.id);
+                for (var i=0; i<item.menuActions.length; ++i) {
+                    if (item.menuActions[i].cmd == PIN_ACTION.cmd) {
+                        item.menuActions[i] = UNPIN_ACTION;
+                        break;
+                    }
+                }
+                this.pinned.sort(titleSort);
+                setLocalStorageVal('pinned', JSON.stringify(this.pinned));
+                this.$forceUpdate();
+            } else if (!add && index!=-1) {
+                this.$confirm(i18n("Un-pin '%1'?", item.title), {buttonTrueText: i18n('Un-pin'), buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        this.pinned.splice(index, 1);
+                        this.options.pinned.delete(item.id);
+                        this.pinned.sort(titleSort);
+                        setLocalStorageVal('pinned', JSON.stringify(this.pinned));
+                        this.$forceUpdate();
+                    }
+                });
+            }
         }
     },
     mounted() {
@@ -1045,5 +1092,44 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.setLibrary();
         }.bind(this));
         this.setLibrary();
+
+        this.scrollElement = document.getElementById("browse-list");
+        this.scrollElement.addEventListener('scroll', () => {
+            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
+                return;
+            }
+            const scrollY = this.scrollElement.scrollTop;
+            const visible = this.scrollElement.clientHeight;
+            const pageHeight = this.scrollElement.scrollHeight;
+            const pad = (visible*2.5);
+
+            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchingItems = true;
+                var command = this.buildCommand(this.current);
+                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
+                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+
+                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                    this.fetchingItems = false;
+                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
+                    if (resp && resp.items) {
+                        resp.items.forEach(i => {
+                            this.items.push(i);
+                        });
+                    }
+                    if (data && data.result && data.result.count) {
+                        this.listSize = data.result.count;
+                    }
+                }).catch(err => {
+                    this.fetchingItems = false;
+                });
+            }
+        });
+
+        this.$nextTick(function () {
+            setScrollTop(this.scrollElement, 0);
+        });
     }
 });

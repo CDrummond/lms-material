@@ -7,87 +7,90 @@
 
 Vue.component('lms-ui-settings', {
     template: `
-<v-dialog v-model="show" fullscreen app>
+<v-dialog v-model="show" scrollable fullscreen>
  <v-card>
-  <v-toolbar color="primary" dark app class="lms-toolbar">
-   <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-   <v-toolbar-title>{{i18n('Settings')}}</v-toolbar-title>
-  </v-toolbar>
-  <div class="settings-toolbar-pad"></div>
-  <v-list two-line subheader class="settings-list">
-   <v-header>{{i18n('General')}}</v-header>
+  <v-card-title class="settings-title">
+   <v-toolbar color="primary" dark class="lms-toolbar">
+    <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+    <v-toolbar-title>{{i18n('Settings')}}</v-toolbar-title>
+   </v-toolbar>
+  </v-card-title>
+  <v-card-text>
+   <v-list two-line subheader class="settings-list">
+    <v-header>{{i18n('General')}}</v-header>
 
-   <v-list-tile>
-    <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
-     <v-list-tile-title>{{i18n('Useark theme')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Light text on a dark background.')}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
-   </v-list-tile>
+    <v-list-tile>
+     <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
+      <v-list-tile-title>{{i18n('Use dark theme')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Light text on a dark background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
+    </v-list-tile>
    
-   <div class="settings-pad"></div>
-   <v-header>{{i18n('Browse')}}</v-header>
-   <v-list-tile>
-    <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
-   <v-divider></v-divider>
+    <div class="settings-pad"></div>
+    <v-header>{{i18n('Browse')}}</v-header>
+    <v-list-tile>
+     <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
  
-   <v-list-tile>
-    <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
-   <v-divider></v-divider>
+    <v-list-tile>
+     <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
             
-   <v-list-tile v-if="libraries.length>0">
-    <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
-   </v-list-tile>
-   <v-divider v-if="libraries.length>0"></v-divider>
+    <v-list-tile v-if="libraries.length>0">
+     <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+    </v-list-tile>
+    <v-divider v-if="libraries.length>0"></v-divider>
 
-   <v-list-tile>
-    <v-list-tile-content @click="splitArtistsAndAlbums = !splitArtistsAndAlbums" class="switch-label">
-     <v-list-tile-title>{{i18n('Split artist (and album) lists into A..Z')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Useful when browsing a large list of artists, or albums.')}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="splitArtistsAndAlbums"></v-switch></v-list-tile-action>
-   </v-list-tile>
-   <v-divider></v-divider>
+    <v-list-tile>
+     <v-list-tile-content @click="splitArtistsAndAlbums = !splitArtistsAndAlbums" class="switch-label">
+      <v-list-tile-title>{{i18n('Split artist (and album) lists into A..Z')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Useful when browsing a large list of artists, or albums.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="splitArtistsAndAlbums"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
 
-   <v-list-tile>
-    <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
-     <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
-   </v-list-tile>
-   <v-divider></v-divider>
+    <v-list-tile>
+     <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
+      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
    
-   <v-list-tile>
-    <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
-     <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
-   </v-list-tile>
-   <v-divider></v-divider>
+    <v-list-tile>
+     <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
+      <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
    
-   <v-list-tile>
-    <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
-     <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Obtain enabled categories (Artists, Albums, etc) from the server.')}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="serverMenus"></v-switch></v-list-tile-action>
-   </v-list-tile>
+    <v-list-tile>
+     <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
+      <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Obtain enabled categories (Artists, Albums, etc) from the server.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="serverMenus"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
-   <div class="settings-pad"></div>
-   <v-header>{{i18n('Queue')}}</v-header>
+    <div class="settings-pad"></div>
+    <v-header>{{i18n('Queue')}}</v-header>
    
-   <v-list-tile>
-    <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
-     <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="autoScrollQueue"></v-switch></v-list-tile-action>
-   </v-list-tile>
-  </v-list>
+    <v-list-tile>
+     <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
+      <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="autoScrollQueue"></v-switch></v-list-tile-action>
+    </v-list-tile>
+   </v-list>
+  </v-card-text>
  </v-card>
 </v-dialog>
 `,

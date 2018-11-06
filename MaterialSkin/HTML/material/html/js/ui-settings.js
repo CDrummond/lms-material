@@ -21,7 +21,7 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile>
      <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
-      <v-list-tile-title>{{i18n('Useark theme')}}</v-list-tile-title>
+      <v-list-tile-title>{{i18n('Use dark theme')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Light text on a dark background.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>

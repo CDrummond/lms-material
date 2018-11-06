@@ -10,77 +10,81 @@ var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
 Vue.component('lms-player-settings', {
     template: `
 <div>
- <v-dialog v-model="show" fullscreen app>
+<v-dialog v-model="show" scrollable fullscreen>
   <v-card>
-   <v-toolbar color="primary" dark app class="lms-toolbar">
-    <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-   <v-toolbar-title>{{playerName}}</v-toolbar-title>
-  </v-toolbar>
-  <div class="settings-toolbar-pad"></div>
-  <v-list two-line subheader class="settings-list">
-   <v-header>{{i18n('Audio')}}</v-header>
-   <v-list-tile>
-    <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
-   <v-list-tile v-if="!isgroup">
-    <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
-   <v-list-tile v-if="dstmItems && dstmItems.length>1">
-    <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
+   <v-card-title class="settings-title">
+    <v-toolbar color="primary" dark class="lms-toolbar">
+     <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+    <v-toolbar-title>{{playerName}}</v-toolbar-title>
+   </v-toolbar>
+  </v-card-title>
 
-   <div class="settings-pad"></div>
-   <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
-
-   <v-list-tile v-if="sleep.timeLeft">
-    <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
-   </v-list-tile>
-   <v-list-tile v-else>
-    <v-menu bottom left>
-     <v-btn slot="activator" flat>Sleep in... <v-icon>arrow_drop_down</v-icon></v-btn>
-     <v-list>
-      <template v-for="(item, index) in sleep.items">
-       <v-list-tile @click="setSleepTimer(item.duration)"">
-        <v-list-tile-title>{{item.label}}</v-list-tile-title>
-       </v-list-tile>
-      </template>
-     </v-list>
-    </v-menu>
-   </v-list-tile>
-
-   <div class="settings-pad"></div>
-    <v-header>{{i18n('Alarms')}}</v-header>
+  <v-card-text>
+   <v-list two-line subheader class="settings-list">
+    <v-header>{{i18n('Audio')}}</v-header>
     <v-list-tile>
-     <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
-      <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="alarms.on"></v-switch></v-list-tile-action>
+     <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-list-tile v-if="!isgroup">
+     <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-list-tile v-if="dstmItems && dstmItems.length>1">
+     <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
+    </v-list-tile> 
+
+    <div class="settings-pad"></div>
+    <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
+
+    <v-list-tile v-if="sleep.timeLeft">
+     <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
+    </v-list-tile>
+    <v-list-tile v-else>
+     <v-menu bottom left>
+      <v-btn slot="activator" flat>Sleep in... <v-icon>arrow_drop_down</v-icon></v-btn>
+      <v-list>
+       <template v-for="(item, index) in sleep.items">
+        <v-list-tile @click="setSleepTimer(item.duration)"">
+         <v-list-tile-title>{{item.label}}</v-list-tile-title>
+        </v-list-tile>
+       </template>
+      </v-list>
+     </v-menu>
     </v-list-tile>
 
-    <div class="settings-sub-pad"></div>
-    <v-subheader class="alarm-sched-header">{{i18n('Scheduled alarms')}}</v-subheader>
-    <template v-for="(item, index) in alarms.scheduled">
-     <v-list-tile class="alarm-entry">
-      <v-checkbox v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-checkbox>
-      <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
-      <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
+    <div class="settings-pad"></div>
+     <v-header>{{i18n('Alarms')}}</v-header>
+     <v-list-tile>
+      <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
+       <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-title>
+      </v-list-tile-content>
+      <v-list-tile-action><v-switch v-model="alarms.on"></v-switch></v-list-tile-action>
      </v-list-tile>
-     <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
-    </template>
-    <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
-    <div class="settings-sub-pad"></div>
-    <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
-    <v-list-tile>
-     <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
-    </v-list-tile>
-    <v-list-tile>
-     <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
-    </v-list-tile>
-    <v-list-tile>
-     <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
-    </v-list-tile>
-   </v-list>
+
+     <div class="settings-sub-pad"></div>
+     <v-subheader class="alarm-sched-header">{{i18n('Scheduled alarms')}}</v-subheader>
+     <template v-for="(item, index) in alarms.scheduled">
+      <v-list-tile class="alarm-entry">
+       <v-checkbox v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-checkbox>
+       <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
+       <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
+      </v-list-tile>
+      <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
+     </template>
+     <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
+     <div class="settings-sub-pad"></div>
+     <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
+     <v-list-tile>
+      <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
+     </v-list-tile>
+     <v-list-tile>
+      <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
+     </v-list-tile>
+     <v-list-tile>
+      <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
+     </v-list-tile>
+    </v-list>
+   </v-card-text>
   </v-card>
  </v-dialog>
 

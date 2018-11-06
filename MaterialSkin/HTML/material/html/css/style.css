@@ -71,7 +71,7 @@ a {
 .lms-list {
     position:fixed;
     top:56px;
-    height:calc((var(--vh, 1vh)*100) - 112px);
+    height:calc((var(--vh, 1vh)*100) - 114px);
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;
@@ -80,7 +80,7 @@ a {
 .lms-list-sub {
     position:fixed;
     top:102px;
-    height:calc((var(--vh, 1vh)*100) - 154px);
+    height:calc((var(--vh, 1vh)*100) - 160px);
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;

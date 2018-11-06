@@ -40,6 +40,15 @@ router.afterEach((to, from) => {
     bus.$emit('routeChanged', from.path, to.path);
 })
 
+function changeCss(cssFile) {
+    var oldlink = document.getElementsByTagName("link").item(0);
+    var newlink = document.createElement("link");
+    newlink.setAttribute("rel", "stylesheet");
+    newlink.setAttribute("type", "text/css");
+    newlink.setAttribute("href", cssFile);
+    document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+}
+
 const store = new Vuex.Store({
     state: {
         players: null, // List of players
@@ -138,6 +147,11 @@ const store = new Vuex.Store({
             if (state.darkUi!=val.darkUi) {
                 state.darkUi = val.darkUi;
                 setLocalStorageVal('darkUi', state.darkUi);
+                if (state.darkUi) {
+                    changeCss("html/css/dark.css");
+                } else {
+                    changeCss("html/css/light.css");
+                }
             }
             if (state.artistAlbumSort!=val.artistAlbumSort) {
                 state.artistAlbumSort = val.artistAlbumSort;
@@ -184,6 +198,9 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
+            if (!state.darkUi) {
+                changeCss("html/css/light.css");
+            }
         },
         setLibrary(state, lib) {
             if (state.library!=lib) {

@@ -255,6 +255,10 @@ function parseBrowseResp(data, parent, options, idStart) {
                     idStart++;
                 }
 
+                if (!isApps && i.presetParams) {
+                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                }
+
                 if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
                     i.actions.go.cmd.forEach(a => {
                         if ("search" == a) {

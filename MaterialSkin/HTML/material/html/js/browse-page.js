@@ -15,6 +15,8 @@ var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
 var ADD_TO_FAV_ACTION       = {cmd:"addfav",     icon:"favorite_border"};
 var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  icon:"delete_outline"};
+var PIN_ACTION              = {cmd:"pin",        icon:"star_border"};
+var UNPIN_ACTION            = {cmd:"unpin",      icon:"star"};
 
 const DIVIDER = {divider:true};
 const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
@@ -73,6 +75,36 @@ var lmsBrowse = Vue.component("LmsBrowse", {
   </tr>
  </table>
  <v-list v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
+  <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
+  <template v-if="isTop" v-for="(item, index) in pinned">
+   <v-divider v-if="index>0 && pinned.length>index"></v-divider>
+
+   <v-list-tile avatar @click="click(item.item, $event)" :key="item.id">
+    <v-list-tile-avatar v-if="item.item.image" :tile="true">
+     <img v-lazy="item.item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.item.icon" :tile="true">
+     <v-icon>{{item.item.icon}}</v-icon>
+    </v-list-tile-avatar>
+
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+    </v-list-tile-content>
+
+    <v-list-tile-action v-if="item.item.menuActions && item.item.menuActions.length>1" @click.stop="itemMenu(item.item, $event)">
+     <v-btn icon>
+      <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else-if="item.item.menuActions && item.item.menuActions.length===1" @click.stop="itemAction(item.item.menuActions[0].cmd, item.item)">
+     <v-btn icon>
+      <v-icon>{{item.item.menuActions[0].icon}}</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+
+   </v-list-tile>
+  </template>
+
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
@@ -98,9 +130,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>0" @click.stop="itemMenu(item, $event)">
+    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" @click.stop="itemAction(item.menuActions[0].cmd, item)">
+     <v-btn icon>
+      <v-icon>{{item.menuActions[0].icon}}</v-icon>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -130,7 +167,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined },
-            menu: { show:false, item: undefined, x:0, y:0}
+            menu: { show:false, item: undefined, x:0, y:0},
+            isTop: true,
+            pinned: []
         }
     },
     created() {
@@ -142,10 +181,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         this.menuActions=[];
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
-                      noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
+                      noRoleFilter: getLocalStorageBool('noRoleFilter', false),
+                      pinned: new Set()};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.previousScrollPos=0;
+        this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
+        this.pinned.forEach( p => { this.options.pinned.add(p.id) });
 
         // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
         // page, so that it can be restored when going back here.
@@ -186,7 +228,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             DELETE_ACTION.title=i18n("Delete");
             ADD_TO_FAV_ACTION.title=i18n("Add to favorites");
             REMOVE_FROM_FAV_ACTION.title=i18n("Remove from favorites");
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
+            PIN_ACTION.title=i18n("Pin to main page");
+            UNPIN_ACTION.title=i18n("Un-pin from main page");
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items') };
 
             this.top = [
                 { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
@@ -322,6 +366,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.items=resp.items;
                     this.baseActions=resp.baseActions;
                     this.menuActions=[];
+                    this.isTop = false;
 
                     if (this.current && this.current.menuActions) {
                         this.current.menuActions.forEach(i => {
@@ -379,6 +424,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.headerSubTitle = i18n("Extra browse modes");
                 this.listSize = this.items.length;
                 setScrollTop(this.scrollElement, 0);
+                this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('randomMix');
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
@@ -538,6 +584,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 });
             } else if (act===MORE_ACTION.cmd) {
                 this.fetchItems(this.buildCommand(item, act), item);
+            } else if (act===PIN_ACTION.cmd) {
+                this.pin(item, true);
+            } else if (act===UNPIN_ACTION.cmd) {
+                this.pin(item, false);
             } else {
                 var command = this.buildCommand(item, act);
                 if (command.command.length<1) { // Non slim-browse command
@@ -642,6 +692,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerTitle = null;
             this.headerSubTitle=null;
             this.menuActions=[];
+            this.isTop = true;
             this.$nextTick(function () {
                 setScrollTop(this.scrollElement, prev>0 ? prev : 0);
             });
@@ -908,6 +959,40 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     }
                 }
             });
+        },
+        pin(item, add) {
+            var before = this.pinned;
+            var index = -1;
+            for (var i=0; i<this.pinned.length; ++i) {
+                if (this.pinned[i].id === item.id) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (add && index==-1) {
+                this.pinned.push({id: item.id, title: item.title, item: item});
+                this.options.pinned.add(item.id);
+                for (var i=0; i<item.menuActions.length; ++i) {
+                    if (item.menuActions[i].cmd == PIN_ACTION.cmd) {
+                        item.menuActions[i] = UNPIN_ACTION;
+                        break;
+                    }
+                }
+                this.pinned.sort(titleSort);
+                setLocalStorageVal('pinned', JSON.stringify(this.pinned));
+                this.$forceUpdate();
+            } else if (!add && index!=-1) {
+                this.$confirm(i18n("Un-pin '%1'?", item.title), {buttonTrueText: i18n('Un-pin'), buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        this.pinned.splice(index, 1);
+                        this.options.pinned.delete(item.id);
+                        this.pinned.sort(titleSort);
+                        setLocalStorageVal('pinned', JSON.stringify(this.pinned));
+                        this.$forceUpdate();
+                    }
+                });
+            }
         }
     },
     mounted() {

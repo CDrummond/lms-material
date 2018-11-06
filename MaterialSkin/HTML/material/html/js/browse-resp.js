@@ -146,6 +146,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             var moreAction = false;
             var isFavorites = parent && parent.isFavFolder;
             var isPlaylists = parent && parent.isPlaylists;
+            var isApps = parent && parent.id && parent.id===TOP_APPS_ID;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             if (data.result.base && data.result.base.actions) {
@@ -240,7 +241,10 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.menuActions.push(MORE_ACTION);
                 }
 
-                if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
+                if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                    i.id = "apps."+i.actions.go.params.menu;
+                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {
                     i.id = "item_id:"+i.params.item_id;
@@ -250,6 +254,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.id=parent.id+"."+idStart;
                     idStart++;
                 }
+
                 if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
                     i.actions.go.cmd.forEach(a => {
                         if ("search" == a) {

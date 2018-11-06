@@ -40,13 +40,30 @@ router.afterEach((to, from) => {
     bus.$emit('routeChanged', from.path, to.path);
 })
 
-function changeCss(cssFile) {
-    var oldlink = document.getElementsByTagName("link").item(0);
+function isMobile() {
+    return navigator.userAgent.indexOf( "Mobile" ) !== -1 || 
+           navigator.userAgent.indexOf( "iPhone" ) !== -1 || 
+           navigator.userAgent.indexOf( "Android" ) !== -1 || 
+           navigator.userAgent.indexOf( "Windows Phone" ) !== -1 ;
+}
+
+function changeCss(cssFile, index) {
+    var oldlink = document.getElementsByTagName("link").item(index);
     var newlink = document.createElement("link");
     newlink.setAttribute("rel", "stylesheet");
     newlink.setAttribute("type", "text/css");
     newlink.setAttribute("href", cssFile);
     document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+}
+
+function setTheme(dark) {
+    if (!isMobile()) {
+        if (dark) {
+            changeCss("html/css/dark-scrollbar.css", 0);
+        } else {
+            changeCss("html/css/light-scrollbar.css", 0);
+        }
+    }
 }
 
 const store = new Vuex.Store({
@@ -147,11 +164,7 @@ const store = new Vuex.Store({
             if (state.darkUi!=val.darkUi) {
                 state.darkUi = val.darkUi;
                 setLocalStorageVal('darkUi', state.darkUi);
-                if (state.darkUi) {
-                    changeCss("html/css/dark.css");
-                } else {
-                    changeCss("html/css/light.css");
-                }
+                setTheme(state.darkUi);
             }
             if (state.artistAlbumSort!=val.artistAlbumSort) {
                 state.artistAlbumSort = val.artistAlbumSort;
@@ -198,9 +211,7 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
-            if (!state.darkUi) {
-                changeCss("html/css/light.css");
-            }
+            setTheme(state.darkUi);
         },
         setLibrary(state, lib) {
             if (state.library!=lib) {

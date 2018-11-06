@@ -1,6 +1,6 @@
 {
-  "name": "SlimServer Mobile UI",
-  "short_name": "SlimServer",
+  "name": "LMS Mobile UI",
+  "short_name": "LMS",
   "theme_color": "#424242",
   "background_color": "#424242",
   "display": "standalone",

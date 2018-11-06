@@ -118,7 +118,7 @@ Vue.component('lms-information-dialog', {
                         this.library.push("Last scan failure: %1", data.result.lastscanfailed);
                     }
 
-                    this.title=i18n("SlimServer v%1", data.result.version);
+                    this.title=i18n("Logitech Media Server v%1", data.result.version);
                 }
             });
         },

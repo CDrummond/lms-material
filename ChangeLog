@@ -17,6 +17,7 @@
 13. Pinnable apps, etc.
 14. Custom CSS scrollbars for WebKit browsers - blend in better with dark
     style.
+15. Store active tab in local storage, and restore upon restart.
 
 0.0.7
 -----

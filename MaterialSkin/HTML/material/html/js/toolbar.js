@@ -165,8 +165,10 @@ Vue.component('lms-toolbar', {
             this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
                           managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing')};
         },
-        setPlayer(name) {
-            this.$store.commit('setPlayer', name);
+        setPlayer(id) {
+            if (id != this.$store.state.player.id) {
+                this.$store.commit('setPlayer', id);
+            }
         },
         doAction(command) {
             bus.$emit('playerCommand', command);

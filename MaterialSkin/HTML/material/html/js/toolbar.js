@@ -36,7 +36,7 @@ Vue.component('lms-toolbar', {
    <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
    <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
     <v-list-tile-content v-if="playerStatus.ison">
-     <v-list-tile-title class="pm-icon-indent"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
+     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>1}"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
     </v-list-tile-content>
     <v-list-tile-content v-else>
      <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>

@@ -165,6 +165,12 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        bus.$on('info', function() {
+            if (this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                this.info.show=!this.info.show;
+            }
+        }.bind(this));
     },
     methods: {
         initItems() {

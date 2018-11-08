@@ -1049,7 +1049,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
                             if (data.result._p2[i].params) {
                                 for(var key in data.result._p2[i].params) {
-                                    item.params.push(key+":"+data.result._p2[i].params[key]);
+                                    item.params.push(("genre_id"==key ? "genre" : key)+":"+data.result._p2[i].params[key]);
                                 }
                             }
 

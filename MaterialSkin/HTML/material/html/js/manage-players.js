@@ -30,13 +30,13 @@ Vue.component('lms-manage-players', {
           <v-list-tile-title>{{player.name}}</v-list-tile-title>
           <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon" @click="prevTrack(index)">
+         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="prevTrack(index)">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" @click="playPause(index)">
+         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="playPause(index)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" @click="nextTrack(index)">
+         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="nextTrack(index)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
           </v-list-tile-action>
         </v-list-tile>
@@ -44,10 +44,11 @@ Vue.component('lms-manage-players', {
       </v-flex xs12>
        <v-flex xs12>
        <v-layout>
-        <v-btn flat icon @click.stop="volumeDown(index)" class="pmgr-vol-btn"><v-icon>volume_down</v-icon></v-btn>
-        <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="pmgr-vol-slider" thumb-label="always" thumb-size=28></v-slider>
-         <v-btn flat icon @click.stop="volumeUp(index)" class="pmgr-vol-btn"><v-icon>volume_up</v-icon></v-btn>
-        <v-btn flat icon @click.stop="togglePower(index)" class="pmgr-vol-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
+        <v-btn flat icon @click.stop="volumeDown(index)" class="pmgr-btn"><v-icon>volume_down</v-icon></v-btn>
+        <v-slider @change="volumeChanged(index)" step="1" v-model="player.volume" class="pmgr-vol-slider"></v-slider>
+        <v-btn flat icon @click.stop="volumeUp(index)" class="pmgr-btn"><v-icon>volume_up</v-icon></v-btn>
+        <p class="pmgr-vol">{{player.volume}} %</p>
+        <v-btn flat icon @click.stop="togglePower(index)" class="pmgr-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
        </v-layout>
       </v-flex>
       <v-flex xs12 v-if="(index+1 < players.length)"><v-divider class="pmgr-divider"></v-divider></v-flex>

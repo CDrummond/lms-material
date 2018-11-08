@@ -111,13 +111,21 @@ a {
     text-overflow: ellipsis;
 }
 
+.vol-text {
+    width:100%;
+    text-align:center;
+    vertical-align: middle;
+}
+
 .vol-slider {
-    padding-top:24px;
-    height: 48px;
+    margin-top:6px;
+    margin-left:8px;
+    margin-right:8px;
+    padding:0px;
+    height: 32px;
 }
 
 .vol-btn {
-    margin-top: 40px;
     width: 32px;
     height: 32px;
 }
@@ -396,7 +404,7 @@ a {
 
 .pmgr-playerlist {
     margin-left:-12px;
-    margin-right:-6px;
+    margin-right:-14px;
 }
 
 .pmgr-container {
@@ -404,17 +412,27 @@ a {
 }
 
 .pmgr-divider {
-    margin-top:8px;
-    margin-bottom:8px;
+    margin-top:4px;
+    margin-bottom:4px;
 }
 
 .pmgr-vol-slider {
-    padding-top:8px;
-    height: 22px;
+    margin-top:0px;
+    margin-left:8px;
+    margin-right:8px;
+    height: 32px;
 }
 
-.pmgr-vol-btn {
-    margin-top: 24px;
+.pmgr-btn {
+    margin: 0px;
     width: 32px;
     height: 32px;
+}
+
+.pmgr-vol {
+    width:82px;
+    padding-top: 4px;
+    height:32px;
+    text-align:center;
+    vertical-align: middle;
 }

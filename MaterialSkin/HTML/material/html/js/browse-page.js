@@ -373,6 +373,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                             }
                         });
                     }
+
+                    if (this.listSize<0) {
+                        this.listSize=this.items.length;
+                    }
                     if (resp.subtitle) {
                         this.headerSubTitle=resp.subtitle;
                     } else {
@@ -649,6 +653,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
+                if (this.listSize<0) {
+                    this.listSize=this.items.length;
+                }
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {

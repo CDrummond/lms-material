@@ -5,6 +5,8 @@
 2. Fix missing menu items if using server supplied browse modes, and start in
    any view bar browse.
 3. Fix 'What Was That Tune?' missing covers.
+4. If a browse response returns a count of -1, then set count to number of
+   items.
 
 0.0.8
 -----

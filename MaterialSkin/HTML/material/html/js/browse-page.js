@@ -212,9 +212,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.playerMenu();
             }
         }.bind(this));
-        if (this.playerId() && this.$store.state.serverMenus) {
-            this.playerMenu();
-        }
     },
     methods: {
         initItems() {
@@ -1100,6 +1097,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.setLibrary();
         }.bind(this));
         this.setLibrary();
+
+        if (this.playerId() && this.$store.state.serverMenus) {
+            this.playerMenu();
+        }
 
         this.scrollElement = document.getElementById("browse-list");
         this.scrollElement.addEventListener('scroll', () => {

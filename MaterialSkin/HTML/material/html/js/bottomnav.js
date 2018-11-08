@@ -46,7 +46,7 @@ Vue.component('lms-bottomnav', {
             this.items = [
                           { text: i18n('Browse'),  icon: 'music_note',          route: '/browse' },
                           { text: i18n('Playing'), icon: 'play_circle_outline', route: '/nowplaying' },
-                          { text: i18n('Queue'),   icon: 'list',                route: '/queue' },
+                          { text: i18n('Queue'),   icon: 'queue_music',         route: '/queue' },
                          ];
         }
     }

@@ -1033,6 +1033,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                    if (data && data.result && data.result._p2 && data.result._p2.length>0) {
                         haveExtra = true;
                         for (var i = data.result._p2.length; i-- > 0; ) {
+                            var canUse = true;
                             var isAlbums = "albums"==data.result._p2[i].feed;
                             var item = { title: data.result._p2[i].name,
                                  command: [data.result._p2[i].feed],
@@ -1049,11 +1050,18 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
                             if (data.result._p2[i].params) {
                                 for(var key in data.result._p2[i].params) {
-                                    item.params.push(("genre_id"==key ? "genre" : key)+":"+data.result._p2[i].params[key]);
+                                    if (key == "genre_id") {
+                                        canUse = false;
+                                        break;
+                                    } else {
+                                        item.params.push(key+":"+data.result._p2[i].params[key]);
+                                    }
                                 }
                             }
 
-                            this.other.unshift(item);
+                            if (canUse) {
+                                this.other.unshift(item);
+                            }
                         }
                     }
 

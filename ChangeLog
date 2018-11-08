@@ -22,6 +22,8 @@
 17. When saving queue, use current playlist name as default value.
 18. Replace play/pause icon in toolbar with an info icon for now-playing
     screen, to activate song info dialog.
+19. Remove thumbs from volume sliders, so that these can be smaller allowing
+    more players to be visible in the player manager.
 
 0.0.7
 -----

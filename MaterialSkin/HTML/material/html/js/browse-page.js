@@ -112,7 +112,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
    <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
-   <p v-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
+   <v-list-tile v-if="item.type=='text'" class="browse-text" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">

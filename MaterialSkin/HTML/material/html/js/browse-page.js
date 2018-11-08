@@ -30,6 +30,12 @@ const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 
+function isLocalLibCommand(command) {
+    return command & command.command && command.command.length>0 &&
+           (command.command[0]=="artists" || command.command[0]=="albums" || command.command[0]=="tracks" ||
+            command.command[0]=="genres" || command.command[0]=="playlists" || "browselibrary"==command.command[0]);
+}
+
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
 <div class>
@@ -769,8 +775,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             }
 
             if (undefined==doReplacements || doReplacements) {
-                // Add library id, if set TODO: Is this OK for all commands???
-                if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library) {
+                if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library && isLocalLibCommand(cmd)) {
                     var haveLibId = false;
                         cmd.params.forEach(p => {
                         if (p.startsWith("library_id:")) {

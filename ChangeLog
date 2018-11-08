@@ -2,6 +2,8 @@
 -----
 1. Can only use addition browse modes that specify a genre if getting
    categories from server.
+2. Fix missing menu items if using server supplied browse modes, and start in
+   any view bar browse.
 
 0.0.8
 -----

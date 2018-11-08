@@ -972,6 +972,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             if (add && index==-1) {
                 this.pinned.push({id: item.id, title: item.title, item: item});
                 this.options.pinned.add(item.id);
+                this.showMessage(i18n("Pinned '%1' to the browse page.", item.title));
                 for (var i=0; i<item.menuActions.length; ++i) {
                     if (item.menuActions[i].cmd == PIN_ACTION.cmd) {
                         item.menuActions[i] = UNPIN_ACTION;

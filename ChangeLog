@@ -1,7 +1,7 @@
 0.0.9
 -----
-1. For additional browse modes not supplied by server, need to use
-   "genre:Genre" and not "genre_id:Genre"
+1. Can only use addition browse modes that specify a genre if getting
+   categories from server.
 
 0.0.8
 -----

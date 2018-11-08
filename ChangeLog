@@ -4,6 +4,7 @@
    server" is enabled.
 2. Fix missing menu items if using server supplied browse modes, and start in
    any view bar browse.
+3. Fix 'What Was That Tune?' missing covers.
 
 0.0.8
 -----

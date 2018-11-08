@@ -338,6 +338,29 @@ a {
 
 .switch-label {
     cursor: pointer;
+    margin-right: 8px;
+}
+
+.switch-label .v-list__tile__title {
+    white-space: normal;
+    min-height: 24px;
+    max-height: 72px;
+    height: auto;
+}
+
+.switch-label .v-list__tile__sub-title {
+    white-space: normal;
+    min-height: 24px;
+    max-height: 72px;
+    height: auto;
+}
+
+.v-dialog .v-card .v-card__text .v-list--two-line .v-list__tile {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    min-height: 58px;
+    max-height: 232px;
+    height: auto;
 }
 
 .lms-dialog {

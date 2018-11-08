@@ -86,7 +86,7 @@ var lmsQueue = Vue.component("LmsQueue", {
         <v-layout>
           <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
-          <v-btn flat icon v-if="playerIsOn" @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>queue_music</v-icon></v-btn>
+          <v-btn flat icon v-if="playerIsOn" @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
           <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
           <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>

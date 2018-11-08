@@ -1022,53 +1022,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 setLocalStorageVal('noRoleFilter', this.options.noRoleFilter);
             }
         });
-        // Additional browse modes?
-        lmsCommand("", ["pref", "plugin.state:ExtendedBrowseModes", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
-                lmsCommand("", ["pref", "plugin.extendedbrowsemodes:additionalMenuItems", "?"]).then(({data}) => {
-                   var haveExtra = false;
-                   if (data && data.result && data.result._p2 && data.result._p2.length>0) {
-                        haveExtra = true;
-                        for (var i = data.result._p2.length; i-- > 0; ) {
-                            var canUse = true;
-                            var isAlbums = "albums"==data.result._p2[i].feed;
-                            var item = { title: data.result._p2[i].name,
-                                 command: [data.result._p2[i].feed],
-                                 params: [],
-                                 id: TOP_ID_PREFIX+"ebm-"+data.result._p2[i].id,
-                                 type: "group",
-                                 icon: isAlbums ? "album" : "group"
-                               };
-
-                            if (isAlbums) {
-                               item.params.push("tags:jlya");
-                               item.params.push("sort:"+ALBUM_SORT_PLACEHOLDER);
-                            }
-
-                            if (data.result._p2[i].params) {
-                                for(var key in data.result._p2[i].params) {
-                                    if (key == "genre_id") {
-                                        canUse = false;
-                                        break;
-                                    } else {
-                                        item.params.push(key+":"+data.result._p2[i].params[key]);
-                                    }
-                                }
-                            }
-
-                            if (canUse) {
-                                this.other.unshift(item);
-                            }
-                        }
-                    }
-
-                    if (haveExtra && 1==this.history.length && this.current && this.current.id===TOP_MORE_ID) {
-                        this.items = this.other;
-                        this.listSize = this.items.length;
-                    }
-                });
-            }
-        });
 
         lmsCommand("", ["can", "randomplay", "?"]).then(({data}) => {
             if (data && data.result && undefined!=data.result._can) {

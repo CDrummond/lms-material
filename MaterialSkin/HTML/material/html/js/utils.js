@@ -67,6 +67,9 @@ function resolveImage(icon, image) {
     if (icon.startsWith("/")) {
         return lmsServerAddress+icon;
     }
+    if (idx<0 && /^[0-9a-fA-F]+$/.test(icon)) {
+        icon="music/"+icon+"/cover50x50_o";
+    }
     return lmsServerAddress+"/"+icon;
 }
 

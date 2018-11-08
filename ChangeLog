@@ -19,6 +19,7 @@
     style.
 15. Store active tab in local storage, and restore upon restart.
 16. Only add "library_id" onto local library commands.
+17. When saving queue, use current playlist name as default value.
 
 0.0.7
 -----

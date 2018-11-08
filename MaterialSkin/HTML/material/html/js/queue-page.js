@@ -172,6 +172,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                     this.timestamp=0;
                 }
             }
+            this.playlistName=playerStatus.playlist.name;
             if (playerStatus.playlist.timestamp!==this.timestamp) {
                 this.timestamp = playerStatus.playlist.timestamp;
                 this.scheduleUpdate();
@@ -265,7 +266,8 @@ var lmsQueue = Vue.component("LmsQueue", {
             if (this.items.length<1) {
                 return;
             }
-            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: undefined };
+            var value=""+this.playlistName;
+            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value };
         },
         clear() {
             if (this.items.length<1) {
@@ -284,6 +286,7 @@ var lmsQueue = Vue.component("LmsQueue", {
                 if (name.length>1) {
                     this.dialog.show = false;
                     lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({datax}) => {
+                        this.playlistName = name;
                     }).catch(err => {
                         this.showError(err, i18n("Failed to save play queue!"));
                     });

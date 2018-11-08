@@ -1,3 +1,8 @@
+0.0.9
+-----
+1. For additional browse modes not supplied by server, need to use
+   "genre:Genre" and not "genre_id:Genre"
+
 0.0.8
 -----
  1. Only show 'Random Mix' if plugin is installed.

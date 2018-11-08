@@ -20,6 +20,8 @@
 15. Store active tab in local storage, and restore upon restart.
 16. Only add "library_id" onto local library commands.
 17. When saving queue, use current playlist name as default value.
+18. Replace play/pause icon in toolbar with an info icon for now-playing
+    screen, to activate song info dialog.
 
 0.0.7
 -----

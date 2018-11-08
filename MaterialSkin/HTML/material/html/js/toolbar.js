@@ -57,7 +57,10 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon v-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+ <v-btn icon v-if="!infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
+  <v-icon>info</v-icon>
+ </v-btn>
+ <v-btn icon v-else-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
   <v-icon>pause_circle_outline</v-icon>
  </v-btn>
  <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
@@ -89,6 +92,7 @@ Vue.component('lms-toolbar', {
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined},
+                 infoOpen: false
                }
     },
     mounted() {
@@ -153,6 +157,13 @@ Vue.component('lms-toolbar', {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        bus.$on('dialog', function(name, val) {
+            if (name=='info-dialog') {
+                this.infoOpen = val;
+            }
+            this.initItems();
+        }.bind(this));
     },
     methods: {
         initItems() {

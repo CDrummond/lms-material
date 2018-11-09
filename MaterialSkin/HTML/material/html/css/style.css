@@ -142,6 +142,14 @@ a {
     margin-right: -8px !important;
 }
 
+/* Stop vuetify changing padding when width changes */
+@media only screen and (max-width: 959px) {
+  .v-toolbar__content,
+  .v-toolbar__extension {
+    padding: 0 24px;
+  }
+}
+
 .pm-noicon-indent {
     margin-left: 44px;
 }

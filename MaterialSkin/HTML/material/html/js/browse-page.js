@@ -933,35 +933,41 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
                                 var command = this.buildCommand(c, "go", false, true);
-                                this.serverTop.push({ title: c.text,
-                                                      command: command.command ,
-                                                      params: command.params,
-                                                      id: TOP_ID_PREFIX+c.id,
-                                                      weight: c.weight ? parseFloat(c.weight) : 100,
-                                                      isPlaylists: c.id == "myMusicPlaylists",
-                                                      icon: c.id.startsWith("myMusicArtists")
-                                                            ? "group"
-                                                            : c.id.startsWith("myMusicAlbums")
-                                                                ? "album"
-                                                                : c.id.startsWith("myMusicGenres")
-                                                                    ? "label"
-                                                                    : c.id.startsWith("myMusicPlaylists")
-                                                                        ? "list"
-                                                                        : c.id.startsWith("myMusicYears")
-                                                                            ? "date_range"
-                                                                            : c.id.startsWith("myMusicNewMusic")
-                                                                                ? "new_releases"
-                                                                                    : c.id.startsWith("myMusicMusicFolder")
-                                                                                    ? "folder"
-                                                                                        : c.id.startsWith("myMusicFileSystem")
-                                                                                            ? "computer"
-                                                                                            : c.id.startsWith("myMusicRandomAlbums")
-                                                                                                ? "shuffle"
-                                                                                                : c.id.startsWith("myMusicTopTracks")
-                                                                                                    ? "arrow_upward"
-                                                                                                    : c.id.startsWith("myMusicFlopTracks")
-                                                                                                        ? "arrow_downward"
-                                                                                                        : c.icon });
+                                var item = { title: c.text,
+                                             command: command.command ,
+                                             params: command.params,
+                                             weight: c.weight ? parseFloat(c.weight) : 100,
+                                             icon: c.icon,
+                                             id: TOP_ID_PREFIX+c.id
+                                            };
+
+                                if (c.id.startsWith("myMusicArtists")) {
+                                    item.icon = "group";
+                                } else if (c.id.startsWith("myMusicAlbums")) {
+                                    item.icon = "album";
+                                } else if (c.id.startsWith("myMusicGenres")) {
+                                    item.icon = "label";
+                                } else if (c.id == "myMusicPlaylists") {
+                                    item.icon = "list";
+                                    item.isPlaylists = true;
+                                } else if (c.id.startsWith("myMusicYears")) {
+                                    item.icon = "date_range";
+                                } else if (c.id == "myMusicNewMusic") {
+                                    item.icon = "new_releases";
+                                    item.id=TOP_NEW_MUSIC_ID;
+                                } else if (c.id.startsWith("myMusicMusicFolder")) {
+                                    item.icon = "folder";
+                                } else if (c.id.startsWith("myMusicFileSystem")) {
+                                    item.icon = "computer";
+                                } else if (c.id == "myMusicRandomAlbums") {
+                                    item.icon = "shuffle";
+                                    item.id=TOP_RANDOM_ALBUMS_ID;
+                                } else if (c.id.startsWith("myMusicTopTracks")) {
+                                    item.icon = "arrow_upward";
+                                } else if (c.id.startsWith("myMusicFlopTracks")) {
+                                    item.icon = "arrow_downward";
+                                }
+                                this.serverTop.push(item);
                             } else if (c.id=="randomplay") {
                                 this.serverTop.push({ title: i18n("Random Mix"),
                                                       icon: "shuffle",

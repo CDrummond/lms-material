@@ -9,6 +9,7 @@
    items.
 5. When getting categories from server, modify command parameters for album
    sort.
+6. Ensure A..Z splitting is not used for 'New Music' or 'Random Albums'
 
 0.0.8
 -----

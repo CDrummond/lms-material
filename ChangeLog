@@ -7,6 +7,8 @@
 3. Fix 'What Was That Tune?' missing covers.
 4. If a browse response returns a count of -1, then set count to number of
    items.
+5. When getting categories from server, modify command parameters for album
+   sort.
 
 0.0.8
 -----

@@ -29,6 +29,8 @@ const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
+const ALBUM_TAGS = "tags:jlya";
+const TRACK_TAGS = "tags:Adt";
 
 function isLocalLibCommand(command) {
     return command & command.command && command.command.length>0 &&
@@ -239,7 +241,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                   id: TOP_ID_PREFIX+"ar" },
                 { title: i18n("Albums"),
                   command: ["albums"],
-                  params: ["tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
+                  params: [ALBUM_TAGS, "sort:"+ALBUM_SORT_PLACEHOLDER],
                   icon: "album",
                   type: "group",
                   id: TOP_ID_PREFIX+"al" },
@@ -278,13 +280,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.other = [
                 { title: i18n("Compilations"),
                   command: ["albums"],
-                  params: ["compilation:1", "tags:jlya", "sort:"+ALBUM_SORT_PLACEHOLDER],
+                  params: ["compilation:1", ALBUM_TAGS, "sort:"+ALBUM_SORT_PLACEHOLDER],
                   icon: "album",
                   type: "group",
                   id: TOP_ID_PREFIX+"co" },
                 { title: i18n("Random Albums"),
                   command: ["albums"],
-                  params: ["tags:jlya", "sort:random"],
+                  params: [ALBUM_TAGS, "sort:random"],
                   icon: "shuffle",
                   type: "group",
                   id: TOP_RANDOM_ALBUMS_ID },
@@ -296,7 +298,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                   id: TOP_ID_PREFIX+"yr" },
                 { title: i18n("New Music"),
                   command: ["albums"],
-                  params: ["tags:jlya", "sort:new"],
+                  params: [ALBUM_TAGS, "sort:new"],
                   icon: "new_releases",
                   type: "group",
                   id: TOP_NEW_MUSIC_ID },
@@ -334,8 +336,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         },
         fetchItems(command, item, batchSize) {
             this.fetchingItems = true;
-            // Is this a browselibrary from favourites? If so, convert to non-SlimBrowse
-            command = this.convertToNonSlimBrowse(command);
 
             //console.log("FETCH command:" + command.command + " params:" + command.params);
             var start = item.range ? item.range.start : 0;
@@ -722,7 +722,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
-        buildCommand(item, commandName, doReplacements) {
+        buildCommand(item, commandName, doReplacements, addAlbumSort) {
             var cmd = {command: [], params: [] };
 
             if (undefined==commandName) {
@@ -774,6 +774,63 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                                 cmd.params.push(key+":"+item[command.itemsParams][key]);
                             }
                         }
+                    }
+                }
+
+                if (cmd.command.length==2 && "browselibrary"==cmd.command[0] && "items"==cmd.command[1]) {
+                    var p=[];
+                    var c=[];
+                    var canReplace = true;
+                    var mode = undefined;
+                    var hasSort = false;
+                    var hasTags = false;
+
+                    cmd.params.forEach(i => {
+                        if (i.startsWith("mode:")) {
+                            mode = i.split(":")[1];
+                            if (mode.startsWith("myMusicArtists")) {
+                                mode="artists";
+                            } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums") {
+                                mode="albums";
+                            } else if (mode=="vaalbums") {
+                                mode="albums";
+                                p.push("compilation:1");
+                            } else if (mode=="bmf") {
+                                mode="musicfolder"
+                                p.push("type:audio");
+                                p.push("tags:d");
+                            } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks" && mode!="playlists") {
+                                canReplace = false;
+                                return;
+                            }
+                            c.push(mode);
+                        } else if (!i.startsWith("menu:")) {
+                            p.push(i);
+                            if (i.startsWith("sort:")) {
+                                hasSort = true;
+                            } else if (i.startsWith("tags:")) {
+                                hasTags = true;
+                            }
+                        }
+                    });
+
+                    if (canReplace && c.length==1 && mode) {
+                        if (mode=="tracks") {
+                            if (!hasTags) {
+                                p.push(TRACK_TAGS);
+                            }
+                            if (!hasSort) {
+                                p.push("sort:tracknum");
+                            }
+                        } else if (mode=="albums") {
+                            if (!hasTags) {
+                                p.push(ALBUM_TAGS);
+                            }
+                            if (!hasSort && undefined!=addAlbumSort && addAlbumSort) {
+                                p.push("sort:"+ALBUM_SORT_PLACEHOLDER);
+                            }
+                        }
+                        cmd = {command: c, params: p};
                     }
                 }
             }
@@ -828,45 +885,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         getTop() {
             return this.$store.state.serverMenus ? this.serverTop : this.top;
         },
-        convertToNonSlimBrowse(command) {
-            if (command.command.length==2 && "browselibrary"==command.command[0] && "items"==command.command[1]) {
-                var p=[];
-                var c=[];
-                var canReplace = true;
-
-                command.params.forEach(i => {
-                    if (i.startsWith("mode:")) {
-                        var mode = i.split(":")[1];
-                        if (mode.startsWith("myMusicArtists")) {
-                            mode="artists";
-                        } else if (mode.startsWith("myMusicAlbums")) {
-                            mode="albums";
-                        } else if (mode=="vaalbums") {
-                            mode="albums";
-                            p.push("compilation:1");
-                        } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks") {
-                            canReplace = false;
-                            return;
-                        }
-                        c.push(mode);
-                        if (mode=="tracks") {
-                            p.push("tags:Adt");
-                            p.push("sort:tracknum");
-                        } else if (mode=="albums") {
-                            p.push("tags:jlya");
-                        }
-                    } else if (!i.startsWith("menu:")) {
-                        p.push(i);
-                    }
-                });
-
-                if (canReplace && c.length==1) {
-                    return {command: c, params: p, modified: true}
-                }
-            }
-            command.modified = false;
-            return command;
-        },
         addExtraItems(list, addMore) {
             list.push({ title: i18n("Search"),
                         command: ["search"],
@@ -914,12 +932,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
-                                // Build command, and see if can convert to non-SlimBrowse
-                                var command = this.convertToNonSlimBrowse(this.buildCommand(c, "go", false));
+                                var command = this.buildCommand(c, "go", false, true);
                                 this.serverTop.push({ title: c.text,
-                                                      command: command.modified ? command.command : undefined,
-                                                      params: command.modified ? command.params : undefined,
-                                                      actions: command.modified ? undefined : c.actions,
+                                                      command: command.command ,
+                                                      params: command.params,
                                                       id: TOP_ID_PREFIX+c.id,
                                                       weight: c.weight ? parseFloat(c.weight) : 100,
                                                       isPlaylists: c.id == "myMusicPlaylists",

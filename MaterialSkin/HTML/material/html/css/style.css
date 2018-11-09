@@ -64,6 +64,12 @@ a {
     max-width:250px !important;
 }
 
+.lms-bottom-nav-button > .v-btn__content > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width:100% !important;
+}
+
 .lms-search {
     width:100%;
 }

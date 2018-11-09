@@ -5,6 +5,8 @@
  * MIT license.
  */
 
+const MORE_COMMANDS = ["item_add", "item_insert", "itemplay", "item_fav"];
+
 function parseBrowseResp(data, parent, options, idStart) {
     var resp = {items: [], baseActions:[] };
 
@@ -21,7 +23,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
                                   //icon: options.artistImages ? undefined : "person",
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION], MORE_LIB_ACTION,
                                   type: "group",
                                   favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
                               });
@@ -36,7 +38,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   command: ["tracks"],
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, "sort:tracknum"],
                                   image: lmsServerAddress+"/music/" + i.artwork + "/cover_100x100_o"  ,
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                                   type: "group",
                                   favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
                               });
@@ -49,7 +51,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
                                   image: lmsServerAddress+"/music/" + i.coverid + "/cover_100x100_o"  ,
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
                                   type: "track"
                               });
                 });
@@ -154,7 +156,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 playAction = undefined != resp.baseActions[PLAY_ACTION.cmd];
                 addAction = undefined != resp.baseActions[ADD_ACTION.cmd];
                 insertAction = undefined != resp.baseActions[INSERT_ACTION.cmd];
-                //moreAction = undefined!=resp.baseActions[MORE_ACTION.cmd];
+                moreAction = undefined!=resp.baseActions[MORE_ACTION.cmd];
             }
 
             data.result.item_loop.forEach(i => {
@@ -165,6 +167,12 @@ function parseBrowseResp(data, parent, options, idStart) {
                 var addedPlayAction = false;
 
                 if ("text"==i.type) {
+
+                    // Exclude 'More' Play,Insert,Fav commands
+                    if (i.style && MORE_COMMANDS.includes(i.style)) {
+                        data.result.count--;
+                        return;
+                    }
                     i.title = i.text.replace(/\n/g, "<br/>");
                 } else {
                     var text = i.text.split(/\r?\n/);
@@ -213,36 +221,37 @@ function parseBrowseResp(data, parent, options, idStart) {
                 }
                 var addedDivider = false;
                 if (isFavorites) {
-                    i.menuActions.push(DIVIDER);
-                    addedDivider = true;
+                    if (i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
                     i.menuActions.push(RENAME_FAV_ACTION);
                     i.menuActions.push(REMOVE_FROM_FAV_ACTION);
                     if (!i.type) {
                         i.isFavFolder = true;
                     }
                 } else if (i.presetParams) {
-                    i.menuActions.push(DIVIDER);
-                    addedDivider = true;
+                    if (i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
                     i.menuActions.push(ADD_TO_FAV_ACTION);
                 }
                 if (isPlaylists) {
-                    if (!addedDivider) {
+                    if (!addedDivider && i.menuActions.length>0) {
                         i.menuActions.push(DIVIDER);
                         addedDivider = true;
                     }
                     i.menuActions.push(RENAME_PL_ACTION);
                     i.menuActions.push(DELETE_ACTION);
                 }
-                if (moreAction && i.menuActions.length>0 && i.params && i.params.item_id) {
-                    if (!addedDivider) {
-                        i.menuActions.push(DIVIDER);
-                        addedDivider = true;
-                    }
-                    i.menuActions.push(MORE_ACTION);
-                }
 
                 if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                     i.id = "apps."+i.actions.go.params.menu;
+                    if (!addedDivider && i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
                     i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
@@ -256,7 +265,19 @@ function parseBrowseResp(data, parent, options, idStart) {
                 }
 
                 if (!isApps && i.presetParams) {
+                    if (!addedDivider && i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
                     i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                }
+
+                if (moreAction && i.menuActions.length>0 && i.params && i.params.item_id) {
+                    if (!addedDivider && i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menuActions.push(MORE_ACTION);
                 }
 
                 if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
@@ -303,7 +324,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["albums"],
                               image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
                               params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                               type: "group",
                               favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
                           };
@@ -348,7 +369,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["tracks"],
                               image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover_100x100_o"  ,
                               params: ["album_id:"+ i.id, TRACK_TAGS, "sort:tracknum"],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                               type: "group",
                               favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
                           };
@@ -378,7 +399,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               title: title,
                               subtitle: formatSeconds(i.duration),
                               //icon: "music_note",
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
                               type: "track"
                           });
             });
@@ -448,7 +469,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["albums"],
                               //icon: "date_range",
                               params: ["year:"+ i.year, "tags:ajly"],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                               type: "group"
                           });
             });

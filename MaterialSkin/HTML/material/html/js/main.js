@@ -79,7 +79,8 @@ const store = new Vuex.Store({
         showMenuAudio:false,
         serverMenus:false,
         autoScrollQueue:true,
-        library: null
+        library: null,
+        infoPlugin: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -212,6 +213,7 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
+            state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
             setTheme(state.darkUi);
         },
         setLibrary(state, lib) {
@@ -221,6 +223,10 @@ const store = new Vuex.Store({
                 bus.$emit('libraryChanged');
             }
         },
+        setInfoPlugin(state, val) {
+            state.infoPlugin = val;
+            setLocalStorageVal('infoPlugin', val);
+        }
     }
 })
 
@@ -277,6 +283,12 @@ var app = new Vue({
             }
         });
 
+        // Music and Artist info plugin installled?
+        lmsCommand("", ["musicartistinfo", "localfiles", 0, 0]).then(({data}) => {
+            this.$store.commit('setInfoPlugin', data && data.result && data.result.window);
+        }).catch(err => {
+            this.$store.commit('setInfoPlugin', false);
+        });
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

@@ -57,7 +57,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon v-if="!infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon v-if="infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
  <v-btn icon v-else-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
@@ -205,6 +205,9 @@ Vue.component('lms-toolbar', {
         },
         players () {
             return this.$store.state.players
+        },
+        infoPlugin () {
+            return this.$store.state.infoPlugin
         }
     },
     filters: {

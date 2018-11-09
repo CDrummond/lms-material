@@ -116,7 +116,8 @@ var lmsQueue = Vue.component("LmsQueue", {
           </v-list-tile>
           <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
         <!-- </div></recycle-list></template> -->
-        </v-template>
+        </template>
+        <v-list-tile class="lms-list-pad"></v-list-tile>
       </v-list>
 
       <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

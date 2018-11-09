@@ -151,7 +151,8 @@ var lmsBrowse = Vue.component("LmsBrowse", {
     </v-list-tile-action>
    </v-list-tile>
   <!-- </div></recycle-list></template> -->
-  </v-template>
+  </template>
+  <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

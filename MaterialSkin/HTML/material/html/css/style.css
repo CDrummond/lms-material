@@ -92,6 +92,11 @@ a {
     backface-visibility:hidden;
 }
 
+/* Add a little padding at the bottom of lists */
+.lms-list-pad {
+    height: 40px;
+}
+
 /* Make action buttons in lists closer together */
 .list__tile__action {
     min-width: 48px !important;

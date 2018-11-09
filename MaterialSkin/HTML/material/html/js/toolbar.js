@@ -189,15 +189,7 @@ Vue.component('lms-toolbar', {
             bus.$emit('toolbarAction', id);
         },
         togglePower() {
-            if (this.playerStatus.ison) {
-                this.$confirm(i18n("Switch off '%1'?", this.$store.state.player.name), {buttonTrueText: i18n('Switch Off'), buttonFalseText: i18n('Cancel')}).then(res => {
-                    if (res) {
-                        bus.$emit('power', "0");
-                    }
-                });
-            } else {
-                bus.$emit('power', "1");
-            }
+            bus.$emit("power", this.playerStatus.ison ? "0" : "1");
         }
     },
     computed: {

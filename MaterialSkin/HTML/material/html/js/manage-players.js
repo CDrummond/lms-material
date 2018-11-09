@@ -141,19 +141,9 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            if (this.players[index].ison) {
-                this.$confirm(i18n("Switch off '%1'?", this.players[index].name), {buttonTrueText: i18n('Switch Off'), buttonFalseText: i18n('Cancel')}).then(res => {
-                    if (res) {
-                        lmsCommand(this.players[index].id, ["power", "0"]).then(({data}) => {
-                            updatePlayer(index);
-                        });
-                    }
-                });
-            } else {
-                lmsCommand(this.players[index].id, ["power", "1"]).then(({data}) => {
-                    updatePlayer(index);
-                });
-            }
+            lmsCommand(this.players[index].id, ["power", this.players[index].ison ? "0" : "1"]).then(({data}) => {
+                updatePlayer(index);
+            });
         },
         playPause(index) {
             if (!this.show) {

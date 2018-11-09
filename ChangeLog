@@ -17,6 +17,7 @@
 10. Fix adding albums to favorites.
 11. Use encodeURIComponent to encode favorites, not encodeURI
 12. Work-around iOS list size issue by adding a small amount of padding.
+13. Remove confirmation dialog when switching off a player.
 
 0.0.8
 -----

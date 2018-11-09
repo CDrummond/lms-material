@@ -777,6 +777,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     }
                 }
 
+                // Convert local browse commands into their non-SlimBrowse equivalents, so that sort and tags can be applied
                 if (cmd.command.length==2 && "browselibrary"==cmd.command[0] && "items"==cmd.command[1]) {
                     var p=[];
                     var c=[];

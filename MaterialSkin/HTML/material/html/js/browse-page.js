@@ -41,7 +41,42 @@ function isLocalLibCommand(command) {
 
 var lmsBrowse = Vue.component("LmsBrowse", {
     template: `
-<div class>
+<div>
+
+ <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+   <div class="pswp__container">
+    <div class="pswp__item"></div>
+    <div class="pswp__item"></div>
+    <div class="pswp__item"></div>
+   </div>
+   <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+     <div class="pswp__counter"></div>
+     <button class="pswp__button pswp__button--close"></button>
+     <button class="pswp__button pswp__button--fs"></button>
+     <button class="pswp__button pswp__button--zoom"></button>
+     <div class="pswp__preloader">
+      <div class="pswp__preloader__icn">
+       <div class="pswp__preloader__cut">
+        <div class="pswp__preloader__donut"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+     <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left"></button>
+    <button class="pswp__button pswp__button--arrow--right"></button>
+    <div class="pswp__caption">
+     <div class="pswp__caption__center"></div>
+    </div>
+   </div>
+  </div>
+ </div>
+
  <v-dialog v-model="dialog.show" persistent max-width="500px">
   <v-card>
    <v-card-text>
@@ -77,7 +112,27 @@ var lmsBrowse = Vue.component("LmsBrowse", {
   </v-layout>
  </v-card>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
- <v-list v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
+
+ <v-card v-if="grid" class="lms-image-grid">
+  <v-container grid-list-sm fluid>
+   <v-layout row wrap>
+    <v-flex v-for="(item, index) in items" :key="item.src" style="max-width:200px">
+     <v-card flat tile>
+      <v-card-text style>
+       <v-img :src="item.src" :lazy-src="item.src" aspect-ratio="1" @click="showImage(index)">
+        <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
+         <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </v-layout>
+       </v-img>
+       {{item.caption}}
+      </v-card-text>
+     </v-card>
+    </v-flex>
+   </v-layout>
+  </v-container>
+ </v-card>
+
+ <v-list v-else v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index"></v-divider>
@@ -114,7 +169,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
    <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
-
    <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item')" avatar @click="click(item, $event, true)">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -124,7 +178,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    <v-list-tile v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event, false)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
-     <img v-lazy="item.image">
+     <img v-lazy="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
@@ -173,6 +227,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
     data() {
         return {
             items: [],
+            grid: false,
             fetchingItems: false,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
@@ -364,6 +419,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     prev.headerSubTitle = this.headerSubTitle;
                     prev.menuActions = this.menuActions;
                     prev.pos=this.scrollElement.scrollTop;
+                    prev.grid=this.grid;
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
                     this.history.push(prev);
@@ -373,6 +429,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.baseActions=resp.baseActions;
                     this.menuActions=[];
                     this.isTop = false;
+                    this.grid = resp.grid;
 
                     if (this.current && this.current.menuActions) {
                         this.current.menuActions.forEach(i => {
@@ -435,6 +492,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 prev.headerSubTitle = this.headerSubTitle;
                 prev.menuActions = this.menuActions;
                 prev.pos=this.scrollElement.scrollTop;
+                prev.grid=this.grid;
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
@@ -467,6 +525,22 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 }
                 this.fetchItems(command, item);
             }
+        },
+        showImage(index) {
+            var that = this;
+            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, this.items, {index: index});
+            this.gallery.listen('gettingData', function (index, item) {
+                if (item.w < 1 || item.h < 1) {
+                    var img = new Image();
+                    img.onload = function () {
+                        item.w = this.width;
+                        item.h = this.height;
+                        that.gallery.updateSize(true);
+                    };
+                    img.src = item.src;
+                }
+            });
+            this.gallery.init();
         },
         search(event, item) {
             if (this.fetchingItems) {
@@ -726,6 +800,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.headerSubTitle=null;
             this.menuActions=[];
             this.isTop = true;
+            this.grid = false;
             this.$nextTick(function () {
                 setScrollTop(this.scrollElement, prev>0 ? prev : 0);
             });
@@ -740,6 +815,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             }
             var prev = this.history.pop();
             this.items = prev.items;
+            this.grid = prev.grid;
             this.baseActions = prev.baseActions;
             this.listSize = prev.listSize;
             this.current = prev.current;

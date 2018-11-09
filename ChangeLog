@@ -16,6 +16,7 @@
  9. Make player list menu scrollable.
 10. Fix adding albums to favorites.
 11. Use encodeURIComponent to encode favorites, not encodeURI
+12. Work-around iOS list size issue by adding a small amount of padding.
 
 0.0.8
 -----

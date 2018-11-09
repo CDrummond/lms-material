@@ -320,7 +320,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                   params: ["type:audio", "tags:d"],
                   icon: "folder",
                   type: "group",
-                  id: TOP_ID_PREFIX+"f" },
+                  id: TOP_ID_PREFIX+"f" }
                 ];
             otherPrev.forEach(i=> {
                 this.other.unshift(i);

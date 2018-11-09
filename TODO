@@ -2,7 +2,7 @@
   - Drag'n'drop, not working on Android Firefox
   - Issues with virtual scroller
     - Navigate into 'Apps' (when only have a few), and back out; not all items drawn
-    - disabld for now
+    - disabled for now
 
 - Browse
   - SlimBrowse

@@ -228,7 +228,7 @@ Vue.use(VueLazyload);
 var app = new Vue({
     el: '#app',
     data() {
-        return { wibble:0 }
+        return { }
     },
     created() {
         // For testing, allow pages to be served p by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/?lms=<reall address of LMS>
@@ -287,7 +287,6 @@ var app = new Vue({
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
         let vh = window.innerHeight * 0.01;
         let lastWinHeight = window.innerHeight;
-        that.wibble=lastWinHeight;
         let timeout = undefined;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         window.addEventListener('resize', () => {
@@ -300,7 +299,6 @@ var app = new Vue({
                     let vh = window.innerHeight * 0.01;
                     document.documentElement.style.setProperty('--vh', `${vh}px`);
                     lastWinHeight = window.innerHeight;
-                    that.wibble=lastWinHeight;
                 }
                 timeout = undefined;
             });

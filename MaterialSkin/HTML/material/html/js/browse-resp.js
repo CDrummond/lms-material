@@ -8,10 +8,10 @@
 const MORE_COMMANDS = ["item_add", "item_insert", "itemplay", "item_fav"];
 
 function parseBrowseResp(data, parent, options, idStart) {
-    var resp = {items: [], baseActions:[] };
+    var resp = {items: [], baseActions:[], grid: false };
 
     if (data && data.result) {
-        //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
+        console.log("RESP", JSON.stringify(data.result, null, 2), parent);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 resp.items.push({header: i18n("Artists")});
@@ -632,6 +632,22 @@ function parseBrowseResp(data, parent, options, idStart) {
             });
         } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
+        } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
+            data.result.data.forEach(i => {
+                if (i.image) {
+                    i.type = "image";
+                    i.src = resolveImage(null, i.image);
+                    i.w=0;
+                    i.h=0;
+                    resp.items.push(i);
+                }
+            });
+            if (resp.items.length>0) {
+                resp.title=data.result.title;
+                resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
+                resp.grid = true;
+            }
+            data.result.count = resp.items.length;
         }
     }
 

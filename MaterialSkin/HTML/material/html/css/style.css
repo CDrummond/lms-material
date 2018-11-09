@@ -92,6 +92,20 @@ a {
     backface-visibility:hidden;
 }
 
+.lms-image-grid {
+    position:fixed;
+    top:102px;
+    height:calc((var(--vh, 1vh)*100) - 158px);
+    width:100vw;
+    overflow:auto;
+    backface-visibility:hidden;
+    margin:0px;
+}
+
+.lms-image-grid .container .layout .flex .d-flex .v-card__text {
+    padding:0px;
+}
+
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
     height: 40px;

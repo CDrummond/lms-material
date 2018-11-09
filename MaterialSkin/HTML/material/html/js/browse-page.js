@@ -9,6 +9,7 @@ var PLAY_ACTION             = {cmd:"play",       icon:"play_circle_outline"};
 var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
 var INSERT_ACTION           = {cmd:"add-hold",   icon:"format_indent_increase"};
 var MORE_ACTION             = {cmd:"more",       icon:"more_horiz"};
+var MORE_LIB_ACTION         = {cmd:"lib-more",   icon:"more_horiz"};
 var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"album"};
 var RENAME_PL_ACTION        = {cmd:"rename-pl",  icon:"edit"};
 var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
@@ -114,8 +115,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
 
    <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
 
-   <v-list-tile v-if="item.type=='text'" class="browse-text" v-html="item.title"></v-list-tile>
-   <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event)" :key="item.id">
+   <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item')" avatar @click="click(item, $event, true)">
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+    </v-list-tile-content>
+   </v-list-tile>
+   <v-list-tile v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></v-list-tile>
+   <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, $event, false)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
@@ -222,6 +229,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
             INSERT_ACTION.title=i18n("Play next");
             MORE_ACTION.title=i18n("More");
+            MORE_LIB_ACTION.title=i18n("More");
             RENAME_PL_ACTION.title=i18n("Rename");
             RENAME_FAV_ACTION.title=i18n("Rename");
             DELETE_ACTION.title=i18n("Delete");
@@ -390,7 +398,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.showError(err);
             });
         },
-        click(item, event) {
+        click(item, event, allowItemPlay) {
             if ("search"==item.type) {
                 if (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) {
                     event.target.scrollIntoView();
@@ -399,6 +407,13 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 return;
             }
             if ("text"==item.type) {
+                if (allowItemPlay && item.style && item.style.startsWith("item")) {
+                    var command = this.buildCommand(item);
+                    command.params.forEach(p => {
+                        command.command.push(p);
+                    });
+                    lmsCommand(this.playerId(), command.command);
+                }
                 return;
             }
 
@@ -585,6 +600,16 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 });
             } else if (act===MORE_ACTION.cmd) {
                 this.fetchItems(this.buildCommand(item, act), item);
+            } else if (act===MORE_LIB_ACTION.cmd) {
+                if (item.id) {
+                    if (item.id.startsWith("artist_id:")) {
+                        this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id]}, item);
+                    } else if (item.id.startsWith("album_id:")) {
+                        this.fetchItems({command: ["albuminfo", "items"], params: ["menu:1", item.id]}, item);
+                    } else if (item.id.startsWith("track_id:")) {
+                        this.fetchItems({command: ["trackinfo", "items"], params: ["menu:1", item.id]}, item);
+                    }
+                }
             } else if (act===PIN_ACTION.cmd) {
                 this.pin(item, true);
             } else if (act===UNPIN_ACTION.cmd) {
@@ -638,6 +663,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             if (1==item.menuActions.length && item.menuActions[0].cmd==MORE_ACTION.cmd) {
                 // Only have 'More' - dont display menu, just activate action...
                 this.itemAction(MORE_ACTION.cmd, item);
+            } else if (1==item.menuActions.length && item.menuActions[0].cmd==MORE_LIB_ACTION.cmd) {
+                // Only have 'More' - dont display menu, just activate action...
+                this.itemAction(MORE_LIB_ACTION.cmd, item);
             } else {
                 this.menu={show:true, item:item, x:event.clientX, y:event.clientY};
             }

@@ -12,6 +12,7 @@
 6. Ensure A..Z splitting is not used for 'New Music' or 'Random Albums'
 7. Only show "i" icon in toolbar for now-playing if music and artist info
    plugin is installed.
+8. Support 'More' command.
 
 0.0.8
 -----

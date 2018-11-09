@@ -85,19 +85,13 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                     current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined },
                     playlist: { shuffle:0, repeat: 0 },
                  },
-                 info: { installed: false, show: false, tab:0,
+                 info: { show: false, tab:0,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
                  trans: { close: undefined }
                 };
     },
     mounted() {
-        // Music and Artist info plugin installled?
-        lmsCommand("", ["musicartistinfo", "localfiles", 0, 0]).then(({data}) => {
-            if (data && data.result && data.result.window) {
-                this.info.installed = true;
-            }
-        });
 
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
@@ -182,7 +176,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
         },
         showMenu(event) {
             event.preventDefault();
-            if (this.info.installed && this.playerStatus.current.title && this.playerStatus.current.artist) {
+            if (this.$store.state.infoPlugin && this.playerStatus.current.title && this.playerStatus.current.artist) {
                 this.menu.show = false;
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;

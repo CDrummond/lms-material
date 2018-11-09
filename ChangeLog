@@ -13,6 +13,7 @@
 7. Only show "i" icon in toolbar for now-playing if music and artist info
    plugin is installed.
 8. Support 'More' command.
+9. Make player list menu scrollable.
 
 0.0.8
 -----

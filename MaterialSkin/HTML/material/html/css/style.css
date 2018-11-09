@@ -136,6 +136,15 @@ a {
     text-overflow: ellipsis;
 }
 
+.toolbar-player-list {
+    max-height:calc((var(--vh, 1vh)*100) - 16px);
+    overflow-y:auto;
+}
+
+.toolbar-player-list .v-list__tile .v-list__tile__content .v-list__tile__title {
+    margin-right: 20px;
+}
+
 .lms-toolbar > .v-toolbar__content {
     height: 56px !important;
     margin-left: -7px !important;

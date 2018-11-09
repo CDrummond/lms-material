@@ -20,7 +20,7 @@ Vue.component('lms-toolbar', {
    <div class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
   </v-toolbar-title>
        
-  <v-list>
+  <v-list class="toolbar-player-list">
    <template v-for="(item, index) in players">
     <v-divider v-if="item.isgroup && index>0 && !players[index-1].isgroup" ></v-divider>
     <v-list-tile @click="setPlayer(item.id)">
@@ -33,6 +33,7 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
     </v-list-tile>
    </template>
+
    <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
    <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
     <v-list-tile-content v-if="playerStatus.ison">

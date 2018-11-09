@@ -29,6 +29,7 @@
   <body>
     <div id="app" v-cloak>
       <v-app class="lms-app" :dark="darkUi" v-touch="{ left: () => swipe('l'), right: () => swipe('r')}">
+      <p style="position:fixed; top:16px; left:256px; z-index:500">{{wibble}}</p>
         <lms-toolbar></lms-toolbar>
         <lms-server></lms-server>
         <keep-alive>

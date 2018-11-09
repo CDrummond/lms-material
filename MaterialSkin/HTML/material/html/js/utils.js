@@ -125,3 +125,11 @@ function getLocalStorageVal(key, def) {
 function setLocalStorageVal(key, val) {
     localStorage.setItem(LS_PREFIX+key, val);
 }
+
+function isMobile() {
+    return navigator.userAgent.indexOf("Mobile") !== -1 ||
+           navigator.userAgent.indexOf("iPhone") !== -1 ||
+           navigator.userAgent.indexOf("Android") !== -1 ||
+           navigator.userAgent.indexOf("Windows Phone") !== -1;
+}
+

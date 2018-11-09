@@ -41,13 +41,6 @@ router.afterEach((to, from) => {
     bus.$emit('routeChanged', from.path, to.path);
 })
 
-function isMobile() {
-    return navigator.userAgent.indexOf( "Mobile" ) !== -1 || 
-           navigator.userAgent.indexOf( "iPhone" ) !== -1 || 
-           navigator.userAgent.indexOf( "Android" ) !== -1 || 
-           navigator.userAgent.indexOf( "Windows Phone" ) !== -1 ;
-}
-
 function changeCss(cssFile, index) {
     var oldlink = document.getElementsByTagName("link").item(index);
     var newlink = document.createElement("link");

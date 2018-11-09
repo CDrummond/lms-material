@@ -522,14 +522,14 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         favTitle = item.presetParams.favorites_title;
                     }
                 } else if (item.id.startsWith("genre_id:")) {
-                    favUrl="db:genre.name="+encodeURI(item.title);
+                    favUrl="db:genre.name="+encodeURIComponent(item.title);
                     favIcon="html/images/genres.png";
                 } else if (item.id.startsWith("artist_id:")) {
-                    favUrl="db:contributor.name="+encodeURI(item.title);
+                    favUrl="db:contributor.name="+encodeURIComponent(item.title);
                 } else if (item.id.startsWith("album_id:")) {
-                    favUrl="db:album.name="+encodeURI(item.title);
+                    favUrl="db:album.title="+encodeURIComponent(item.title);
                 } else if (item.id.startsWith("year:")) {
-                    favUrl="db:year.id="+encodeURI(item.title);
+                    favUrl="db:year.id="+encodeURIComponent(item.title);
                     favIcon="html/images/years.png";
                 } else if (item.id.startsWith("playlist:")) {
                     favIcon="html/images/playlists.png";
@@ -681,6 +681,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
+                if (data && data.result) {
+                    this.listSize = data.result.count;
+                } else {
+                    this.listSize = 0;
+                }
                 if (this.listSize<0) {
                     this.listSize=this.items.length;
                 }
@@ -688,11 +693,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.headerSubTitle=resp.subtitle;
                 } else {
                     this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
-                }
-                if (data && data.result) {
-                    this.listSize = data.result.count;
-                } else {
-                    this.listize = 0;
                 }
                 this.sortItems();
                 this.$nextTick(function () {

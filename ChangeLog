@@ -1,19 +1,21 @@
 0.0.9
 -----
-1. Additional browse modes only supported if "Use categories as supplied by
-   server" is enabled.
-2. Fix missing menu items if using server supplied browse modes, and start in
-   any view bar browse.
-3. Fix 'What Was That Tune?' missing covers.
-4. If a browse response returns a count of -1, then set count to number of
-   items.
-5. When getting categories from server, modify command parameters for album
-   sort.
-6. Ensure A..Z splitting is not used for 'New Music' or 'Random Albums'
-7. Only show "i" icon in toolbar for now-playing if music and artist info
-   plugin is installed.
-8. Support 'More' command.
-9. Make player list menu scrollable.
+ 1. Additional browse modes only supported if "Use categories as supplied by
+    server" is enabled.
+ 2. Fix missing menu items if using server supplied browse modes, and start in
+    any view bar browse.
+ 3. Fix 'What Was That Tune?' missing covers.
+ 4. If a browse response returns a count of -1, then set count to number of
+    items.
+ 5. When getting categories from server, modify command parameters for album
+    sort.
+ 6. Ensure A..Z splitting is not used for 'New Music' or 'Random Albums'
+ 7. Only show "i" icon in toolbar for now-playing if music and artist info
+    plugin is installed.
+ 8. Support 'More' command.
+ 9. Make player list menu scrollable.
+10. Fix adding albums to favorites.
+11. Use encodeURIComponent to encode favorites, not encodeURI
 
 0.0.8
 -----

@@ -10,6 +10,7 @@ const MORE_COMMANDS = ["item_add", "item_insert", "itemplay", "item_fav"];
 function parseBrowseResp(data, parent, options, idStart) {
     var resp = {items: [], baseActions:[], grid: false };
 
+    try{
     if (data && data.result) {
         //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
@@ -649,6 +650,10 @@ function parseBrowseResp(data, parent, options, idStart) {
             }
             data.result.count = resp.items.length;
         }
+    }
+
+    } catch(e) {
+        resp.items.push({title:i18n("ERROR: List processing failed\n%1", e), type: 'text', id:'error'});
     }
 
     return resp;

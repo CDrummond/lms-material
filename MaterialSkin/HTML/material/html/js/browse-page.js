@@ -169,7 +169,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
    <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
 
    <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
-   <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item')" avatar @click="click(item, $event, true)">
+   <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item')" avatar @click="click(item, $event, true)" v-bind:class="{'error-text': item.id==='error'}">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>

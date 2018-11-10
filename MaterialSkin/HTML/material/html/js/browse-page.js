@@ -1227,7 +1227,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.fetchingItems = true;
                 var command = this.buildCommand(this.current);
                 var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+                var count = this.current.range ? (this.current.range.count-this.items.length) < LMS_BATCH_SIZE ? (this.current.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
 
                 lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                     var resp = parseBrowseResp(data, this.current, this.options, this.items.length);

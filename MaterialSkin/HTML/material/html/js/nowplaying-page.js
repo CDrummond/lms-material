@@ -233,6 +233,15 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                     }
                 });
             }
+        },
+        showInfo() {
+            if (0==this.info.tab) {
+                this.fetchLyrics();
+            } else if (1==this.info.tab) {
+                this.fetchBio();
+            } else {
+                this.fetchReview();
+            }
         }
     },
     filters: {
@@ -247,15 +256,10 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
         'info.show': function(val) {
             // Indicate that dialog is/isn't shown, so that swipe is controlled
             bus.$emit('dialog', 'info-dialog', val);
+            this.showInfo();
         },
         'info.tab': function(tab) {
-            if (0==tab) {
-                this.fetchLyrics();
-            } else if (1==tab) {
-                this.fetchBio();
-            } else {
-                this.fetchReview();
-            }
+            this.showInfo();
         }
     }
 });

@@ -19,6 +19,8 @@
 12. Work-around iOS list size issue by adding a small amount of padding.
 13. Remove confirmation dialog when switching off a player.
 14. Correctly update display of items when list is refreshed.
+15. If player is changed whilst fetching a list of items, delay updating the
+    player specific browse list.
 
 0.0.8
 -----

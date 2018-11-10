@@ -399,13 +399,16 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.snackbar = {msg: msg, show: true };
         },
         fetchItems(command, item, batchSize) {
+            if (this.fetchingItems) {
+                return;
+            }
+
             this.fetchingItems = true;
 
             //console.log("FETCH command:" + command.command + " params:" + command.params);
             var start = item.range ? item.range.start : 0;
             var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize;
             lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                this.fetchingItems = false;
                 var resp = parseBrowseResp(data, item, this.options, 0);
 
                 if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
@@ -451,6 +454,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     this.sortItems();
                     setScrollTop(this.scrollElement, 0);
                 }
+                this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
                 this.showError(err);
@@ -484,6 +488,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             }
 
             if (TOP_MORE_ID===item.id) {
+                if (this.fetchingItems) {
+                    return;
+                }
                 var prev = {};
                 prev.items = this.items;
                 prev.listSize = this.listSize;
@@ -648,29 +655,23 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     }
                 });
             } else if (act===ADD_RANDOM_ALBUM_ACTION.cmd) {
-                this.fetchingItems = true;
                 var params = [];
                 item.params.forEach(p => { params.push(p); });
                 params.push("sort:random");
                 lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
-                    this.fetchingItems = false;
                     var resp = parseBrowseResp(data, this.current, this.options);
                     if (1===resp.items.length && resp.items[0].id) {
                         var item = resp.items[0];
-                        this.fetchingItems = true;
                         lmsCommand(this.playerId(), ["playlistcontrol", "cmd:add", item.id]).then(({data}) => {
-                            this.fetchingItems = false;
                             bus.$emit('refreshStatus');
                             this.showMessage(i18n("Appended '%1' to the play queue", item.title));
                         }).catch(err => {
-                            this.fetchingItems = false;
                             this.showError(err);
                         });
                     } else {
                         this.showError(undefined, i18n("Failed to find an album!"));
                     }
                 }).catch(err => {
-                    this.fetchingItems = false;
                     this.showError(err);
                 });
             } else if (act===MORE_ACTION.cmd) {
@@ -753,7 +754,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
             this.fetchingItems = true;
             var command = this.buildCommand(this.current);
             lmsList(this.playerId(), command.command, command.params, 0).then(({data}) => {
-                this.fetchingItems = false;
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 if (data && data.result) {
@@ -773,6 +773,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.$nextTick(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                 });
+                this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
                 this.showError(err);
@@ -829,6 +830,11 @@ var lmsBrowse = Vue.component("LmsBrowse", {
         },
         buildCommand(item, commandName, doReplacements, addAlbumSort) {
             var cmd = {command: [], params: [] };
+
+            if (undefined===item || null===item) {
+                console.error("Null item passed to buildCommand????");
+                return cmd;
+            }
 
             if (undefined==commandName) {
                 if (item.command && item.command.length>0) {
@@ -1031,6 +1037,17 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 return;
             }
 
+            if (this.fetchingItems) {
+                if (this.playerMenuTimeout) {
+                    clearTimeout(this.playerMenuTimeout);
+                }
+                this.playerMenuTimeout = setTimeout(function () {
+                    this.playerMenu();
+                }.bind(this), 250);
+                return;
+            }
+
+            this.fetchingItems=true;
             lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
                     this.serverTop = [];
@@ -1089,6 +1106,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         this.items = this.serverTop;
                     }
                 }
+                this.fetchingItems=false;
+            }).catch(err => {
+                this.fetchingItems = false;
+                this.showError(err);
             });
         },
         pin(item, add) {
@@ -1209,7 +1230,6 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
 
                 lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                    this.fetchingItems = false;
                     var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
                     if (resp && resp.items) {
                         resp.items.forEach(i => {
@@ -1219,6 +1239,7 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                     if (data && data.result && data.result.count) {
                         this.listSize = data.result.count;
                     }
+                    this.fetchingItems = false;
                 }).catch(err => {
                     this.fetchingItems = false;
                 });

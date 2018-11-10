@@ -74,6 +74,11 @@ a {
     width:100%;
 }
 
+/* Stop horizontal scrollbar in full screen dialogs */
+.v-dialog .v-card {
+    overflow-x: hidden !important;
+}
+
 .lms-list {
     position:fixed;
     top:56px;

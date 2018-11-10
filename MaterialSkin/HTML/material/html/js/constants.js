@@ -14,5 +14,5 @@ const LMS_STATUS_REFRESH_MAX = 3000;
 
 const LMS_DEFAULT_LIBRARY = "0";
 
-const LMS_SKIN_LANGUAGES = ['de', 'en', 'en-gb', 'fr', 'nl'];
+const LMS_SKIN_LANGUAGES = new Set(['de', 'en', 'en-gb', 'fr', 'nl']);
 

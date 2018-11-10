@@ -262,8 +262,9 @@ var app = new Vue({
                     }
                 }
                 if (lang != 'en') {
-                    if (!SKIN_LANGUAGES[lang])
+                    if (!LMS_SKIN_LANGUAGES.includes(lang)) {
                         lang = lang.substr(0, 2);
+                    }
                     
                     axios.get("html/lang/"+lang+".json").then(function (resp) {
                         var trans = eval(resp.data);

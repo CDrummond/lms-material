@@ -342,7 +342,7 @@ var app = new Vue({
     },
     methods: {
         swipe(direction) {
-            if (this.openDialogs.length!=0) {
+            if (this.openDialogs.size!=0) {
                 if ('r'==direction) {
                     bus.$emit('closeDialog');
                 }

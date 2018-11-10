@@ -69,7 +69,7 @@ const store = new Vuex.Store({
         albumSort:'album',
         splitArtistsAndAlbums:false,
         sortFavorites:false,
-        showMenuAudio:false,
+        showMenuAudio:true,
         serverMenus:false,
         autoScrollQueue:true,
         library: null,

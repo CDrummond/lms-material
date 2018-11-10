@@ -228,7 +228,7 @@ Vue.use(VueLazyload);
 var app = new Vue({
     el: '#app',
     data() {
-        return { }
+        return { screenHeight:0, debugHeight:false } // set debugHeight to display screen height in toolbar
     },
     created() {
         // For testing, allow pages to be served p by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/?lms=<reall address of LMS>
@@ -288,20 +288,22 @@ var app = new Vue({
         let vh = window.innerHeight * 0.01;
         let lastWinHeight = window.innerHeight;
         let timeout = undefined;
+        that.screenHeight = lastWinHeight;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         window.addEventListener('resize', () => {
             if (timeout) {
-                window.cancelAnimationFrame(timeout);
+                clearTimeout(timeout);
             }
-            timeout = window.requestAnimationFrame( function() {
+            timeout = setTimeout(function () {
                 // Only update if changed
                 if (Math.abs(lastWinHeight-window.innerHeight)!=0) {
                     let vh = window.innerHeight * 0.01;
                     document.documentElement.style.setProperty('--vh', `${vh}px`);
                     lastWinHeight = window.innerHeight;
+                    that.screenHeight = lastWinHeight;
                 }
                 timeout = undefined;
-            });
+            }.bind(that), 50);
         }, false);
 
         // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-application-closes-de-app

@@ -8,6 +8,7 @@
 var PQ_PLAY_NOW_ACTION =  { cmd: 'playnow',  icon: 'play_circle_outline'   };
 var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'    };
 var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline' };
+var PQ_MORE_ACTION =      { cmd: 'more',     icon: 'more_horiz'            };
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -45,12 +46,12 @@ function parseResp(data) {
                 var image = queueItemCover(i);
                 var isStream = i.url && (i.url.startsWith("http:") || i.url.startsWith("https:"));
                 resp.items.push({
-                              url: "track_id:"+i.id,
+                              id: "track_id:"+i.id,
                               title: title,
                               subtitle: subtitle,
                               icon: image ? undefined : (isStream ? "wifi_tethering" : "music_note"),
                               image: image,
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION],
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_MORE_ACTION],
                               duration: i.duration
                           });
             });
@@ -255,6 +256,7 @@ var lmsQueue = Vue.component("LmsQueue", {
             PQ_PLAY_NOW_ACTION.title=i18n('Play now');
             PQ_PLAY_NEXT_ACTION.title=i18n('Move to next in queue');
             PQ_REMOVE_ACTION.title=i18n('Remove from queue');
+            PQ_MORE_ACTION.title=i18n("More");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
         },
         showError(msg) {
@@ -303,6 +305,11 @@ var lmsQueue = Vue.component("LmsQueue", {
                 }
             } else if (PQ_REMOVE_ACTION.cmd===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
+            } else if (PQ_MORE_ACTION.cmd===act) {
+                this.$router.push('/browse');
+                this.$nextTick(function () {
+                    bus.$emit('trackInfo', item);
+                });
             }
         },
         itemMenu(item, index, event) {

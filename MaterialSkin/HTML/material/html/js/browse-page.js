@@ -277,6 +277,10 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                 this.playerMenu();
             }
         }.bind(this));
+
+        bus.$on('trackInfo', function(item) {
+            this.itemAction(MORE_LIB_ACTION.cmd, item);
+        }.bind(this));
     },
     methods: {
         initItems() {

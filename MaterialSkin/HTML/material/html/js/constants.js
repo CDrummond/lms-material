@@ -13,3 +13,11 @@ const LMS_STATUS_REFRESH_MIN = 1000;
 const LMS_STATUS_REFRESH_MAX = 3000;
 
 const LMS_DEFAULT_LIBRARY = "0";
+
+const SKIN_LANGUAGES = {
+	de: true,
+	en: true,
+	'en-gb': true,
+	fr: true,
+	nl: true
+};

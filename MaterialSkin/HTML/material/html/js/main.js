@@ -262,6 +262,9 @@ var app = new Vue({
                     }
                 }
                 if (lang != 'en') {
+                    if (!SKIN_LANGUAGES[lang])
+                        lang = lang.substr(0, 2);
+                    
                     axios.get("html/lang/"+lang+".json").then(function (resp) {
                         var trans = eval(resp.data);
                         setLocalStorageVal('translation', JSON.stringify(trans));

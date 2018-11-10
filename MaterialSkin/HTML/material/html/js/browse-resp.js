@@ -96,6 +96,9 @@ function parseBrowseResp(data, parent, options, idStart) {
             var maxCount = data.result.count <= 500 ? 50 : data.result.count <= 1000 ? 100 : 200;
             for (var i=start; i<data.result.indexList.length; ++i) {
                 var name = data.result.indexList[i][0];
+                if (name == null) {
+                    name = "?";
+                }
                 var count = data.result.indexList[i][1];
                 var item = {
                                 title: name,

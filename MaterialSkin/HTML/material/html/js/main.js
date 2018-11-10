@@ -82,7 +82,7 @@ const store = new Vuex.Store({
                 for (i=0; i<state.players.length; ++i) {
                     var a = state.players[i];
                     var b = players[i];
-                    if (a.id!=b.id || a.name!=b.name || a.canpoweroff!=b.canpoweroff ||  a.ison!=b.ison ||  a.isconnected!=b.isconnected ||  a.isgroup!=b.isgroup) {
+                    if (a.id!=b.id || a.name!=b.name || a.canpoweroff!=b.canpoweroff || a.ison!=b.ison || a.isconnected!=b.isconnected || a.isgroup!=b.isgroup) {
                         changed = true;
                         break;
                     }
@@ -231,7 +231,7 @@ var app = new Vue({
         return { screenHeight:0, debugHeight:false } // set debugHeight to display screen height in toolbar
     },
     created() {
-        // For testing, allow pages to be served p by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/?lms=<reall address of LMS>
+        // For testing, allow pages to be served p by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/?lms=<real address of LMS>
         var res = RegExp('[?&]lms=([^&#]*)').exec(window.location.href);
         if (res && 2==res.length) {
             lmsServerAddress = "http://"+res[1]+":9000";

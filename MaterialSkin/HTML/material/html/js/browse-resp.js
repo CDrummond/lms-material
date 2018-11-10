@@ -174,7 +174,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         data.result.count--;
                         return;
                     }
-                    i.title = i.text.replace(/\n/g, "<br/>");
+                    i.title = replaceNewLines(i.text);
                 } else {
                     var text = i.text.split(/\r?\n/);
                     i.title = text[0];
@@ -296,7 +296,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
                 resp.items.push({
-                                title: data.result.window.textarea.replace(/\n/g, "<br/>"),
+                                title: replaceNewLines(data.result.window.textarea),
                                 type: "text",
                                 id: parent.id+"."+idStart
                                });
@@ -550,7 +550,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             data.result.loop_loop.forEach(i => {
                 if ("text"===i.type || "textarea"===i.type) {
                     resp.items.push({
-                                  title: (i.name ? i.name : i.title).replace(/\n/g, "<br/>"),
+                                  title: replaceNewLines(i.name ? i.name : i.title),
                                   type: "text",
                                   id: i.id
                                });
@@ -624,7 +624,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         }
 
                         resp.items.push({
-                                  title: details.replace(/\n/g, "<br/>"),
+                                  title: replaceNewLines(details),
                                   type: "text",
                                   id: i.id+"-descr"
                                });

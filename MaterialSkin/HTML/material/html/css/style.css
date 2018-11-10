@@ -122,6 +122,10 @@ a {
     max-width: 48px !important;
 }
 
+.error-text {
+    background-color: red;
+}
+
 .padding {
     height:8px;
 }

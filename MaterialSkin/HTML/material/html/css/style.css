@@ -330,9 +330,12 @@ a {
 }
 
 .np-info-text {
-    text-align: center;
     height:calc((var(--vh, 1vh)*100) - 212px); /* Work-around chrome mobile 100vh - see main.js */
     overflow:auto;
+}
+
+.np-info-lyrics {
+    text-align: center;
 }
 
 .np-playpause {

@@ -14,7 +14,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index">
      <v-card flat>
-      <v-card-text class="np-info-text" v-html="tab.text"></v-card-text>
+      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': 0==index}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>

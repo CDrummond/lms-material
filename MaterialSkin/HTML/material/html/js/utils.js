@@ -133,3 +133,7 @@ function isMobile() {
            navigator.userAgent.indexOf("Windows Phone") !== -1;
 }
 
+function replaceNewLines(str) {
+    return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
+}
+

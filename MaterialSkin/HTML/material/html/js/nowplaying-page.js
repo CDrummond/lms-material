@@ -202,7 +202,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 lmsCommand("", ["musicartistinfo", "lyrics", "artist:"+this.playerStatus.current.artist, "title:"+this.playerStatus.current.title]).then(({data}) => {
                     if (data && data.result && (data.result.lyrics || data.result.error) && data.result.artist==this.playerStatus.current.artist &&
                         data.result.title==this.playerStatus.current.title) {
-                        this.info.tabs[0].text=data.result.lyrics ? data.result.lyrics.replace(/\n/g, "<br/>") : data.result.error;
+                        this.info.tabs[0].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
                         this.info.tabs[0].songartist=this.playerStatus.current.artist;
                         this.info.tabs[0].songtitle=this.playerStatus.current.title;
                     }
@@ -214,7 +214,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 this.info.tabs[1].text=i18n("Fetching...");
                 lmsCommand("", ["musicartistinfo", "biography", "artist:"+this.playerStatus.current.artist]).then(({data}) => {
                     if (data && data.result && (data.result.biography || data.result.error) && data.result.artist==this.playerStatus.current.artist) {
-                        this.info.tabs[1].text=data.result.biography ? data.result.biography.replace(/\n/g, "<br/>") : data.result.error;
+                        this.info.tabs[1].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
                         this.info.tabs[1].songartist=this.playerStatus.current.artist;
                     }
                 });
@@ -226,7 +226,7 @@ var lmsNowPlaying = Vue.component("LmsNowPlaying", {
                 lmsCommand("", ["musicartistinfo", "albumreview", "artist:"+this.playerStatus.current.artist, "album:"+this.playerStatus.current.album]).then(({data}) => {
                     if (data && data.result && (data.result.albumreview || data.result.error) && data.result.artist==this.playerStatus.current.artist &&
                         data.result.album==this.playerStatus.current.album) {
-                        this.info.tabs[2].text=data.result.albumreview ? data.result.albumreview.replace(/\n/g, "<br/>") : data.result.error;
+                        this.info.tabs[2].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
                         this.info.tabs[2].songartist=this.playerStatus.current.artist;
                         this.info.tabs[2].songalbum=this.playerStatus.current.album;
                     }

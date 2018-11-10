@@ -262,7 +262,7 @@ var app = new Vue({
                     }
                 }
                 if (lang != 'en') {
-                    if (!LMS_SKIN_LANGUAGES.includes(lang)) {
+                    if (!LMS_SKIN_LANGUAGES.has(lang)) {
                         lang = lang.substr(0, 2);
                     }
                     

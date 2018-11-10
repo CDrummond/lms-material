@@ -394,11 +394,13 @@ var lmsQueue = Vue.component("LmsQueue", {
         },
         scrollToCurrent() {
             this.autoScrollRequired = false;
-            if (this.items.length>5) {
+            if (this.items.length>5 && this.currentIndex>0) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the brows/nowplaying page!
-                    // Offset of -68 below to take into account toolbar
                     if (this.currentIndex<=this.items.length) {
-                        this.$vuetify.goTo('#track'+(this.currentIndex>3 ? this.currentIndex-3 : 0), {offset: -104, duration: 500});
+                        var elem=document.getElementById('track'+this.currentIndex);
+                        if (elem) {
+                            setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                        }
                     } else {
                         this.autoScrollRequired = true;
                         this.fetchItems();

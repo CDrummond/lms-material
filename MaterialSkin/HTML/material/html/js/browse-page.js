@@ -456,7 +456,9 @@ var lmsBrowse = Vue.component("LmsBrowse", {
                         this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
                     this.sortItems();
-                    setScrollTop(this.scrollElement, 0);
+                    this.$nextTick(function () {
+                        setScrollTop(this.scrollElement, 0);
+                    });
                 }
                 this.fetchingItems = false;
             }).catch(err => {

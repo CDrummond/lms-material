@@ -25,4 +25,10 @@
       - at start of song, and near end poll every (e.g.) 0.5 seconds
     - Create timer to advance song progress - re-adjust on each poll
     - or use ["time", "?"] to just obtain time position every second?
-  - Desktop UI - expand the 3 pages into 1.
+  - Desktop UI
+    - Slim top toolbar (as no need for current playing)
+    - Browse / splitter/ Queue
+    - Bottom toolbar with cover, controls, and current playing track
+    - Create separate desktop.html / desktop/index.html
+    - Modify browse/queue JS files - so as not to change path
+    - New CSS - different heights for browse/queue

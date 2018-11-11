@@ -78,15 +78,15 @@ function parseBrowseResp(data, parent, options, idStart) {
             // Look for first valid key? Looks like 'No Album' messes up album txtkeys? First 2 seem to be garbage...
             if (data.result.artists_loop) {
                 for (var i=0; i<data.result.artists_loop.length; ++i) {
-                    if (data.result.artists_loop[i].textkey!=null && data.result.artists_loop[i].textkey!=undefined && data.result.artists_loop[i].textkey!="") {
+                    if (data.result.artists_loop[i].textkey!=null && data.result.artists_loop[i].textkey!=undefined && data.result.artists_loop[i].textkey.length>0) {
                         start = i;
                         break;
                     }
                 }
             } else if (data.result.albums_loop) {
                 for (var i=0; i<data.result.albums_loop.length; ++i) {
-                    if (data.result.albums_loop[i].textkey!=null && data.result.albums_loop[i].textkey!=undefined && data.result.albums_loop[i].textkey!="") {
-                        fstart = i;
+                    if (data.result.albums_loop[i].textkey!=null && data.result.albums_loop[i].textkey!=undefined && data.result.albums_loop[i].textkey.length>0) {
+                        start = i;
                         break;
                     }
                 }

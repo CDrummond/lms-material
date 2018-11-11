@@ -1,6 +1,7 @@
 0.0.10
 ------
 1. After list is loaded, wait until next tick to scroll to top.
+2. Fix detection of first valid album when getting A..Z lists.
 
 0.0.9
 -----

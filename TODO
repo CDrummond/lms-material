@@ -31,4 +31,4 @@
     - Bottom toolbar with cover, controls, and current playing track
     - Create separate desktop.html / desktop/index.html
     - Modify browse/queue JS files - so as not to change path
-    - New CSS - different heights for browse/queue
+

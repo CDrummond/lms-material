@@ -79,34 +79,6 @@ a {
     overflow-x: hidden !important;
 }
 
-.lms-list {
-    position:fixed;
-    top:56px;
-    height:calc((var(--vh, 1vh)*100) - 112px);
-    width:100vw;
-    overflow:auto;
-    backface-visibility:hidden;
-}
-
-.lms-list-sub {
-    position:fixed;
-    top:102px;
-    height:calc((var(--vh, 1vh)*100) - 158px);
-    width:100vw;
-    overflow:auto;
-    backface-visibility:hidden;
-}
-
-.lms-image-grid {
-    position:fixed;
-    top:102px;
-    height:calc((var(--vh, 1vh)*100) - 158px);
-    width:100vw;
-    overflow:auto;
-    backface-visibility:hidden;
-    margin:0px;
-}
-
 .lms-image-grid .container .layout .flex .d-flex .v-card__text {
     padding:0px;
 }
@@ -264,82 +236,6 @@ a {
     text-overflow:ellipsis; 
     overflow: hidden; 
     white-space: nowrap;
-}
-
-.np-text {
-    font-weight:800; 
-    font-size:150%;
-    margin:0px 8px 0px 8px; 
-    /*height:32px; */
-    text-align: center;
-}
-
-.np-subtext {
-    font-weight:400; 
-    margin:0px 8px 0px 8px; 
-    /*height:22px; */
-    text-align: center;
-}
-
-.np-image {
-    display: block;
-    object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - 102px); /* Work-around chrome mobile 100vh - see main.js */
-    width:calc(100vw - 16px);
-    margin-left: auto;
-    margin-right: auto;
-    padding:8px 8px 232px 8px; /* t, r, b, l */
-}
-
-.np-pos {
-    font-size: 75%;
-    font-weight: 400;
-    font-family: monospace, monospace;
-    text-align: left;
-}
-
-.np-duration {
-    font-size: 75%;
-    font-weight: 400;
-    font-family: monospace, monospace;
-    text-align: right;
-}
-
-.np-slider {
-    height: 32px;
-    margin:-2px 12px 12px 8px;
-}
-
-.np-controls {
-    font-weight:400;
-    padding:8px 8px 16px 8px; /* t, r, b, l */
-    /*height:22px; */
-    width:100%;
-    position:absolute; 
-    bottom:0px; 
-    /*border: 1px solid blue;*/
-}
-
-.np-info {
-    margin-top:-8px;
-    max-width:800px;
-    display: block;
-    height:auto;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.np-info-text {
-    height:calc((var(--vh, 1vh)*100) - 212px); /* Work-around chrome mobile 100vh - see main.js */
-    overflow:auto;
-}
-
-.np-info-lyrics {
-    text-align: center;
-}
-
-.np-playpause {
-    margin-top: 2px !important;
 }
 
 .shuffle-albums {

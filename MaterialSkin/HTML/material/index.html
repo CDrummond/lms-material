@@ -20,6 +20,7 @@
     <link href="html/lib/photoswipe/photoswipe.css?ver=4.1.2" rel="stylesheet">
     <link href="html/lib/photoswipe/default-skin/default-skin.css?ver=4.1.2" rel="stylesheet">
     <link href="html/css/style.css" rel="stylesheet">
+    <link href="html/css/mobile.css" rel="stylesheet">
     <link rel="icon" href="html/images/icon.png">
     <link rel="manifest" href="html/manifest.json">
 
@@ -31,7 +32,6 @@
   <body>
     <div id="app" v-cloak>
       <v-app class="lms-app" :dark="darkUi" v-touch="{ left: () => swipe('l'), right: () => swipe('r')}">
-        <p v-if="debugHeight" style="position:fixed; top:16px; left:512px; z-index:500">{{screenHeight}}</p>
         <lms-toolbar></lms-toolbar>
         <lms-server></lms-server>
         <keep-alive>
@@ -83,6 +83,8 @@
     <script src="html/js/randommix-dialog.js"></script>
     <script src="html/js/manage-players.js"></script>
     <script src="html/js/i18n.js"></script>
+    <script src="html/js/store.js"></script>
+    <script src="html/js/init.js"></script>
     <script src="html/js/main.js"></script>
   </body>
 </html>

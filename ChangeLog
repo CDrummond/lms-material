@@ -1,3 +1,7 @@
+0.0.10
+------
+1. After list is loaded, wait until next tick to scroll to top.
+
 0.0.9
 -----
  1. Additional browse modes only supported if "Use categories as supplied by

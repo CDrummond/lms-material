@@ -39,7 +39,7 @@ function isLocalLibCommand(command) {
             command.command[0]=="genres" || command.command[0]=="playlists" || "browselibrary"==command.command[0]);
 }
 
-var lmsBrowse = Vue.component("LmsBrowse", {
+var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div>
 

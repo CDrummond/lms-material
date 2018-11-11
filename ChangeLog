@@ -2,6 +2,8 @@
 ------
 1. After list is loaded, wait until next tick to scroll to top.
 2. Fix detection of first valid album when getting A..Z lists.
+3. Show context menu when clicking on an item that has actions.go=playControl
+   or actions.go=play
 
 0.0.9
 -----

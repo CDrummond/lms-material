@@ -485,8 +485,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
-            if ("audio"==item.type  || "track"==item.type /*|| "itemplay"==item.style || "item_play"==item.style ||
-                (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))*/) {
+            if ("audio"==item.type  || "track"==item.type /*|| "itemplay"==item.style || "item_play"==item.style*/ ||
+                (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))) {
                 if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, event);
                 }

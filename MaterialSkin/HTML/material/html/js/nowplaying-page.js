@@ -5,7 +5,7 @@
  * MIT license.
  */
  
-var lmsNowPlaying = Vue.component("LmsNowPlaying", {
+var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div class="np-page" v-if="playerStatus.ison">
  <div v-if="info.show" class="np-info">

@@ -60,7 +60,7 @@ function parseResp(data) {
     return resp;
 }
 
-var lmsQueue = Vue.component("LmsQueue", {
+var lmsQueue = Vue.component("lms-queue", {
   template: `
     <div> 
       <v-dialog v-model="dialog.show" persistent max-width="500px">

@@ -137,3 +137,22 @@ function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }
 
+function changeCss(cssFile, index) {
+    var oldlink = document.getElementsByTagName("link").item(index);
+    var newlink = document.createElement("link");
+    newlink.setAttribute("rel", "stylesheet");
+    newlink.setAttribute("type", "text/css");
+    newlink.setAttribute("href", cssFile);
+    document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+}
+
+function setTheme(dark) {
+    if (!isMobile()) {
+        if (dark) {
+            changeCss("html/css/dark-scrollbar.css", 0);
+        } else {
+            changeCss("html/css/light-scrollbar.css", 0);
+        }
+    }
+}
+

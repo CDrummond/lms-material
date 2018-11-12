@@ -181,21 +181,6 @@ a {
     padding-top: 0px;
 }
 
-.subtoolbar {
-    position:fixed; 
-    top:56px;
-    width:100vw;
-    height:48px !important;
-    white-space:nowrap;
-    overflow-x:hidden;
-    overflow-y:hidden;
-    padding-top:2px;
-    padding-right:8px;
-    padding-bottom:0px;
-    z-index:1;
-    float: left;
-}
-
 .pq-details {
     padding-left: 17px;
 }

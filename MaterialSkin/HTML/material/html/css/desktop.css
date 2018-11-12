@@ -110,9 +110,9 @@ body {
 
 .np-slider {
     margin-top:-6px;
-    padding-left:2px;
+    padding-left:0px;
+    padding-right:4px;
     height: 32px;
-    height:calc(100vw - 380px);
 }
 
 .np-info-text {

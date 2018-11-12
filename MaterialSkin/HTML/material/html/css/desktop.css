@@ -1,0 +1,50 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+.subtoolbar {
+    position:fixed; 
+    top:56px;
+    width:100%;
+    height:48px !important;
+    white-space:nowrap;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    padding-top:2px;
+    padding-right:8px;
+    padding-bottom:0px;
+    z-index:1;
+    float: left;
+}
+
+.lms-list {
+    position:fixed;
+    top:56px;
+    height:calc((var(--vh, 1vh)*100) - 112px);
+    width:100%;
+    overflow:auto;
+    backface-visibility:hidden;
+}
+
+.lms-list-sub {
+    position:fixed;
+    top:102px;
+    height:calc((var(--vh, 1vh)*100) - 158px);
+    width:100%;
+    overflow:auto;
+    backface-visibility:hidden;
+}
+
+.lms-image-grid {
+    position:fixed;
+    top:102px;
+    height:calc((var(--vh, 1vh)*100) - 158px);
+    width:100%;
+    overflow:auto;
+    backface-visibility:hidden;
+    margin:0px;
+}
+

@@ -10,6 +10,7 @@ Vue.use(VueLazyload);
 var app = new Vue({
     el: '#app',
     data() {
+        splitterPercent:50
     },
     created() {
         // For testing, allow pages to be served by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/?lms=<real address of LMS>
@@ -18,6 +19,8 @@ var app = new Vue({
             lmsServerAddress = "http://"+res[1]+":9000";
         }
         this.$store.commit('initUiSettings', true);
+        this.splitterPercent = getLocalStorageVal("splitter", "50");
+        this.splitter = this.splitterPercent;
         initApp(true);
     },
     computed: {
@@ -30,6 +33,15 @@ var app = new Vue({
     },
     components: {
         VueSplitter
+    },
+    methods: {
+        splitteResized(val) {
+            var f = Math.floor(val/2)*2;
+            if (f!=this.splitter) {
+                setLocalStorageVal("splitter", f);
+                this.splitter=f;
+            }
+        }
     },
     store,
     lmsServer

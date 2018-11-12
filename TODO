@@ -31,7 +31,6 @@
 
 - Desktop UI
   - Volume control in toolbar
-  - Remember splitter size
   - Spinner should be in middle of its view, not page
   - Move desktop.html into 'deskop/index.html' and update plugin.pm to look into this folder
     - Want http://host:9000/material/desktop

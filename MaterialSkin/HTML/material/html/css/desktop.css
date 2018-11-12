@@ -57,6 +57,17 @@ body {
     margin:0px;
 }
 
+.vol-slider {
+    max-width:300px;
+}
+
+.vol-label {
+    padding-top: 16px;
+    width:3em;
+    text-align: left;
+    opacity: 0.6;
+}
+
 .np-bar {
     padding:0px 16px 0px 16px; /* t, r, b, l */
     position:fixed;

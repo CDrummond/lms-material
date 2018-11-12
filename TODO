@@ -30,7 +30,6 @@
   - Set current highlight diffeently for dark/light
 
 - Desktop UI
-  - Volume control in toolbar
   - Spinner should be in middle of its view, not page
   - Move desktop.html into 'deskop/index.html' and update plugin.pm to look into this folder
     - Want http://host:9000/material/desktop

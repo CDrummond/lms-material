@@ -42,6 +42,7 @@ Vue.component('lms-volume', {
             if (this.show && playerStatus.volume!=this.playerVolume && playerStatus.volume!=this.playerVolumePrev &&
                 (!this.lastUpdate || ((new Date())-this.lastUpdate)>500)) {
                 this.playerVolume = playerStatus.volume;
+                this.lastUpdate = new Date();
             }
         }.bind(this));
         

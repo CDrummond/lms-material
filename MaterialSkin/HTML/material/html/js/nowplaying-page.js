@@ -24,12 +24,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <img :src="cover" class="np-image" @click="infoPlugin ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
  <div>
   <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
-  <p class="np-text" v-else>&nbsp;Title</p>
+  <p class="np-text" v-else>&nbsp;</p>
   <p class="np-subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
   <p class="np-subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
   <p class="np-subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-  <p class="np-subtext" v-else>&nbsp;Artist - Album</p>
-  <p class="np-subtext np-time ">{{formattedTime}}</p>
+  <p class="np-subtext" v-else>&nbsp;</p>
+  <p class="np-subtext np-time">{{formattedTime}}</p>
   <v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
  <div v-if="info.show" class="np-info">

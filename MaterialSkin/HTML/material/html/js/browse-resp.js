@@ -164,7 +164,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             }
 
             data.result.item_loop.forEach(i => {
-                if (!i.text) {
+                if (!i.text || i.showBigArtwork==1) {
                     data.result.count--;
                     return;
                 }

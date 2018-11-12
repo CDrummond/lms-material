@@ -223,9 +223,10 @@ var lmsBrowse = Vue.component("lms-browse", {
  <lms-randommix></lms-randommix>
 </div>
       `,
-    props: [],
+    props: [ 'desktop' ],
     data() {
         return {
+            desktop: false,
             items: [],
             grid: false,
             fetchingItems: false,
@@ -254,17 +255,19 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
         this.pinned.forEach( p => { this.options.pinned.add(p.id) });
 
-        // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
-        // page, so that it can be restored when going back here.
-        bus.$on('routeChange', function(from, to) {
-            if (to=='/browse') {
-                setTimeout(function () {
-                    setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                }.bind(this), 100);
-            } else if (from=='/browse') {
-                this.previousScrollPos = this.scrollElement.scrollTop;
-            }
-        }.bind(this));
+        if (!this.desktop) {
+            // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
+            // page, so that it can be restored when going back here.
+            bus.$on('routeChange', function(from, to) {
+                if (to=='/browse') {
+                    setTimeout(function () {
+                        setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
+                    }.bind(this), 100);
+                } else if (from=='/browse') {
+                    this.previousScrollPos = this.scrollElement.scrollTop;
+                }
+            }.bind(this));
+        }
 
         bus.$on('langChanged', function() {
             this.initItems();
@@ -726,12 +729,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 //console.log("ACTION", command.command);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     bus.$emit('refreshStatus');
-                    if (act===PLAY_ACTION.cmd) {
-                        this.$router.push('/nowplaying');
-                    } else if (act===ADD_ACTION.cmd) {
-                        this.showMessage(i18n("Appended '%1' to the play queue", item.title));
-                    } else if (act==="insert") {
-                        this.showMessage(i18n("Inserted '%1' into the play queue", item.title));
+                    if (!this.desktop) {
+                        if (act===PLAY_ACTION.cmd) {
+                            this.$router.push('/nowplaying');
+                        } else if (act===ADD_ACTION.cmd) {
+                            this.showMessage(i18n("Appended '%1' to the play queue", item.title));
+                        } else if (act==="insert") {
+                            this.showMessage(i18n("Inserted '%1' into the play queue", item.title));
+                        }
                     }
                 }).catch(err => {
                     this.showError(err);
@@ -1219,7 +1224,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         this.scrollElement = document.getElementById("browse-list");
         this.scrollElement.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/browse') {
+            if (this.fetchingItems || this.listSize<=this.items.length || (!this.desktop && this.$route.path!='/browse')) {
                 return;
             }
             const scrollY = this.scrollElement.scrollTop;

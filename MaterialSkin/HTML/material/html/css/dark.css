@@ -1,0 +1,11 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+.vue-splitter .splitter {
+    background-color: #333 !important;
+}
+

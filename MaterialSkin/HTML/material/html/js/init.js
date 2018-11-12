@@ -5,7 +5,7 @@
  * MIT license.
  */
  
-function initApp() {
+function initApp(desktop) {
     var t = getLocalStorageVal('translation', undefined);
     if (t!=undefined) {
         setTranslation(JSON.parse(t));
@@ -24,7 +24,7 @@ function initApp() {
                     lang = lang.substr(0, 2);
                 }
                 
-                axios.get("html/lang/"+lang+".json").then(function (resp) {
+                axios.get((desktop ? "lang/" : "html/lang/")+lang+".json").then(function (resp) {
                     var trans = eval(resp.data);
                     setLocalStorageVal('translation', JSON.stringify(trans));
                     setTranslation(trans);

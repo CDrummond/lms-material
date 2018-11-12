@@ -1,0 +1,94 @@
+<!--
+ * LMS-Material
+ *
+ * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+-->
+ 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Logitech Media Server</title>
+    <link href="css/blank.css" rel="stylesheet">
+    <link href="css/blank.css" rel="stylesheet">
+    <link href="font/font.css" rel="stylesheet">
+    <link href="lib/vuetify.min.css?ver=1.3.5" rel="stylesheet">
+    <!-- TODO: Fix and re-use virtual scroller -->
+    <!-- <link href="lib/vue-virtual-scroller.css?ver=0.12.2" rel="stylesheet"> -->
+    <link href="lib/mobile-drag-drop.css?ver=2.3.0-rc.1" rel="stylesheet">
+    <link href="lib/photoswipe/photoswipe.css?ver=4.1.2" rel="stylesheet">
+    <link href="lib/photoswipe/default-skin/default-skin.css?ver=4.1.2" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/desktop.css" rel="stylesheet">
+    <link rel="icon" href="images/icon.png">
+    <link rel="manifest" href="manifest.json"> <!-- TODO desktop -->
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Logitech Media Server">
+    <link href="images/icon-ios.png" rel="apple-touch-icon" sizes="128x128">
+    <link href="images/icon-ios.png" rel="shortcut" sizes="128x128">
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <v-app class="lms-app" :dark="darkUi">
+        <lms-server></lms-server>
+        <lms-toolbar :desktop="true"></lms-toolbar>
+        <div class="lms-desktop-toolbar-pad"></div>
+        <vue-splitter :margin="20" class="lms-splitter">
+          <div slot="left-pane"><lms-browse :desktop="true"></lms-browse></div>
+          <div slot="right-pane"><lms-queue :desktop="true"></lms-queue></div>
+        </vue-splitter>
+        <lms-now-playing :desktop="true"></lms-now-playing>
+        <lms-noplayer></lms-noplayer>
+        <lms-ui-settings></lms-ui-settings>
+        <lms-player-settings></lms-player-settings>
+        <lms-information-dialog></lms-information-dialog>
+        <lms-sync-dialog></lms-sync-dialog>
+        <lms-volume></lms-volume>
+        <lms-manage-players></lms-manage-players>
+      </v-app>
+    </div>
+
+    <script src="lib/axios.min.js?ver=0.18.0"></script>
+    <script src="lib/vue.min.js?ver=2.5.17"></script>
+    <script src="lib/vuetify.min.js?ver=1.3.5"></script>
+    <script src="lib/vuex.min.js?ver=2.0.0"></script>
+    <script src="lib/vue-lazyload.js?ver=1.2.6"></script>
+    <script src="lib/vuetify-confirm.min.js"></script>
+    <!-- TODO: Fix and re-use virtual scroller -->
+    <!--
+    <script src="lib/intersection-observer.js?ver=0.5.0"></script>
+    <script src="lib/vue-observe-visibility.min.js?ver=0.4.3"></script>
+    <script src="lib/vue-virtual-scroller.min.js?ver=0.12.2"></script>
+    -->
+    <script src="lib/mobile-drag-drop.min.js?ver=2.3.0-rc.1"></script>
+    <script>MobileDragDrop.polyfill({holdToDrag: 1000});</script>
+    <script src="lib/photoswipe/photoswipe.min.js?ver=4.1.2"></script>
+    <script src="lib/photoswipe/photoswipe-ui-default.min.js?ver=4.1.2"></script>
+    <script src="lib/vue-splitter.js?ver=1.3.0"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/noplayers.js"></script>
+    <script src="js/toolbar.js"></script>
+    <script src="js/bottomnav.js"></script>
+    <script src="js/browse-resp.js"></script>
+    <script src="js/browse-page.js"></script>
+    <script src="js/nowplaying-page.js"></script>
+    <script src="js/queue-page.js"></script>
+    <script src="js/sync-dialog.js"></script>
+    <script src="js/server.js"></script>
+    <script src="js/ui-settings.js"></script>
+    <script src="js/player-settings.js"></script>
+    <script src="js/volume.js"></script>
+    <script src="js/information.js"></script>
+    <script src="js/randommix-dialog.js"></script>
+    <script src="js/manage-players.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/main-desktop.js"></script>
+  </body>
+</html>
+

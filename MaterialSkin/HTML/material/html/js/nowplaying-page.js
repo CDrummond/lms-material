@@ -7,7 +7,52 @@
  
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
-<div class="np-page" v-if="playerStatus.ison">
+<div v-if="desktop" class="np-bar noselect">
+
+ <v-layout row class="np-controls">
+  <v-flex xs4>
+   <v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn>
+  </v-flex>
+  <v-flex xs4>
+   <v-btn flat icon large v-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+   <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+  </v-flex>
+  <v-flex xs4>
+   <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+  </v-flex>
+ </v-layout>
+ <img :src="cover" class="np-image" @click="infoPlugin ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
+ <div>
+  <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+  <p class="np-text" v-else>&nbsp;Title</p>
+  <p class="np-subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
+  <p class="np-subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+  <p class="np-subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+  <p class="np-subtext" v-else>&nbsp;Artist - Album</p>
+  <p class="np-subtext np-time ">{{formattedTime}}</p>
+  <v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
+ </div>
+ <div v-if="info.show" class="np-info">
+  <v-tabs centered v-model="info.tab">
+   <template v-for="(tab, index) in info.tabs">
+    <v-tab :key="index">{{tab.title}}</v-tab>
+    <v-tab-item :key="index">
+     <v-card flat>
+      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': 0==index}" v-html="tab.text"></v-card-text>
+     </v-card>
+    </v-tab-item>
+   </template>
+  </v-tabs>
+  <v-card>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
+    <v-spacer></v-spacer>
+   </v-card-actions>
+  </v-card>
+ </div>
+</div>
+<div class="np-page" v-else-if="playerStatus.ison">
  <div v-if="info.show" class="np-info">
   <v-tabs centered v-model="info.tab">
    <template v-for="(tab, index) in info.tabs">
@@ -73,12 +118,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-layout>
    </v-flex>
   </v-layout>
- </v-div>
+ </div>
 </div>
 `,
-    props: [],
+    props: [ 'desktop' ],
     data() {
-        return { cover:undefined,
+        return { desktop:false,
+                 cover:undefined,
                  coverFromPlayer:undefined,
                  playerStatus: {
                     ison: 1,
@@ -261,5 +307,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         'info.tab': function(tab) {
             this.showInfo();
         }
-    }
+    },
+    computed: {
+        infoPlugin() {
+            return this.$store.state.infoPlugin
+        },
+        formattedTime() {
+            return this.playerStatus && this.playerStatus.current
+                        ? (this.playerStatus.current.time ? formatSeconds(Math.floor(this.playerStatus.current.time)) : "") +
+                          (this.playerStatus.current.time && this.playerStatus.current.duration ? " / " : "") +
+                          (this.playerStatus.current.duration ? formatSeconds(Math.floor(this.playerStatus.current.duration)) : "")
+                        : undefined;
+        }
+    },
 });

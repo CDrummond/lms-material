@@ -25,10 +25,14 @@
       - at start of song, and near end poll every (e.g.) 0.5 seconds
     - Create timer to advance song progress - re-adjust on each poll
     - or use ["time", "?"] to just obtain time position every second?
-  - Desktop UI
-    - Slim top toolbar (as no need for current playing)
-    - Browse / splitter/ Queue
-    - Bottom toolbar with cover, controls, and current playing track
-    - Create separate desktop.html / desktop/index.html
-    - Modify browse/queue JS files - so as not to change path
 
+- Queue
+  - Set current highlight diffeently for dark/light
+
+- Desktop UI
+  - Volume control in toolbar
+  - Remember splitter size
+  - Spinner should be in middle of its view, not page
+  - View divider should not span whole view, add margins l/r
+  - Move desktop.html into 'deskop/index.html' and update plugin.pm to look into this folder
+    - Want http://host:9000/material/desktop

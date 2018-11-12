@@ -53,7 +53,7 @@ var app = new Vue({
         if (res && 2==res.length) {
             lmsServerAddress = "http://"+res[1]+":9000";
         }
-        this.$store.commit('initUiSettings');
+        this.$store.commit('initUiSettings', false);
 
         this.openDialogs = new Set();
         bus.$on('dialog', function(name, open) {

@@ -85,9 +85,17 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
         <v-layout>
+          <v-btn flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+          <v-btn flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+          <v-btn flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
+
+          <v-btn flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+          <v-btn flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+          <v-btn flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
+
           <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
-          <v-btn flat icon v-if="playerIsOn" @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
+          <v-btn flat icon v-if="playerStatus.ison" @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
           <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
           <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>
@@ -133,16 +141,17 @@ var lmsQueue = Vue.component("lms-queue", {
       </v-menu>
     </div>
 `,
-    props: [],
+    props: [ 'desktop' ],
     data() {
         return {
+            desktop: false,
             items: [],
             currentIndex: -1,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             trackCount:0,
             duration: 0.0,
-            playerIsOn: true,
+            playerStatus: { ison:1, shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0}
         }
@@ -164,8 +173,14 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
-            if (playerStatus.ison!=this.playerIsOn) {
-                this.playerIsOn = playerStatus.ison;
+            if (playerStatus.ison!=this.playerStatus.ison) {
+                this.playerStatus.ison = playerStatus.ison;
+            }
+            if (playerStatus.playlist.shuffle!=this.playerStatus.shuffle) {
+                this.playerStatus.shuffle = playerStatus.playlist.shuffle;
+            }
+            if (playerStatus.playlist.repeat!=this.playerStatus.repeat) {
+                this.playerStatus.repeat = playerStatus.playlist.repeat;
             }
             if (playerStatus.playlist.count!=this.trackCount) {
                 this.trackCount = playerStatus.playlist.count;
@@ -188,22 +203,24 @@ var lmsQueue = Vue.component("lms-queue", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
-        // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
-        // page, so that it can be restored when going back here.
-        bus.$on('routeChange', function(from, to) {
-            this.isVisible = '/queue'==to;
-            if (this.isVisible) {
-                if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
-                    this.scheduleUpdate();
-                } else {
-                    setTimeout(function () {
-                        setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                    }.bind(this), 100);
+        if (!this.desktop) {
+            // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
+            // page, so that it can be restored when going back here.
+            bus.$on('routeChange', function(from, to) {
+                this.isVisible = '/queue'==to;
+                if (this.isVisible) {
+                    if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
+                        this.scheduleUpdate();
+                    } else {
+                        setTimeout(function () {
+                            setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
+                        }.bind(this), 100);
+                    }
+                } else if (from=='/queue') {
+                    this.previousScrollPos = this.scrollElement.scrollTop;
                 }
-            } else if (from=='/queue') {
-                this.previousScrollPos = this.scrollElement.scrollTop;
-            }
-        }.bind(this));
+            }.bind(this));
+        }
         
         bus.$on('langChanged', function() {
             this.initItems();
@@ -212,7 +229,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || this.$route.path!='/queue') {
+            if (this.fetchingItems || this.listSize<=this.items.length || (!this.desktop && this.$route.path!='/queue')) {
                 return;
             }
             const scrollY = this.scrollElement.scrollTop;
@@ -306,10 +323,14 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_ACTION.cmd===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_MORE_ACTION.cmd===act) {
-                this.$router.push('/browse');
-                this.$nextTick(function () {
+                if (this.desktop) {
                     bus.$emit('trackInfo', item);
-                });
+                } else {
+                    this.$router.push('/browse');
+                    this.$nextTick(function () {
+                        bus.$emit('trackInfo', item);
+                    });
+                }
             }
         },
         itemMenu(item, index, event) {

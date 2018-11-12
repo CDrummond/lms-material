@@ -143,16 +143,23 @@ function changeCss(cssFile, index) {
     newlink.setAttribute("rel", "stylesheet");
     newlink.setAttribute("type", "text/css");
     newlink.setAttribute("href", cssFile);
+
     document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
 }
 
-function setTheme(dark) {
+function setTheme(dark, desktop) {
     if (!isMobile()) {
         if (dark) {
-            changeCss("html/css/dark-scrollbar.css", 0);
+            changeCss((desktop ? "" : "html/") + "css/dark-scrollbar.css", 0);
         } else {
-            changeCss("html/css/light-scrollbar.css", 0);
+            changeCss((desktop ? "" : "html/") + "css/light-scrollbar.css", 0);
         }
+    }
+
+    if (dark) {
+        changeCss((desktop ? "" : "html/") + "css/dark.css", 1);
+    } else {
+        changeCss((desktop ? "" : "html/") + "css/light.css", 1);
     }
 }
 

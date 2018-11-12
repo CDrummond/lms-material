@@ -17,8 +17,8 @@ var app = new Vue({
         if (res && 2==res.length) {
             lmsServerAddress = "http://"+res[1]+":9000";
         }
-        this.$store.commit('initUiSettings');
-        initApp();
+        this.$store.commit('initUiSettings', true);
+        initApp(true);
     },
     computed: {
         darkUi() {
@@ -27,6 +27,9 @@ var app = new Vue({
         lang() {
             return this.$store.state.lang;
         }
+    },
+    components: {
+        VueSplitter
     },
     store,
     lmsServer

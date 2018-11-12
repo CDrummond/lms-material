@@ -41,10 +41,6 @@ a {
     min-height:400px;
 }
 
-.lms-toolbar {
-    height:56px !important;
-}
-
 .lms-footer {
     position:fixed;
     bottom:0;
@@ -151,12 +147,6 @@ a {
     margin-right: 20px;
 }
 
-.lms-toolbar > .v-toolbar__content {
-    height: 56px !important;
-    margin-left: -7px !important;
-    margin-right: -8px !important;
-}
-
 /* Stop vuetify changing padding when width changes */
 @media only screen and (max-width: 959px) {
   .v-toolbar__content,
@@ -217,6 +207,14 @@ a {
     /*border: 1px solid red;*/
 }
 
+.np-playpause {
+    margin-top: 2px !important;
+}
+
+.np-info-lyrics {
+    text-align: center;
+}
+
 .ellipsis {
     text-overflow:ellipsis; 
     overflow: hidden; 
@@ -236,7 +234,7 @@ a {
 }
 
 .pq-text {
-    padding-top:10px; /* TODO: This should not be required! */
+    padding-top:12px; /* TODO: This should not be required! */
     display: table-cell !important;
     vertical-align: middle !important;
 }

@@ -17,7 +17,7 @@ Vue.component('lms-toolbar', {
  <v-menu bottom class="toolbar-menu">
   <v-toolbar-title slot="activator">
    <v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon>
-   <div class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
+   <div v-if="!desktop" class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list">
@@ -58,13 +58,13 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon v-if="infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon v-else-if="playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop && playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
   <v-icon>pause_circle_outline</v-icon>
  </v-btn>
- <v-btn icon v-else-if="playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop && playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
   <v-icon>play_circle_outline</v-icon>
  </v-btn>
  <v-btn icon flat class="toolbar-button" v-bind:class="{'dimmed': playerStatus.volume<0}" v-if="playerStatus.ison" @click="bus.$emit('volume')">
@@ -86,9 +86,10 @@ Vue.component('lms-toolbar', {
  </v-menu>
 </v-toolbar>
     `,
-    props: [],
+    props: ['desktop'],
     data() {
-        return { songInfo:undefined,
+        return { desktop:false,
+                 songInfo:undefined,
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],

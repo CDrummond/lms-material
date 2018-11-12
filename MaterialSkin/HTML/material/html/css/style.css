@@ -70,6 +70,11 @@ a {
     width:100%;
 }
 
+.v-divider {
+   margin-left:8px;
+   margin-right:8px;
+}
+
 /* Stop horizontal scrollbar in full screen dialogs */
 .v-dialog .v-card {
     overflow-x: hidden !important;

@@ -24,7 +24,7 @@ function initApp(desktop) {
                     lang = lang.substr(0, 2);
                 }
                 
-                axios.get("html/lang/"+lang+".json").then(function (resp) {
+                axios.get("html/lang/"+lang+".json?r=[% material_revision %]").then(function (resp) {
                     var trans = eval(resp.data);
                     setLocalStorageVal('translation', JSON.stringify(trans));
                     setTranslation(trans);

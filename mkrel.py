@@ -104,7 +104,7 @@ def cleanup():
         shutil.rmtree(BUILD_FOLDER)
 
 
-def minify(version):
+def minify():
     info("Minifying")
     index = "%s/MaterialSkin/HTML/material/index.html" % BUILD_FOLDER
     jsFiles = []
@@ -133,11 +133,11 @@ def minify(version):
 
         if matchedJs:
             if not replacedJs:
-                fixedLines.append('    <script src="%s?ver=%s"></script>\n' % (minifiedJs, version))
+                fixedLines.append('    <script src="%s?r=[% material_revision %]"></script>\n' % minifiedJs)
                 replacedJs = True
         elif matchedCss:
             if not replacedCss:
-                fixedLines.append('    <link href="html/css/style.min.css?ver=%s" rel="stylesheet">\n' % version)
+                fixedLines.append('    <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
                 replacedCss = True
         else:
             fixedLines.append(line)
@@ -161,37 +161,6 @@ def minify(version):
     for f in jsFiles:
         os.remove(f)
     os.remove(origCss)
-
-    # Update index.html
-    with open(index, "w") as f:
-        for line in fixedLines:
-            f.write(line)
-
-
-def appendVersion(version):
-    info("Appending version")
-    index = "%s/MaterialSkin/HTML/material/index.html" % BUILD_FOLDER
-    fixedLines = []
-    with open(index, "r") as f:
-        lines=f.readlines()
-    for line in lines:
-        matchedJs = False
-        matchedCss = False
-
-        matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js\\"', line)
-        if matches:
-            for match in matches:
-                fixedLines.append('    <script src="%s?ver=%s"></script>\n' % (match.split('"')[1], version))
-                matchedJs = True
-        else:
-            matches = re.findall('"html/css/style.css"', line)
-            if matches:
-                for match in matches:
-                    fixedLines.append('    <link href="html/css/style.css?ver=%s" rel="stylesheet">\n' % version)
-                    matchedCss = True
-
-        if not matchedJs and not matchedCss:
-            fixedLines.append(line)
 
     # Update index.html
     with open(index, "w") as f:
@@ -266,9 +235,7 @@ checkVersionExists(version)
 updateInstallXml(version)
 prepare()
 if MINIFY_CODE:
-    minify(version)
-else:
-    appendVersion(version)
+    minify()
 
 zipFile = createZip(version)
 sha1 = getSha1Sum(zipFile)

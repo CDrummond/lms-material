@@ -85,6 +85,8 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
         <v-layout>
+          <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
+          <v-spacer></v-spacer>
           <v-btn flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
           <v-btn flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
           <v-btn flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
@@ -92,12 +94,10 @@ var lmsQueue = Vue.component("lms-queue", {
           <v-btn flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
           <v-btn flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
           <v-btn flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
-
-          <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
-          <v-spacer></v-spacer>
-          <v-btn flat icon v-if="playerStatus.ison" @click.stop="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
-          <v-btn flat icon @click.stop="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-          <v-btn flat icon @click.stop="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
+          <v-divider vertical="true" v-if="desktop"></v-divider>
+          <v-btn flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
+          <v-btn flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
+          <v-btn flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>
       </v-card>
       <v-list class="lms-list-sub"  id="queue-list">
@@ -414,6 +414,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         scrollToCurrent() {
+            if (!this.playerStatus.ison) {
+                return;
+            }
             this.autoScrollRequired = false;
             if (this.items.length>5 && this.currentIndex>0) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the brows/nowplaying page!

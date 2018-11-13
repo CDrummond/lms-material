@@ -5,6 +5,7 @@
     - disabled for now
 
 - Browse
+  - Add history menu, allowing to go back multilpe steps
   - SlimBrowse
     - Fully handle commands
       - 'More'
@@ -31,5 +32,4 @@
 
 - Desktop UI
   - Spinner should be in middle of its view, not page
-  - Move desktop.html into 'deskop/index.html' and update plugin.pm to look into this folder
-    - Want http://host:9000/material/desktop
+

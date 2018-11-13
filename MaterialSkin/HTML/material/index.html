@@ -8,85 +8,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <title>Logitech Media Server</title>
-    <link href="html/css/blank.css" rel="stylesheet">
-    <link href="css/blank.css" rel="stylesheet">
-    <link href="html/font/font.css" rel="stylesheet">
-    <link href="html/lib/vuetify.min.css?r=1.3.5" rel="stylesheet">
-    <!-- TODO: Fix and re-use virtual scroller -->
-    <!-- <link href="html/lib/vue-virtual-scroller.css?r=0.12.2" rel="stylesheet"> -->
-    <link href="html/lib/mobile-drag-drop.css?r=2.3.0-rc.1" rel="stylesheet">
-    <link href="html/lib/photoswipe/photoswipe.css?r=4.1.2" rel="stylesheet">
-    <link href="html/lib/photoswipe/default-skin/default-skin.css?r=4.1.2" rel="stylesheet">
-    <link href="html/css/style.css" rel="stylesheet">
-    <link href="html/css/mobile.css" rel="stylesheet">
-    <link rel="icon" href="html/images/icon.png">
-    <link rel="manifest" href="html/manifest.json">
-
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Logitech Media Server">
-    <link href="html/images/icon-ios.png" rel="apple-touch-icon" sizes="128x128">
-    <link href="html/images/icon-ios.png" rel="shortcut" sizes="128x128">
   </head>
   <body>
-    <div id="app" v-cloak>
-      <v-app class="lms-app" :dark="darkUi" v-touch="{ left: () => swipe('l'), right: () => swipe('r')}">
-        <lms-toolbar></lms-toolbar>
-        <lms-server></lms-server>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-        <lms-bottomnav></lms-bottomnav>
-        <lms-noplayer></lms-noplayer>
-        <lms-ui-settings></lms-ui-settings>
-        <lms-player-settings></lms-player-settings>
-        <lms-information-dialog></lms-information-dialog>
-        <lms-sync-dialog></lms-sync-dialog>
-        <lms-volume></lms-volume>
-        <lms-manage-players></lms-manage-players>
-      </v-app>
-    </div>
-
-    <script src="html/lib/axios.min.js?r=0.18.0"></script>
-    <script src="html/lib/vue.min.js?r=2.5.17"></script>
-    <script src="html/lib/vue-router.min.js?r=3.0.1"></script>
-    <script src="html/lib/vuetify.min.js?r=1.3.5"></script>
-    <script src="html/lib/vuex.min.js?r=2.0.0"></script>
-    <script src="html/lib/vue-lazyload.js?r=1.2.6"></script>
-    <script src="html/lib/vuetify-confirm.min.js"></script>
-    <!-- TODO: Fix and re-use virtual scroller -->
-    <!--
-    <script src="html/lib/intersection-observer.js?r=0.5.0"></script>
-    <script src="html/lib/vue-observe-visibility.min.js?r=0.4.3"></script>
-    <script src="html/lib/vue-virtual-scroller.min.js?r=0.12.2"></script>
-    -->
-    <script src="html/lib/mobile-drag-drop.min.js?r=2.3.0-rc.1"></script>
-    <script>MobileDragDrop.polyfill({holdToDrag: 1000});</script>
-    <script src="html/lib/photoswipe/photoswipe.min.js?r=4.1.2"></script>
-    <script src="html/lib/photoswipe/photoswipe-ui-default.min.js?r=4.1.2"></script>
-    <script src="html/js/constants.js?r=[% material_revision %]"></script>
     <script src="html/js/utils.js?r=[% material_revision %]"></script>
-    <script src="html/js/noplayers.js?r=[% material_revision %]"></script>
-    <script src="html/js/toolbar.js?r=[% material_revision %]"></script>
-    <script src="html/js/bottomnav.js?r=[% material_revision %]"></script>
-    <script src="html/js/browse-resp.js?r=[% material_revision %]"></script>
-    <script src="html/js/browse-page.js?r=[% material_revision %]"></script>
-    <script src="html/js/nowplaying-page.js?r=[% material_revision %]"></script>
-    <script src="html/js/queue-page.js?r=[% material_revision %]"></script>
-    <script src="html/js/sync-dialog.js?r=[% material_revision %]"></script>
-    <script src="html/js/server.js?r=[% material_revision %]"></script>
-    <script src="html/js/ui-settings.js?r=[% material_revision %]"></script>
-    <script src="html/js/player-settings.js?r=[% material_revision %]"></script>
-    <script src="html/js/volume.js?r=[% material_revision %]"></script>
-    <script src="html/js/information.js?r=[% material_revision %]"></script>
-    <script src="html/js/randommix-dialog.js?r=[% material_revision %]"></script>
-    <script src="html/js/manage-players.js?r=[% material_revision %]"></script>
-    <script src="html/js/i18n.js?r=[% material_revision %]"></script>
-    <script src="html/js/store.js?r=[% material_revision %]"></script>
-    <script src="html/js/init.js?r=[% material_revision %]"></script>
-    <script src="html/js/main.js?r=[% material_revision %]"></script>
+    <script>
+      window.location.href = isMobile() ? "mobile" : "desktop";
+    </script>
   </body>
 </html>
 

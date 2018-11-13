@@ -75,6 +75,11 @@ a {
    margin-right:8px;
 }
 
+.v-divider--vertical {
+   margin-top:8px;
+   margin-bottom:8px;
+}
+
 /* Stop horizontal scrollbar in full screen dialogs */
 .v-dialog .v-card {
     overflow-x: hidden !important;
@@ -239,6 +244,7 @@ a {
 }
 
 .pq-text {
+    padding-left: 4px;
     padding-top:12px; /* TODO: This should not be required! */
     display: table-cell !important;
     vertical-align: middle !important;

@@ -21,7 +21,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn></v-flex>
   </v-flex>
  </v-layout>
- <img :src="cover" class="np-image" @click="infoPlugin ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
+ <img :src="cover" class="np-image" @click="infoPlugin && playerStatus.current.artist ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
  <div>
   <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
   <p class="np-text" v-else>&nbsp;</p>

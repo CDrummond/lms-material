@@ -150,16 +150,16 @@ function changeCss(cssFile, index) {
 function setTheme(dark, desktop) {
     if (!isMobile()) {
         if (dark) {
-            changeCss((desktop ? "" : "html/") + "css/dark-scrollbar.css", 0);
+            changeCss("html/css/dark-scrollbar.css", 0);
         } else {
-            changeCss((desktop ? "" : "html/") + "css/light-scrollbar.css", 0);
+            changeCss("html/css/light-scrollbar.css", 0);
         }
     }
 
     if (dark) {
-        changeCss((desktop ? "" : "html/") + "css/dark.css", 1);
+        changeCss("html/css/dark.css", 1);
     } else {
-        changeCss((desktop ? "" : "html/") + "css/light.css", 1);
+        changeCss("html/css/light.css", 1);
     }
 }
 

@@ -30,7 +30,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <p class="np-subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
   <p class="np-subtext" v-else>&nbsp;</p>
   <p class="np-subtext np-time">{{formattedTime}}</p>
-  <v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
+  <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
  <div v-if="info.show" class="np-info">
   <v-tabs centered v-model="info.tab">

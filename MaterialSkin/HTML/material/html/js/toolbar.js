@@ -75,6 +75,9 @@ Vue.component('lms-toolbar', {
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
  </v-btn>
+ <v-btn icon v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
+  <v-icon>info</v-icon>
+ </v-btn>
  <v-menu bottom left>
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
   <v-list>

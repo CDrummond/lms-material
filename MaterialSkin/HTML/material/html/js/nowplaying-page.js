@@ -129,7 +129,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  playerStatus: {
                     ison: 1,
                     isplaying: 1,
-                    current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined },
+                    current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined, albumName:undefined },
                     playlist: { shuffle:0, repeat: 0 },
                  },
                  info: { show: false, tab:0,
@@ -189,8 +189,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.current.artist!=this.playerStatus.current.artist) {
                 this.playerStatus.current.artist = playerStatus.current.artist;
             }
-            if (playerStatus.current.album!=this.playerStatus.current.album) {
-                this.playerStatus.current.album = playerStatus.current.album;
+            if (playerStatus.current.album!=this.playerStatus.current.albumName) {
+                this.playerStatus.current.albumName = playerStatus.current.album;
+                if (playerStatus.current.year) {
+                    this.playerStatus.current.album = this.playerStatus.current.albumName+" ("+ playerStatus.current.year+")";
+                } else {
+                    this.playerStatus.current.album = this.playerStatus.current.albumName;
+                }
             }
             if (playerStatus.playlist.shuffle!=this.playerStatus.playlist.shuffle) {
                 this.playerStatus.playlist.shuffle = playerStatus.playlist.shuffle;

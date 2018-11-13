@@ -90,7 +90,7 @@ body {
     object-fit: contain;
     height:80px;
     width:80px;
-    padding:0px 8px 0px 0px; /* t, r, b, l */
+    padding:0px 16px 0px 0px; /* t, r, b, l */
     float:left;
 }
 

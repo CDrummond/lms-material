@@ -5,6 +5,16 @@
  * MIT license.
  */
 
+:root {
+    --safe-area-bottom: 0px;
+}
+
+@supports(padding-top: env(safe-area-inset-bottom)) {
+    :root {
+        --safe-area-bottom: env(safe-area-inset-bottom);
+    }
+}
+
 html { 
     overflow-y: hidden;
     margin:0px;
@@ -272,13 +282,14 @@ a {
 .switch-label .v-list__tile__title {
     white-space: normal;
     min-height: 24px;
+    max-height: 72px;
     height: auto;
 }
 
 .switch-label .v-list__tile__sub-title {
     white-space: normal;
     min-height: 24px;
-    max-height: 72px;
+    max-height: 240px;
     height: auto;
 }
 

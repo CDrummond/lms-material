@@ -8,7 +8,7 @@
 :root {
     --main-toolbar-height: 56px;
     --sub-toolbar-height: 48px;
-    --bottom-nav-height: 58px;
+    --bottom-nav-height: calc(58px + var(--safe-area-bottom));
 }
 
 .lms-toolbar {

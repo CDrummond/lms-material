@@ -101,7 +101,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout>
    <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
-   <v-layout row wrap class="subtoolbar-title">
+   <v-layout row wrap class="subtoolbar-title" @click="showHistory($event)">
     <v-flex class="xs12 toolbar-title">{{headerTitle}}</v-flex>
     <div class="toolbar-subtitle">{{headerSubTitle}}</div>
    </v-layout>
@@ -215,6 +215,13 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-divider v-if="action.divider"></v-divider>
     <v-list-tile v-else @click="itemAction(action.cmd, menu.item)">
      <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+  <v-list v-if="menu.history">
+   <template v-for="(item, index) in menu.history">
+    <v-list-tile @click="goTo(index)">
+     <v-list-tile-title>{{item}}</v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>
@@ -757,6 +764,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.menu={show:true, item:item, x:event.clientX, y:event.clientY};
             }
         },
+        showHistory(event) {
+            if (this.history.length>1) {
+                var history=[];
+                this.history.forEach(h => {
+                    history.push(h.headerTitle ? h.headerTitle : i18n("Home"));
+                });
+                this.menu={show:true, x:event.clientX, y:event.clientY, history:history};
+            }
+        },
         headerAction(act) {
             this.itemAction(act, this.current);
         },
@@ -816,6 +832,19 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$nextTick(function () {
                 setScrollTop(this.scrollElement, prev>0 ? prev : 0);
             });
+        },
+        goTo(index) {
+            if (index>=this.history.length) {
+                return;
+            }
+            if (0==index) {
+                this.goHome();
+            } else {
+                while (index<this.history.length-1) {
+                    this.history.pop();
+                }
+                this.goBack();
+            }
         },
         goBack() {
             if (this.fetchingItems) {

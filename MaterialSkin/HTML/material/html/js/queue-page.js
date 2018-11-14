@@ -171,6 +171,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 lmsCommand("", ["pref", "titleFormat", "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2 && idx<data.result._p2.length) {
                         this.showTrackNum = data.result._p2[idx].includes("TRACKNUM");
+                        setLocalStorageVal('showTrackNum', this.showTrackNum);
                     }
                 });
             }

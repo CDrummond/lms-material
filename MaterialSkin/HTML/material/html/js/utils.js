@@ -147,7 +147,7 @@ function changeCss(cssFile, index) {
     document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
 }
 
-function setTheme(dark, desktop) {
+function setTheme(dark) {
     if (!isMobile()) {
         if (dark) {
             changeCss("html/css/dark-scrollbar.css?r=" + LMS_MATERIAL_REVISION, 0);

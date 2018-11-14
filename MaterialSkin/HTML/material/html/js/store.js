@@ -18,8 +18,7 @@ const store = new Vuex.Store({
         serverMenus:false,
         autoScrollQueue:true,
         library: null,
-        infoPlugin: false,
-        desktop: false
+        infoPlugin: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -105,7 +104,7 @@ const store = new Vuex.Store({
             if (state.darkUi!=val.darkUi) {
                 state.darkUi = val.darkUi;
                 setLocalStorageVal('darkUi', state.darkUi);
-                setTheme(state.darkUi, state.desktop);
+                setTheme(state.darkUi);
             }
             if (state.artistAlbumSort!=val.artistAlbumSort) {
                 state.artistAlbumSort = val.artistAlbumSort;
@@ -142,7 +141,7 @@ const store = new Vuex.Store({
             }
             bus.$emit('browseDisplayChanged');
         },
-        initUiSettings(state, isDesktop) {
+        initUiSettings(state) {
             state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
             state.artistAlbumSort = getLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
             state.albumSort = getLocalStorageVal('albumSort', state.albumSort);
@@ -153,8 +152,7 @@ const store = new Vuex.Store({
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
-            state.desktop = isDesktop;
-            setTheme(state.darkUi, state.desktop);
+            setTheme(state.darkUi);
             
             // Music and Artist info plugin installled?
             lmsCommand("", ["musicartistinfo", "localfiles", 0, 0]).then(({data}) => {

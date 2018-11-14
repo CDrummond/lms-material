@@ -8,7 +8,6 @@
 :root {
     --main-toolbar-height: 48px;
     --sub-toolbar-height: 48px;
-    --bottom-toolbar-height: 80px;
     --bottom-toolbar-height: calc(80px + var(--safe-area-bottom));
 }
 
@@ -141,7 +140,7 @@ body {
 }
 
 .np-info-text {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 52px));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 52px));
     overflow:auto;
     max-width:1000px;
     margin:auto;

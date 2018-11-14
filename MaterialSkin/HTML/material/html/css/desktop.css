@@ -64,6 +64,13 @@ body {
     margin:0px;
 }
 
+.browse-progress {
+    z-index:2;
+    position: absolute;
+    top: calc((var(--vh, 1vh)*50) - 36px);
+    left: calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
+}
+
 .vol-slider {
     max-width:200px;
 }

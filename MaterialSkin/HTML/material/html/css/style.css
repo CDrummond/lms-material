@@ -213,9 +213,9 @@ a {
 }
 
 .pq-current {
-    border: 1px solid rgba(0, 0, 0, 0.75);
+    border: 1px solid rgb(25, 118, 210);
     border-radius: 4px;
-    background-color:rgba(0, 0, 0, 0.15);
+    background-color:rgba(25, 118, 210, 0.15);
 }
 
 .pq-text {

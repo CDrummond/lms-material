@@ -15,9 +15,6 @@
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
 
-- Queue
-  - Set current highlight diffeently for dark/light
-
 - Misc
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.

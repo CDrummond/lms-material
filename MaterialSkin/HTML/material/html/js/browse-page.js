@@ -1073,7 +1073,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         id: TOP_APPS_ID });
         },
         playerMenu() {
-            console.log("Update playr menu");
+            console.log("Update player menu - " + this.playerId());
             if (this.serverTop.length>0 && this.serverTop[0].player==this.playerId()) {
                 console.log("Player has not changed");
                 return;

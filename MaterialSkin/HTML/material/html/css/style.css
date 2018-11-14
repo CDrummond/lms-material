@@ -41,31 +41,6 @@ a {
     min-height:400px;
 }
 
-.lms-footer {
-    position:fixed;
-    bottom:0;
-    width:100%;
-    padding:0 !important;
-    max-height:56px !important;
-}
-
-.lms-bottom-nav {
-    position:relative !important;
-    height:58px !important;
-    top:-59px !important;
-}
-
-.lms-bottom-nav-button {
-    width:33.3333% !important;
-    max-width:250px !important;
-}
-
-.lms-bottom-nav-button > .v-btn__content > span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:100% !important;
-}
-
 .lms-search {
     width:100%;
 }

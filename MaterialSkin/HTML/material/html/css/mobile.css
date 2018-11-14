@@ -5,21 +5,27 @@
  * MIT license.
  */
 
+:root {
+    --main-toolbar-height: 56px;
+    --sub-toolbar-height: 48px;
+    --bottom-nav-height: 58px;
+}
+
 .lms-toolbar {
-    height:56px !important;
+    height:var(--main-toolbar-height) !important;
 }
 
 .lms-toolbar > .v-toolbar__content {
-    height: 56px !important;
+    height: var(--main-toolbar-height) !important;
     margin-left: -7px !important;
     margin-right: -8px !important;
 }
 
 .subtoolbar {
     position:fixed;
-    top:56px;
+    top:var(--main-toolbar-height);
     width:100vw;
-    height:48px !important;
+    height:var(--sub-toolbar-height) !important;
     white-space:nowrap;
     overflow-x:hidden;
     overflow-y:hidden;
@@ -30,10 +36,36 @@
     float: left;
 }
 
+
+.lms-footer {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    padding:0 !important;
+    max-height:var(--bottom-nav-height) !important;
+}
+
+.lms-bottom-nav {
+    position:relative !important;
+    height:var(--bottom-nav-height) !important;
+    top:calc(-1 * (var(--bottom-nav-height) + 1px)) !important;
+}
+
+.lms-bottom-nav-button {
+    width:33.3333% !important;
+    max-width:250px !important;
+}
+
+.lms-bottom-nav-button > .v-btn__content > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width:100% !important;
+}
+
 .lms-list {
     position:fixed;
-    top:56px;
-    height:calc((var(--vh, 1vh)*100) - 112px);
+    top:var(--main-toolbar-height);
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 2px));
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;
@@ -41,8 +73,8 @@
 
 .lms-list-sub {
     position:fixed;
-    top:102px;
-    height:calc((var(--vh, 1vh)*100) - 158px);
+    top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height) - 2px);
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) - 4px));
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;
@@ -50,8 +82,8 @@
 
 .lms-image-grid {
     position:fixed;
-    top:102px;
-    height:calc((var(--vh, 1vh)*100) - 158px);
+    top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height) - 2px);
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) - 4px));
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;
@@ -76,7 +108,7 @@
 .np-image {
     display: block;
     object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - 102px); /* Work-around chrome mobile 100vh - see main.js */
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 12px));
     width:calc(100vw - 16px);
     margin-left: auto;
     margin-right: auto;
@@ -122,7 +154,7 @@
 }
 
 .np-info-text {
-    height:calc((var(--vh, 1vh)*100) - 212px); /* Work-around chrome mobile 100vh - see main.js */
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 50px));
     overflow:auto;
 }
 

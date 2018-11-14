@@ -9,6 +9,8 @@
 6. Colour current track in queue.
 7. Don't check artist/album in MusicArtistInfo is same as current track, as the
    plugin may remove characters (e.g. brackets).
+8. Clicking on title in browse sub-toolbar will produce a menu allowing
+   navigation back multiple levels.
 
 0.0.9
 -----

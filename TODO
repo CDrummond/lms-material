@@ -5,13 +5,10 @@
     - disabled for now
 
 - Browse
-  - Add history menu, allowing to go back multilpe steps
   - SlimBrowse
     - Fully handle commands
       - 'More'
       - Check all
-  - click() needs to allow itemplay for menu lists.
-  - Replace ... menu with a play button/long press menu?
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
 

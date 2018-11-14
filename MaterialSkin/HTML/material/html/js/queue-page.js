@@ -20,7 +20,7 @@ function queueItemCover(item) {
     return resolveImage("music/0/cover_50x50");
 }
 
-function parseResp(data) {
+function parseResp(data, showTrackNum) {
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;
@@ -29,7 +29,7 @@ function parseResp(data) {
         if (data.result.playlist_loop) {
             data.result.playlist_loop.forEach(i => {
                 var title = i.title;
-                if (i.tracknum>0) {
+                if (showTrackNum && i.tracknum>0) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                 }
                 var subtitle = i.artist;
@@ -164,6 +164,17 @@ var lmsQueue = Vue.component("lms-queue", {
         this.isVisible = true;
         this.autoScrollRequired = false;
         this.previousScrollPos = 0;
+        this.showTrackNum = getLocalStorageBool('showTrackNum', true);
+        lmsCommand("", ["pref", "titleFormatWeb", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2) {
+                var idx = parseInt(data.result && data.result._p2);
+                lmsCommand("", ["pref", "titleFormat", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 && idx<data.result._p2.length) {
+                        this.showTrackNum = data.result._p2[idx].includes("TRACKNUM");
+                    }
+                });
+            }
+        });
     },
     mounted() {
         this.listSize = this.items.length;
@@ -247,7 +258,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
                 lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                     this.fetchingItems = false;
-                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
+                    var resp = parseResp(data, this.showTrackNum);
                     if (resp && resp.items) {
                         resp.items.forEach(i => {
                             this.items.push(i);
@@ -351,7 +362,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuyK"], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data);
+                var resp = parseResp(data, this.showTrackNum);
                 if (this.items.length && resp.items.length) {
                     resp.items.forEach(i => {
                         this.items.push(i);

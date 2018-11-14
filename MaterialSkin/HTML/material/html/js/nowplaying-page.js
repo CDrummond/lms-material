@@ -251,12 +251,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         fetchLyrics() {
             if (this.info.tabs[0].songartist!=this.playerStatus.current.artist || this.info.tabs[0].songtitle!=this.playerStatus.current.title) {
                 this.info.tabs[0].text=i18n("Fetching...");
+                this.info.tabs[0].songartist=this.playerStatus.current.artist;
+                this.info.tabs[0].songtitle=this.playerStatus.current.title;
                 lmsCommand("", ["musicartistinfo", "lyrics", "artist:"+this.playerStatus.current.artist, "title:"+this.playerStatus.current.title, "html:1"]).then(({data}) => {
-                    if (data && data.result && (data.result.lyrics || data.result.error) && data.result.artist==this.playerStatus.current.artist &&
-                        data.result.title==this.playerStatus.current.title) {
+                    if (data && data.result && (data.result.lyrics || data.result.error)) {
                         this.info.tabs[0].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
-                        this.info.tabs[0].songartist=this.playerStatus.current.artist;
-                        this.info.tabs[0].songtitle=this.playerStatus.current.title;
                     }
                 });
             }
@@ -264,10 +263,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         fetchBio() {
             if (this.info.tabs[1].songartist!=this.playerStatus.current.artist) {
                 this.info.tabs[1].text=i18n("Fetching...");
+                this.info.tabs[1].songartist=this.playerStatus.current.artist;
                 lmsCommand("", ["musicartistinfo", "biography", "artist:"+this.playerStatus.current.artist, "html:1"]).then(({data}) => {
-                    if (data && data.result && (data.result.biography || data.result.error) && data.result.artist==this.playerStatus.current.artist) {
+                    if (data && data.result && (data.result.biography || data.result.error)) {
                         this.info.tabs[1].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
-                        this.info.tabs[1].songartist=this.playerStatus.current.artist;
                     }
                 });
             }
@@ -275,12 +274,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         fetchReview() {
             if (this.info.tabs[2].songartist!=this.playerStatus.current.artist || this.info.tabs[2].songalbum!=this.playerStatus.current.album) {
                 this.info.tabs[2].text=i18n("Fetching...");
+                this.info.tabs[2].songartist=this.playerStatus.current.artist;
+                this.info.tabs[2].songalbum=this.playerStatus.current.album;
                 lmsCommand("", ["musicartistinfo", "albumreview", "artist:"+this.playerStatus.current.artist, "album:"+this.playerStatus.current.album, "html:1"]).then(({data}) => {
-                    if (data && data.result && (data.result.albumreview || data.result.error) && data.result.artist==this.playerStatus.current.artist &&
-                        data.result.album==this.playerStatus.current.album) {
+                    if (data && data.result && (data.result.albumreview || data.result.error)) {
                         this.info.tabs[2].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
-                        this.info.tabs[2].songartist=this.playerStatus.current.artist;
-                        this.info.tabs[2].songalbum=this.playerStatus.current.album;
                     }
                 });
             }

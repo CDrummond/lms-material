@@ -6,6 +6,9 @@
    or actions.go=play
 4. Initial work on desktop UI.
 5. Check with server to determine whether to show track numbers in queue.
+6. Colour current track in queue.
+7. Don't check artist/album in MusicArtistInfo is same as current track, as the
+   plugin may remove characters (e.g. brackets).
 
 0.0.9
 -----

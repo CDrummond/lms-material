@@ -1073,27 +1073,35 @@ var lmsBrowse = Vue.component("lms-browse", {
                         id: TOP_APPS_ID });
         },
         playerMenu() {
+            console.log("Update playr menu");
             if (this.serverTop.length>0 && this.serverTop[0].player==this.playerId()) {
+                console.log("Player has not changed");
                 return;
             }
 
             if (this.fetchingItems) {
+                console.log("Currently fetching items, so tray again in 250ms");
                 if (this.playerMenuTimeout) {
                     clearTimeout(this.playerMenuTimeout);
                 }
                 this.playerMenuTimeout = setTimeout(function () {
+                    console.log("Timeout, call playerMenu");
                     this.playerMenu();
                 }.bind(this), 250);
                 return;
             }
 
             this.fetchingItems=true;
+            console.log("Fetch player menu items");
             lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
+                console.log("Got response");
                 if (data && data.result && data.result.item_loop) {
+                    console.log("Clear current menu, and iterate response");
                     this.serverTop = [];
                     this.serverTop.push({ header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" });
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
+                            console.log("Got music item " + c.id);
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
                                 var command = this.buildCommand(c, "go", false, true);
                                 var item = { title: c.text,
@@ -1130,8 +1138,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id.startsWith("myMusicFlopTracks")) {
                                     item.icon = "arrow_downward";
                                 }
+                                console.log("add item");
                                 this.serverTop.push(item);
                             } else if (c.id=="randomplay") {
+                                console.log("add random");
                                 this.serverTop.push({ title: i18n("Random Mix"),
                                                       icon: "shuffle",
                                                       id: TOP_RANDOM_MIX_ID,
@@ -1139,16 +1149,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         }
                     });
+                    console.log("parsed items");
                     this.serverTop.sort(function(a, b) { return a.weight!=b.weight ? a.weight>b.weight : titleSort(a, b); });
                     this.addExtraItems(this.serverTop, false);
+                    console.log("Store player id");
                     this.serverTop[0].player=this.playerId();
+                    console.log("sm:"+this.$store.state.serverMenus+" hl:"+this.history.length);
                     if (this.$store.state.serverMenus && 0==this.history.length) {
+                        console.log("set items to these");
                         this.items = this.serverTop;
                     }
                 }
                 this.fetchingItems=false;
+                console.log("player menu updated");
             }).catch(err => {
                 this.fetchingItems = false;
+                console.log("Error loading player menu " +err);
                 this.showError(err);
             });
         },

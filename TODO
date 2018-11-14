@@ -15,6 +15,9 @@
   - Favourites
     - Before showing menu, check if item is in favourites - and adjust entries?
 
+- Queue
+  - Set current highlight diffeently for dark/light
+
 - Misc
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
@@ -26,10 +29,4 @@
       - at start of song, and near end poll every (e.g.) 0.5 seconds
     - Create timer to advance song progress - re-adjust on each poll
     - or use ["time", "?"] to just obtain time position every second?
-
-- Queue
-  - Set current highlight diffeently for dark/light
-
-- Desktop UI
-  - Spinner should be in middle of its view, not page
 

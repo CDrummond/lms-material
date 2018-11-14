@@ -21,6 +21,7 @@ var app = new Vue({
         this.$store.commit('initUiSettings');
         this.splitterPercent = getLocalStorageVal("splitter", "50");
         this.splitter = this.splitterPercent;
+        document.documentElement.style.setProperty('--splitter-pc', 50);
         initApp();
     },
     computed: {
@@ -39,6 +40,7 @@ var app = new Vue({
             var f = Math.floor(val/2)*2;
             if (f!=this.splitter) {
                 setLocalStorageVal("splitter", f);
+                document.documentElement.style.setProperty('--splitter-pc', f);
                 this.splitter=f;
             }
         }

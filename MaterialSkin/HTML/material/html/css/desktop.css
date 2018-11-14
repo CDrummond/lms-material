@@ -9,6 +9,7 @@
     --main-toolbar-height: 44px;
     --sub-toolbar-height: 48px;
     --bottom-toolbar-height: 80px;
+    --bottom-toolbar-height: calc(80px + var(--safe-area-bottom));
 }
 
 body {
@@ -110,7 +111,7 @@ body {
 .np-subtext {
     font-weight:400; 
     margin:0px 8px 0px 8px; 
-    max-width:calc(100vw - 400px );
+    max-width:calc(100vw - (400px - var(--safe-area-bottom)));
     /*height:22px; */
 }
 
@@ -141,7 +142,7 @@ body {
 
 .np-time {
     position:fixed;
-    bottom:25px;
+    bottom:calc(25px + var(--safe-area-bottom));
     right:12px;
     font-size: 75%;
     font-weight: 400;

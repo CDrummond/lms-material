@@ -20,15 +20,15 @@
     <link href="html/lib/mobile-drag-drop.css?r=2.3.0-rc.1" rel="stylesheet">
     <link href="html/lib/photoswipe/photoswipe.css?r=4.1.2" rel="stylesheet">
     <link href="html/lib/photoswipe/default-skin/default-skin.css?r=4.1.2" rel="stylesheet">
-    <link href="html/css/style.css" rel="stylesheet">
-    <link href="html/css/desktop.css" rel="stylesheet">
-    <link rel="icon" href="images/icon.png">
-    <link rel="manifest" href="manifest.json"> <!-- TODO desktop -->
+    <link href="html/css/style.css?r=[% material_revision %]"" rel="stylesheet">
+    <link href="html/css/desktop.css?r=[% material_revision %]"" rel="stylesheet">
+    <link rel="icon" href="html/images/icon.png?r=[% material_revision %]"">
+    <link rel="manifest" href="manifest.json?r=[% material_revision %]""> <!-- TODO desktop -->
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Logitech Media Server">
-    <link href="images/icon-ios.png" rel="apple-touch-icon" sizes="128x128">
-    <link href="images/icon-ios.png" rel="shortcut" sizes="128x128">
+    <link href="html/images/icon-ios.png" rel="apple-touch-icon" sizes="128x128">
+    <link href="html/images/icon-ios.png" rel="shortcut" sizes="128x128">
   </head>
   <body>
     <div id="app" v-cloak>
@@ -51,6 +51,7 @@
       </v-app>
     </div>
 
+    <script>const LMS_MATERIAL_REVISION="[% material_revision %]";</script>
     <script src="html/lib/axios.min.js?r=0.18.0"></script>
     <script src="html/lib/vue.min.js?r=2.5.17"></script>
     <script src="html/lib/vuetify.min.js?r=1.3.5"></script>

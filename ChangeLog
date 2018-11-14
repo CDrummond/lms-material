@@ -5,6 +5,7 @@
 3. Show context menu when clicking on an item that has actions.go=playControl
    or actions.go=play
 4. Initial work on desktop UI.
+5. Check with server to determine whether to show track numbers in queue.
 
 0.0.9
 -----

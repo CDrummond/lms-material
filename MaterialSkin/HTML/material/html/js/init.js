@@ -5,7 +5,7 @@
  * MIT license.
  */
  
-function initApp(desktop) {
+function initApp() {
     var t = getLocalStorageVal('translation', undefined);
     if (t!=undefined) {
         setTranslation(JSON.parse(t));

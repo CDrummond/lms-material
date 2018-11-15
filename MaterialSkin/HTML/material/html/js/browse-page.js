@@ -1143,7 +1143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         }
                     });
-                    this.serverTop.sort(function(a, b) { return a.weight!=b.weight ? a.weight>b.weight : titleSort(a, b); });
+                    this.serverTop.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
                     this.addExtraItems(this.serverTop, false);
                     this.serverTop[0].player=this.playerId();
                     if (this.$store.state.serverMenus && 0==this.history.length) {

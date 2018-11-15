@@ -58,7 +58,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info"  v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
  <v-btn icon v-else-if="!desktop && playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
@@ -75,7 +75,7 @@ Vue.component('lms-toolbar', {
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
  </v-btn>
- <v-btn icon v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
  <v-menu bottom left>
@@ -100,7 +100,7 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
-                 trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined},
+                 trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined, info:undefined},
                  infoOpen: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined}
                }
@@ -194,7 +194,8 @@ Vue.component('lms-toolbar', {
             TB_MANAGE_PLAYERS.title=i18n('Manage Players');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_MANAGE_PLAYERS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
-                          managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing')};
+                          managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing'),
+                          info:i18n("Show current track information")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

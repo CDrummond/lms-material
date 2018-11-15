@@ -186,11 +186,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.current.title!=this.playerStatus.current.title) {
                 this.playerStatus.current.title = playerStatus.current.title;
             }
-            if (playerStatus.current.artist!=this.playerStatus.current.artist) {
+            if (playerStatus.current.artist!=this.playerStatus.current.artist ||
+                playerStatus.current.artist_id!=this.playerStatus.current.artist_id) {
                 this.playerStatus.current.artist = playerStatus.current.artist;
+                this.playerStatus.current.artist_id = playerStatus.current.artist_id;
             }
-            if (playerStatus.current.album!=this.playerStatus.current.albumName) {
+            if (playerStatus.current.album!=this.playerStatus.current.albumName ||
+                playerStatus.current.album_id!=this.playerStatus.current.album_id) {
                 this.playerStatus.current.albumName = playerStatus.current.album;
+                this.playerStatus.current.album_id = playerStatus.current.album_id;
                 if (playerStatus.current.year) {
                     this.playerStatus.current.album = this.playerStatus.current.albumName+" ("+ playerStatus.current.year+")";
                 } else {
@@ -249,15 +253,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchLyrics() {
-            if (this.info.tabs[0].songartist!=this.playerStatus.current.artist || this.info.tabs[0].songtitle!=this.playerStatus.current.title) {
+            if (this.info.tabs[0].songartist!=this.playerStatus.current.artist || this.info.tabs[0].songtitle!=this.playerStatus.current.title ||
+                (this.playerStatus.current.artist_id && this.info.tabs[0].songartist_id!=this.playerStatus.current.artist_id)) {
                 this.info.tabs[0].text=i18n("Fetching...");
                 this.info.tabs[0].songartist=this.playerStatus.current.artist;
+                this.info.tabs[0].songartist_id=this.playerStatus.current.artist_id;
                 this.info.tabs[0].songtitle=this.playerStatus.current.title;
-                var command = ["musicartistinfo", "lyrics", "title:"+this.playerStatus.current.title, "html:1"];
+                var command = ["musicartistinfo", "lyrics", "title:"+this.playerStatus.current.title, "artist:"+this.playerStatus.current.artist, "html:1"];
                 if (this.playerStatus.current.artist_id) {
                     command.push("artist_id:"+this.playerStatus.current.artist_id);
-                } else {
-                    command.push("artist:"+this.playerStatus.current.artist);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.lyrics || data.result.error)) {
@@ -267,14 +271,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchBio() {
-            if (this.info.tabs[1].songartist!=this.playerStatus.current.artist) {
+            if (this.info.tabs[1].songartist!=this.playerStatus.current.artist ||
+                (this.playerStatus.current.artist_id && this.info.tabs[1].songartist_id!=this.playerStatus.current.artist_id)) {
                 this.info.tabs[1].text=i18n("Fetching...");
                 this.info.tabs[1].songartist=this.playerStatus.current.artist;
-                var command = ["musicartistinfo", "biography", "html:1"];
+                this.info.tabs[1].songartist_id=this.playerStatus.current.artist_id;
+                var command = ["musicartistinfo", "biography", "artist:"+this.playerStatus.current.artist, "html:1"];
                 if (this.playerStatus.current.artist_id) {
                     command.push("artist_id:"+this.playerStatus.current.artist_id);
-                } else {
-                    command.push("artist:"+this.playerStatus.current.artist);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.biography || data.result.error)) {
@@ -284,20 +288,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchReview() {
-            if (this.info.tabs[2].songartist!=this.playerStatus.current.artist || this.info.tabs[2].songalbum!=this.playerStatus.current.album) {
+            if (this.info.tabs[2].songartist!=this.playerStatus.current.artist || this.info.tabs[2].songalbum!=this.playerStatus.current.album ||
+                (this.playerStatus.current.artist_id && this.info.tabs[2].songartist_id!=this.playerStatus.current.artist_id) ||
+                (this.playerStatus.current.album_id && this.info.tabs[2].songalbum_id!=this.playerStatus.current.album_id)) {
                 this.info.tabs[2].text=i18n("Fetching...");
                 this.info.tabs[2].songartist=this.playerStatus.current.artist;
                 this.info.tabs[2].songalbum=this.playerStatus.current.album;
-                var command = ["musicartistinfo", "albumreview", "html:1"];
+                this.info.tabs[2].songartist_id=this.playerStatus.current.artist_id;
+                this.info.tabs[2].songalbum_id=this.playerStatus.current.album_id;
+                var command = ["musicartistinfo", "albumreview", "artist:"+this.playerStatus.current.artist, "album:"+this.playerStatus.current.album, "html:1"];
                 if (this.playerStatus.current.artist_id) {
                     command.push("artist_id:"+this.playerStatus.current.artist_id);
-                } else {
-                    command.push("artist:"+this.playerStatus.current.artist);
                 }
                 if (this.playerStatus.current.album_id) {
                     command.push("album_id:"+this.playerStatus.current.album_id);
-                } else {
-                    command.push("album:"+this.playerStatus.current.album);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.albumreview || data.result.error)) {

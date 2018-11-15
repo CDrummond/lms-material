@@ -155,8 +155,8 @@ const store = new Vuex.Store({
             setTheme(state.darkUi);
             
             // Music and Artist info plugin installled?
-            lmsCommand("", ["musicartistinfo", "localfiles", 0, 0]).then(({data}) => {
-                state.infoPlugin = data && data.result && data.result.window ? true : false;
+            lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
+                state.infoPlugin = data && data.result && data.result._can ? true : false;
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
             }).catch(err => {
                 state.infoPlugin = false;

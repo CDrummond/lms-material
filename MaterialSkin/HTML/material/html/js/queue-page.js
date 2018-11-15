@@ -87,17 +87,17 @@ var lmsQueue = Vue.component("lms-queue", {
         <v-layout>
           <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
-          <v-btn flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
-          <v-btn flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
-          <v-btn flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
+          <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+          <v-btn :title="trans.repeatAll" flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+          <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
 
-          <v-btn flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-          <v-btn flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
-          <v-btn flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleAlbums" flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
           <v-divider vertical="true" v-if="desktop"></v-divider>
-          <v-btn flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
-          <v-btn flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-          <v-btn flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
+          <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
+          <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
+          <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
         </v-layout>
       </v-card>
       <v-list class="lms-list-sub"  id="queue-list">
@@ -152,7 +152,9 @@ var lmsQueue = Vue.component("lms-queue", {
             trackCount:0,
             duration: 0.0,
             playerStatus: { ison:1, shuffle:0, repeat: 0 },
-            trans: { ok: undefined, cancel: undefined },
+            trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, saveAs:undefined, clear:undefined,
+                     repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
+                     shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0}
         }
     },
@@ -286,7 +288,11 @@ var lmsQueue = Vue.component("lms-queue", {
             PQ_PLAY_NEXT_ACTION.title=i18n('Move to next in queue');
             PQ_REMOVE_ACTION.title=i18n('Remove from queue');
             PQ_MORE_ACTION.title=i18n("More");
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel') };
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'),
+                          scrollToCurrent:i18n("Scroll to current track"),
+                          save:i18n("Save"), clear:i18n("Clear"),
+                          repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
+                          shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
         },
         showError(msg) {
             this.snackbar = {msg: msg + (err ? " (" + err+")" : ""), show: true, color: 'error' };

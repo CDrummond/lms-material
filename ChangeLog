@@ -11,6 +11,7 @@
    plugin may remove characters (e.g. brackets).
 8. Clicking on title in browse sub-toolbar will produce a menu allowing
    navigation back multiple levels.
+9. Fix language update causing browse items to dissapear.
 
 0.0.9
 -----

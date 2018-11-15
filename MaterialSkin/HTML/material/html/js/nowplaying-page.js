@@ -96,9 +96,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs4>
     <v-layout text-xs-center>
      <v-flex xs6>
-      <v-btn flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
-      <v-btn flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
-      <v-btn flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed"><v-icon>repeat</v-icon></v-btn>
+      <v-btn :title="trans.repeatOne" flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+      <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+      <v-btn :title="trans.repeatOff" flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed"><v-icon>repeat</v-icon></v-btn>
      </v-flex>
      <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
     </v-layout>
@@ -111,9 +111,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-layout text-xs-center>
      <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn></v-flex>
      <v-flex xs6>
-      <v-btn flat icon v-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-      <v-btn flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
-      <v-btn flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed"><v-icon>shuffle</v-icon></v-btn>
+      <v-btn :title="trans.shuffleAlbums" flat icon v-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+      <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+      <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed"><v-icon>shuffle</v-icon></v-btn>
      </v-flex>
     </v-layout>
    </v-flex>
@@ -135,7 +135,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  info: { show: false, tab:0,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
-                 trans: { close: undefined }
+                 trans: { close: undefined,
+                          repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
+                          shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined }
                 };
     },
     mounted() {
@@ -224,7 +226,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     methods: {
         initItems() {
-            this.trans.close=i18n("Close");
+            this.trans = { close:i18n("Close"),
+                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
+                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle")};
             this.menu.text=i18n("Show information");
             this.info.tabs[0].title=i18n("Lyrics");
             this.info.tabs[1].title=i18n("Artist Biography");

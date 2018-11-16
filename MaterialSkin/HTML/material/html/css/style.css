@@ -283,6 +283,10 @@ a {
     height: auto;
 }
 
+.v-list__tile__action .v-input--switch {
+    max-width:36px;
+}
+
 .v-dialog .v-card .v-card__text .v-list--two-line .v-list__tile {
     margin-top: 8px;
     margin-bottom: 8px;

@@ -388,6 +388,7 @@ function parseBrowseResp(data, parent, options, idStart) {
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
+            var allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
             data.result.titles_loop.forEach(i => {
                 var title = i.title;
                 if (i.tracknum>0) {
@@ -403,7 +404,9 @@ function parseBrowseResp(data, parent, options, idStart) {
                               title: title,
                               subtitle: formatSeconds(i.duration),
                               //icon: "music_note",
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
+                              menuActions: allowPlayAlbum && (undefined==idStart || idStart>0 || resp.items.length>0)
+                                            ? [PLAY_ACTION, PLAY_ALBUM_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION] 
+                                            : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
                               type: "track"
                           });
             });

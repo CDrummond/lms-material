@@ -4,7 +4,7 @@
  * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
- 
+
 function initApp() {
     var t = getLocalStorageVal('translation', undefined);
     if (t!=undefined) {

@@ -27,6 +27,10 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
     </v-list-tile>
    
+    <v-list-tile>
+     <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+
     <div class="settings-pad"></div>
     <v-header>{{i18n('Browse')}}</v-header>
     <v-list-tile>
@@ -94,7 +98,7 @@ Vue.component('lms-ui-settings', {
  </v-card>
 </v-dialog>
 `,
-    props: [],
+    props: [ 'desktop' ],
     data() {
         return {
             show: false,
@@ -108,7 +112,9 @@ Vue.component('lms-ui-settings', {
             autoScrollQueue:true,
             albumSorts:[],
             library: null,
-            libraries: []
+            libraries: [],
+            layout: null,
+            layoutItems: []
         }
     },
     mounted() {
@@ -123,6 +129,8 @@ Vue.component('lms-ui-settings', {
                 this.sortFavorites = this.$store.state.sortFavorites;
                 this.serverMenus = this.$store.state.serverMenus;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
+                this.layout = getLocalStorageVal("layout", "auto");
+                this.layoutOrig = this.layout;
                 this.show = true;
 
                 lmsList("", ["libraries"]).then(({data}) => {
@@ -171,6 +179,11 @@ Vue.component('lms-ui-settings', {
                 { key:"yearalbum",       label:i18n("Year, Album")},
                 { key:"yearartistalbum", label:i18n("Year, Artist, Album")}
                 ];
+            this.layoutItems=[
+                { key:"auto",    label:i18n("Automatic")},
+                { key:"desktop", label:i18n("Use desktop layout")},
+                { key:"mobile",  label:i18n("Use mobile layout")}
+                ];
         },
         close() {
             this.show=false;
@@ -186,6 +199,16 @@ Vue.component('lms-ui-settings', {
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
+            }
+            if (this.layout != this.layoutOrig) {
+                setLocalStorageVal("layout", this.layout);
+                if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout)) {
+                    this.$confirm(i18n("You have changed the application layout setting. Do you wish to re-load the page, so that this can take effect?"), {buttonTrueText: i18n('Reload'), buttonFalseText: i18n('Stay As Is')}).then(res => {
+                        if (res) {
+                            window.location.href = this.layout;
+                        }
+                    });
+                }
             }
         },
         i18n(str) {

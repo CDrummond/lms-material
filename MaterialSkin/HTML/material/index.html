@@ -11,9 +11,15 @@
     <title>Logitech Media Server</title>
   </head>
   <body>
+    <script src="html/lib/vue.min.js?r=2.5.17"></script>
     <script src="html/js/utils.js?r=[% material_revision %]"></script>
     <script>
-      window.location.href = isMobile() ? "mobile" : "desktop";
+        var cfg = getLocalStorageVal("layout", "auto");
+        if (cfg == "desktop" || cfg == "mobile") {
+            window.location.href = cfg;
+        } else {
+            window.location.href = isMobile() ? "mobile" : "desktop";
+        }
     </script>
   </body>
 </html>

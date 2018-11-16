@@ -1,16 +1,17 @@
 - Bugs:
-  - Drag'n'drop, not working on Android Firefox
+  - Drag'n'drop not working on Android Firefox
   - Issues with virtual scroller
     - Navigate into 'Apps' (when only have a few), and back out; not all items drawn
     - disabled for now
 
 - Browse
-  - SlimBrowse
-    - Fully handle commands
-      - 'More'
-      - Check all
-  - Favourites
-    - Before showing menu, check if item is in favourites - and adjust entries?
+  - Fully handle SlimBrowse commands - e.g. buttons, radios, checkboxes
+  - Before showing menu, check if item is in favourites - and adjust entries?
+  - Grid view for albums, and artists (if using artist images). Other lists?
+
+- Now playing
+  - Show more info for desktop view. e.g. expand 3 tabs into 3 columns
+  - Draw album cover as backdrop?
 
 - Misc
   - Group management

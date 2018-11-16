@@ -49,13 +49,15 @@ var lmsServer = Vue.component('lms-server', {
                 if (data && data.result && data.result.players_loop) {
                     var players = [];
                     data.result.players_loop.forEach(i => {
-                        players.push({ id: i.playerid,
-                                       name: i.name,
-                                       canpoweroff: 1===i.canpoweroff,
-                                       ison: 1===i.power,
-                                       isconnected: 1===i.connected,
-                                       isgroup: 'group'===i.model
-                                      });
+                        if (1===i.connected) {
+                            players.push({ id: i.playerid,
+                                           name: i.name,
+                                           canpoweroff: 1===i.canpoweroff,
+                                           ison: 1===i.power,
+                                           isconnected: 1===i.connected,
+                                           isgroup: 'group'===i.model
+                                          });
+                        }
                     });
                     this.$store.commit('setPlayers', players.sort(function(a, b) {
                                                                         if (a.isgroup!=b.isgroup) {

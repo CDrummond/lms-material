@@ -65,8 +65,8 @@ body {
 
 .browse-progress {
     z-index:2;
-    position: absolute;
-    top: calc((var(--vh, 1vh)*50) - 36px);
+    position: fixed;
+    top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 36px));
     left: calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
 }
 

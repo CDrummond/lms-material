@@ -739,6 +739,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         }
 
+                        if (loadingItem.id.startsWith("album_id:")  || loadingItem.id.startsWith("artist_id:")) {
+                            loadingItem.params.forEach(p => {
+                                if ( (!this.options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
+                                     (!this.options.noGenreFilter && p.startsWith("genre_id:"))) {
+                                    command.command.push(p);
+                                }
+                            });
+                        }
+
                         command.command.push(loadingItem.id);
                     }
                 }

@@ -1,5 +1,9 @@
+0.1.1
+-----
+1. Only list players that are connected.
+
 0.1.0
-------
+-----
  1. After list is loaded, wait until next tick to scroll to top.
  2. Fix detection of first valid album when getting A..Z lists.
  3. Show context menu when clicking on an item that has actions.go=playControl
@@ -11,7 +15,7 @@
     plugin may remove characters (e.g. brackets).
  8. Clicking on title in browse sub-toolbar will produce a menu allowing
     navigation back multiple levels.
- 9. Fix language update causing browse items to dissapear.
+ 9. Fix language update causing browse items to disappear.
 10. Use artist_id and album_id to obtain info if available.
 
 0.0.9

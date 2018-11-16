@@ -19,9 +19,9 @@ var app = new Vue({
             lmsServerAddress = "http://"+res[1]+":9000";
         }
         this.$store.commit('initUiSettings');
-        this.splitterPercent = getLocalStorageVal("splitter", "50");
+        this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;
-        document.documentElement.style.setProperty('--splitter-pc', 50);
+        document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         initApp();
     },
     computed: {

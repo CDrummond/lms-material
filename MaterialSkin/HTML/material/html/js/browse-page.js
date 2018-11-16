@@ -6,6 +6,7 @@
  */
 
 var PLAY_ACTION             = {cmd:"play",       icon:"play_circle_outline"};
+var PLAY_ALBUM_ACTION       = {cmd:"play_album", icon:"album"};
 var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
 var INSERT_ACTION           = {cmd:"add-hold",   icon:"format_indent_increase"};
 var MORE_ACTION             = {cmd:"more",       icon:"more_horiz"};
@@ -295,6 +296,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     methods: {
         initItems() {
             PLAY_ACTION.title=i18n("Play now");
+            PLAY_ALBUM_ACTION.title=i18n("Play album starting at track");
             ADD_ACTION.title=i18n("Append to queue");
             ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
             INSERT_ACTION.title=i18n("Play next");
@@ -721,7 +723,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else if (item.app && item.id) {
                         command.command = [item.app, "playlist", act, item.id];
                     } else if (item.id) {
-                        command.command = ["playlistcontrol", "cmd:"+(act=="play" ? "load" : act), item.id];
+                        var itemId = item.id;
+                        var loadingItem = item;
+                        command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION.cmd || act==PLAY_ALBUM_ACTION.cmd ? "load" : act)];
+
+                        // NOTE(a): Play whole album, starting at selected track. First load album, then play track at index
+                        if (PLAY_ALBUM_ACTION.cmd == act && item.id.startsWith("track_id:") && this.current && this.current.id &&
+                            this.current.id.startsWith("album_id:") ) {
+                            for (var idx=0; idx<this.items.length; ++idx) {
+                                if (this.items[idx].id == item.id) {
+                                    loadingItem = this.current;
+                                    command.command.push("play_index:"+idx);
+                                    break;
+                                }
+                            }
+                        }
+
+                        command.command.push(loadingItem.id);
                     }
                 }
 
@@ -737,11 +755,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                     });
                 }
 
-                //console.log("ACTION", command.command);
+                console.log("ACTION", command.command);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     if (!this.desktop) {
                         if (act===PLAY_ACTION.cmd) {
+                            this.$router.push('/nowplaying');
+                        } else if (act==PLAY_ALBUM_ACTION.cmd || act==PLAY_ALBUM_ACTION.cmd) {
                             this.$router.push('/nowplaying');
                         } else if (act===ADD_ACTION.cmd) {
                             this.showMessage(i18n("Appended '%1' to the play queue", item.title));

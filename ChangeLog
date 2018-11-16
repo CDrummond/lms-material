@@ -1,6 +1,8 @@
 0.1.1
 -----
 1. Only list players that are connected.
+2. Add 'Play album starting at track' item to track context menus. Only if
+   parent is an album, and track is not 1st track.
 
 0.1.0
 -----

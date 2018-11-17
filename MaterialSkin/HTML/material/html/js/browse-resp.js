@@ -8,11 +8,11 @@
 const MORE_COMMANDS = ["item_add", "item_insert", "itemplay", "item_fav"];
 
 function parseBrowseResp(data, parent, options, idStart) {
-    var resp = {items: [], baseActions:[], grid: false };
+    var resp = {items: [], baseActions:[], useGrid: false };
 
     try{
     if (data && data.result) {
-        //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
+        console.log("RESP", JSON.stringify(data.result, null, 2), parent);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 resp.items.push({header: i18n("Artists")});
@@ -22,7 +22,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   title: i.contributor,
                                   command: ["albums"],
                                   params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image_100x100_o" : undefined,
+                                  image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION], MORE_LIB_ACTION,
                                   type: "group",
@@ -38,7 +38,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   title: i.album,
                                   command: ["tracks"],
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, "sort:tracknum"],
-                                  image: lmsServerAddress+"/music/" + i.artwork + "/cover_100x100_o"  ,
+                                  image: lmsServerAddress+"/music/" + i.artwork + "/cover" + LMS_LIST_IMAGE_SIZE,
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                                   type: "group",
                                   favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
@@ -51,7 +51,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
-                                  image: lmsServerAddress+"/music/" + i.coverid + "/cover_100x100_o"  ,
+                                  image: lmsServerAddress+"/music/" + i.coverid + "/cover" +LMS_LIST_IMAGE_SIZE,
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
                                   type: "track"
                               });
@@ -155,12 +155,19 @@ function parseBrowseResp(data, parent, options, idStart) {
             var isApps = parent && parent.id && parent.id===TOP_APPS_ID;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
+
+            resp.useGrid = options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
                 playAction = undefined != resp.baseActions[PLAY_ACTION.cmd];
                 addAction = undefined != resp.baseActions[ADD_ACTION.cmd];
                 insertAction = undefined != resp.baseActions[INSERT_ACTION.cmd];
                 moreAction = undefined!=resp.baseActions[MORE_ACTION.cmd];
+                if (resp.useGrid && parent && parent.actions && parent.actions.go && parent.actions.go.cmd &&
+                    parent.actions.go.cmd[0] == "playhistory") {
+                    resp.useGrid = false;
+                }
             }
 
             data.result.item_loop.forEach(i => {
@@ -171,7 +178,6 @@ function parseBrowseResp(data, parent, options, idStart) {
                 var addedPlayAction = false;
 
                 if ("text"==i.type) {
-
                     // Exclude 'More' Play,Insert,Fav commands
                     if (i.style && MORE_COMMANDS.includes(i.style)) {
                         data.result.count--;
@@ -191,7 +197,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 i.image = resolveImage(i.icon ? i.icon : i["icon-id"]);
 
                 if (!i.image && i.commonParams && i.commonParams.album_id) {
-                    i.image = resolveImage("music/0/cover_50x50");
+                    i.image = resolveImage("music/0/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
                 }
 
                 if (i.image) {
@@ -201,7 +207,6 @@ function parseBrowseResp(data, parent, options, idStart) {
                 }
                 i.menuActions=[];
                 if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
-
                     // Convert NUM. TITLE into 0NUM TITLE - e.g 1. Wibble => 01 Wibble
                     if (/^[0-9]+\.\s.+/.test(i.title)) {
                         var dot = i.title.indexOf('.');
@@ -288,12 +293,26 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.actions.go.cmd.forEach(a => {
                         if ("search" == a) {
                             i.type = "search";
+                            resp.useGrid = false;
                             return;
                         }
                     });
                 }
                 if (!i.type && i.style&& i.style=="itemNoAction") {
                     i.type = "text";
+                    resp.useGrid = false;
+                }
+
+                if (resp.useGrid && i.image) {
+                    if (i.image.endsWith("_50x50.png")) {
+                        i.image=i.image.replace("_50x50.png", LMS_GRID_IMAGE_SIZE);
+                    } else if (i.image.endsWith("50x50.png")) {
+                        i.image=i.image.replace("50x50.png", LMS_GRID_IMAGE_SIZE);
+                    } else if (i.image.endsWith("_50x50_o")) {
+                        i.image=i.image.replace("_50x50_o", LMS_GRID_IMAGE_SIZE);
+                    } else if (i.image.endsWith("50x50_o")) {
+                        i.image=i.image.replace("50x50_o", LMS_GRID_IMAGE_SIZE);
+                    }
                 }
                 resp.items.push(i);
             });
@@ -303,8 +322,10 @@ function parseBrowseResp(data, parent, options, idStart) {
                                 type: "text",
                                 id: parent.id+"."+idStart
                                });
+                resp.useGrid = false;
             } else if (haveWithoutIcons && haveWithIcons && resp.items.length == data.result.count) {
-                var defCover = parent.image ? parent.image : resolveImage("music/0/cover_50x50");
+                var defCover = parent.image ? parent.image
+                                            : resolveImage("music/0/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
                 resp.items.forEach(i => {
                     if (!i.image) {
                         i.image = defCover;
@@ -320,13 +341,14 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 });
             }
-
+            resp.useGrid = options.useGrid && options.artistImages;
             data.result.artists_loop.forEach(i => {
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               command: ["albums"],
-                              image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image_100x100_o" : undefined,
+                              image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image" +
+                                    (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE) : undefined,
                               params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                               type: "group",
@@ -342,6 +364,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : data.result.count);
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
+            resp.useGrid = options.useGrid;
             var params = [];
             if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
                 parent.params.forEach(p => {
@@ -358,20 +381,16 @@ function parseBrowseResp(data, parent, options, idStart) {
                     data.result.count--;
                     return;
                 }
-                var subtitle = i.artist ? i.artist : undefined;
+                var title = i.album;
                 if (i.year && i.year>1900) {
-                    if (i.artist) {
-                        subtitle+=" (" + i.year + ")";
-                    } else {
-                        subtitle = i.year;
-                    }
+                    title+=" (" + i.year + ")";
                 }
                 var album = {
                               id: "album_id:"+i.id,
-                              title: i.album,
-                              subtitle: subtitle,
+                              title: title,
+                              subtitle: i.artist ? i.artist : undefined,
                               command: ["tracks"],
-                              image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover_100x100_o"  ,
+                              image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE),
                               params: ["album_id:"+ i.id, TRACK_TAGS, "sort:tracknum"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                               type: "group",
@@ -642,6 +661,7 @@ function parseBrowseResp(data, parent, options, idStart) {
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
             data.result.data.forEach(i => {
                 if (i.image) {
+                    i.id = "image:"+resp.items.length,
                     i.type = "image";
                     i.src = resolveImage(null, i.image);
                     i.w=0;
@@ -652,7 +672,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             if (resp.items.length>0) {
                 resp.title=data.result.title;
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
-                resp.grid = true;
+                resp.useGrid = true;
             }
             data.result.count = resp.items.length;
         }

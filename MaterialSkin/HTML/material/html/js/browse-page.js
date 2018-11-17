@@ -114,18 +114,23 @@ var lmsBrowse = Vue.component("lms-browse", {
  </v-card>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
- <v-card v-if="grid" class="lms-image-grid">
+ <v-card v-if="useGrid" class="lms-image-grid" id="browse-grid">
   <v-container grid-list-sm fluid>
    <v-layout row wrap>
-    <v-flex v-for="(item, index) in items" :key="item.src" style="max-width:200px">
+    <v-flex v-for="(item, index) in items" :key="item.id">
      <v-card flat tile>
-      <v-card-text style>
-       <v-img :src="item.src" :lazy-src="item.src" aspect-ratio="1" @click="showImage(index)">
-        <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
-         <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        </v-layout>
-       </v-img>
+      <v-card-text v-if="item.type=='image'" class="image-grid-item">
+       <v-img :src="item.src" :lazy-src="item.src" aspect-ratio="1" @click="showImage(index)"></v-img>
        {{item.caption}}
+      </v-card-text>
+      <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">
+       <img v-lazy="item.image"></img>
+       <div class="image-grid-text">
+       <div class="ellipsis">{{item.title}}</div>
+       <div class="ellipsis">{{item.subtitle}}</div>
+       </div>
+       <v-icon v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">more_vert</v-icon>
+       <v-icon v-else-if="item.menuActions && item.menuActions.length===1" @click.stop="itemAction(item.menuActions[0].cmd, item, index)" class="image-grid-btn">{{item.menuActions[0].icon}}</v-icon>
       </v-card-text>
      </v-card>
     </v-flex>
@@ -256,12 +261,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
-                      pinned: new Set()};
+                      pinned: new Set(),
+                      useGrid: this.$store.state.useGrid};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.previousScrollPos=0;
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
         this.pinned.forEach( p => { this.options.pinned.add(p.id) });
+        this.useGrid=false;
 
         if (!this.desktop) {
             // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
@@ -442,7 +449,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     prev.headerSubTitle = this.headerSubTitle;
                     prev.menuActions = this.menuActions;
                     prev.pos=this.scrollElement.scrollTop;
-                    prev.grid=this.grid;
+                    prev.useGrid = this.useGrid;
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
                     this.history.push(prev);
@@ -452,7 +459,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.baseActions=resp.baseActions;
                     this.menuActions=[];
                     this.isTop = false;
-                    this.grid = resp.grid;
+                    var changedView = this.useGrid != resp.useGrid;
+                    this.useGrid = resp.useGrid;
 
                     if (this.current && this.current.menuActions) {
                         this.current.menuActions.forEach(i => {
@@ -473,6 +481,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     this.sortItems();
                     this.$nextTick(function () {
+                        if (changedView) {
+                            this.setScrollElement();
+                        }
                         setScrollTop(this.scrollElement, 0);
                     });
                 }
@@ -521,7 +532,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 prev.headerSubTitle = this.headerSubTitle;
                 prev.menuActions = this.menuActions;
                 prev.pos=this.scrollElement.scrollTop;
-                prev.grid=this.grid;
+                prev.useGrid=this.useGrid;
                 this.history.push(prev);
                 this.items = this.other;
                 this.headerTitle = item.title;
@@ -856,9 +867,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle=null;
             this.menuActions=[];
             this.isTop = true;
-            this.grid = false;
+            var changedView = this.useGrid;
+            this.useGrid = false;
             this.$nextTick(function () {
-                setScrollTop(this.scrollElement, prev>0 ? prev : 0);
+                if (changedView) {
+                    this.setScrollElement();
+                }
+                setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
         goTo(index) {
@@ -883,8 +898,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             var prev = this.history.pop();
+            var changedView = this.useGrid != prev.useGrid;
             this.items = prev.items;
-            this.grid = prev.grid;
+            this.useGrid = prev.useGrid;
             this.baseActions = prev.baseActions;
             this.listSize = prev.listSize;
             this.current = prev.current;
@@ -893,6 +909,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
             this.$nextTick(function () {
+                if (changedView) {
+                    this.setScrollElement();
+                }
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1214,6 +1233,42 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             }
+        },
+        setScrollElement() {
+            this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");
+            this.scrollElement.addEventListener('scroll', () => {
+                if (this.fetchingItems || this.listSize<=this.items.length || (!this.desktop && this.$route.path!='/browse')) {
+                    return;
+                }
+                const scrollY = this.scrollElement.scrollTop;
+                const visible = this.scrollElement.clientHeight;
+                const pageHeight = this.scrollElement.scrollHeight;
+                const pad = (visible*2.5);
+
+                const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+                if (bottomOfPage || pageHeight < visible) {
+                    this.fetchingItems = true;
+                    var command = this.buildCommand(this.current);
+                    var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
+                    var count = this.current.range ? (this.current.range.count-this.items.length) < LMS_BATCH_SIZE ? (this.current.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+
+                    lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                        var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
+                        if (resp && resp.items) {
+                            resp.items.forEach(i => {
+                                this.items.push(i);
+                            });
+                        }
+                        if (data && data.result && data.result.count) {
+                            this.listSize = data.result.count;
+                        }
+                        this.fetchingItems = false;
+                    }).catch(err => {
+                        this.fetchingItems = false;
+                    });
+                }
+            });
         }
     },
     mounted() {
@@ -1264,6 +1319,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         });
 
         bus.$on('browseDisplayChanged', function(act) {
+            this.options.useGrid=this.$store.state.useGrid;
             if (this.playerId() && this.$store.state.serverMenus) {
                 this.playerMenu();
             }
@@ -1279,41 +1335,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.playerMenu();
         }
 
-        this.scrollElement = document.getElementById("browse-list");
-        this.scrollElement.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || (!this.desktop && this.$route.path!='/browse')) {
-                return;
-            }
-            const scrollY = this.scrollElement.scrollTop;
-            const visible = this.scrollElement.clientHeight;
-            const pageHeight = this.scrollElement.scrollHeight;
-            const pad = (visible*2.5);
-
-            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchingItems = true;
-                var command = this.buildCommand(this.current);
-                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                var count = this.current.range ? (this.current.range.count-this.items.length) < LMS_BATCH_SIZE ? (this.current.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
-
-                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
-                    if (resp && resp.items) {
-                        resp.items.forEach(i => {
-                            this.items.push(i);
-                        });
-                    }
-                    if (data && data.result && data.result.count) {
-                        this.listSize = data.result.count;
-                    }
-                    this.fetchingItems = false;
-                }).catch(err => {
-                    this.fetchingItems = false;
-                });
-            }
-        });
-
+        this.setScrollElement();
         this.$nextTick(function () {
             setScrollTop(this.scrollElement, 0);
         });

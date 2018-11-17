@@ -49,6 +49,15 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="libraries.length>0"></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="useGrid = !useGrid" class="switch-label">
+      <v-list-tile-title>{{i18n('Use a grid for albums, and artists')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Place album covers, artist images (if supported), and others in a grid.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="useGrid"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="splitArtistsAndAlbums = !splitArtistsAndAlbums" class="switch-label">
       <v-list-tile-title>{{i18n('Split artist (and album) lists into A..Z')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Useful when browsing a large list of artists, or albums.')}}</v-list-tile-title>
@@ -106,6 +115,7 @@ Vue.component('lms-ui-settings', {
             artistAlbumSort:'yearalbum',
             albumSort:'album',
             splitArtistsAndAlbums: false,
+            useGrid:true,
             showMenuAudio:false,
             sortFavorites:false,
             serverMenus:false,
@@ -126,6 +136,7 @@ Vue.component('lms-ui-settings', {
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
+                this.useGrid=this.$store.state.useGrid;
                 this.sortFavorites = this.$store.state.sortFavorites;
                 this.serverMenus = this.$store.state.serverMenus;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
@@ -193,6 +204,7 @@ Vue.component('lms-ui-settings', {
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
+                                                  useGrid:this.useGrid,
                                                   sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus

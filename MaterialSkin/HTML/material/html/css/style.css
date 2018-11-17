@@ -85,6 +85,47 @@ a {
     max-width: 48px !important;
 }
 
+
+.image-grid-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.image-grid-item {
+    width: 250px;
+    height: 290px;
+}
+
+.image-grid-text {
+    position: absolute;
+    bottom:0px;
+    width: 214px;
+}
+
+.image-grid-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 218px;
+    width: 32px;
+    height: 32px;
+}
+
+@media only screen and (max-width: 600px) {
+    .image-grid-item {
+        width: 180px;
+        height: 220px;
+    }
+
+    .image-grid-text {;
+        width: 144px;
+    }
+
+    .image-grid-btn {
+        left: 148px;
+    }
+}
+
 .error-text {
     background-color: red;
 }
@@ -207,9 +248,9 @@ a {
 }
 
 .shuffle-albums {
-    border: 1px solid;
+    border: 2px solid;
     border-radius: 50%;
-    padding:-1px;
+    padding:-2px;
 }
 
 .pq-current {

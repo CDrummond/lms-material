@@ -85,7 +85,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
       <v-card class="subtoolbar pq-details">
         <v-layout>
-          <v-flex class="pq-text" v-if="trackCount>0">{{trackCount | displayCount}} {{duration | displayTime(true)}}</v-flex>
+          <v-flex class="pq-text" v-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
           <v-spacer></v-spacer>
           <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
           <v-btn :title="trans.repeatAll" flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
@@ -149,7 +149,7 @@ var lmsQueue = Vue.component("lms-queue", {
             currentIndex: -1,
             snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
-            trackCount:0,
+            listSize:0,
             duration: 0.0,
             playerStatus: { ison:1, shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, saveAs:undefined, clear:undefined,
@@ -180,7 +180,9 @@ var lmsQueue = Vue.component("lms-queue", {
         });
     },
     mounted() {
-        this.listSize = this.items.length;
+        this.listSize=0;
+        this.items=[];
+        this.timestamp=0;
         bus.$on('playerChanged', function() {
 	        this.items=[];
 	        this.timestamp=0;
@@ -196,13 +198,13 @@ var lmsQueue = Vue.component("lms-queue", {
             if (playerStatus.playlist.repeat!=this.playerStatus.repeat) {
                 this.playerStatus.repeat = playerStatus.playlist.repeat;
             }
-            if (playerStatus.playlist.count!=this.trackCount) {
-                this.trackCount = playerStatus.playlist.count;
-                if (0==this.trackCount) {
+            /*if (playerStatus.playlist.count!=this.listSize) {
+                this.listSize = playerStatus.playlist.count;
+                if (0==this.listSize && 0==playerStatus.playlist.timestamp) {
                     this.items=[];
                     this.timestamp=0;
                 }
-            }
+            }*/
             this.playlistName=playerStatus.playlist.name;
             if (playerStatus.playlist.timestamp!==this.timestamp) {
                 this.timestamp = playerStatus.playlist.timestamp;
@@ -267,8 +269,8 @@ var lmsQueue = Vue.component("lms-queue", {
                             this.items.push(i);
                         });
                     }
-                    if (data && data.result && data.result.count) {
-                        this.listSize = data.result.count;
+                    if (data && data.result && data.result.playlist_tracks) {
+                        this.listSize = data.result.playlist_tracks;
                     }
                 }).catch(err => {
                     this.fetchingItems = false;
@@ -381,8 +383,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 // to update!
                 var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==timestamp;
                 this.timestamp = resp.timestamp;
-                this.listSize = resp.size;
                 this.fetchingItems = false;
+                this.listSize = data.result.playlist_tracks;
                 if (needUpdate) {
                     this.scheduleUpdate();
                 } else {
@@ -415,17 +417,28 @@ var lmsQueue = Vue.component("lms-queue", {
             } else {
                 var currentPos = this.scrollElement.scrollTop;
                 this.fetchingItems = true;
-
+                var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], 0,
                         this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data);
+                    var resp = parseResp(data, this.showTrackNum);
                     this.items = resp.items;
+                    var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==timestamp;
                     this.timestamp = resp.timestamp;
                     this.fetchingItems = false;
+                    this.listSize = data.result.playlist_tracks;
                     this.getDuration();
                     this.$nextTick(function () {
                         setScrollTop(this.scrollElement, currentPos>0 ? currentPos : 0);
                     });
+                    if (needUpdate) {
+                        this.scheduleUpdate();
+                    } else {
+                        if (this.$store.state.autoScrollQueue) {
+                            this.$nextTick(function () {
+                                this.scrollToCurrent();
+                            });
+                        }
+                    }
                 }).catch(err => {
                     this.fetchingItems = false;
                 });

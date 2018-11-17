@@ -6,6 +6,7 @@
 3. Respect genre/artist filtering when adding albums/artists to queue.
 4. Add a setting to specify application layout; auto, desktop, mobile.
 5. Add optional grid view for artists, albums, and SlimBrowse icon_list.
+6. Fix durations longer than 24hrs.
 
 0.1.0
 -----

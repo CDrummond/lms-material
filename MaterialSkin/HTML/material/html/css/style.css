@@ -113,13 +113,15 @@ a {
 
 .image-grid-text {
     position: absolute;
-    bottom:0px;
+    bottom:4px;
     width: 184px;
+    height: 44px;
+    vertical-align: middle;
 }
 
 .image-grid-btn {
     position: absolute;
-    bottom: 12px;
+    bottom: 20px;
     left: 180px;
     width: 32px;
     height: 32px;

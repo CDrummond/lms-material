@@ -21,7 +21,7 @@ Vue.component('lms-information-dialog', {
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
    </ul>
    <v-menu bottom left v-if="!scanning">
-    <v-btn slot="activator" flat>Rescan <v-icon>arrow_drop_down</v-icon></v-btn>
+    <v-btn slot="activator" flat>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
     <v-list>
      <template v-for="(item, index) in rescans">
       <v-list-tile @click="initiateScan(item.prompt, item.command)">
@@ -40,6 +40,16 @@ Vue.component('lms-information-dialog', {
      </ul>
     </p>
    </template>
+   <div style="height:24px"></div>
+
+   <p class="about-header">{{i18n('Plugins')}}</p>
+   <p v-if="updates.plugins.length>0">{{i18n('The following plugins have updates available:')}}</p>
+   <p v-else-if="undefined!=updates.error">{{updates.error}}</p>
+   <p v-else>{{i18n('All plugins up to date.')}}</p>
+   <ul>
+    <template v-for="(info, index) in updates.plugins"><li>{{info.title}}</li></template>
+   </ul>
+   <v-btn v-if="updates.plugins.length>0" href="../Default/settings/index.html" flat>{{i18n('Server Settings')}}</v-btn>
   </v-card-text>
  </v-card>
 </v-dialog>
@@ -54,19 +64,24 @@ Vue.component('lms-information-dialog', {
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
                        {title:undefined, prompt:undefined, command: ["rescan"]},
                        {title:undefined, prompt:undefined, command: ["rescan", "playlists"]} ],
-            scanning: false
+            scanning: false,
+            updates: { plugins: [], error:undefined }
         }
     },
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_INFO.id) {
-
                 bus.$emit('dialog', 'information', true);
                 this.update();
                 this.timer = setInterval(function () {
                     this.update();
                 }.bind(this), 2000);
                 this.show = true;
+                axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+"/updateinfo.json?=time"+(new Date().getTime())).then(function (resp) {
+                    this.updates = eval(resp.data);
+                }).catch(err => {
+                    this.updates.error=i18n('Failed to determine plugin status.');
+                });
             }
         }.bind(this));
 

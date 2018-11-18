@@ -7,6 +7,7 @@
 4. Add a setting to specify application layout; auto, desktop, mobile.
 5. Add optional grid view for artists, albums, and SlimBrowse icon_list.
 6. Fix durations longer than 24hrs.
+7. Add plugin update info to Information dialog.
 
 0.1.0
 -----

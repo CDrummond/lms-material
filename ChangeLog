@@ -9,6 +9,7 @@
 6. Fix durations longer than 24hrs.
 7. Add plugin update info to Information dialog.
 8. Disable swipe to change views whilst photo slideshow is open.
+9. When listing a genre's items, ask whether to list Artists or Albums.
 
 0.1.0
 -----

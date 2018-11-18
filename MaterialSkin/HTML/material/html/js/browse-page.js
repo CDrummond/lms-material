@@ -425,6 +425,20 @@ var lmsBrowse = Vue.component("lms-browse", {
         showMessage(msg) {
             this.snackbar = {msg: msg, show: true };
         },
+        addHistory() {
+            var prev = {};
+            prev.items = this.items;
+            prev.baseActions = this.baseActions;
+            prev.listSize = this.listSize;
+            prev.current = this.current;
+            prev.currentBaseActions = this.currentBaseActions;
+            prev.headerTitle = this.headerTitle;
+            prev.headerSubTitle = this.headerSubTitle;
+            prev.menuActions = this.menuActions;
+            prev.pos=this.scrollElement.scrollTop;
+            prev.useGrid=this.useGrid;
+            this.history.push(prev);
+        },
         fetchItems(command, item, batchSize) {
             if (this.fetchingItems) {
                 return;
@@ -439,20 +453,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var resp = parseBrowseResp(data, item, this.options, 0);
 
                 if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
-                    var prev = {};
-                    prev.items = this.items;
-                    prev.baseActions = this.baseActions;
-                    prev.listSize = this.listSize;
-                    prev.current = this.current;
-                    prev.currentBaseActions = this.currentBaseActions;
-                    prev.headerTitle = this.headerTitle;
-                    prev.headerSubTitle = this.headerSubTitle;
-                    prev.menuActions = this.menuActions;
-                    prev.pos=this.scrollElement.scrollTop;
-                    prev.useGrid = this.useGrid;
+                    this.addHistory();
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
-                    this.history.push(prev);
                     this.headerTitle=item.title;
                     this.listSize = item.range ? item.range.count : data.result.count;
                     this.items=resp.items;
@@ -524,16 +527,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.fetchingItems) {
                     return;
                 }
-                var prev = {};
-                prev.items = this.items;
-                prev.listSize = this.listSize;
-                prev.current = this.current;
-                prev.headerTitle = this.headerTitle;
-                prev.headerSubTitle = this.headerSubTitle;
-                prev.menuActions = this.menuActions;
-                prev.pos=this.scrollElement.scrollTop;
-                prev.useGrid=this.useGrid;
-                this.history.push(prev);
+                this.addHistory();
                 this.items = this.other;
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Extra browse modes");
@@ -542,6 +536,31 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('randomMix');
+            } else if (!item.genreArtists && 1==item.command.length && 1==item.params.length &&
+                       "artists"==item.command[0] && item.params[0].startsWith("genre_id:")) {
+                if (this.fetchingItems) {
+                    return;
+                }
+                // When listing a genre's items, ask whether to list Artists or Albums
+                this.addHistory();
+                this.items=[{ title: i18n("Artists"),
+                              command: ["artists"],
+                              params: [item.params[0]],
+                              icon: "group",
+                              type: "group",
+                              id: item.id+"artists",
+                              genreArtists:true },
+                            { title: i18n("Albums"),
+                              command: ["albums"],
+                              params: [item.params[0], ALBUM_TAGS, "sort:"+ALBUM_SORT_PLACEHOLDER],
+                              icon: "album",
+                              type: "group",
+                              id: item.id+"albums"}];
+                this.headerTitle = item.title;
+                this.headerSubTitle = i18n("Show artists or albums?");
+                this.listSize = this.items.length;
+                setScrollTop(this.scrollElement, 0);
+                this.isTop = false;
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
                        item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
                        item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {

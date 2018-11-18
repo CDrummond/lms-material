@@ -120,7 +120,7 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            if (this.playerVolume>=95) {
+            if (this.players[index].volume>=95) {
                 this.setVolume(index, 100);
             } else {
                 this.setVolume(index, Math.floor((this.players[index].volume+5)/5)*5);

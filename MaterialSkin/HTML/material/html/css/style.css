@@ -74,6 +74,11 @@ a {
     padding:0px;
 }
 
+.lms-image-grid .container .layout .flex {
+    padding:0px;
+    margin:0px;
+}
+
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
     height: 40px;
@@ -100,28 +105,30 @@ a {
 }
 
 .image-grid-item {
-    width: 230px;
-    height: 270px;
+    width: 200px;
+    height: 256px;
+    padding:4px;
+    margin:0px;
 }
 
 .image-grid-text {
     position: absolute;
     bottom:0px;
-    width: 194px;
+    width: 184px;
 }
 
 .image-grid-btn {
     position: absolute;
     bottom: 12px;
-    left: 198px;
+    left: 180px;
     width: 32px;
     height: 32px;
 }
 
 @media only screen and (max-width: 600px) {
     .image-grid-item {
-        width: 160px;
-        height: 200px !important;
+        width: 134px;
+        height: 184px !important;
     }
 
     .image-grid-item img {
@@ -130,11 +137,11 @@ a {
     }
 
     .image-grid-text {;
-        width: 124px;
+        width: 114px;
     }
 
     .image-grid-btn {
-        left: 128px;
+        left: 110px;
     }
 }
 

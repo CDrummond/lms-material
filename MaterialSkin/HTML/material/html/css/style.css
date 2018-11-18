@@ -85,6 +85,10 @@ a {
     max-width: 48px !important;
 }
 
+.subtitle {
+    opacity: 0.7;
+}
+
 .image-grid-item img {
     display: block;
     height: auto;

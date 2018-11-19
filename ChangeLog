@@ -12,6 +12,7 @@
  9. When listing a genre's items, ask whether to list Artists or Albums.
 10. Always send volume up commands, even if at 100% already.
 11. List all artists of a track in toolbar, queue, and now playing.
+12. Fix text/html weblinks.
 
 0.1.0
 -----

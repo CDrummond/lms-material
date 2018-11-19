@@ -1,6 +1,5 @@
 {
 "%1 minutes":"%1 Minuten",
-"+this.playerStatus.current.title, ":"",
 "Add to favorites":"In Favoriten speichern",
 "Added to favorites":"Favorit wurde gespeichert",
 "Alarm settings":"Wecker",
@@ -48,7 +47,7 @@
 "Do not sync":"Nicht synchronisieren",
 "Don't know how to handle this!":"Weiss nicht, wie ich das behandeln soll!",
 "Don't shuffle":"Nicht in zufälliger Reihenfolge wiedergeben",
-"ERROR: List processing failed\n%1":"FEHLER beim Verarbeiten der Liste\n%1",
+"ERROR: List processing failed":"FEHLER beim Verarbeiten der Liste",
 "Edit Alarm":"Wecker bearbeiten",
 "Enable alarm fuctionality.":"Weckerfunktion aktivieren",
 "Enable alarms":"Wecker aktivieren",

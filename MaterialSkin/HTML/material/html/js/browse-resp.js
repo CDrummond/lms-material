@@ -682,7 +682,7 @@ function parseBrowseResp(data, parent, options, idStart) {
     }
 
     } catch(e) {
-        resp.items.push({title:i18n("ERROR: List processing failed\n%1", e), type: 'text', id:'error'});
+        resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e, type: 'text', id:'error'});
     }
 
     return resp;

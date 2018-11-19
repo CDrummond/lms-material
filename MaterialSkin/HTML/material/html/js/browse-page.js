@@ -129,8 +129,10 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div class="ellipsis">{{item.title}}</div>
        <div class="ellipsis subtitle">{{item.subtitle}}</div>
        </div>
-       <v-icon v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">more_vert</v-icon>
-       <v-icon v-else-if="item.menuActions && item.menuActions.length===1" @click.stop="itemAction(item.menuActions[0].cmd, item, index)" class="image-grid-btn">{{item.menuActions[0].icon}}</v-icon>
+       <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
+        <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
+        <v-icon v-else-if="item.menuActions && item.menuActions.length===1">{{item.menuActions[0].icon}}</v-icon>
+       </v-btn>
       </v-card-text>
      </v-card>
     </v-flex>

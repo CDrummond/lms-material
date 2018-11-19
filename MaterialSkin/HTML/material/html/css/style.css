@@ -121,10 +121,15 @@ a {
 
 .image-grid-btn {
     position: absolute;
-    bottom: 20px;
-    left: 180px;
-    width: 32px;
-    height: 32px;
+    bottom: 16px !important;
+    left: 176px !important;
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.image-grid-btn:hover {
+    position: absolute;
+    z-index:2;
 }
 
 @media only screen and (max-width: 600px) {
@@ -139,11 +144,11 @@ a {
     }
 
     .image-grid-text {;
-        width: 114px;
+        width: 118px;
     }
 
     .image-grid-btn {
-        left: 110px;
+        left: 110px !important;
     }
 }
 

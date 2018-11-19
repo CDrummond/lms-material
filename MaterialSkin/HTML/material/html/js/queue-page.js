@@ -85,7 +85,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-card>
  </v-dialog>
  <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
- <v-card class="subtoolbar pq-details">
+ <div class="subtoolbar pq-details">
   <v-layout>
    <v-flex class="pq-text" v-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
    <v-spacer></v-spacer>
@@ -101,7 +101,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
   </v-layout>
- </v-card>
+ </div>
  <v-list class="lms-list-sub"  id="queue-list">
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->

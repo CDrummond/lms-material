@@ -13,3 +13,10 @@
     background-color: #212121;
 }
 
+.subtoolbar {
+    background-color: #3a3a3a !important;
+}
+
+.lms-bottom-nav {
+    border-top: 1px solid #333;
+}

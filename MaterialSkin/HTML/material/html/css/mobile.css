@@ -48,7 +48,7 @@
 .lms-bottom-nav {
     position:relative !important;
     height:var(--bottom-nav-height) !important;
-    top:calc(-1 * (var(--bottom-nav-height) + 1px)) !important;
+    top:calc(-1 * (var(--bottom-nav-height) + 2px)) !important;
 }
 
 .lms-bottom-nav-button {
@@ -65,29 +65,31 @@
 .lms-list {
     position:fixed;
     top:var(--main-toolbar-height);
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 2px));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height)));
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;
+    margin:0px;
 }
 
 .lms-list-sub {
     position:fixed;
-    top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height) - 2px);
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) - 4px));
-    width:100vw;
-    overflow:auto;
-    backface-visibility:hidden;
-}
-
-.lms-image-grid {
-    position:fixed;
-    top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height) - 2px);
+    top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
     height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
     width:100vw;
     overflow:auto;
     backface-visibility:hidden;
-    margin:2px 0px 0px 0px;
+    margin:0px;
+}
+
+.lms-image-grid {
+    position:fixed;
+    top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
+    width:100vw;
+    overflow:auto;
+    backface-visibility:hidden;
+    margin:0px;
 }
 
 .browse-progress {

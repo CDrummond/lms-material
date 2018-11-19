@@ -394,7 +394,8 @@ function parseBrowseResp(data, parent, options, idStart) {
                               params: ["album_id:"+ i.id, TRACK_TAGS, "sort:tracknum"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                               type: "group",
-                              favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
+                              favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined,
+                              origTitle: i.album
                           };
                 if (params.length>0) {
                     params.forEach(p => {

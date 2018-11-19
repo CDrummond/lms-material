@@ -219,11 +219,9 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeUp() {
-            if (this.playerVolume.val>=95) {
-                this.playerVolume.val = 100;
-            } else {
-                this.playerVolume.val = Math.floor((this.playerVolume.val+5)/5)*5;
-            }
+            // Always send volume up, even if at 100% already. Some users trap LMS
+            // volume commands and forward on
+            this.playerVolume.val = Math.floor((this.playerVolume.val+5)/5)*5;
         }
     },
     computed: {

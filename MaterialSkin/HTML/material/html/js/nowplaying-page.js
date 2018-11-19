@@ -189,8 +189,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.title = playerStatus.current.title;
             }
             if (playerStatus.current.artist!=this.playerStatus.current.artist ||
+                playerStatus.current.trackartist!=this.playerStatus.current.trackartist ||
                 playerStatus.current.artist_id!=this.playerStatus.current.artist_id) {
-                this.playerStatus.current.artist = playerStatus.current.artist;
+                this.playerStatus.current.artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
                 this.playerStatus.current.artist_id = playerStatus.current.artist_id;
             }
             if (playerStatus.current.album!=this.playerStatus.current.albumName ||

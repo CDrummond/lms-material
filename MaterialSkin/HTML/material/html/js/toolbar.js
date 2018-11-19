@@ -146,9 +146,11 @@ Vue.component('lms-toolbar', {
                 this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
             }
 
-            if (playerStatus.current.title!=this.playerStatus.current.title || playerStatus.current.artist!=this.playerStatus.current.artist) {
+            if (playerStatus.current.title!=this.playerStatus.current.title ||
+                (playerStatus.current.artist && playerStatus.current.artist!=this.playerStatus.current.artist) ||
+                (playerStatus.current.trackartist && playerStatus.current.trackartist!=this.playerStatus.current.artist) ) {
                 this.playerStatus.current.title=playerStatus.current.title;
-                this.playerStatus.current.artist=playerStatus.current.artist;
+                this.playerStatus.current.artist=playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
 
                 if (this.playerStatus.current.title) {
                     if (this.playerStatus.current.artist) {

@@ -1,6 +1,5 @@
 {
 "%1 minutes":"",
-"+this.playerStatus.current.title, ":"",
 "Add to favorites":"Sauver dans les favoris",
 "Added to favorites":"Sauvé dans les favoris",
 "Alarm settings":"Configuration du réveil",
@@ -48,7 +47,7 @@
 "Do not sync":"Ne pas synchroniser",
 "Don't know how to handle this!":"Aucune idée comment traiter ceci!",
 "Don't shuffle":"Ne pas jouer en ordre aléatoire",
-"ERROR: List processing failed\n%1":"",
+"ERROR: List processing failed":"",
 "Edit Alarm":"Modifier le réveil",
 "Enable alarm fuctionality.":"",
 "Enable alarms":"",

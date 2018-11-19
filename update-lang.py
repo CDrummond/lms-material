@@ -31,6 +31,7 @@ def add(a, b=None):
         pair=[a, b]
         if not pair in plurals:
             plurals.append(pair)
+            info("Add %s" % str(pair))
         if a in translations:
             translations.remove(a)
         if b in translations:
@@ -40,6 +41,7 @@ def add(a, b=None):
             for b in plurals:
                 if a in b:
                     return
+            info("Add %s" % a)
             translations.append(a)
  
 def extract(path):
@@ -70,12 +72,12 @@ def extract(path):
                 add(parts[1], parts[3])
  
         matches = re.findall("title:\\s*\\'.+\\'", line)
-        if matches:
+        if matches and not re.findall("\\'title:\\s*\\'", line):
             for match in matches:
                 add(match.split("'")[1])
  
         matches = re.findall('title:\\s*\\".+\\"', line)
-        if matches:
+        if matches and not re.findall('\\"title:\\s*\\"', line):
             for match in matches:
                 add(match.split('"')[1])
  

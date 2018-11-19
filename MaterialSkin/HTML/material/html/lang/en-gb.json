@@ -1,6 +1,5 @@
 {
 "%1 minutes":"",
-"+this.playerStatus.current.title, ":"",
 "Add to favorites":"Add to favourites",
 "Added to favorites":"Added to favourites",
 "Alarm settings":"",
@@ -48,7 +47,7 @@
 "Do not sync":"",
 "Don't know how to handle this!":"",
 "Don't shuffle":"",
-"ERROR: List processing failed\n%1":"",
+"ERROR: List processing failed":"",
 "Edit Alarm":"",
 "Enable alarm fuctionality.":"",
 "Enable alarms":"",

@@ -98,7 +98,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-card>
  </v-dialog>
  <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
- <v-card v-if="headerTitle" class="subtoolbar">
+ <div v-if="headerTitle" class="subtoolbar">
   <v-layout>
    <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
@@ -111,10 +111,10 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button"><v-icon>{{action.icon}}</v-icon></v-btn>
    </template>
   </v-layout>
- </v-card>
+ </div>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
- <v-card v-if="useGrid" class="lms-image-grid" id="browse-grid">
+ <v-list v-if="useGrid" class="lms-image-grid" id="browse-grid">
   <v-container grid-list-sm fluid>
    <v-layout row wrap>
     <v-flex v-for="(item, index) in items" :key="item.id">
@@ -136,7 +136,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-flex>
    </v-layout>
   </v-container>
- </v-card>
+ </v-list>
 
  <v-list v-else v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>

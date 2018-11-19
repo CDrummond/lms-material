@@ -6,10 +6,18 @@
  */
 
 .vue-splitter .splitter {
-    background-color: #ddd !important;
+    background-color: #f0f0f0 !important;
 }
 
 .np-bar {
     background-color: #f5f5f5;
+}
+
+.subtoolbar {
+    background-color: #f5f5f5 !important;
+}
+
+.lms-bottom-nav {
+    border-top: 1px solid #ddd;
 }
 

@@ -422,3 +422,8 @@ a {
     text-align:center;
     vertical-align: middle;
 }
+
+.vue-splitter .splitter {
+    margin-bottom:4px;
+}
+

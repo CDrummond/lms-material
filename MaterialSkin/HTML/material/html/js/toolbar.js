@@ -40,7 +40,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>1}"><v-icon>power_settings_new</v-icon>&nbsp;{{trans.switchoff}}</v-list-tile-title>
     </v-list-tile-content>
     <v-list-tile-content v-else>
-     <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;{{trans.switchon}}</v-list-tile-title>
+     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>1}"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;{{trans.switchon}}</v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
 

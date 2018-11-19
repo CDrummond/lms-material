@@ -536,7 +536,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('randomMix');
-            } else if (!item.genreArtists && 1==item.command.length && 1==item.params.length &&
+            } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
                        "artists"==item.command[0] && item.params[0].startsWith("genre_id:")) {
                 if (this.fetchingItems) {
                     return;
@@ -573,6 +573,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
                 this.fetchItems(command, item, 5);
+            } else if (item.weblink) {
+                window.open(item.weblink);
             } else {
                 var command = this.buildCommand(item);
                 if (command.command.length>2 && command.command[1]=="playlist") {

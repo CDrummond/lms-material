@@ -649,10 +649,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             } else if (act===ADD_TO_FAV_ACTION.cmd) {
-                var favUrl = item.url;
+                var favUrl = item.favUrl ? item.favUrl : item.url;
                 var favIcon = item.favIcon;
                 var favType = "audio";
-                var favTitle = item.title;
+                var favTitle = item.origTitle ? item.origTitle : item.title;
 
                 if (item.presetParams && item.presetParams.favorites_url) {
                     favUrl = item.presetParams.favorites_url;
@@ -662,14 +662,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         favTitle = item.presetParams.favorites_title;
                     }
                 } else if (item.id.startsWith("genre_id:")) {
-                    favUrl="db:genre.name="+encodeURIComponent(item.title);
+                    favUrl="db:genre.name="+encodeURIComponent(favTitle);
                     favIcon="html/images/genres.png";
                 } else if (item.id.startsWith("artist_id:")) {
-                    favUrl="db:contributor.name="+encodeURIComponent(item.title);
+                    favUrl="db:contributor.name="+encodeURIComponent(favTitle);
                 } else if (item.id.startsWith("album_id:")) {
-                    favUrl="db:album.title="+encodeURIComponent(item.title);
+                    favUrl="db:album.title="+encodeURIComponent(favTitle);
                 } else if (item.id.startsWith("year:")) {
-                    favUrl="db:year.id="+encodeURIComponent(item.title);
+                    favUrl="db:year.id="+encodeURIComponent(favTitle);
                     favIcon="html/images/years.png";
                 } else if (item.id.startsWith("playlist:")) {
                     favIcon="html/images/playlists.png";

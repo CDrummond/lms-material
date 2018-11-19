@@ -37,10 +37,10 @@ Vue.component('lms-toolbar', {
    <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
    <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
     <v-list-tile-content v-if="playerStatus.ison">
-     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>1}"><v-icon>power_settings_new</v-icon>&nbsp;Switch off</v-list-tile-title>
+     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>1}"><v-icon>power_settings_new</v-icon>&nbsp;{{trans.switchoff}}</v-list-tile-title>
     </v-list-tile-content>
     <v-list-tile-content v-else>
-     <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;Switch on</v-list-tile-title>
+     <v-list-tile-title class="pm-icon-indent"><v-icon class="dimmed">power_settings_new</v-icon>&nbsp;{{trans.switchon}}</v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
 
@@ -100,7 +100,8 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
-                 trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined, info:undefined},
+                 trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined, info:undefined,
+                        switchoff:undefined, switchon:undefined},
                  infoOpen: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined}
                }
@@ -195,7 +196,7 @@ Vue.component('lms-toolbar', {
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_MANAGE_PLAYERS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
                           managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing'),
-                          info:i18n("Show current track information")};
+                          info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

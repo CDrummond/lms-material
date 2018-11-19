@@ -7,6 +7,7 @@
 - Browse
   - Fully handle SlimBrowse commands - e.g. buttons, radios, checkboxes
   - Before showing menu, check if item is in favourites - and adjust entries?
+  - Check grid sizes on various devices
 
 - Now playing
   - Show more info for desktop view. e.g. expand 3 tabs into 3 columns

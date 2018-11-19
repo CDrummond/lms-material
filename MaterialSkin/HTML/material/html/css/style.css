@@ -95,11 +95,10 @@ a {
 }
 
 .image-grid-item img {
+    object-fit: cover;
     display: block;
-    height: auto;
-    width: auto;
-    max-height: 200px !important;
-    max-width: 200px !important;
+    height: 200px !important;
+    width: 200px !important;
     margin-left: auto;
     margin-right: auto;
 }
@@ -139,8 +138,8 @@ a {
     }
 
     .image-grid-item img {
-        max-height: 130px !important;
-        max-width: 130px !important;
+        height: 130px !important;
+        width: 130px !important;
     }
 
     .image-grid-text {;

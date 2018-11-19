@@ -84,7 +84,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             var nextInterval = LMS_STATUS_REFRESH_MAX;
             if (this.$store.state.players && this.$store.state.players.length>0 && this.$store.state.player.id) {
-                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:acdelysK"]).then(({data}) => {
+                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:cdelysAK"]).then(({data}) => {
                     var nextInterval = LMS_STATUS_REFRESH_MAX;
                     if (data && data.result) {
                         var player = { ison: data.result.power,

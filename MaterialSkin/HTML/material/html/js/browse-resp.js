@@ -414,8 +414,10 @@ function parseBrowseResp(data, parent, options, idStart) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                      //title = i.tracknum + ". " + title; // SlimBrowse format
                 }
-                if (i.trackartist && i.albumartist && i.trackartist !== i.albumartist) {
+                if (i.trackartist && ( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
                      title+=" - " + i.trackartist;
+                } else if (i.artist && ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
+                     title+=" - " + i.artist;
                 }
                 duration+=i.duration;
                 resp.items.push({
@@ -451,7 +453,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 resp.items.push({
                               id: "playlist_id:"+i.id,
                               title: i.playlist,
-                              command: ["playlists", "tracks"],
+                              command: ["playlists", "tracks", TRACK_TAGS],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],

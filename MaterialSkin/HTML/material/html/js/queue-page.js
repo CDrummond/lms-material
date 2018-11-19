@@ -10,6 +10,8 @@ var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'    };
 var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline' };
 var PQ_MORE_ACTION =      { cmd: 'more',     icon: 'more_horiz'            };
 
+const PQ_STATUS_TAGS = "tags:dcltuAK";
+
 function queueItemCover(item) {
     if (item.artwork_url) {
         return resolveImage(null, item.artwork_url);
@@ -370,7 +372,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
-            lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuyK"], this.items.length, fetchCount).then(({data}) => {
+            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data, this.showTrackNum);
                 if (this.items.length && resp.items.length) {
                     resp.items.forEach(i => {
@@ -418,7 +420,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var currentPos = this.scrollElement.scrollTop;
                 this.fetchingItems = true;
                 var prevTimestamp = this.timestamp;
-                lmsList(this.$store.state.player.id, ["status"], ["tags:adcltuK"], 0,
+                lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
                         this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
                     var resp = parseResp(data, this.showTrackNum);
                     this.items = resp.items;

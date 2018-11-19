@@ -14,7 +14,8 @@
 }
 
 .subtoolbar {
-    background-color: #3a3a3a !important;
+    background-color: #424242 !important;
+    border-bottom: 1px solid #333;
 }
 
 .lms-bottom-nav {

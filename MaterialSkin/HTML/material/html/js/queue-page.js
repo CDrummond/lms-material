@@ -34,7 +34,7 @@ function parseResp(data, showTrackNum) {
                 if (showTrackNum && i.tracknum>0) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                 }
-                var subtitle = i.artist;
+                var subtitle = i.artist ? i.artist : i.trackartist;
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=" - " + i.album;

@@ -100,6 +100,7 @@ a {
 
 .image-grid-item img {
     object-fit: cover;
+    object-position: 50% 0%;
     display: block;
     height: 200px !important;
     width: 200px !important;

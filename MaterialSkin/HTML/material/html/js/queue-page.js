@@ -64,84 +64,82 @@ function parseResp(data, showTrackNum) {
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-    <div> 
-      <v-dialog v-model="dialog.show" persistent max-width="500px">
-        <v-card>
-          <v-card-text>
-            <span v-if="dialog.title">{{dialog.title}}</span>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field :label="dialog.hint" v-model="dialog.value"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
-            <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
-      <v-card class="subtoolbar pq-details">
-        <v-layout>
-          <v-flex class="pq-text" v-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
-          <v-spacer></v-spacer>
-          <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
-          <v-btn :title="trans.repeatAll" flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
-          <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
+<div> 
+ <v-dialog v-model="dialog.show" persistent max-width="500px">
+  <v-card>
+   <v-card-text>
+    <span v-if="dialog.title">{{dialog.title}}</span>
+    <v-container grid-list-md>
+     <v-layout wrap>
+      <v-flex xs12>
+       <v-text-field :label="dialog.hint" v-model="dialog.value"></v-text-field>
+      </v-flex>
+     </v-layout>
+    </v-container>
+   </v-card-text>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
+    <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
+   </v-card-actions>
+  </v-card>
+ </v-dialog>
+ <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
+ <v-card class="subtoolbar pq-details">
+  <v-layout>
+   <v-flex class="pq-text" v-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
+   <v-spacer></v-spacer>
+   <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+   <v-btn :title="trans.repeatAll" flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
 
-          <v-btn :title="trans.shuffleAlbums" flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-          <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
-          <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
-          <v-divider vertical="true" v-if="desktop"></v-divider>
-          <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
-          <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-          <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
-        </v-layout>
-      </v-card>
-      <v-list class="lms-list-sub"  id="queue-list">
-        <template v-for="(item, index) in items">
-        <!-- TODO: Fix and re-use virtual scroller -->
-        <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
-          <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
-            <v-list-tile-avatar v-if="item.image" :tile="true">
-              <img v-lazy="item.image">
-            </v-list-tile-avatar>
-            <v-list-tile-avatar v-else-if="item.icon" :tile="true">
-              <v-icon>{{item.icon}}</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{item.title}}</v-list-tile-title>
-              <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-            <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
-              <v-btn icon>
-                <v-icon>more_vert</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-            <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
-          </v-list-tile>
-          <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
-        <!-- </div></recycle-list></template> -->
-        </template>
-        <v-list-tile class="lms-list-pad"></v-list-tile>
-      </v-list>
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
+   <v-divider vertical="true" v-if="desktop"></v-divider>
+   <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
+   <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
+  </v-layout>
+ </v-card>
+ <v-list class="lms-list-sub"  id="queue-list">
+  <template v-for="(item, index) in items">
+  <!-- TODO: Fix and re-use virtual scroller -->
+  <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
+   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
+    <v-list-tile-avatar v-if="item.image" :tile="true">
+     <img v-lazy="item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+     <v-icon>{{item.icon}}</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
+    <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
+   </v-list-tile>
+   <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
+   <!-- </div></recycle-list></template> -->
+  </template>
+  <v-list-tile class="lms-list-pad"></v-list-tile>
+ </v-list>
 
-      <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
-        <v-list v-if="menu.item">
-          <template v-for="(action, index) in menu.item.actions">
-            <v-divider v-if="action.divider"></v-divider>
-            <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
-              <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
-            </v-list-tile>
-          </template>
-        </v-list>
-      </v-menu>
-    </div>
+ <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
+  <v-list v-if="menu.item">
+   <template v-for="(action, index) in menu.item.actions">
+    <v-divider v-if="action.divider"></v-divider>
+    <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
+     <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
+</div>
 `,
     props: [ 'desktop' ],
     data() {

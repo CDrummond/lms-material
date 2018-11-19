@@ -536,7 +536,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('randomMix');
-            } else if (!item.genreArtists && 1==item.command.length && 1==item.params.length &&
+            } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
                        "artists"==item.command[0] && item.params[0].startsWith("genre_id:")) {
                 if (this.fetchingItems) {
                     return;

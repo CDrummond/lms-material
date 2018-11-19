@@ -32,7 +32,7 @@ const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const ALBUM_TAGS = "tags:jlya";
-const TRACK_TAGS = "tags:Adt";
+const TRACK_TAGS = "tags:ACdt";
 
 function isLocalLibCommand(command) {
     return command & command.command && command.command.length>0 &&

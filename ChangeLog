@@ -1,15 +1,16 @@
 0.1.1
 -----
-1. Only list players that are connected.
-2. Add 'Play album starting at track' item to track context menus. Only if
-   parent is an album, and track is not 1st track.
-3. Respect genre/artist filtering when adding albums/artists to queue.
-4. Add a setting to specify application layout; auto, desktop, mobile.
-5. Add optional grid view for artists, albums, and SlimBrowse icon_list.
-6. Fix durations longer than 24hrs.
-7. Add plugin update info to Information dialog.
-8. Disable swipe to change views whilst photo slideshow is open.
-9. When listing a genre's items, ask whether to list Artists or Albums.
+ 1. Only list players that are connected.
+ 2. Add 'Play album starting at track' item to track context menus. Only if
+    parent is an album, and track is not 1st track.
+ 3. Respect genre/artist filtering when adding albums/artists to queue.
+ 4. Add a setting to specify application layout; auto, desktop, mobile.
+ 5. Add optional grid view for artists, albums, and SlimBrowse icon_list.
+ 6. Fix durations longer than 24hrs.
+ 7. Add plugin update info to Information dialog.
+ 8. Disable swipe to change views whilst photo slideshow is open.
+ 9. When listing a genre's items, ask whether to list Artists or Albums.
+10. Always send volume up commands, even if at 100% already.
 
 0.1.0
 -----

@@ -62,6 +62,7 @@ is how its developed. e.g.
 
 1. cd in the `material` folder
 2. Start python's simple HTTP server - e.g. `python -m SimpleHTTPServer`
-3. Access on localhost via `http://localhost:8000/?lms=192.168.0.1` 
-   (replace `192.168.0.1` with the IP address of the LMS server)
+3. Access on localhost via `http://localhost:8000/mobile.html?lms=192.168.0.1`
+   or `http://localhost:8000/desktop.html?lms=192.168.0.1` (replace
+   `192.168.0.1` with the IP address of the LMS server)
 

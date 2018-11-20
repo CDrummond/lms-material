@@ -125,10 +125,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-card-text>
       <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">
        <img v-lazy="item.image"></img>
-       <div class="image-grid-text">
-       <div class="ellipsis">{{item.title}}</div>
-       <div class="ellipsis subtitle">{{item.subtitle}}</div>
-       </div>
+       <div class="image-grid-text">{{item.title}}</div>
+       <div class="image-grid-text subtitle">{{item.subtitle}}</div>
        <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
         <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
         <v-icon v-else-if="item.menuActions && item.menuActions.length===1">{{item.menuActions[0].icon}}</v-icon>

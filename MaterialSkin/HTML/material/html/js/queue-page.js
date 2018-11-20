@@ -101,7 +101,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-divider vertical="true" v-if="desktop"></v-divider>
    <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon>format_indent_increase</v-icon></v-btn>
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear_all</v-icon></v-btn>
+   <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear</v-icon></v-btn>
   </v-layout>
  </div>
  <v-list class="lms-list-sub"  id="queue-list">

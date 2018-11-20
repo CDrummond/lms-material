@@ -6,6 +6,7 @@
 3. Crop list images as per grid images.
 4. Add bitrate and file type to now playing.
 5. Only show year if >0
+6. Add tooltip to grid view items.
 
 0.1.1
 -----

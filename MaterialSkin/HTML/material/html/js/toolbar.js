@@ -35,6 +35,11 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
+   <v-divider v-if="players && players.length>1"></v-divider>
+   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
+     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>0}"><v-icon>speaker_group</v-icon>&nbsp;{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
+   </v-list-tile>
+
    <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
    <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
     <v-list-tile-content v-if="playerStatus.ison">
@@ -207,7 +212,7 @@ console.log("Show message:"+msg);
             TB_SERVER_SETTINGS.title=i18n('Server Settings');
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage Players');
-            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_MANAGE_PLAYERS, TB_INFO ];
+            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
                           managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On')};

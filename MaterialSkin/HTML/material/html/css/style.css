@@ -176,7 +176,11 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
 }
- 
+
+.maintoolbar-title {
+    font-size:85% !important;
+}
+
 .toolbar-subtitle {
     font-size:75% !important;
     font-weight: 300;

@@ -36,7 +36,6 @@
     float: left;
 }
 
-
 .lms-footer {
     position:fixed;
     bottom:0;
@@ -104,7 +103,7 @@
 
 .np-text {
     font-weight:800; 
-    font-size:150%;
+    font-size:120%;
     margin:0px 8px 0px 8px; 
     /*height:32px; */
     text-align: center;

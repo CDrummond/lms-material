@@ -382,7 +382,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     return;
                 }
                 var title = i.album;
-                if (i.year && i.year>1900) {
+                if (i.year && i.year>0) {
                     title+=" (" + i.year + ")";
                 }
                 var album = {

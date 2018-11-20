@@ -5,6 +5,7 @@
    slideshow active.
 3. Crop list images as per grid images.
 4. Add bitrate and file type to now playing.
+5. Only show year if >0
 
 0.1.1
 -----

@@ -84,7 +84,6 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-card-actions>
   </v-card>
  </v-dialog>
- <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
  <div class="subtoolbar pq-details">
   <v-layout>
    <v-flex class="pq-text" v-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
@@ -147,7 +146,6 @@ var lmsQueue = Vue.component("lms-queue", {
             desktop: false,
             items: [],
             currentIndex: -1,
-            snackbar:{ show: false, msg: undefined},
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             listSize:0,
             duration: 0.0,
@@ -296,12 +294,6 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
         },
-        showError(msg) {
-            this.snackbar = {msg: msg + (err ? " (" + err+")" : ""), show: true, color: 'error' };
-        },
-        /*showMessage(msg) {
-            this.snackbar = {msg: msg, show: true };
-        },*/
         save() {
             if (this.items.length<1) {
                 return;
@@ -328,7 +320,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({datax}) => {
                         this.playlistName = name;
                     }).catch(err => {
-                        this.showError(err, i18n("Failed to save play queue!"));
+                        bus.$emit('showError', err, i18n("Failed to save play queue!"));
                     });
                 }
             }

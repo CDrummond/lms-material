@@ -23,7 +23,7 @@ Vue.component('lms-volume', {
   </v-container>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="show = false">Close</v-btn>
+   <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

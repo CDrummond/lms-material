@@ -43,7 +43,7 @@ function formatDate(timestamp) {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 }
 
-function resolveImage(icon, image) {
+function resolveImage(icon, image, size) {
     if (!icon && !image) {
         return null;
     }
@@ -52,9 +52,9 @@ function resolveImage(icon, image) {
             return image;
         }
         if (image.startsWith("/")) {
-            return lmsServerAddress+image; //+"/image_100x100_o";
+            return lmsServerAddress+image+(size ? size : "");
         }
-        return lmsServerAddress+"/"+image; //+"/image_100x100_o";
+        return lmsServerAddress+"/"+image+(size ? size : "");
     }
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
         return icon;
@@ -62,13 +62,13 @@ function resolveImage(icon, image) {
     
     var idx = icon.lastIndexOf(".png");
     if (idx>0) {
-        icon = icon.substring(0, idx)+"_50x50.png";
+        icon = icon.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+".png";
     }
     if (icon.startsWith("/")) {
         return lmsServerAddress+icon;
     }
     if (idx<0 && /^[0-9a-fA-F]+$/.test(icon)) {
-        icon="music/"+icon+"/cover50x50_o";
+        icon="music/"+icon+"/cover"+(size ? size : LMS_LIST_IMAGE_SIZE);
     }
     return lmsServerAddress+"/"+icon;
 }

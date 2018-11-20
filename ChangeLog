@@ -1,6 +1,8 @@
 0.1.2
 -----
 1. Use _50x50_f for list covers, and _300x300_f for grid covers.
+2. Add scaled image to slideshow list, and only fetch full sized image when
+   slideshow active.
 
 0.1.1
 -----

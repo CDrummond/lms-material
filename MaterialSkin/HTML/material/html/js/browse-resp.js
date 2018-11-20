@@ -194,7 +194,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 }
                 i.text = undefined;
-                i.image = resolveImage(i.icon ? i.icon : i["icon-id"]);
+                i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE);
 
                 if (!i.image && i.commonParams && i.commonParams.album_id) {
                     i.image = resolveImage("music/0/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
@@ -524,7 +524,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd, "items"],
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   params: ["want_url:1"],
                                   type: "group",
                                   id: parent.id+i.cmd,
@@ -534,7 +534,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd, "items"],
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   //icon: "search",
                                   params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                   type: "search",
@@ -549,7 +549,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd, "items"],
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   params: ["want_url:1"],
                                   type: "group",
                                   id: parent.url+i.cmd,
@@ -559,7 +559,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd, "items"],
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   //icon: "search",
                                   params: ["want_url:1", "search:"+TERM_PLACEHOLDER],
                                   type: "search",
@@ -586,7 +586,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   command: [i.cmd ? i.cmd : parent.command[0], "items"],
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   //icon: "search",
                                   params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
                                   type: "search",
@@ -597,7 +597,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   command: parent.command,
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   //icon: "folder"==i.type || "url"==i.type ? "folder" : "chevron_right",
                                   params: ["item_id:"+i.id, "want_url:1"],
                                   type: "group",
@@ -621,7 +621,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
                                   url: i.url,
-                                  image: resolveImage(i.icon, i.image),
+                                  image: resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE),
                                   //icon: i.url && (i.url.startsWith("http:") || i.url.startsWith("https:")) ? "wifi_tethering" : "music_note",
                                   type: "track",
                                   menuActions: "favorites"===parent.type
@@ -666,6 +666,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 if (i.image) {
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
+                    i.thumb = resolveImage(null, i.image, LMS_GRID_IMAGE_SIZE);
                     i.src = resolveImage(null, i.image);
                     i.w=0;
                     i.h=0;

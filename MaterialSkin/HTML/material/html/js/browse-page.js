@@ -120,7 +120,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex v-for="(item, index) in items" :key="item.id">
      <v-card flat tile>
       <v-card-text v-if="item.type=='image'" class="image-grid-item">
-       <v-img :src="item.src" :lazy-src="item.src" aspect-ratio="1" @click="showImage(index)"></v-img>
+       <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
        {{item.caption}}
       </v-card-text>
       <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">

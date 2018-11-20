@@ -108,6 +108,11 @@ a {
     margin-right: auto;
 }
 
+.v-avatar img {
+    object-fit: cover;
+    object-position: 50% 0%;
+}
+
 .image-grid-item {
     width: 200px;
     height: 256px;

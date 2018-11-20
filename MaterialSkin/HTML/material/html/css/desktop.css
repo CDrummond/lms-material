@@ -110,17 +110,15 @@ body {
 }
 
 .np-text {
-    font-weight:800; 
-    font-size:120%;
-    margin:8px 8px 0px 8px; 
-    /*height:32px; */
+    font-weight:400;
+    margin:8px 8px 0px 8px;
+    max-width:calc(100vw - (400px - var(--safe-area-bottom)));
 }
 
-.np-subtext {
-    font-weight:400; 
-    margin:0px 8px 0px 8px; 
+.np-text-sub {
+    font-weight:400;
+    margin: -2px 8px -4px 8px;
     max-width:calc(100vw - (400px - var(--safe-area-bottom)));
-    /*height:22px; */
 }
 
 .np-info {

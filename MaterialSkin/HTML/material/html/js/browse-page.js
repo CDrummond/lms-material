@@ -103,8 +103,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)">
-    <v-flex xs12 class="ellipsis toolbar-title">{{headerTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis toolbar-subtitle">{{headerSubTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <template v-for="(action, index) in menuActions">
@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">
        <img v-lazy="item.image"></img>
        <div class="image-grid-text">{{item.title}}</div>
-       <div class="image-grid-text subtitle">{{item.subtitle}}</div>
+       <div class="image-grid-text subtext">{{item.subtitle}}</div>
        <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
         <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
         <v-icon v-else-if="item.menuActions && item.menuActions.length===1">{{item.menuActions[0].icon}}</v-icon>

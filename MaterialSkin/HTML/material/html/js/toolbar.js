@@ -18,7 +18,7 @@ Vue.component('lms-toolbar', {
  <v-menu bottom class="toolbar-menu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title"><v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
-   <div v-if="!desktop" class="toolbar-subtitle">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
+   <div v-if="!desktop" class="maintoolbar-subtitle subtext">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list">

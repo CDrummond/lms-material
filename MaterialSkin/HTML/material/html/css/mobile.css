@@ -55,10 +55,17 @@
     max-width:250px !important;
 }
 
-.lms-bottom-nav-button > .v-btn__content > span {
+.lms-bottom-nav-button .v-btn__content {
+    height: 48px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.lms-bottom-nav-button .v-btn__content span {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width:100% !important;
+    height: 18px;
 }
 
 .lms-list {

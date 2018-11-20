@@ -17,9 +17,9 @@ function queueItemCover(item) {
         return resolveImage(null, item.artwork_url);
     }
     if (item.coverid) {
-        return lmsServerAddress+"/music/"+item.coverid+"/cover.jpg";
+        return lmsServerAddress+"/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
     }
-    return resolveImage("music/0/cover_50x50");
+    return resolveImage("music/0/cover"+LMS_LIST_IMAGE_SIZE);
 }
 
 function parseResp(data, showTrackNum) {

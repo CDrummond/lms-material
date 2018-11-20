@@ -1,3 +1,7 @@
+0.1.2
+-----
+1. Use _50x50_f for list covers, and _300x300_f for grid covers.
+
 0.1.1
 -----
  1. Only list players that are connected.

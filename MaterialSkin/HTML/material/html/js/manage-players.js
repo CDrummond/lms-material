@@ -100,7 +100,7 @@ Vue.component('lms-manage-players', {
             bus.$emit('dialog', 'manage-players', false);
         },
         i18n(str) {
-            if (!this.show) {
+            if (this.show) {
                 return i18n(str);
             } else {
                 return str;

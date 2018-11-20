@@ -1,15 +1,16 @@
 0.1.2
 -----
-1. Use _50x50_o for list covers, and _300x300_f for grid covers.
-2. Add scaled image to slideshow list, and only fetch full sized image when
-   slideshow active.
-3. Crop list images as per grid images.
-4. Add bitrate and file type to now playing.
-5. Only show year if >0
-6. Add tooltip to grid view items.
-7. Allow gtid view text to span multiple lines.
-8. Reduce some font sizes.
-9. Show name of last loaded playlist in queue.
+ 1. Use _50x50_o for list covers, and _300x300_f for grid covers.
+ 2. Add scaled image to slideshow list, and only fetch full sized image when
+    slideshow active.
+ 3. Crop list images as per grid images.
+ 4. Add bitrate and file type to now playing.
+ 5. Only show year if >0
+ 6. Add tooltip to grid view items.
+ 7. Allow gtid view text to span multiple lines.
+ 8. Reduce some font sizes.
+ 9. Show name of last loaded playlist in queue.
+10. Fix listing of playlist tracks.
 
 0.1.1
 -----

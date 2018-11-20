@@ -454,7 +454,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 resp.items.push({
                               id: "playlist_id:"+i.id,
                               title: i.playlist,
-                              command: ["playlists", "tracks", TRACK_TAGS],
+                              command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],

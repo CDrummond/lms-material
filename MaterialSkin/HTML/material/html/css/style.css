@@ -317,6 +317,11 @@ a {
     padding-right:8px !important;
 }
 
+.settings-title .lms-toolbar .v-toolbar__title {
+    font-size: 110% !important;
+    font-weight: 600;
+}
+
 .settings-title {
     height: 56px !important;
     max-height: 56px !important;

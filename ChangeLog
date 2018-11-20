@@ -11,6 +11,7 @@
  8. Reduce some font sizes.
  9. Show name of last loaded playlist in queue.
 10. Fix listing of playlist tracks.
+11. Move 'Manage Players' dialog to player menu.
 
 0.1.1
 -----

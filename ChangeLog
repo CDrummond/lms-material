@@ -9,6 +9,7 @@
 6. Add tooltip to grid view items.
 7. Allow gtid view text to span multiple lines.
 8. Reduce some font sizes.
+9. Show name of last loaded playlist in queue.
 
 0.1.1
 -----

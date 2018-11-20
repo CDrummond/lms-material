@@ -102,9 +102,9 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout>
    <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
-   <v-layout row wrap class="subtoolbar-title" @click="showHistory($event)">
-    <v-flex class="xs12 toolbar-title">{{headerTitle}}</v-flex>
-    <div class="toolbar-subtitle">{{headerSubTitle}}</div>
+   <v-layout row wrap @click="showHistory($event)">
+    <v-flex xs12 class="ellipsis toolbar-title">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis toolbar-subtitle">{{headerSubTitle}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <template v-for="(action, index) in menuActions">

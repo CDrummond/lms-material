@@ -86,7 +86,10 @@ var lmsQueue = Vue.component("lms-queue", {
  </v-dialog>
  <div class="subtoolbar pq-details">
   <v-layout>
-   <v-flex class="pq-text" v-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
+   <v-layout row wrap v-if="listSize>0">
+    <v-flex xs12 class="ellipsis toolbar-title">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 v-if="playlistName" class="ellipsis toolbar-subtitle">{{playlistName}}</v-flex>
+   </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
@@ -153,7 +156,8 @@ var lmsQueue = Vue.component("lms-queue", {
             trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, saveAs:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                      shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
-            menu: { show:false, item: undefined, x:0, y:0, index:0}
+            menu: { show:false, item: undefined, x:0, y:0, index:0},
+            playlistName: undefined
         }
     },
     created() {
@@ -203,7 +207,10 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.timestamp=0;
                 }
             }*/
-            this.playlistName=playerStatus.playlist.name;
+            if (this.lastLoadedPlaylistName!=playerStatus.playlist.name) {
+                this.lastLoadedPlaylistName=playerStatus.playlist.name;
+                this.playlistName=playerStatus.playlist.name;
+            }
             if (playerStatus.playlist.timestamp!==this.timestamp) {
                 this.timestamp = playerStatus.playlist.timestamp;
                 this.scheduleUpdate();
@@ -298,7 +305,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.items.length<1) {
                 return;
             }
-            var value=""+this.playlistName;
+            var value=""+(undefined==this.playlistName ? "" : this.playlistName);
             this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value };
         },
         clear() {

@@ -29,6 +29,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <p class="np-subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
   <p class="np-subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
   <p class="np-subtext" v-else>&nbsp;</p>
+  <p class="np-subtext np-tech">{{playerStatus.current.technicalInfo}}</p>
   <p class="np-subtext np-time">{{formattedTime}}</p>
   <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
@@ -89,9 +90,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-menu>
 
   <v-layout text-xs-center row wrap class="np-controls">
-   <v-flex xs6 class="np-pos" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.time | displayTime}}</v-flex>
-   <v-flex xs12 class="np-pos" style="text-align:center" v-else-if="!info.show && playerStatus.current.time>0">{{playerStatus.current.time | displayTime}}</v-flex>
-   <v-flex xs6 class="np-duration" v-if="!info.show && playerStatus.current.duration>0">{{playerStatus.current.duration | displayTime}}</v-flex>
+   <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
+   <v-flex xs6 class="np-tech">{{playerStatus.current.technicalInfo}}</v-flex>
+   <v-flex xs3 class="np-duration" v-if="!info.show">{{playerStatus.current.duration | displayTime}}</v-flex>
    <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0"><v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider></v-flex>
    <v-flex xs4>
     <v-layout text-xs-center>
@@ -129,7 +130,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  playerStatus: {
                     ison: 1,
                     isplaying: 1,
-                    current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, album:undefined, albumName:undefined },
+                    current: { canseek:1, artwork_url:undefined, coverid: undefined, duration:0, time:0, title:undefined, artist:undefined, 
+                               album:undefined, albumName:undefined, technicalInfo: "" },
                     playlist: { shuffle:0, repeat: 0 },
                  },
                  info: { show: false, tab:0,
@@ -209,6 +211,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.playlist.repeat!=this.playerStatus.playlist.repeat) {
                 this.playerStatus.playlist.repeat = playerStatus.playlist.repeat;
+            }
+            var technical = [];
+            if (playerStatus.current.bitrate) {
+                technical.push(playerStatus.current.bitrate);
+            }
+            if (playerStatus.current.type) {
+                technical.push(playerStatus.current.type);
+            }
+            technical=technical.join(", ");
+            if (technical!=this.playerStatus.current.technicalInfo) {
+                this.playerStatus.current.technicalInfo = technical;
             }
         }.bind(this));
         // Refresh status now, in case we were mounted after initial status call
@@ -327,7 +340,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     filters: {
         displayTime: function (value) {
-            if (undefined==value) {
+            if (undefined==value || value<=0) {
                 return '';
             }
             return formatSeconds(Math.floor(value));

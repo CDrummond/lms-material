@@ -148,6 +148,17 @@ body {
     margin:auto;
 }
 
+.np-tech {
+    position:fixed;
+    bottom:calc(41px + var(--safe-area-bottom));
+    right:12px;
+    font-size: 75%;
+    font-weight: 400;
+    width: 16em;
+    font-family: monospace, monospace;
+    text-align: right;
+}
+
 .np-time {
     position:fixed;
     bottom:calc(25px + var(--safe-area-bottom));

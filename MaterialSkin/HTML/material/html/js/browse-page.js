@@ -58,6 +58,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <button class="pswp__button pswp__button--close"></button>
      <button class="pswp__button pswp__button--fs"></button>
      <button class="pswp__button pswp__button--zoom"></button>
+     <button class="pswp__button pswp__button--playpause"></button>
      <div class="pswp__preloader">
       <div class="pswp__preloader__icn">
        <div class="pswp__preloader__cut">

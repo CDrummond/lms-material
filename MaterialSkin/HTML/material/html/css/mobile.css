@@ -134,6 +134,13 @@
     text-align: left;
 }
 
+.np-tech {
+    font-size: 75%;
+    font-weight: 400;
+    font-family: monospace, monospace;
+    text-align: center;
+}
+
 .np-duration {
     font-size: 75%;
     font-weight: 400;

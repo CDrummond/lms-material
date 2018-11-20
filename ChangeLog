@@ -4,6 +4,7 @@
 2. Add scaled image to slideshow list, and only fetch full sized image when
    slideshow active.
 3. Crop list images as per grid images.
+4. Add bitrate and file type to now playing.
 
 0.1.1
 -----

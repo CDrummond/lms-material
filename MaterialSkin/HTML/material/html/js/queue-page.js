@@ -87,8 +87,8 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="subtoolbar pq-details">
   <v-layout>
    <v-layout row wrap v-if="listSize>0">
-    <v-flex xs12 class="ellipsis toolbar-title">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
-    <v-flex xs12 v-if="playlistName" class="ellipsis toolbar-subtitle">{{playlistName}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 v-if="playlistName" class="ellipsis subtoolbar-subtitle subtext">{{playlistName}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>

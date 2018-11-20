@@ -25,12 +25,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <div>
   <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
   <p class="np-text" v-else>&nbsp;</p>
-  <p class="np-subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
-  <p class="np-subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
-  <p class="np-subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-  <p class="np-subtext" v-else>&nbsp;</p>
-  <p class="np-subtext np-tech">{{playerStatus.current.technicalInfo}}</p>
-  <p class="np-subtext np-time">{{formattedTime}}</p>
+  <p class="np-text-sub subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
+  <p class="np-text-sub subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+  <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+  <p class="np-text" v-else>&nbsp;</p>
+  <p class="np-text np-tech">{{playerStatus.current.technicalInfo}}</p>
+  <p class="np-text np-time">{{formattedTime}}</p>
   <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
  <div v-if="info.show" class="np-info">
@@ -76,10 +76,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <div v-else>
   <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
   <p class="np-text" v-else>&nbsp;</p>
-  <p class="np-subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
-  <p class="np-subtext" v-else>&nbsp;</p>
-  <p class="np-subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-  <p class="np-subtext" v-else>&nbsp;</p>
+  <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+  <p class="np-text" v-else>&nbsp;</p>
+  <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+  <p class="np-text" v-else>&nbsp;</p>
   <img v-if="!info.show" :src="cover" class="np-image" @contextmenu="showMenu"></img>
   <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
    <v-list>

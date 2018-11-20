@@ -170,23 +170,24 @@ a {
     height:8px;
 }
 
-.toolbar-title {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .maintoolbar-title {
     font-size:85% !important;
 }
 
+.toolbar-title {
+    margin-left: 4px;
+    margin-bottom:0px !important;
+    padding-bottom:0px !important;
+    align-items: center;
+    display: flex;
+}
+
 .toolbar-subtitle {
-    font-size:75% !important;
+    margin-left: 4px;
+    padding-top: 0px;
     font-weight: 300;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    opacity:0.9;
+    margin-top:-2px !important;
 }
 
 .vol-text {
@@ -241,10 +242,6 @@ a {
 
 .dimmed {
     opacity:0.25;
-}
-
-.subtoolbar-title {
-    padding-top: 0px;
 }
 
 .pq-details {

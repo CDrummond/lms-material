@@ -83,6 +83,10 @@ a {
     margin:0px;
 }
 
+.lms-small-menu-icon {
+    margin-bottom:3px;
+}
+
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
     height: 40px;

@@ -13,6 +13,7 @@ var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
 Vue.component('lms-toolbar', {
     template: `
+<div>
 <v-toolbar fixed dense app class="lms-toolbar">
  <v-menu bottom class="toolbar-menu">
   <v-toolbar-title slot="activator">
@@ -92,6 +93,8 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
 </v-toolbar>
+<v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
+</div>
     `,
     props: ['desktop'],
     data() {
@@ -103,7 +106,8 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined, info:undefined,
                         switchoff:undefined, switchon:undefined},
                  infoOpen: false,
-                 playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined}
+                 playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined},
+                 snackbar:{ show: false, msg: undefined}
                }
     },
     mounted() {
@@ -187,6 +191,14 @@ Vue.component('lms-toolbar', {
                 }
             }.bind(this));
         }
+
+        bus.$on('showError', function(err, msg) {
+            this.snackbar = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""), show: true, color: 'error' };
+        }.bind(this));
+        bus.$on('showMessage', function(msg) {
+console.log("Show message:"+msg);
+            this.snackbar = {msg: msg, show: true };
+        }.bind(this));
     },
     methods: {
         initItems() {

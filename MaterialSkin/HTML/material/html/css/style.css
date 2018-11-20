@@ -106,6 +106,7 @@ a {
     width: 200px !important;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 4px;
 }
 
 .v-avatar img {
@@ -113,24 +114,22 @@ a {
     object-position: 50% 0%;
 }
 
+.image-grid-text {
+    width: 184px;
+    max-height: 144px;
+}
+
 .image-grid-item {
     width: 200px;
-    height: 256px;
+    min-height: 240px;
+    max-height: 512px;
     padding:4px;
     margin:0px;
 }
 
-.image-grid-text {
-    position: absolute;
-    bottom:4px;
-    width: 184px;
-    height: 44px;
-    vertical-align: middle;
-}
-
 .image-grid-btn {
     position: absolute;
-    bottom: 16px !important;
+    top: 196px !important;
     left: 176px !important;
     width: 32px !important;
     height: 32px !important;
@@ -143,8 +142,9 @@ a {
 
 @media only screen and (max-width: 600px) {
     .image-grid-item {
-        width: 134px;
-        height: 184px !important;
+        width: 134px !important;
+        min-height: 184px !important;
+        max-height: 442px !important;
     }
 
     .image-grid-item img {
@@ -157,6 +157,7 @@ a {
     }
 
     .image-grid-btn {
+        top: 126px !important;
         left: 110px !important;
     }
 }

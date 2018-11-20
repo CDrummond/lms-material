@@ -200,7 +200,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 playerStatus.current.album_id!=this.playerStatus.current.album_id) {
                 this.playerStatus.current.albumName = playerStatus.current.album;
                 this.playerStatus.current.album_id = playerStatus.current.album_id;
-                if (playerStatus.current.year) {
+                if (playerStatus.current.year && playerStatus.current.year>0) {
                     this.playerStatus.current.album = this.playerStatus.current.albumName+" ("+ playerStatus.current.year+")";
                 } else {
                     this.playerStatus.current.album = this.playerStatus.current.albumName;

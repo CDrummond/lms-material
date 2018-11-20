@@ -41,7 +41,7 @@ function parseResp(data, showTrackNum) {
                     } else {
                         sbtitle=i.album;
                     }
-                    if (i.year) {
+                    if (i.year && i.year>0) {
                         subtitle+=" (" + i.year + ")";
                     }
                 }

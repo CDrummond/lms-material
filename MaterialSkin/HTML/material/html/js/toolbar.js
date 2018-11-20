@@ -35,11 +35,6 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="players && players.length>1"></v-divider>
-   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
-     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>0}"><v-icon>speaker_group</v-icon>&nbsp;{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
-   </v-list-tile>
-
    <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
    <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
     <v-list-tile-content v-if="playerStatus.ison">
@@ -55,6 +50,9 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
    <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
     <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
+     <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>0}"><v-icon>speaker_group</v-icon>&nbsp{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
    <v-list-tile v-if="playerStatus.sleepTimer">
     <v-list-tile-content>

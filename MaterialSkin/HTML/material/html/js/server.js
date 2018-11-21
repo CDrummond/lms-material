@@ -43,11 +43,24 @@ var lmsServer = Vue.component('lms-server', {
                 this.refreshStatus();
             }.bind(this), nextInterval);
         },
+        setServerStatusUpdateInterval: function(interval) {
+            if (interval == this.currentServerStatusInterval) {
+                return;
+            }
+            if (undefined!==this.serverStatusRefreshInterval) {
+                clearInterval(this.serverStatusRefreshInterval);
+                this.serverStatusRefreshInterval = undefined;
+            }
+            this.currentServerStatusInterval = interval;
+            this.serverStatusRefreshInterval = setInterval(function () {
+                this.refreshServerStatus();
+            }.bind(this), interval);
+        },
         refreshServerStatus: function () {
             //console.log("Refresh");
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
+                var players = [];
                 if (data && data.result && data.result.players_loop) {
-                    var players = [];
                     data.result.players_loop.forEach(i => {
                         if (1===i.connected) {
                             players.push({ id: i.playerid,
@@ -74,8 +87,10 @@ var lmsServer = Vue.component('lms-server', {
                                                                         return 0;
                                                                    }));
                 }
+                this.setServerStatusUpdateInterval(players.length>0 ? LMS_SERVER_STATUS_REFRESH_MAX : LMS_SERVER_STATUS_REFRESH_MIN);
             }).catch(err => {
                 window.console.error(err);
+                this.setServerStatusUpdateInterval(LMS_SERVER_STATUS_REFRESH_MIN);
             });
         },
         refreshStatus: function() {
@@ -127,10 +142,6 @@ var lmsServer = Vue.component('lms-server', {
     },
     created: function() {    
         this.refreshServerStatus();
-
-        this.serverStatusRefreshInterval = setInterval(function () {
-            this.refreshServerStatus();
-        }.bind(this), LMS_SERVER_STATUS_REFRESH);
         this.statusRefreshTimer = setTimeout(function () {
             this.refreshStatus();
         }.bind(this), LMS_STATUS_REFRESH_MAX);

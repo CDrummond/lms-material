@@ -260,25 +260,7 @@ var lmsQueue = Vue.component("lms-queue", {
             const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
 
             if (bottomOfPage || pageHeight < visible) {
-                this.fetchingItems = true;
-                var command = this.buildCommand(this.current);
-                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                var count = this.current.range ? (item.range.count-this.items.length) < LMS_BATCH_SIZE ? (item.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
-
-                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                    this.fetchingItems = false;
-                    var resp = parseResp(data, this.showTrackNum);
-                    if (resp && resp.items) {
-                        resp.items.forEach(i => {
-                            this.items.push(i);
-                        });
-                    }
-                    if (data && data.result && data.result.playlist_tracks) {
-                        this.listSize = data.result.playlist_tracks;
-                    }
-                }).catch(err => {
-                    this.fetchingItems = false;
-                });
+                this.fetchItems();
             }
         });
 

@@ -17,6 +17,7 @@
 13. Smarter polling whilst playing. Only poll every second if in the first or
     last 6 seconds of a track.
 14. Change clear queue icon to something (hopefully) more obvious.
+15. Fix fetching more than 100 items in queue.
 
 0.1.1
 -----

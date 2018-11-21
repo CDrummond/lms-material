@@ -199,13 +199,13 @@ var lmsQueue = Vue.component("lms-queue", {
             if (playerStatus.playlist.repeat!=this.playerStatus.repeat) {
                 this.playerStatus.repeat = playerStatus.playlist.repeat;
             }
-            /*if (playerStatus.playlist.count!=this.listSize) {
+            if (playerStatus.playlist.count!=this.listSize) {
                 this.listSize = playerStatus.playlist.count;
                 if (0==this.listSize && 0==playerStatus.playlist.timestamp) {
                     this.items=[];
                     this.timestamp=0;
                 }
-            }*/
+            }
             if (this.lastLoadedPlaylistName!=playerStatus.playlist.name) {
                 this.lastLoadedPlaylistName=playerStatus.playlist.name;
                 this.playlistName=playerStatus.playlist.name;

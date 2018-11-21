@@ -1288,12 +1288,18 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     mounted() {
-        // All Artists + Album Artists, or just Artists?
-        lmsCommand("", ["pref", "useUnifiedArtistsList", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                this.separateArtists = 1!= data.result._p2;
-                setLocalStorageVal('separateArtists', this.separateArtists);
-                this.initItems();
+        // Get server prefs  for:
+        //   All Artists + Album Artists, or just Artists?
+        //   Filer albums/tracks on genre?
+        //   Filter album/tracks on role?
+        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter"]).then(({data}) => {
+            if (data && data.result) {
+                this.options.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
+                setLocalStorageVal('separateArtists', this.options.separateArtists);
+                this.options.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
+                setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
+                this.options.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
+                setLocalStorageVal('noRoleFilter', this.options.noRoleFilter);
             }
         });
         // Artist images?
@@ -1301,20 +1307,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (data && data.result && data.result._p2) {
                 this.options.artistImages = 1==data.result._p2;
                 setLocalStorageVal('artistImages', this.options.artistImages);
-            }
-        });
-        // Filer albums/tracks on genre?
-        lmsCommand("", ["pref", "noGenreFilter", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                this.options.noGenreFilter = 1==data.result._p2;
-                setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
-            }
-        });
-        // Filter album/tracks on role?
-        lmsCommand("", ["pref", "noRoleFilter", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                this.options.noRoleFilter = 1==data.result._p2;
-                setLocalStorageVal('noRoleFilter', this.options.noRoleFilter);
             }
         });
 

@@ -169,15 +169,14 @@ var lmsQueue = Vue.component("lms-queue", {
         this.autoScrollRequired = false;
         this.previousScrollPos = 0;
         this.showTrackNum = getLocalStorageBool('showTrackNum', true);
-        lmsCommand("", ["pref", "titleFormatWeb", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                var idx = parseInt(data.result && data.result._p2);
-                lmsCommand("", ["pref", "titleFormat", "?"]).then(({data}) => {
-                    if (data && data.result && data.result._p2 && idx<data.result._p2.length) {
-                        this.showTrackNum = data.result._p2[idx].includes("TRACKNUM");
-                        setLocalStorageVal('showTrackNum', this.showTrackNum);
-                    }
-                });
+
+        lmsCommand("", ["serverstatus", 0, 0, "prefs:titleFormatWeb,titleFormat"]).then(({data}) => {
+            if (data && data.result && data.result) {
+                var idx = parseInt(data.result.titleFormatWeb);
+                if (idx<data.result.titleFormat.length) {
+                    this.showTrackNum = data.result.titleFormat[idx].includes("TRACKNUM");
+                    setLocalStorageVal('showTrackNum', this.showTrackNum);
+                }
             }
         });
     },

@@ -133,7 +133,7 @@ body {
 }
 
 .np-slider {
-    margin-top:-6px;
+    margin-top:1px !important;
     padding-left:0px;
     padding-right:4px;
     height: 32px;
@@ -148,7 +148,7 @@ body {
 
 .np-tech {
     position:fixed;
-    bottom:calc(41px + var(--safe-area-bottom));
+    bottom:calc(45px + var(--safe-area-bottom));
     right:12px;
     font-size: 75%;
     font-weight: 400;
@@ -159,7 +159,7 @@ body {
 
 .np-time {
     position:fixed;
-    bottom:calc(25px + var(--safe-area-bottom));
+    bottom:calc(29px + var(--safe-area-bottom));
     right:12px;
     font-size: 75%;
     font-weight: 400;

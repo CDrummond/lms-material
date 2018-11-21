@@ -171,12 +171,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.coverFromInfo = true;
             }
 
+            var playStateChanged = false;
+            var trackChanged = false;
             // Have other items changed
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
             }
             if (playerStatus.isplaying!=this.playerStatus.isplaying) {
                 this.playerStatus.isplaying = playerStatus.isplaying;
+                playStateChanged = true;
             }
             if (playerStatus.current.canseek!=this.playerStatus.current.canseek) {
                 this.playerStatus.current.canseek = playerStatus.current.canseek;
@@ -189,12 +192,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.current.title!=this.playerStatus.current.title) {
                 this.playerStatus.current.title = playerStatus.current.title;
+                trackChanged = true;
             }
             if (playerStatus.current.artist!=this.playerStatus.current.artist ||
                 playerStatus.current.trackartist!=this.playerStatus.current.trackartist ||
                 playerStatus.current.artist_id!=this.playerStatus.current.artist_id) {
                 this.playerStatus.current.artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
                 this.playerStatus.current.artist_id = playerStatus.current.artist_id;
+                trackChanged = true;
             }
             if (playerStatus.current.album!=this.playerStatus.current.albumName ||
                 playerStatus.current.album_id!=this.playerStatus.current.album_id) {
@@ -205,6 +210,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 } else {
                     this.playerStatus.current.album = this.playerStatus.current.albumName;
                 }
+                trackChanged = true;
             }
             if (playerStatus.playlist.shuffle!=this.playerStatus.playlist.shuffle) {
                 this.playerStatus.playlist.shuffle = playerStatus.playlist.shuffle;
@@ -222,6 +228,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             technical=technical.join(", ");
             if (technical!=this.playerStatus.current.technicalInfo) {
                 this.playerStatus.current.technicalInfo = technical;
+            }
+
+            if (playStateChanged) {
+                if (this.playerStatus.isplaying) {
+                    if (trackChanged) {
+                        this.stopPositionInterval();
+                    }
+                    this.startPositionInterval();
+                } else {
+                    this.stopPositionInterval();
+                }
+            } else if (this.playerStatus.isplaying && trackChanged) {
+                this.stopPositionInterval();
+                this.startPositionInterval();
             }
         }.bind(this));
         // Refresh status now, in case we were mounted after initial status call
@@ -336,6 +356,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else {
                 this.fetchReview();
             }
+        },
+        startPositionInterval() {
+            this.positionInterval = setInterval(function () {
+                if (undefined!=this.playerStatus.current.time && this.playerStatus.current.time>=0) {
+                    this.playerStatus.current.time += 0.5;
+                }
+            }.bind(this), 500);
+        },
+        stopPositionInterval() {
+            if (undefined!==this.positionInterval) {
+                clearInterval(this.positionInterval);
+                this.positionInterval = undefined;
+            }
         }
     },
     filters: {
@@ -368,4 +401,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         : undefined;
         }
     },
+    beforeDestroy() {
+        this.stopPositionInterval();
+    }
 });

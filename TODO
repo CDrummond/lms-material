@@ -19,9 +19,4 @@
       ["groupmac", ["playergroup", 0, 100]] lists group details
       ["groupmac", ["playerpref", "playername", "X"]] sets group name
       ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
-  - Smarter polling
-    - Only poll status every 5 seconds
-      - at start of song, and near end poll every (e.g.) 0.5 seconds
-    - Create timer to advance song progress - re-adjust on each poll
-    - or use ["time", "?"] to just obtain time position every second?
 

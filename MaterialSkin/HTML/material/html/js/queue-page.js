@@ -371,23 +371,19 @@ var lmsQueue = Vue.component("lms-queue", {
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data, this.showTrackNum);
-                if (this.items.length && resp.items.length) {
-                    resp.items.forEach(i => {
-                        this.items.push(i);
-                    });
-                } else {
-                    this.items = resp.items;
-                }
+                resp.items.forEach(i => {
+                    this.items.push(i);
+                });
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
                 var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==timestamp;
                 this.timestamp = resp.timestamp;
                 this.fetchingItems = false;
                 this.listSize = data.result.playlist_tracks;
+                this.getDuration();
                 if (needUpdate) {
                     this.scheduleUpdate();
                 } else {
-                    this.getDuration();
                     if (this.$store.state.autoScrollQueue) {
                         this.$nextTick(function () {
                             this.scrollToCurrent();

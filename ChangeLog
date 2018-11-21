@@ -7,7 +7,7 @@
  4. Add bitrate and file type to now playing.
  5. Only show year if >0
  6. Add tooltip to grid view items.
- 7. Allow gtid view text to span multiple lines.
+ 7. Allow grid view text to span multiple lines.
  8. Reduce some font sizes.
  9. Show name of last loaded playlist in queue.
 10. Fix listing of playlist tracks.
@@ -16,6 +16,7 @@
     players.
 13. Smarter ploggin whilst playing. Only poll every second if in the first or
     last 6 seconds of a track.
+14. Change clear queue icon to something (hopefully) more obvious.
 
 0.1.1
 -----

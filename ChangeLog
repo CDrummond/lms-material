@@ -14,7 +14,7 @@
 11. Move 'Manage Players' dialog to player menu.
 12. If there are no players detected, then poll server ever second to detect
     players.
-13. Smarter ploggin whilst playing. Only poll every second if in the first or
+13. Smarter polling whilst playing. Only poll every second if in the first or
     last 6 seconds of a track.
 14. Change clear queue icon to something (hopefully) more obvious.
 

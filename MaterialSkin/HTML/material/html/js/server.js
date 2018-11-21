@@ -126,8 +126,12 @@ var lmsServer = Vue.component('lms-server', {
                         }
 
                         bus.$emit('playerStatus', player);
+
                         if (player.isplaying) {
-                            nextInterval = LMS_STATUS_REFRESH_MIN;
+                            var quickPoll = (LMS_STATUS_REFRESH_MAX/1000.0)*2;
+                            if (player.current.time<quickPoll || (player.current.duration-player.current.time)<quickPoll) {
+                                nextInterval = LMS_STATUS_REFRESH_MIN;
+                            }
                         }
                     }
                     this.scheduleNextStatusUpdate(nextInterval);

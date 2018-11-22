@@ -70,6 +70,10 @@ a {
     overflow-x: hidden !important;
 }
 
+.lms-image-grid {
+    overflow-x: hidden !important;
+}
+
 .lms-image-grid .container {
     padding: 0px 8px 8px 8px;
 }

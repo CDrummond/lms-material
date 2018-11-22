@@ -147,7 +147,7 @@ body {
 }
 
 .np-info-text-full {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 45px));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 44px));
     overflow:auto;
     max-width:1000px;
     margin:auto;

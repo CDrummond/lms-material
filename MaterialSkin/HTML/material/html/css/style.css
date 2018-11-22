@@ -293,6 +293,15 @@ a {
 	display: block;
 }
 
+.np-info-tab-cover {
+    background:transparent;
+}
+
+/* Remove shadow at top of now-playing info dialog buttons */
+.np-info .v-card {
+    box-shadow: none !important;
+}
+
 .ellipsis {
     text-overflow:ellipsis; 
     overflow: hidden; 

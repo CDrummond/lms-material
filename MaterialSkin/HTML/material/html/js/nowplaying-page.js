@@ -37,12 +37,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <p class="np-text np-time cursor" @click="toggleTime()">{{formattedTime}}</p>
   <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
- <div v-if="info.show" class="np-info">
-  <v-tabs centered v-model="info.tab" v-if="info.showTabs">
+ <div v-if="info.show" class="np-info np-info-cover" id="np-info">
+  <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
-    <v-tab-item :key="index">
-     <v-card flat>
+    <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
+     <v-card flat class="np-info-card-cover">
       <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
@@ -52,7 +52,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-layout row>
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
-      <v-card flat>
+      <v-card flat class="np-info-card-cover">
        <v-card-title><b>{{tab.title}}</b></v-card-title>
        <v-card-text class="np-info-text-full" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
       </v-card>
@@ -60,7 +60,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </template>
    </v-layout>
   </div>
-  <v-card>
+  <v-card class="np-info-card-cover">
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat v-if="info.showTabs" @click="toggleTabs()">{{trans.expand}}</v-btn>
@@ -72,12 +72,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 </div>
 <div class="np-page" v-else-if="playerStatus.ison">
- <div v-if="info.show" class="np-info">
-  <v-tabs centered v-model="info.tab">
+ <div v-if="info.show" class="np-info np-info-cover" id="np-info">
+  <v-tabs centered v-model="info.tab" class="np-info-card-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
-    <v-tab-item :key="index">
-     <v-card flat>
+    <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
+     <v-card flat class="np-info-card-cover">
       <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
@@ -377,6 +377,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showInfo() {
+            this.$nextTick(function () {
+                var elem = document.getElementById("np-info");
+                if (elem) {
+                    elem.style.backgroundImage = "url('"+this.cover+"')";
+                }
+            });
             if (this.desktop && !this.showTabs) {
                 this.fetchLyrics();
                 this.fetchBio();

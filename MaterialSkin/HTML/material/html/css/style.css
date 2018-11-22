@@ -332,9 +332,9 @@ a {
     background:transparent;
 }
 
-/* Remove shadow at top of now-playing info dialog buttons */
 .np-info .v-card {
-    box-shadow: none !important;
+    box-shadow: none !important; /* Remove shadow at top of now-playing info dialog buttons */
+    border-radius: 0px; /* And border around cards, which makes holes in the corners! */
 }
 
 .np-info .v-card__title {

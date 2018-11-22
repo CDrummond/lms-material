@@ -10,7 +10,7 @@ var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'    };
 var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline' };
 var PQ_MORE_ACTION =      { cmd: 'more',     icon: 'more_horiz'            };
 
-const PQ_STATUS_TAGS = "tags:dcltuAK";
+const PQ_STATUS_TAGS = "tags:dcltuyAK";
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -27,7 +27,7 @@ function parseResp(data, showTrackNum) {
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;
         resp.size = data.result.playlist_tracks;
-        
+
         if (data.result.playlist_loop) {
             data.result.playlist_loop.forEach(i => {
                 var title = i.title;

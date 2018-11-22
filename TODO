@@ -9,14 +9,11 @@
   - Before showing menu, check if item is in favourites - and adjust entries?
   - Check grid sizes on various devices
 
-- Now playing
-  - Show more info for desktop view. e.g. expand 3 tabs into 3 columns
-  - Draw album cover as backdrop?
-
 - Misc
   - Group management
     - Add create/delete/edit/list to JSON API in Groups plugin itself.
       ["groupmac", ["playergroup", 0, 100]] lists group details
       ["groupmac", ["playerpref", "playername", "X"]] sets group name
       ["groupmac", ["playerpref", "plugin.groups:members", ["maca", "macb"]]] sets group members
+  - Use CometD for status updates, rather than polling
 

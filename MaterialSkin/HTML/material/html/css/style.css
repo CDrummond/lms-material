@@ -285,6 +285,14 @@ a {
     text-align: center;
 }
 
+.np-info-text img {
+    max-width: 300px !important;
+    max-height: 300px !important;
+    margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
 .ellipsis {
     text-overflow:ellipsis; 
     overflow: hidden; 

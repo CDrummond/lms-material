@@ -8,6 +8,25 @@
   - Fully handle SlimBrowse commands - e.g. buttons, radios, checkboxes
   - Before showing menu, check if item is in favourites - and adjust entries?
   - Check grid sizes on various devices
+  - Add 'select' mode
+    - Long press on a playable item
+      - change its image/icon to a check
+      - change sub-toolbar to be
+        [x] <selected count> (play now) (insert) (append)
+      - clicking the [x] disables select mode
+      - clicking buttons on left will apply action to selected items
+   - click any item to add to selection
+   - browsing is not possible until selection mode stopped
+
+- Queue
+ - Add 'select' mode
+    - Long press on a playable item
+      - change its image/icon to a check
+      - change sub-toolbar to be
+        [x] <selected count> (remove)
+      - clicking the [x] disables select mode
+      - clicking (remove) will remove items from queue
+   - click any item to add to selection
 
 - Misc
   - Group management

@@ -295,6 +295,14 @@ a {
     padding:16px 16px 0px 16px;
 }
 
+.browse-text img {
+    max-width: 300px !important;
+    max-height: 300px !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
 .np-page {
     position: fixed; 
     top:64px; /* l-toolbar.height */

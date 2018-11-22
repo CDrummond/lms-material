@@ -100,6 +100,38 @@ function parseBrowseResp(data, parent, options, idStart) {
                     name = "?";
                 }
                 var count = data.result.indexList[i][1];
+
+                // If we have more than max items in this 1 group, then split
+                if (count>=maxCount) {
+                    if (prevItem) {
+                        if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
+                            prevItem.title += " .. " + prevItem.subtitle;
+                        }
+                        prevItem.subtitle = isArtists
+                                                ? i18np("1 Artist", "%1 Artists", prevItem.range.count)
+                                                : i18np("1 Album", "%1 Albums", prevItem.range.count);
+                        resp.items.push(prevItem);
+                        prevItem = undefined;
+                    }
+
+                    for (var c=0; c<count; c+=maxCount) {
+                        var total=c+maxCount>count ? (count-c) : maxCount;
+                        console.log(c, total);
+                        resp.items.push({
+                                            title: name+" ("+(c+1)+".."+(c+total)+")",
+                                            subtitle: isArtists
+                                                ? i18np("1 Artist", "%1 Artists", total)
+                                                : i18np("1 Album", "%1 Albums", total),
+                                            range: {start: start+c, count: total},
+                                            type: "group",
+                                            command: parent.command,
+                                            params: parent.params
+                                        });
+                    }
+                    start += count;
+                    continue;
+                }
+
                 var item = {
                                 title: name,
                                 range: {start: start, count: count},

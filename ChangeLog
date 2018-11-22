@@ -22,6 +22,8 @@
 17. For desktop layout, optionally show all 3 panes when showing track info.
 18. Draw current cover behind track info.
 19. Reduce grid cover sizes, and add 3rd size.
+20. If splitting artists/albums in A..Z groups, and a letter has more than the
+    'group size' then split into 'group size' chunks.
 
 0.1.1
 -----

@@ -146,6 +146,13 @@ body {
     margin:auto;
 }
 
+.np-info-text-full {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 57px));
+    overflow:auto;
+    max-width:1000px;
+    margin:auto;
+}
+
 .np-tech {
     position:fixed;
     bottom:calc(45px + var(--safe-area-bottom));

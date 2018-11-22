@@ -19,6 +19,7 @@
 14. Change clear queue icon to something (hopefully) more obvious.
 15. Fix fetching more than 100 items in queue.
 16. Click on song duration to toggle showing duration / time remaining.
+17. For desktop layout, optionally show all 3 panes when showing track info.
 
 0.1.1
 -----

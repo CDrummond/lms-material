@@ -4,7 +4,11 @@
  * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
- 
+
+const BIO_TAB = 0;
+const REVIEW_TAB = 1;
+const LYRICS_TAB = 2;
+
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div v-if="desktop" class="np-bar noselect">
@@ -34,19 +38,33 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
  <div v-if="info.show" class="np-info">
-  <v-tabs centered v-model="info.tab">
+  <v-tabs centered v-model="info.tab" v-if="info.showTabs">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index">
      <v-card flat>
-      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': 0==index}" v-html="tab.text"></v-card-text>
+      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
   </v-tabs>
+  <div v-else>
+   <v-layout row>
+    <template v-for="(tab, index) in info.tabs">
+     <v-flex xs4>
+      <v-card flat>
+       <v-card-title><b>{{tab.title}}</b></v-card-title>
+       <v-card-text class="np-info-text-full" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
+      </v-card>
+     </v-flex>
+    </template>
+   </v-layout>
+  </div>
   <v-card>
    <v-card-actions>
     <v-spacer></v-spacer>
+    <v-btn flat v-if="info.showTabs" @click="toggleTabs()">{{trans.expand}}</v-btn>
+    <v-btn flat v-else @click="toggleTabs()">{{trans.collapse}}</v-btn>
     <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
@@ -60,7 +78,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index">
      <v-card flat>
-      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': 0==index}" v-html="tab.text"></v-card-text>
+      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
@@ -135,16 +153,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                album:undefined, albumName:undefined, technicalInfo: "" },
                     playlist: { shuffle:0, repeat: 0 },
                  },
-                 info: { show: false, tab:0,
+                 info: { show: false, tab:LYRICS_TAB, showTabs:false,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
-                 trans: { close: undefined,
+                 trans: { close: undefined, expand:undefined, collapse:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true
                 };
     },
     mounted() {
+        if (this.desktop) {
+            this.info.showTabs=getLocalStorageBool("showTabs", false);
+        }
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
             if (playerStatus.playlist.count == 0) {
@@ -263,13 +284,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     methods: {
         initItems() {
-            this.trans = { close:i18n("Close"),
+            this.trans = { close:i18n("Close"), expand:i18n("Expand"), collapse:i18n("Collapse"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                            shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle")};
             this.menu.text=i18n("Show information");
-            this.info.tabs[0].title=i18n("Lyrics");
-            this.info.tabs[1].title=i18n("Artist Biography");
-            this.info.tabs[2].title=i18n("Album Review");
+            this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
+            this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
+            this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
         },
         showMenu(event) {
             event.preventDefault();
@@ -293,50 +314,54 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
             }
         },
+        toggleTabs() {
+            this.info.showTabs = !this.info.showTabs;
+            setLocalStorageVal("showTabs", this.info.showTabs);
+        },
         fetchLyrics() {
-            if (this.info.tabs[0].songartist!=this.playerStatus.current.artist || this.info.tabs[0].songtitle!=this.playerStatus.current.title ||
-                (this.playerStatus.current.artist_id && this.info.tabs[0].songartist_id!=this.playerStatus.current.artist_id)) {
-                this.info.tabs[0].text=i18n("Fetching...");
-                this.info.tabs[0].songartist=this.playerStatus.current.artist;
-                this.info.tabs[0].songartist_id=this.playerStatus.current.artist_id;
-                this.info.tabs[0].songtitle=this.playerStatus.current.title;
+            if (this.info.tabs[LYRICS_TAB].songartist!=this.playerStatus.current.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.playerStatus.current.title ||
+                (this.playerStatus.current.artist_id && this.info.tabs[LYRICS_TAB].songartist_id!=this.playerStatus.current.artist_id)) {
+                this.info.tabs[LYRICS_TAB].text=i18n("Fetching...");
+                this.info.tabs[LYRICS_TAB].songartist=this.playerStatus.current.artist;
+                this.info.tabs[LYRICS_TAB].songartist_id=this.playerStatus.current.artist_id;
+                this.info.tabs[LYRICS_TAB].songtitle=this.playerStatus.current.title;
                 var command = ["musicartistinfo", "lyrics", "title:"+this.playerStatus.current.title, "artist:"+this.playerStatus.current.artist, "html:1"];
                 if (this.playerStatus.current.artist_id) {
                     command.push("artist_id:"+this.playerStatus.current.artist_id);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.lyrics || data.result.error)) {
-                        this.info.tabs[0].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
+                        this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
                     }
                 });
             }
         },
         fetchBio() {
-            if (this.info.tabs[1].songartist!=this.playerStatus.current.artist ||
-                (this.playerStatus.current.artist_id && this.info.tabs[1].songartist_id!=this.playerStatus.current.artist_id)) {
-                this.info.tabs[1].text=i18n("Fetching...");
-                this.info.tabs[1].songartist=this.playerStatus.current.artist;
-                this.info.tabs[1].songartist_id=this.playerStatus.current.artist_id;
+            if (this.info.tabs[BIO_TAB].songartist!=this.playerStatus.current.artist ||
+                (this.playerStatus.current.artist_id && this.info.tabs[BIO_TAB].songartist_id!=this.playerStatus.current.artist_id)) {
+                this.info.tabs[BIO_TAB].text=i18n("Fetching...");
+                this.info.tabs[BIO_TAB].songartist=this.playerStatus.current.artist;
+                this.info.tabs[BIO_TAB].songartist_id=this.playerStatus.current.artist_id;
                 var command = ["musicartistinfo", "biography", "artist:"+this.playerStatus.current.artist, "html:1"];
                 if (this.playerStatus.current.artist_id) {
                     command.push("artist_id:"+this.playerStatus.current.artist_id);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.biography || data.result.error)) {
-                        this.info.tabs[1].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                        this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
                     }
                 });
             }
         },
         fetchReview() {
-            if (this.info.tabs[2].songartist!=this.playerStatus.current.artist || this.info.tabs[2].songalbum!=this.playerStatus.current.album ||
-                (this.playerStatus.current.artist_id && this.info.tabs[2].songartist_id!=this.playerStatus.current.artist_id) ||
-                (this.playerStatus.current.album_id && this.info.tabs[2].songalbum_id!=this.playerStatus.current.album_id)) {
-                this.info.tabs[2].text=i18n("Fetching...");
-                this.info.tabs[2].songartist=this.playerStatus.current.artist;
-                this.info.tabs[2].songalbum=this.playerStatus.current.album;
-                this.info.tabs[2].songartist_id=this.playerStatus.current.artist_id;
-                this.info.tabs[2].songalbum_id=this.playerStatus.current.album_id;
+            if (this.info.tabs[REVIEW_TAB].songartist!=this.playerStatus.current.artist || this.info.tabs[REVIEW_TAB].songalbum!=this.playerStatus.current.album ||
+                (this.playerStatus.current.artist_id && this.info.tabs[REVIEW_TAB].songartist_id!=this.playerStatus.current.artist_id) ||
+                (this.playerStatus.current.album_id && this.info.tabs[REVIEW_TAB].songalbum_id!=this.playerStatus.current.album_id)) {
+                this.info.tabs[REVIEW_TAB].text=i18n("Fetching...");
+                this.info.tabs[REVIEW_TAB].songartist=this.playerStatus.current.artist;
+                this.info.tabs[REVIEW_TAB].songalbum=this.playerStatus.current.album;
+                this.info.tabs[REVIEW_TAB].songartist_id=this.playerStatus.current.artist_id;
+                this.info.tabs[REVIEW_TAB].songalbum_id=this.playerStatus.current.album_id;
                 var command = ["musicartistinfo", "albumreview", "artist:"+this.playerStatus.current.artist, "album:"+this.playerStatus.current.album, "html:1"];
                 if (this.playerStatus.current.artist_id) {
                     command.push("artist_id:"+this.playerStatus.current.artist_id);
@@ -346,15 +371,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.albumreview || data.result.error)) {
-                        this.info.tabs[2].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
+                        this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
                     }
                 });
             }
         },
         showInfo() {
-            if (0==this.info.tab) {
+            if (this.desktop && !this.showTabs) {
                 this.fetchLyrics();
-            } else if (1==this.info.tab) {
+                this.fetchBio();
+                this.fetchReview();
+            } else if (LYRICS_TAB==this.info.tab) {
+                this.fetchLyrics();
+            } else if (BIO_TAB==this.info.tab) {
                 this.fetchBio();
             } else {
                 this.fetchReview();

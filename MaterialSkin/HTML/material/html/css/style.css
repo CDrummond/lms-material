@@ -337,6 +337,19 @@ a {
     box-shadow: none !important;
 }
 
+.np-info .v-card__title {
+    padding: 16px 16px 0px 16px;
+}
+
+.np-info .v-card__title p {
+    font-weight: 600;
+    width: 100%;
+    text-align: center !important;
+    text-transform: uppercase;
+    padding: 0px;
+    margin: 0px;
+}
+
 .ellipsis {
     text-overflow:ellipsis; 
     overflow: hidden; 

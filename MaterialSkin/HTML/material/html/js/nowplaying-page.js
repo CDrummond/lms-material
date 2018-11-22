@@ -53,7 +53,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
-       <v-card-title><b>{{tab.title}}</b></v-card-title>
+       <v-card-title><p>{{tab.title}}</p></v-card-title>
        <v-card-text class="np-info-text-full" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
       </v-card>
      </v-flex>

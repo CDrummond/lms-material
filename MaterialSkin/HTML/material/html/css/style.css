@@ -315,8 +315,17 @@ a {
     max-width: 300px !important;
     max-height: 300px !important;
     margin-left: auto;
-	margin-right: auto;
-	display: block;
+    margin-right: auto;
+    display: block;
+}
+
+
+.np-info-text-full img {
+    max-width: 300px !important;
+    max-height: 300px !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 .np-info-tab-cover {

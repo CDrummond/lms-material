@@ -25,6 +25,7 @@ const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "__ALBUM_SORT__";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
 const TOP_ID_PREFIX = "top:/";
+const TOP_MMHDR_ID = TOP_ID_PREFIX+"mmh";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
@@ -35,7 +36,7 @@ const ALBUM_TAGS = "tags:jlya";
 const TRACK_TAGS = "tags:ACdt";
 
 function isLocalLibCommand(command) {
-    return command & command.command && command.command.length>0 &&
+    return command.command && command.command.length>0 &&
            (command.command[0]=="artists" || command.command[0]=="albums" || command.command[0]=="tracks" ||
             command.command[0]=="genres" || command.command[0]=="playlists" || "browselibrary"==command.command[0]);
 }
@@ -172,7 +173,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
-   <v-subheader v-if="item.header">{{ item.header }}</v-subheader>
+   <v-subheader v-if="item.header">{{ libraryName && item.id==TOP_MMHDR_ID ? libraryName : item.header }}</v-subheader>
 
    <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item') && item.style!='itemNoAction'" avatar @click="click(item, index, $event, true)" v-bind:class="{'error-text': item.id==='error'}">
@@ -247,7 +248,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             trans: { ok:undefined, cancel: undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
-            pinned: []
+            pinned: [],
+            libraryName: undefined
         }
     },
     created() {
@@ -318,7 +320,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items') };
 
             this.top = [
-                { header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh" },
+                { header: i18n("My Music"), id: TOP_MMHDR_ID },
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [],
@@ -1077,6 +1079,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return cmd;
         },
         setLibrary() {
+            this.libraryName = undefined;
             this.top[0].header=i18n("My Music");
             if (0==this.history.length) {
                 this.items[0].header=this.top[0].header;
@@ -1086,10 +1089,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     data.result.folder_loop.forEach(i => {
                         if (i.id == this.$store.state.library) {
                             if (i.id!=LMS_DEFAULT_LIBRARY) {
-                                this.top[0].header=i.name;
-                                if (0==this.history.length) {
-                                    this.items[0].header=this.top[0].header;
-                                }
+                                this.libraryName=i.name;
                             }
                             return;
                         }
@@ -1154,7 +1154,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
                     this.serverTop = [];
-                    this.serverTop.push({ header: i18n("My Music"), id: TOP_ID_PREFIX+"mmh", weight:0} );
+                    this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0} );
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {

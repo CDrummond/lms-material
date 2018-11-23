@@ -1,3 +1,7 @@
+0.1.3
+-----
+1. Fix virtual library handling.
+
 0.1.2
 -----
  1. Use _50x50_o for list covers, and _300x300_f for grid covers.

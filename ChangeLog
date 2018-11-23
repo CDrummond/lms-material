@@ -1,6 +1,7 @@
 0.1.3
 -----
 1. Fix virtual library handling.
+2. Fix now playing info backdrop for mobile layout.
 
 0.1.2
 -----

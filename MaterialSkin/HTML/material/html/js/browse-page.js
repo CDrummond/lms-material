@@ -561,14 +561,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
                        item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
                        item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {
-                var command = { command: [ item.command[0] ], params: ["tags:CCZs"]};
-                item.params.forEach(i => {
-                    if (i.startsWith("sort:")) {
-                        command.params.push(i.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort));
-                    } else if (!i.startsWith("tags:")) {
-                        command.params.push(i);
-                    }
-                });
+                var command = this.replaceCommandTerms({ command: [ item.command[0] ], params: ["tags:CCZs"]});
                 this.fetchItems(command, item, 5);
             } else if (item.weblink) {
                 window.open(item.weblink);
@@ -1055,29 +1048,33 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (undefined==doReplacements || doReplacements) {
-                if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library && isLocalLibCommand(cmd)) {
-                    var haveLibId = false;
-                        cmd.params.forEach(p => {
-                        if (p.startsWith("library_id:")) {
-                            haveLibId = true;
-                            return;
-                        }
-                    });
-                    if (!haveLibId) {
-                        cmd.params.push("library_id:"+this.$store.state.library);
-                    }
-               }
-
-                // Replace sort and search terms
-                if (cmd.params.length>0) {
-                    var modifiedParams = [];
-                    cmd.params.forEach(p => { modifiedParams.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
-                                                                   .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)
-                                                                   .replace(TERM_PLACEHOLDER, this.searchTerm)); });
-                    cmd.params = modifiedParams;
-                }
+                cmd=this.replaceCommandTerms(cmd);
             }
             //console.log("COMMAND", cmd.command, cmd.params);
+            return cmd;
+        },
+        replaceCommandTerms(cmd) {
+            if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library && isLocalLibCommand(cmd)) {
+                var haveLibId = false;
+                    cmd.params.forEach(p => {
+                    if (p.startsWith("library_id:")) {
+                        haveLibId = true;
+                        return;
+                    }
+                });
+                 if (!haveLibId) {
+                    cmd.params.push("library_id:"+this.$store.state.library);
+                }
+            }
+
+            // Replace sort and search terms
+            if (cmd.params.length>0) {
+                var modifiedParams = [];
+                cmd.params.forEach(p => { modifiedParams.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
+                                                               .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)
+                                                               .replace(TERM_PLACEHOLDER, this.searchTerm)); });
+                cmd.params = modifiedParams;
+            }
             return cmd;
         },
         setLibrary() {

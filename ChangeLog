@@ -2,6 +2,8 @@
 -----
 1. Fix virtual library handling.
 2. Fix now playing info backdrop for mobile layout.
+3. Change A..Z group sizes. For 500 or less items, size is 50. For 5000 or less,
+   size is 100. For 10000 or less, size is 200. Otherwise size is 300
 
 0.1.2
 -----

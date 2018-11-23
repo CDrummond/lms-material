@@ -5,6 +5,10 @@
  * MIT license.
  */
 
+.browse-text a, .np-info-text a {
+    color: #005cb3 !important;
+}
+
 .vue-splitter .splitter {
     background-color: #f0f0f0 !important;
 }

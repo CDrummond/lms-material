@@ -1136,7 +1136,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             list.push({ title: i18n("Remote Libraries"),
                         command: ["selectRemoteLibrary", "items"],
                         params: ["menu:selectRemoteLibrary", "menu:1"],
-                        icon: "cloud_queue",
+                        icon: "cloud",
                         type: "group",
                         id: TOP_REMOTE_ID,
                         disabled:!this.remoteLibraries });

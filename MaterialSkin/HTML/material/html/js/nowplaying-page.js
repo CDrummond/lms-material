@@ -73,7 +73,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 </div>
 <div class="np-page" v-else-if="playerStatus.ison">
  <div v-if="info.show" class="np-info np-info-cover" id="np-info">
-  <v-tabs centered v-model="info.tab" class="np-info-card-cover">
+  <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
@@ -83,7 +83,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-tab-item>
    </template>
   </v-tabs>
-  <v-card>
+  <v-card class="np-info-card-cover">
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>

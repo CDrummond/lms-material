@@ -5,6 +5,7 @@
 3. Change A..Z group sizes. For 500 or less items, size is 50. For 5000 or less,
    size is 100. For 10000 or less, size is 200. Otherwise size is 300
 4. Add support for remote libraries.
+5. Alter link text colour to improve legibility.
 
 0.1.2
 -----

@@ -65,6 +65,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-spacer></v-spacer>
     <v-btn flat v-if="info.showTabs" @click="toggleTabs()">{{trans.expand}}</v-btn>
     <v-btn flat v-else @click="toggleTabs()">{{trans.collapse}}</v-btn>
+    <v-btn flat icon v-if="info.sync" @click="info.sync = false"><v-icon>link</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.sync = true"><v-icon>link_off</v-icon></v-btn>
     <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
@@ -86,6 +88,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-card class="np-info-card-cover">
    <v-card-actions>
     <v-spacer></v-spacer>
+    <v-btn flat icon v-if="info.sync" @click="info.sync = false"><v-icon>link</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.sync = true"><v-icon>link_off</v-icon></v-btn>
     <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
@@ -153,7 +157,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                album:undefined, albumName:undefined, technicalInfo: "" },
                     playlist: { shuffle:0, repeat: 0 },
                  },
-                 info: { show: false, tab:LYRICS_TAB, showTabs:false,
+                 info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
                  trans: { close: undefined, expand:undefined, collapse:undefined,
@@ -166,6 +170,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         if (this.desktop) {
             this.info.showTabs=getLocalStorageBool("showTabs", false);
         }
+        this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
             if (playerStatus.playlist.count == 0) {
@@ -252,6 +257,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.technicalInfo = technical;
             }
 
+            if (trackChanged && this.info.sync) {
+                this.setInfoTrack();
+                this.showInfo();
+            }
+
             if (playStateChanged) {
                 if (this.playerStatus.isplaying) {
                     if (trackChanged) {
@@ -286,7 +296,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         initItems() {
             this.trans = { close:i18n("Close"), expand:i18n("Expand"), collapse:i18n("Collapse"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
-                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle")};
+                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
             this.menu.text=i18n("Show information");
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
@@ -314,20 +324,26 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
             }
         },
+        setInfoTrack() {
+            this.infoTrack={ title: this.playerStatus.current.title,
+                             artist: this.playerStatus.current.artist, artist_id: this.playerStatus.current.artist_id,
+                             album: this.playerStatus.current.album, album_id: this.playerStatus.current.album_id };
+                            
+        },
         toggleTabs() {
             this.info.showTabs = !this.info.showTabs;
             setLocalStorageVal("showTabs", this.info.showTabs);
         },
         fetchLyrics() {
-            if (this.info.tabs[LYRICS_TAB].songartist!=this.playerStatus.current.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.playerStatus.current.title ||
-                (this.playerStatus.current.artist_id && this.info.tabs[LYRICS_TAB].songartist_id!=this.playerStatus.current.artist_id)) {
+            if (this.info.tabs[LYRICS_TAB].songartist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||
+                (this.infoTrack.artist_id && this.info.tabs[LYRICS_TAB].songartist_id!=this.infoTrack.artist_id)) {
                 this.info.tabs[LYRICS_TAB].text=i18n("Fetching...");
-                this.info.tabs[LYRICS_TAB].songartist=this.playerStatus.current.artist;
-                this.info.tabs[LYRICS_TAB].songartist_id=this.playerStatus.current.artist_id;
-                this.info.tabs[LYRICS_TAB].songtitle=this.playerStatus.current.title;
-                var command = ["musicartistinfo", "lyrics", "title:"+this.playerStatus.current.title, "artist:"+this.playerStatus.current.artist, "html:1"];
-                if (this.playerStatus.current.artist_id) {
-                    command.push("artist_id:"+this.playerStatus.current.artist_id);
+                this.info.tabs[LYRICS_TAB].songartist=this.infoTrack.artist;
+                this.info.tabs[LYRICS_TAB].songartist_id=this.infoTrack.artist_id;
+                this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
+                var command = ["musicartistinfo", "lyrics", "title:"+this.infoTrack.title, "artist:"+this.infoTrack.artist, "html:1"];
+                if (this.infoTrack.artist_id) {
+                    command.push("artist_id:"+this.infoTrack.artist_id);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.lyrics || data.result.error)) {
@@ -337,14 +353,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchBio() {
-            if (this.info.tabs[BIO_TAB].songartist!=this.playerStatus.current.artist ||
-                (this.playerStatus.current.artist_id && this.info.tabs[BIO_TAB].songartist_id!=this.playerStatus.current.artist_id)) {
+            if (this.info.tabs[BIO_TAB].songartist!=this.infoTrack.artist ||
+                (this.infoTrack.artist_id && this.info.tabs[BIO_TAB].songartist_id!=this.infoTrack.artist_id)) {
                 this.info.tabs[BIO_TAB].text=i18n("Fetching...");
-                this.info.tabs[BIO_TAB].songartist=this.playerStatus.current.artist;
-                this.info.tabs[BIO_TAB].songartist_id=this.playerStatus.current.artist_id;
-                var command = ["musicartistinfo", "biography", "artist:"+this.playerStatus.current.artist, "html:1"];
-                if (this.playerStatus.current.artist_id) {
-                    command.push("artist_id:"+this.playerStatus.current.artist_id);
+                this.info.tabs[BIO_TAB].songartist=this.infoTrack.artist;
+                this.info.tabs[BIO_TAB].songartist_id=this.infoTrack.artist_id;
+                var command = ["musicartistinfo", "biography", "artist:"+this.infoTrack.artist, "html:1"];
+                if (this.infoTrack.artist_id) {
+                    command.push("artist_id:"+this.infoTrack.artist_id);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.biography || data.result.error)) {
@@ -354,20 +370,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchReview() {
-            if (this.info.tabs[REVIEW_TAB].songartist!=this.playerStatus.current.artist || this.info.tabs[REVIEW_TAB].songalbum!=this.playerStatus.current.album ||
-                (this.playerStatus.current.artist_id && this.info.tabs[REVIEW_TAB].songartist_id!=this.playerStatus.current.artist_id) ||
-                (this.playerStatus.current.album_id && this.info.tabs[REVIEW_TAB].songalbum_id!=this.playerStatus.current.album_id)) {
+            if (this.info.tabs[REVIEW_TAB].songartist!=this.infoTrack.artist || this.info.tabs[REVIEW_TAB].songalbum!=this.infoTrack.album ||
+                (this.infoTrack.artist_id && this.info.tabs[REVIEW_TAB].songartist_id!=this.infoTrack.artist_id) ||
+                (this.infoTrack.album_id && this.info.tabs[REVIEW_TAB].songalbum_id!=this.infoTrack.album_id)) {
                 this.info.tabs[REVIEW_TAB].text=i18n("Fetching...");
-                this.info.tabs[REVIEW_TAB].songartist=this.playerStatus.current.artist;
-                this.info.tabs[REVIEW_TAB].songalbum=this.playerStatus.current.album;
-                this.info.tabs[REVIEW_TAB].songartist_id=this.playerStatus.current.artist_id;
-                this.info.tabs[REVIEW_TAB].songalbum_id=this.playerStatus.current.album_id;
-                var command = ["musicartistinfo", "albumreview", "artist:"+this.playerStatus.current.artist, "album:"+this.playerStatus.current.album, "html:1"];
-                if (this.playerStatus.current.artist_id) {
-                    command.push("artist_id:"+this.playerStatus.current.artist_id);
+                this.info.tabs[REVIEW_TAB].songartist=this.infoTrack.artist;
+                this.info.tabs[REVIEW_TAB].songalbum=this.infoTrack.album;
+                this.info.tabs[REVIEW_TAB].songartist_id=this.infoTrack.artist_id;
+                this.info.tabs[REVIEW_TAB].songalbum_id=this.infoTrack.album_id;
+                var command = ["musicartistinfo", "albumreview", "artist:"+this.infoTrack.artist, "album:"+this.infoTrack.album, "html:1"];
+                if (this.infoTrack.artist_id) {
+                    command.push("artist_id:"+this.infoTrack.artist_id);
                 }
-                if (this.playerStatus.current.album_id) {
-                    command.push("album_id:"+this.playerStatus.current.album_id);
+                if (this.infoTrack.album_id) {
+                    command.push("album_id:"+this.infoTrack.album_id);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.albumreview || data.result.error)) {
@@ -425,10 +441,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         'info.show': function(val) {
             // Indicate that dialog is/isn't shown, so that swipe is controlled
             bus.$emit('dialog', 'info-dialog', val);
+            this.setInfoTrack();
             this.showInfo();
         },
         'info.tab': function(tab) {
             this.showInfo();
+        },
+        'info.sync': function() {
+            setLocalStorageVal("syncInfo", this.info.sync);
+            if (this.info.sync) {
+                this.setInfoTrack();
+                this.showInfo();
+            }
         }
     },
     computed: {

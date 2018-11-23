@@ -7,6 +7,8 @@
 4. Add support for remote libraries.
 5. Alter link text colour to improve legibility.
 6. Allow setting of active player from Manager Players dialog.
+7. Add toggle button to control whether info in now playing dialog should stay
+   in sync with song changes.
 
 0.1.2
 -----

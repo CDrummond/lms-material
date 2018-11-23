@@ -476,7 +476,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     if (resp.subtitle) {
                         this.headerSubTitle=resp.subtitle;
-                    } else {
+                    } else if (!(1==this.items.length && "text"==this.items[0].type)) {
                         this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
                     this.sortItems();

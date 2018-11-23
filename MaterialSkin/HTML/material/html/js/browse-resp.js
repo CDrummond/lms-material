@@ -93,7 +93,10 @@ function parseBrowseResp(data, parent, options, idStart) {
             }
 
             var prevItem = undefined;
-            var maxCount = data.result.count <= 500 ? 50 : data.result.count <= 1000 ? 100 : 200;
+            var maxCount = data.result.count <= 500 
+                            ? 50 : data.result.count <= 5000
+                                ? 100 : data.result.count <= 10000
+                                    ? 200 : 300;
             for (var i=start; i<data.result.indexList.length; ++i) {
                 var name = data.result.indexList[i][0];
                 if (name == null) {
@@ -116,7 +119,6 @@ function parseBrowseResp(data, parent, options, idStart) {
 
                     for (var c=0; c<count; c+=maxCount) {
                         var total=c+maxCount>count ? (count-c) : maxCount;
-                        console.log(c, total);
                         resp.items.push({
                                             title: name+" ("+(c+1)+".."+(c+total)+")",
                                             subtitle: isArtists

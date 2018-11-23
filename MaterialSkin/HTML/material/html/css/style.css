@@ -295,11 +295,12 @@ a {
     padding:16px 16px 0px 16px;
 }
 
-.browse-text img {
+.browse-text img, .np-info-text img, .np-info-text-full img {
     max-width: 300px !important;
     max-height: 300px !important;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 16px;
     display: block;
 }
 
@@ -317,23 +318,6 @@ a {
 
 .np-info-lyrics {
     text-align: center;
-}
-
-.np-info-text img {
-    max-width: 300px !important;
-    max-height: 300px !important;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-
-.np-info-text-full img {
-    max-width: 300px !important;
-    max-height: 300px !important;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
 }
 
 .np-info-tab-cover {

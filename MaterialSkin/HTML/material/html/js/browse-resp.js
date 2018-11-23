@@ -93,7 +93,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             }
 
             var prevItem = undefined;
-            var maxCount = data.result.count <= 500 
+            var maxCount = data.result.count <= 500
                             ? 50 : data.result.count <= 5000
                                 ? 100 : data.result.count <= 10000
                                     ? 200 : 300;

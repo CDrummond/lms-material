@@ -32,6 +32,7 @@ const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
+const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const ALBUM_TAGS = "tags:jlya";
 const TRACK_TAGS = "tags:ACdt";
 
@@ -266,6 +267,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       useGrid: this.$store.state.useGrid};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
+        this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.previousScrollPos=0;
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
         this.pinned.forEach( p => { this.options.pinned.add(p.id) });
@@ -1134,6 +1136,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                         icon: "apps",
                         type: "group",
                         id: TOP_APPS_ID });
+            list.push({ title: i18n("Remote Libraries"),
+                        command: ["selectRemoteLibrary", "items"],
+                        params: ["menu:selectRemoteLibrary", "menu:1"],
+                        icon: "cloud_queue",
+                        type: "group",
+                        id: TOP_REMOTE_ID,
+                        disabled:!this.remoteLibraries });
         },
         playerMenu() {
             if (this.serverTop.length>0 && this.serverTop[0].player==this.playerId()) {
@@ -1322,6 +1331,30 @@ var lmsBrowse = Vue.component("lms-browse", {
                             return;
                         }
                     });
+                }
+            }
+        });
+
+        lmsCommand("", ["can", "selectRemoteLibrary", "items", "?"]).then(({data}) => {
+            if (data && data.result && undefined!=data.result._can) {
+                var can = 1==data.result._can;
+                if (can!=this.remoteLibraries) {
+                    this.remoteLibraries = can;
+                    setLocalStorageVal('remoteLibraries', this.remoteLibraries);
+                    this.top.forEach(i => {
+                        if (i.id == TOP_REMOTE_ID) {
+                            i.disabled = !this.remoteLibraries;
+                            return;
+                        }
+                    });
+                    if (undefined!=this.serverTop && this.serverTop.length>0) {
+                        this.serverTop.forEach(i => {
+                            if (i.id == TOP_REMOTE_ID) {
+                                i.disabled = !this.remoteLibraries;
+                                return;
+                            }
+                        });
+                    }
                 }
             }
         });

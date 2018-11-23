@@ -6,6 +6,7 @@
    size is 100. For 10000 or less, size is 200. Otherwise size is 300
 4. Add support for remote libraries.
 5. Alter link text colour to improve legibility.
+6. Allow setting of active player from Manager Players dialog.
 
 0.1.2
 -----

@@ -27,7 +27,7 @@ Vue.component('lms-manage-players', {
           <img :src="player.image">
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title>{{player.name}}</v-list-tile-title>
+          <v-list-tile-title  style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>&nbsp;{{player.name}}</v-list-tile-title>
           <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="prevTrack(index)">
@@ -167,6 +167,11 @@ Vue.component('lms-manage-players', {
                 updatePlayer(index);
             });
         },
+        setActive(id) {
+            if (id != this.$store.state.player.id) {
+                this.$store.commit('setPlayer', id);
+            }
+        },
         updateAll() {
             for (var i=0; i<this.players.length; ++i) {
                 if (!this.players[i].updating && (undefined==this.players[i].lastUpdate || ((new Date())-this.players[i].lastUpdate)>500)) {
@@ -218,6 +223,11 @@ Vue.component('lms-manage-players', {
                 window.console.error(err);
                 this.players[i].updating=false;
             });
+        }
+    },
+    computed: {
+        currentPlayer() {
+            return this.$store.state.player
         }
     },
     beforeDestroy() {

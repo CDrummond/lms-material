@@ -23,7 +23,7 @@ function lmsCommand(playerid, command) {
 
 function lmsList(playerid, command, params, start, batchSize) {
     var cmdParams = command.slice();
-    cmdParams = [].concat(cmdParams, [start, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
+    cmdParams = [].concat(cmdParams, [start || 0, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }

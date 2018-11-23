@@ -1199,6 +1199,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                       icon: "shuffle",
                                                       id: TOP_RANDOM_MIX_ID,
                                                       weight: c.weight ? parseFloat(c.weight) : 100 });
+                            } else if (c.id == "opmlselectVirtualLibrary" || c.id == "opmlselectRemoteLibrary") {
+                                var command = this.buildCommand(c, "go", false, true);
+                                this.serverTop.push({
+                                    title: c.text,
+                                    command: command.command,
+                                    params: command.params,
+                                    weight: c.weight ? parseFloat(c.weight) : 100,
+                                    icon: "library_music",
+                                    id: TOP_ID_PREFIX + c.id
+                                });
+                            } else {
+                                console.log(`Unsupported menu? ${c.id}`);
                             }
                         }
                     });

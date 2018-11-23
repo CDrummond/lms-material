@@ -63,11 +63,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-card class="np-info-card-cover">
    <v-card-actions>
     <v-spacer></v-spacer>
-    <v-btn flat v-if="info.showTabs" @click="toggleTabs()">{{trans.expand}}</v-btn>
-    <v-btn flat v-else @click="toggleTabs()">{{trans.collapse}}</v-btn>
-    <v-btn flat icon v-if="info.sync" @click="info.sync = false"><v-icon>link</v-icon></v-btn>
-    <v-btn flat icon v-else @click="info.sync = true"><v-icon>link_off</v-icon></v-btn>
-    <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
+    <v-btn flat icon v-if="info.showTabs" @click="info.showTabs=false" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.showTabs=true" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
+    <div style="width:32px"></div>
+    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon>link_off</v-icon></v-btn>
+    <div style="width:32px"></div>
+    <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
   </v-card>
@@ -88,9 +90,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-card class="np-info-card-cover">
    <v-card-actions>
     <v-spacer></v-spacer>
-    <v-btn flat icon v-if="info.sync" @click="info.sync = false"><v-icon>link</v-icon></v-btn>
-    <v-btn flat icon v-else @click="info.sync = true"><v-icon>link_off</v-icon></v-btn>
-    <v-btn flat @click="info.show = false">{{trans.close}}</v-btn>
+    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon>link_off</v-icon></v-btn>
+    <div style="width:32px"></div>
+    <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
   </v-card>
@@ -160,7 +163,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
-                 trans: { close: undefined, expand:undefined, collapse:undefined,
+                 trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true
@@ -294,7 +297,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     methods: {
         initItems() {
-            this.trans = { close:i18n("Close"), expand:i18n("Expand"), collapse:i18n("Collapse"),
+            this.trans = { close:i18n("Close"), expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
+                           sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                            shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
             this.menu.text=i18n("Show information");
@@ -328,11 +332,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.infoTrack={ title: this.playerStatus.current.title,
                              artist: this.playerStatus.current.artist, artist_id: this.playerStatus.current.artist_id,
                              album: this.playerStatus.current.album, album_id: this.playerStatus.current.album_id };
-                            
-        },
-        toggleTabs() {
-            this.info.showTabs = !this.info.showTabs;
-            setLocalStorageVal("showTabs", this.info.showTabs);
         },
         fetchLyrics() {
             if (this.info.tabs[LYRICS_TAB].songartist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||
@@ -446,6 +445,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         'info.tab': function(tab) {
             this.showInfo();
+        },
+        'info.showTabs': function() {
+            setLocalStorageVal("showTabs", this.info.showTabs);
         },
         'info.sync': function() {
             setLocalStorageVal("syncInfo", this.info.sync);

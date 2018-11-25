@@ -39,6 +39,9 @@ Vue.component('lms-manage-players', {
          <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="nextTrack(index)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
           </v-list-tile-action>
+         <v-list-tile-action class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player.id)">
+          <v-btn icon><v-icon>{{player.synced ? 'link' : 'link_off'}}</v-icon></v-btn>
+         </v-list-tile-action>
         </v-list-tile>
        </v-list>
       </v-flex xs12>
@@ -186,6 +189,7 @@ Vue.component('lms-manage-players', {
                 this.players[i].ison = 1==data.result.power;
                 this.players[i].isplaying = data.result.mode === "play" && !data.result.waitingToPlay;
                 this.players[i].volume = data.result["mixer volume"] ? data.result["mixer volume"] : 0;
+                this.players[i].synced = undefined!==data.result.sync_master || undefined!==data.result.sync_slaves;
                 if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
                     this.players[i].playIcon = this.players[i].isplaying ? "pause_circle_outline" : "play_circle_outline";
                     if (data.result.playlist_loop[0].title) {

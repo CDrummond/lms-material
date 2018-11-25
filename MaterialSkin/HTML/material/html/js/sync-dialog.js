@@ -35,8 +35,8 @@ Vue.component('lms-sync-dialog', {
         }
     },
     mounted() {
-        bus.$on('synchronise', function() {
-            this.playerId = this.$store.state.player.id;
+        bus.$on('synchronise', function(playerId) {
+            this.playerId = playerId;
             lmsCommand(this.playerId, ["sync", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._sync) {
                     this.sync=this.syncOrig=data.result._sync;

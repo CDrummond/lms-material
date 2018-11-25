@@ -307,6 +307,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.playlistName = name;
                     }).catch(err => {
                         bus.$emit('showError', err, i18n("Failed to save play queue!"));
+                        logError(err);
                     });
                 }
             }
@@ -371,6 +372,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }).catch(err => {
                 this.fetchingItems = false;
+                logError(err);
             });
         },
         scheduleUpdate() {
@@ -415,6 +417,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                 }).catch(err => {
                     this.fetchingItems = false;
+                    logError(err);
                 });
             }
         },

@@ -81,6 +81,7 @@ Vue.component('lms-information-dialog', {
                     this.updates = eval(resp.data);
                 }).catch(err => {
                     this.updates.error=i18n('Failed to determine plugin status.');
+                    logError(err);
                 });
             }
         }.bind(this));

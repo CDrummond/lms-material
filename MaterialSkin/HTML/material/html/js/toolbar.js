@@ -45,12 +45,6 @@ Vue.component('lms-toolbar', {
     </v-list-tile-content>
    </v-list-tile>
 
-   <v-list-tile v-if="playerGroups && players && players.length>1" @click="bus.$emit('manageGroups')">
-    <v-list-tile-content><v-list-tile-title class="pm-noicon-indent">&nbsp;{{trans.managegroups}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-   <v-list-tile v-else-if="players && players.length>1" @click="bus.$emit('synchronise')">
-    <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
    <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
      <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>0}"><v-icon>speaker_group</v-icon>&nbsp{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
@@ -106,7 +100,7 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
-                 trans:{noplayer:undefined, synchronise:undefined,managegroups:undefined,nothingplaying:undefined, info:undefined,
+                 trans:{noplayer:undefined,nothingplaying:undefined, info:undefined,
                         switchoff:undefined, switchon:undefined},
                  infoOpen: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined},
@@ -128,15 +122,6 @@ Vue.component('lms-toolbar', {
                 }
             });
         }.bind(this));
-        */
-
-        // Player groups plugin
-        /* TODO: Enable, and implement!
-        lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
-            if (data && data.result && data.result._can) {
-                this.playerGroups = 1==data.result._can;
-            }
-        });
         */
 
         bus.$on('playerStatus', function(playerStatus) {
@@ -211,8 +196,7 @@ console.log("Show message:"+msg);
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage Players');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
-            this.trans = {noplayer:i18n('No Player'), synchronise:i18n('Synchronise'),
-                          managegroups:i18n('Manage player groups'), nothingplaying:i18n('Nothing playing'),
+            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On')};
         },
         setPlayer(id) {

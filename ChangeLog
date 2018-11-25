@@ -1,16 +1,17 @@
 0.1.3
 -----
-1. Fix virtual library handling.
-2. Fix now playing info backdrop for mobile layout.
-3. Change A..Z group sizes. For 500 or less items, size is 50. For 5000 or less,
-   size is 100. For 10000 or less, size is 200. Otherwise size is 300
-4. Add support for remote libraries.
-5. Alter link text colour to improve legibility.
-6. Allow setting of active player from Manager Players dialog.
-7. Add toggle button to control whether info in now playing dialog should stay
-   in sync with song changes.
-8. Use virtual library ID for A..Z grouping.
-9. Add playall/addall entries to song lists.
+ 1. Fix virtual library handling.
+ 2. Fix now playing info backdrop for mobile layout.
+ 3. Change A..Z group sizes. For 500 or less items, size is 50. For 5000 or
+    less, size is 100. For 10000 or less, size is 200. Otherwise size is 300
+ 4. Add support for remote libraries.
+ 5. Alter link text colour to improve legibility.
+ 6. Allow setting of active player from Manager Players dialog.
+ 7. Add toggle button to control whether info in now playing dialog should stay
+    in sync with song changes.
+ 8. Use virtual library ID for A..Z grouping.
+ 9. Add playall/addall entries to song lists.
+10. Move sync control to manage players dialog.
 
 0.1.2
 -----

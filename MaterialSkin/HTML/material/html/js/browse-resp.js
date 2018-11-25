@@ -348,6 +348,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         i.image=i.image.replace("50x50_o", LMS_GRID_IMAGE_SIZE);
                     }
                 }
+                i.isRadio = parent && parent.isRadio;
                 resp.items.push(i);
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {

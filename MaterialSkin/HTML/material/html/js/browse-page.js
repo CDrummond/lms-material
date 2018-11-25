@@ -7,7 +7,9 @@
 
 var PLAY_ACTION             = {cmd:"play",       icon:"play_circle_outline"};
 var PLAY_ALBUM_ACTION       = {cmd:"play_album", icon:"album"};
+var PLAY_ALL_ACTION         = {cmd:"playall",    icon:"play_circle_outline"};
 var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
+var ADD_ALL_ACTION          = {cmd:"addall",     icon:"add_circle_outline"};
 var INSERT_ACTION           = {cmd:"add-hold",   icon:"format_indent_increase"};
 var MORE_ACTION             = {cmd:"more",       icon:"more_horiz"};
 var MORE_LIB_ACTION         = {cmd:"lib-more",   icon:"more_horiz"};
@@ -110,7 +112,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-layout>
    <v-spacer></v-spacer>
    <template v-for="(action, index) in menuActions">
-    <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button"><v-icon>{{action.icon}}</v-icon></v-btn>
+    <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button" :title="action.title"><v-icon>{{action.icon}}</v-icon></v-btn>
    </template>
   </v-layout>
  </div>
@@ -305,9 +307,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     },
     methods: {
         initItems() {
-            PLAY_ACTION.title=i18n("Play now");
+            PLAY_ACTION.title=PLAY_ALL_ACTION.title=i18n("Play now");
             PLAY_ALBUM_ACTION.title=i18n("Play album starting at track");
-            ADD_ACTION.title=i18n("Append to queue");
+            ADD_ACTION.title=ADD_ALL_ACTION.title=i18n("Append to queue");
             ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
             INSERT_ACTION.title=i18n("Play next");
             MORE_ACTION.title=i18n("More");
@@ -466,6 +468,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.current.menuActions.forEach(i => {
                             if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
                                 this.menuActions=[ADD_ACTION, PLAY_ACTION];
+                                return;
+                            }
+                        });
+                    }
+
+                    // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
+                    if (!this.current.isRadio && this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions) {
+                        this.items[0].menuActions.forEach(i => {
+                            if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
+                                this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                                 return;
                             }
                         });
@@ -939,6 +951,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         buildCommand(item, commandName, doReplacements, addAlbumSort) {
+            var origCommand = undefined;
+
+            // Faking addall/playall, so build add/play command for first item...
+            if (PLAY_ALL_ACTION.cmd==commandName || ADD_ALL_ACTION.cmd==commandName) {
+                item = this.items[0];
+                origCommand = commandName;
+                commandName = PLAY_ALL_ACTION.cmd==commandName ? "play" : "add";
+            }
+
             var cmd = {command: [], params: [] };
 
             if (undefined===item || null===item) {
@@ -1060,6 +1081,26 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined==doReplacements || doReplacements) {
                 cmd=this.replaceCommandTerms(cmd);
             }
+
+            // If this *was* playall/addall, then need to convert back and set ID to parent
+            if (origCommand && (PLAY_ALL_ACTION.cmd==origCommand || ADD_ALL_ACTION.cmd==origCommand)) {
+                var c={command:[], params:[]};
+                cmd.command.forEach(p=> {
+                    if (p=="play" || p=="add") {
+                        c.command.push(origCommand);
+                    } else {
+                        c.command.push(p);
+                    }
+                });
+                cmd.params.forEach(p=> {
+                    if (p.startsWith("item_id:")) {
+                        c.params.push(this.current.id);
+                    } else {
+                        c.params.push(p);
+                    }
+                });
+                cmd=c;
+            }
             //console.log("COMMAND", cmd.command, cmd.params);
             return cmd;
         },
@@ -1128,7 +1169,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         params: ["menu:radio"],
                         icon: "radio",
                         type: "group",
-                        id: TOP_ID_PREFIX+"ra" });
+                        id: TOP_ID_PREFIX+"ra",
+                        isRadio: true });
             list.push({ title: i18n("Favorites"),
                         command: ["favorites", "items"],
                         params: ["menu:favorites", "menu:1"],

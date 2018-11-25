@@ -184,7 +184,6 @@ Vue.component('lms-toolbar', {
             this.snackbar = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""), show: true, color: 'error' };
         }.bind(this));
         bus.$on('showMessage', function(msg) {
-console.log("Show message:"+msg);
             this.snackbar = {msg: msg, show: true };
         }.bind(this));
     },

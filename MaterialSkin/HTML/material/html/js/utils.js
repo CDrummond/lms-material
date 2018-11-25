@@ -7,6 +7,11 @@
  
 var bus = new Vue();
 
+function logError(err) {
+    console.error("[" + new Date()+"] " + err);
+    console.trace();
+}
+
 function formatSeconds(secs) {
     var sec_num = parseInt(secs, 10)    
     var hours   = Math.floor(sec_num / 3600);

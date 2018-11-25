@@ -491,6 +491,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 bus.$emit('showError', err);
+                logError(err);
             });
         },
         click(item, index, event, allowItemPlay) {
@@ -613,6 +614,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.refreshList();
                     }).catch(err => {
                         bus.$emit('showError', err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"));
+                        logError(err);
                     });
                 }
             }
@@ -632,6 +634,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 this.refreshList();
                             }).catch(err => {
                                 bus.$emit('showError', err, i18n("Failed to delete playlist!"));
+                                logError(err);
                             });
                         }
                     }
@@ -685,10 +688,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                             bus.$emit('showMessage', i18n("Added to favorites"));
                         }).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to add to favorites!"));
+                            logError(err);
                         });
                     }
                 }).catch(err => {
-                        bus.$emit('showMessage', i18n("Failed to add to favorites!"));
+                    bus.$emit('showMessage', i18n("Failed to add to favorites!"));
+                    logError(err);
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
@@ -697,6 +702,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.refreshList();
                         }).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to remove favorite!"));
+                            logError(err);
                         });
                     }
                 });
@@ -713,12 +719,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         }).catch(err => {
                             bus.$emit('showError', err);
+                            logError(err);
                         });
                     } else {
                         bus.$emit('showError', undefined, i18n("Failed to find an album!"));
                     }
                 }).catch(err => {
                     bus.$emit('showError', err);
+                    logError(err);
                 });
             } else if (act===MORE_ACTION.cmd) {
                 this.fetchItems(this.buildCommand(item, act), item);
@@ -799,6 +807,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }).catch(err => {
                     bus.$emit('showError', err);
+                    logError(err);
                 });
             }
         },
@@ -856,6 +865,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 bus.$emit('showError', err);
+                logError(err);
             });
         },
         sortItems() {
@@ -1219,6 +1229,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 bus.$emit('showError', err);
+                logError(err);
             });
         },
         pin(item, add) {
@@ -1288,6 +1299,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.fetchingItems = false;
                     }).catch(err => {
                         this.fetchingItems = false;
+                        logError(err);
                     });
                 }
             });

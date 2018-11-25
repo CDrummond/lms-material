@@ -89,7 +89,7 @@ var lmsServer = Vue.component('lms-server', {
                 }
                 this.setServerStatusUpdateInterval(players.length>0 ? LMS_SERVER_STATUS_REFRESH_MAX : LMS_SERVER_STATUS_REFRESH_MIN);
             }).catch(err => {
-                window.console.error(err);
+                logError(err);
                 this.setServerStatusUpdateInterval(LMS_SERVER_STATUS_REFRESH_MIN);
             });
         },
@@ -136,7 +136,7 @@ var lmsServer = Vue.component('lms-server', {
                     }
                     this.scheduleNextStatusUpdate(nextInterval);
                 }).catch(err => {
-                    window.console.error(err);
+                    logError(err);
                     this.scheduleNextStatusUpdate(LMS_STATUS_REFRESH_MIN);
                 });
             } else {

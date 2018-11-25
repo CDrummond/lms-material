@@ -156,6 +156,16 @@ Vue.component('lms-toolbar', {
                     this.songInfo=undefined;
                 }
             }
+
+            if (this.desktop &&
+                (undefined==this.playerVolume.id ||
+                 this.$store.state.player.id!=this.playerVolume.id ||
+                 ((playerStatus.volume!=this.playerVolume.val && playerStatus.volume!=this.playerVolume.prev &&
+                  (!this.playerVolume.lastUpdate || ((new Date())-this.playerVolume.lastUpdate)>500))))) {
+                this.playerVolume.val = playerStatus.volume;
+                this.playerVolume.lastUpdate = new Date();
+                this.playerVolume.id = this.$store.state.player.id;
+            }
         }.bind(this));
         
         bus.$on('langChanged', function() {
@@ -171,12 +181,9 @@ Vue.component('lms-toolbar', {
         }.bind(this));
 
         if (this.desktop) {
-            bus.$on('playerStatus', function(playerStatus) {
-                if (playerStatus.volume!=this.playerVolume.val && playerStatus.volume!=this.playerVolume.prev &&
-                    (!this.playerVolume.lastUpdate || ((new Date())-this.playerVolume.lastUpdate)>500)) {
-                    this.playerVolume.val = playerStatus.volume;
-                    this.playerVolume.lastUpdate = new Date();
-                }
+            bus.$on('playerChanged', function() {
+                // Ensure we update volume when player changes.
+                this.playerVolume.id = undefined;
             }.bind(this));
         }
 

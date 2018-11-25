@@ -46,7 +46,9 @@ function parseBrowseResp(data, parent, options, idStart) {
                 });
             }
             if (data.result.tracks_loop && data.result.tracks_count>0) {
-                resp.items.push({header: i18n("Tracks")});
+                if (idStart<=0 || (data.result.contributors_loop && data.result.contributors_count>0) || (data.result.albums_loop && data.result.albums_count>0)) {
+                    resp.items.push({header: i18n("Tracks")});
+                }
                 data.result.tracks_loop.forEach(i => {
                     resp.items.push({
                                   id: "track_id:"+i.track_id,

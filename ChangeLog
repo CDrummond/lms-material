@@ -10,6 +10,7 @@
 7. Add toggle button to control whether info in now playing dialog should stay
    in sync with song changes.
 8. Use virtual library ID for A..Z grouping.
+9. Add playall/addall entries to song lists.
 
 0.1.2
 -----

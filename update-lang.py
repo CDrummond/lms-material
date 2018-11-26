@@ -91,19 +91,28 @@ def update(path):
             values=json.load(f)
         except:
             pass
+    translated=[]
+    untranslated=[]
+    for i in translations:
+        if i in values and len(values[i])>0:
+            translated.append([i, values[i]])
+        else:
+            untranslated.append([i, None])
+    entries = translated + untranslated
+
     first=True
     with open(path, "w") as f:
         f.write("{")
-        for i in translations:
+        for i in entries:
             if not first:
                 f.write(",\n")
             else:
                 first=False
                 f.write("\n")
-            if i in values:
-                f.write('"%s":"%s"' % (i, values[i].encode("utf-8")))
+            if i[1]:
+                f.write('"%s":"%s"' % (i[0], i[1].encode("utf-8")))
             else:
-                f.write('"%s":""' % i)
+                f.write('"%s":""' % i[0])
         f.write("\n}\n")
 
 

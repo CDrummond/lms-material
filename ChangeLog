@@ -5,6 +5,7 @@
 3. For A..Z group, set max combined group size to 100, and don't split letters
    into multiple groups until 301 or more.
 4. Retreive biographies for all artists in now playing info.
+5. Change sync dialog to be 'Choose players to sync with $PLAYER'
 
 0.1.3
 -----

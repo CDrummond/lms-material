@@ -39,7 +39,7 @@ Vue.component('lms-manage-players', {
          <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="nextTrack(index)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
           </v-list-tile-action>
-         <v-list-tile-action class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player.id)">
+         <v-list-tile-action class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player)">
           <v-btn icon><v-icon>{{player.synced ? 'link' : 'link_off'}}</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
@@ -91,6 +91,10 @@ Vue.component('lms-manage-players', {
             if (this.show) {
                 this.close();
             }
+        }.bind(this));
+
+        bus.$on('syncChanged', function() {
+            this.updateAll();
         }.bind(this));
     },
     methods: {

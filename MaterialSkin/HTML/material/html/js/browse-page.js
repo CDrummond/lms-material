@@ -137,7 +137,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div class="image-grid-text subtext">{{item.subtitle}}</div>
        <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
         <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
-        <v-icon v-else-if="item.menuActions && item.menuActions.length===1">{{item.menuActions[0].icon}}</v-icon>
+        <v-icon v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" >{{item.menuActions[0].icon}}</v-icon>
        </v-btn>
       </v-card-text>
      </v-card>
@@ -168,7 +168,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.item.menuActions && item.item.menuActions.length===1" @click.stop="itemAction(item.item.menuActions[0].cmd, item.item, index)">
+    <v-list-tile-action v-else-if="item.item.menuActions && item.item.menuActions.length===1" :title="item.item.menuActions[0].title" @click.stop="itemAction(item.item.menuActions[0].cmd, item.item, index)">
      <v-btn icon>
       <v-icon>{{item.item.menuActions[0].icon}}</v-icon>
      </v-btn>
@@ -212,7 +212,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
+    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title"  @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
      <v-btn icon>
       <v-icon>{{item.menuActions[0].icon}}</v-icon>
      </v-btn>

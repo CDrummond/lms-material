@@ -95,10 +95,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             }
 
             var prevItem = undefined;
-            var maxCount = data.result.count <= 500
-                            ? 50 : data.result.count <= 5000
-                                ? 100 : data.result.count <= 10000
-                                    ? 200 : 300;
+
             for (var i=start; i<data.result.indexList.length; ++i) {
                 var name = data.result.indexList[i][0];
                 if (name == null) {
@@ -107,7 +104,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 var count = data.result.indexList[i][1];
 
                 // If we have more than max items in this 1 group, then split
-                if (count>=maxCount) {
+                if (count>=LMS_AZ_MAX_PER_LETTER) {
                     if (prevItem) {
                         if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
                             prevItem.title += " .. " + prevItem.subtitle;
@@ -119,8 +116,8 @@ function parseBrowseResp(data, parent, options, idStart) {
                         prevItem = undefined;
                     }
 
-                    for (var c=0; c<count; c+=maxCount) {
-                        var total=c+maxCount>count ? (count-c) : maxCount;
+                    for (var c=0; c<count; c+=LMS_AZ_MAX_PER_LETTER) {
+                        var total=c+LMS_AZ_MAX_PER_LETTER>count ? (count-c) : LMS_AZ_MAX_PER_LETTER;
                         resp.items.push({
                                             title: name+" ("+(c+1)+".."+(c+total)+")",
                                             subtitle: isArtists
@@ -145,7 +142,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                             };
 
                 if (prevItem) {
-                    if (prevItem.range.count + count > maxCount) {
+                    if (prevItem.range.count + count > LMS_AZ_MAX_SIZE) {
                         if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
                             prevItem.title += " .. " + prevItem.subtitle;
                         }
@@ -158,7 +155,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         prevItem.subtitle = name;
                         prevItem.range.count += count;
                     }
-                } else if (item.range.count >= maxCount) {
+                } else if (item.range.count >= LMS_AZ_MAX_SIZE) {
                     item.subtitle = isArtists
                                         ? i18np("1 Artist", "%1 Artists", count)
                                         : i18np("1 Album", "%1 Albums", count);

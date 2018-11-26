@@ -2,6 +2,8 @@
 -----
 1. When obtaining A..Z lists, pass all orig params (e.g. artist role)
 2. Don't add playall/addall entries to A..Z groups.
+3. For A..Z group, set max combined group size to 100, and don't split letters
+   into multiple groups until 301 or more.
 
 0.1.3
 -----

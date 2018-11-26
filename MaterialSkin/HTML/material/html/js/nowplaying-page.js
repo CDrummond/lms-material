@@ -340,9 +340,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[LYRICS_TAB].songartist=this.infoTrack.artist;
                 this.info.tabs[LYRICS_TAB].songartist_id=this.infoTrack.artist_id;
                 this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
-                var command = ["musicartistinfo", "lyrics", "title:"+this.infoTrack.title, "artist:"+this.infoTrack.artist, "html:1"];
+                var command = ["musicartistinfo", "lyrics", "title:"+this.infoTrack.title, "html:1"];
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
+                } else {
+                    command.push("artist:"+this.infoTrack.artist);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.lyrics || data.result.error)) {
@@ -357,9 +359,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[BIO_TAB].text=i18n("Fetching...");
                 this.info.tabs[BIO_TAB].songartist=this.infoTrack.artist;
                 this.info.tabs[BIO_TAB].songartist_id=this.infoTrack.artist_id;
-                var command = ["musicartistinfo", "biography", "artist:"+this.infoTrack.artist, "html:1"];
+                var command = ["musicartistinfo", "biography", "html:1"];
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
+                } else {
+                    command.push("artist:"+this.infoTrack.artist);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.biography || data.result.error)) {
@@ -377,12 +381,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[REVIEW_TAB].songalbum=this.infoTrack.album;
                 this.info.tabs[REVIEW_TAB].songartist_id=this.infoTrack.artist_id;
                 this.info.tabs[REVIEW_TAB].songalbum_id=this.infoTrack.album_id;
-                var command = ["musicartistinfo", "albumreview", "artist:"+this.infoTrack.artist, "album:"+this.infoTrack.album, "html:1"];
+                var command = ["musicartistinfo", "albumreview", "html:1"];
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
+                } else {
+                    command.push("artist:"+this.infoTrack.artist);
                 }
                 if (this.infoTrack.album_id) {
                     command.push("album_id:"+this.infoTrack.album_id);
+                } else {
+                    command.push("album:"+this.infoTrack.album);
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.albumreview || data.result.error)) {

@@ -54,7 +54,7 @@ Vue.component('lms-manage-players', {
         <v-btn flat icon @click.stop="togglePower(index)" class="pmgr-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="(index+1 < players.length)"><v-divider class="pmgr-divider"></v-divider></v-flex>
+      <v-flex xs12 v-if="index+1<players.length && players[index+1].isgroup && !players[index].isgroup" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
      </template>
     </v-layout>
    </v-container>

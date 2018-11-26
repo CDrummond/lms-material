@@ -29,6 +29,7 @@ const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
 const TOP_ID_PREFIX = "top:/";
 const TOP_MMHDR_ID = TOP_ID_PREFIX+"mmh";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
+const TOP_PLAYLISTS_ID = TOP_ID_PREFIX+"pl";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
@@ -37,6 +38,9 @@ const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const ALBUM_TAGS = "tags:jlya";
 const TRACK_TAGS = "tags:ACdt";
+const SECTION_APPS = 1;
+const SECTION_FAVORITES = 2;
+const SECTION_RADIO = 2;
 
 function isLocalLibCommand(command) {
     return command.command && command.command.length>0 &&
@@ -348,8 +352,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   params: [],
                   icon: "list",
                   type: "group",
-                  id: TOP_ID_PREFIX+"pl",
-                  isPlaylists: true }
+                  id: TOP_PLAYLISTS_ID }
                 ];
             this.addExtraItems(this.top, true);
             if (this.separateArtists) {
@@ -474,7 +477,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
 
                     // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                    if (!this.current.isRadio && this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions) {
+                    if (this.current.section && this.current.section!=SECTION_RADIO && this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions) {
                         this.items[0].menuActions.forEach(i => {
                             if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
                                 this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
@@ -887,7 +890,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && this.listSize == this.items.length) {
                 if (this.current.id == TOP_APPS_ID) {
                     this.items.sort(titleSort);
-                } else if (this.current.isFavFolder && this.$store.state.sortFavorites) {
+                } else if (SECTION_APPS==this.current.section && this.$store.state.sortFavorites) {
                     this.items.sort(favSort);
                 }
             }
@@ -1173,7 +1176,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         icon: "radio",
                         type: "group",
                         id: TOP_ID_PREFIX+"ra",
-                        isRadio: true });
+                        section: SECTION_RADIO });
             list.push({ title: i18n("Favorites"),
                         command: ["favorites", "items"],
                         params: ["menu:favorites", "menu:1"],
@@ -1181,13 +1184,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         type: "favorites",
                         app: "favorites",
                         id: TOP_ID_PREFIX+"fav",
-                        isFavFolder: true });
+                        section: SECTION_FAVORITES });
             list.push({ title: i18n("Apps"),
                         command: ["myapps", "items"],
                         params: ["menu:1"],
                         icon: "apps",
                         type: "group",
-                        id: TOP_APPS_ID });
+                        id: TOP_APPS_ID,
+                        section: SECTION_APPS });
             list.push({ title: i18n("Remote Libraries"),
                         command: ["selectRemoteLibrary", "items"],
                         params: ["menu:selectRemoteLibrary", "menu:1"],
@@ -1236,7 +1240,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "label";
                                 } else if (c.id == "myMusicPlaylists") {
                                     item.icon = "list";
-                                    item.isPlaylists = true;
+                                    item.id = TOP_PLAYLISTS_ID;
                                 } else if (c.id.startsWith("myMusicYears")) {
                                     item.icon = "date_range";
                                 } else if (c.id == "myMusicNewMusic") {

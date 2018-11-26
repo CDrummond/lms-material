@@ -4,6 +4,7 @@
 2. Don't add playall/addall entries to A..Z groups.
 3. For A..Z group, set max combined group size to 100, and don't split letters
    into multiple groups until 301 or more.
+4. If have artist_id, or album_id, then pass these to MAI instead of strings.
 
 0.1.3
 -----

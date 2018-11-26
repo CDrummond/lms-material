@@ -186,9 +186,9 @@ function parseBrowseResp(data, parent, options, idStart) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.isFavFolder;
-            var isPlaylists = parent && parent.isPlaylists;
-            var isApps = parent && parent.id && parent.id===TOP_APPS_ID;
+            var isFavorites = parent && parent.section == SECTION_FAVORITES;
+            var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
+            var isApps = parent && parent.id == TOP_APPS_ID;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
 
@@ -350,7 +350,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         i.image=i.image.replace("50x50_o", LMS_GRID_IMAGE_SIZE);
                     }
                 }
-                i.isRadio = parent && parent.isRadio;
+                i.section = parent ? parent.section : undefined;
                 resp.items.push(i);
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {

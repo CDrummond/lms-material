@@ -574,8 +574,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
                        item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
                        item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {
-                var command = this.replaceCommandTerms({ command: [ item.command[0] ], params: ["tags:CCZs"]});
-                this.fetchItems(command, item, 5);
+                var command = { command: item.command, params: ["tags:CCZs"]};
+                if (item.params) {
+                    item.params.forEach(p => { if (!p.startsWith("tags:")) { command.params.push(p); } } );
+                }
+                this.fetchItems(this.replaceCommandTerms(command), item, 5);
             } else if (item.weblink) {
                 window.open(item.weblink);
             } else {

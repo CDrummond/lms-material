@@ -435,7 +435,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showInfo() {
-            if (!this.info.show) {
+            if (!this.info.show || !this.infoTrack) {
                 return;
             }
             this.$nextTick(function () {

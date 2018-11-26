@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-.browse-text a, .np-info-text a {
+.browse-text a, .np-info-text a, .np-info-text-full a {
     color: #99ceff !important;
 }
 

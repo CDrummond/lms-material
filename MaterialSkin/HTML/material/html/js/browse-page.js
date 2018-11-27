@@ -751,11 +751,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act===MORE_LIB_ACTION.cmd) {
                 if (item.id) {
                     if (item.id.startsWith("artist_id:")) {
-                        this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id]}, item);
+                        this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
                     } else if (item.id.startsWith("album_id:")) {
-                        this.fetchItems({command: ["albuminfo", "items"], params: ["menu:1", item.id]}, item);
+                        this.fetchItems({command: ["albuminfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
                     } else if (item.id.startsWith("track_id:")) {
-                        this.fetchItems({command: ["trackinfo", "items"], params: ["menu:1", item.id]}, item);
+                        this.fetchItems({command: ["trackinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
                     }
                 }
             } else if (act===PIN_ACTION.cmd) {

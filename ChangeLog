@@ -6,6 +6,7 @@
    into multiple groups until 301 or more.
 4. Retreive biographies for all artists in now playing info.
 5. Change sync dialog to be 'Choose players to sync with $PLAYER'
+6. Add link to trackinfo command in now playing info.
 
 0.1.3
 -----

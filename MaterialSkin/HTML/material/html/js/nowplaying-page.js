@@ -69,6 +69,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon>link_off</v-icon></v-btn>
     <div style="width:32px"></div>
+    <v-btn flat icon @click="trackInfo()" :title="trans.more"><v-icon>more_horiz</v-icon></v-btn>
+    <div style="width:32px"></div>
     <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
@@ -92,6 +94,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-spacer></v-spacer>
     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon>link_off</v-icon></v-btn>
+    <div style="width:32px"></div>
+    <v-btn flat icon @click="trackInfo()" :title="trans.more"><v-icon>more_horiz</v-icon></v-btn>
     <div style="width:32px"></div>
     <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
@@ -163,7 +167,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  menu: { show: false, x:0, y:0, text: undefined },
-                 trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined,
+                 trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true
@@ -219,6 +223,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.current.time!=this.playerStatus.current.time) {
                 this.playerStatus.current.time = playerStatus.current.time;
+            }
+            if (playerStatus.current.id!=this.playerStatus.current.id) {
+                this.playerStatus.current.id = playerStatus.current.id;
             }
             if (playerStatus.current.title!=this.playerStatus.current.title) {
                 this.playerStatus.current.title = playerStatus.current.title;
@@ -301,6 +308,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         initItems() {
             this.trans = { close:i18n("Close"), expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
+                           more:i18n("More"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                            shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
             this.menu.text=i18n("Show information");
@@ -335,6 +343,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                              artist: this.playerStatus.current.artist, artist_id: this.playerStatus.current.artist_id,
                              artist_ids: this.playerStatus.current.artist_ids,
                              album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
+        },
+        trackInfo() {
+            this.info.show=false;
+            if (this.desktop) {
+                bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title});
+            } else {
+                this.$router.push('/browse');
+                this.$nextTick(function () {
+                    bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title});
+                });
+            }
         },
         fetchLyrics() {
             if (this.info.tabs[LYRICS_TAB].songartist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||

@@ -5,7 +5,8 @@
  * MIT license.
  */
 
-.browse-text a, .np-info-text a, .np-info-text-full a {
+.browse-text a, .np-info-text a, .np-info-text-full a,
+.primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text {
     color: #99ceff !important;
 }
 

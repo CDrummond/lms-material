@@ -488,21 +488,22 @@ a {
 }
 
 .pmgr-vol-slider {
-    margin-top:0px;
+    margin-top:-12px;
     margin-left:8px;
     margin-right:8px;
-    height: 32px;
+    height: 20px;
 }
 
 .pmgr-btn {
-    margin: 0px;
+    margin: -12px 0px 0px 0px;
     width: 32px;
     height: 32px;
 }
 
 .pmgr-vol {
     width:82px;
-    padding-top: 4px;
+    padding-top: 0px;
+    margin-top: -8px;
     height:32px;
     text-align:center;
     vertical-align: middle;

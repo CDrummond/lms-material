@@ -7,6 +7,8 @@
 4. Retreive biographies for all artists in now playing info.
 5. Change sync dialog to be 'Choose players to sync with $PLAYER'
 6. Add link to trackinfo command in now playing info.
+7. Adjust metrics in manager payers dialog, and only show prev/next buttons if
+   screen is 500px or wider.
 
 0.1.3
 -----

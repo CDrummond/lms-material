@@ -12,7 +12,7 @@ Vue.component('lms-manage-players', {
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">
     <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-    <v-toolbar-title>{{i18n('Manage Players')}}</v-toolbar-title>
+    <v-toolbar-title>{{i18n('Manage Players')}}{{width}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
 
@@ -27,16 +27,16 @@ Vue.component('lms-manage-players', {
           <img :src="player.image">
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title  style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>&nbsp;{{player.name}}</v-list-tile-title>
+          <v-list-tile-title  style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>&nbsp;&nbsp;&nbsp;{{player.name}}</v-list-tile-title>
           <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="prevTrack(index)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(index)">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
          <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="playPause(index)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="nextTrack(index)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="nextTrack(index)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
           </v-list-tile-action>
          <v-list-tile-action class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player)">
@@ -66,6 +66,7 @@ Vue.component('lms-manage-players', {
     data() {
         return {
             show: false,
+            showAllButtons: true,
             players: []
         }
     },
@@ -96,6 +97,13 @@ Vue.component('lms-manage-players', {
         bus.$on('syncChanged', function() {
             this.updateAll();
         }.bind(this));
+
+        this.showAllButtons = window.innerWidth>=500;
+        this.$nextTick(() => {
+            window.addEventListener('resize', () => {
+                this.showAllButtons = window.innerWidth>=500;
+            });
+        });
     },
     methods: {
         close() {

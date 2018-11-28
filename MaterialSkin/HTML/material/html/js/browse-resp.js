@@ -24,7 +24,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION], MORE_LIB_ACTION,
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
                                   type: "group",
                                   favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
                               });

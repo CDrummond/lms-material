@@ -5,10 +5,12 @@
  * MIT license.
  */
 
-var PQ_PLAY_NOW_ACTION =  { cmd: 'playnow',  icon: 'play_circle_outline'   };
-var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'    };
-var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline' };
-var PQ_MORE_ACTION =      { cmd: 'more',     icon: 'more_horiz'            };
+var PQ_PLAY_NOW_ACTION =  { cmd: 'playnow',  icon: 'play_circle_outline'     };
+var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'      };
+var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline'   };
+var PQ_MORE_ACTION =      { cmd: 'more',     icon: 'more_horiz'              };
+var PQ_SELECT_ACTION =    { cmd: 'select',   icon: 'check_box_outline_blank' };
+var PQ_UNSELECT_ACTION =  { cmd: 'unselect', icon: 'check_box'               };
 
 const PQ_STATUS_TAGS = "tags:dcltuyAK";
 
@@ -53,7 +55,7 @@ function parseResp(data, showTrackNum) {
                               subtitle: subtitle,
                               icon: image ? undefined : (isStream ? "wifi_tethering" : "music_note"),
                               image: image,
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_MORE_ACTION],
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
                               duration: i.duration
                           });
             });
@@ -84,8 +86,18 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-card-actions>
   </v-card>
  </v-dialog>
- <div class="subtoolbar pq-details">
-  <v-layout>
+
+ <div class="subtoolbar pq-details" >
+  <v-layout v-if="selection.length>0">
+   <v-layout row wrap>
+    <v-flex xs12 class="ellipsis subtoolbar-title">{{trans.selectMultiple}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
+   </v-layout>
+   <v-spacer></v-spacer>
+   <v-btn :title="trans.remove" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
+   <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
+  </v-layout>
+  <v-layout v-else>
    <v-layout row wrap v-if="listSize>0">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
     <v-flex xs12 v-if="playlistName" class="ellipsis subtoolbar-subtitle subtext">{{playlistName}}</v-flex>
@@ -109,10 +121,13 @@ var lmsQueue = Vue.component("lms-queue", {
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
    <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
-    <v-list-tile-avatar v-if="item.image" :tile="true">
+    <v-list-tile-avatar v-if="item.selected" :tile="true" @click="select(item, index)">
+     <v-icon>check_box</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" @click="select(item, index)">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true" @click="select(item, index)">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-content>
@@ -155,9 +170,11 @@ var lmsQueue = Vue.component("lms-queue", {
             playerStatus: { ison:1, shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, saveAs:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
-                     shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
+                     shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
+                     selectMultiple:undefined, remove:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
-            playlistName: undefined
+            playlistName: undefined,
+            selection: []
         }
     },
     created() {
@@ -275,11 +292,14 @@ var lmsQueue = Vue.component("lms-queue", {
             PQ_PLAY_NEXT_ACTION.title=i18n('Move to next in queue');
             PQ_REMOVE_ACTION.title=i18n('Remove from queue');
             PQ_MORE_ACTION.title=i18n("More");
+            PQ_SELECT_ACTION.title=i18n("Select");
+            PQ_UNSELECT_ACTION.title=i18n("Un-select");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'),
                           scrollToCurrent:i18n("Scroll to current track"),
                           save:i18n("Save"), clear:i18n("Clear"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
-                          shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
+                          shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
+                          selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};
         },
         save() {
             if (this.items.length<1) {
@@ -331,10 +351,53 @@ var lmsQueue = Vue.component("lms-queue", {
                         bus.$emit('trackInfo', item);
                     });
                 }
+            } else if (PQ_SELECT_ACTION.cmd===act) {
+                var idx=this.selection.indexOf(index);
+                if (idx<0) {
+                    this.selection.push(index);
+                    item.selected = true;
+                    idx = item.actions.indexOf(PQ_SELECT_ACTION);
+                    if (idx>-1) {
+                        item.actions[idx]=PQ_UNSELECT_ACTION;
+                    }
+                }
+            } else if (PQ_UNSELECT_ACTION.cmd===act) {
+                var idx=this.selection.indexOf(index);
+                if (idx>-1) {
+                    this.selection.splice(idx, 1);
+                    item.selected = false;
+                    idx = item.actions.indexOf(PQ_UNSELECT_ACTION);
+                    if (idx>-1) {
+                        item.actions[idx]=PQ_SELECT_ACTION;
+                    }
+                }
             }
         },
         itemMenu(item, index, event) {
             this.menu={show:true, item:item, index:index, x:event.clientX, y:event.clientY};
+        },
+        removeSelectedItems() {
+            this.selection.sort(function(a, b) { return a<b ? 1 : -1; });
+            bus.$emit('removeFromQueue', this.selection);
+            this.clearSelection();
+        },
+        clearSelection() {
+            this.selection.forEach(index => {
+                if (index>-1 && index<this.items.length) {
+                    var idx = this.items[index].actions.indexOf(PQ_UNSELECT_ACTION);
+                    if (idx>-1) {
+                        this.items[index].actions[idx]=PQ_SELECT_ACTION;
+                        this.items[index].selected = false;
+                    }
+                }
+            });
+
+            this.selection = [];
+        },
+        select(item, index) {
+            if (this.selection.length>0) {
+                this.itemAction(this.selection.indexOf(index)<0 ? PQ_SELECT_ACTION.cmd : PQ_UNSELECT_ACTION.cmd, item, index);
+            }
         },
         getDuration() {
             if (this.items.length>0) {
@@ -448,6 +511,9 @@ var lmsQueue = Vue.component("lms-queue", {
             ev.dataTransfer.setData('Text', this.id);
             this.dragIndex = which;
             this.stopScrolling = false;
+            if (this.selection.length>0 /* && this.selection.indexOf(which)<0*/) { //TODO: Multiple drag
+                this.clearSelection();
+            }
         },
         dragOver(ev) {
             // Drag over item at top/bottom of list to start scrolling
@@ -501,6 +567,12 @@ var lmsQueue = Vue.component("lms-queue", {
                 return '';
             }
             return i18np("1 Track", "%1 Tracks", value);
+        },
+        displaySelectionCount: function (value) {
+            if (!value) {
+                return '';
+            }
+            return i18np("1 Selected Item", "%1 Selected Items", value);
         }
     },
     beforeDestroy() {

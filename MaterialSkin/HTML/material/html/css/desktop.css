@@ -175,7 +175,7 @@ body {
     text-align: right;
 }
 
-/* Moving the splitte sometimes causes now-playing bar text to be selected? Disable selection to work-around */
+/* Moving the splitter sometimes causes now-playing bar text to be selected? Disable selection to work-around */
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

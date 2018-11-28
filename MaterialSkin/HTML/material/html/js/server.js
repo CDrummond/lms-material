@@ -154,6 +154,18 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 });
             }
+        },
+        moveQueueItems(indexes, to) {
+            if (indexes.length>0) {
+                var index = indexes.shift();
+                lmsCommand(this.$store.state.player.id, ["playlist", "move", index, to]).then(({data}) => {
+                    if (indexes.length>0) {
+                        this.moveQueueItems(indexes, index>to ? to+1 : to);
+                    } else {
+                        this.refreshStatus();
+                    }
+                });
+            }
         }
     },
     created: function() {    
@@ -176,6 +188,11 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('removeFromQueue', function(indexes) {
             if (this.$store.state.player) {
                 this.removeFromQueue(indexes);
+            }
+        }.bind(this));
+        bus.$on('moveQueueItems', function(indexes, to) {
+            if (this.$store.state.player) {
+                this.moveQueueItems(indexes, to);
             }
         }.bind(this));
         bus.$on('power', function(state) {

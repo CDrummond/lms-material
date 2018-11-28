@@ -9,6 +9,7 @@
 6. Add link to trackinfo command in now playing info.
 7. Adjust metrics in manager payers dialog, and only show prev/next buttons if
    screen is 500px or wider.
+8. Add multiple item selection to browse and queue.
 
 0.1.3
 -----

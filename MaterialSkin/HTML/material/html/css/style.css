@@ -131,10 +131,19 @@ a {
     margin:0px;
 }
 
+.image-grid-select-btn, .image-grid-select-btn:hover {
+    position: absolute;
+    top: 0px !important;
+    left: 0px !important;
+    width: 32px !important;
+    height: 32px !important;
+    z-index:2;
+}
+
 .image-grid-btn {
     position: absolute;
     top: 146px !important;
-    left: 126px !important;
+    left: 124px !important;
     width: 32px !important;
     height: 32px !important;
 }
@@ -162,7 +171,7 @@ a {
 
     .image-grid-btn {
         top: 126px !important;
-        left: 110px !important;
+        left: 108px !important;
     }
 }
 

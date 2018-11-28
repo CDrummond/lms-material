@@ -24,7 +24,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group",
                                   favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
                               });
@@ -39,7 +39,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   command: ["tracks"],
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, "sort:tracknum"],
                                   image: lmsServerAddress+"/music/" + i.artwork + "/cover" + LMS_LIST_IMAGE_SIZE,
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group",
                                   favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
                               });
@@ -54,7 +54,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
                                   image: lmsServerAddress+"/music/" + i.coverid + "/cover" +LMS_LIST_IMAGE_SIZE,
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "track"
                               });
                 });
@@ -68,7 +68,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   command: ["artists"],
                                   params: ["genre_id:"+ i.genre_id],
                                   //icon: "label",
-                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                                  menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION],
                                   type: "group"
                               });
                 });
@@ -279,6 +279,15 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                     i.menuActions.push(ADD_TO_FAV_ACTION);
                 }
+
+                if (addedPlayAction) {
+                    if (!addedDivider) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menuActions.push(SELECT_ACTION);
+                }
+
                 if (isPlaylists) {
                     if (!addedDivider && i.menuActions.length>0) {
                         i.menuActions.push(DIVIDER);
@@ -384,7 +393,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image" +
                                     (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE) : undefined,
                               params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
                               favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
                           };
@@ -426,7 +435,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["tracks"],
                               image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE),
                               params: ["album_id:"+ i.id, TRACK_TAGS, "sort:tracknum"],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
                               favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined,
                               origTitle: i.album
@@ -461,8 +470,8 @@ function parseBrowseResp(data, parent, options, idStart) {
                               subtitle: formatSeconds(i.duration),
                               //icon: "music_note",
                               menuActions: allowPlayAlbum && (undefined==idStart || idStart>0 || resp.items.length>0)
-                                            ? [PLAY_ACTION, PLAY_ALBUM_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION] 
-                                            : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, MORE_LIB_ACTION],
+                                            ? [PLAY_ACTION, PLAY_ALBUM_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION]
+                                            : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "track"
                           });
             });
@@ -478,7 +487,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["artists"],
                               //icon: "label",
                               params: ["genre_id:"+ i.id],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION],
                               type: "group"
                           });
             });
@@ -491,7 +500,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                               type: "group"
                           });
             });
@@ -532,7 +541,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["albums"],
                               //icon: "date_range",
                               params: ["year:"+ i.year, "tags:ajly"],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, MORE_LIB_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group"
                           });
             });
@@ -639,14 +648,14 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   app: parent.app,
                                   menuActions: "favorites"===parent.type
                                                 ? topLevelFavourites
-                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION]
+                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
                                                 : i.isaudio === 1
                                                     ? i.url
-                                                        ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
-                                                        : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                                                        ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]
+                                                        : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
                                                     : i.url
-                                                        ? [ADD_TO_FAV_ACTION]
+                                                        ? [ADD_TO_FAV_ACTION, DIVIDER, SELECT_ACTION]
                                                         : undefined,
                                   id: "item_id:"+i.id,
                                   favIcon: i.image ? i.image : i.icon
@@ -660,11 +669,11 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   type: "track",
                                   menuActions: "favorites"===parent.type
                                                 ? topLevelFavourites
-                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION]
-                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION]
+                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
                                                 : i.url
-                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
-                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]
+                                                    : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION],
                                   app: parent.app,
                                   id: "item_id:"+i.id,
                                   favIcon: i.image ? i.image : i.icon

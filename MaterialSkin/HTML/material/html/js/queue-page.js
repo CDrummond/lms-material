@@ -120,14 +120,14 @@ var lmsQueue = Vue.component("lms-queue", {
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
-   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable>
-    <v-list-tile-avatar v-if="item.selected" :tile="true" @click="select(item, index)">
+   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)"  @dragover="dragOver($event)" @drop="drop(index, $event)" draggable  @click="select(item, index)">
+    <v-list-tile-avatar v-if="item.selected" :tile="true">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" @click="select(item, index)">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true" @click="select(item, index)">
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-content>

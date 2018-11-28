@@ -206,16 +206,16 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
    <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, index, $event, false)" :key="item.id">
-    <v-list-tile-avatar v-if="item.selected" :tile="true" @click.stop="select(item, index)">
+    <v-list-tile-avatar v-if="item.selected" :tile="true">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" @click="select(item, index)">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true">
      <img v-lazy="item.image"></img>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true" @click="select(item, index)">
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="selection.length>0" :tile="true" @click.stop="select(item, index)">
+    <v-list-tile-avatar v-else-if="selection.length>0" :tile="true">
      <v-icon>check_box_outline_blank</v-icon>
     </v-list-tile-avatar>
 
@@ -536,6 +536,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         click(item, index, event, allowItemPlay) {
             if (this.selection.length>0) {
+                this.select(item, index);
                 return;
             }
             if ("search"==item.type) {

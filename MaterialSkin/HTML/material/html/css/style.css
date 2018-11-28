@@ -78,12 +78,12 @@ a {
     padding: 0px 8px 8px 8px;
 }
 
-.lms-image-grid .container .layout .flex .d-flex .v-card__text {
+.lms-image-grid .container .layout div .v-card__text {
     padding:0px;
 }
 
-.lms-image-grid .container .layout .flex {
-    padding:0px;
+.lms-image-grid .container .layout div {
+    padding:2px;
     margin:0px;
 }
 

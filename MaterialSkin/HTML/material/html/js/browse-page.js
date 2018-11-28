@@ -137,7 +137,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-list v-if="useGrid" class="lms-image-grid" id="browse-grid">
   <v-container grid-list-sm fluid>
    <v-layout row wrap>
-    <v-flex v-for="(item, index) in items" :key="item.id">
+    <div v-for="(item, index) in items" :key="item.id">
      <v-card flat tile :title="item | tooltip">
       <v-card-text v-if="item.type=='image'" class="image-grid-item">
        <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
@@ -156,7 +156,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        </v-btn>
       </v-card-text>
      </v-card>
-    </v-flex>
+    </div>
    </v-layout>
   </v-container>
  </v-list>

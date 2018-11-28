@@ -129,6 +129,7 @@
 "1 Year":"1 Année",
 "%1 Years":"%1 Années",
 "%1 minutes":"",
+"Add selection to queue":"",
 "Album Mix":"",
 "All plugins up to date.":"",
 "Alphabetically sort favorites, rather than server supplied order.":"",
@@ -174,6 +175,7 @@
 "Place album covers, artist images (if supported), and others in a grid.":"",
 "Play album starting at track":"",
 "Play next":"",
+"Play selection":"",
 "Players":"",
 "Plugins":"",
 "Radio":"",
@@ -186,7 +188,9 @@
 "Rescan for playlist changes?":"",
 "Scroll play queue when current track changes.":"",
 "Scroll to current track":"",
+"Select":"",
 "Select All":"",
+"Select multiple items":"",
 "Select which players you would like to synchronise with '%1'.":"",
 "Selected Genres":"",
 "Should alarms repeat":"",
@@ -220,6 +224,7 @@
 "Un-pin":"",
 "Un-pin '%1'?":"",
 "Un-pin from main page":"",
+"Un-select":"",
 "Update information when song changes":"",
 "Update playlists":"",
 "Update rescan":"",
@@ -240,5 +245,7 @@
 "1 Image":"",
 "%1 Images":"",
 "1 Item":"",
-"%1 Items":""
+"%1 Items":"",
+"1 Selected Item":"",
+"%1 Selected Items":""
 }

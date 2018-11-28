@@ -17,7 +17,7 @@ Vue.component('lms-information-dialog', {
   </v-card-title>
   <v-card-text class="settings-list">
    <p class="about-header">{{i18n('Library')}}</p>
-   <ul class="about-indent">
+   <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
    </ul>
    <v-menu bottom left v-if="!scanning">
@@ -33,13 +33,15 @@ Vue.component('lms-information-dialog', {
    <div style="height:24px"></div>
 
    <p class="about-header">{{i18n('Players')}}</p>
-   <template v-for="(item, index) in players">
-    <p class="about-indent">{{item.name}}
-     <ul>
-      <template v-for="(info, index) in item.info"><li>{{info}}</li></template>
-     </ul>
-    </p>
-   </template>
+   <ul>
+    <template v-for="(item, index) in players">
+     <li>{{item.name}}
+      <ul>
+       <template v-for="(info, index) in item.info"><li>{{info}}</li></template>
+      </ul>
+     </li>
+    </template>
+   </ul>
    <div style="height:24px"></div>
 
    <p class="about-header">{{i18n('Plugins')}}</p>

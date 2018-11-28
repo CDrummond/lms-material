@@ -87,7 +87,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-card>
  </v-dialog>
 
- <div class="subtoolbar pq-details" >
+ <div class="subtoolbar pq-details noselect" >
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title">{{trans.selectMultiple}}</v-flex>

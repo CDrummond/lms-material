@@ -14,7 +14,7 @@ var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 Vue.component('lms-toolbar', {
     template: `
 <div>
-<v-toolbar fixed dense app class="lms-toolbar">
+<v-toolbar fixed dense app class="lms-toolbar noselect">
  <v-menu bottom class="toolbar-menu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title"><v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>

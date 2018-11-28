@@ -108,7 +108,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-card-actions>
   </v-card>
  </v-dialog>
- <div v-if="headerTitle" class="subtoolbar">
+ <div v-if="headerTitle" class="subtoolbar noselect">
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title">{{trans.selectMultiple}}</v-flex>
@@ -134,7 +134,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
- <v-list v-if="useGrid" class="lms-image-grid" id="browse-grid">
+ <v-list v-if="useGrid" class="lms-image-grid noselect" id="browse-grid">
   <v-container grid-list-sm fluid>
    <v-layout row wrap>
     <div v-for="(item, index) in items" :key="item.id">
@@ -161,7 +161,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-container>
  </v-list>
 
- <v-list v-else v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
+ <v-list v-else class="noselect" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index"></v-divider>

@@ -511,7 +511,7 @@ var lmsQueue = Vue.component("lms-queue", {
             ev.dataTransfer.setData('Text', this.id);
             this.dragIndex = which;
             this.stopScrolling = false;
-            if (this.selection.length>0 /*&& this.selection.indexOf(which)<0*/) {
+            if (this.selection.length>0 && this.selection.indexOf(which)<0) {
                 this.clearSelection();
             }
         },
@@ -541,11 +541,11 @@ var lmsQueue = Vue.component("lms-queue", {
             this.stopScrolling = true;
             ev.preventDefault();
             if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                /*if (this.selection.length>0) {
+                if (this.selection.length>0) {
                     if (this.selection.indexOf(to)<0) {
-                        bus.$emit('moveQueueItems', this.selection.sort(function(a, b) { return a<b ? 1 : -1; }), to);
+                        bus.$emit('moveQueueItems', this.selection.sort(function(a, b) { return a<b ? -1 : 1; }), to);
                     }
-                } else*/ {
+                } else {
                     bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
                 }
                 this.clearSelection();

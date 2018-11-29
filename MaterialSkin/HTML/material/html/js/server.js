@@ -155,12 +155,14 @@ var lmsServer = Vue.component('lms-server', {
                 });
             }
         },
-        moveQueueItems(indexes, to) {
+        moveQueueItems(indexes, to, movedBefore, movedAfter) {
             if (indexes.length>0) {
                 var index = indexes.shift();
-                lmsCommand(this.$store.state.player.id, ["playlist", "move", index, to]).then(({data}) => {
+                lmsCommand(this.$store.state.player.id, ["playlist", "move", index<to ? index-movedBefore : index,
+                                                         index>to ? to+movedAfter+(movedBefore>0 ? 1 : 0) : to]).then(({data}) => {
                     if (indexes.length>0) {
-                        this.moveQueueItems(indexes, index>to ? to+1 : to);
+                        this.moveQueueItems(indexes, to, index<to ? movedBefore+1 : movedBefore,
+                                                         index>to ? movedAfter+1 : movedAfter);
                     } else {
                         this.refreshStatus();
                     }
@@ -192,7 +194,7 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
         bus.$on('moveQueueItems', function(indexes, to) {
             if (this.$store.state.player) {
-                this.moveQueueItems(indexes, to);
+                this.moveQueueItems(indexes, to, 0, 0);
             }
         }.bind(this));
         bus.$on('power', function(state) {

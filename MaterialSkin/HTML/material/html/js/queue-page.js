@@ -420,7 +420,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
-                var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==timestamp;
+                var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                 this.timestamp = resp.timestamp;
                 this.fetchingItems = false;
                 this.listSize = data.result.playlist_tracks;

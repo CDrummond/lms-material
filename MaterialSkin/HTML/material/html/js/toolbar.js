@@ -188,7 +188,18 @@ Vue.component('lms-toolbar', {
         }
 
         bus.$on('showError', function(err, msg) {
-            this.snackbar = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""), show: true, color: 'error' };
+            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""), show: true, color: 'error' };
+            if (undefined!=err && undefined==msg && !err.response) {
+                // If this is a network error, check if connection is up...
+                var that = this;
+                axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
+                    that.snackbar = info;
+                 }).catch(err => {
+                    that.snackbar = {msg: i18n("No network connection?"), show: true, color: 'error' };
+                });
+            } else {
+                this.snackbar = info;
+            }
         }.bind(this));
         bus.$on('showMessage', function(msg) {
             this.snackbar = {msg: msg, show: true };

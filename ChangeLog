@@ -6,6 +6,7 @@
 4. If lose server connection, display modal dialog (similar to when there are no
    players) until connection is re-established.
 5. Allow "PlayAll" / "AddAll" for radio.
+6. Fix multi-artist retrievel in now playing.
 
 0.1.4
 -----

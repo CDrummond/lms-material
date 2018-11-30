@@ -37,7 +37,7 @@ Vue.component('lms-information-dialog', {
     <template v-for="(item, index) in players">
      <li>{{item.name}}
       <ul>
-       <template v-for="(info, index) in item.info"><li>{{info}}</li></template>
+       <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
       </ul>
      </li>
     </template>
@@ -111,6 +111,12 @@ Vue.component('lms-information-dialog', {
         update() {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
+                    var prevStrengths={};
+                    this.players.forEach(p=>{
+                        if (p.sigStrength>0) {
+                            prevStrengths[p.id]=p.sigStrength;
+                        }
+                    });
                     this.players = [];
                     if (data.result.players_loop) {
                          data.result.players_loop.forEach(i => {
@@ -118,9 +124,25 @@ Vue.component('lms-information-dialog', {
                                          i18n("Type: %1", i.model),
                                          i18n("Firmware: %1", i.firmware),
                                          i18n("IP: %1", i.ip.split(':')[0]),
-                                         i18n("Mac Address: %1", i.playerid) ];
+                                         i18n("Mac Address: %1", i.playerid),
+                                         "" ];
+                            if (undefined!=prevStrengths[i.playerid]) {
+                                info[5]=i18n("Signal Strength: %1%", prevStrengths[i.playerid]);
+                            }
 
-                            this.players.push({name: i.name, info: info});
+                            this.players.push({name: i.name, id: i.playerid, info: info});
+                            if ("group" != i.model) {
+                                lmsCommand(i.playerid, ["signalstrength" ,"?"]).then(({data}) => {
+                                    if (data && data.result && data.result._signalstrength>0) {
+                                        this.players.forEach(p=>{
+                                            if (p.id==data.params[0]) {
+                                                p.info[5]=i18n("Signal Strength: %1%", data.result._signalstrength);
+                                                p.sigStrength = data.result._signalstrength;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
 

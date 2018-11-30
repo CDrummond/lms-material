@@ -31,12 +31,12 @@ Vue.component('lms-noconnection', {
             this.$store.commit('setNoNetwork', true);
             this.refreshInterval = setInterval(function () {
                 var that = this;
-                axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
+                lmsCheckConnection().then(function (resp) {
                     that.$store.commit('setNoNetwork', false);
                     bus.$emit('networkReconnected');
                     that.cancelInterval();
                 });
-            }.bind(this), 1000);
+            }.bind(this), 1500);
         }.bind(this));
     },
     methods: {

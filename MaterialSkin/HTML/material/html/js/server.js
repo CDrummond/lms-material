@@ -7,6 +7,11 @@
 
 var lmsServerAddress = "";
 
+function lmsCheckConnection() {
+    var url = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/css/blank.css?r"+(new Date().getTime());
+    return axios({ method: "get", url: url, timeout: 1000});
+}
+
 function lmsCommand(playerid, command) {
     var args = {
             method: "post",
@@ -97,8 +102,8 @@ var lmsServer = Vue.component('lms-server', {
                 if (!err.response) {
                     // If this is a network error, check if connection is up...
                     var that = this;
-                    axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
-                        this.setServerStatusUpdateInterval(500);
+                    lmsCheckConnection().then(function (resp) {
+                        that.setServerStatusUpdateInterval(500);
                      }).catch(err => {
                         bus.$emit('noNetwork');
                     });
@@ -158,9 +163,9 @@ var lmsServer = Vue.component('lms-server', {
                     if (!err.response) {
                         // If this is a network error, check if connection is up...
                         var that = this;
-                        axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
-                            this.scheduleNextStatusUpdate(500);
-                         }).catch(err => {
+                        lmsCheckConnection().then(function (resp) {
+                            that.scheduleNextStatusUpdate(500);
+                        }).catch(err => {
                             bus.$emit('noNetwork');
                         });
                     } else {

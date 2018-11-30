@@ -417,6 +417,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         fetchItems() {
+            if (!this.$store.state.player) {
+                return
+            }
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;

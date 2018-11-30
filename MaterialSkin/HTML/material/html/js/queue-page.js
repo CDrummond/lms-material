@@ -220,6 +220,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.listSize=0;
                 this.items=[];
                 this.timestamp=0;
+                this.lastLoadedPlaylistName=undefined;
+                this.playlistName=undefined;
             }
             if (this.lastLoadedPlaylistName!=playerStatus.playlist.name) {
                 this.lastLoadedPlaylistName=playerStatus.playlist.name;

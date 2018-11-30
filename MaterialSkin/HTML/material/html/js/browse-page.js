@@ -479,7 +479,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.addHistory();
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
-                    this.headerTitle=item.title;
+                    this.headerTitle=item.title ? item.title : "?";
                     this.listSize = item.range ? item.range.count : data.result.count;
                     this.items=resp.items;
                     this.baseActions=resp.baseActions;

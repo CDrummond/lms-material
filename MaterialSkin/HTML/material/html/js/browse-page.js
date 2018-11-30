@@ -135,30 +135,26 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
  <v-list v-if="useGrid" class="lms-image-grid noselect" id="browse-grid">
-  <v-container grid-list-sm fluid>
-   <v-layout row wrap>
-    <div v-for="(item, index) in items" :key="item.id">
-     <v-card flat tile :title="item | tooltip">
-      <v-card-text v-if="item.type=='image'" class="image-grid-item">
-       <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
-       {{item.caption}}
-      </v-card-text>
-      <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">
-       <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(item, index)">
-        <v-icon>{{item.selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
-       </v-btn>
-       <img v-lazy="item.image"></img>
-       <div class="image-grid-text">{{item.title}}</div>
-       <div class="image-grid-text subtext">{{item.subtitle}}</div>
-       <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
-        <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
-        <v-icon v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" >{{item.menuActions[0].icon}}</v-icon>
-       </v-btn>
-      </v-card-text>
-     </v-card>
-    </div>
-   </v-layout>
-  </v-container>
+  <div v-for="(item, index) in items" :key="item.id">
+   <v-card flat tile :title="item | tooltip">
+    <v-card-text v-if="item.type=='image'" class="image-grid-item">
+     <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
+     {{item.caption}}
+    </v-card-text>
+    <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">
+     <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(item, index)">
+      <v-icon>{{item.selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
+     </v-btn>
+     <img v-lazy="item.image"></img>
+     <div class="image-grid-text">{{item.title}}</div>
+     <div class="image-grid-text subtext">{{item.subtitle}}</div>
+     <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
+      <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
+      <v-icon v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" >{{item.menuActions[0].icon}}</v-icon>
+     </v-btn>
+    </v-card-text>
+   </v-card>
+  </div>
  </v-list>
 
  <v-list v-else class="noselect" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">

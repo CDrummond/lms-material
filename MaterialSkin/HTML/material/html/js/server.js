@@ -57,6 +57,11 @@ var lmsServer = Vue.component('lms-server', {
             }.bind(this), interval);
         },
         refreshServerStatus: function () {
+            if (this.$store.state.noNetwork) {
+                this.setServerStatusUpdateInterval(1000);
+                return;
+            }
+
             //console.log("Refresh");
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 var players = [];
@@ -89,13 +94,27 @@ var lmsServer = Vue.component('lms-server', {
                 }
                 this.setServerStatusUpdateInterval(players.length>0 ? LMS_SERVER_STATUS_REFRESH_MAX : LMS_SERVER_STATUS_REFRESH_MIN);
             }).catch(err => {
-                logError(err);
-                this.setServerStatusUpdateInterval(err.response ? LMS_STATUS_REFRESH_MIN : 500);
+                if (!err.response) {
+                    // If this is a network error, check if connection is up...
+                    var that = this;
+                    axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
+                        this.setServerStatusUpdateInterval(500);
+                     }).catch(err => {
+                        bus.$emit('noNetwork');
+                    });
+                } else {
+                    logError(err);
+                    this.setServerStatusUpdateInterval(LMS_STATUS_REFRESH_MIN);
+                }
             });
         },
         refreshStatus: function() {
             if (undefined!==this.statusRefreshTimer) {
                 clearTimeout(this.statusRefreshTimer);
+            }
+            if (this.$store.state.noNetwork) {
+                this.scheduleNextStatusUpdate(1000);
+                return;
             }
             var nextInterval = LMS_STATUS_REFRESH_MAX;
             if (this.$store.state.players && this.$store.state.players.length>0 && this.$store.state.player.id) {
@@ -136,8 +155,18 @@ var lmsServer = Vue.component('lms-server', {
                     }
                     this.scheduleNextStatusUpdate(nextInterval);
                 }).catch(err => {
-                    logError(err);
-                    this.scheduleNextStatusUpdate(err.response ? LMS_STATUS_REFRESH_MIN : 500);
+                    if (!err.response) {
+                        // If this is a network error, check if connection is up...
+                        var that = this;
+                        axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
+                            this.scheduleNextStatusUpdate(500);
+                         }).catch(err => {
+                            bus.$emit('noNetwork');
+                        });
+                    } else {
+                        logError(err);
+                        this.scheduleNextStatusUpdate(LMS_STATUS_REFRESH_MIN);
+                    }
                 });
             } else {
                 this.scheduleNextStatusUpdate(LMS_STATUS_REFRESH_MAX);

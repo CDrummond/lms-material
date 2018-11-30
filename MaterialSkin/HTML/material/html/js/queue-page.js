@@ -239,6 +239,11 @@ var lmsQueue = Vue.component("lms-queue", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
+        bus.$on('networkReconnected', function() {
+            this.timestamp=0;
+            this.scheduleUpdate();
+        }.bind(this));
+
         if (!this.desktop) {
             // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
             // page, so that it can be restored when going back here.

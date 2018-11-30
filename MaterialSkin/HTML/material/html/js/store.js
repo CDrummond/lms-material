@@ -19,7 +19,8 @@ const store = new Vuex.Store({
         serverMenus:false,
         autoScrollQueue:true,
         library: null,
-        infoPlugin: false
+        infoPlugin: false,
+        noNetwork: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -180,6 +181,9 @@ const store = new Vuex.Store({
         setInfoPlugin(state, val) {
             state.infoPlugin = val;
             setLocalStorageVal('infoPlugin', val);
+        },
+        setNoNetwork(state, val) {
+            state.noNetwork = val;
         }
     }
 })

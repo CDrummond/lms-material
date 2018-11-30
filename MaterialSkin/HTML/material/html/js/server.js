@@ -232,6 +232,10 @@ var lmsServer = Vue.component('lms-server', {
                 this.refreshStatus();
             });
         }.bind(this));
+        bus.$on('networkReconnected', function() {
+            this.refreshServerStatus();
+            this.refreshStatus();
+        }.bind(this));
     },
     watch: {
         '$store.state.player': function (newVal) {

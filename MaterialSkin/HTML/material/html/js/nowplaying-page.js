@@ -231,13 +231,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.title = playerStatus.current.title;
                 trackChanged = true;
             }
-            if (playerStatus.current.artist!=this.playerStatus.current.artist ||
-                playerStatus.current.trackartist!=this.playerStatus.current.trackartist ||
+            var artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
+            var artist_ids = playerStatus.current.artist_ids ? playerStatus.current.artist_ids : playerStatus.current.trackartist_ids;
+            if (this.playerStatus.current.artist!=artist ||
                 playerStatus.current.artist_id!=this.playerStatus.current.artist_id ||
-                playerStatus.current.artist_ids!=this.playerStatus.current.artist_ids) {
-                this.playerStatus.current.artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
+                playerStatus.current.artist_ids!=artist_ids) {
+                this.playerStatus.current.artist = artist;
                 this.playerStatus.current.artist_id = playerStatus.current.artist_id;
-                this.playerStatus.current.artist_ids = playerStatus.current.artist_ids;
+                this.playerStatus.current.artist_ids = artist_ids;
                 trackChanged = true;
             }
             if (playerStatus.current.album!=this.playerStatus.current.albumName ||
@@ -366,7 +367,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
                 }
-                if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(",").length==1) {
+                if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1) {
                     command.push("artist:"+this.infoTrack.artist);
                 }
                 lmsCommand("", command).then(({data}) => {
@@ -383,9 +384,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[BIO_TAB].songartist=this.infoTrack.artist;
                 this.info.tabs[BIO_TAB].songartist_id=this.infoTrack.artist_id;
 
-                var ids = this.infoTrack.artist_ids ? this.infoTrack.artist_ids.split(",") : [];
-                var names = this.infoTrack.artist.split(",");
-                if (ids.length>1 && names.length>=ids.length) {
+                var ids = this.infoTrack.artist_ids ? this.infoTrack.artist_ids.split(", ") : [];
+                if (ids.length>1) {
                     this.info.tabs[BIO_TAB].first = true;
                     this.info.tabs[BIO_TAB].found = false;
                     this.info.tabs[BIO_TAB].count = ids.length;
@@ -414,7 +414,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (this.infoTrack.artist_id) {
                         command.push("artist_id:"+this.infoTrack.artist_id);
                     }
-                    if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(",").length==1) {
+                    if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1) {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                     lmsCommand("", command).then(({data}) => {
@@ -438,7 +438,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
                 }
-                if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(",").length==1) {
+                if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1) {
                     command.push("artist:"+this.infoTrack.artist);
                 }
                 if (this.infoTrack.album_id) {

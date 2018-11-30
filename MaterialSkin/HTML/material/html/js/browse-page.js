@@ -498,7 +498,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
 
                     // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                    if (this.current.section && this.current.section!=SECTION_RADIO && this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions) {
+                    if (this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions) {
                         this.items[0].menuActions.forEach(i => {
                             if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
                                 this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];

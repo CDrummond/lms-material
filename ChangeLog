@@ -5,6 +5,7 @@
 3. Show signal strength in Information dialog.
 4. Attempt to detect if an error is a because of no network connection, and if
    so use that as the error message.
+5. Allow "PlayAll" / "AddAll" for radio.
 
 0.1.4
 -----

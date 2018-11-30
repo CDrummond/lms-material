@@ -142,7 +142,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                             };
 
                 if (prevItem) {
-                    if (prevItem.range.count + count > LMS_AZ_MAX_SIZE) {
+                    if (prevItem.range.count>1 && (prevItem.range.count + count > LMS_AZ_MAX_SIZE)) {
                         if (undefined!==prevItem.subtitle && prevItem.subtitle!=prevItem.title) {
                             prevItem.title += " .. " + prevItem.subtitle;
                         }

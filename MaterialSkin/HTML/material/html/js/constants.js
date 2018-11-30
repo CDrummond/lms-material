@@ -16,5 +16,5 @@ const LMS_LIST_IMAGE_SIZE = "_50x50_o";
 const LMS_GRID_IMAGE_SIZE = "_300x300_f";
 const LMS_DEFAULT_LIBRARY = "0";
 const LMS_SKIN_LANGUAGES = new Set(['de', 'en', 'en-gb', 'fr', 'nl']);
-const LMS_AZ_MAX_SIZE = 100;
+const LMS_AZ_MAX_SIZE = 10;
 const LMS_AZ_MAX_PER_LETTER = 300;

@@ -195,7 +195,7 @@ Vue.component('lms-toolbar', {
                 axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
                     that.snackbar = info;
                  }).catch(err => {
-                    that.snackbar = {msg: i18n("No network connection?"), show: true, color: 'error' };
+                    bus.$emit('noNetwork');
                 });
             } else {
                 this.snackbar = info;

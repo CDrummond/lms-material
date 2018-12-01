@@ -1,16 +1,17 @@
 0.1.5
 -----
-1. Better image grid sizing.
-2. Set A..Z group size to 10.
-3. Show signal strength in Information dialog.
-4. If lose server connection, display modal dialog (similar to when there are
-   no players) until connection is re-established.
-5. Allow "PlayAll" / "AddAll" for radio.
-6. Fix multi-artist retrievel in now playing.
-7. Store command used to populate list, so that it can be re-used when
-   fetching more.
-8. Fix un-pinnig of items.
-9. When un-pinnnig an app, re-add 'Pin' menu entry.
+ 1. Better image grid sizing.
+ 2. Set A..Z group size to 10.
+ 3. Show signal strength in Information dialog.
+ 4. If lose server connection, display modal dialog (similar to when there are
+    no players) until connection is re-established.
+ 5. Allow "PlayAll" / "AddAll" for radio.
+ 6. Fix multi-artist retrievel in now playing.
+ 7. Store command used to populate list, so that it can be re-used when
+    fetching more.
+ 8. Fix un-pinnig of items.
+ 9. When un-pinnnig an app, re-add 'Pin' menu entry.
+10. Only save the bare minimum of info required for pinned apps.
 
 0.1.4
 -----

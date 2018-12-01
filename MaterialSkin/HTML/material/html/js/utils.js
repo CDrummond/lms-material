@@ -12,11 +12,19 @@ function logError(err) {
     console.trace();
 }
 
-function formatSeconds(secs) {
-    var sec_num = parseInt(secs, 10)    
-    var hours   = Math.floor(sec_num / 3600);
-    var minutes = Math.floor(sec_num / 60) % 60
-    var seconds = sec_num % 60
+function formatSeconds(secs, showDays) {
+    var numSeconds = parseInt(secs, 10)
+    var days       = showDays ? Math.floor(numSeconds / (3600*24)) : 0;
+    var hours      = showDays ? Math.floor(numSeconds / 3600) % 24 : Math.floor(numSeconds / 3600);
+    var minutes    = Math.floor(numSeconds / 60) % 60
+    var seconds    = numSeconds % 60
+    if (days>0) {
+        return i18np("1 day", "%1 days", days)+" "+
+                 ([hours,minutes,seconds]
+                 .map(v => v < 10 ? "0" + v : v)
+                 .filter((v,i) => v !== "00" || i > 0)
+                 .join(":"));
+    }
     if (hours>0) {
         return [hours,minutes,seconds]
                  .map(v => v < 10 ? "0" + v : v)
@@ -31,9 +39,9 @@ function formatSeconds(secs) {
 }
 
 function formatTime(secs, twentyFour) {
-    var sec_num = parseInt(secs, 10)
-    var hours   = Math.floor(sec_num / 3600) % 24
-    var minutes = Math.floor(sec_num / 60) % 60
+    var numSeconds = parseInt(secs, 10)
+    var hours      = Math.floor(numSeconds / 3600) % 24
+    var minutes    = Math.floor(numSeconds / 60) % 60
     if (twentyFour) {
         return [hours,minutes]
                  .map(v => v < 10 ? "0" + v : v)

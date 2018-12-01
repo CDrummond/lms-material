@@ -87,9 +87,9 @@ a {
     grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
     grid-auto-rows: min-content;
     grid-gap: 0px;
-    padding: 8px !important;
+    padding: 2px !important;
     margin: 0px !important;
-
+    justify-items: center;
 }
 
 .lms-image-grid .container {
@@ -97,12 +97,12 @@ a {
 }
 
 .lms-image-grid .container .layout div .v-card__text {
-    padding:0px;
+    padding: 0px;
 }
 
 .lms-image-grid .container .layout div {
-    padding:2px;
-    margin:0px;
+    padding: 1px;
+    margin: 0px;
 }
 
 .image-grid-item img {

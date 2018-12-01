@@ -101,11 +101,14 @@ body {
 }
 
 .np-image {
+    object-fit: cover;
+    object-position: 50% 0%;
     display: block;
-    object-fit: contain;
-    height:var(--bottom-toolbar-height);
-    width:var(--bottom-toolbar-height);
-    padding:0px 16px 0px 0px; /* t, r, b, l */
+    margin-top: 4px;
+    margin-left: 4px;
+    margin-right: 8px;
+    height:calc(var(--bottom-toolbar-height) - 8px) !important;
+    width:calc(var(--bottom-toolbar-height) - 8px) !important;
     float:left;
 }
 

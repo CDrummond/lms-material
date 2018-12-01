@@ -1360,6 +1360,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.pinned.sort(titleSort);
                         setLocalStorageVal('pinned', JSON.stringify(this.pinned));
                         this.$forceUpdate();
+
+                        for (var i=0; i<item.menuActions.length; ++i) {
+                            if (item.menuActions[i].cmd == UNPIN_ACTION.cmd) {
+                                item.menuActions[i] = PIN_ACTION;
+                                break;
+                            }
+                        }
                     }
                 });
             }

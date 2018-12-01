@@ -10,6 +10,7 @@
 7. Store command used to populate list, so that it can be re-used when
    fetching more.
 8. Fix un-pinnig of items.
+9. When un-pinnnig an app, re-add 'Pin' menu entry.
 
 0.1.4
 -----

@@ -1333,7 +1333,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var before = this.pinned;
             var index = -1;
             for (var i=0; i<this.pinned.length; ++i) {
-                if (this.pinned[i].id === item.id) {
+                if (this.pinned[i].id == item.id) {
                     index = i;
                     break;
                 }

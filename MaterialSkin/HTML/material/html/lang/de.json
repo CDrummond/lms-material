@@ -243,11 +243,11 @@
 "Logitech Media Server v%1":"",
 "Mon":"",
 "Name":"",
-"No network connection?":"",
+"No network connection?":"Keine Netzwerkverbindung?",
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Signal Strength: %1%":"",
+"Signal Strength: %1%":"Signalstärke: %1%",
 "Sound":"",
 "Start":""
 }

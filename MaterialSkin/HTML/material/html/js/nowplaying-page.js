@@ -263,7 +263,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 technical.push(playerStatus.current.bitrate);
             }
             if (playerStatus.current.type) {
-                technical.push(playerStatus.current.type);
+                var bracket = playerStatus.current.type.indexOf(" (");
+                technical.push(bracket>0 ? playerStatus.current.type.substring(0, bracket) : playerStatus.current.type);
             }
             technical=technical.join(", ");
             if (technical!=this.playerStatus.current.technicalInfo) {

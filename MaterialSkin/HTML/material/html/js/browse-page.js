@@ -458,8 +458,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.headerTitle = this.headerTitle;
             prev.headerSubTitle = this.headerSubTitle;
             prev.menuActions = this.menuActions;
-            prev.pos=this.scrollElement.scrollTop;
-            prev.useGrid=this.useGrid;
+            prev.pos = this.scrollElement.scrollTop;
+            prev.useGrid = this.useGrid;
+            prev.command = this.command;
             this.history.push(prev);
         },
         fetchItems(command, item, batchSize) {
@@ -467,6 +468,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
+            this.command = command;
             this.fetchingItems = true;
 
             //console.log("FETCH command:" + command.command + " params:" + command.params);
@@ -903,8 +905,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         refreshList() {
             var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
-            var command = this.buildCommand(this.current);
-            lmsList(this.playerId(), command.command, command.params, 0).then(({data}) => {
+            lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 if (data && data.result) {
@@ -955,6 +956,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.isTop = true;
             var changedView = this.useGrid;
             this.useGrid = false;
+            this.command = undefined;
             this.$nextTick(function () {
                 if (changedView) {
                     this.setScrollElement();
@@ -994,6 +996,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerTitle = prev.headerTitle;
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
+            this.command = prev.command;
             this.$nextTick(function () {
                 if (changedView) {
                     this.setScrollElement();
@@ -1413,11 +1416,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (bottomOfPage || pageHeight < visible) {
                     this.fetchingItems = true;
-                    var command = this.buildCommand(this.current);
                     var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
                     var count = this.current.range ? (this.current.range.count-this.items.length) < LMS_BATCH_SIZE ? (this.current.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
 
-                    lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                    lmsList(this.playerId(), this.command.command, this.command.params, start, count).then(({data}) => {
                         var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
                         if (resp && resp.items) {
                             resp.items.forEach(i => {

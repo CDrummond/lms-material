@@ -9,6 +9,7 @@
 6. Fix multi-artist retrievel in now playing.
 7. Store command used to populate list, so that it can be re-used when
    fetching more.
+8. Fix un-pinnig of items.
 
 0.1.4
 -----

@@ -1358,7 +1358,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.pinned.splice(index, 1);
                         this.options.pinned.delete(item.id);
                         this.pinned.sort(titleSort);
-                        setLocalStorageVal('pinned', JSON.stritooltipngify(this.pinned));
+                        setLocalStorageVal('pinned', JSON.stringify(this.pinned));
                         this.$forceUpdate();
                     }
                 });

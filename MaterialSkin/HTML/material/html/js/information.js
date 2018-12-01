@@ -151,7 +151,7 @@ Vue.component('lms-information-dialog', {
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    i18n("Total albums: %1", data.result["info total albums"]),
                                    i18n("Total songs: %1", data.result["info total songs"]),
-                                   i18n("Total duration: %1", formatSeconds(data.result["info total duration"])),
+                                   i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true)),
                                    i18n("Last scan: %1", this.scanning ? i18n("In progress") : formatDate(data.result.lastscan))];
 
                     if (data.result.lastscanfailed) {

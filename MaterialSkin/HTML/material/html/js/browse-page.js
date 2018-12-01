@@ -162,26 +162,21 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index"></v-divider>
 
-   <v-list-tile avatar @click="click(item.item, index, $event)" :key="item.id">
-    <v-list-tile-avatar v-if="item.item.image" :tile="true">
-     <img v-lazy="item.item.image">
+   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id">
+    <v-list-tile-avatar v-if="item.image" :tile="true">
+     <img v-lazy="item.image">
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.item.icon" :tile="true">
-     <v-icon>{{item.item.icon}}</v-icon>
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+     <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
 
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.item.menuActions && item.item.menuActions.length>1" @click.stop="itemMenu(item.item, index, $event)">
+    <v-list-tile-action :title="UNPIN_ACTION.title" @click.stop="itemAction(UNPIN_ACTION.cmd, item, index)">
      <v-btn icon>
-      <v-icon>more_vert</v-icon>
-     </v-btn>
-    </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.item.menuActions && item.item.menuActions.length===1" :title="item.item.menuActions[0].title" @click.stop="itemAction(item.item.menuActions[0].cmd, item.item, index)">
-     <v-btn icon>
-      <v-icon>{{item.item.menuActions[0].icon}}</v-icon>
+      <v-icon>{{UNPIN_ACTION.icon}}</v-icon>
      </v-btn>
     </v-list-tile-action>
 
@@ -294,7 +289,17 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.previousScrollPos=0;
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
-        this.pinned.forEach( p => { this.options.pinned.add(p.id) });
+        this.pinned.forEach( p => {
+            if (undefined==p.command && undefined==p.params) { // Previous pinned apps
+                var command = this.buildCommand(p.item);
+                p.params = command.params;
+                p.command = command.command;
+                p.image = p.item.image;
+                p.icon = p.item.icon;
+                p.item = undefined;
+            }
+            this.options.pinned.add(p.id);
+        });
         this.useGrid=false;
 
         if (!this.desktop) {
@@ -1340,7 +1345,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (add && index==-1) {
-                this.pinned.push({id: item.id, title: item.title, item: item});
+                var command = this.buildCommand(item);
+                this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon,
+                                  command: command.command, params: command.params});
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
                 for (var i=0; i<item.menuActions.length; ++i) {

@@ -100,7 +100,6 @@
 "No Player":"",
 "No artist found":"",
 "No fade":"",
-"No network connection?":"",
 "No repeat":"",
 "No shuffle":"",
 "None":"",
@@ -156,6 +155,7 @@
 "Select which players you would like to synchronise with '%1'.":"",
 "Selected Genres":"",
 "Server Settings":"",
+"Server connection lost...":"",
 "Settings":"",
 "Should alarms repeat":"",
 "Show all information":"",
@@ -249,5 +249,7 @@
 "1 Track":"",
 "%1 Tracks":"",
 "1 Year":"",
-"%1 Years":""
+"%1 Years":"",
+"1 day":"",
+"%1 days":""
 }

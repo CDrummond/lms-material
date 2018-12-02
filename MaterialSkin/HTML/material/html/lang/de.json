@@ -156,6 +156,7 @@
 "Shuffle by album":"Zufällige Albumreihenfolge",
 "Shuffle by song":"Zufällige Titelreihenfolge",
 "Shuffle tracks":"Zufällige Titelreihenfolge",
+"Signal Strength: %1%":"Signalstärke: %1%",
 "Sleep":"Schlummern",
 "Sleep in...":"Schlummern in...",
 "Smart gain":"'Intelligente' Normalisierung",
@@ -243,11 +244,12 @@
 "Logitech Media Server v%1":"",
 "Mon":"",
 "Name":"",
-"No network connection?":"Keine Netzwerkverbindung?",
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Signal Strength: %1%":"Signalstärke: %1%",
+"Server connection lost...":"",
 "Sound":"",
-"Start":""
+"Start":"",
+"1 day":"",
+"%1 days":""
 }

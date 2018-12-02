@@ -164,7 +164,6 @@
 "Model: %1":"",
 "Music Folder":"",
 "No artist found":"",
-"No network connection?":"",
 "No repeat":"",
 "No shuffle":"",
 "OK":"",
@@ -194,6 +193,7 @@
 "Select multiple items":"",
 "Select which players you would like to synchronise with '%1'.":"",
 "Selected Genres":"",
+"Server connection lost...":"",
 "Should alarms repeat":"",
 "Show all information":"",
 "Show artists or albums?":"",
@@ -249,5 +249,7 @@
 "1 Item":"",
 "%1 Items":"",
 "1 Selected Item":"",
-"%1 Selected Items":""
+"%1 Selected Items":"",
+"1 day":"",
+"%1 days":""
 }

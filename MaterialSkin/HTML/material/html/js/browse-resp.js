@@ -372,7 +372,6 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 }
                 i.section = parent ? parent.section : undefined;
-                console.log(JSON.stringify(i, null, 2));
                 resp.items.push(i);
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {

@@ -297,25 +297,13 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.menuActions.push(DELETE_ACTION);
                 }
 
-                if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
-                    var canPin = true;
+                if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu && "myapps" != i.actions.go.params.menu) {
                     i.id = "apps."+i.actions.go.params.menu;
-                    if ("myapps" == i.actions.go.params.menu) {
-                        if (i.actions.go.params.item_id) {
-                            i.id+="."+i.actions.go.params.item_id;
-                        } else if (i.item_id) {
-                            i.id+="."+i.item_id;
-                        } else {
-                            canPin = false;
-                        }
+                    if (!addedDivider && i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
                     }
-                    if (canPin) {
-                        if (!addedDivider && i.menuActions.length>0) {
-                            i.menuActions.push(DIVIDER);
-                            addedDivider = true;
-                        }
-                        i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
-                    }
+                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {

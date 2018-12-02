@@ -4,7 +4,7 @@
   <module>Plugins::MaterialSkin::Plugin</module>
   <description>PLUGIN_MATERIAL_SKIN</description>
   <creator>Craig Drummond</creator>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
   <defaultState>enabled</defaultState>
   <type>2</type>
   <homepageURL>https://github.com/CDrummond/lms-material</homepageURL>

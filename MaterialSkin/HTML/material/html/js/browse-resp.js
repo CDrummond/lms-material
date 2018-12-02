@@ -298,12 +298,24 @@ function parseBrowseResp(data, parent, options, idStart) {
                 }
 
                 if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                    var canPin = true;
                     i.id = "apps."+i.actions.go.params.menu;
-                    if (!addedDivider && i.menuActions.length>0) {
-                        i.menuActions.push(DIVIDER);
-                        addedDivider = true;
+                    if ("myapps" == i.actions.go.params.menu) {
+                        if (i.actions.go.params.item_id) {
+                            i.id+="."+i.actions.go.params.item_id;
+                        } else if (i.item_id) {
+                            i.id+="."+i.item_id;
+                        } else {
+                            canPin = false;
+                        }
                     }
-                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                    if (canPin) {
+                        if (!addedDivider && i.menuActions.length>0) {
+                            i.menuActions.push(DIVIDER);
+                            addedDivider = true;
+                        }
+                        i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                    }
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {

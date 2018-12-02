@@ -941,7 +941,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && this.listSize == this.items.length) {
                 if (this.current.id == TOP_APPS_ID) {
                     this.items.sort(titleSort);
-                } else if (SECTION_APPS==this.current.section && this.$store.state.sortFavorites) {
+                } else if (SECTION_FAVORITES==this.current.section && this.$store.state.sortFavorites) {
                     this.items.sort(favSort);
                 }
             }

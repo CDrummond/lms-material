@@ -12,6 +12,7 @@
  8. Fix un-pinnig of items.
  9. When un-pinnnig an app, re-add 'Pin' menu entry.
 10. Only save the bare minimum of info required for pinned apps.
+11. Use different ID for mysqueezebox apps when pinning.
 
 0.1.4
 -----

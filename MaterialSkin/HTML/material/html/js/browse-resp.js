@@ -297,20 +297,35 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.menuActions.push(DELETE_ACTION);
                 }
 
-                if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu && "myapps" != i.actions.go.params.menu) {
-                    i.id = "apps."+i.actions.go.params.menu;
-                    if (!addedDivider && i.menuActions.length>0) {
-                        i.menuActions.push(DIVIDER);
-                        addedDivider = true;
+                if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                    if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
+                        if (i.actions.go.params.item_id) {
+                            var parts = i.actions.go.params.item_id.split(".");
+                            if (parts.length>1) {
+                                parts.shift();
+                                i.id = "myapps."+parts.join(".");
+                            }
+                        }
+                    } else {
+                        i.id = "apps."+i.actions.go.params.menu;
                     }
-                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+
+                    if (i.id) {
+                        if (!addedDivider && i.menuActions.length>0) {
+                            i.menuActions.push(DIVIDER);
+                            addedDivider = true;
+                        }
+                        i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                    }
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {
                     i.id = "item_id:"+i.params.item_id;
                 } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
                     i.id = "item_id:"+i.actions.go.params.item_id;
-                } else {
+                }
+
+                if (!i.id) {
                     i.id=parent.id+"."+idStart;
                     idStart++;
                 }
@@ -357,6 +372,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 }
                 i.section = parent ? parent.section : undefined;
+                console.log(JSON.stringify(i, null, 2));
                 resp.items.push(i);
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {

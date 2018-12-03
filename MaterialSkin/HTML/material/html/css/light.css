@@ -5,6 +5,18 @@
  * MIT license.
  */
 
+::-webkit-scrollbar {
+    background: #c0c0c0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-corner {
+    background: #ddd;
+}
+
 .vue-splitter .splitter {
     background-color: #f0f0f0 !important;
 }

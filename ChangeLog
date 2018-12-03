@@ -3,6 +3,7 @@
 1. Fix swipe to change views not working after show Information dialog.
 2. Add ellipsis to main toolbar text.
 3. Ensure suqare cover for mobile now playing, as per elsewhere.
+4. Fix scrollbar initialisation.
 
 0.1.5
 -----

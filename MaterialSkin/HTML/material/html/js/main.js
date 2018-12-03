@@ -75,7 +75,18 @@ var app = new Vue({
         }
     },
     methods: {
-        swipe(direction) {
+        swipe(ev, direction) {
+            if (this.$route.path=='/nowplaying') {
+                // Ignore swipes on position slider...
+                var elem = document.getElementById("pos-slider");
+                if (elem) {
+                    var rect = elem.getBoundingClientRect();
+                    if ((rect.x-4)<=ev.touchstartX && (rect.x+rect.width+8)>=ev.touchstartX &&
+                        (rect.y-4)<=ev.touchstartY && (rect.y+rect.height+8)>=ev.touchstartY) {
+                        return;
+                    }
+                }
+            }
             if (this.openDialogs.size!=0) {
                 if ('r'==direction) {
                     bus.$emit('closeDialog');

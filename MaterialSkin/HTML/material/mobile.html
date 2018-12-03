@@ -30,7 +30,7 @@
   </head>
   <body>
     <div id="app" v-cloak>
-      <v-app class="lms-app" :dark="darkUi" v-touch="{ left: () => swipe('l'), right: () => swipe('r')}">
+      <v-app class="lms-app" :dark="darkUi" v-touch="{ left: (ev) => swipe(ev, 'l'), right: (ev) => swipe(ev, 'r')}">
         <lms-toolbar></lms-toolbar>
         <lms-server></lms-server>
         <keep-alive>

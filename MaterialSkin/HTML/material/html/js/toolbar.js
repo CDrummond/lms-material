@@ -23,7 +23,6 @@ Vue.component('lms-toolbar', {
        
   <v-list class="toolbar-player-list">
    <template v-for="(item, index) in players">
-    <v-divider v-if="item.isgroup && index>0 && !players[index-1].isgroup" ></v-divider>
     <v-list-tile @click="setPlayer(item.id)">
      <v-list-tile-content>
      <v-list-tile-title>

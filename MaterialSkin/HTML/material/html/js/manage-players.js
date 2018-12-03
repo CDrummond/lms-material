@@ -20,6 +20,8 @@ Vue.component('lms-manage-players', {
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <template v-for="(player, index) in players">
+      <v-flex xs12 v-if="0==index && players[0].isgroup" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-else-if="index>0 && (players[index-1].isgroup && !players[index].isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
@@ -54,7 +56,6 @@ Vue.component('lms-manage-players', {
         <v-btn flat icon @click.stop="togglePower(index)" class="pmgr-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="index+1<players.length && players[index+1].isgroup && !players[index].isgroup" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
      </template>
     </v-layout>
    </v-container>

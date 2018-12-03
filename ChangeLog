@@ -4,6 +4,7 @@
 2. Add ellipsis to main toolbar text.
 3. Ensure suqare cover for mobile now playing, as per elsewhere.
 4. Fix scrollbar initialisation.
+5. Place group players first in drop down menu and in Manage Players dialog.
 
 0.1.5
 -----

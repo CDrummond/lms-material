@@ -64,7 +64,7 @@ var app = new Vue({
             }
         }.bind(this));
 
-        initApp();
+        initApp(this);
     },
     computed: {
         darkUi() {

@@ -5,6 +5,7 @@
 3. Ensure suqare cover for mobile now playing, as per elsewhere.
 4. Fix scrollbar initialisation.
 5. Place group players first in drop down menu and in Manage Players dialog.
+6. Auto-switch layout (desktop/mobile) if set to auto and not on mobile device.
 
 0.1.5
 -----

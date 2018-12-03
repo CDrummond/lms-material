@@ -22,7 +22,7 @@ var app = new Vue({
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
-        initApp();
+        initApp(this);
     },
     computed: {
         darkUi() {

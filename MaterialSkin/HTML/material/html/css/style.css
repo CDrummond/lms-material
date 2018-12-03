@@ -9,6 +9,11 @@
     --safe-area-bottom: 0px;
 }
 
+::-webkit-scrollbar {
+    max-height: 10px;
+    max-width: 10px;
+}
+
 @supports(padding-top: env(safe-area-inset-bottom)) {
     :root {
         --safe-area-bottom: env(safe-area-inset-bottom);

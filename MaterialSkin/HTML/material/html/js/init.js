@@ -10,6 +10,11 @@ function initApp() {
     if (t!=undefined) {
         setTranslation(JSON.parse(t));
     }
+
+    if (isMobile()) {
+        document.styleSheets[0].addRule("::-webkit-scrollbar", "max-height: 0px !important; max-width: 0px !important;");
+    }
+
     lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
         if (data && data.result && data.result._p2) {
             var lang = data.result._p2.toLowerCase();

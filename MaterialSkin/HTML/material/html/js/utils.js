@@ -161,18 +161,10 @@ function changeCss(cssFile, index) {
 }
 
 function setTheme(dark) {
-    if (!isMobile()) {
-        if (dark) {
-            changeCss("html/css/dark-scrollbar.css?r=" + LMS_MATERIAL_REVISION, 0);
-        } else {
-            changeCss("html/css/light-scrollbar.css?r=" + LMS_MATERIAL_REVISION, 0);
-        }
-    }
-
     if (dark) {
-        changeCss("html/css/dark.css?r=" + LMS_MATERIAL_REVISION, 1);
+        changeCss("html/css/dark.css?r=" + LMS_MATERIAL_REVISION, 0);
     } else {
-        changeCss("html/css/light.css?r=" + LMS_MATERIAL_REVISION, 1);
+        changeCss("html/css/light.css?r=" + LMS_MATERIAL_REVISION, 0);
     }
 }
 

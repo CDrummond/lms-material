@@ -1,6 +1,7 @@
 0.1.6
 -----
 1. Fix swipe to change views not working after show Information dialog.
+2. Add ellipsis to main toolbar text.
 
 0.1.5
 -----

@@ -530,7 +530,8 @@ function parseBrowseResp(data, parent, options, idStart) {
                 if (!title) {
                     title=i18n("Unknown");
                 }
-                var subtitle = parseFloat(i.duration)>0 ? formatSeconds(i.duration) : undefined;
+                var duration = parseFloat(i.duration || 0)
+                var subtitle = duration>0 ? formatSeconds(duration) : undefined;
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=" ("+i.album+")";

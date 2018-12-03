@@ -214,13 +214,10 @@ Vue.component('lms-ui-settings', {
             }
             if (this.layout != this.layoutOrig) {
                 setLocalStorageVal("layout", this.layout);
-                setAutoLayout(this.layout == "auto");
-                if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout)) {
-                    this.$confirm(i18n("You have changed the application layout setting. Do you wish to re-load the page, so that this can take effect?"), {buttonTrueText: i18n('Reload'), buttonFalseText: i18n('Stay As Is')}).then(res => {
-                        if (res) {
-                            window.location.href = this.layout;
-                        }
-                    });
+                if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout) ) {
+                    window.location.href = this.layout;
+                } else {
+                    setAutoLayout(this.layout == "auto");
                 }
             }
         },

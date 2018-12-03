@@ -5,6 +5,8 @@
 3. Fix scrollbar initialisation.
 4. Place group players first in drop down menu and in Manage Players dialog.
 5. Auto-switch layout (desktop/mobile) if set to auto and not on mobile device.
+6. If switch desktop/mobile layout in settings, then don't prompt for
+   confirmation.
 
 0.1.5
 -----

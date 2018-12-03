@@ -5,13 +5,33 @@
  * MIT license.
  */
 
-function initApp() {
+var autoLayout = false;
+var isMobileBrowser = false;
+
+function checkLayout() {
+    if (autoLayout && !isMobileBrowser) {
+        if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
+            window.location.href = "mobile";
+        } else if (window.innerWidth>=600 && window.location.href.indexOf("/mobile")>1) {
+            window.location.href = "desktop";
+        }
+    }
+}
+
+function setAutoLayout(al) {
+    autoLayout = al;
+    checkLayout();
+}
+
+function initApp(app) {
     var t = getLocalStorageVal('translation', undefined);
     if (t!=undefined) {
         setTranslation(JSON.parse(t));
     }
 
-    if (isMobile()) {
+    isMobileBrowser = isMobile();
+
+    if (isMobileBrowser) {
         document.styleSheets[0].addRule("::-webkit-scrollbar", "max-height: 0px !important; max-width: 0px !important;");
     }
 
@@ -43,6 +63,8 @@ function initApp() {
         }
     });
 
+    setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
+
     // Work-around 100vh behaviour in mobile chrome
     // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
     let vh = window.innerHeight * 0.01;
@@ -61,6 +83,7 @@ function initApp() {
                 lastWinHeight = window.innerHeight;
             }
             timeout = undefined;
+            checkLayout();
         }, 50);
     }, false);
 

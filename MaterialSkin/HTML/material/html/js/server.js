@@ -84,7 +84,7 @@ var lmsServer = Vue.component('lms-server', {
                     });
                     this.$store.commit('setPlayers', players.sort(function(a, b) {
                                                                         if (a.isgroup!=b.isgroup) {
-                                                                            return a.isgroup ? 1 : -1;
+                                                                            return a.isgroup ? -1 : 1;
                                                                         }
                                                                         var nameA = a.name.toUpperCase();
                                                                         var nameB = b.name.toUpperCase();

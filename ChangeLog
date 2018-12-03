@@ -1,3 +1,7 @@
+0.1.6
+-----
+1. Fix swipe to change views not working after show Information dialog.
+
 0.1.5
 -----
  1. Better image grid sizing.

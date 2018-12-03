@@ -168,6 +168,7 @@ Vue.component('lms-information-dialog', {
                 clearInterval(this.timer);
                 this.timer = undefined;
             }
+            bus.$emit('dialog', 'information', true);
         },
         initiateScan(prompt, command) {
             this.$confirm(prompt, {buttonTrueText: i18n('Rescan'), buttonFalseText: i18n('Cancel')}).then(res => {

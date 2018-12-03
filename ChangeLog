@@ -8,6 +8,8 @@
 6. If switch desktop/mobile layout in settings, then don't prompt for
    confirmation.
 7. Ignore swipes on now-playing posiion slider in mobile layout.
+8. Add 'Play album starting at track' to 1st track as well, just for
+   consistency.
 
 0.1.5
 -----

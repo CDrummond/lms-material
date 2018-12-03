@@ -484,7 +484,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               title: title,
                               subtitle: formatSeconds(i.duration),
                               //icon: "music_note",
-                              menuActions: allowPlayAlbum && (undefined==idStart || idStart>0 || resp.items.length>0)
+                              menuActions: allowPlayAlbum && data.result.count>1
                                             ? [PLAY_ACTION, PLAY_ALBUM_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION]
                                             : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "track"

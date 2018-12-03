@@ -168,3 +168,11 @@ function setTheme(dark) {
     }
 }
 
+function changeLayout(layout) {
+    if (lmsServerAddress.length>0) {
+        window.location.href = layout + ".html?lms="+lmsServerAddress.replace("http://", "").replace(":9000", "");
+    } else {
+        window.location.href = layout;
+    }
+}
+

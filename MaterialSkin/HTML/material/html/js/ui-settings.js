@@ -215,7 +215,7 @@ Vue.component('lms-ui-settings', {
             if (this.layout != this.layoutOrig) {
                 setLocalStorageVal("layout", this.layout);
                 if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout) ) {
-                    window.location.href = this.layout;
+                    changeLayout(this.layout);
                 } else {
                     setAutoLayout(this.layout == "auto");
                 }

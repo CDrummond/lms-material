@@ -11,9 +11,9 @@ var isMobileBrowser = false;
 function checkLayout() {
     if (autoLayout && !isMobileBrowser) {
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
-            window.location.href = "mobile";
+            changeLayout("mobile");
         } else if (window.innerWidth>=600 && window.location.href.indexOf("/mobile")>1) {
-            window.location.href = "desktop";
+            changeLayout("desktop");
         }
     }
 }

@@ -247,9 +247,9 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Server connection lost...":"",
+"Server connection lost...":"Verbindung zum Server unterbrochen...",
 "Sound":"",
 "Start":"",
-"1 day":"",
-"%1 days":""
+"1 day":"Ein Tag",
+"%1 days":"%1 Tage"
 }

@@ -478,7 +478,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 } else if (i.artist && ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
                      title+=" - " + i.artist;
                 }
-                duration+=i.duration;
+                duration+=parseFloat(i.duration || 0);
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -530,7 +530,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                 if (!title) {
                     title=i18n("Unknown");
                 }
-                var subtitle = i.duration>0 ? formatSeconds(i.duration) : undefined;
+                var subtitle = parseFloat(i.duration)>0 ? formatSeconds(i.duration) : undefined;
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=" ("+i.album+")";

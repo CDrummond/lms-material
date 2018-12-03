@@ -115,7 +115,7 @@
 
 .np-image {
     display: block;
-    object-fit: cover;
+    object-fit: contain;
     height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 12px));
     width:calc(100vw - 16px);
     margin-left: auto;

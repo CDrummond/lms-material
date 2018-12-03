@@ -135,7 +135,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
  <v-list v-if="useGrid" class="lms-image-grid noselect" id="browse-grid">
-  <div v-for="(item, index) in items" :key="item.id">
+  <div v-for="(item, index) in items" :key="item.id" :id="'item'+index">
    <v-card flat tile :title="item | tooltip">
     <v-card-text v-if="item.type=='image'" class="image-grid-item">
      <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
@@ -526,6 +526,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.$nextTick(function () {
                         if (changedView) {
                             this.setScrollElement();
+                        }
+                        if (this.useGrid) {
+                            this.setGridAlignment();
                         }
                         setScrollTop(this.scrollElement, 0);
                     });
@@ -1006,6 +1009,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (changedView) {
                     this.setScrollElement();
                 }
+                if (this.useGrid) {
+                    this.setGridAlignment();
+                }
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1450,6 +1456,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                     });
                 }
             });
+        },
+        setGridAlignment() {
+            var justify = this.listSize>3;
+            if (!justify) {
+                var elem = document.getElementById("item0");
+                justify = elem && (this.scrollElement.scrollWidth/elem.scrollWidth)<3.5;
+            }
+
+            if (justify) {
+                if (this.scrollElement.classList.contains("lms-image-grid-few")) {
+                    this.scrollElement.classList.remove("lms-image-grid-few");
+                }
+            } else if (!this.scrollElement.classList.contains("lms-image-grid-few")) {
+                this.scrollElement.classList.add("lms-image-grid-few");
+            }
         }
     },
     mounted() {

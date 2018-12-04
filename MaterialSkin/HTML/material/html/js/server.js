@@ -241,6 +241,10 @@ var lmsServer = Vue.component('lms-server', {
             this.refreshServerStatus();
             this.refreshStatus();
         }.bind(this));
+        bus.$on('updateServerStatus', function() {
+            this.refreshServerStatus();
+            this.refreshStatus();
+        }.bind(this));
     },
     watch: {
         '$store.state.player': function (newVal) {

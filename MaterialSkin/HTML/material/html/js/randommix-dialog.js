@@ -7,7 +7,7 @@
 
 Vue.component('lms-randommix', {
     template: `
-<v-dialog scrollable v-model="show" persistent width="500">
+<v-dialog scrollable v-model="show" persistent width="600">
  <v-card>
   <v-card-text>
    <v-select :items="mixes" :label="i18n('Mix Type')" v-model="chosenMix" item-text="label" item-value="key"></v-select>

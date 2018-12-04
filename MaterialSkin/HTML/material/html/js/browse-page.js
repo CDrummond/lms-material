@@ -527,9 +527,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (changedView) {
                             this.setScrollElement();
                         }
-                        if (this.useGrid) {
-                            this.setGridAlignment();
-                        }
+                        this.setGridAlignment();
                         setScrollTop(this.scrollElement, 0);
                     });
                 }
@@ -1009,9 +1007,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (changedView) {
                     this.setScrollElement();
                 }
-                if (this.useGrid) {
-                    this.setGridAlignment();
-                }
+                this.setGridAlignment();
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1458,10 +1454,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         setGridAlignment() {
-            var justify = this.listSize>3;
-            if (!justify) {
+            if (!this.useGrid) {
+                return;
+            }
+            var justify = this.listSize>7;
+            if (!justify && this.listSize>1) {
                 var elem = document.getElementById("item0");
-                justify = elem && (this.scrollElement.scrollWidth/elem.scrollWidth)<3.5;
+                justify = elem && (this.scrollElement.scrollWidth/elem.scrollWidth)<(this.listSize*1.15);
             }
 
             if (justify) {
@@ -1557,6 +1556,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.$nextTick(function () {
             setScrollTop(this.scrollElement, 0);
         });
+
+        bus.$on('splitterChanged', function(act) {
+            this.setGridAlignment();
+        }.bind(this));
     },
     filters: {
         tooltip: function (item) {

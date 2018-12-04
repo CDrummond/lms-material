@@ -20,8 +20,9 @@ Vue.component('lms-manage-players', {
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <template v-for="(player, index) in players">
-      <v-flex xs12 v-if="0==index && players[0].isgroup" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-else-if="index>0 && (players[index-1].isgroup && !players[index].isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="0==index && (manageGroups || player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat @click="bus.$emit('createGroup')">{{i18n('Create group')}}</v-btn></v-flex>
+      <v-flex xs12 v-if="(manageGroups && 0==index && !player.isgroup) || (index>0 && players[index-1].isgroup && !player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
@@ -40,8 +41,24 @@ Vue.component('lms-manage-players', {
          </v-list-tile-action>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="nextTrack(index)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
-          </v-list-tile-action>
-         <v-list-tile-action class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player)">
+         </v-list-tile-action>
+         <v-list-tile-action v-if="manageGroups && player.isgroup" class="pmgr-btn">
+          <v-menu bottom left>
+           <v-btn slot="activator" flat icon class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
+           <v-list>
+            <v-list-tile @click="bus.$emit('editGroup', player)">
+             <v-list-tile-title><v-icon>edit</v-icon>&nbsp;&nbsp;{{i18n('Edit')}}</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="deleteGroup(player)">
+             <v-list-tile-title><v-icon>delete</v-icon>&nbsp;&nbsp;{{i18n('Delete')}}</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="bus.$emit('synchronise', player)">
+             <v-list-tile-title><v-icon>{{player.synced ? 'link' : 'link_off'}}</v-icon>&nbsp;&nbsp;{{i18n('Synchronise')}}</v-list-tile-title>
+            </v-list-tile>
+           </v-list>
+          </v-menu>
+         </v-list-tile-action>
+         <v-list-tile-action v-else class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player)">
           <v-btn icon><v-icon>{{player.synced ? 'link' : 'link_off'}}</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
@@ -68,24 +85,33 @@ Vue.component('lms-manage-players', {
         return {
             show: false,
             showAllButtons: true,
-            players: []
+            players: [],
+            manageGroups: false
         }
     },
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_MANAGE_PLAYERS.id) {
                 bus.$emit('dialog', 'manage-players', true);
-                this.players = [];
-                this.$store.state.players.forEach(i => {
-                    i.track="...";
-                    this.players.push(i);
-                });
-                
-                this.updateAll();
-                this.timer = setInterval(function () {
-                    this.updateAll();
-                }.bind(this), 2000);
+                this.getPlayerList();
                 this.show = true;
+
+                // Check to see if we can manage groups...
+                this.manageGroups = getLocalStorageBool('manageGroups', false);
+                lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
+                        lmsCommand("", ["playergroups", "can-manage"]).then(({data}) => {
+                            this.manageGroups = undefined!=data.result && 1==data.result['can-manage'];
+                            setLocalStorageVal('manageGroups', this.manageGroups);
+                        }).catch(err => {
+                            this.manageGroups = false;
+                            setLocalStorageVal('manageGroups', this.manageGroups);
+                        });
+                    } else {
+                        this.manageGroups = false;
+                        setLocalStorageVal('manageGroups', this.manageGroups);
+                    }
+                });
             }
         }.bind(this));
 
@@ -107,6 +133,19 @@ Vue.component('lms-manage-players', {
         });
     },
     methods: {
+        getPlayerList() {
+            var players = [];
+            this.$store.state.players.forEach(i => {
+                i.track="...";
+                players.push(i);
+            });
+
+            this.players = players;
+            this.updateAll();
+            this.timer = setInterval(function () {
+                this.updateAll();
+            }.bind(this), 2000);
+        },
         close() {
             this.show=false;
             if (this.timer) {
@@ -188,6 +227,15 @@ Vue.component('lms-manage-players', {
                 this.$store.commit('setPlayer', id);
             }
         },
+        deleteGroup(player) {
+            this.$confirm(i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
+                        bus.$emit('updateServerStatus');
+                    });
+                }
+            });
+        },
         updateAll() {
             for (var i=0; i<this.players.length; ++i) {
                 if (!this.players[i].updating && (undefined==this.players[i].lastUpdate || ((new Date())-this.players[i].lastUpdate)>500)) {
@@ -245,6 +293,11 @@ Vue.component('lms-manage-players', {
     computed: {
         currentPlayer() {
             return this.$store.state.player
+        }
+    },
+    watch: {
+        '$store.state.players': function (newVal) {
+            this.getPlayerList();
         }
     },
     beforeDestroy() {

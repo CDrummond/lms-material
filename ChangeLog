@@ -1,16 +1,17 @@
 0.1.6
 -----
-1. Fix swipe to change views not working after show Information dialog.
-2. Add ellipsis to main toolbar text.
-3. Fix scrollbar initialisation.
-4. Place group players first in drop down menu and in Manage Players dialog.
-5. Auto-switch layout (desktop/mobile) if set to auto and not on mobile device.
-6. If switch desktop/mobile layout in settings, then don't prompt for
-   confirmation.
-7. Ignore swipes on now-playing posiion slider in mobile layout.
-8. Add 'Play album starting at track' to 1st track as well, just for
-   consistency.
-9. Fix sync dialog.
+ 1. Fix swipe to change views not working after show Information dialog.
+ 2. Add ellipsis to main toolbar text.
+ 3. Fix scrollbar initialisation.
+ 4. Place group players first in drop down menu and in Manage Players dialog.
+ 5. Auto-switch layout (desktop/mobile) if set to auto and not on mobile device.
+ 6. If switch desktop/mobile layout in settings, then don't prompt for
+    confirmation.
+ 7. Ignore swipes on now-playing position slider in mobile layout.
+ 8. Add 'Play album starting at track' to 1st track as well, just for
+    consistency.
+ 9. Fix sync dialog.
+10. Detect added/removed players in Manager Players dialog.
 
 0.1.5
 -----

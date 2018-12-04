@@ -42,6 +42,7 @@ var app = new Vue({
                 setLocalStorageVal("splitter", f);
                 document.documentElement.style.setProperty('--splitter-pc', f);
                 this.splitter=f;
+                bus.$emit('splitterChanged');
             }
         }
     },

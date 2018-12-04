@@ -67,7 +67,7 @@ Vue.component('lms-sync-dialog', {
                             var play = {id:p.id, label:p.name};
                             this.players.push(play);
                             if (this.origSync.has(play.id)) {
-                                this.chosenPlayers.push(play);
+                                this.chosenPlayers.push(play.id);
                             }
                         }
                     });
@@ -83,7 +83,7 @@ Vue.component('lms-sync-dialog', {
         sync() {
             this.show=false;
             var newSync = new Set();
-            this.chosenPlayers.forEach(p => { newSync.add(p.id); } );
+            this.chosenPlayers.forEach(p => { newSync.add(p); } );
 
             this.origSync.forEach(p => {
                 if (!newSync.has(p)) {
@@ -100,7 +100,8 @@ Vue.component('lms-sync-dialog', {
             if (this.chosenPlayers.length==this.players.length) {
                 this.chosenPlayers = [];
             } else {
-                this.chosenPlayers = this.players.slice();
+                this.chosenPlayers = [];
+                this.players.forEach(p => { this.chosenPlayers.push(p.id); } );
             }
         },
         i18n(str, arg) {

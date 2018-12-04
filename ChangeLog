@@ -10,6 +10,7 @@
 7. Ignore swipes on now-playing posiion slider in mobile layout.
 8. Add 'Play album starting at track' to 1st track as well, just for
    consistency.
+9. Fix sync dialog.
 
 0.1.5
 -----

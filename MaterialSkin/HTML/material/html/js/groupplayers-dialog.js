@@ -16,7 +16,6 @@ Vue.component('lms-groupplayers-dialog', {
      <v-text-field single-line clearable :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
     </v-list-tile-content>
    </v-list-tile>
-   <v-divider></v-divider>
    <v-list-tile>
     <v-select chips deletable-chips multiple :items="players" :label="i18n('Group members')" v-model="chosenPlayers" item-text="label" item-value="id">
      <v-list-tile slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">
@@ -26,7 +25,6 @@ Vue.component('lms-groupplayers-dialog', {
      <v-divider slot="prepend-item"></v-divider>
     </v-select>
    </v-list-tile>
-   <v-divider></v-divider>
    <v-list-tile>
     <v-list-tile-content @click="options.powerMaster = !options.powerMaster" class="switch-label">
      <v-list-tile-title>{{i18n('Power on/off all')}}</v-list-tile-title>
@@ -79,13 +77,23 @@ Vue.component('lms-groupplayers-dialog', {
             this.setDefaults();
             this.player = player;
             this.name = player.name;
+            this.prevName = player.name;
+            this.unknownIds = [];
 
             lmsCommand(this.player.id, ["playergroup", 0, 255]).then(({data}) => {
                 if (data && data.result) {
                     this.options.powerMaster = 1 == parseInt(data.result.powerMaster);
                     this.options.powerPlay = 1 == parseInt(data.result.powerPlay);
                     if (data.result.players_loop) {
-                        data.result.players_loop.forEach(p => { this.chosenPlayers.push(p.id); } );
+                        data.result.players_loop.forEach(p => {
+                            if (this.playerIds.has(p.id)) {
+                                this.chosenPlayers.push(p.id);
+                            } else {
+                                // Chosen player ID is not connected, or unknown?
+                                // Save, so that we re-add when updating
+                                this.unknownIds.push(p.id);
+                            }
+                        });
                     }
                     this.show = true;
                 }
@@ -99,12 +107,16 @@ Vue.component('lms-groupplayers-dialog', {
     methods: {
         setDefaults() {
             this.name = undefined;
+            this.prevName = undefined;
             this.player = undefined;
             this.chosenPlayers = [];
             this.options = { powerMaster: true, powerPlay: true };
+			this.players = [];
+            this.playerIds = new Set();
             this.$store.state.players.forEach(p => {
                 if (!p.isgroup) {
                     this.players.push({id:p.id, label:p.name});
+                    this.playerIds.add(p.id);
                 }
             });
         },
@@ -116,19 +128,35 @@ Vue.component('lms-groupplayers-dialog', {
             if (name.length<1) {
                 return;
             }
-            lmsCommand("", ['playergroups', 'update', 'id:'+player.id, 'name:'+name, 'players:'+this.chosenPlayers.join(','), 
-                            'powerMaster:'+this.options.powerMaster, 'powerPlay:'+this.options.powerPlay]).then(({data}) => {
-                bus.$emit('updateServerStatus');
-                this.show=false;
-            });
+            var members = [];
+            this.chosenPlayers.forEach(p => { members.push(p); } );
+            this.unknownIds.forEach(p => { members.push(p); } );
+
+            var cmd = ['playergroups', 'update', 'id:'+this.player.id, "members:"+(members.length>0 ? members.join(",") : "-"),
+                       'powerMaster:'+(this.options.powerMaster ? 1 : 0), 'powerPlay:'+(this.options.powerPlay ? 1 : 0)];
+
+            if (this.prevName != name) {
+                // Change name first
+                lmsCommand(this.player.id, ['name', name]).then(({data}) => {
+                    lmsCommand("", cmd).then(({data}) => {
+                        bus.$emit('updateServerStatus');
+                        this.show=false;
+                    });
+                });
+            } else {
+                lmsCommand("", cmd).then(({data}) => {
+                    bus.$emit('updateServerStatus');
+                    this.show=false;
+                });
+            }
         },
         create() {
             var name = this.name.trim();
             if (name.length<1) {
                 return;
             }
-            lmsCommand("", ['playergroups', 'create', 'id:'+player.id, 'name:'+name, 'players:'+this.chosenPlayers.join(','), 
-                            'powerMaster:'+this.options.powerMaster, 'powerPlay:'+this.options.powerPlay]).then(({data}) => {
+            lmsCommand("", ['playergroups', 'add', 'name:'+name, 'members:'+this.chosenPlayers.join(','),
+                            'powerMaster:'+(this.options.powerMaster ? 1 : 0), 'powerPlay:'+(this.options.powerPlay ? 1 : 0)]).then(({data}) => {
                 bus.$emit('updateServerStatus');
                 this.show=false;
             });

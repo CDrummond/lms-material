@@ -21,7 +21,7 @@ Vue.component('lms-manage-players', {
     <v-layout row wrap>
      <template v-for="(player, index) in players" :key="player.id">
       <v-flex xs12 v-if="0==index && (manageGroups || player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat @click="bus.$emit('createGroup')">{{i18n('Create group')}}</v-btn></v-flex>
+      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat icon @click="bus.$emit('createGroup')" :title="i18n('Create group')"><v-icon>add_circle_outline</v-icon></v-btn></v-flex>
       <v-flex xs12 v-if="(manageGroups && 0==index && !player.isgroup) || (index>0 && players[index-1].isgroup && !player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">

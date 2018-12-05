@@ -13,6 +13,7 @@
  9. Fix sync dialog.
 10. Detect added/removed players in Manager Players dialog.
 11. Add group player management; add, update, and delete.
+12. Allow changing player name in Player Settings dialog.
 
 0.1.5
 -----

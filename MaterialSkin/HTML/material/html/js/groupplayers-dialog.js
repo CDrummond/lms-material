@@ -13,7 +13,7 @@ Vue.component('lms-groupplayers-dialog', {
   <v-list two-line>
    <v-list-tile>
     <v-list-tile-content>
-     <v-text-field single-line clearable :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
+     <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
     </v-list-tile-content>
    </v-list-tile>
    <v-list-tile>

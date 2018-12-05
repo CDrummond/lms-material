@@ -15,12 +15,17 @@ Vue.component('lms-player-settings', {
    <v-card-title class="settings-title">
     <v-toolbar color="primary" dark app class="lms-toolbar">
      <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
-    <v-toolbar-title>{{playerName}}</v-toolbar-title>
+    <v-toolbar-title>{{TB_PLAYER_SETTINGS.title}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
 
   <v-card-text>
    <v-list two-line subheader class="settings-list">
+    <v-header>{{i18n('General')}}</v-header>
+    <v-list-tile>
+     <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
+    </v-list-tile>
+    <div class="settings-pad"></div>
     <v-header>{{i18n('Audio')}}</v-header>
     <v-list-tile>
      <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
@@ -212,6 +217,7 @@ Vue.component('lms-player-settings', {
                 this.replaygain='0';
                 this.playerId = this.$store.state.player.id;
                 this.playerName = this.$store.state.player.name;
+                this.playerOrigName = this.$store.state.player.name;
                 this.isgroup = this.$store.state.player.isgroup;
                 lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
@@ -344,6 +350,11 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
             lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
+            if (this.playerOrigName!=this.playerName) {
+                lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
+                    bus.$emit('updateServerStatus');
+                });
+            }
             this.playerId = undefined;
         },
         loadAlarms() {

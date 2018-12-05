@@ -48,6 +48,9 @@ const store = new Vuex.Store({
                     for (i=0; i<state.players.length; ++i) {
                         if (state.players[i].id === state.player.id) {
                             found = true;
+                            if (changed) {
+                                state.player = state.players[i];
+                            }
                             break;
                         }
                     }

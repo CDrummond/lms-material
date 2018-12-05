@@ -35,7 +35,7 @@ Vue.component('lms-groupplayers-dialog', {
    <v-divider></v-divider>
    <v-list-tile>
     <v-list-tile-content @click="options.powerPlay = !options.powerPlay" class="switch-label">
-     <v-list-tile-title>{{i18n('Power on all on play')}}</v-list-tile-title>
+     <v-list-tile-title>{{i18n('Power on all upon play')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Power on all group members when playing to group.')}}</v-list-tile-title>
     </v-list-tile-content>
     <v-list-tile-action><v-switch v-model="options.powerPlay"></v-switch></v-list-tile-action>

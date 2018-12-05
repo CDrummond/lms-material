@@ -211,12 +211,11 @@ Vue.component('lms-manage-players', {
         volumeChanged(player) {
             this.setVolume(player, player.volume);
         },
-        togglePower(index) {
+        togglePower(player) {
             if (!this.show) {
                 return;
             }
-            var player = this.players[index];
-            lmsCommand(player.id, ["power", this.players[index].ison ? "0" : "1"]).then(({data}) => {
+            lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
                 updatePlayer(player);
             });
         },
@@ -224,7 +223,7 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, this.players[index].isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
+            lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
                 updatePlayer(player);
             });
         },

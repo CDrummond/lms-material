@@ -148,6 +148,7 @@ Vue.component('lms-manage-players', {
             PMGR_POWER_OFF_ACTION.title=i18n("Switch Off");
         },
         playerMenu(player, event) {
+            PMGR_SYNC_ACTION.icon = player.synced ? "link" : "link_off";
             this.menu = {actions: [PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION],
                          x:event.clientX, y:event.clientY, player: player};
 

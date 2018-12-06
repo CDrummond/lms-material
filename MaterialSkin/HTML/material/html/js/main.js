@@ -55,12 +55,15 @@ var app = new Vue({
         }
         this.$store.commit('initUiSettings');
 
-        this.openDialogs = new Set();
+        this.openDialogs = [];
         bus.$on('dialog', function(name, open) {
             if (open) {
-                this.openDialogs.add(name);
+                this.openDialogs.push(name);
             } else {
-                this.openDialogs.delete(name);
+                var index = this.openDialogs.indexOf(name);
+                if (index>=0) {
+                    this.openDialogs.splice(index, 1);
+                }
             }
         }.bind(this));
 
@@ -87,9 +90,9 @@ var app = new Vue({
                     }
                 }
             }
-            if (this.openDialogs.size!=0) {
+            if (this.openDialogs.length!=0) {
                 if ('r'==direction) {
-                    bus.$emit('closeDialog');
+                    bus.$emit('closeDialog', this.openDialogs[this.openDialogs.length-1]);
                 }
                 return;
             }

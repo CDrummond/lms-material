@@ -218,8 +218,8 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
 
-        bus.$on('closeDialog', function() {
-            if (this.show && !this.alarmDialog.show) {
+        bus.$on('closeDialog', function(name) {
+            if (this.show && !this.alarmDialog.show && name=='player-settings') {
                 this.close();
             }
         }.bind(this));

@@ -88,8 +88,8 @@ Vue.component('lms-information-dialog', {
             }
         }.bind(this));
 
-        bus.$on('closeDialog', function() {
-            if (this.show) {
+        bus.$on('closeDialog', function(name) {
+            if (this.show && name=='information') {
                 this.close();
             }
         }.bind(this));

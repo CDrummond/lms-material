@@ -5,6 +5,13 @@
  * MIT license.
  */
 
+var PMGR_EDIT_GROUP_ACTION   = {cmd:"edit",     icon:"edit"};
+var PMGR_DELETE_GROUP_ACTION = {cmd:"delete",   icon:"delete"};
+var PMGR_SYNC_ACTION         = {cmd:"sync",     icon:"link"};
+var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"settings"};
+var PMGR_POWER_ON_ACTION     = {cmd:"on",       icon:"power_settings_new", dimmed:true};
+var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new"};
+
 Vue.component('lms-manage-players', {
     template: `
 <v-dialog v-model="show" scrollable fullscreen>
@@ -26,12 +33,12 @@ Vue.component('lms-manage-players', {
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
-         <v-list-tile-avatar v-if="player.image" :tile="true">
+         <v-list-tile-avatar v-if="player.image" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :src="player.image">
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title  style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>&nbsp;&nbsp;&nbsp;{{player.name}}</v-list-tile-title>
-          <v-list-tile-sub-title>{{player.track}}</v-list-tile-sub-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>&nbsp;&nbsp;&nbsp;{{player.name}}</v-list-tile-title>
+          <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(player)">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
@@ -42,25 +49,6 @@ Vue.component('lms-manage-players', {
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="nextTrack(player)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="manageGroups && player.isgroup" class="pmgr-btn">
-          <v-menu bottom left>
-           <v-btn slot="activator" flat icon class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
-           <v-list>
-            <v-list-tile @click="bus.$emit('editGroup', player)">
-             <v-list-tile-title><v-icon>edit</v-icon>&nbsp;&nbsp;{{i18n('Edit')}}</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="deleteGroup(player)">
-             <v-list-tile-title><v-icon>delete</v-icon>&nbsp;&nbsp;{{i18n('Delete')}}</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="bus.$emit('synchronise', player)">
-             <v-list-tile-title><v-icon>{{player.synced ? 'link' : 'link_off'}}</v-icon>&nbsp;&nbsp;{{i18n('Synchronise')}}</v-list-tile-title>
-            </v-list-tile>
-           </v-list>
-          </v-menu>
-         </v-list-tile-action>
-         <v-list-tile-action v-else class="pmgr-btn" :title="i18n('Synchronise')" @click="bus.$emit('synchronise', player)">
-          <v-btn icon><v-icon>{{player.synced ? 'link' : 'link_off'}}</v-icon></v-btn>
-         </v-list-tile-action>
         </v-list-tile>
        </v-list>
       </v-flex xs12>
@@ -70,7 +58,7 @@ Vue.component('lms-manage-players', {
         <v-slider @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider"></v-slider>
         <v-btn flat icon @click.stop="volumeUp(player)" class="pmgr-btn"><v-icon>volume_up</v-icon></v-btn>
         <p class="pmgr-vol">{{player.volume}} %</p>
-        <v-btn flat icon @click.stop="togglePower(player)" class="pmgr-btn" v-bind:class="{'dimmed': !player.ison}"><v-icon>power_settings_new</v-icon></v-btn>
+        <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
      </template>
@@ -78,7 +66,18 @@ Vue.component('lms-manage-players', {
    </v-container>
   </v-card-text>
  </v-card>
- </v-dialog>
+
+ <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
+  <v-list>
+   <template v-for="(action, index) in menu.actions">
+    <v-divider v-if="action.divider"></v-divider>
+    <v-list-tile v-else @click="playerAction(menu.player, action.cmd)">
+     <v-list-tile-title><v-icon v-bind:class="{'dimmed': action.dimmed}">{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
+</v-dialog>
 `,
     props: [],
     data() {
@@ -86,7 +85,8 @@ Vue.component('lms-manage-players', {
             show: false,
             showAllButtons: true,
             players: [],
-            manageGroups: false
+            manageGroups: false,
+            menu: { show:false, player:undefined, actions:[], x:0, y:0 }
         }
     },
     mounted() {
@@ -131,8 +131,46 @@ Vue.component('lms-manage-players', {
                 this.showAllButtons = window.innerWidth>=500;
             });
         });
+
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+
+        this.initItems();
     },
     methods: {
+        initItems() {
+            PMGR_EDIT_GROUP_ACTION.title=i18n("Edit");
+            PMGR_DELETE_GROUP_ACTION.title=i18n("Delete");
+            PMGR_SYNC_ACTION.title=i18n("Synchronise");
+            PMGR_SETTINGS_ACTION.title=i18n("Settings");
+            PMGR_POWER_ON_ACTION.title=i18n("Switch On");
+            PMGR_POWER_OFF_ACTION.title=i18n("Switch Off");
+        },
+        playerMenu(player, event) {
+            this.menu = {actions: [PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION],
+                         x:event.clientX, y:event.clientY, player: player};
+            
+            if (player.isgroup) {
+                this.menu.actions.push(DIVIDER);
+                this.menu.actions.push(PMGR_EDIT_GROUP_ACTION);
+                this.menu.actions.push(PMGR_DELETE_GROUP_ACTION);
+            }
+            this.menu.show = true;
+        },
+        playerAction(player, cmd) {
+            if (PMGR_EDIT_GROUP_ACTION.cmd==cmd) {
+                bus.$emit('editGroup', player);
+            } else if (PMGR_DELETE_GROUP_ACTION.cmd==cmd) {
+                this.deleteGroup(player);
+            } else if (PMGR_SYNC_ACTION.cmd==cmd) {
+                bus.$emit('synchronise', player);
+            } else if (PMGR_SETTINGS_ACTION.cmd==cmd) {
+                bus.$emit('playerSettings', player);
+            } else if (PMGR_POWER_ON_ACTION.cmd==cmd || PMGR_POWER_OFF_ACTION.cmd==cmd) {
+                this.togglePower(player);
+            }
+        },
         getPlayerList() {
             var players = [];
             this.$store.state.players.forEach(p => {

@@ -18,6 +18,7 @@
 14. When new plugins are detected in Info page, set activePage=SETUP_PLUGINS in
     URL.
 15. Group players have replaygain setting.
+16. Provide access to player settings from Manage Players dialog.
 
 0.1.5
 -----

@@ -35,7 +35,7 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
    <v-list-tile v-if="dstmItems && dstmItems.length>1">
     <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
-   </v-list-tile> 
+   </v-list-tile>
 
    <div class="settings-pad"></div>
    <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>

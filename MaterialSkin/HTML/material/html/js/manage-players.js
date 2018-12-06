@@ -150,7 +150,7 @@ Vue.component('lms-manage-players', {
         playerMenu(player, event) {
             this.menu = {actions: [PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION],
                          x:event.clientX, y:event.clientY, player: player};
-            
+
             if (player.isgroup) {
                 this.menu.actions.push(DIVIDER);
                 this.menu.actions.push(PMGR_EDIT_GROUP_ACTION);

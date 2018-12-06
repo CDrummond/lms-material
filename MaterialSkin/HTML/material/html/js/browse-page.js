@@ -42,7 +42,7 @@ const ALBUM_TAGS = "tags:jlya";
 const TRACK_TAGS = "tags:ACdt";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
-const SECTION_RADIO = 2;
+const SECTION_RADIO = 3;
 
 function isLocalLibCommand(command) {
     return command.command && command.command.length>0 &&

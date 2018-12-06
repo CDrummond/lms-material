@@ -6,6 +6,7 @@
  */
 
 var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
+const TIMER_DURATION_MIN = 30;
 
 Vue.component('lms-player-settings', {
     template: `
@@ -333,6 +334,8 @@ Vue.component('lms-player-settings', {
                 { duration: 45*60, label:i18n("%1 minutes", 45)},
                 { duration: 60*60, label:i18n("%1 minutes", 60)},
                 { duration: 90*60, label:i18n("%1 minutes", 90)},
+                { duration: 0,     label:i18n("Duration of current track")},
+                { duration: -1,    label:i18n("Duration of play queue")}
                 ];
         },
         close() {
@@ -423,7 +426,27 @@ Vue.component('lms-player-settings', {
             }
         },
         setSleepTimer(duration) {
-            bus.$emit('playerCommand', ["sleep", duration]);
+            if (0==duration) { // Current track
+                lmsCommand(this.$store.state.player.id, ["status", "-", 1]).then(({data}) => {
+                    duration = Math.floor(data.result && data.result.duration ? parseFloat(data.result.duration) : 0.0);
+                    if (duration>=TIMER_DURATION_MIN) {
+                        bus.$emit('playerCommand', ["sleep", duration]);
+                    } else {
+                        bus.$emit('showMessage', i18n("Current track duration is too short. (Minimum of %1 seconds required.)", TIMER_DURATION_MIN));
+                    }
+                });
+            } else if (-1==duration) { // Queue
+                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
+                    duration = Math.floor(data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0);
+                    if (duration>=TIMER_DURATION_MIN) {
+                        bus.$emit('playerCommand', ["sleep", duration]);
+                    } else {
+                        bus.$emit('showMessage', i18n("Play queue duration is too short. (Minimum of %1 seconds required.)", TIMER_DURATION_MIN));
+                    }
+                });
+            } else {
+                bus.$emit('playerCommand', ["sleep", duration]);
+            }
         },
         cancelSleep() {
             bus.$emit('playerCommand', ["sleep", 0]);

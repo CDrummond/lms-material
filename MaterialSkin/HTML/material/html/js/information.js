@@ -51,7 +51,7 @@ Vue.component('lms-information-dialog', {
    <ul>
     <template v-for="(info, index) in updates.plugins"><li>{{info.title}}</li></template>
    </ul>
-   <v-btn v-if="updates.plugins.length>0" href="../Default/settings/index.html" flat>{{i18n('Server Settings')}}</v-btn>
+   <v-btn v-if="updates.plugins.length>0" href="../Default/settings/index.html?activePage=SETUP_PLUGINS" flat>{{i18n('Server Settings')}}</v-btn>
   </v-card-text>
  </v-card>
 </v-dialog>

@@ -1,3 +1,7 @@
+0.2.1
+-----
+1. Fix plugin udate check.
+
 0.2.0
 -----
  1. Fix swipe to change views not working after show Information dialog.

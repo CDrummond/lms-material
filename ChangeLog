@@ -17,6 +17,7 @@
 13. Add option to use current track, or queue, duration as sleep timer.
 14. When new plugins are detected in Info page, set activePage=SETUP_PLUGINS in
     URL.
+15. Group players have replaygain setting.
 
 0.1.5
 -----

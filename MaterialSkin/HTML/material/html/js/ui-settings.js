@@ -170,8 +170,8 @@ Vue.component('lms-ui-settings', {
             }
         }.bind(this));
 
-        bus.$on('closeDialog', function() {
-            if (this.show) {
+        bus.$on('closeDialog', function(name) {
+            if (this.show && name=='ui-settings') {
                 this.close();
             }
         }.bind(this));

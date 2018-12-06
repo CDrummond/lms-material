@@ -115,8 +115,8 @@ Vue.component('lms-manage-players', {
             }
         }.bind(this));
 
-        bus.$on('closeDialog', function() {
-            if (this.show) {
+        bus.$on('closeDialog', function(name) {
+            if (this.show && name=='manage-players') {
                 this.close();
             }
         }.bind(this));

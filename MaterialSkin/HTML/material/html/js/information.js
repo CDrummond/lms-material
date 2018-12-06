@@ -32,6 +32,16 @@ Vue.component('lms-information-dialog', {
    </v-menu>
    <div style="height:24px"></div>
 
+   <p class="about-header">{{i18n('Plugins')}}</p>
+   <p v-if="updates.plugins.length>0">{{i18n('The following plugins have updates available:')}}</p>
+   <p v-else-if="undefined!=updates.error">{{updates.error}}</p>
+   <p v-else>{{i18n('All plugins up to date.')}}</p>
+   <ul>
+    <template v-for="(info, index) in updates.plugins"><li>{{info.title}}</li></template>
+   </ul>
+   <v-btn v-if="updates.plugins.length>0" href="../Default/settings/index.html?activePage=SETUP_PLUGINS" flat>{{i18n('Server Settings')}}</v-btn>
+   <div style="height:24px"></div>
+
    <p class="about-header">{{i18n('Players')}}</p>
    <ul>
     <template v-for="(item, index) in players">
@@ -42,16 +52,7 @@ Vue.component('lms-information-dialog', {
      </li>
     </template>
    </ul>
-   <div style="height:24px"></div>
 
-   <p class="about-header">{{i18n('Plugins')}}</p>
-   <p v-if="updates.plugins.length>0">{{i18n('The following plugins have updates available:')}}</p>
-   <p v-else-if="undefined!=updates.error">{{updates.error}}</p>
-   <p v-else>{{i18n('All plugins up to date.')}}</p>
-   <ul>
-    <template v-for="(info, index) in updates.plugins"><li>{{info.title}}</li></template>
-   </ul>
-   <v-btn v-if="updates.plugins.length>0" href="../Default/settings/index.html?activePage=SETUP_PLUGINS" flat>{{i18n('Server Settings')}}</v-btn>
   </v-card-text>
  </v-card>
 </v-dialog>

@@ -11,9 +11,10 @@
  8. Add 'Play album starting at track' to 1st track as well, just for
     consistency.
  9. Fix sync dialog.
-10. Detect added/removed players in Manager Players dialog.
+10. Detect added/removed players in Manage Players dialog.
 11. Add group player management; add, update, and delete.
 12. Allow changing player name in Player Settings dialog.
+13. Add option to use current track, or queue, duration as sleep timer.
 
 0.1.5
 -----

@@ -1,6 +1,8 @@
 0.2.1
 -----
 1. Fix plugin update check.
+2. Remove option to use current track, or queue, duration as sleep timer. Don't
+   work well, and really needs support in server.
 
 0.2.0
 -----

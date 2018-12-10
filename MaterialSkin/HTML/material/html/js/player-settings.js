@@ -6,7 +6,6 @@
  */
 
 var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
-const TIMER_DURATION_MIN = 30;
 
 Vue.component('lms-player-settings', {
     template: `
@@ -250,7 +249,9 @@ Vue.component('lms-player-settings', {
                 { duration: 30*60, label:i18n("%1 minutes", 30)},
                 { duration: 45*60, label:i18n("%1 minutes", 45)},
                 { duration: 60*60, label:i18n("%1 minutes", 60)},
-                { duration: 90*60, label:i18n("%1 minutes", 90)}
+                { duration: 90*60, label:i18n("%1 minutes", 90)},
+                { duration: 0,     label:i18n("Remaining duration of current track")}/*,
+                { duration: -1,    label:xxx("Remaining duration of play queue")} */
                 ];
         },
         playerSettings(player) {
@@ -423,7 +424,11 @@ Vue.component('lms-player-settings', {
             }
         },
         setSleepTimer(duration) {
-            bus.$emit('playerCommand', ["sleep", duration]);
+            if (0==duration) { // Current track
+                bus.$emit('playerCommand', ["jiveendoftracksleep"]);
+            } else {
+                bus.$emit('playerCommand', ["sleep", duration]);
+            }
         },
         cancelSleep() {
             bus.$emit('playerCommand', ["sleep", 0]);

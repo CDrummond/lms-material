@@ -1,8 +1,10 @@
 0.2.1
 -----
 1. Fix plugin update check.
-2. Remove option to use current track, or queue, duration as sleep timer. Don't
-   work well, and really needs support in server.
+2. Replace option to use curent track duration as sleep timer, to using
+   reamining duration as sleep timer.
+3. Remove option to use queue duration as sleep timer. Should be replaced
+   with remaning queue duration, but unsure how to retreive this.
 
 0.2.0
 -----

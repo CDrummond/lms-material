@@ -1,10 +1,10 @@
 0.2.1
 -----
 1. Fix plugin update check.
-2. Replace option to use curent track duration as sleep timer, to using
-   reamining duration as sleep timer.
+2. Replace option to use current track duration as sleep timer, to using
+   remaining duration as sleep timer.
 3. Remove option to use queue duration as sleep timer. Should be replaced
-   with remaning queue duration, but unsure how to retreive this.
+   with renaming queue duration, but unsure how to retrieve this.
 
 0.2.0
 -----
@@ -51,7 +51,7 @@
 2. Don't add playall/addall entries to A..Z groups.
 3. For A..Z group, set max combined group size to 100, and don't split letters
    into multiple groups until 301 or more.
-4. Retreive biographies for all artists in now playing info.
+4. Retrieve biographies for all artists in now playing info.
 5. Change sync dialog to be 'Choose players to sync with $PLAYER'
 6. Add link to trackinfo command in now playing info.
 7. Adjust metrics in manager payers dialog, and only show prev/next buttons if
@@ -77,8 +77,8 @@
 0.1.2
 -----
  1. Use _50x50_o for list covers, and _300x300_f for grid covers.
- 2. Add scaled image to slideshow list, and only fetch full sized image when
-    slideshow active.
+ 2. Add scaled image to slide show list, and only fetch full sized image when
+    slide show active.
  3. Crop list images as per grid images.
  4. Add bitrate and file type to now playing.
  5. Only show year if >0
@@ -111,7 +111,7 @@
  5. Add optional grid view for artists, albums, and SlimBrowse icon_list.
  6. Fix durations longer than 24hrs.
  7. Add plugin update info to Information dialog.
- 8. Disable swipe to change views whilst photo slideshow is open.
+ 8. Disable swipe to change views whilst photo slide show is open.
  9. When listing a genre's items, ask whether to list Artists or Albums.
 10. Always send volume up commands, even if at 100% already.
 11. List all artists of a track in toolbar, queue, and now playing.
@@ -149,8 +149,8 @@
     plugin is installed.
  8. Support 'More' command.
  9. Make player list menu scrollable.
-10. Fix adding albums to favorites.
-11. Use encodeURIComponent to encode favorites, not encodeURI
+10. Fix adding albums to favourites.
+11. Use encodeURIComponent to encode favourites, not encodeURI
 12. Work-around iOS list size issue by adding a small amount of padding.
 13. Remove confirmation dialog when switching off a player.
 14. Correctly update display of items when list is refreshed.
@@ -176,7 +176,7 @@
 10. Follow material style, and place text to the left of switches.
 11. Close full-screen dialogs (e.g. settings) via Escape key.
 12. Scroll lists, not page.
-13. Pinnable apps, etc.
+13. Pinable apps, etc.
 14. Custom CSS scrollbars for WebKit browsers - blend in better with dark
     style.
 15. Store active tab in local storage, and restore upon restart.
@@ -203,7 +203,7 @@
  9. Add icon for iOS.
 10. Update Vue.js and Vuetify.js
 11. Sleep timer.
-12. Add option to sort favorites.
+12. Add option to sort favourites.
 13. When using +/- buttons in volume dialog, round to nearest 5%
 14. Only react to status volume changes if more than half a second since volume
     was set.
@@ -215,11 +215,11 @@
 
 0.0.6
 -----
-1. Initial work on SlimBrowse - only used in favorites and radios so far.
+1. Initial work on SlimBrowse - only used in favourites and radios so far.
 2. Dutch, German, and French translations.
 3. Group players have no replaygain setting.
 4. Show album year in play queue.
-5. Don't sort favorites - as the order can be determined in default web UI.
+5. Don't sort favourites - as the order can be determined in default web UI.
 6. Ensure volume is only ever adjusted whilst dialog is shown.
 7. Add insert action.
 
@@ -229,8 +229,8 @@
    podcast listing.
 2. If browse listing only has 1 item with description, then show description
    under item. Mainly for podcasts.
-3. Improve how favorites are added.
-4. When adding a favorite, check if it already exists.
+3. Improve how favourites are added.
+4. When adding a favourite, check if it already exists.
 
 0.0.4
 -----

@@ -83,8 +83,12 @@ Vue.component('lms-information-dialog', {
                 that = this;
                 axios.get((lmsServerAddress.length>1 ? lmsServerAddress : (location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')))+"/updateinfo.json?x=time"+(new Date().getTime())).then(function (resp) {
                     that.updates = eval(resp.data);
+                    if (that.updates && that.updates.plugins && 1==that.updates.plugins.length && null==that.updates.plugins[0]) {
+                        that.updates.plugins=[];
+                        that.updates.error=i18n('Failed to determine plugin status.');
+                    }
                 }).catch(err => {
-                    this.updates.error=i18n('Failed to determine plugin status.');
+                    that.updates.error=i18n('Failed to determine plugin status.');
                     logError(err);
                 });
             }

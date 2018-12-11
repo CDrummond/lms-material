@@ -1479,8 +1479,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         //   Filter album/tracks on role?
         lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter"]).then(({data}) => {
             if (data && data.result) {
-                this.options.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
-                setLocalStorageVal('separateArtists', this.options.separateArtists);
+                this.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
+                setLocalStorageVal('separateArtists', this.separateArtists);
                 this.options.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
                 setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
                 this.options.noRoleFilter = 1==parseInt(data.result.noRoleFilter);

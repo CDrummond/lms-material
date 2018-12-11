@@ -176,3 +176,7 @@ function changeLayout(layout) {
     }
 }
 
+function serverSettings(page) {
+    window.open('../Default/settings/index.html' + (page ? '?activePage='+page : ''), '_blank');
+}
+

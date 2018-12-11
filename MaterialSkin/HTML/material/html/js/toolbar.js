@@ -7,7 +7,7 @@
 
 var TB_UI_SETTINGS     = {id:'tb:settings'       };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings" };
-var TB_SERVER_SETTINGS = {id:"tb:serversettings", href:'../Default/settings/index.html'};
+var TB_SERVER_SETTINGS = {id:"tb:serversettings" };
 var TB_INFO            = {id:"tb:info"           };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
@@ -224,7 +224,11 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', command);
         },
         menuAction(id) {
-            bus.$emit('toolbarAction', id);
+            if (TB_SERVER_SETTINGS==id) {
+                serverSettings();
+            } else {
+                bus.$emit('toolbarAction', id);
+            }
         },
         togglePower() {
             bus.$emit("power", this.playerStatus.ison ? "0" : "1");

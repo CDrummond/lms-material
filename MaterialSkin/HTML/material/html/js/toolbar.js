@@ -224,7 +224,7 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', command);
         },
         menuAction(id) {
-            if (TB_SERVER_SETTINGS==id) {
+            if (TB_SERVER_SETTINGS.id==id) {
                 serverSettings();
             } else {
                 bus.$emit('toolbarAction', id);

@@ -112,7 +112,7 @@ Vue.component('lms-manage-players', {
                     }
                 });
             }
-        }.bind(this));Z
+        }.bind(this));
 
         bus.$on('syncChanged', function() {
             this.updateAll();

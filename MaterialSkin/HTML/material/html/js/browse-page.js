@@ -680,7 +680,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        if (item.id.startsWith("playlist:")) {
+                        if (item.id.startsWith("playlist_id:")) {
                             lmsCommand(this.playerId(), ["playlists", "delete", item.id]).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
@@ -909,6 +909,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.itemAction(act, this.current);
         },
         refreshList() {
+            this.clearSelection();
             var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
             lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length).then(({data}) => {

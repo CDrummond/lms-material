@@ -100,13 +100,5 @@ function initApp(app) {
 
     // https://github.com/timruffles/mobile-drag-drop/issues/77
     window.addEventListener( 'touchmove', function() {});
-
-    // Use Escape to close dialogs
-    document.onkeydown = function(evt) {
-        evt = evt || window.event;
-        if (evt.keyCode == 27) {
-            bus.$emit('closeDialog');
-        }
-    };
 }
 

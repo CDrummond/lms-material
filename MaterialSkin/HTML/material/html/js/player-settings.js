@@ -216,12 +216,6 @@ Vue.component('lms-player-settings', {
                 this.playerSettings(player);
             }
         }.bind(this));
-
-        bus.$on('closeDialog', function(name) {
-            if (this.show && !this.alarmDialog.show && name=='player-settings') {
-                this.close();
-            }
-        }.bind(this));
     },
     methods: {
         initItems() {
@@ -255,7 +249,6 @@ Vue.component('lms-player-settings', {
                 ];
         },
         playerSettings(player) {
-            bus.$emit('dialog', 'player-settings', true);
             this.dstmItems=[];
             this.crossfade='0';
             this.replaygain='0';
@@ -339,7 +332,6 @@ Vue.component('lms-player-settings', {
             this.show = true;
         },
         close() {
-            bus.$emit('dialog', 'player-settings', false);
             this.show=false;
             if (this.dstmItems.length>1) {
                 lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);

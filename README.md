@@ -7,21 +7,22 @@
 
 ## Features
 
-1. Mobile and desktop layouts.
+1. Mobile and desktop layouts
 2. Browse local library - Artists, Album Artists (if not set for single list),
    Genres, Playlists, Years, Composers, etc.
-3. Add random albums of artist, genre, or year.
+3. Add random albums of artist, genre, or year
 4. Browse Radio, Favourites, and Apps
 5. Add, delete, and rename favourites
 6. Add, delete, and rename playlists
 7. Now playing
 8. Play queue with drag'n'drop editing
-9. Swipe left/right on mobile to change views
-10. UI settings; dark theme, album sort, auto scroll play queue
-11. Player settings; crossfade, replay gain, dont stop the music, alarms
-12. Sync support
-13. Info dialog to show stats, and re-scan music
-14. Manage players; control volume, play/pause, show current track
+9. UI settings; dark theme, album sort, auto scroll play queue
+10. Player settings; crossfade, replay gain, dont stop the music, alarms
+11. Sync support
+12. Info dialog to show stats, and re-scan music
+13. Manage players; control volume, play/pause, show current track
+14. Group playr control; add, edit, delete
+15. Pin apps, etc, to main screen
 
 
 ## Installation

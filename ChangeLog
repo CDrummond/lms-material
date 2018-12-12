@@ -5,6 +5,7 @@
    remaining duration as sleep timer.
 3. Remove option to use queue duration as sleep timer. Should be replaced
    with renaming queue duration, but unsure how to retrieve this.
+4. Remove swipe to change views; buggy, and material apps don't do this.
 
 0.2.0
 -----

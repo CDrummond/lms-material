@@ -92,7 +92,6 @@ Vue.component('lms-manage-players', {
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_MANAGE_PLAYERS.id) {
-                bus.$emit('dialog', 'manage-players', true);
                 this.getPlayerList();
                 this.show = true;
 
@@ -113,13 +112,7 @@ Vue.component('lms-manage-players', {
                     }
                 });
             }
-        }.bind(this));
-
-        bus.$on('closeDialog', function(name) {
-            if (this.show && name=='manage-players') {
-                this.close();
-            }
-        }.bind(this));
+        }.bind(this));Z
 
         bus.$on('syncChanged', function() {
             this.updateAll();
@@ -212,7 +205,6 @@ Vue.component('lms-manage-players', {
                 clearInterval(this.timer);
                 this.timer = undefined;
             }
-            bus.$emit('dialog', 'manage-players', false);
         },
         i18n(str) {
             if (this.show) {

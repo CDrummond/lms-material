@@ -74,7 +74,6 @@ Vue.component('lms-information-dialog', {
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_INFO.id) {
-                bus.$emit('dialog', 'information', true);
                 this.update();
                 this.timer = setInterval(function () {
                     this.update();
@@ -93,12 +92,6 @@ Vue.component('lms-information-dialog', {
                     that.updates.error=i18n('Failed to determine plugin status.');
                     logError(err);
                 });
-            }
-        }.bind(this));
-
-        bus.$on('closeDialog', function(name) {
-            if (this.show && name=='information') {
-                this.close();
             }
         }.bind(this));
 
@@ -176,7 +169,6 @@ Vue.component('lms-information-dialog', {
                 clearInterval(this.timer);
                 this.timer = undefined;
             }
-            bus.$emit('dialog', 'information', true);
         },
         initiateScan(prompt, command) {
             this.$confirm(prompt, {buttonTrueText: i18n('Rescan'), buttonFalseText: i18n('Cancel')}).then(res => {

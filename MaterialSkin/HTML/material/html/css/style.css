@@ -409,6 +409,12 @@ a {
     margin: 0px;
 }
 
+.np-info-cover {
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position:center top;
+}
+
 .ellipsis {
     text-overflow:ellipsis; 
     overflow: hidden; 

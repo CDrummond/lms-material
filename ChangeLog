@@ -7,6 +7,7 @@
    with renaming queue duration, but unsure how to retrieve this.
 4. Remove swipe to change views; buggy, and material apps don't do this.
 5. Fix deleting playlists.
+6. Center crop background image in mobile now playing info.
 
 0.2.0
 -----

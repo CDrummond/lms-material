@@ -8,6 +8,7 @@
 4. Remove swipe to change views; buggy, and material apps don't do this.
 5. Fix deleting playlists.
 6. Center crop background image in mobile now playing info.
+7. Don't add play actions to toolbar for track/album/atist info.
 
 0.2.0
 -----

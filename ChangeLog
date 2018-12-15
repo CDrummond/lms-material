@@ -1,16 +1,18 @@
 0.2.1
 -----
-1. Fix plugin update check.
-2. Replace option to use current track duration as sleep timer, to using
-   remaining duration as sleep timer.
-3. Remove option to use queue duration as sleep timer. Should be replaced
-   with renaming queue duration, but unsure how to retrieve this.
-4. Remove swipe to change views; buggy, and material apps don't do this.
-5. Fix deleting playlists.
-6. Center crop background image in mobile now playing info.
-7. Don't add play actions to toolbar for track/album/atist info.
-8. Fix buttons in fullscreen image view.
-9. Remove option to sort favourites, instead allow drag'n'drop re-ordering.
+ 1. Fix plugin update check.
+ 2. Replace option to use current track duration as sleep timer, to using
+    remaining duration as sleep timer.
+ 3. Remove option to use queue duration as sleep timer. Should be replaced
+    with renaming queue duration, but unsure how to retrieve this.
+ 4. Remove swipe to change views; buggy, and material apps don't do this.
+ 5. Fix deleting playlists.
+ 6. Center crop background image in mobile now playing info.
+ 7. Don't add play actions to toolbar for track/album/atist info.
+ 8. Fix buttons in fullscreen image view.
+ 9. Remove option to sort favourites, instead allow drag'n'drop re-ordering.
+10. Don't allow pining of favourites  - their IDs seem to change too, and
+    why pin a favourite directly?
 
 0.2.0
 -----

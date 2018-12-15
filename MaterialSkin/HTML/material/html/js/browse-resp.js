@@ -322,7 +322,18 @@ function parseBrowseResp(data, parent, options, idStart) {
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (i.params && i.params.item_id) {
-                    i.id = "item_id:"+i.params.item_id;
+                    if (isFavorites) {
+                        // First part of favorites ID seems to randomly change to? As per mysqueezebox.com apps???
+                        var parts = i.params.item_id.split(".");
+                        if (parts.length>1 && 8==parts[0].length && /^[0-9a-fA-F]+$/.test(parts[0])) {
+                            parts.shift();
+                            i.id = "favorites."+parts.join(".");
+                        } else {
+                            i.id = "item_id:"+i.params.item_id;
+                        }
+                    } else {
+                        i.id = "item_id:"+i.params.item_id;
+                    }
                 } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
                     i.id = "item_id:"+i.actions.go.params.item_id;
                 }
@@ -332,7 +343,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     idStart++;
                 }
 
-                if (!isApps && i.presetParams) {
+                if (!isApps && !isFavorites && i.presetParams) {
                     if (!addedDivider && i.menuActions.length>0) {
                         i.menuActions.push(DIVIDER);
                         addedDivider = true;

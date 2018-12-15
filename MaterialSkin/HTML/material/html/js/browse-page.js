@@ -32,6 +32,7 @@ const TOP_ID_PREFIX = "top:/";
 const TOP_MMHDR_ID = TOP_ID_PREFIX+"mmh";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_PLAYLISTS_ID = TOP_ID_PREFIX+"pl";
+const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
@@ -161,7 +162,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index"></v-divider>
 
-   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id">
+   <v-list-tile avatar @click="click(item, index, $event)" :key="SECTION_FAVORITES==i.section ? item.presetParams.favorites_url : item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
@@ -195,7 +196,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, index, $event, false)" :key="item.id">
+   <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, index, $event, false)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag">
     <v-list-tile-avatar v-if="item.selected" :tile="true">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -944,8 +945,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && this.listSize == this.items.length) {
                 if (this.current.id == TOP_APPS_ID) {
                     this.items.sort(titleSort);
-                } else if (SECTION_FAVORITES==this.current.section && this.$store.state.sortFavorites) {
-                    this.items.sort(favSort);
                 }
             }
         },
@@ -1240,7 +1239,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         icon: "favorite",
                         type: "favorites",
                         app: "favorites",
-                        id: TOP_ID_PREFIX+"fav",
+                        id: TOP_FAVORITES_ID,
                         section: SECTION_FAVORITES });
             list.push({ title: i18n("Apps"),
                         command: ["myapps", "items"],
@@ -1472,7 +1471,59 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (!this.scrollElement.classList.contains("lms-image-grid-few")) {
                 this.scrollElement.classList.add("lms-image-grid-few");
             }
-        }
+        },
+        dragStart(which, ev) {
+            ev.dataTransfer.dropEffect = 'move';
+            ev.dataTransfer.setData('Text', this.id);
+            this.dragIndex = which;
+            this.stopScrolling = false;
+            //if (this.selection.length>0 && this.selection.indexOf(which)<0) {
+                this.clearSelection();
+            //}
+        },
+        dragOver(ev) {
+            // Drag over item at top/bottom of list to start scrolling
+            this.stopScrolling = true;
+            if (ev.clientY < 110) {
+                this.stopScrolling = false;
+                this.scrollList(-5)
+            }
+
+            if (ev.clientY > (window.innerHeight - 70)) {
+                this.stopScrolling = false;
+                this.scrollList(5)
+            }
+            ev.preventDefault(); // Otherwise drop is never called!
+        },
+        scrollList(step) {
+            setScrollTop(this.scrollElement, this.scrollElement.scrollTop + step);
+            if (!this.stopScrolling) {
+                setTimeout(function () {
+                    this.scrollList(step);
+                }.bind(this), 100);
+            }
+        },
+        drop(to, ev) {
+            this.stopScrolling = true;
+            ev.preventDefault();
+            if (this.dragIndex!=undefined && to!=this.dragIndex) {
+                lmsCommand(this.playerId(), ["favorites", "move", "from_id:"+this.dragIndex, "to_id:"+to]).then(({data}) => {
+                    this.refreshList();
+                }).catch(err => {
+                    logError(err);
+                });
+                /*if (this.selection.length>0) {
+                    if (this.selection.indexOf(to)<0) {
+                        bus.$emit('moveQueueItems', this.selection.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                    }
+                } else {
+                    bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
+                }
+                this.clearSelection();
+                */
+            }
+            this.dragIndex = undefined;
+        },
     },
     mounted() {
         // Get server prefs  for:

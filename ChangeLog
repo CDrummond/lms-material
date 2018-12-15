@@ -10,6 +10,7 @@
 6. Center crop background image in mobile now playing info.
 7. Don't add play actions to toolbar for track/album/atist info.
 8. Fix buttons in fullscreen image view.
+9. Remove option to sort favourites, instead allow drag'n'drop re-ordering.
 
 0.2.0
 -----

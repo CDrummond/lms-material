@@ -14,7 +14,6 @@ const store = new Vuex.Store({
         albumSort:'album',
         splitArtistsAndAlbums:false,
         useGrid:true,
-        sortFavorites:false,
         showMenuAudio:true,
         serverMenus:false,
         autoScrollQueue:true,
@@ -126,11 +125,6 @@ const store = new Vuex.Store({
                 setLocalStorageVal('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
                 browseDisplayChanged = true;
             }
-            if (state.sortFavorites!=val.sortFavorites) {
-                state.sortFavorites = val.sortFavorites;
-                setLocalStorageVal('sortFavorites', state.sortFavorites);
-                browseDisplayChanged = true;
-            }
             if (state.useGrid!=val.useGrid) {
                 state.useGrid = val.useGrid;
                 setLocalStorageVal('useGrid', state.useGrid);
@@ -158,7 +152,6 @@ const store = new Vuex.Store({
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.splitArtistsAndAlbums = getLocalStorageBool('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
-            state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.useGrid = getLocalStorageBool('useGrid', state.useGrid);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);

@@ -272,6 +272,8 @@ function parseBrowseResp(data, parent, options, idStart) {
                     if (!i.type) {
                         i.isFavFolder = true;
                     }
+                    // Only allow drag'n'drop of top-level favorites items.
+                    i.canDrag = parent & parent.id==TOP_FAVORITES_ID;
                 } else if (i.presetParams) {
                     if (i.menuActions.length>0) {
                         i.menuActions.push(DIVIDER);

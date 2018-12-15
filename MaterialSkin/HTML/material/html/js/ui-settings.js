@@ -76,15 +76,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
    
     <v-list-tile>
-     <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
-      <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-   
-    <v-list-tile>
      <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
       <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Obtain enabled categories (Artists, Albums, etc) from the server. This is required in order to use additional browse modes, or to control the selection of browse categories.')}}</v-list-tile-title>
@@ -117,7 +108,6 @@ Vue.component('lms-ui-settings', {
             splitArtistsAndAlbums: false,
             useGrid:true,
             showMenuAudio:false,
-            sortFavorites:false,
             serverMenus:false,
             autoScrollQueue:true,
             albumSorts:[],
@@ -136,7 +126,6 @@ Vue.component('lms-ui-settings', {
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.useGrid=this.$store.state.useGrid;
-                this.sortFavorites = this.$store.state.sortFavorites;
                 this.serverMenus = this.$store.state.serverMenus;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
                 this.layout = getLocalStorageVal("layout", "auto");
@@ -197,7 +186,6 @@ Vue.component('lms-ui-settings', {
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                                   useGrid:this.useGrid,
-                                                  sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus
                                                 } );

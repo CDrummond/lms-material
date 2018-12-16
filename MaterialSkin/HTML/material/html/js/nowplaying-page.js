@@ -246,6 +246,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.artist_ids = artist_ids;
                 trackChanged = true;
             }
+            if (playerStatus.current.albumartist!=this.playerStatus.current.albumartist ||
+                playerStatus.current.albumartist_ids!=this.playerStatus.current.albumartist_ids ) {
+                this.playerStatus.current.albumartist = playerStatus.current.albumartist;
+                this.playerStatus.current.albumartist_ids = playerStatus.current.albumartist_ids;
+                trackChanged = true;
+            }
             if (playerStatus.current.album!=this.playerStatus.current.albumName ||
                 playerStatus.current.album_id!=this.playerStatus.current.album_id) {
                 this.playerStatus.current.albumName = playerStatus.current.album;
@@ -348,6 +354,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         setInfoTrack() {
             this.infoTrack={ title: this.playerStatus.current.title,
                              artist: this.playerStatus.current.artist, artist_id: this.playerStatus.current.artist_id,
+                             albumartist: this.playerStatus.current.albumartist, albumartist_ids: this.playerStatus.current.albumartist_ids,
                              artist_ids: this.playerStatus.current.artist_ids,
                              album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
         },
@@ -363,12 +370,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchLyrics() {
-            if (this.info.tabs[LYRICS_TAB].songartist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||
-                (this.infoTrack.artist_id && this.info.tabs[LYRICS_TAB].songartist_id!=this.infoTrack.artist_id)) {
+            if (this.info.tabs[LYRICS_TAB].artist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].title!=this.infoTrack.title ||
+                (this.infoTrack.artist_id && this.info.tabs[LYRICS_TAB].artist_id!=this.infoTrack.artist_id)) {
                 this.info.tabs[LYRICS_TAB].text=i18n("Fetching...");
-                this.info.tabs[LYRICS_TAB].songartist=this.infoTrack.artist;
-                this.info.tabs[LYRICS_TAB].songartist_id=this.infoTrack.artist_id;
-                this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
+                this.info.tabs[LYRICS_TAB].artist=this.infoTrack.artist;
+                this.info.tabs[LYRICS_TAB].artist_id=this.infoTrack.artist_id;
+                this.info.tabs[LYRICS_TAB].title=this.infoTrack.title;
                 var command = ["musicartistinfo", "lyrics", "title:"+this.infoTrack.title, "html:1"];
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
@@ -384,11 +391,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchBio() {
-            if (this.info.tabs[BIO_TAB].songartist!=this.infoTrack.artist ||
-                (this.infoTrack.artist_id && this.info.tabs[BIO_TAB].songartist_id!=this.infoTrack.artist_id)) {
+            if (this.info.tabs[BIO_TAB].artist!=this.infoTrack.artist ||
+                (this.infoTrack.artist_id && this.info.tabs[BIO_TAB].artist_id!=this.infoTrack.artist_id)) {
                 this.info.tabs[BIO_TAB].text=i18n("Fetching...");
-                this.info.tabs[BIO_TAB].songartist=this.infoTrack.artist;
-                this.info.tabs[BIO_TAB].songartist_id=this.infoTrack.artist_id;
+                this.info.tabs[BIO_TAB].artist=this.infoTrack.artist;
+                this.info.tabs[BIO_TAB].artist_id=this.infoTrack.artist_id;
 
                 var ids = this.infoTrack.artist_ids ? this.infoTrack.artist_ids.split(", ") : [];
                 if (ids.length>1) {
@@ -432,19 +439,24 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchReview() {
-            if (this.info.tabs[REVIEW_TAB].songartist!=this.infoTrack.artist || this.info.tabs[REVIEW_TAB].songalbum!=this.infoTrack.album ||
-                (this.infoTrack.artist_id && this.info.tabs[REVIEW_TAB].songartist_id!=this.infoTrack.artist_id) ||
-                (this.infoTrack.album_id && this.info.tabs[REVIEW_TAB].songalbum_id!=this.infoTrack.album_id)) {
+            if (this.info.tabs[REVIEW_TAB].albumartist!=this.infoTrack.albumartist || this.info.tabs[REVIEW_TAB].album!=this.infoTrack.album ||
+                (this.infoTrack.albumartist_ids && this.info.tabs[REVIEW_TAB].albumartist_ids!=this.infoTrack.albumartist_ids) ||
+                (this.infoTrack.album_id && this.info.tabs[REVIEW_TAB].album_id!=this.infoTrack.album_id)) {
                 this.info.tabs[REVIEW_TAB].text=i18n("Fetching...");
-                this.info.tabs[REVIEW_TAB].songartist=this.infoTrack.artist;
-                this.info.tabs[REVIEW_TAB].songalbum=this.infoTrack.album;
-                this.info.tabs[REVIEW_TAB].songartist_id=this.infoTrack.artist_id;
-                this.info.tabs[REVIEW_TAB].songalbum_id=this.infoTrack.album_id;
+                this.info.tabs[REVIEW_TAB].albumartist=this.infoTrack.albumartist;
+                this.info.tabs[REVIEW_TAB].albumartist_ids=this.infoTrack.albumartist_ids;
+                this.info.tabs[REVIEW_TAB].album=this.infoTrack.album;
+                this.info.tabs[REVIEW_TAB].artist_id=this.infoTrack.artist_id;
+                this.info.tabs[REVIEW_TAB].album_id=this.infoTrack.album_id;
                 var command = ["musicartistinfo", "albumreview", "html:1"];
-                if (this.infoTrack.artist_id) {
+                if (this.infoTrack.albumartist_ids) {
+                    command.push("artist_id:"+this.infoTrack.albumartist_ids.split(", ")[0]);
+                } else if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
                 }
-                if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1) {
+                if (this.infoTrack.albumartist) {
+                    command.push("artist:"+this.infoTrack.albumartist);
+                } else if (this.infoTrack.artist) {
                     command.push("artist:"+this.infoTrack.artist);
                 }
                 if (this.infoTrack.album_id) {

@@ -14,6 +14,7 @@
 10. Don't allow pining of favourites  - their IDs seem to change too, and
     why pin a favourite directly?
 11. Always use player's current cover image for now playing.
+12. Use album artist for album review.
 
 0.2.0
 -----

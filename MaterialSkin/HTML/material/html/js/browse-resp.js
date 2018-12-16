@@ -188,6 +188,9 @@ function parseBrowseResp(data, parent, options, idStart) {
             var isApps = parent && parent.id == TOP_APPS_ID;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
+            // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
+            // need different IDs for the re-ordered items so that the correct cover is shown.
+            var favPrefix = isFavorites ? new Date().getTime().toString(16) : undefined;
 
             resp.useGrid = options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
@@ -327,7 +330,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         var parts = i.params.item_id.split(".");
                         if (parts.length>1 && 8==parts[0].length && /^[0-9a-fA-F]+$/.test(parts[0])) {
                             parts.shift();
-                            i.id = "favorites."+parts.join(".");
+                            i.id = favPrefix+"."+parts.join(".");
                         } else {
                             i.id = "item_id:"+i.params.item_id;
                         }

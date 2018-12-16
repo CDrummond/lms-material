@@ -2,7 +2,7 @@
 -----
  1. Fix plugin update check.
  2. Remove track/queue duration sleep timers, and replace with option to use
-    remining duration of current track.
+    remaining duration of current track.
  3. Remove swipe to change views; buggy, and material apps don't do this.
  4. Fix deleting playlists.
  5. Center crop background image in mobile now playing info.
@@ -13,6 +13,7 @@
     why pin a favourite directly?
 10. Always use player's current cover image for now playing.
 11. Use album artist for album review.
+12. Fix player menu in manage players dialog not always showing.
 
 0.2.0
 -----

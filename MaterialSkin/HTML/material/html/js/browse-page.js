@@ -162,7 +162,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index"></v-divider>
 
-   <v-list-tile avatar @click="click(item, index, $event)" :key="SECTION_FAVORITES==i.section ? item.presetParams.favorites_url : item.id">
+   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
@@ -751,7 +751,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        lmsCommand(this.playerId(), ["favorites", "delete", item.id]).then(({datax}) => {
+                        // (NOTE:FAV) Favorite IDs are <random>.<num>.<num> etc. Remove random part to delete
+                        var parts = item.id.split(".");
+                        parts.shift();
+                        lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+parts.join(".")]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to remove favorite!"));
@@ -1506,8 +1509,16 @@ var lmsBrowse = Vue.component("lms-browse", {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                lmsCommand(this.playerId(), ["favorites", "move", "from_id:"+this.dragIndex, "to_id:"+to]).then(({data}) => {
+            if (this.dragIndex!=undefined && to!=this.dragIndex && this.dragIndex<this.items.length && to<this.items.length) {
+                // See NOTE:FAV above
+                var parts = this.items[this.dragIndex].id.split(".");
+                parts.shift();
+                var fromId = parts.join(".");
+                parts = this.items[to].id.split(".");
+                parts.shift();
+                var toId = parts.join(".");
+
+                lmsCommand(this.playerId(), ["favorites", "move", "from_id:"+fromId, "to_id:"+toId]).then(({data}) => {
                     this.refreshList();
                 }).catch(err => {
                     logError(err);

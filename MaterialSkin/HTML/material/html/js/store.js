@@ -5,6 +5,57 @@
  * MIT license.
  */
 
+function updateUiSettings(state, val) {
+    var browseDisplayChanged = false;
+    if (undefined!=val.darkUi && state.darkUi!=val.darkUi) {
+        state.darkUi = val.darkUi;
+        setLocalStorageVal('darkUi', state.darkUi);
+        setTheme(state.darkUi);
+        bus.$emit('themeChanged');
+    }
+    if (undefined!=val.artistAlbumSort && state.artistAlbumSort!=val.artistAlbumSort) {
+        state.artistAlbumSort = val.artistAlbumSort;
+        setLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
+        browseDisplayChanged = true;
+    }
+    if (undefined!=val.albumSort && state.albumSort!=val.albumSort) {
+        state.albumSort = val.albumSort;
+        setLocalStorageVal('albumSort', state.albumSort);
+        browseDisplayChanged = true;
+    }
+    if (undefined!=val.splitArtistsAndAlbums && state.splitArtistsAndAlbums!=val.splitArtistsAndAlbums) {
+        state.splitArtistsAndAlbums = val.splitArtistsAndAlbums;
+        setLocalStorageVal('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
+        browseDisplayChanged = true;
+    }
+    if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
+        state.sortFavorites = val.sortFavorites;
+        setLocalStorageVal('sortFavorites', state.sortFavorites);
+        browseDisplayChanged = true;
+    }
+    if (undefined!=val.useGrid && state.useGrid!=val.useGrid) {
+        state.useGrid = val.useGrid;
+        setLocalStorageVal('useGrid', state.useGrid);
+        browseDisplayChanged = true;
+    }
+    if (undefined!=val.autoScrollQueue && state.autoScrollQueue!=val.autoScrollQueue) {
+        state.autoScrollQueue = val.autoScrollQueue;
+        setLocalStorageVal('autoScrollQueue', state.autoScrollQueue);
+    }
+    if (undefined!=val.showMenuAudio && state.showMenuAudio!=val.showMenuAudio) {
+        state.showMenuAudio = val.showMenuAudio;
+        setLocalStorageVal('showMenuAudio', state.showMenuAudio);
+    }
+    if (undefined!=val.serverMenus && state.serverMenus!=val.serverMenus) {
+        state.serverMenus = val.serverMenus;
+        setLocalStorageVal('serverMenus', state.serverMenus);
+        browseDisplayChanged = true;
+    }
+    if (browseDisplayChanged) {
+        bus.$emit('browseDisplayChanged');
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         players: null, // List of players
@@ -105,52 +156,7 @@ const store = new Vuex.Store({
             }
         },
         setUiSettings(state, val) {
-            var browseDisplayChanged = false;
-            if (state.darkUi!=val.darkUi) {
-                state.darkUi = val.darkUi;
-                setLocalStorageVal('darkUi', state.darkUi);
-                setTheme(state.darkUi);
-                bus.$emit('themeChanged');
-            }
-            if (state.artistAlbumSort!=val.artistAlbumSort) {
-                state.artistAlbumSort = val.artistAlbumSort;
-                setLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
-                browseDisplayChanged = true;
-            }
-            if (state.albumSort!=val.albumSort) {
-                state.albumSort = val.albumSort;
-                setLocalStorageVal('albumSort', state.albumSort);
-                browseDisplayChanged = true;
-            }
-            if (state.splitArtistsAndAlbums!=val.splitArtistsAndAlbums) {
-                state.splitArtistsAndAlbums = val.splitArtistsAndAlbums;
-                setLocalStorageVal('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
-                browseDisplayChanged = true;
-            }
-            if (state.sortFavorites!=val.sortFavorites) {
-                state.sortFavorites = val.sortFavorites;
-                setLocalStorageVal('sortFavorites', state.sortFavorites);
-                browseDisplayChanged = true;
-            }
-            if (state.useGrid!=val.useGrid) {
-                state.useGrid = val.useGrid;
-                setLocalStorageVal('useGrid', state.useGrid);
-                browseDisplayChanged = true;
-            }
-            if (state.autoScrollQueue!=val.autoScrollQueue) {
-                state.autoScrollQueue = val.autoScrollQueue;
-                setLocalStorageVal('autoScrollQueue', state.autoScrollQueue);
-            }
-            if (state.showMenuAudio!=val.showMenuAudio) {
-                state.showMenuAudio = val.showMenuAudio;
-                setLocalStorageVal('showMenuAudio', state.showMenuAudio);
-            }
-            if (state.serverMenus!=val.serverMenus) {
-                state.serverMenus = val.serverMenus;
-                setLocalStorageVal('serverMenus', state.serverMenus);
-                browseDisplayChanged = true;
-            }
-            bus.$emit('browseDisplayChanged');
+            updateUiSettings(state, val);
         },
         initUiSettings(state) {
             state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
@@ -173,6 +179,23 @@ const store = new Vuex.Store({
             }).catch(err => {
                 state.infoPlugin = false;
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
+            });
+
+            // Read defaults, stored on server
+            lmsCommand("", ["pref", LMS_MATERIAL_PREFS, "?"]).then(({data}) => {
+                if (data && data.result && data.result._p2) {
+                    var prefs = JSON.parse(data.result._p2);
+                    var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
+                                 artistAlbumSort: getLocalStorageBool('artistAlbumSort', undefined==prefs.artistAlbumSort ? state.artistAlbumSort : prefs.artistAlbumSort),
+                                 albumSort: getLocalStorageBool('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
+                                 autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
+                                 splitArtistsAndAlbums: getLocalStorageBool('splitArtistsAndAlbums', undefined==prefs.splitArtistsAndAlbums ? state.splitArtistsAndAlbums : prefs.splitArtistsAndAlbums),
+                                 useGrid: getLocalStorageBool('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid),
+                                 sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
+                                 showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
+                                 serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus)};
+                    updateUiSettings(state, opts);
+                }
             });
         },
         setLibrary(state, lib) {

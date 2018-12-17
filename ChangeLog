@@ -8,6 +8,7 @@
    each to complete before doing the next.
 6. Revert cover change, and use artwork_url/coverid if supplied.
 7. Re-add option to sort favourites, disables drag'n'drop ordering.
+8. Add button to save default UI settings on server.
 
 0.2.1
 -----

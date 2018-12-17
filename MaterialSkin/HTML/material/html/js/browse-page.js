@@ -134,7 +134,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
- <v-list v-if="useGrid" class="lms-image-grid noselect" id="browse-grid">
+ <v-list v-if="useGrid" class="lms-image-grid noselect bgnd-cover" id="browse-grid">
   <div v-for="(item, index) in items" :key="item.id" :id="'item'+index">
    <v-card flat tile :title="item | tooltip">
     <v-card-text v-if="item.type=='image'" class="image-grid-item">
@@ -157,7 +157,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </div>
  </v-list>
 
- <v-list v-else class="noselect" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
+ <v-list v-else class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index"></v-divider>
@@ -530,6 +530,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.setScrollElement();
                         }
                         this.setGridAlignment();
+                        setBgndCover(this.scrollElement, this.current.image, this.$store.state.darkUi);
                         setScrollTop(this.scrollElement, 0);
                     });
                 }
@@ -968,6 +969,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (changedView) {
                     this.setScrollElement();
                 }
+                setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1009,6 +1011,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setScrollElement();
                 }
                 this.setGridAlignment();
+                setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1616,6 +1619,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('splitterChanged', function(act) {
             this.setGridAlignment();
         }.bind(this));
+
+        bus.$on('themeChanged', function() {
+            setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
+        }.bind(this));
+        setBgndCover(this.scrollElement, undefined, this.$store.state.darkUi);
     },
     filters: {
         tooltip: function (item) {

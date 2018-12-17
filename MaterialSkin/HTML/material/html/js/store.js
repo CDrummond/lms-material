@@ -109,6 +109,7 @@ const store = new Vuex.Store({
                 state.darkUi = val.darkUi;
                 setLocalStorageVal('darkUi', state.darkUi);
                 setTheme(state.darkUi);
+                bus.$emit('themeChanged');
             }
             if (state.artistAlbumSort!=val.artistAlbumSort) {
                 state.artistAlbumSort = val.artistAlbumSort;

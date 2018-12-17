@@ -26,7 +26,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
     </v-list-tile>
-   
+ 
     <v-list-tile>
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -42,7 +42,7 @@ Vue.component('lms-ui-settings', {
      <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
-            
+
     <v-list-tile v-if="libraries.length>0">
      <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
     </v-list-tile>
@@ -74,7 +74,16 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
-   
+ 
+    <v-list-tile>
+     <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
+      <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
     <v-list-tile>
      <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
       <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
@@ -85,7 +94,7 @@ Vue.component('lms-ui-settings', {
 
     <div class="settings-pad"></div>
     <v-header>{{i18n('Queue')}}</v-header>
-   
+ 
     <v-list-tile>
      <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
       <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
@@ -108,6 +117,7 @@ Vue.component('lms-ui-settings', {
             splitArtistsAndAlbums: false,
             useGrid:true,
             showMenuAudio:false,
+            sortFavorites:false,
             serverMenus:false,
             autoScrollQueue:true,
             albumSorts:[],
@@ -120,12 +130,14 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_UI_SETTINGS.id) {
+                bus.$emit('dialog', 'ui-settings', true);
                 this.darkUi = this.$store.state.darkUi;
                 this.artistAlbumSort = this.$store.state.artistAlbumSort;
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.useGrid=this.$store.state.useGrid;
+                this.sortFavorites = this.$store.state.sortFavorites;
                 this.serverMenus = this.$store.state.serverMenus;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
                 this.layout = getLocalStorageVal("layout", "auto");
@@ -158,6 +170,12 @@ Vue.component('lms-ui-settings', {
             }
         }.bind(this));
 
+        bus.$on('closeDialog', function(name) {
+            if (this.show && name=='ui-settings') {
+                this.close();
+            }
+        }.bind(this));
+
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -180,12 +198,14 @@ Vue.component('lms-ui-settings', {
         },
         close() {
             this.show=false;
+            bus.$emit('dialog', 'ui-settings', false);
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
                                                   artistAlbumSort:this.artistAlbumSort,
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                                   useGrid:this.useGrid,
+                                                  sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus
                                                 } );

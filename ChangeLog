@@ -7,6 +7,7 @@
 5. When adding/playing a selection, call commands sequentially and wait for
    each to complete before doing the next.
 6. Revert cover change, and use artwork_url/coverid if supplied.
+7. Re-add option to sort favourites, disables drag'n'drop ordering.
 
 0.2.1
 -----

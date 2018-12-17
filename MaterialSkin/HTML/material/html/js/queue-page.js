@@ -187,6 +187,7 @@ var lmsQueue = Vue.component("lms-queue", {
         this.previousScrollPos = 0;
         this.showTrackNum = getLocalStorageBool('showTrackNum', true);
 
+        this.playerStatus= { current: { artwork_url:undefined, coverid: undefined} };
         lmsCommand("", ["serverstatus", 0, 0, "prefs:titleFormatWeb,titleFormat"]).then(({data}) => {
             if (data && data.result && data.result) {
                 var idx = parseInt(data.result.titleFormatWeb);
@@ -238,31 +239,49 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }
 
-            var coverUrl;
+            // Has cover changed?
+            var coverUrl = this.coverUrl;
 
             if (playerStatus.playlist.count == 0) {
-                coverUrl=undefined;
-            } else {
-                // Use players current cover as cover image. Need to add extra (coverid, etc) params so that
-                // the URL is different between tracks...
-                coverUrl = lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
-                if (playerStatus.current.coverid) {
-                    coverUrl+="&coverid="+playerStatus.current.coverid;
-                } else {
-                    if (playerStatus.current.album_id) {
-                        coverUrl+="&album_id="+playerStatus.current.album_id;
+                this.coverFromInfo = false;
+                coverUrl = undefined;
+            } else if (playerStatus.current.artwork_url!=this.playerStatus.current.artwork_url ||
+                playerStatus.current.coverid!=this.playerStatus.current.coverid ||
+                this.coverFromPlayer!=this.$store.state.player.id) {
+                this.playerStatus.current.artwork_url = playerStatus.current.artwork_url;
+                this.playerStatus.current.coverid = playerStatus.current.coverid;
+                this.coverFromPlayer = this.$store.state.player.id
+
+                coverUrl = undefined;
+                if (this.playerStatus.current.artwork_url) {
+                    coverUrl=resolveImage(null, this.playerStatus.current.artwork_url);
+                }
+                if (undefined==coverUrl && this.playerStatus.current.coverid) {
+                    coverUrl=lmsServerAddress+"/music/"+this.playerStatus.current.coverid+"/cover.jpg";
+                }
+                if (undefined==coverUrl) {
+                    // Use players current cover as cover image. Need to add extra (coverid, etc) params so that
+                    // the URL is different between tracks...
+                    coverUrl=lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
+                    if (playerStatus.current.coverid) {
+                        coverUrl+="&coverid="+playerStatus.current.coverid;
                     } else {
-                        if (playerStatus.current.album) {
-                            coverUrl+="&album="+encodeURIComponent(playerStatus.current.album);
-                        }
-                        if (playerStatus.current.albumartist) {
-                            coverUrl+="&artist="+encodeURIComponent(playerStatus.current.albumartist);
-                        }
-                        if (playerStatus.current.year && playerStatus.current.year>0) {
-                            coverUrl+="&year="+playerStatus.current.year;
+                        if (playerStatus.current.album_id) {
+                            coverUrl+="&album_id="+playerStatus.current.album_id;
+                        } else {
+                            if (playerStatus.current.album) {
+                                coverUrl+="&album="+encodeURIComponent(playerStatus.current.album);
+                            }
+                            if (playerStatus.current.albumartist) {
+                                coverUrl+="&artist="+encodeURIComponent(playerStatus.current.albumartist);
+                            }
+                            if (playerStatus.current.year && playerStatus.current.year>0) {
+                                coverUrl+="&year="+playerStatus.current.year;
+                            }
                         }
                     }
                 }
+                this.coverFromInfo = true;
             }
 
             if (this.coverUrl!=coverUrl) {

@@ -6,6 +6,7 @@
 4. Use curent artist, album, etc. image as browse background.
 5. When adding/playing a selection, call commands sequentially and wait for
    each to complete before doing the next.
+6. Revert cover change, and use artwork_url/coverid if supplied.
 
 0.2.1
 -----

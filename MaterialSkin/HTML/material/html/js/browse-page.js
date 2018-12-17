@@ -530,7 +530,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.setScrollElement();
                         }
                         this.setGridAlignment();
-                        setBgndCover(this.scrollElement, this.current.image, this.$store.state.darkUi);
+                        this.setBgndCover();
                         setScrollTop(this.scrollElement, 0);
                     });
                 }
@@ -969,7 +969,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (changedView) {
                     this.setScrollElement();
                 }
-                setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
+                this.setBgndCover();
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1011,7 +1011,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setScrollElement();
                 }
                 this.setGridAlignment();
-                setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
+                this.setBgndCover();
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
         },
@@ -1530,6 +1530,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.dragIndex = undefined;
         },
+        setBgndCover() {
+            setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
+        }
     },
     mounted() {
         // Get server prefs  for:
@@ -1621,9 +1624,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('themeChanged', function() {
-            setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
+            this.setBgndCover();
         }.bind(this));
-        setBgndCover(this.scrollElement, undefined, this.$store.state.darkUi);
+        this.setBgndCover();
     },
     filters: {
         tooltip: function (item) {

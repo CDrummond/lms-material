@@ -273,9 +273,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
-        bus.$on('coverChanged', function(coverUrl) {
+        bus.$on('currentCover', function(coverUrl) {
             this.cover = coverUrl;
         }.bind(this));
+        bus.$emit('getCurrentCover');
 
         bus.$on('langChanged', function() {
             this.initItems();

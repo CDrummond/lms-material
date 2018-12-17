@@ -241,11 +241,13 @@ var lmsQueue = Vue.component("lms-queue", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
-        bus.$on('coverChanged', function(coverUrl) {
-            this.coverUrl = coverUrl.endsWith(DEFAULT_COVER) ? undefined : this.coverUrl;
+        this.coverUrl = undefined;
+        this.setBgndCover();
+        bus.$on('currentCover', function(coverUrl) {
+            this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : coverUrl;
             this.setBgndCover();
         }.bind(this));
-        bus.$emit('curentCover');
+        bus.$emit('getCurrentCover');
 
         bus.$on('networkReconnected', function() {
             this.timestamp=0;

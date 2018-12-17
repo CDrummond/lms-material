@@ -80,8 +80,12 @@ var lmsServer = Vue.component('lms-currentcover', {
 
             if (coverUrl!=this.coverUrl) {
                 this.coverUrl = coverUrl;
-                bus.$emit('coverChanged', this.coverUrl);
+                bus.$emit('currentCover', this.coverUrl);
             }
+        }.bind(this));
+
+        bus.$on('getCurrentCover', function() {
+            bus.$emit('currentCover', this.coverUrl);
         }.bind(this));
     }
 });

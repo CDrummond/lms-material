@@ -267,7 +267,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
             if (this.coverUrl!=coverUrl) {
                 this.coverUrl = coverUrl;
-                setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+                this.setBgndCover();
             }
         }.bind(this));
         // Refresh status now, in case we were mounted after initial status call
@@ -298,9 +298,9 @@ var lmsQueue = Vue.component("lms-queue", {
         }
 
         bus.$on('themeChanged', function() {
-            setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+            this.setBgndCover();
         }.bind(this));
-        setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+        this.setBgndCover();
 
         bus.$on('langChanged', function() {
             this.initItems();
@@ -601,6 +601,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         i18n(str) {
             return i18n(str);
+        },
+        setBgndCover() {
+            setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
         }
     },
     filters: {

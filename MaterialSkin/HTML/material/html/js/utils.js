@@ -188,3 +188,22 @@ function removeUniqueness(id) {
     return id.split("?")[0];
 }
 
+function setBgndCover(elem, coverUrl, isDark) {
+    if (elem) {
+        elem.style.backgroundImage = "url('"+coverUrl+"')";
+        if (isDark) {
+            //if (coverUrl) {
+                elem.style.boxShadow = "inset 0 0 120vw 120vh rgba(72,72,72,0.9)";
+           // } else {
+           //     elem.style.boxShadow = "";
+           // }
+        } else {
+            //if (coverUrl) {
+                elem.style.boxShadow = "inset 0 0 120vw 120vh rgba(255,255,255,0.9)";
+            //} else {
+            //    elem.style.boxShadow = "";
+           // }
+        }
+    }
+}
+

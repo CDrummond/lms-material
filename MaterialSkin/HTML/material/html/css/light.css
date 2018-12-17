@@ -29,11 +29,7 @@
     background-color:#fff;
 }
 
-.np-info-card-cover {
-    background:rgba(255, 255, 255, 0.9) !important;
-}
-
-.np-info .theme--light.v-tabs__bar {
+.np-info-card-cover, .np-info .theme--light.v-tabs__bar {
     background:rgba(255, 255, 255, 0.9) !important;
 }
 

@@ -116,7 +116,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear</v-icon></v-btn>
   </v-layout>
  </div>
- <v-list class="lms-list-sub"  id="queue-list">
+ <v-list class="lms-list-sub bgnd-cover" id="queue-list">
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
@@ -237,6 +237,38 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.scrollToCurrent();
                 }
             }
+
+            var coverUrl;
+
+            if (playerStatus.playlist.count == 0) {
+                coverUrl=undefined;
+            } else {
+                // Use players current cover as cover image. Need to add extra (coverid, etc) params so that
+                // the URL is different between tracks...
+                coverUrl = lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
+                if (playerStatus.current.coverid) {
+                    coverUrl+="&coverid="+playerStatus.current.coverid;
+                } else {
+                    if (playerStatus.current.album_id) {
+                        coverUrl+="&album_id="+playerStatus.current.album_id;
+                    } else {
+                        if (playerStatus.current.album) {
+                            coverUrl+="&album="+encodeURIComponent(playerStatus.current.album);
+                        }
+                        if (playerStatus.current.albumartist) {
+                            coverUrl+="&artist="+encodeURIComponent(playerStatus.current.albumartist);
+                        }
+                        if (playerStatus.current.year && playerStatus.current.year>0) {
+                            coverUrl+="&year="+playerStatus.current.year;
+                        }
+                    }
+                }
+            }
+
+            if (this.coverUrl!=coverUrl) {
+                this.coverUrl = coverUrl;
+                setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+            }
         }.bind(this));
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
@@ -264,7 +296,12 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }.bind(this));
         }
-        
+
+        bus.$on('themeChanged', function() {
+            setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+        }.bind(this));
+        setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));

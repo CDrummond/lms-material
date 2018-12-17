@@ -180,3 +180,11 @@ function serverSettings(page) {
     window.open((lmsServerAddress.length>0 ? lmsServerAddress : '..') + '/Default/settings/index.html' + (page ? '?activePage='+page : ''), '_blank');
 }
 
+function addUniqueness(id, uniqueness) {
+    return id+"?"+uniqueness;
+}
+
+function removeUniqueness(id) {
+    return id.split("?")[0];
+}
+

@@ -13,6 +13,8 @@ Vue.component('lms-ui-settings', {
    <v-toolbar color="primary" dark app class="lms-toolbar">
     <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title}}</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save</b-icon></v-btn>
    </v-toolbar>
   </v-card-title>
   <v-card-text>
@@ -220,6 +222,23 @@ Vue.component('lms-ui-settings', {
                     setAutoLayout(this.layout == "auto");
                 }
             }
+        },
+        saveAsDefault() {
+            this.$confirm(i18n("Save the current settings as default for new users?"), {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    var settings = { darkUi:this.darkUi,
+                                     artistAlbumSort:this.artistAlbumSort,
+                                     albumSort:this.albumSort,
+                                     autoScrollQueue:this.autoScrollQueue,
+                                     splitArtistsAndAlbums:this.splitArtistsAndAlbums,
+                                     useGrid:this.useGrid,
+                                     sortFavorites:this.sortFavorites,
+                                     showMenuAudio:this.showMenuAudio,
+                                     serverMenus:this.serverMenus
+                                   };
+                    lmsCommand("", ["pref", LMS_MATERIAL_PREFS, JSON.stringify(settings)]);
+                }
+            });
         },
         i18n(str) {
             if (this.show) {

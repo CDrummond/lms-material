@@ -18,3 +18,4 @@ const LMS_DEFAULT_LIBRARY = "0";
 const LMS_SKIN_LANGUAGES = new Set(['de', 'en', 'en-gb', 'fr', 'nl']);
 const LMS_AZ_MAX_SIZE = 10;
 const LMS_AZ_MAX_PER_LETTER = 300;
+const LMS_MATERIAL_PREFS = "plugin.material-skin:defaults";

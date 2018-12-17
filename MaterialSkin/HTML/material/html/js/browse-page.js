@@ -819,50 +819,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             } else {
-                var command = this.buildCommand(item, act);
-                if (command.command.length<1) { // Non slim-browse command
-                    if (INSERT_ACTION.cmd==act) {
-                        act="insert";
-                    }
-                    if (item.url) {
-                        command.command = ["playlist", act, item.url, item.title];
-                    } else if (item.app && item.id) {
-                        command.command = [item.app, "playlist", act, item.id];
-                    } else if (item.id) {
-                        var itemId = item.id;
-                        var loadingItem = item;
-                        command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION.cmd || act==PLAY_ALBUM_ACTION.cmd ? "load" : act)];
-
-                        // NOTE(a): Play whole album, starting at selected track. First load album, then play track at index
-                        if (undefined!==index && PLAY_ALBUM_ACTION.cmd == act && item.id.startsWith("track_id:") && this.current && 
-                            this.current.id && this.current.id.startsWith("album_id:") ) {
-                            loadingItem = this.current;
-                            command.command.push("play_index:"+index);
-                        }
-
-                        if (loadingItem.id.startsWith("album_id:")  || loadingItem.id.startsWith("artist_id:")) {
-                            loadingItem.params.forEach(p => {
-                                if ( (!this.options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
-                                     (!this.options.noGenreFilter && p.startsWith("genre_id:"))) {
-                                    command.command.push(p);
-                                }
-                            });
-                        }
-
-                        command.command.push(loadingItem.id);
-                    }
-                }
-
+                var command = this.buildFullCommand(item, act, index);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;
-                }
-
-                // Add params onto command...
-                if (command.params.length>0) {
-                    command.params.forEach(i => {
-                        command.command.push(i);
-                    });
                 }
 
                 //console.log("ACTION", command.command);
@@ -1169,6 +1129,53 @@ var lmsBrowse = Vue.component("lms-browse", {
             //console.log("COMMAND", cmd.command, cmd.params);
             return cmd;
         },
+        buildFullCommand(item, act, index) {
+            var command = this.buildCommand(item, act);
+            if (command.command.length<1) { // Non slim-browse command
+                if (INSERT_ACTION.cmd==act) {
+                    act="insert";
+                }
+                if (item.url) {
+                    command.command = ["playlist", act, item.url, item.title];
+                } else if (item.app && item.id) {
+                    command.command = [item.app, "playlist", act, item.id];
+                } else if (item.id) {
+                    var itemId = item.id;
+                    var loadingItem = item;
+                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION.cmd || act==PLAY_ALBUM_ACTION.cmd ? "load" : act)];
+
+                    // NOTE(a): Play whole album, starting at selected track. First load album, then play track at index
+                    if (undefined!==index && PLAY_ALBUM_ACTION.cmd == act && item.id.startsWith("track_id:") && this.current && 
+                        this.current.id && this.current.id.startsWith("album_id:") ) {
+                        loadingItem = this.current;
+                        command.command.push("play_index:"+index);
+                    }
+
+                    if (loadingItem.id.startsWith("album_id:")  || loadingItem.id.startsWith("artist_id:")) {
+                        loadingItem.params.forEach(p => {
+                            if ( (!this.options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
+                                 (!this.options.noGenreFilter && p.startsWith("genre_id:"))) {
+                                command.command.push(p);
+                            }
+                        });
+                    }
+
+                    command.command.push(loadingItem.id);
+                }
+            }
+
+            if (command.command.length===0) {
+                return command;
+            }
+
+            // Add params onto command...
+            if (command.params.length>0) {
+                command.params.forEach(i => {
+                     command.command.push(i);
+                });
+            }
+            return command;
+        },
         replaceCommandTerms(cmd) {
             if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library && isLocalLibCommand(cmd)) {
                 var haveLibId = false;
@@ -1403,23 +1410,41 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         addSelectedItems() {
+            var commands=[]
             this.selection.sort(function(a, b) { return a<b ? -1 : 1; });
             this.selection.forEach(idx => {
                 if (idx>-1 && idx<this.items.length) {
-                    this.itemAction(ADD_ACTION.cmd, this.items[idx], idx, true);
+                    commands.push({act:ADD_ACTION.cmd, item:this.items[idx], idx:idx});
                 }
             });
+            this.doCommands(commands);
             this.clearSelection();
         },
         playSelectedItems() {
+            var commands=[]
             this.selection.sort(function(a, b) { return a<b ? -1 : 1; });
             for (var i=0; i<this.selection.length; ++i) {
                 var idx = this.selection[i];
                 if (idx>-1 && idx<this.items.length) {
-                    this.itemAction(0==i ? PLAY_ACTION.cmd : ADD_ACTION.cmd, this.items[idx], idx, true);
+                    commands.push({act:0==i ? PLAY_ACTION.cmd : ADD_ACTION.cmd, item:this.items[idx], idx:idx});
                 }
             }
+            this.doCommands(commands);
             this.clearSelection();
+        },
+        doCommands(commands) {
+            if (commands.length>0) {
+                var cmd = commands.shift();
+                var command = this.buildFullCommand(cmd.item, cmd.act, cmd.idx);
+                if (command.command.length===0) {
+                    bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
+                    return;
+                }
+
+                lmsCommand(this.playerId(), command.command).then(({data}) => {
+                    this.doCommands(commands);
+                });
+            }
         },
         setScrollElement() {
             this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");

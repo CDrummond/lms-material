@@ -678,7 +678,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};
             } else if (act==RENAME_FAV_ACTION.cmd) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
+                                command:["favorites", "rename", removeUniqueness(item.id), "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -751,10 +751,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        // (NOTE:FAV) Favorite IDs are <random>.<num>.<num> etc. Remove random part to delete
-                        var parts = item.id.split(".");
-                        parts.shift();
-                        lmsCommand(this.playerId(), ["favorites", "delete", "item_id:"+parts.join(".")]).then(({datax}) => {
+                        lmsCommand(this.playerId(), ["favorites", "delete", removeUniqueness(item.id)]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to remove favorite!"));
@@ -1509,16 +1506,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            if (this.dragIndex!=undefined && to!=this.dragIndex && this.dragIndex<this.items.length && to<this.items.length) {
-                // See NOTE:FAV above
-                var parts = this.items[this.dragIndex].id.split(".");
-                parts.shift();
-                var fromId = parts.join(".");
-                parts = this.items[to].id.split(".");
-                parts.shift();
-                var toId = parts.join(".");
+            if (this.dragIndex!=undefined && to!=this.dragIndex && this.dragIndex<this.items.length && to<this.items.length) {;
+                var fromId = removeUniqueness(this.items[this.dragIndex].id).replace("item_id:", "from_id:");
+                var toId = removeUniqueness(this.items[to].id).replace("item_id:", "to_id:");
 
-                lmsCommand(this.playerId(), ["favorites", "move", "from_id:"+fromId, "to_id:"+toId]).then(({data}) => {
+                lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
                     this.refreshList();
                 }).catch(err => {
                     logError(err);

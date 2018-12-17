@@ -190,7 +190,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
             // need different IDs for the re-ordered items so that the correct cover is shown.
-            var favPrefix = isFavorites ? new Date().getTime().toString(16) : undefined;
+            var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
 
             resp.useGrid = options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
@@ -324,26 +324,25 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
-                } else if (i.params && i.params.item_id) {
-                    if (isFavorites) {
-                        // First part of favorites ID seems to randomly change to? As per mysqueezebox.com apps???
-                        var parts = i.params.item_id.split(".");
-                        if (parts.length>1 && 8==parts[0].length && /^[0-9a-fA-F]+$/.test(parts[0])) {
-                            parts.shift();
-                            i.id = favPrefix+"."+parts.join(".");
-                        } else {
-                            i.id = "item_id:"+i.params.item_id;
-                        }
-                    } else {
+                } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
+                    if (i.params && i.params.item_id) {
                         i.id = "item_id:"+i.params.item_id;
+                    } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                        i.id = "item_id:"+i.actions.go.params.item_id;
                     }
-                } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
-                    i.id = "item_id:"+i.actions.go.params.item_id;
                 }
 
                 if (!i.id) {
-                    i.id=parent.id+"."+idStart;
+                    if (parent.id.startsWith(TOP_ID_PREFIX)) {
+                        i.id="item_id:"+idStart;
+                    } else {
+                        i.id=parent.id+"."+idStart;
+                    }
                     idStart++;
+                }
+
+                if (isFavorites) {
+                    i.id=addUniqueness(i.id, uniqueness);
                 }
 
                 if (!isApps && !isFavorites && i.presetParams) {

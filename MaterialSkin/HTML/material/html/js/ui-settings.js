@@ -132,7 +132,6 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('toolbarAction', function(act) {
             if (act==TB_UI_SETTINGS.id) {
-                bus.$emit('dialog', 'ui-settings', true);
                 this.darkUi = this.$store.state.darkUi;
                 this.artistAlbumSort = this.$store.state.artistAlbumSort;
                 this.albumSort = this.$store.state.albumSort;
@@ -145,6 +144,7 @@ Vue.component('lms-ui-settings', {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
                 this.show = true;
+                bus.$emit('dialogOpen', this.show);
 
                 lmsList("", ["libraries"]).then(({data}) => {
                     if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
@@ -200,7 +200,7 @@ Vue.component('lms-ui-settings', {
         },
         close() {
             this.show=false;
-            bus.$emit('dialog', 'ui-settings', false);
+            bus.$emit('dialogOpen', this.show);
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
                                                   artistAlbumSort:this.artistAlbumSort,
                                                   albumSort:this.albumSort,

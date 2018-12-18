@@ -330,9 +330,11 @@ Vue.component('lms-player-settings', {
                 this.loadAlarms();
             });
             this.show = true;
+            bus.$emit('dialogOpen', this.show);
         },
         close() {
             this.show=false;
+            bus.$emit('dialogOpen', this.show);
             if (this.dstmItems.length>1) {
                 lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
             }

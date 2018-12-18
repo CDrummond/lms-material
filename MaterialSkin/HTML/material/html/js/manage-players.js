@@ -94,6 +94,7 @@ Vue.component('lms-manage-players', {
             if (act==TB_MANAGE_PLAYERS.id) {
                 this.getPlayerList();
                 this.show = true;
+                bus.$emit('dialogOpen', this.show);
 
                 // Check to see if we can manage groups...
                 this.manageGroups = getLocalStorageBool('manageGroups', false);
@@ -203,6 +204,7 @@ Vue.component('lms-manage-players', {
         },
         close() {
             this.show=false;
+            bus.$emit('dialogOpen', this.show);
             if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = undefined;

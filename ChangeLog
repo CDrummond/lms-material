@@ -9,6 +9,7 @@
 6. Revert cover change, and use artwork_url/coverid if supplied.
 7. Re-add option to sort favourites, disables drag'n'drop ordering.
 8. Add button to save default UI settings, and pinned items, on server.
+9. Re-add swipe to change view.
 
 0.2.1
 -----

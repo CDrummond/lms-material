@@ -79,6 +79,7 @@ Vue.component('lms-information-dialog', {
                     this.update();
                 }.bind(this), 2000);
                 this.show = true;
+                bus.$emit('dialogOpen', this.show);
                 that = this;
                 axios.get((lmsServerAddress.length>1 ? lmsServerAddress : (location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')))+"/updateinfo.json?x=time"+(new Date().getTime())).then(function (resp) {
                     that.updates = eval(resp.data);
@@ -165,6 +166,7 @@ Vue.component('lms-information-dialog', {
         },
         close() {
             this.show = false;
+            bus.$emit('dialogOpen', this.show);
             if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = undefined;

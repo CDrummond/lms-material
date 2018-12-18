@@ -23,7 +23,7 @@
 13. Manage players; control volume, play/pause, show current track
 14. Group player control; add, edit, delete
 15. Pin apps, etc, to main screen
-
+16. Swipe left/right to change views with mobile layout
 
 ## Installation
 

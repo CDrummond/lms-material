@@ -68,6 +68,15 @@ var app = new Vue({
         }.bind(this));
 
         initApp(this);
+        this.openDialogs = 0;
+
+        bus.$on('dialogOpen', function(open) {
+            if (open) {
+                this.openDialogs++;
+            } else if (this.openDialogs>0) {
+                this.openDialogs--;
+            }
+        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -75,6 +84,41 @@ var app = new Vue({
         },
         lang() {
             return this.$store.state.lang;
+        }
+    },
+    methods: {
+        swipe(ev, direction) {
+            if (this.openDialogs>0) {
+                return;
+            }
+            if (this.$route.path=='/nowplaying') {
+                // Ignore swipes on position slider...
+                var elem = document.getElementById("pos-slider");
+                if (elem) {
+                    var rect = elem.getBoundingClientRect();
+                    if ((rect.x-4)<=ev.touchstartX && (rect.x+rect.width+8)>=ev.touchstartX &&
+                        (rect.y-4)<=ev.touchstartY && (rect.y+rect.height+8)>=ev.touchstartY) {
+                        return;
+                    }
+                }
+            }
+            if ('l'==direction) {
+                if (this.$route.path=='/browse') {
+                    this.$router.push('/nowplaying');
+                } else if (this.$route.path=='/nowplaying') {
+                    this.$router.push('/queue');
+                } else if (this.$route.path=='/queue') {
+                    this.$router.push('/browse');
+                }
+            } else if ('r'==direction) {
+                if (this.$route.path=='/browse') {
+                    this.$router.push('/queue');
+                } else if (this.$route.path=='/nowplaying') {
+                    this.$router.push('/browse');
+                } else if (this.$route.path=='/queue') {
+                    this.$router.push('/nowplaying');
+                }
+            }
         }
     },
     store,

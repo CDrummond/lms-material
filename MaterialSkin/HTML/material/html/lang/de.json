@@ -257,11 +257,11 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Remaining duration of current track":"",
-"Save as default":"",
-"Save the current settings as default for new users?":"",
-"Set Defaults":"",
+"Remaining duration of current track": "Verbleibende Dauer des aktuellen Titels",
+"Save as default":"Als Standard speichern",
+"Save the current settings as default for new users?":"Aktuelle Einstellungen als Standard für neue Anwender speichern?",
+"Set Defaults":"Speichern",
 "Sound":"",
 "Start":"",
-"Update":""
+"Update":"Aktualisieren"
 }

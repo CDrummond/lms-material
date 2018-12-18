@@ -62,16 +62,10 @@ Vue.component('lms-volume', {
     },
     methods: {
         volumeDown() {
-            if (this.playerVolume<=5) {
-                this.playerVolume = 0;
-            } else {
-                this.playerVolume = Math.floor((this.playerVolume-5)/5)*5;
-            }
+            this.playerVolume = adjustVolume(this.playerVolume, false);
         },
         volumeUp() {
-            // Always send volume up, even if at 100% already. Some users trap LMS
-            // volume commands and forward on
-            this.playerVolume = Math.floor((this.playerVolume+5)/5)*5;
+            this.playerVolume = adjustVolume(this.playerVolume, true);
         },
         i18n(str) {
             if (this.show) {

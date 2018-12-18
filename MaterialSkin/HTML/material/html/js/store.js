@@ -182,7 +182,7 @@ const store = new Vuex.Store({
             });
 
             // Read defaults, stored on server
-            lmsCommand("", ["pref", LMS_MATERIAL_PREFS, "?"]).then(({data}) => {
+            lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
                 if (data && data.result && data.result._p2) {
                     var prefs = JSON.parse(data.result._p2);
                     var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),

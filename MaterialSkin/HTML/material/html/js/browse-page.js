@@ -290,17 +290,17 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.previousScrollPos=0;
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
-        this.pinned.forEach( p => {
-            if (undefined==p.command && undefined==p.params) { // Previous pinned apps
-                var command = this.buildCommand(p.item);
-                p.params = command.params;
-                p.command = command.command;
-                p.image = p.item.image;
-                p.icon = p.item.icon;
-                p.item = undefined;
-            }
-            this.options.pinned.add(p.id);
-        });
+
+        if (this.pinned.length==0) {
+            lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
+                if (data && data.result && data.result._p2) {
+                    this.pinned = JSON.parse(data.result._p2);
+                    this.addPinned();
+                }
+            });
+        } else {
+            this.addPinned();
+        }
         this.useGrid=false;
 
         if (!this.desktop) {
@@ -1348,6 +1348,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
                 bus.$emit('showError', err);
                 logError(err);
+            });
+        },
+        addPinned() {
+            this.pinned.forEach( p => {
+                if (undefined==p.command && undefined==p.params) { // Previous pinned apps
+                    var command = this.buildCommand(p.item);
+                    p.params = command.params;
+                    p.command = command.command;
+                    p.image = p.item.image;
+                    p.icon = p.item.icon;
+                    p.item = undefined;
+                }
+                this.options.pinned.add(p.id);
             });
         },
         pin(item, add) {

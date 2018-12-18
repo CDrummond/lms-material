@@ -207,3 +207,22 @@ function setBgndCover(elem, coverUrl, isDark) {
     }
 }
 
+function adjustVolume(vol, inc) {
+    if (inc) {
+        // Always send volume up, even if at 100% already. Some users trap LMS
+        // volume commands and forward on
+        return Math.floor((vol+LMS_VOLUME_STEP)/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
+    }
+
+    if (vol<=LMS_VOLUME_STEP) {
+        return 0;
+    }
+
+    var adj = Math.floor(vol/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
+    // If rounding down to LMS_VOLUME_STEP is 2% (or more) then use that, else make even lower
+    if ((vol-adj)>=2) {
+        return adj;
+    }
+    return Math.floor((vol-LMS_VOLUME_STEP)/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
+}
+

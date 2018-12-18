@@ -234,16 +234,10 @@ Vue.component('lms-toolbar', {
             bus.$emit("power", this.playerStatus.ison ? "0" : "1");
         },
         volumeDown() {
-            if (this.playerVolume.val<=5) {
-                this.playerVolume.val = 0;
-            } else {
-                this.playerVolume.val = Math.floor((this.playerVolume.val-5)/5)*5;
-            }
+            this.playerVolume.val = adjustVolume(this.playerVolume.val, false);
         },
         volumeUp() {
-            // Always send volume up, even if at 100% already. Some users trap LMS
-            // volume commands and forward on
-            this.playerVolume.val = Math.floor((this.playerVolume.val+5)/5)*5;
+            this.playerVolume.val = adjustVolume(this.playerVolume.val, true);
         }
     },
     computed: {

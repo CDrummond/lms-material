@@ -572,7 +572,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                               command: ["albums"],
                               //icon: "date_range",
                               params: ["year:"+ i.year, "tags:ajly"],
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION],
                               type: "group"
                           });
             });

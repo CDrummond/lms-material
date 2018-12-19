@@ -1578,6 +1578,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     url = url.replace(LMS_LIST_IMAGE_SIZE+".png", ".png");
                 } else if (url.endsWith(LMS_GRID_IMAGE_SIZE+".png")) {
                     url = url.replace(LMS_GRID_IMAGE_SIZE+".png", ".png");
+                } else if (url.endsWith(LMS_LIST_IMAGE_SIZE)) {
+                    url = url.substring(0, url.length - LMS_LIST_IMAGE_SIZE.length);
+                } else if (url.endsWith(LMS_GRID_IMAGE_SIZE)) {
+                    url = url.substring(0, url.length - LMS_GRID_IMAGE_SIZE.length);
                 }
             }
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);

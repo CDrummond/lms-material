@@ -11,6 +11,7 @@
  8. Add button to save default UI settings, and pinned items, on server.
  9. Re-add swipe to change view.
 10. Fix error when browsing apps and there are none.
+11. Remove 'More' menu option from years.
 
 0.2.1
 -----

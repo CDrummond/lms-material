@@ -43,7 +43,7 @@ Vue.component('lms-player-settings', {
     <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
    </v-list-tile>
    <v-list-tile v-else>
-    <v-menu bottom left>
+    <v-menu bottom>
      <v-btn slot="activator" flat>{{i18n('Sleep in...')}} <v-icon>arrow_drop_down</v-icon></v-btn>
      <v-list>
       <template v-for="(item, index) in sleep.items">

@@ -1,15 +1,16 @@
 0.2.2
 -----
-1. Fix cover display when re-ordering favourites.
-2. Fix renmaming and deleting favourites.
-3. Use curent cover as queue background.
-4. Use curent artist, album, etc. image as browse background.
-5. When adding/playing a selection, call commands sequentially and wait for
-   each to complete before doing the next.
-6. Revert cover change, and use artwork_url/coverid if supplied.
-7. Re-add option to sort favourites, disables drag'n'drop ordering.
-8. Add button to save default UI settings, and pinned items, on server.
-9. Re-add swipe to change view.
+ 1. Fix cover display when re-ordering favourites.
+ 2. Fix renmaming and deleting favourites.
+ 3. Use curent cover as queue background.
+ 4. Use curent artist, album, etc. image as browse background.
+ 5. When adding/playing a selection, call commands sequentially and wait for
+    each to complete before doing the next.
+ 6. Revert cover change, and use artwork_url/coverid if supplied.
+ 7. Re-add option to sort favourites, disables drag'n'drop ordering.
+ 8. Add button to save default UI settings, and pinned items, on server.
+ 9. Re-add swipe to change view.
+10. Fix error when browsing apps and there are none.
 
 0.2.1
 -----

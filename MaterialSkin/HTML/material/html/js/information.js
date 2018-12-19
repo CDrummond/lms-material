@@ -20,7 +20,7 @@ Vue.component('lms-information-dialog', {
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
    </ul>
-   <v-menu bottom left v-if="!scanning">
+   <v-menu bottom v-if="!scanning">
     <v-btn slot="activator" flat>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
     <v-list>
      <template v-for="(item, index) in rescans">

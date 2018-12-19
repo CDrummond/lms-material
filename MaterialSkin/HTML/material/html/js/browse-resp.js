@@ -302,7 +302,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.menuActions.push(DELETE_ACTION);
                 }
 
-                if (isApps && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                if (isApps && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                     if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
                         if (i.actions.go.params.item_id) {
                             var parts = i.actions.go.params.item_id.split(".");

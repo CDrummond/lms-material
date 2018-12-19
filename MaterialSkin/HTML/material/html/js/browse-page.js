@@ -1572,7 +1572,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
         },
         setBgndCover() {
-            setBgndCover(this.scrollElement, this.current ? this.current.image : undefined, this.$store.state.darkUi);
+            var url = this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;
+            setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
         }
     },
     mounted() {

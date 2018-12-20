@@ -125,7 +125,8 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.image" :tile="true">
-     <img v-lazy="item.image">
+     <img v-if="0==item.duration" :src="item.image">
+     <img v-else v-lazy="item.image">
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
@@ -235,6 +236,32 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.currentIndex = playerStatus.playlist.current;
                 if (this.$store.state.autoScrollQueue) {
                     this.scrollToCurrent();
+                }
+            }
+
+            // Check for metadata changes in radio streams...
+            if (playerStatus.current && 0==playerStatus.current.duration &&
+                this.items.length>0 && this.currentIndex<this.items.length && 0==this.items[this.currentIndex].duration) {
+                var i = playerStatus.current;
+                var title = i.title;
+                if (this.showTrackNum && i.tracknum>0) {
+                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
+                }
+                var subtitle = i.artist ? i.artist : i.trackartist;
+                if (i.album) {
+                    if (subtitle) {
+                        subtitle+=" - " + i.album;
+                    } else {
+                        sbtitle=i.album;
+                    }
+                    if (i.year && i.year>0) {
+                        subtitle+=" (" + i.year + ")";
+                    }
+                }
+                if (title!=this.items[this.currentIndex].title || subtitle!=this.items[this.currentIndex].subtitle) {
+                    this.items[this.currentIndex].title = title;
+                    this.items[this.currentIndex].subtitle = subtitle;
+                    this.$forceUpdate();
                 }
             }
         }.bind(this));
@@ -580,6 +607,12 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         setBgndCover() {
             setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+            // Check for cover changes in radio streams...
+            if (this.coverUrl && this.items.length>0 && this.currentIndex<this.items.length && 0==this.items[this.currentIndex].duration &&
+                this.items[this.currentIndex].image!=this.coverUrl) {
+                this.items[this.currentIndex].image=this.coverUrl;
+                this.$forceUpdate();
+            }
         }
     },
     filters: {

@@ -275,7 +275,6 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('themeChanged', function() {
             this.setBgndCover();
         }.bind(this));
-        this.setBgndCover();
 
         bus.$on('langChanged', function() {
             this.initItems();
@@ -299,10 +298,12 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         });
 
+        this.setBgndCover();
         this.$nextTick(function () {
             setScrollTop(this.scrollElement, 0);
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
+            this.setBgndCover();
         });
     },
     methods: {
@@ -578,6 +579,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return i18n(str);
         },
         setBgndCover() {
+        console.log("SET BGND COVER", this.coverUrl);
             setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
         }
     },

@@ -579,7 +579,6 @@ var lmsQueue = Vue.component("lms-queue", {
             return i18n(str);
         },
         setBgndCover() {
-        console.log("SET BGND COVER", this.coverUrl);
             setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
         }
     },

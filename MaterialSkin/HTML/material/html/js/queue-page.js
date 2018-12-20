@@ -242,7 +242,6 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$emit('refreshStatus');
 
         this.coverUrl = undefined;
-        this.setBgndCover();
         bus.$on('currentCover', function(coverUrl) {
             this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : coverUrl;
             this.setBgndCover();

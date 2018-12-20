@@ -77,8 +77,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
 </div>
-<div class="np-page" v-else-if="playerStatus.ison">
- <div v-if="info.show" class="np-info np-info-cover" id="np-info">
+<div class="np-page" v-else-if="playerStatus.ison" id="np-page">
+ <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>

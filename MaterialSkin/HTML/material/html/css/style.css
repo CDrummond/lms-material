@@ -376,14 +376,6 @@ a {
     display: block;
 }
 
-.np-page {
-    position: fixed; 
-    top:64px; /* l-toolbar.height */
-    bottom:56px; /* l-footer.height */
-    width:100%;
-    /*border: 1px solid red;*/
-}
-
 .np-playpause {
     margin-top: 2px !important;
 }

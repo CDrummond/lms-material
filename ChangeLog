@@ -4,6 +4,7 @@
 2. Fix queue background cover not being drawn initially on mobile.
 3. Check for metadata, and cover, changes for current track in queue if it is a
    radio stream (0 duration).
+4. Fix mobile layout now playing info background and size.
 
 0.2.2
 -----

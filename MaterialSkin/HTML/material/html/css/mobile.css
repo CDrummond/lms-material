@@ -114,6 +114,13 @@
     margin: auto;
 }
 
+.np-page {
+    position: fixed;
+    top:var(--main-toolbar-height);
+    bottom:var(--bottom-nav-height);
+    width:100%;
+}
+
 .np-text {
     margin:0px 8px 0px 8px; 
     text-align: center;
@@ -166,7 +173,6 @@
 }
 
 .np-info {
-    margin-top:-8px;
     max-width:800px;
     display: block;
     height:auto;

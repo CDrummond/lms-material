@@ -1604,7 +1604,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         });
         // Artist images?
         lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
+            if (data && data.result && data.result._p2 != null) {
                 this.options.artistImages = 1==data.result._p2;
                 setLocalStorageVal('artistImages', this.options.artistImages);
             }

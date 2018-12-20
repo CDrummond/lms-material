@@ -17,16 +17,17 @@ function parseBrowseResp(data, parent, options, idStart) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 resp.items.push({header: i18n("Artists")});
                 data.result.contributors_loop.forEach(i => {
+                    var infoPlugin = getLocalStorageBool('infoPlugin');
                     resp.items.push({
                                   id: "artist_id:"+i.contributor_id,
                                   title: i.contributor,
                                   command: ["albums"],
                                   params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
+                                  image: (infoPlugin && options.artistImages) ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group",
-                                  favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
+                                  favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
                               });
                 });
             }
@@ -414,18 +415,19 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 });
             }
-            resp.useGrid = options.useGrid && options.artistImages;
+            var infoPlugin = getLocalStorageBool('infoPlugin');
+            resp.useGrid = options.useGrid && infoPlugin && options.artistImages;
             data.result.artists_loop.forEach(i => {
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               command: ["albums"],
-                              image: options.artistImages ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image" +
+                              image: (infoPlugin && options.artistImages) ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image" +
                                     (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE) : undefined,
                               params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
-                              favIcon: options.artistImages ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
+                              favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
                           };
                 if (params.length>0) {
                     params.forEach(p => {

@@ -25,7 +25,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :src="cover" class="np-image" @click="infoPlugin && playerStatus.current.artist ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
+ <img :src="coverUrl" class="np-image" @click="infoPlugin && playerStatus.current.artist ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
  <div>
   <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
   <p class="np-text" v-else>&nbsp;</p>
@@ -77,7 +77,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
 </div>
-<div class="np-page" v-else-if="playerStatus.ison" id="np-page">
+<div class="np-page bgnd-cover" v-else-if="playerStatus.ison" id="np-page">
  <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
@@ -109,7 +109,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <p class="np-text" v-else>&nbsp;</p>
   <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
   <p class="np-text" v-else>&nbsp;</p>
-  <img v-if="!info.show" :src="cover" class="np-image" @contextmenu="showMenu"></img>
+  <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
   <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
    <v-list>
     <v-list-tile>
@@ -155,8 +155,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     props: [ 'desktop' ],
     data() {
         return { desktop:false,
-                 cover:undefined,
-                 coverFromPlayer:undefined,
+                 coverUrl:undefined,
                  playerStatus: {
                     ison: 1,
                     isplaying: 1,
@@ -273,8 +272,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
+        if (!this.desktop) {
+            this.page = document.getElementById("np-page");
+            bus.$on('themeChanged', function() {
+                this.setBgndCover();
+            }.bind(this));
+        }
+
         bus.$on('currentCover', function(coverUrl) {
-            this.cover = coverUrl;
+            this.coverUrl = coverUrl;
+            if (!this.desktop) {
+                this.setBgndCover();
+            }
         }.bind(this));
         bus.$emit('getCurrentCover');
 
@@ -452,7 +461,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.$nextTick(function () {
                 var elem = document.getElementById("np-info");
                 if (elem) {
-                    elem.style.backgroundImage = "url('"+this.cover+"')";
+                    elem.style.backgroundImage = "url('"+this.coverUrl+"')";
                 }
             });
             if (this.desktop && !this.showTabs) {
@@ -483,6 +492,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         toggleTime() {
             this.showTotal = !this.showTotal;
             setLocalStorageVal("showTotal", this.showTotal);
+        },
+        setBgndCover() {
+            var url = undefined==this.coverUrl || this.coverUrl.endsWith(DEFAULT_COVER) ? undefined : this.coverUrl;
+            setBgndCover(this.page, url, this.$store.state.darkUi);
         }
     },
     filters: {

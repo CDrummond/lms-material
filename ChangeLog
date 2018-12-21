@@ -5,6 +5,7 @@
 3. Check for metadata, and cover, changes for current track in queue if it is a
    radio stream (0 duration).
 4. Fix mobile layout now playing info background and size.
+5. Draw stretched cover as now-playing background.
 
 0.2.2
 -----

@@ -518,8 +518,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             setLocalStorageVal("showTotal", this.showTotal);
         },
         setBgndCover() {
-            var url = undefined==this.coverUrl || this.coverUrl.endsWith(DEFAULT_COVER) ? undefined : this.coverUrl;
-            setBgndCover(this.page, url, this.$store.state.darkUi);
+            setBgndCover(this.page, this.coverUrl, this.$store.state.darkUi);
         }
     },
     filters: {

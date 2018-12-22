@@ -28,9 +28,19 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
  
     <v-list-tile>
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
+      <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
     </v-list-tile>
 
     <div class="settings-pad"></div>
@@ -122,6 +132,7 @@ Vue.component('lms-ui-settings', {
             sortFavorites:false,
             serverMenus:false,
             autoScrollQueue:true,
+            stopButton:false,
             albumSorts:[],
             library: null,
             libraries: [],
@@ -136,6 +147,7 @@ Vue.component('lms-ui-settings', {
                 this.artistAlbumSort = this.$store.state.artistAlbumSort;
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
+                this.stopButton = this.$store.state.stopButton;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.useGrid=this.$store.state.useGrid;
                 this.sortFavorites = this.$store.state.sortFavorites;
@@ -209,7 +221,8 @@ Vue.component('lms-ui-settings', {
                                                   useGrid:this.useGrid,
                                                   sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
-                                                  serverMenus:this.serverMenus
+                                                  serverMenus:this.serverMenus,
+                                                  stopButton:this.stopButton
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
@@ -234,7 +247,8 @@ Vue.component('lms-ui-settings', {
                                      useGrid:this.useGrid,
                                      sortFavorites:this.sortFavorites,
                                      showMenuAudio:this.showMenuAudio,
-                                     serverMenus:this.serverMenus
+                                     serverMenus:this.serverMenus,
+                                     stopButton:this.stopButton
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

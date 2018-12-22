@@ -51,6 +51,10 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('serverMenus', state.serverMenus);
         browseDisplayChanged = true;
     }
+    if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
+        state.stopButton = val.stopButton;
+        setLocalStorageVal('stopButton', state.stopButton);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -71,7 +75,8 @@ const store = new Vuex.Store({
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
-        noNetwork: false
+        noNetwork: false,
+        stopButton: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -170,6 +175,7 @@ const store = new Vuex.Store({
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
+            state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             setTheme(state.darkUi);
             
             // Music and Artist info plugin installled?
@@ -193,7 +199,8 @@ const store = new Vuex.Store({
                                  useGrid: getLocalStorageBool('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid),
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                  showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
-                                 serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus)};
+                                 serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus),
+                                 stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton)};
                     updateUiSettings(state, opts);
                 }
             });

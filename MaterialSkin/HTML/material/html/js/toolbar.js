@@ -58,10 +58,10 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info"  v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon v-else-if="!desktop && playerStatus.ison && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
   <v-icon>pause_circle_outline</v-icon>
  </v-btn>
- <v-btn icon v-else-if="!desktop && playerStatus.ison" @click.native="doAction(['play'])" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop" @click.native="doAction(['play'])" class="toolbar-button">
   <v-icon>play_circle_outline</v-icon>
  </v-btn>
  <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" @click="volumeDown"><v-icon>volume_down</v-icon></v-btn>

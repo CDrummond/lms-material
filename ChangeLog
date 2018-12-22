@@ -6,6 +6,7 @@
    radio stream (0 duration).
 4. Fix mobile layout now playing info background and size.
 5. Draw stretched cover as now-playing background.
+6. Allow specifying player in URL via "?player=<mac>"
 
 0.2.2
 -----

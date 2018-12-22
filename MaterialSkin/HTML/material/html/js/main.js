@@ -48,11 +48,7 @@ var app = new Vue({
     data() {
     },
     created() {
-        // For testing, allow pages to be served by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/mobile.html?lms=<real address of LMS>
-        var res = RegExp('[?&]lms=([^&#]*)').exec(window.location.href);
-        if (res && 2==res.length) {
-            lmsServerAddress = "http://"+res[1]+":9000";
-        }
+        parseQueryParams();
         this.$store.commit('initUiSettings');
 
         this.openDialogs = [];

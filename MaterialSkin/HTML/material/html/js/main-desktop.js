@@ -13,11 +13,7 @@ var app = new Vue({
         splitterPercent:50
     },
     created() {
-        // For testing, allow pages to be served by (e.g.) python -m SimpleHTTPServer. Use http://localhost:8000/desktop.html?lms=<real address of LMS>
-        var res = RegExp('[?&]lms=([^&#]*)').exec(window.location.href);
-        if (res && 2==res.length) {
-            lmsServerAddress = "http://"+res[1]+":9000";
-        }
+        parseQueryParams();
         this.$store.commit('initUiSettings');
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;

@@ -226,3 +226,22 @@ function adjustVolume(vol, inc) {
     return Math.floor((vol-LMS_VOLUME_STEP)/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
 }
 
+function parseQueryParams() {
+    var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
+    var hash = queryString.indexOf('#');
+    if (hash>0) {
+        queryString=queryString.substring(0, hash);
+    }
+    var query = queryString.split('&');
+
+
+    for (var i = query.length - 1; i >= 0; i--) {
+        var kv = query[i].split('=');
+        if ("lms"==kv[0]) {
+            lmsServerAddress = "http://"+kv[1]+":9000";
+        } else if ("player"==kv[0]) {
+            setLocalStorageVal("player", kv[1]);
+        }
+    }
+}
+

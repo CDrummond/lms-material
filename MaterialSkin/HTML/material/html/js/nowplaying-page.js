@@ -181,7 +181,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         return { desktop:false,
                  coverUrl:undefined,
                  playerStatus: {
-                    ison: 1,
                     isplaying: 1,
                     current: { canseek:1, duration:0, time:0, title:undefined, artist:undefined, 
                                album:undefined, albumName:undefined, technicalInfo: "" },
@@ -205,9 +204,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             var playStateChanged = false;
             var trackChanged = false;
             // Have other items changed
-            if (playerStatus.ison!=this.playerStatus.ison) {
-                this.playerStatus.ison = playerStatus.ison;
-            }
             if (playerStatus.isplaying!=this.playerStatus.isplaying) {
                 this.playerStatus.isplaying = playerStatus.isplaying;
                 playStateChanged = true;

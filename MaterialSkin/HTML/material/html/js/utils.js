@@ -190,7 +190,8 @@ function removeUniqueness(id) {
 
 function setBgndCover(elem, coverUrl, isDark) {
     if (elem) {
-        elem.style.backgroundImage = "url('"+coverUrl+"')";
+        elem.style.backgroundImage = "url('"+(undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")
+                                              ? undefined : coverUrl)+"')";
         if (isDark) {
             //if (coverUrl) {
                 elem.style.boxShadow = "inset 0 0 120vw 120vh rgba(72,72,72,0.9)";

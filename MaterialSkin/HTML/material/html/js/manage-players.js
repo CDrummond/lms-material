@@ -46,6 +46,9 @@ Vue.component('lms-manage-players', {
          <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="playPause(player)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn" @click="stop(player)">
+           <v-btn icon><v-icon>stop</v-icon></v-btn>
+         </v-list-tile-action>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="nextTrack(player)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
@@ -256,6 +259,14 @@ Vue.component('lms-manage-players', {
                 updatePlayer(player);
             });
         },
+        stop(player) {
+            if (!this.show) {
+                return;
+            }
+            lmsCommand(player.id, ['stop']).then(({data}) => {
+                updatePlayer(player);
+            });
+        },
         prevTrack(player) {
             if (!this.show) {
                 return;
@@ -356,6 +367,9 @@ Vue.component('lms-manage-players', {
     computed: {
         currentPlayer() {
             return this.$store.state.player
+        },
+        stopButton() {
+            return this.$store.state.stopButton
         }
     },
     watch: {

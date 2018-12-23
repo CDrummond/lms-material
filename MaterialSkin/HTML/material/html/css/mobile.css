@@ -156,10 +156,6 @@
     align-items:center;
 }
 
-.np-text-landscape-pad {
-    min-height:calc( (((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px)) /2) - 22px);
-}
-
 .np-pos {
     font-size: 75%;
     font-weight: 400;

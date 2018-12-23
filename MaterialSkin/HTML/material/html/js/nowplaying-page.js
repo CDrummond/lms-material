@@ -121,14 +121,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="landscape">
    <img v-if="!info.show" :src="coverUrl" class="np-image-landscape"></img>
    <v-layout class="np-details-landscape" wrap>
-    <v-flex xs12 class="np-text-landscape-pad"></v-flex>
-    <v-flex xs12 class="np-text-landscape ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-flex>
+    <v-spacer></v-spacer>
+    <v-flex xs12 class="np-text-landscape" v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-flex>
     <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
-    <v-flex xs12 class="np-text-landscape subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</v-flex>
+    <v-flex xs12 class="np-text-landscape subtext" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</v-flex>
     <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
-    <v-flex xs12 class="np-text-landscape subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</v-flex>
+    <v-flex xs12 class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</v-flex>
     <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
-    <v-flex xs12 class="np-text-landscape-pad"></v-flex>
+    <v-spacer></v-spacer>
    </v-layout>
   </div>
   <div v-else>

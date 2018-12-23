@@ -152,11 +152,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs4>
     <v-layout v-if="stopButton" text-xs-center>
      <v-flex xs6>
-      <v-btn flat icon large v-if="playerStatus.isplaying" @click="doAction(['pause'])"><v-icon large>pause</v-icon></v-btn>
-      <v-btn flat icon large v-else @click="doAction(['play'])"><v-icon large>play_arrow</v-icon></v-btn>
+      <v-btn flat icon v-if="playerStatus.isplaying" @click="doAction(['pause'])"><v-icon large>pause</v-icon></v-btn>
+      <v-btn flat icon v-else @click="doAction(['play'])"><v-icon large>play_arrow</v-icon></v-btn>
      </v-flex>
      <v-flex xs6>
-      <v-btn flat icon large @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
+      <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
      </v-flex>
     </v-layout>
     <v-btn flat icon large v-else-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>

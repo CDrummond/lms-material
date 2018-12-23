@@ -118,20 +118,28 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
  <div v-else>
+  <div v-if="landscape">
+   <img v-if="!info.show" :src="coverUrl" class="np-image-landscape"></img>
+   <v-layout class="np-details-landscape" wrap>
+    <v-flex xs12 class="np-text-landscape-pad"></v-flex>
+    <v-flex xs12 class="np-text-landscape ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-flex>
+    <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
+    <v-flex xs12 class="np-text-landscape subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</v-flex>
+    <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
+    <v-flex xs12 class="np-text-landscape subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</v-flex>
+    <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
+    <v-flex xs12 class="np-text-landscape-pad"></v-flex>
+   </v-layout>
+  </div>
+  <div v-else>
   <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
   <p class="np-text" v-else>&nbsp;</p>
   <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
   <p class="np-text" v-else>&nbsp;</p>
   <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
   <p class="np-text" v-else>&nbsp;</p>
-  <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
-  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
-   <v-list>
-    <v-list-tile>
-     <v-list-tile-title @click="info.show=true">{{menu.text}}</v-list-tile-title>
-    </v-list-tile>
-   </v-list>
-  </v-menu>
+  <img v-if="!info.show" :src="coverUrl" class="np-image"></img>
+  </div>
 
   <v-layout text-xs-center row wrap class="np-controls">
    <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
@@ -188,11 +196,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
-                 menu: { show: false, x:0, y:0, text: undefined },
                  trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
-                 showTotal: true
+                 showTotal: true,
+                 landscape: false
                 };
     },
     mounted() {
@@ -297,6 +305,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$on('themeChanged', function() {
                 this.setBgndCover();
             }.bind(this));
+            this.landscape = isLandscape();
+            bus.$on('orientation', function(landscape) {
+                this.landscape = landscape;
+            }.bind(this));
         }
 
         bus.$on('currentCover', function(coverUrl) {
@@ -327,21 +339,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            more:i18n("More"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                            shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
-            this.menu.text=i18n("Show information");
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
-        },
-        showMenu(event) {
-            event.preventDefault();
-            if (this.$store.state.infoPlugin && this.playerStatus.current.title && this.playerStatus.current.artist) {
-                this.menu.show = false;
-                this.menu.x = event.clientX;
-                this.menu.y = event.clientY;
-                this.$nextTick(() => {
-                    this.menu.show = true;
-                });
-            }
         },
         doAction(command) {
             bus.$emit('playerCommand', command);

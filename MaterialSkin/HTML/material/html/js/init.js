@@ -7,7 +7,7 @@
 
 var autoLayout = false;
 var isMobileBrowser = false;
-
+var isLandscapeOrientation = undefined;
 function checkLayout() {
     if (autoLayout && !isMobileBrowser) {
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
@@ -15,6 +15,11 @@ function checkLayout() {
         } else if (window.innerWidth>=600 && window.location.href.indexOf("/mobile")>1) {
             changeLayout("desktop");
         }
+    }
+
+    if (undefined==isLandscapeOrientation || isLandscapeOrientation!=isLandscape()) {
+        isLandscapeOrientation = isLandscape()
+        bus.$emit("orientation", isLandscapeOrientation);
     }
 }
 

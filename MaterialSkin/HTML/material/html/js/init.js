@@ -32,7 +32,10 @@ function initApp(app) {
     isMobileBrowser = isMobile();
 
     if (isMobileBrowser) {
-        document.styleSheets[0].addRule("::-webkit-scrollbar", "max-height: 0px !important; max-width: 0px !important;");
+        try { // Fails on mobile Firefox - "addRule is not a function"
+            document.styleSheets[0].addRule("::-webkit-scrollbar", "max-height: 0px !important; max-width: 0px !important;");
+        } catch(e) {
+        }
     }
 
     lmsCommand("", ["pref", "language", "?"]).then(({data}) => {

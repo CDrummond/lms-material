@@ -126,6 +126,10 @@
     text-align: center;
 }
 
+.np-text-landscape {
+    margin:0px 8px 0px 8px;
+}
+
 .np-image {
     display: block;
     object-fit: contain;
@@ -134,6 +138,26 @@
     margin-left: auto;
     margin-right: auto;
     padding:8px 8px 232px 8px; /* t, r, b, l */
+}
+
+.np-image-landscape {
+    margin:16px;
+    object-fit: contain;
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px));
+    width:auto;
+    max-width: 40vw;
+    float:left;
+}
+
+.np-details-landscape {
+    margin:16px;
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px));
+    display:flex;
+    align-items:center;
+}
+
+.np-text-landscape-pad {
+    min-height:calc( (((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px)) /2) - 22px);
 }
 
 .np-pos {

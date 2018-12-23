@@ -246,3 +246,7 @@ function parseQueryParams() {
     }
 }
 
+function isLandscape() {
+    return window.innerHeight<window.innerWidth;
+}
+

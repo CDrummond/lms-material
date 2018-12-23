@@ -130,6 +130,13 @@ a {
     object-position: 50% 0%;
 }
 
+.radio-image img {
+    object-fit:contain !important;
+    object-position: 50% 50% !important;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
 .image-grid-text {
     width: 134px;
     max-height: 144px;

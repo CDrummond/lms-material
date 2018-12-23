@@ -141,7 +141,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
      {{item.caption}}
     </v-card-text>
-    <v-card-text v-else class="image-grid-item" @click="click(item, index, $event, false)">
+    <v-card-text v-else class="image-grid-item" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" @click="click(item, index, $event, false)">
      <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(item, index)">
       <v-icon>{{item.selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
      </v-btn>
@@ -200,7 +200,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-avatar v-if="item.selected" :tile="true">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}">
      <img v-lazy="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true">

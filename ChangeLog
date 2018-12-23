@@ -8,6 +8,7 @@
 5. Draw stretched cover as now-playing background.
 6. Allow specifying player in URL via "?player=<mac>"
 7. Add option to show stop button.
+8. Fix translations not working on Android Firefox.
 
 0.2.2
 -----

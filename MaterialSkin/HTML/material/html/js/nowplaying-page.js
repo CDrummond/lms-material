@@ -52,7 +52,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <p class="np-text np-time cursor" @click="toggleTime()">{{formattedTime}}</p>
   <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
- <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
+ <div v-if="info.show" class="np-info bgnd-cover np-info-cover" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>

@@ -1,16 +1,17 @@
 0.2.3
 -----
-1. Fix add/edit alarm dialog not showing.
-2. Fix queue background cover not being drawn initially on mobile.
-3. Check for metadata, and cover, changes for current track in queue if it is a
-   radio stream (0 duration).
-4. Fix mobile layout now playing info background and size.
-5. Draw stretched cover as now-playing background.
-6. Allow specifying player in URL via "?player=<mac>"
-7. Add option to show stop button.
-8. Fix translations not working on Android Firefox.
-9. Don't add play/add icons to sub-toolbar of top-level items (e.g. Artists,
-   Albums, etc).
+ 1. Fix add/edit alarm dialog not showing.
+ 2. Fix queue background cover not being drawn initially on mobile.
+ 3. Check for metadata, and cover, changes for current track in queue if it is a
+    radio stream (0 duration).
+ 4. Fix mobile layout now playing info background and size.
+ 5. Draw stretched cover as now-playing background.
+ 6. Allow specifying player in URL via "?player=<mac>"
+ 7. Add option to show stop button.
+ 8. Fix translations not working on Android Firefox.
+ 9. Don't add play/add icons to sub-toolbar of top-level items (e.g. Artists,
+    Albums, etc).
+10. Don't crop radio logos when browsing.
 
 0.2.2
 -----

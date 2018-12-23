@@ -316,7 +316,8 @@ Vue.component('lms-manage-players', {
                 player.volume = data.result["mixer volume"] ? data.result["mixer volume"] : 0;
                 player.synced = undefined!==data.result.sync_master || undefined!==data.result.sync_slaves;
                 if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
-                    player.playIcon = player.isplaying ? "pause_circle_outline" : "play_circle_outline";
+                    player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :
+                                                         (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
                     if (data.result.playlist_loop[0].title) {
                         if (data.result.playlist_loop[0].artist) {
                             player.track=data.result.playlist_loop[0].title+" - "+data.result.playlist_loop[0].artist;

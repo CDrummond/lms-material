@@ -178,11 +178,6 @@
     text-align: right;
 }
 
-.np-slider {
-    height: 32px;
-    margin:-2px 12px 12px 8px;
-}
-
 .np-controls {
     font-weight:400;
     padding:8px 8px 16px 8px; /* t, r, b, l */

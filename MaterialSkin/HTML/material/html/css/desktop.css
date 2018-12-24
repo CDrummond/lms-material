@@ -114,13 +114,13 @@ body {
 
 .np-text {
     font-weight:400;
-    margin:8px 8px 0px 8px;
+    margin:12px 8px 0px 0px;
     max-width:calc(100vw - (400px - var(--safe-area-bottom)));
 }
 
 .np-text-sub {
     font-weight:400;
-    margin: -2px 8px -4px 8px;
+    margin: 0px 8px -4px 0px;
     max-width:calc(100vw - (400px - var(--safe-area-bottom)));
 }
 
@@ -133,13 +133,6 @@ body {
     overflow:auto;
     backface-visibility:hidden;
     z-index:0;
-}
-
-.np-slider {
-    margin-top:1px !important;
-    padding-left:0px;
-    padding-right:4px;
-    height: 32px;
 }
 
 .np-info-text {
@@ -159,7 +152,7 @@ body {
 .np-tech {
     position:fixed;
     bottom:calc(45px + var(--safe-area-bottom));
-    right:12px;
+    right:8px;
     font-size: 75%;
     font-weight: 400;
     width: 16.5em;
@@ -170,7 +163,7 @@ body {
 .np-time {
     position:fixed;
     bottom:calc(29px + var(--safe-area-bottom));
-    right:12px;
+    right:8px;
     font-size: 75%;
     font-weight: 400;
     width: 16em;

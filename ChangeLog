@@ -3,6 +3,8 @@
 1. Fix position of play/pause and stop button in mobile layout when stop button
    is enabled.
 2. Landscape layout for mobile now playing.
+3. Handle muted players; show speaker icon with line through, toggle mute with
+   long press on icon.
 
 0.2.3
 -----

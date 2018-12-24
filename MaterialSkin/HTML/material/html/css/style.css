@@ -430,6 +430,10 @@ a {
     width: 100% !important;
 }
 
+progress {
+    border:0;
+}
+
 .bgnd-cover {
     background-size:cover !important;
     background-repeat:no-repeat !important;

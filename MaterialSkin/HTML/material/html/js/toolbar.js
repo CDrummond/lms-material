@@ -165,6 +165,7 @@ Vue.component('lms-toolbar', {
                      this.playerVolume.muted != muted ||
                     ((val!=this.playerVolume.val && val!=this.playerVolume.prev &&
                     (!this.playerVolume.lastUpdate || ((new Date())-this.playerVolume.lastUpdate)>500)))) {
+                    this.playerVolume.current = val;
                     this.playerVolume.val = val;
                     this.playerVolume.muted = muted;
                     this.playerVolume.lastUpdate = new Date();

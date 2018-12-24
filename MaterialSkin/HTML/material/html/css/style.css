@@ -413,6 +413,13 @@ a {
     margin: 0px;
 }
 
+.np-title {
+    padding-top: 4px;
+    font-size: 125%;
+    font-weight: 500;
+    letter-spacing: .02em;
+}
+
 .bgnd-cover {
     background-size:cover !important;
     background-repeat:no-repeat !important;

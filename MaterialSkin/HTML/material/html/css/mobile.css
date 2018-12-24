@@ -127,7 +127,7 @@
 }
 
 .np-text-landscape {
-    margin:0px 8px 0px 8px;
+    margin:8px 8px 8px 8px;
 }
 
 .np-image {
@@ -153,7 +153,8 @@
     margin:16px;
     height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px));
     display:flex;
-    align-items:center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .np-pos {

@@ -7,6 +7,7 @@
    long press on icon.
 4. Fix reading default album sort values from server.
 5. Reduce CPU usage duting playback by uisng HTML5 progressbar not v-slider.
+6. Add options to control drawing of background.
 
 0.2.3
 -----

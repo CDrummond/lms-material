@@ -606,7 +606,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return i18n(str);
         },
         setBgndCover() {
-            setBgndCover(this.scrollElement, this.coverUrl, this.$store.state.darkUi);
+            setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             // Check for cover changes in radio streams...
             if (this.coverUrl && this.items.length>0 && this.currentIndex<this.items.length && 0==this.items[this.currentIndex].duration &&
                 this.items[this.currentIndex].image!=this.coverUrl) {

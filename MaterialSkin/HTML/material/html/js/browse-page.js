@@ -1571,7 +1571,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
         },
         setBgndCover() {
-            var url = this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;
+            var url = this.$store.state.browseBackdrop && this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;
 
             if (url) {
                 if (url.endsWith(LMS_LIST_IMAGE_SIZE+".png")) {

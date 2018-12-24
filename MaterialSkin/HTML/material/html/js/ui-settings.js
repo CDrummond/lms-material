@@ -29,7 +29,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
- 
+
     <v-list-tile>
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -86,7 +86,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
- 
+
     <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
@@ -103,16 +103,56 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="serverMenus"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <div class="settings-pad" v-if="!desktop"></div>
+    <v-header v-if="!desktop">{{i18n('Now Playing')}}</v-header>
+
+    <v-list-tile v-if="!desktop">
+     <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="settings-pad"></div>
     <v-header>{{i18n('Queue')}}</v-header>
- 
+
     <v-list-tile>
      <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
       <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="autoScrollQueue"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <div class="settings-pad" v-if="infoPlugin"></div>
+    <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
+
+    <v-list-tile v-if="infoPlugin">
+     <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
    </v-list>
   </v-card-text>
@@ -133,11 +173,20 @@ Vue.component('lms-ui-settings', {
             serverMenus:false,
             autoScrollQueue:true,
             stopButton:false,
+            browseBackdrop:true,
+            queueBackdrop:true,
+            nowPlayingBackdrop:true,
+            infoBackdrop:true,
             albumSorts:[],
             library: null,
             libraries: [],
             layout: null,
             layoutItems: []
+        }
+    },
+    computed: {
+        infoPlugin () {
+            return this.$store.state.infoPlugin
         }
     },
     mounted() {
@@ -148,6 +197,10 @@ Vue.component('lms-ui-settings', {
                 this.albumSort = this.$store.state.albumSort;
                 this.autoScrollQueue = this.$store.state.autoScrollQueue;
                 this.stopButton = this.$store.state.stopButton;
+                this.browseBackdrop = this.$store.state.browseBackdrop;
+                this.queueBackdrop = this.$store.state.queueBackdrop;
+                this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
+                this.infoBackdrop = this.$store.state.infoBackdrop;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.useGrid=this.$store.state.useGrid;
                 this.sortFavorites = this.$store.state.sortFavorites;
@@ -222,7 +275,11 @@ Vue.component('lms-ui-settings', {
                                                   sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus,
-                                                  stopButton:this.stopButton
+                                                  stopButton:this.stopButton,
+                                                  browseBackdrop:this.browseBackdrop,
+                                                  queueBackdrop:this.queueBackdrop,
+                                                  nowPlayingBackdrop:this.nowPlayingBackdrop,
+                                                  infoBackdrop:this.infoBackdrop
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
@@ -248,7 +305,11 @@ Vue.component('lms-ui-settings', {
                                      sortFavorites:this.sortFavorites,
                                      showMenuAudio:this.showMenuAudio,
                                      serverMenus:this.serverMenus,
-                                     stopButton:this.stopButton
+                                     stopButton:this.stopButton,
+                                     browseBackdrop:this.browseBackdrop,
+                                     queueBackdrop:this.queueBackdrop,
+                                     nowPlayingBackdrop:this.nowPlayingBackdrop,
+                                     infoBackdrop:this.infoBackdrop
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

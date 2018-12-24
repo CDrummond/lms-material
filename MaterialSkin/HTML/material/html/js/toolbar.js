@@ -58,19 +58,20 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info"  v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon v-else-if="!desktop && playerStatus.isplaying" @click.native="doAction(['pause', '1'])" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop && playerStatus.isplaying" @click.native="bus.$emit('playerCommand', ['pause', '1'])" class="toolbar-button">
   <v-icon>pause_circle_outline</v-icon>
  </v-btn>
- <v-btn icon v-else-if="!desktop" @click.native="doAction(['play'])" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop" @click.native="bus.$emit('playerCommand', ['play'])" class="toolbar-button">
   <v-icon>play_circle_outline</v-icon>
  </v-btn>
- <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" @click="volumeDown"><v-icon>volume_down</v-icon></v-btn>
+ <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-if="desktop && playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider"></v-slider>
- <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" @click="volumeUp"><v-icon>volume_up</v-icon></v-btn>
+ <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-if="desktop && playerStatus.ison" class="vol-label">{{playerVolume.val}} %</p>
- <v-btn v-else-if="!desktop && playerStatus.ison" icon flat class="toolbar-button" v-bind:class="{'dimmed': playerStatus.volume<0}" @click="bus.$emit('volume')">
+ <v-btn v-else-if="!desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
-  <v-icon v-else="playerStatus.volume<=0">volume_mute</v-icon>
+  <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
+  <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
@@ -102,7 +103,7 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined,nothingplaying:undefined, info:undefined,
                         switchoff:undefined, switchon:undefined},
                  infoOpen: false,
-                 playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined},
+                 playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
                  snackbar:{ show: false, msg: undefined}
                }
     },
@@ -156,14 +157,19 @@ Vue.component('lms-toolbar', {
                 }
             }
 
-            if (this.desktop &&
-                (undefined==this.playerVolume.id ||
-                 this.$store.state.player.id!=this.playerVolume.id ||
-                 ((playerStatus.volume!=this.playerVolume.val && playerStatus.volume!=this.playerVolume.prev &&
-                  (!this.playerVolume.lastUpdate || ((new Date())-this.playerVolume.lastUpdate)>500))))) {
-                this.playerVolume.val = playerStatus.volume;
-                this.playerVolume.lastUpdate = new Date();
-                this.playerVolume.id = this.$store.state.player.id;
+            if (this.desktop) {
+                var muted = playerStatus.volume < 0;
+                var val = playerStatus.volume<0 ? -1*playerStatus.volume : playerStatus.volume;
+                if (undefined==this.playerVolume.id ||
+                     this.$store.state.player.id!=this.playerVolume.id ||
+                     this.playerVolume.muted != muted ||
+                    ((val!=this.playerVolume.val && val!=this.playerVolume.prev &&
+                    (!this.playerVolume.lastUpdate || ((new Date())-this.playerVolume.lastUpdate)>500)))) {
+                    this.playerVolume.val = val;
+                    this.playerVolume.muted = muted;
+                    this.playerVolume.lastUpdate = new Date();
+                    this.playerVolume.id = this.$store.state.player.id;
+                }
             }
         }.bind(this));
         
@@ -220,9 +226,6 @@ Vue.component('lms-toolbar', {
                 this.$store.commit('setPlayer', id);
             }
         },
-        doAction(command) {
-            bus.$emit('playerCommand', command);
-        },
         menuAction(id) {
             if (TB_SERVER_SETTINGS.id==id) {
                 serverSettings();
@@ -233,11 +236,28 @@ Vue.component('lms-toolbar', {
         togglePower() {
             bus.$emit("power", this.playerStatus.ison ? "0" : "1");
         },
-        volumeDown() {
-            this.playerVolume.val = adjustVolume(this.playerVolume.val, false);
+        volumeDown(toggleMute) {
+            if (toggleMute) {
+                bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+            } else {
+                this.playerVolume.val = adjustVolume(this.playerVolume.val, false);
+            }
         },
-        volumeUp() {
-            this.playerVolume.val = adjustVolume(this.playerVolume.val, true);
+        volumeUp(toggleMute) {
+            if (toggleMute) {
+                bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+            } else {
+                this.playerVolume.val = adjustVolume(this.playerVolume.val, true);
+            }
+        },
+        volumeClick(toggleMute) {
+            if (toggleMute) {
+                bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+            } else if (this.playerStatus.volume<0) {
+                bus.$emit('playerCommand', ['mixer', 'muting', 0]);
+            } else {
+                bus.$emit('volume');
+            }
         }
     },
     computed: {

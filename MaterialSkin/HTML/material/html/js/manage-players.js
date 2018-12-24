@@ -57,9 +57,9 @@ Vue.component('lms-manage-players', {
       </v-flex xs12>
        <v-flex xs12>
        <v-layout>
-        <v-btn flat icon @click.stop="volumeDown(player)" class="pmgr-btn"><v-icon>volume_down</v-icon></v-btn>
+        <v-btn flat icon v-longpress="{item:player, method:volumeDown}" class="pmgr-btn"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
         <v-slider @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider"></v-slider>
-        <v-btn flat icon @click.stop="volumeUp(player)" class="pmgr-btn"><v-icon>volume_up</v-icon></v-btn>
+        <v-btn flat icon v-longpress="{item:player, method:volumeUp}" class="pmgr-btn"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
         <p class="pmgr-vol">{{player.volume}} %</p>
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
@@ -220,17 +220,25 @@ Vue.component('lms-manage-players', {
                 return str;
             }
         },
-        volumeDown(player) {
+        volumeDown(player, toggleMute) {
             if (!this.show) {
                 return;
             }
-            this.setVolume(player, adjustVolume(player.volume, false));
+            if (toggleMute) {
+                this.toggleMute(player);
+            } else {
+                this.setVolume(player, adjustVolume(player.volume, false));
+            }
         },
-        volumeUp(player) {
+        volumeUp(player, toggleMute) {
             if (!this.show) {
                 return;
             }
-            this.setVolume(player, adjustVolume(player.volume, true));
+            if (toggleMute) {
+                this.toggleMute(player);
+            } else {
+                this.setVolume(player, adjustVolume(player.volume, true));
+            }
         },
         setVolume(player, vol) {
             if (!this.show) {
@@ -238,6 +246,17 @@ Vue.component('lms-manage-players', {
             }
             lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
                 player.volume = vol;
+            });
+        },
+        toggleMute(player) {
+            lmsCommand(player.id, ['mixer', 'muting', 'toggle']).then(({data}) => {
+                lmsCommand(player.id, ["mixer", "volume", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._volume) {
+                        var vol = parseInt(data.result._volume);
+                        player.volume = vol<0 ? vol*-1 : vol;
+                        player.muted = vol<0;
+                    }
+                });
             });
         },
         volumeChanged(player) {
@@ -314,6 +333,10 @@ Vue.component('lms-manage-players', {
                 player.ison = 1==data.result.power;
                 player.isplaying = data.result.mode === "play" && !data.result.waitingToPlay;
                 player.volume = data.result["mixer volume"] ? data.result["mixer volume"] : 0;
+                player.muted = player.volume<0;
+                if (player.volume<0) {
+                    player.volume *= -1;
+                }
                 player.synced = undefined!==data.result.sync_master || undefined!==data.result.sync_slaves;
                 if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
                     player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :

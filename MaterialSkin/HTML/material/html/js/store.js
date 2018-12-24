@@ -76,7 +76,11 @@ const store = new Vuex.Store({
         library: null,
         infoPlugin: false,
         noNetwork: false,
-        stopButton: false
+        stopButton: false,
+        browseBackdrop: true,
+        queueBackdrop: true,
+        nowPlayingBackdrop: true,
+        infoBackdrop: true
     },
     mutations: {
         setPlayers(state, players) {
@@ -176,8 +180,11 @@ const store = new Vuex.Store({
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
+            state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
+            state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
+            state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
+            state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
             setTheme(state.darkUi);
-            
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
                 state.infoPlugin = data && data.result && data.result._can ? true : false;
@@ -200,7 +207,11 @@ const store = new Vuex.Store({
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                  showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
                                  serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus),
-                                 stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton)};
+                                 stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
+                                 browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
+                                 queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
+                                 nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
+                                 infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop)};
                     updateUiSettings(state, opts);
                 }
             });

@@ -55,6 +55,22 @@ function updateUiSettings(state, val) {
         state.stopButton = val.stopButton;
         setLocalStorageVal('stopButton', state.stopButton);
     }
+    if (undefined!=val.browseBackdrop && state.browseBackdrop!=val.browseBackdrop) {
+        state.browseBackdrop = val.browseBackdrop;
+        setLocalStorageVal('browseBackdrop', state.browseBackdrop);
+    }
+    if (undefined!=val.queueBackdrop && state.queueBackdrop!=val.queueBackdrop) {
+        state.queueBackdrop = val.queueBackdrop;
+        setLocalStorageVal('queueBackdrop', state.queueBackdrop);
+    }
+    if (undefined!=val.nowPlayingBackdrop && state.nowPlayingBackdrop!=val.nowPlayingBackdrop) {
+        state.nowPlayingBackdrop = val.nowPlayingBackdrop;
+        setLocalStorageVal('nowPlayingBackdrop', state.nowPlayingBackdrop);
+    }
+    if (undefined!=val.infoBackdrop && state.infoBackdrop!=val.infoBackdrop) {
+        state.infoBackdrop = val.infoBackdrop;
+        setLocalStorageVal('infoBackdrop', state.infoBackdrop);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }

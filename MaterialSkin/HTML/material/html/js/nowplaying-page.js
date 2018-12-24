@@ -122,7 +122,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <img v-if="!info.show" :src="coverUrl" class="np-image-landscape"></img>
    <v-layout class="np-details-landscape" wrap>
     <v-spacer></v-spacer>
-    <v-flex xs12 class="np-text-landscape" v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-flex>
+    <v-flex xs12 class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-flex>
     <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
     <v-flex xs12 class="np-text-landscape subtext" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</v-flex>
     <v-flex xs12 class="np-text-landscape" v-else>&nbsp;</v-flex>
@@ -132,7 +132,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-layout>
   </div>
   <div v-else>
-  <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+  <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
   <p class="np-text" v-else>&nbsp;</p>
   <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
   <p class="np-text" v-else>&nbsp;</p>

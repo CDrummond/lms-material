@@ -42,15 +42,21 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </v-layout>
  <img :src="coverUrl" class="np-image" @click="infoPlugin && playerStatus.current.artist ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
  <div>
-  <p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
-  <p class="np-text" v-else>&nbsp;</p>
-  <p class="np-text-sub subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
-  <p class="np-text-sub subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
-  <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-  <p class="np-text" v-else>&nbsp;</p>
+  <v-layout row wrap>
+   <v-flex xs12><p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p></v-flex>
+   <v-flex xs12>
+    <p class="np-text-sub subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
+    <p class="np-text-sub subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+   </v-flex>
+   <v-flex xs12>
+    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+   </v-flex>
+   <v-flex xs12>
+    <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+   </v-flex>
+  </v-layout>
   <p class="np-text np-tech ellipsis" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
   <p class="np-text np-time cursor" @click="toggleTime()">{{formattedTime}}</p>
-  <v-slider id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider>
  </div>
  <div v-if="info.show" class="np-info bgnd-cover np-info-cover" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -144,7 +150,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs6 class="np-tech ellipsis">{{playerStatus.current.technicalInfo}}</v-flex>
    <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time)" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
    <v-flex xs3 class="np-duration cursor" v-else-if="!info.show && !showTotal" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</v-flex>
-   <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0"><v-slider id="pos-slider" class="np-slider" :value='playerStatus.current.time' :max='playerStatus.current.duration' @click.native="sliderChanged($event)"></v-slider></v-flex>
+   <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
+    <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+   </v-flex>
    <v-flex xs4>
     <v-layout text-xs-center>
      <v-flex xs6>
@@ -189,7 +197,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  playerStatus: {
                     isplaying: 1,
                     current: { canseek:1, duration:0, time:0, title:undefined, artist:undefined, 
-                               album:undefined, albumName:undefined, technicalInfo: "" },
+                               album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0 },
                     playlist: { shuffle:0, repeat: 0 },
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
@@ -223,6 +231,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.current.time!=this.playerStatus.current.time) {
                 this.playerStatus.current.time = playerStatus.current.time;
             }
+            this.setPosition();
             if (playerStatus.current.id!=this.playerStatus.current.id) {
                 this.playerStatus.current.id = playerStatus.current.id;
             }
@@ -343,6 +352,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         doAction(command) {
             bus.$emit('playerCommand', command);
+        },
+        setPosition() {
+            var pc = this.playerStatus.current.duration>0 ? Math.floor(this.playerStatus.current.time*1000/this.playerStatus.current.duration)/1000 : 0.0;
+            if (pc!=this.playerStatus.current.pospc) {
+                this.playerStatus.current.pospc = pc;
+            }
         },
         sliderChanged(e) {
             if (this.playerStatus.current.canseek && this.playerStatus.current.duration>3) {
@@ -498,6 +513,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.positionInterval = setInterval(function () {
                 if (undefined!=this.playerStatus.current.time && this.playerStatus.current.time>=0) {
                     this.playerStatus.current.time += 1;
+                    this.setPosition();
                 }
             }.bind(this), 1000);
         },

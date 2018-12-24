@@ -38,6 +38,28 @@
     background:rgba(72, 72, 72, 0.9) !important;
 }
 
+.np-slider {
+    color:#346dd2;
+    background-color: #333;
+    border-top: 2px solid #262626 !important;
+    border-bottom: 2px solid #262626 !important;
+}
+
+.np-slider-mobile {
+    color:#346dd2;
+    background-color: #333;
+}
+
+progress::-webkit-progress-bar {
+    background-color:#333;
+}
+progress::-webkit-progress-value {
+    background-color:#346dd2;
+}
+progress::-moz-progress-bar {
+    background-color:#346dd2;
+}
+
 .subtoolbar {
     background-color: #424242 !important;
     border-bottom: 1px solid #333;

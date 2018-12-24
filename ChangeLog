@@ -6,6 +6,7 @@
 3. Handle muted players; show speaker icon with line through, toggle mute with
    long press on icon.
 4. Fix reading default album sort values from server.
+5. Reduce CPU usage duting playback by uisng HTML5 progressbar not v-slider.
 
 0.2.3
 -----

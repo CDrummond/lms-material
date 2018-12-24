@@ -192,8 +192,8 @@ const store = new Vuex.Store({
                 if (data && data.result && data.result._p2) {
                     var prefs = JSON.parse(data.result._p2);
                     var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
-                                 artistAlbumSort: getLocalStorageBool('artistAlbumSort', undefined==prefs.artistAlbumSort ? state.artistAlbumSort : prefs.artistAlbumSort),
-                                 albumSort: getLocalStorageBool('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
+                                 artistAlbumSort: getLocalStorageVal('artistAlbumSort', undefined==prefs.artistAlbumSort ? state.artistAlbumSort : prefs.artistAlbumSort),
+                                 albumSort: getLocalStorageVal('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
                                  autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                  splitArtistsAndAlbums: getLocalStorageBool('splitArtistsAndAlbums', undefined==prefs.splitArtistsAndAlbums ? state.splitArtistsAndAlbums : prefs.splitArtistsAndAlbums),
                                  useGrid: getLocalStorageBool('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid),

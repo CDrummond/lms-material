@@ -497,9 +497,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         startPositionInterval() {
             this.positionInterval = setInterval(function () {
                 if (undefined!=this.playerStatus.current.time && this.playerStatus.current.time>=0) {
-                    this.playerStatus.current.time += 0.5;
+                    this.playerStatus.current.time += 1;
                 }
-            }.bind(this), 500);
+            }.bind(this), 1000);
         },
         stopPositionInterval() {
             if (undefined!==this.positionInterval) {

@@ -184,7 +184,7 @@ Vue.component('lms-ui-settings', {
             stopButton:false,
             browseBackdrop:true,
             queueBackdrop:true,
-            nowPlayingBackdrop:true,
+            nowPlayingBackdrop:false,
             infoBackdrop:true,
             techInfo:false,
             albumSorts:[],

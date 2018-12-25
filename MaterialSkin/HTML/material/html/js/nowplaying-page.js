@@ -55,7 +55,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
    </v-flex>
   </v-layout>
-  <p class="np-text np-tech ellipsis" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
+  <p class="np-text np-tech ellipsis" v-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
   <p class="np-text np-time cursor" @click="toggleTime()">{{formattedTime}}</p>
  </div>
  <div v-if="info.show" class="np-info bgnd-cover np-info-cover" id="np-info">
@@ -147,7 +147,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
   <v-layout text-xs-center row wrap class="np-controls">
    <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
-   <v-flex xs6 class="np-tech ellipsis">{{playerStatus.current.technicalInfo}}</v-flex>
+   <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
+   <v-flex xs6 v-else></v-flex>
    <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time)" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
    <v-flex xs3 class="np-duration cursor" v-else-if="!info.show && !showTotal" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</v-flex>
    <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
@@ -566,6 +567,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         stopButton() {
             return this.$store.state.stopButton
+        },
+        techInfo() {
+            return this.$store.state.techInfo
         },
         formattedTime() {
             return this.playerStatus && this.playerStatus.current

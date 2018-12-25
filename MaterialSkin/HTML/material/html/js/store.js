@@ -71,6 +71,10 @@ function updateUiSettings(state, val) {
         state.infoBackdrop = val.infoBackdrop;
         setLocalStorageVal('infoBackdrop', state.infoBackdrop);
     }
+    if (undefined!=val.techInfo && state.techInfo!=val.techInfo) {
+        state.techInfo = val.techInfo;
+        setLocalStorageVal('techInfo', state.techInfo);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -96,7 +100,8 @@ const store = new Vuex.Store({
         browseBackdrop: true,
         queueBackdrop: true,
         nowPlayingBackdrop: true,
-        infoBackdrop: true
+        infoBackdrop: true,
+        techInfo: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -200,6 +205,7 @@ const store = new Vuex.Store({
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
+            state.techInfo = getLocalStorageBool('techInfo', state.infoBackdrop);
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -227,7 +233,8 @@ const store = new Vuex.Store({
                                  browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                  queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
                                  nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
-                                 infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop)};
+                                 infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
+                                 techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo)};
                     updateUiSettings(state, opts);
                 }
             });

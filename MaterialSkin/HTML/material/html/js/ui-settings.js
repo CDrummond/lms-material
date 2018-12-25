@@ -113,8 +113,17 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="settings-pad" v-if="!desktop"></div>
-    <v-header v-if="!desktop">{{i18n('Now Playing')}}</v-header>
+    <div class="settings-pad"></div>
+    <v-header>{{i18n('Now Playing')}}</v-header>
+
+    <v-list-tile>
+     <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
+      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="techInfo"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider v-if="!desktop"></v-divider>
 
     <v-list-tile v-if="!desktop">
      <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
@@ -177,6 +186,7 @@ Vue.component('lms-ui-settings', {
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
+            techInfo:false,
             albumSorts:[],
             library: null,
             libraries: [],
@@ -201,6 +211,7 @@ Vue.component('lms-ui-settings', {
                 this.queueBackdrop = this.$store.state.queueBackdrop;
                 this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
                 this.infoBackdrop = this.$store.state.infoBackdrop;
+                this.techInfo = this.$store.state.techInfo;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.useGrid=this.$store.state.useGrid;
                 this.sortFavorites = this.$store.state.sortFavorites;
@@ -279,7 +290,8 @@ Vue.component('lms-ui-settings', {
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
                                                   nowPlayingBackdrop:this.nowPlayingBackdrop,
-                                                  infoBackdrop:this.infoBackdrop
+                                                  infoBackdrop:this.infoBackdrop,
+                                                  techInfo:this.techInfo
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
@@ -309,7 +321,8 @@ Vue.component('lms-ui-settings', {
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,
                                      nowPlayingBackdrop:this.nowPlayingBackdrop,
-                                     infoBackdrop:this.infoBackdrop
+                                     infoBackdrop:this.infoBackdrop,
+                                     techInfo:this.techInfo
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

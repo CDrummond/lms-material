@@ -128,6 +128,23 @@
 
 .np-text-landscape {
     margin:8px 8px 8px 8px;
+    font-size: 150%;
+    text-align: center;
+}
+
+@media only screen and (max-height: 400px) {
+    .np-text-landscape {
+        margin:0px 8px 0px 8px !important;
+        font-size: 100% !important;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 600px) {
+    .np-text-landscape {
+        font-size: 125% !important;
+        text-align: center;
+    }
 }
 
 .np-image {
@@ -141,17 +158,18 @@
 }
 
 .np-image-landscape {
-    margin:16px;
+    padding:16px 16px 0px 16px;
     object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px));
-    width:auto;
-    max-width: 40vw;
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 132px));
+    width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
     float:left;
 }
 
 .np-details-landscape {
-    margin:16px;
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 188px));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 132px));
+    width: 50vw;
     display:flex;
     justify-content: center;
     flex-direction: column;

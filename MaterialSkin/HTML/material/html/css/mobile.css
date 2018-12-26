@@ -52,6 +52,10 @@
     position:relative !important;
     height:var(--bottom-nav-height) !important;
     top:calc(-1 * (var(--bottom-nav-height) + 2px)) !important;
+
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        padding-bottom: env(safe-area-inset-bottom) !important;
+    }
 }
 
 .lms-bottom-nav-button {

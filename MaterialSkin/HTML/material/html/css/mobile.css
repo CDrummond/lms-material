@@ -126,12 +126,10 @@
     text-align: center;
 }
 
-@media only screen and (min-height: 801px) {
-    .np-text-landscape {
-        margin:16px 8px 16px 8px;
-        font-size: 250%;
-        text-align: center;
-    }
+.np-text-landscape {
+    margin:16px 8px 16px 8px;
+    font-size: 250%;
+    text-align: center;
 }
 
 @media only screen and (max-height: 800px) {

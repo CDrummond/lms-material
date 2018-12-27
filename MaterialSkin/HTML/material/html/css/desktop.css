@@ -8,7 +8,11 @@
 :root {
     --main-toolbar-height: 48px;
     --sub-toolbar-height: 48px;
-    --bottom-toolbar-height: calc(80px + var(--safe-area-bottom));
+    --bottom-toolbar-height: 80px;
+
+    @supports (--bottom-toolbar-height: env(safe-area-inset-bottom)) {
+        --bottom-toolbar-height: calc(80px + env(safe-area-inset-bottom));
+    }
 }
 
 body {
@@ -115,13 +119,19 @@ body {
 .np-text {
     font-weight:400;
     margin:12px 8px 0px 0px;
-    max-width:calc(100vw - (400px - var(--safe-area-bottom)));
+    max-width:calc(100vw - 400px);
+    @supports (max-width: env(safe-area-inset-bottom)) {
+        max-width: calc(100vw - (400px - env(safe-area-inset-bottom)));
+    }
 }
 
 .np-text-sub {
     font-weight:400;
     margin: 0px 8px -4px 0px;
-    max-width:calc(100vw - (400px - var(--safe-area-bottom)));
+    max-width:calc(100vw - 400px);
+    @supports (max-width: env(safe-area-inset-bottom)) {
+        max-width: calc(100vw - (400px - env(safe-area-inset-bottom)));
+    }
 }
 
 .np-info {
@@ -151,7 +161,10 @@ body {
 
 .np-tech {
     position:fixed;
-    bottom:calc(45px + var(--safe-area-bottom));
+    bottom:44px;
+    @supports (bottom: env(safe-area-inset-bottom)) {
+        bottom: calc(44px + env(safe-area-inset-bottom));
+    }
     right:8px;
     font-size: 75%;
     font-weight: 400;
@@ -162,7 +175,10 @@ body {
 
 .np-time {
     position:fixed;
-    bottom:calc(29px + var(--safe-area-bottom));
+    bottom:20px;
+    @supports (bottom: env(safe-area-inset-bottom)) {
+        bottom: calc(20px + env(safe-area-inset-bottom));
+    }
     right:8px;
     font-size: 75%;
     font-weight: 400;

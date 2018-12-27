@@ -133,6 +133,7 @@ body {
 .np-text {
     font-weight:400;
     margin:12px 8px 0px 0px;
+    height:2em;
     max-width:calc(100vw - 400px);
     @supports (max-width: env(safe-area-inset-bottom)) {
         max-width: calc(100vw - (400px - env(safe-area-inset-bottom)));
@@ -142,6 +143,7 @@ body {
 .np-text-sub {
     font-weight:400;
     margin: 0px 8px -4px 0px;
+    height:2em;
     max-width:calc(100vw - 400px);
     @supports (max-width: env(safe-area-inset-bottom)) {
         max-width: calc(100vw - (400px - env(safe-area-inset-bottom)));
@@ -176,34 +178,37 @@ body {
 .np-slider {
     height: 8px !important;
     width: 100% !important;
+    vertical-align: top !important;
 }
 
 .np-tech {
     position:fixed;
     bottom:44px;
-    @supports (bottom: env(safe-area-inset-bottom)) {
-        bottom: calc(44px + env(safe-area-inset-bottom));
-    }
     right:8px;
     font-size: 75%;
     font-weight: 400;
     width: 16.5em;
     font-family: monospace, monospace;
     text-align: right;
+    height:2em;
+    @supports (bottom: env(safe-area-inset-bottom)) {
+        bottom: calc(44px + env(safe-area-inset-bottom));
+    }
 }
 
 .np-time {
     position:fixed;
-    bottom:20px;
-    @supports (bottom: env(safe-area-inset-bottom)) {
-        bottom: calc(20px + env(safe-area-inset-bottom));
-    }
+    bottom:18px;
     right:8px;
     font-size: 75%;
     font-weight: 400;
     width: 16em;
     font-family: monospace, monospace;
     text-align: right;
+    height:2em;
+    @supports (bottom: env(safe-area-inset-bottom)) {
+        bottom: calc(20px + env(safe-area-inset-bottom));
+    }
 }
 
 /* Moving the splitter sometimes causes now-playing bar text to be selected? Disable selection to work-around */

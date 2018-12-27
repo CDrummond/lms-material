@@ -10,10 +10,9 @@
     --sub-toolbar-height: 48px;
     --bottom-nav-height: 58px;
 
-    @supports (padding-top: env(safe-area-inset-top)) {
-        padding-top: env(safe-area-inset-top);
+    @supports (--main-toolbar-height: env(safe-area-inset-top)) {
+        --main-toolbar-height: calc(56px + env(safe-area-inset-top));
     }
-
     @supports (--bottom-nav-height: env(safe-area-inset-bottom)) {
         --bottom-nav-height: calc(58px + env(safe-area-inset-bottom));
     }

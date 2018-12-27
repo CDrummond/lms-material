@@ -19,8 +19,8 @@ var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
 var ADD_TO_FAV_ACTION       = {cmd:"addfav",     icon:"favorite_border"};
 var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  icon:"delete_outline"};
-var PIN_ACTION              = {cmd:"pin",        icon:"star_border"};
-var UNPIN_ACTION            = {cmd:"unpin",      icon:"star"};
+var PIN_ACTION              = {cmd:"pin",        svg: "pin"};
+var UNPIN_ACTION            = {cmd:"unpin",      svg: "unpin"};
 var SELECT_ACTION           = {cmd:"select",     icon:"check_box_outline_blank"};
 var UNSELECT_ACTION         = {cmd:"unselect",   icon:"check_box"};
 
@@ -150,7 +150,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div class="image-grid-text subtext">{{item.subtitle}}</div>
      <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
       <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
-      <v-icon v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" >{{item.menuActions[0].icon}}</v-icon>
+      <v-icon v-else-if="item.menuActions && item.menuActions.length===1 && undefined==item.menuActions[0].svg" :title="item.menuActions[0].title">{{item.menuActions[0].icon}}</v-icon>
+      <img v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-card-text>
    </v-card>
@@ -176,7 +177,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
     <v-list-tile-action :title="UNPIN_ACTION.title" @click.stop="itemAction(UNPIN_ACTION.cmd, item, index)">
      <v-btn icon>
-      <v-icon>{{UNPIN_ACTION.icon}}</v-icon>
+      <img :src="UNPIN_ACTION.svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
 
@@ -224,9 +225,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title"  @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
+    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
      <v-btn icon>
-      <v-icon>{{item.menuActions[0].icon}}</v-icon>
+      <v-icon v-if="undefined==item.menuActions[0].svg">{{item.menuActions[0].icon}}</v-icon>
+      <img v-else :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -270,6 +272,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             pinned: [],
             libraryName: undefined,
             selection: []
+        }
+    },
+    computed: {
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     created() {
@@ -1697,6 +1704,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return '';
             }
             return i18np("1 Selected Item", "%1 Selected Items", value);
+        },
+        svgIcon: function (name, dark) {
+            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
         }
     },
 });

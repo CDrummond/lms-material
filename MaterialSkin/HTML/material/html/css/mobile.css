@@ -214,7 +214,7 @@
     flex-direction: column;
 }
 
-.np-slider {
+.np-slider-mobile {
     height: 4px !important;
     width: 100%;
     @supports (width: env(safe-area-inset-right)) {

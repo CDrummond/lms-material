@@ -259,7 +259,7 @@
 "Album Mix":"",
 "Audio":"",
 "Crossfade":"",
-"Display technical info":"",
+"Display technical info":"Technische Informationen anzeigen",
 "Firmware: %1":"",
 "IP: %1":"",
 "Information":"",
@@ -269,7 +269,7 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Show file type, bitrate, etc.":"",
+"Show file type, bitrate, etc.":"Zeige Dateityp, Bitrate etc. an",
 "Sound":"",
 "Start":""
 }

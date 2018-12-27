@@ -17,6 +17,10 @@
     background: #ddd;
 }
 
+html {
+    background-color: #f5f5f5;
+}
+
 .vue-splitter .splitter {
     background-color: #f0f0f0 !important;
 }

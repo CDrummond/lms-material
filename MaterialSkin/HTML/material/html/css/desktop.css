@@ -28,6 +28,13 @@ body {
     height:var(--main-toolbar-height) !important;
     margin-left: -7px !important;
     margin-right: -8px !important;
+
+    @supports (padding-left: env(safe-area-inset-left)) {
+        padding-left: env(safe-area-inset-left);
+    }
+    @supports (padding-right: env(safe-area-inset-right)) {
+        padding-right: env(safe-area-inset-right);
+    }
 }
 
 .lms-desktop-toolbar-pad {
@@ -95,6 +102,13 @@ body {
     height:var(--bottom-toolbar-height) !important;
     box-shadow: 0px -2px 4px 1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
     min-width:600px;
+
+    @supports (padding-left: env(safe-area-inset-left)) {
+        padding-left: calc(16px + env(safe-area-inset-left));
+    }
+    @supports (padding-right: env(safe-area-inset-right)) {
+        padding-right: calc(16px + env(safe-area-inset-right));
+    }
 }
 
 .np-controls {

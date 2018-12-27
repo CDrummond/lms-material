@@ -173,6 +173,11 @@ body {
     margin:auto;
 }
 
+.np-slider {
+    height: 8px !important;
+    width: 100% !important;
+}
+
 .np-tech {
     position:fixed;
     bottom:44px;

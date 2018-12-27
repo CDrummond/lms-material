@@ -6,7 +6,7 @@
 3. Handle muted players; show speaker icon with line through, toggle mute with
    long press on icon.
 4. Fix reading default album sort values from server.
-5. Reduce CPU usage duting playback by using HTML5 progressbar not v-slider.
+5. Reduce CPU usage during playback by using HTML5 progressbar not v-slider.
 6. Add options to control drawing of background.
 7. Make display of technical info optional, and disabled by default.
 8. Disable now playing background by default.

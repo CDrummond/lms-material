@@ -164,6 +164,14 @@
     }
 }
 
+@media only screen and (max-height: 300px) {
+    .np-text-landscape {
+        margin:0px 2px 0px 2px !important;
+        font-size: 50% !important;
+        text-align: center;
+    }
+}
+
 .np-image {
     display: block;
     object-fit: contain;

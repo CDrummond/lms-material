@@ -44,6 +44,9 @@ const TRACK_TAGS = "tags:ACdt";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;
+const GROUP_PINNED = 0;
+const GROUP_MY_MUSIC = 1;
+const GROUP_OTHER_MUSIC = 2;
 
 function isLocalLibCommand(command) {
     return command.command && command.command.length>0 &&
@@ -159,11 +162,11 @@ var lmsBrowse = Vue.component("lms-browse", {
  </v-list>
 
  <v-list v-else class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
-  <v-subheader v-if="isTop && pinned.length>0">{{ trans.pinned }}</v-subheader>
+  <v-subheader v-if="isTop && pinned.length>0"  @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
-   <v-divider v-if="index>0 && pinned.length>index"></v-divider>
+   <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
-   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id">
+   <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
@@ -187,9 +190,9 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
-   <v-subheader v-if="item.header">{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
+   <v-subheader v-if="item.header" @click="toggleGroup(item.group)"><v-icon>{{undefined!=item.group && collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
 
-   <v-divider v-else-if="!item.disabled && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
+   <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item') && item.style!='itemNoAction'" avatar @click="click(item, index, $event, true)" v-bind:class="{'error-text': item.id==='error'}">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -197,7 +200,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && !item.header" avatar @click="click(item, index, $event, false)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag">
+   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event, false)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag">
     <v-list-tile-avatar v-if="item.selected" :tile="true">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -271,7 +274,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             isTop: true,
             pinned: [],
             libraryName: undefined,
-            selection: []
+            selection: [],
+            collapsed: [false, false, false]
         }
     },
     computed: {
@@ -286,6 +290,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.menuActions=[];
+        var col=getLocalStorageVal('collapsed', "").split(",");
+        for (i=0; i<col.length && i<this.collapsed.length; ++i) {
+           this.collapsed[i] = "true" == col[i];
+        }
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
@@ -362,30 +370,34 @@ var lmsBrowse = Vue.component("lms-browse", {
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection") };
 
             this.top = [
-                { header: i18n("My Music"), id: TOP_MMHDR_ID },
+                { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC },
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [],
                   icon: "group",
                   type: "group",
+                  group: GROUP_MY_MUSIC,
                   id: TOP_ID_PREFIX+"ar" },
                 { title: i18n("Albums"),
                   command: ["albums"],
                   params: [ALBUM_TAGS, "sort:"+ALBUM_SORT_PLACEHOLDER],
                   icon: "album",
                   type: "group",
+                  group: GROUP_MY_MUSIC,
                   id: TOP_ID_PREFIX+"al" },
                 { title: i18n("Genres"),
                   command: ["genres"],
                   params: [],
                   icon: "label",
                   type: "group",
+                  group: GROUP_MY_MUSIC,
                   id: TOP_ID_PREFIX+"ge" },
                 { title: i18n("Playlists"),
                   command: ["playlists"],
                   params: [],
                   icon: "list",
                   type: "group",
+                  group: GROUP_MY_MUSIC,
                   id: TOP_PLAYLISTS_ID }
                 ];
             this.addExtraItems(this.top, true);
@@ -395,6 +407,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         params: ["role_id:ALBUMARTIST"],
                                         icon: "group",
                                         type: "group",
+                                        group: GROUP_MY_MUSIC,
                                         id: TOP_ID_PREFIX+"aar" });
             }
 
@@ -548,6 +561,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('showError', err);
                 logError(err);
             });
+        },
+        toggleGroup(group) {
+            this.$set(this.collapsed, group, !this.collapsed[group]);
+            setLocalStorageVal('collapsed', this.collapsed.join(","));
         },
         click(item, index, event, allowItemPlay) {
             if (this.selection.length>0) {
@@ -1238,19 +1255,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                         params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
                         icon: "search",
                         type: "search",
+                        group: GROUP_MY_MUSIC,
                         id: TOP_SEARCH_ID });
             if (addMore) {
                 list.push({ title: i18n("More"),
                             icon: "more_horiz",
+                            group: GROUP_MY_MUSIC,
                             id: TOP_MORE_ID,
                             type: "group" });
             }
-            list.push({ header: i18n("Other Music"), id:"omh" });
+            list.push({ header: i18n("Other Music"), id:"omh", group: GROUP_OTHER_MUSIC });
             list.push({ title: i18n("Radio"),
                         command: ["radios"],
                         params: ["menu:radio"],
                         icon: "radio",
                         type: "group",
+                        group: GROUP_OTHER_MUSIC,
                         id: TOP_ID_PREFIX+"ra",
                         section: SECTION_RADIO });
             list.push({ title: i18n("Favorites"),
@@ -1259,6 +1279,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         icon: "favorite",
                         type: "favorites",
                         app: "favorites",
+                        group: GROUP_OTHER_MUSIC,
                         id: TOP_FAVORITES_ID,
                         section: SECTION_FAVORITES });
             list.push({ title: i18n("Apps"),
@@ -1266,6 +1287,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         params: ["menu:1"],
                         icon: "apps",
                         type: "group",
+                        group: GROUP_OTHER_MUSIC,
                         id: TOP_APPS_ID,
                         section: SECTION_APPS });
             list.push({ title: i18n("Remote Libraries"),
@@ -1273,6 +1295,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         params: ["menu:selectRemoteLibrary", "menu:1"],
                         icon: "cloud",
                         type: "group",
+                        group: GROUP_OTHER_MUSIC,
                         id: TOP_REMOTE_ID,
                         disabled:!this.remoteLibraries });
         },
@@ -1295,7 +1318,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
                     this.serverTop = [];
-                    this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0} );
+                    this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC} );
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch")) {
@@ -1305,7 +1328,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              params: command.params,
                                              weight: c.weight ? parseFloat(c.weight) : 100,
                                              icon: c.icon,
-                                             id: TOP_ID_PREFIX+c.id
+                                             group: GROUP_MY_MUSIC,
+                                             id: TOP_ID_PREFIX+c.id,
                                             };
 
                                 if (c.id.startsWith("myMusicArtists")) {
@@ -1367,6 +1391,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     p.icon = p.item.icon;
                     p.item = undefined;
                 }
+                p.group = GROUP_PINNED;
                 this.options.pinned.add(p.id);
             });
         },
@@ -1382,7 +1407,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (add && index==-1) {
                 var command = this.buildCommand(item);
                 this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon,
-                                  command: command.command, params: command.params});
+                                  command: command.command, params: command.params, group: GROUP_PINNED});
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
                 for (var i=0; i<item.menuActions.length; ++i) {

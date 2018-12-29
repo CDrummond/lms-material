@@ -1363,6 +1363,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 this.serverTop.push({ title: i18n("Random Mix"),
                                                       icon: "shuffle",
                                                       id: TOP_RANDOM_MIX_ID,
+                                                      group: GROUP_MY_MUSIC,
                                                       weight: c.weight ? parseFloat(c.weight) : 100 });
                             }
                         }

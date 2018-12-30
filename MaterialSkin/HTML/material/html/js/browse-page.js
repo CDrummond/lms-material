@@ -36,6 +36,7 @@ const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
+const TOP_DYNAMIC_PLAYLISTS_ID = TOP_ID_PREFIX+"dpl";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
@@ -302,6 +303,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       sortFavorites: this.$store.state.sortFavorites};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
+        this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.previousScrollPos=0;
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
@@ -414,7 +416,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var otherPrev = [];
             if (this.other) {
                 if (this.other.length>6) {
-                    for (var i=0; i<this.other.length-6; ++i) {
+                    for (var i=0; i<this.other.length-7; ++i) {
                         otherPrev.unshift(this.other[i]);
                     }
                 }
@@ -432,6 +434,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                   icon: "shuffle",
                   type: "group",
                   id: TOP_RANDOM_ALBUMS_ID },
+                { title: i18n("Random Mix"),
+                  icon: "shuffle",
+                  id: TOP_RANDOM_MIX_ID,
+                  disabled: !this.randomMix },
+                { title: i18n("Dynamic Playlists"),
+                  command: ["dynamicplaylist", "browsejive"],
+                  params: [],
+                  icon: "casino",
+                  id: TOP_DYNAMIC_PLAYLISTS_ID,
+                  disabled: !this.dynamicPlaylists },
                 { title: i18n("Years"),
                   command: ["years"],
                   params: [],
@@ -444,10 +456,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                   icon: "new_releases",
                   type: "group",
                   id: TOP_NEW_MUSIC_ID },
-                { title: i18n("Random Mix"),
-                  icon: "shuffle",
-                  id: TOP_RANDOM_MIX_ID,
-                  disabled: !this.randomMix },
                 { title: i18n("Music Folder"),
                   command: ["musicfolder"],
                   params: ["type:audio", "tags:d"],
@@ -1653,6 +1661,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                     setLocalStorageVal('randomMix', this.randomMix);
                     this.other.forEach(i => {
                         if (i.id == TOP_RANDOM_MIX_ID) {
+                            i.disabled = !this.randomMix;
+                            return;
+                        }
+                    });
+                }
+            }
+        });
+
+        lmsCommand("", ["can", "dynamicplaylist", "browsejive", "?"]).then(({data}) => {
+            if (data && data.result && undefined!=data.result._can) {
+                var can = 1==data.result._can;
+                if (can!=this.dynamicPlaylists) {
+                    this.dynamicPlaylists = can;
+                    setLocalStorageVal('dynamicPlaylists', this.dynamicPlaylists);
+                    this.other.forEach(i => {
+                        if (i.id == TOP_DYNAMIC_PLAYLISTS_ID) {
                             i.disabled = !this.randomMix;
                             return;
                         }

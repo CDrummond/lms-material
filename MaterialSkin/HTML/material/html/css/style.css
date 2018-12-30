@@ -494,6 +494,10 @@ progress {
     margin-right: 8px;
 }
 
+#browse-list .v-subheader {
+    cursor: pointer;
+}
+
 .switch-label .v-list__tile__title {
     white-space: normal;
     min-height: 24px;

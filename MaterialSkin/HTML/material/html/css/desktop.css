@@ -30,6 +30,13 @@ body {
     height:var(--main-toolbar-height) !important;
 }
 
+.settings-title {
+    height: var(--main-toolbar-height) !important;
+    max-height: var(--main-toolbar-height) !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
 .pq-details {
     margin-left:-16px !important;
 }

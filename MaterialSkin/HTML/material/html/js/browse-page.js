@@ -1367,6 +1367,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "arrow_downward";
                                 } else if (c.id == "dynamicplaylist") {
                                     item.icon = "casino";
+                                } else {
+                                    item.icon = "music_note";
                                 }
                                 this.serverTop.push(item);
                             } else if (c.id=="randomplay") {

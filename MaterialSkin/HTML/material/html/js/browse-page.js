@@ -1699,14 +1699,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                             return;
                         }
                     });
-                    if (undefined!=this.serverTop && this.serverTop.length>0) {
-                        this.serverTop.forEach(i => {
-                            if (i.id == TOP_REMOTE_ID) {
-                                i.disabled = !this.remoteLibraries;
-                                return;
-                            }
-                        });
-                    }
                 }
             }
         });

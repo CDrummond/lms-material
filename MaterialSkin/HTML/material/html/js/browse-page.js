@@ -1329,7 +1329,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC} );
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
-                            if (c.id=="dynamicplaylist" || (c.id.startsWith("myMusic") && !c.id.startsWith("myMusicSearch"))) {
+                            if (c.id=="randomplay") {
+                                this.serverTop.push({ title: i18n("Random Mix"),
+                                                      icon: "shuffle",
+                                                      id: TOP_RANDOM_MIX_ID,
+                                                      group: GROUP_MY_MUSIC,
+                                                      weight: c.weight ? parseFloat(c.weight) : 100 });
+                            } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect")) {
                                 var command = this.buildCommand(c, "go", false, true);
                                 var item = { title: c.text,
                                              command: command.command ,
@@ -1371,12 +1377,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "music_note";
                                 }
                                 this.serverTop.push(item);
-                            } else if (c.id=="randomplay") {
-                                this.serverTop.push({ title: i18n("Random Mix"),
-                                                      icon: "shuffle",
-                                                      id: TOP_RANDOM_MIX_ID,
-                                                      group: GROUP_MY_MUSIC,
-                                                      weight: c.weight ? parseFloat(c.weight) : 100 });
                             }
                         }
                     });

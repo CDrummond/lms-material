@@ -44,6 +44,7 @@
 "Delete":"Löschen",
 "Delete '%1'?":"'%1' löschen?",
 "Delete alarm?":"Wecker löschen?",
+"Display technical info":"Technische Informationen anzeigen",
 "Don't know how to handle this!":"Weiss nicht, wie ich das behandeln soll!",
 "Don't shuffle":"Nicht in zufälliger Reihenfolge wiedergeben",
 "Don't update information when song changes":"Informationen bei Titelwechsel nicht aktualisieren",
@@ -164,6 +165,7 @@
 "Show artists or albums?":"Interpreten oder Alben anzeigen?",
 "Show context menu when clicking anywhere on an audio item.":"Kontextmenü zeigen, wenn irgendwo auf ein Lied-Eintrag geklickt wird?",
 "Show current track information":"Informationen zum aktuellen Titel anzeigen",
+"Show file type, bitrate, etc.":"Zeige Dateityp, Bitrate etc. an",
 "Show information in tabs":"Informationen auf separaten Seiten anzeigen",
 "Shuffle":"Zufällige Wiedergabe",
 "Shuffle albums":"Zufällige Albumreihenfolge",
@@ -259,7 +261,7 @@
 "Album Mix":"",
 "Audio":"",
 "Crossfade":"",
-"Display technical info":"Technische Informationen anzeigen",
+"Dynamic Playlists":"",
 "Firmware: %1":"",
 "IP: %1":"",
 "Information":"",
@@ -269,7 +271,6 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Show file type, bitrate, etc.":"Zeige Dateityp, Bitrate etc. an",
 "Sound":"",
 "Start":""
 }

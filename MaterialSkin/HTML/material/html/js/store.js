@@ -145,7 +145,7 @@ const store = new Vuex.Store({
                 var config = getLocalStorageVal('player');
                 if (config) {
                     state.players.forEach(p => {
-                        if (p.id === config) {
+                        if (p.id === config || p.name == config) {
                             state.player = p;   
                         }
                     });

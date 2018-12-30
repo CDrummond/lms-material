@@ -250,3 +250,11 @@ function isLandscape() {
     return window.innerHeight<window.innerWidth;
 }
 
+function incrementVolume() {
+    bus.$emit("adjustVolume", true);
+}
+
+function decrementVolume() {
+    bus.$emit("adjustVolume", false);
+}
+

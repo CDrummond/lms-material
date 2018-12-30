@@ -135,6 +135,8 @@ var lmsServer = Vue.component('lms-server', {
                                      };
 
                         player.volume = data.result["mixer volume"];
+                        // Store volume, so that it can be accessed in 'adjustVolume' handler
+                        this.volume = player.volume;
                         player.playlist = { shuffle: data.result["playlist shuffle"],
                                             repeat: data.result["playlist repeat"],
                                             duration: data.result["playlist duration"],
@@ -244,6 +246,13 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('updateServerStatus', function() {
             this.refreshServerStatus();
             this.refreshStatus();
+        }.bind(this));
+        bus.$on('adjustVolume', function(inc) {
+            if (this.$store.state.player) {
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]).then(({data}) => {
+                    this.refreshStatus();
+                });
+            }
         }.bind(this));
     },
     watch: {

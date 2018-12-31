@@ -410,6 +410,113 @@ a {
     letter-spacing: .02em;
 }
 
+.np-text {
+    margin:0px 8px 0px 8px;
+    text-align: center;
+}
+
+.np-text-landscape {
+    margin:16px 8px 16px 8px;
+    font-size: 250%;
+    text-align: center;
+}
+
+@media only screen and (max-height: 800px) {
+    .np-text-landscape {
+        margin:12px !important;
+        font-size: 200% !important;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 700px) {
+    .np-text-landscape {
+        margin:8px !important;
+        font-size: 150% !important;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 600px) {
+    .np-text-landscape {
+        margin:4px !important;
+        font-size: 125% !important;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 400px) {
+    .np-text-landscape {
+        margin:0px 8px 0px 8px !important;
+        font-size: 100% !important;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 300px) {
+    .np-text-landscape {
+        margin:0px 2px 0px 2px !important;
+        font-size: 50% !important;
+        text-align: center;
+    }
+}
+
+.np-slider-mobile {
+    height: 4px !important;
+    width: 100%;
+}
+
+.np-pos {
+    font-size: 75%;
+    font-weight: 400;
+    font-family: monospace, monospace;
+    text-align: left;
+}
+
+.np-tech {
+    font-size: 75%;
+    font-weight: 400;
+    font-family: monospace, monospace;
+    text-align: center;
+}
+
+.np-duration {
+    font-size: 75%;
+    font-weight: 400;
+    font-family: monospace, monospace;
+    text-align: right;
+}
+
+.np-controls {
+    font-weight:400;
+    padding:8px 8px 16px 8px; /* t, r, b, l */
+    width:100%;
+    position:absolute;
+    bottom:0px;
+}
+
+.np-controls-wide {
+    font-weight:400;
+    padding:8px 8px 16px 8px; /* t, r, b, l */
+    width:calc(50vw - 16px);
+    position:absolute;
+    bottom:0px;
+}
+
+.np-info {
+    width:100vw;
+    display: block;
+    height:auto;
+}
+
+.np-info-text {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 50px));
+    overflow:auto;
+    max-width:1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 progress {
     border:0;
 }

@@ -123,9 +123,9 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="techInfo"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="!desktop"></v-divider>
+    <v-divider></v-divider>
 
-    <v-list-tile v-if="!desktop">
+    <v-list-tile>
      <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>

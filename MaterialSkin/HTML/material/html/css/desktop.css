@@ -100,14 +100,22 @@ body {
     min-width:600px;
 }
 
-.np-controls {
+.np-page {
+    position: fixed;
+    top:var(--main-toolbar-height);
+    height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
+    bottom:0px;
+    width:100%;
+}
+
+.np-controls-desktop {
     margin-left:-16px;
     margin-top:16px;
     max-width:270px;
     float:left;
 }
 
-.np-image {
+.np-image-desktop {
     object-fit: cover;
     object-position: 50% 0%;
     display: block;
@@ -119,21 +127,21 @@ body {
     float:left;
 }
 
-.np-text {
+.np-text-desktop {
     font-weight:400;
     margin:12px 8px 0px 0px;
     height:2em;
     max-width:calc(100vw - 400px);
 }
 
-.np-text-sub {
+.np-text-sub-desktop {
     font-weight:400;
     margin: 0px 8px -4px 0px;
     height:2em;
     max-width:calc(100vw - 400px);
 }
 
-.np-info {
+.np-info-desktop {
     position:fixed;
     top:var(--main-toolbar-height);
     left:0px;
@@ -144,27 +152,27 @@ body {
     z-index:0;
 }
 
-.np-info-text {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 52px));
+.np-info-text-desktop {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 100px));
     overflow:auto;
     max-width:1000px;
     margin:auto;
 }
 
-.np-info-text-full {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 41px));
+.np-info-text-full-desktop {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 92px));
     overflow:auto;
     max-width:1000px;
     margin:auto;
 }
 
-.np-slider {
+.np-slider-desktop {
     height: 8px !important;
     width: 100% !important;
     vertical-align: top !important;
 }
 
-.np-tech {
+.np-tech-desktop {
     position:fixed;
     bottom:44px;
     right:8px;
@@ -176,7 +184,7 @@ body {
     height:2em;
 }
 
-.np-time {
+.np-time-desktop {
     position:fixed;
     bottom:18px;
     right:8px;
@@ -186,6 +194,51 @@ body {
     font-family: monospace, monospace;
     text-align: right;
     height:2em;
+}
+
+.np-image {
+    display: block;
+    object-fit: contain;
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px));
+    width:calc(100vw - 16px);
+    margin-left: auto;
+    margin-right: auto;
+    padding:8px 8px 232px 8px; /* t, r, b, l */
+}
+
+.np-image-landscape {
+    padding:16px 16px 0px 16px;
+    object-fit: contain;
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 132px));
+    width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
+    float:left;
+}
+
+.np-image-landscape-wide {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px)) !important;
+}
+
+.np-details-landscape {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 132px));
+    width: 50vw;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.np-close-desktop {
+    position: absolute;
+    top:8px;
+    right:8px;
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.np-close-desktop:hover {
+    position: absolute;
+    z-index:2;
 }
 
 /* Moving the splitter sometimes causes now-playing bar text to be selected? Disable selection to work-around */

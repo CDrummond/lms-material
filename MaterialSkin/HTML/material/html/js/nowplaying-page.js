@@ -596,7 +596,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     watch: {
         'info.show': function(val) {
             // Indicate that dialog is/isn't shown, so that swipe is controlled
-            bus.$emit('dialogOpen', val);
+            bus.$emit('dialogOpen', val, 'info-dialog');
             this.setInfoTrack();
             this.showInfo();
         },

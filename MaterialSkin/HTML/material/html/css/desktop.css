@@ -228,19 +228,6 @@ body {
     flex-direction: column;
 }
 
-.np-close-desktop {
-    position: absolute;
-    top:8px;
-    right:8px;
-    width: 32px !important;
-    height: 32px !important;
-}
-
-.np-close-desktop:hover {
-    position: absolute;
-    z-index:2;
-}
-
 /* Moving the splitter sometimes causes now-playing bar text to be selected? Disable selection to work-around */
 .noselect {
     -webkit-touch-callout: none;

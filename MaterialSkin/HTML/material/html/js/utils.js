@@ -190,6 +190,7 @@ function removeUniqueness(id) {
 
 function setBgndCover(elem, coverUrl, isDark) {
     if (elem) {
+        elem.style.backgroundColor = isDark ? "#424242" : "#fff";
         elem.style.backgroundImage = "url('"+(undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")
                                               ? undefined : coverUrl)+"')";
         if (isDark) {

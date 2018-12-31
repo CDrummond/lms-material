@@ -55,7 +55,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon :title="trans.info"  v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
  <v-btn icon v-else-if="!desktop && playerStatus.isplaying" @click.native="bus.$emit('playerCommand', ['pause', '1'])" class="toolbar-button">
@@ -75,6 +75,12 @@ Vue.component('lms-toolbar', {
  </v-btn>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
+ </v-btn>
+ <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
+  <v-icon>fullscreen</v-icon>
+ </v-btn>
+ <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
+  <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu bottom left>
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
@@ -101,8 +107,9 @@ Vue.component('lms-toolbar', {
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined,nothingplaying:undefined, info:undefined,
-                        switchoff:undefined, switchon:undefined},
+                        switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined},
                  infoOpen: false,
+                 largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
                  snackbar:{ show: false, msg: undefined}
                }
@@ -185,6 +192,9 @@ Vue.component('lms-toolbar', {
             }
             this.initItems();
         }.bind(this));
+        bus.$on('largeViewVisible', function(val) {
+            this.largeView = val;
+        }.bind(this));
 
         if (this.desktop) {
             bus.$on('playerChanged', function() {
@@ -220,7 +230,8 @@ Vue.component('lms-toolbar', {
             TB_MANAGE_PLAYERS.title=i18n('Manage Players');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
-                          info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On')};
+                          info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
+                          showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

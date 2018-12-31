@@ -40,7 +40,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :src="coverUrl" class="np-image-desktop" @click="info.show=false; largeView=true" v-bind:class="{'cursor' : infoPlugin}"></img>
+ <img :src="coverUrl" class="np-image-desktop"></img>
  <div>
   <v-layout row wrap>
    <v-flex xs12><p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p></v-flex>
@@ -99,7 +99,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 </div>
 <div class="np-page bgnd-cover" v-else id="np-page">
- <v-btn v-if="desktop" flat icon class="np-close-desktop" @click="largeView=false" :title="trans.close"><v-icon>close</v-icon></v-btn>
  <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
@@ -263,6 +262,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     mounted() {
         if (this.desktop) {
             this.info.showTabs=getLocalStorageBool("showTabs", false);
+            bus.$on('largeView', function(val) {
+                if (val) {
+                    this.info.show = false;
+                }
+                this.largeView = val;
+            }.bind(this));
         }
         this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {
@@ -637,6 +642,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 this.page = undefined;
             }
+            bus.$emit('largeViewVisible', val);
         }
     },
     computed: {

@@ -4,7 +4,7 @@
 2. Allow 'My Music', etc, to be collapsed.
 3. Add dynamic playlists entry to menus.
 4. Move player controls in mobile now-playing if very wide.
-5. Click on cover in desktop toolbar to show large now-playing info (same as
+5. Add toolbar button in desktop layout to show large now-playing info (same as
    mobile layout).
 6. Fix info icon changing to play/pause in mobile layout when info shown.
 

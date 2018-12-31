@@ -6,6 +6,7 @@
 4. Move player controls in mobile now-playing if very wide.
 5. Click on cover in desktop toolbar to show large now-playing info (same as
    mobile layout).
+6. Fix info icon changing to play/pause in mobile layout when info shown.
 
 0.2.4
 -----

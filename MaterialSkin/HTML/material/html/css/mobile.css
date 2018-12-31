@@ -192,6 +192,10 @@
     float:left;
 }
 
+.np-image-landscape-wide {
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 16px)) !important;
+}
+
 .np-details-landscape {
     height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 132px));
     width: 50vw;
@@ -229,11 +233,17 @@
 .np-controls {
     font-weight:400;
     padding:8px 8px 16px 8px; /* t, r, b, l */
-    /*height:22px; */
     width:100%;
-    position:absolute; 
-    bottom:0px; 
-    /*border: 1px solid blue;*/
+    position:absolute;
+    bottom:0px;
+}
+
+.np-controls-wide {
+    font-weight:400;
+    padding:8px 8px 16px 8px; /* t, r, b, l */
+    width:calc(50vw - 16px);
+    position:absolute;
+    bottom:0px;
 }
 
 .np-info {

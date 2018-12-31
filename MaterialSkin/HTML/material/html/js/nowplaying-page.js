@@ -125,7 +125,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
  <div v-else>
   <div v-if="landscape">
-   <img v-if="!info.show" :src="coverUrl" class="np-image-landscape"></img>
+   <img v-if="!info.show" :src="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -133,6 +133,53 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
+    <div v-if="wide">
+
+     <v-layout text-xs-center row wrap class="np-controls-wide">
+      <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
+      <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
+      <v-flex xs6 v-else></v-flex>
+      <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time)" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
+      <v-flex xs3 class="np-duration cursor" v-else-if="!info.show && !showTotal" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</v-flex>
+      <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
+       <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+      </v-flex>
+      <v-flex xs4>
+       <v-layout text-xs-center>
+        <v-flex xs6>
+         <v-btn :title="trans.repeatOne" flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+         <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+         <v-btn :title="trans.repeatOff" flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed"><v-icon>repeat</v-icon></v-btn>
+        </v-flex>
+        <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+       </v-layout>
+      </v-flex>
+      <v-flex xs4>
+       <v-layout v-if="stopButton" text-xs-center>
+        <v-flex xs6>
+         <v-btn flat icon v-if="playerStatus.isplaying" @click="doAction(['pause'])"><v-icon large>pause</v-icon></v-btn>
+         <v-btn flat icon v-else @click="doAction(['play'])"><v-icon large>play_arrow</v-icon></v-btn>
+        </v-flex>
+        <v-flex xs6>
+         <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
+        </v-flex>
+       </v-layout>
+       <v-btn flat icon large v-else-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+       <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+      </v-flex>
+      <v-flex xs4>
+       <v-layout text-xs-center>
+        <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+        <v-flex xs6>
+         <v-btn :title="trans.shuffleAlbums" flat icon v-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+         <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+         <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed"><v-icon>shuffle</v-icon></v-btn>
+        </v-flex>
+       </v-layout>
+      </v-flex>
+     </v-layout>
+
+    </div>
    </div>
   </div>
   <div v-else>
@@ -145,7 +192,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <img v-if="!info.show" :src="coverUrl" class="np-image"></img>
   </div>
 
-  <v-layout text-xs-center row wrap class="np-controls">
+  <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
    <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
    <v-flex xs6 v-else></v-flex>
@@ -207,7 +254,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true,
-                 landscape: false
+                 landscape: false,
+                 wide: false
                 };
     },
     mounted() {
@@ -313,9 +361,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$on('themeChanged', function() {
                 this.setBgndCover();
             }.bind(this));
-            this.landscape = isLandscape();
-            bus.$on('orientation', function(landscape) {
-                this.landscape = landscape;
+            var orient = orientation();
+            this.landscape = "portrait"!=orient;
+            this.wide = "landscape-wide"==orient;
+            bus.$on('orientation', function(orient) {
+                this.landscape = "portrait"!=orient;
+                this.wide = "landscape-wide"==orient;
             }.bind(this));
         }
 

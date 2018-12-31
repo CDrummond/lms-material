@@ -11,9 +11,9 @@ const LYRICS_TAB = 2;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
-<div v-if="desktop" class="np-bar noselect">
+<div v-if="desktop && !largeView" class="np-bar noselect" id="np-bar">
 
- <v-layout row class="np-controls" v-if="stopButton">
+ <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
@@ -28,7 +28,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <v-layout row class="np-controls" v-else>
+ <v-layout row class="np-controls-desktop" v-else>
   <v-flex xs4>
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
@@ -40,31 +40,31 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :src="coverUrl" class="np-image" @click="infoPlugin && playerStatus.current.artist ? info.show=!info.show : undefined" v-bind:class="{'cursor' : infoPlugin}"></img>
+ <img :src="coverUrl" class="np-image-desktop" @click="info.show=false; largeView=true" v-bind:class="{'cursor' : infoPlugin}"></img>
  <div>
   <v-layout row wrap>
-   <v-flex xs12><p class="np-text ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p></v-flex>
+   <v-flex xs12><p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p></v-flex>
    <v-flex xs12>
-    <p class="np-text-sub subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
-    <p class="np-text-sub subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
    </v-flex>
    <v-flex xs12>
-    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+    <p class="np-text-desktop subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    </v-flex>
    <v-flex xs12>
-    <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+    <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
    </v-flex>
   </v-layout>
-  <p class="np-text np-tech ellipsis" v-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
-  <p class="np-text np-time cursor" @click="toggleTime()">{{formattedTime}}</p>
+  <p class="np-text-desktop np-tech-desktop ellipsis" v-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
+  <p class="np-text-desktop np-time-desktop cursor" @click="toggleTime()">{{formattedTime}}</p>
  </div>
- <div v-if="info.show" class="np-info bgnd-cover np-info-cover" id="np-info">
+ <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
      <v-card flat class="np-info-card-cover">
-      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
+      <v-card-text class="np-info-text-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
@@ -75,7 +75,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
        <v-card-title><p>{{tab.title}}</p></v-card-title>
-       <v-card-text class="np-info-text-full" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
+       <v-card-text class="np-info-text-full-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
       </v-card>
      </v-flex>
     </template>
@@ -99,6 +99,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 </div>
 <div class="np-page bgnd-cover" v-else id="np-page">
+ <v-btn v-if="desktop" flat icon class="np-close-desktop" @click="largeView=false" :title="trans.close"><v-icon>close</v-icon></v-btn>
  <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
@@ -183,13 +184,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
   </div>
   <div v-else>
-  <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
-  <p class="np-text" v-else>&nbsp;</p>
-  <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
-  <p class="np-text" v-else>&nbsp;</p>
-  <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-  <p class="np-text" v-else>&nbsp;</p>
-  <img v-if="!info.show" :src="coverUrl" class="np-image"></img>
+   <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+   <p class="np-text" v-else>&nbsp;</p>
+   <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+   <p class="np-text" v-else>&nbsp;</p>
+   <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+   <p class="np-text" v-else>&nbsp;</p>
+   <img v-if="!info.show" :src="coverUrl" class="np-image"></img>
   </div>
 
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
@@ -255,7 +256,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true,
                  landscape: false,
-                 wide: false
+                 wide: false,
+                 largeView: false
                 };
     },
     mounted() {
@@ -356,25 +358,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
-        if (!this.desktop) {
-            this.page = document.getElementById("np-page");
-            bus.$on('themeChanged', function() {
-                this.setBgndCover();
-            }.bind(this));
-            var orient = orientation();
+        this.page = document.getElementById("np-page");
+        bus.$on('themeChanged', function() {
+            this.setBgndCover();
+        }.bind(this));
+
+        var orient = orientation();
+        this.landscape = "portrait"!=orient;
+        this.wide = "landscape-wide"==orient;
+        bus.$on('orientation', function(orient) {
             this.landscape = "portrait"!=orient;
             this.wide = "landscape-wide"==orient;
-            bus.$on('orientation', function(orient) {
-                this.landscape = "portrait"!=orient;
-                this.wide = "landscape-wide"==orient;
-            }.bind(this));
-        }
+        }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {
             this.coverUrl = coverUrl;
-            if (!this.desktop) {
-                this.setBgndCover();
-            }
+            this.setBgndCover();
         }.bind(this));
         bus.$emit('getCurrentCover');
 
@@ -385,6 +384,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         bus.$on('info', function() {
             if (this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                this.largeView = false;
                 this.info.show=!this.info.show;
             }
         }.bind(this));
@@ -609,6 +609,28 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.info.sync) {
                 this.setInfoTrack();
                 this.showInfo();
+            }
+        },
+        'largeView': function(val) {
+            if (val) {
+                // Save current style so can reset when largeview disabled
+                if (!this.before) {
+                    var elem = document.getElementById("np-bar");
+                    if (elem) {
+                        this.before = elem.style;
+                    }
+                }
+                this.$nextTick(function () {
+                    this.page = document.getElementById("np-page");
+                    this.setBgndCover();
+                });
+            } else if (this.before) {
+                this.$nextTick(function () {
+                    var elem = document.getElementById("np-bar");
+                    if (elem) {
+                        elem.style = this.before;
+                    }
+                });
             }
         }
     },

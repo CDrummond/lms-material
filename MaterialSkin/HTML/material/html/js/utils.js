@@ -246,8 +246,11 @@ function parseQueryParams() {
     }
 }
 
-function isLandscape() {
-    return window.innerHeight<window.innerWidth;
+function orientation() {
+    if (window.innerHeight<window.innerWidth) {
+        return window.innerWidth>=900 ? "landscape-wide" : "landscape";
+    }
+    return "portrait";
 }
 
 function incrementVolume() {

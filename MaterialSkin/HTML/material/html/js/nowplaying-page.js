@@ -580,7 +580,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             setLocalStorageVal("showTotal", this.showTotal);
         },
         setBgndCover() {
-            setBgndCover(this.page, this.$store.state.nowPlayingBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
+            if (this.page && (!this.desktop || this.largeView)) {
+                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
+            }
         }
     },
     filters: {
@@ -624,13 +626,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.page = document.getElementById("np-page");
                     this.setBgndCover();
                 });
-            } else if (this.before) {
-                this.$nextTick(function () {
-                    var elem = document.getElementById("np-bar");
-                    if (elem) {
-                        elem.style = this.before;
-                    }
-                });
+            } else {
+                if (this.before) {
+                    this.$nextTick(function () {
+                        var elem = document.getElementById("np-bar");
+                        if (elem) {
+                            elem.style = this.before;
+                        }
+                    });
+                }
+                this.page = undefined;
             }
         }
     },

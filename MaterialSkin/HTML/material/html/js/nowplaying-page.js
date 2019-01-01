@@ -1,7 +1,7 @@
 /**
  * LMS-Material
  *
- * Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+ * Copyright (c) 2018 Craig-2019 Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
 

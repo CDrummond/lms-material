@@ -7,7 +7,8 @@
 
 var autoLayout = false;
 var isMobileBrowser = false;
-var currentOrientation = undefined;
+var landscape = undefined;
+var wide = undefined;
 function checkLayout() {
     if (autoLayout && !isMobileBrowser) {
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
@@ -17,9 +18,10 @@ function checkLayout() {
         }
     }
 
-    if (undefined==currentOrientation || currentOrientation!=orientation()) {
-        currentOrientation = orientation()
-        bus.$emit("orientation", currentOrientation);
+    if (undefined==landscape || undefined==wide || landscape!=isLandscape() || wide!=isWide()) {
+        landscape=isLandscape();
+        wide!=isWide();
+        bus.$emit("screenLayoutChanged");
     }
 }
 

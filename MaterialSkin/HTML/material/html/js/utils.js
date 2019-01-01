@@ -247,11 +247,12 @@ function parseQueryParams() {
     }
 }
 
-function orientation() {
-    if (window.innerHeight<window.innerWidth) {
-        return window.innerWidth>=900 ? "landscape-wide" : "landscape";
-    }
-    return "portrait";
+function isLandscape() {
+    return window.innerWidth > window.innerHeight;
+}
+
+function isWide() {
+    return window.innerWidth>=900;
 }
 
 function incrementVolume() {

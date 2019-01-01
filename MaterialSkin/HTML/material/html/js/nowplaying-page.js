@@ -368,12 +368,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.setBgndCover();
         }.bind(this));
 
-        var orient = orientation();
-        this.landscape = "portrait"!=orient;
-        this.wide = "landscape-wide"==orient;
-        bus.$on('orientation', function(orient) {
-            this.landscape = "portrait"!=orient;
-            this.wide = "landscape-wide"==orient;
+        this.landscape = isLandscape();
+        this.wide = isWide();
+        bus.$on('screenLayoutChanged', function() {
+            this.landscape = isLandscape();
+            this.wide = isWide();
         }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {

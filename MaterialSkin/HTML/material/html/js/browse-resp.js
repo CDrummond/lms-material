@@ -186,6 +186,7 @@ function parseBrowseResp(data, parent, options, idStart) {
             var moreAction = false;
             var isFavorites = parent && parent.section == SECTION_FAVORITES;
             var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
+            var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
@@ -325,11 +326,26 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
+                } else if (isRadios) {
+                    if (!i.id) {
+                        if (i.presetParams && i.presetParams.favorites_url) {
+                            i.id = "radio:"+i.presetParams.favorites_url;
+                        } else if (parent && parent.id && TOP_RADIO_ID!=parent.id) {
+                            i.id = parent.id+"."+i.title;
+                        } else {
+                            i.id = "radio:"+i.title;
+                        }
+                    }
+                    if (!addedDivider && i.menuActions.length>0) {
+                        i.menuActions.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {
-                        i.id = "item_id:"+i.params.item_id;
+                        i.id = "item_id:x"+i.params.item_id;
                     } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
-                        i.id = "item_id:"+i.actions.go.params.item_id;
+                        i.id = "item_id:y"+i.actions.go.params.item_id;
                     }
                 }
 
@@ -344,14 +360,6 @@ function parseBrowseResp(data, parent, options, idStart) {
 
                 if (isFavorites) {
                     i.id=addUniqueness(i.id, uniqueness);
-                }
-
-                if (!isApps && !isFavorites && i.presetParams) {
-                    if (!addedDivider && i.menuActions.length>0) {
-                        i.menuActions.push(DIVIDER);
-                        addedDivider = true;
-                    }
-                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                 }
 
                 if (moreAction && i.menuActions.length>0 && i.params && i.params.item_id) {

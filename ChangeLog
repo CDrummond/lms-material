@@ -7,6 +7,8 @@
 5. Add toolbar button in desktop layout to show large now-playing info (same as
    mobile layout).
 6. Fix info icon changing to play/pause in mobile layout when info shown.
+7. When setting progress bar position, check that curent song duration and time
+   are not 'undefined'
 
 0.2.4
 -----

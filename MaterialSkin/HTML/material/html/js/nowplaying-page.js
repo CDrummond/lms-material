@@ -410,7 +410,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('playerCommand', command);
         },
         setPosition() {
-            var pc = this.playerStatus.current.duration>0 ? Math.floor(this.playerStatus.current.time*1000/this.playerStatus.current.duration)/1000 : 0.0;
+            var pc = this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration &&
+                     this.playerStatus.current.duration>0 ? Math.floor(this.playerStatus.current.time*1000/this.playerStatus.current.duration)/1000 : 0.0;
+
             if (pc!=this.playerStatus.current.pospc) {
                 this.playerStatus.current.pospc = pc;
             }

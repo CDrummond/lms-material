@@ -1509,7 +1509,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         setScrollElement() {
             this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");
             this.scrollElement.addEventListener('scroll', () => {
-                if (this.fetchingItems || this.listSize<=this.items.length || (!this.desktop && this.$route.path!='/browse')) {
+                if (this.fetchingItems || this.listSize<=this.items.length) {
                     return;
                 }
                 const scrollY = this.scrollElement.scrollTop;

@@ -318,7 +318,7 @@ var lmsQueue = Vue.component("lms-queue", {
             const pageHeight = this.scrollElement.scrollHeight;
             const pad = (visible*2.5);
 
-            const bottomOfPage = visible + scrollY >= (pageHeight-(pageHeight>pad ? pad : 300));
+            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
 
             if (bottomOfPage || pageHeight < visible) {
                 this.fetchItems();

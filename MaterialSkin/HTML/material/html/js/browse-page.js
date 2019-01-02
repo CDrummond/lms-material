@@ -246,7 +246,10 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(action, index) in menu.item.menuActions">
     <v-divider v-if="action.divider"></v-divider>
     <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
-     <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+     <v-list-tile-title>
+       <div v-if="undefined==action.svg"><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</div>
+       <div v-else><img style="vertical-align: middle" :src="action.svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{action.title}}</div>
+     </v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>

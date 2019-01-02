@@ -310,7 +310,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length || (!this.desktop && this.$route.path!='/queue')) {
+            if (this.fetchingItems || this.listSize<=this.items.length) {
                 return;
             }
             const scrollY = this.scrollElement.scrollTop;

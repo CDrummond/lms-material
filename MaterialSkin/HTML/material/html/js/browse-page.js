@@ -39,6 +39,7 @@ const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_DYNAMIC_PLAYLISTS_ID = TOP_ID_PREFIX+"dpl";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
+const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const ALBUM_TAGS = "tags:jlya";
 const TRACK_TAGS = "tags:ACdt";
@@ -1282,7 +1283,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         icon: "radio",
                         type: "group",
                         group: GROUP_OTHER_MUSIC,
-                        id: TOP_ID_PREFIX+"ra",
+                        id: TOP_RADIO_ID,
                         section: SECTION_RADIO });
             list.push({ title: i18n("Favorites"),
                         command: ["favorites", "items"],

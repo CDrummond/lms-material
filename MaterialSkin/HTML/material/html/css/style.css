@@ -374,7 +374,9 @@ a {
 }
 
 .np-playpause {
-    margin-top: 2px !important;
+    margin: 2px !important;
+    width: 47px !important;
+    height: 47px !important;
 }
 
 .np-info-lyrics {

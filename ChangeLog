@@ -3,6 +3,8 @@
 1. Fix pin icon missing from menus.
 2. Use radio URL as its ID when pinning.
 3. Allow all radio sections to be pinned.
+4. Limit text (album, or artist) in grid to 80 characters, and add '...' if
+   longer.
 
 0.2.5
 -----

@@ -24,6 +24,7 @@ var UNPIN_ACTION            = {cmd:"unpin",      svg: "unpin"};
 var SELECT_ACTION           = {cmd:"select",     icon:"check_box_outline_blank"};
 var UNSELECT_ACTION         = {cmd:"unselect",   icon:"check_box"};
 
+const MAX_GRID_TEXT_LEN = 80;
 const DIVIDER = {divider:true};
 const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "__ALBUM_SORT__";
@@ -151,8 +152,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
      </v-btn>
      <img v-lazy="item.image"></img>
-     <div class="image-grid-text">{{item.title}}</div>
-     <div class="image-grid-text subtext">{{item.subtitle}}</div>
+     <div class="image-grid-text truncate-multiline">{{item.title | clampText}}</div>
+     <div class="image-grid-text truncate-multiline subtext">{{item.subtitle | clampText}}</div>
      <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
       <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
       <v-icon v-else-if="item.menuActions && item.menuActions.length===1 && undefined==item.menuActions[0].svg" :title="item.menuActions[0].title">{{item.menuActions[0].icon}}</v-icon>
@@ -1757,6 +1758,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         svgIcon: function (name, dark) {
             return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
+        },
+        clampText: function(str) {
+            if (!str || str.length<MAX_GRID_TEXT_LEN) {
+                return str;
+            }
+            return str.substring(0, MAX_GRID_TEXT_LEN) + "...";
         }
     },
 });

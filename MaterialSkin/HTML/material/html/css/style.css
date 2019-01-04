@@ -535,6 +535,14 @@ progress {
     white-space: nowrap;
 }
 
+.truncate-multiline {
+  overflow: hidden;
+  position: relative;
+  line-height: 1.25em;
+  max-height: 8.75em;
+  margin-bottom: 2px;
+}
+
 .shuffle-albums {
     border: 2px solid;
     border-radius: 50%;

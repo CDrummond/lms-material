@@ -153,4 +153,21 @@
     flex-direction: column;
 }
 
-
+.vol-label {
+    margin: 0px;
+    padding: 0px;
+    font-size: 100%;
+    font-family: monospace, monospace;
+    text-align: center;
+    position: fixed;
+    white-space:nowrap;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    width: 3.7em !important;
+    height: 1.35em !important;
+    line-height: 1.35em !important;
+    top: 34px;
+    right: 50px;
+    z-index: -1;
+    opacity: 0.4;
+}

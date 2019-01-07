@@ -8,7 +8,7 @@
 var PQ_PLAY_NOW_ACTION =  { cmd: 'playnow',  icon: 'play_circle_outline'     };
 var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'      };
 var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline'   };
-var PQ_MORE_ACTION =      { cmd: 'more',     icon: 'more_horiz'              };
+var PQ_MORE_ACTION =      { cmd: 'more',     svg:  'more'                    };
 var PQ_SELECT_ACTION =    { cmd: 'select',   icon: 'check_box_outline_blank' };
 var PQ_UNSELECT_ACTION =  { cmd: 'unselect', icon: 'check_box'               };
 
@@ -152,7 +152,10 @@ var lmsQueue = Vue.component("lms-queue", {
    <template v-for="(action, index) in menu.item.actions">
     <v-divider v-if="action.divider"></v-divider>
     <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
-     <v-list-tile-title><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+     <v-list-tile-title>
+      <div v-if="undefined==action.svg"><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</div>
+      <div v-else><img style="vertical-align: middle" :src="action.svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{action.title}}</div>
+     </v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>
@@ -176,6 +179,11 @@ var lmsQueue = Vue.component("lms-queue", {
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlistName: undefined,
             selection: []
+        }
+    },
+    computed: {
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     created() {
@@ -639,6 +647,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 return '';
             }
             return i18np("1 Selected Item", "%1 Selected Items", value);
+        },
+        svgIcon: function (name, dark) {
+            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
         }
     },
     beforeDestroy() {

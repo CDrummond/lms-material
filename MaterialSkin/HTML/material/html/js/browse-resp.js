@@ -362,7 +362,10 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.id=addUniqueness(i.id, uniqueness);
                 }
 
-                if (moreAction && i.menuActions.length>0 && i.params && i.params.item_id) {
+                // Only show 'More' aciton if ('more' is in baseActions and item as item_id) OR
+                // 'more' is in item's actions. #57
+                if ((moreAction && i.menuActions.length>0 && i.params && i.params.item_id) ||
+                    (i.actions && i.actions.more && i.actions.more.cmd)) {
                     if (!addedDivider && i.menuActions.length>0) {
                         i.menuActions.push(DIVIDER);
                         addedDivider = true;

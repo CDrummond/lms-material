@@ -6,6 +6,7 @@
 4. Limit text (album, or artist) in grid to 80 characters, and add '...' if
    longer.
 5. Show volume level under button in mobile toolbar.
+6. Show 'More' action in more cases.
 
 0.2.5
 -----

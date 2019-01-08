@@ -130,7 +130,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{headerTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
+    <v-flex xs12 v-if="headerSubTitle" class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <template v-for="(action, index) in menuActions">
@@ -555,7 +555,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     if (resp.subtitle) {
                         this.headerSubTitle=resp.subtitle;
-                    } else if (!(1==this.items.length && "text"==this.items[0].type)) {
+                    } else if (1==this.items.length && "text"==this.items[0].type) {
+                        this.headerSubTitle = undefined;
+                    } else {
                         this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                     }
                     this.sortItems();

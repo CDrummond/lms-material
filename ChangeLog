@@ -7,6 +7,7 @@
    longer.
 5. Show volume level under button in mobile toolbar.
 6. Show 'More' action in more cases.
+7. Respect 'nextWindow' when clicking on a 'text' action.
 
 0.2.5
 -----

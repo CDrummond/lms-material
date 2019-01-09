@@ -231,6 +231,12 @@ function parseBrowseResp(data, parent, options, idStart) {
                         i.title=i.text;
                     }
                 }
+
+                // Issue #58 Pretend 'text' with a go action is just a text line, so that click() works
+                if (undefined==i.type && !i.style && i.actions && i.actions.go) {
+                    i.type="text";
+                }
+
                 i.text = undefined;
                 i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE);
 

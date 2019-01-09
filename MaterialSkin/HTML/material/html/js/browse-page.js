@@ -602,12 +602,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     lmsCommand(this.playerId(), command.command).then(({data}) => {
                         if (item.nextWindow) {
                             if (item.nextWindow=="parent" && this.history.length>0) {
-                                this.history.pop();
-                                this.refreshList();
+                                this.goBack(true);
                             } else if (item.nextWindow=="grandParent" && this.history.length>1) {
                                 this.history.pop();
-                                this.history.pop();
-                                this.refreshList();
+                                this.goBack(true);
                             }
                         }
                     });
@@ -926,7 +924,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.clearSelection();
             var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
-            lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length).then(({data}) => {
+            lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length>LMS_BATCH_SIZE ? this.items.length : LMS_BATCH_SIZE).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 if (data && data.result) {
@@ -999,7 +997,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        goBack() {
+        goBack(refresh) {
             if (this.fetchingItems) {
                 return;
             }
@@ -1019,14 +1017,18 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
             this.command = prev.command;
-            this.$nextTick(function () {
-                if (changedView) {
-                    this.setScrollElement();
-                }
-                this.setGridAlignment();
-                this.setBgndCover();
-                setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
-            });
+            if (refresh) {
+                this.refreshList();
+            } else {
+                this.$nextTick(function () {
+                    if (changedView) {
+                        this.setScrollElement();
+                    }
+                    this.setGridAlignment();
+                    this.setBgndCover();
+                    setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                });
+            }
         },
         buildCommand(item, commandName, doReplacements, addAlbumSort) {
             var origCommand = undefined;

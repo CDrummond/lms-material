@@ -11,6 +11,7 @@
  8. Fix restoring command when go back.
  9. Only check for wide layout if landscape - otherwise controls are sometimes
 10. Respect 'nextWindow' when clicking on a 'text' action.
+11. Darker botton navbar for dark mobile layout.
 
 0.2.5
 -----

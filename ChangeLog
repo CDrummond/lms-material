@@ -8,6 +8,9 @@
 5. Show volume level under button in mobile toolbar.
 6. Show 'More' action in more cases.
 7. Respect 'nextWindow' when clicking on a 'text' action.
+7. Fix double-presses occuring on volume buttons with touch devices.
+8. Fix restoring command when go back.
+9. Respect 'nextWindow' when clicking on a 'text' action.
 
 0.2.5
 -----

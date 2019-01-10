@@ -169,7 +169,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
-   <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
+   <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event, false)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
@@ -196,7 +196,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)"><v-icon>{{undefined!=item.group && collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
 
    <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
-   <v-list-tile v-if="item.type=='text' && item.style && item.style.startsWith('item') && item.style!='itemNoAction'" avatar @click="click(item, index, $event, true)" v-bind:class="{'error-text': item.id==='error'}">
+   <v-list-tile v-if="item.type=='text' && ( (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && item.actions && item.actions.go) )" avatar @click="click(item, index, $event, true)" v-bind:class="{'error-text': item.id==='error'}">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
@@ -581,7 +581,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$set(this.collapsed, group, !this.collapsed[group]);
             setLocalStorageVal('collapsed', this.collapsed.join(","));
         },
-        click(item, index, event, allowItemPlay) {
+        click(item, index, event, allowTextClick) {
             if (this.selection.length>0) {
                 this.select(item, index);
                 return;
@@ -594,12 +594,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if ("text"==item.type) {
-                if (allowItemPlay && item.style && item.style.startsWith("item")) {
+                if (allowTextClick) {
                     var command = this.buildCommand(item);
                     command.params.forEach(p => {
                         command.command.push(p);
                     });
-                    lmsCommand(this.playerId(), command.command);
+                    lmsCommand(this.playerId(), command.command).then(({data}) => {
+                        if (item.nextWindow) {
+                            if (item.nextWindow=="parent" && this.history.length>0) {
+                                this.goBack(true);
+                            } else if (item.nextWindow=="grandParent" && this.history.length>1) {
+                                this.history.pop();
+                                this.goBack(true);
+                            }
+                        }
+                    });
                 }
                 return;
             }
@@ -915,7 +924,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.clearSelection();
             var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
-            lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length).then(({data}) => {
+            lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length>LMS_BATCH_SIZE ? this.items.length : LMS_BATCH_SIZE).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 if (data && data.result) {
@@ -988,7 +997,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        goBack() {
+        goBack(refresh) {
             if (this.fetchingItems) {
                 return;
             }
@@ -1008,14 +1017,18 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
             this.command = prev.command;
-            this.$nextTick(function () {
-                if (changedView) {
-                    this.setScrollElement();
-                }
-                this.setGridAlignment();
-                this.setBgndCover();
-                setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
-            });
+            if (refresh) {
+                this.refreshList();
+            } else {
+                this.$nextTick(function () {
+                    if (changedView) {
+                        this.setScrollElement();
+                    }
+                    this.setGridAlignment();
+                    this.setBgndCover();
+                    setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                });
+            }
         },
         buildCommand(item, commandName, doReplacements, addAlbumSort) {
             var origCommand = undefined;

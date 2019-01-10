@@ -507,7 +507,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
-            this.command = command;
             this.fetchingItems = true;
 
             //console.log("FETCH command:" + command.command + " params:" + command.params);
@@ -518,6 +517,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
                     this.addHistory();
+                    this.command = command;
                     this.current = item;
                     this.currentBaseActions = this.baseActions;
                     this.headerTitle=item.title ? item.title : "?";

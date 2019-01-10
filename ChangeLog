@@ -1,16 +1,17 @@
 0.2.6
 -----
-1. Fix pin icon missing from menus.
-2. Use radio URL as its ID when pinning.
-3. Allow all radio sections to be pinned.
-4. Limit text (album, or artist) in grid to 80 characters, and add '...' if
-   longer.
-5. Show volume level under button in mobile toolbar.
-6. Show 'More' action in more cases.
+ 1. Fix pin icon missing from menus.
+ 2. Use radio URL as its ID when pinning.
+ 3. Allow all radio sections to be pinned.
+ 4. Limit text (album, or artist) in grid to 80 characters, and add '...' if
+    longer.
+ 5. Show volume level under button in mobile toolbar.
+ 6. Show 'More' action in more cases.
+ 7. Respect 'nextWindow' when clicking on a 'text' action.
 7. Fix double-presses occuring on volume buttons with touch devices.
-8. Fix restoring command when go back.
-9. Only check for wide layout if landscape - otherwise controls are sometimes
-   missing.
+ 8. Fix restoring command when go back.
+ 9. Only check for wide layout if landscape - otherwise controls are sometimes
+10. Respect 'nextWindow' when clicking on a 'text' action.
 
 0.2.5
 -----

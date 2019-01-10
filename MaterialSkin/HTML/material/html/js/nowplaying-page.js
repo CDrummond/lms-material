@@ -369,10 +369,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.landscape = isLandscape();
-        this.wide = isWide();
+        this.wide = this.landscape && isWide();
         bus.$on('screenLayoutChanged', function() {
             this.landscape = isLandscape();
-            this.wide = isWide();
+            this.wide = this.landscape && isWide();
         }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {

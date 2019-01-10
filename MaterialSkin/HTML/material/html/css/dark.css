@@ -71,4 +71,5 @@ progress::-moz-progress-bar {
 
 .lms-bottom-nav {
     border-top: 1px solid #333;
+    background-color: #3d3d3d !important;
 }

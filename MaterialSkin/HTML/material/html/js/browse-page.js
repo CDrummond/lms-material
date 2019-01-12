@@ -1372,7 +1372,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              command: command.command ,
                                              params: command.params,
                                              weight: c.weight ? parseFloat(c.weight) : 100,
-                                             icon: c.icon,
                                              group: GROUP_MY_MUSIC,
                                              id: TOP_ID_PREFIX+c.id,
                                             };
@@ -1398,14 +1397,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id == "myMusicRandomAlbums") {
                                     item.svg = "dice-album";
                                     item.id=TOP_RANDOM_ALBUMS_ID;
-                                    item.icon = undefined;
                                 } else if (c.id.startsWith("myMusicTopTracks")) {
                                     item.icon = "arrow_upward";
                                 } else if (c.id.startsWith("myMusicFlopTracks")) {
                                     item.icon = "arrow_downward";
                                 } else if (c.id == "dynamicplaylist") {
                                     item.svg = "dice-list";
-                                    item.icon = undefined;
                                 } else {
                                     item.icon = "music_note";
                                 }

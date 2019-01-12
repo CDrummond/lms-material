@@ -68,3 +68,7 @@ progress::-moz-progress-bar {
     border-top: 1px solid #ddd;
 }
 
+div.v-avatar i.v-icon {
+    color: #272727;
+}
+

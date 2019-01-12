@@ -44,6 +44,10 @@ Vue.component('lms-toolbar', {
     </v-list-tile-content>
    </v-list-tile>
 
+   <v-list-tile v-if="!playerGroups && players && players.length>1" @click="bus.$emit('synchronise', player)">
+    <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+
    <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
      <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>0}"><v-icon>speaker_group</v-icon>&nbsp{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
@@ -107,7 +111,7 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
-                 trans:{noplayer:undefined,nothingplaying:undefined, info:undefined,
+                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined,
                         switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined},
                  infoOpen: false,
                  largeView: false,
@@ -132,6 +136,9 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         */
 
+        lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
+            this.playerGroups = data && data.result && undefined!=data.result._can && 1==data.result._can;
+        });
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
@@ -230,7 +237,7 @@ Vue.component('lms-toolbar', {
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage Players');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
-            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
+            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing")};
         },

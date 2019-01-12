@@ -613,8 +613,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                 : undefined;
                         if (nextWindow) {
                             if (nextWindow=="parent" && this.history.length>0) {
+                                bus.$emit('showMessage', item.title);
                                 this.goBack(true);
                             } else if (nextWindow=="grandParent" && this.history.length>1) {
+                                bus.$emit('showMessage', item.title);
                                 this.history.pop();
                                 this.goBack(true);
                             }

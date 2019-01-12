@@ -7,12 +7,12 @@
     longer.
  5. Show volume level under button in mobile toolbar.
  6. Show 'More' action in more cases.
- 7. Fix double-presses occuring on volume buttons with touch devices.
+ 7. Fix double-presses occurring on volume buttons with touch devices.
  8. Fix restoring command when go back.
  9. Only check for wide layout if landscape - otherwise controls are sometimes
     missing.
 10. Respect 'nextWindow' when clicking on a 'text' action.
-11. Darker botton navbar for dark mobile layout.
+11. Darker bottom navbar for dark mobile layout.
 12. Semi-transparent time progress background.
 13. If group players plugin is not enabled, then add 'Synchronise' to players
     menu in toolbar.
@@ -31,7 +31,7 @@
 5. Add toolbar button in desktop layout to show large now-playing info (same as
    mobile layout).
 6. Fix info icon changing to play/pause in mobile layout when info shown.
-7. When setting progress bar position, check that curent song duration and time
+7. When setting progress bar position, check that current song duration and time
    are not 'undefined'
 
 0.2.4
@@ -42,7 +42,7 @@
 3. Handle muted players; show speaker icon with line through, toggle mute with
    long press on icon.
 4. Fix reading default album sort values from server.
-5. Reduce CPU usage during playback by using HTML5 progressbar not v-slider.
+5. Reduce CPU usage during playback by using HTML5 progress bar not v-slider.
 6. Add options to control drawing of background.
 7. Make display of technical info optional, and disabled by default.
 8. Disable now playing background by default.
@@ -65,9 +65,9 @@
 0.2.2
 -----
  1. Fix cover display when re-ordering favourites.
- 2. Fix renmaming and deleting favourites.
- 3. Use curent cover as queue background.
- 4. Use curent artist, album, etc. image as browse background.
+ 2. Fix renaming and deleting favourites.
+ 3. Use current cover as queue background.
+ 4. Use current artist, album, etc. image as browse background.
  5. When adding/playing a selection, call commands sequentially and wait for
     each to complete before doing the next.
  6. Revert cover change, and use artwork_url/coverid if supplied.
@@ -85,7 +85,7 @@
     remaining duration of current track.
  3. Remove swipe to change views; buggy, and material apps don't do this.
  4. Fix deleting playlists.
- 5. Center crop background image in mobile now playing info.
+ 5. Centre crop background image in mobile now playing info.
  6. Don't add play actions to toolbar for track/album/atist info.
  7. Fix buttons in fullscreen image view.
  8. Remove option to sort favourites, instead allow drag'n'drop re-ordering.
@@ -126,7 +126,7 @@
  4. If lose server connection, display modal dialog (similar to when there are
     no players) until connection is re-established.
  5. Allow "PlayAll" / "AddAll" for radio.
- 6. Fix multi-artist retrievel in now playing.
+ 6. Fix multi-artist retrieval in now playing.
  7. Store command used to populate list, so that it can be re-used when
     fetching more.
  8. Fix un-pinnig of items.

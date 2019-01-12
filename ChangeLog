@@ -13,7 +13,7 @@
     missing.
 10. Respect 'nextWindow' when clicking on a 'text' action.
 11. Darker botton navbar for dark mobile layout.
-12. Transparent time progress background.
+12. Semi-transparent time progress background.
 13. If group players plugin is not enabled, then add 'Synchronise' to players
     menu in toolbar.
 14. Use same font-size for browse header entries ('My Music', etc) as for

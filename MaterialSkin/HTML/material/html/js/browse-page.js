@@ -157,7 +157,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
       <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
       <v-icon v-else-if="item.menuActions && item.menuActions.length===1 && undefined==item.menuActions[0].svg" :title="item.menuActions[0].title">{{item.menuActions[0].icon}}</v-icon>
-      <img v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
+      <img v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" class="svg-img" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-card-text>
    </v-card>
@@ -177,7 +177,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.svg" :tile="true">
-      <img :src="item.svg | svgIcon(darkUi)"></img>
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
 
     <v-list-tile-content>
@@ -186,7 +186,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
     <v-list-tile-action :title="UNPIN_ACTION.title" @click.stop="itemAction(UNPIN_ACTION.cmd, item, index)">
      <v-btn icon>
-      <img :src="UNPIN_ACTION.svg | svgIcon(darkUi)"></img>
+      <img class="svg-img" :src="UNPIN_ACTION.svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
 
@@ -217,7 +217,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.svg" :tile="true">
-      <img :src="item.svg | svgIcon(darkUi)"></img>
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="selection.length>0" :tile="true">
      <v-icon>check_box_outline_blank</v-icon>
@@ -240,7 +240,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
      <v-btn icon>
       <v-icon v-if="undefined==item.menuActions[0].svg">{{item.menuActions[0].icon}}</v-icon>
-      <img v-else :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
+      <img v-else class="svg-img" :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -256,7 +256,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
      <v-list-tile-title>
        <div v-if="undefined==action.svg"><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</div>
-       <div v-else><img style="vertical-align: middle" :src="action.svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{action.title}}</div>
+       <div v-else><img class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{action.title}}</div>
      </v-list-tile-title>
     </v-list-tile>
    </template>

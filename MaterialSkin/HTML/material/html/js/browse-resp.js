@@ -233,7 +233,8 @@ function parseBrowseResp(data, parent, options, idStart) {
                 }
 
                 // Issue #58 Pretend 'text' with a go action is just a text line, so that click() works
-                if (undefined==i.type && !i.style && i.actions && i.actions.go && !i.icon && !i["icon-id"] && !i.image && !i.window && !i.addAction) {
+                if (undefined==i.type && !i.style && i.actions && i.actions.go && !i.icon && !i["icon-id"] && !i.image && !i.window &&
+                    (!i.addAction || i.actions.go.nextWindow)) {
                     i.type="text";
                 }
 

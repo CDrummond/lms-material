@@ -2,6 +2,7 @@
 -----
 1. Fix 'Random Albums' icon when using categories from server.
 2. Fix SVG icon sizes.
+3. Fix radio browsing - don't treat items with 'addAction' and no type as 'text'
 
 0.2.6
 -----

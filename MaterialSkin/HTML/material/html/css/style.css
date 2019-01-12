@@ -265,8 +265,9 @@ a {
     height:8px;
 }
 
-.info-padding {
+.dialog-padding {
     height:24px;
+    background-color:red;
 }
 
 .maintoolbar-title {
@@ -596,10 +597,6 @@ progress {
     padding-left:8px;
     margin-left: auto;
     margin-right: auto;
-}
-
-.settings-pad {
-    height: 32px;
 }
 
 .settings-sub-pad {

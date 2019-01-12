@@ -68,6 +68,7 @@ Vue.component('lms-manage-players', {
     </v-layout>
    </v-container>
   </v-card-text>
+  <div class="dialog-padding"></div>
  </v-card>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

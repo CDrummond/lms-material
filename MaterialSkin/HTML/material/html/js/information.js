@@ -30,7 +30,7 @@ Vue.component('lms-information-dialog', {
      </template>
     </v-list>
    </v-menu>
-   <div class="info-padding"></div>
+   <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Plugins')}}</p>
    <p v-if="updates.plugins.length>0">{{i18n('The following plugins have updates available:')}}</p>
@@ -40,7 +40,7 @@ Vue.component('lms-information-dialog', {
     <template v-for="(info, index) in updates.plugins"><li>{{info.title}}</li></template>
    </ul>
    <v-btn v-if="updates.plugins.length>0" @click="serverSettings('SETUP_PLUGINS')" flat>{{i18n('Server Settings')}}</v-btn>
-   <div class="info-padding"></div>
+   <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Players')}}</p>
    <ul>
@@ -52,7 +52,7 @@ Vue.component('lms-information-dialog', {
      </li>
     </template>
    </ul>
-   <div class="info-padding"></div>
+   <div class="dialog-padding"></div>
 
   </v-card-text>
  </v-card>

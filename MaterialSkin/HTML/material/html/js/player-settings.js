@@ -25,7 +25,7 @@ Vue.component('lms-player-settings', {
     <v-list-tile>
      <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
     </v-list-tile>
-    <div class="settings-pad"></div>
+    <div class="dialog-padding"></div>
     <v-header>{{i18n('Audio')}}</v-header>
     <v-list-tile>
      <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
@@ -37,7 +37,7 @@ Vue.component('lms-player-settings', {
      <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
     </v-list-tile>
 
-    <div class="settings-pad"></div>
+    <div class="dialog-padding"></div>
     <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
 
     <v-list-tile v-if="sleep.timeLeft">
@@ -55,7 +55,7 @@ Vue.component('lms-player-settings', {
       </v-list>
      </v-menu>
     </v-list-tile>
-     <div class="settings-pad"></div>
+     <div class="dialog-padding"></div>
     <v-header>{{i18n('Alarms')}}</v-header>
      <v-list-tile>
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
@@ -86,6 +86,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile>
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
+     <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
   </v-card>
@@ -106,7 +107,7 @@ Vue.component('lms-player-settings', {
      </v-time-picker>
     </v-dialog>
    </v-list-tile>
-   <div class="settings-pad"></div>
+   <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Days')}}</v-subheader>
    <v-list-tile class="settings-compact-row">
     <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
@@ -121,7 +122,7 @@ Vue.component('lms-player-settings', {
     <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
    </v-list-tile>
-   <div class="settings-pad"></div>
+   <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Options')}}</v-subheader>
    <v-list-tile>
     <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
@@ -140,6 +141,7 @@ Vue.component('lms-player-settings', {
     <v-list-tile-action><v-switch v-model="alarmDialog.repeat"></v-switch></v-list-tile-action>
    </v-list-tile>
   </v-list>
+  <div class="dialog-padding"></div>
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click="alarmDialog.show = false">{{i18n('Cancel')}}</v-btn>

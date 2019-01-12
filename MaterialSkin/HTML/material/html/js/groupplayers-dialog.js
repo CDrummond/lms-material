@@ -41,6 +41,7 @@ Vue.component('lms-groupplayers-dialog', {
     <v-list-tile-action><v-switch v-model="options.powerPlay"></v-switch></v-list-tile-action>
    </v-list-tile>
   </v-list>
+  <div class="dialog-padding"></div>
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>

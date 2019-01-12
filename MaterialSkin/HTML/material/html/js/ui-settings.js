@@ -43,7 +43,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="settings-pad"></div>
+    <div class="dialog-padding"></div>
     <v-header>{{i18n('Browse')}}</v-header>
     <v-list-tile>
      <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
@@ -113,7 +113,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="settings-pad"></div>
+    <div class="dialog-padding"></div>
     <v-header>{{i18n('Now Playing')}}</v-header>
 
     <v-list-tile>
@@ -133,7 +133,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="settings-pad"></div>
+    <div class="dialog-padding"></div>
     <v-header>{{i18n('Queue')}}</v-header>
 
     <v-list-tile>
@@ -153,7 +153,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="settings-pad" v-if="infoPlugin"></div>
+    <div class="dialog-padding" v-if="infoPlugin"></div>
     <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
 
     <v-list-tile v-if="infoPlugin">
@@ -163,6 +163,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <div class="dialog-padding"></div>
    </v-list>
   </v-card-text>
  </v-card>

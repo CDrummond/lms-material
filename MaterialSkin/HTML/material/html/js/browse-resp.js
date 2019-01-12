@@ -310,6 +310,20 @@ function parseBrowseResp(data, parent, options, idStart) {
                     i.menuActions.push(DELETE_ACTION);
                 }
 
+                if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
+                    i.actions.go.cmd.forEach(a => {
+                        if ("search" == a) {
+                            i.type = "search";
+                            resp.useGrid = false;
+                            return;
+                        }
+                    });
+                }
+                if (!i.type && i.style && i.style=="itemNoAction") {
+                    i.type = "text";
+                    resp.useGrid = false;
+                }
+
                 if (isApps && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                     if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
                         if (i.actions.go.params.item_id) {
@@ -332,7 +346,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
-                } else if (isRadios) {
+                } else if (isRadios && i.type!="search") {
                     if (!i.id) {
                         if (i.presetParams && i.presetParams.favorites_url) {
                             i.id = "radio:"+i.presetParams.favorites_url;
@@ -377,20 +391,6 @@ function parseBrowseResp(data, parent, options, idStart) {
                         addedDivider = true;
                     }
                     i.menuActions.push(MORE_ACTION);
-                }
-
-                if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
-                    i.actions.go.cmd.forEach(a => {
-                        if ("search" == a) {
-                            i.type = "search";
-                            resp.useGrid = false;
-                            return;
-                        }
-                    });
-                }
-                if (!i.type && i.style&& i.style=="itemNoAction") {
-                    i.type = "text";
-                    resp.useGrid = false;
                 }
 
                 if (resp.useGrid && i.image) {

@@ -265,6 +265,10 @@ a {
     height:8px;
 }
 
+.info-padding {
+    height:24px;
+}
+
 .maintoolbar-title {
     font-size:85% !important;
 }

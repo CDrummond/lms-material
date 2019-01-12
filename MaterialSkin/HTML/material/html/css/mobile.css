@@ -156,18 +156,19 @@
 .vol-label {
     margin: 0px;
     padding: 0px;
-    font-size: 100%;
+    font-size: 10px;
     font-family: monospace, monospace;
     text-align: center;
+    vertical-align: middle;
     position: fixed;
     white-space:nowrap;
     overflow-x:hidden;
     overflow-y:hidden;
-    width: 3.7em !important;
-    height: 1.35em !important;
-    line-height: 1.35em !important;
-    top: 34px;
-    right: 50px;
+    width: 36px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    top: 38px;
+    right: 58px;
     z-index: -1;
     opacity: 0.4;
 }

@@ -593,7 +593,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if ("search"==item.type) {
-                if (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) {
+                if (isMobile()) {
                     event.target.scrollIntoView();
                     //window.scrollBy(0, -64);
                 }

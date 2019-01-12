@@ -716,6 +716,18 @@ progress {
     margin-bottom:4px;
 }
 
+.svg-list-img {
+    width: 32px !important;
+    height: 32px !important;
+    vertical-align: middle;
+}
+
+.svg-img {
+    width: 24px !important;
+    height: 24px !important;
+    vertical-align: middle;
+}
+
 .vue-splitter .splitter {
     margin-bottom:4px;
 }

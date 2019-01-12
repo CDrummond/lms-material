@@ -44,14 +44,14 @@ html {
 
 .np-slider {
     color:#346dd2;
-    background-color: #333;
+    background-color: rgba(255, 255, 255, 0.15) !important;
     border-top: 2px solid #262626 !important;
     border-bottom: 2px solid #262626 !important;
 }
 
 .np-slider-mobile {
     color:#346dd2;
-    background-color: #333;
+    background-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 progress::-webkit-progress-bar {

@@ -16,10 +16,17 @@ Vue.directive('longpress', {
         let pressTimer = null
         let started = false
         let timedout = false
+        let touchOnly = false;
 
         // Define funtion handlers
         // Create timeout ( run function after 1s )
         let start = (e) => {
+            if (e.type=="touchstart") {
+                touchOnly = true;
+            } else if (touchOnly && !e.type.startsWith("touch")) {
+                return;
+            }
+
             if (started || (e.type === 'click' && e.button !== 0)) {
                 return;
             }
@@ -55,15 +62,13 @@ Vue.directive('longpress', {
             }
         }
 
-        if ('ontouchstart' in document.documentElement) {
-            el.addEventListener("touchstart", start);
-            el.addEventListener("touchend", cancel);
-            el.addEventListener("touchcancel", cancel);
-        } else {
-            el.addEventListener("mousedown", start);
-            el.addEventListener("click", cancel);
-            el.addEventListener("mouseout", cancel);
-        }
+
+        el.addEventListener("touchstart", start);
+        el.addEventListener("touchend", cancel);
+        el.addEventListener("touchcancel", cancel);
+        el.addEventListener("mousedown", start);
+        el.addEventListener("click", cancel);
+        el.addEventListener("mouseout", cancel);
     }
 })
 

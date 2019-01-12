@@ -606,10 +606,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                         command.command.push(p);
                     });
                     lmsCommand(this.playerId(), command.command).then(({data}) => {
-                        if (item.nextWindow) {
-                            if (item.nextWindow=="parent" && this.history.length>0) {
+                        var nextWindow = item.nextWindow
+                                            ? item.nextWindow
+                                            : item.actions && item.actions.go && item.actions.go.nextWindow
+                                                ? item.actions.go.nextWindow
+                                                : undefined;
+                        if (nextWindow) {
+                            if (nextWindow=="parent" && this.history.length>0) {
                                 this.goBack(true);
-                            } else if (item.nextWindow=="grandParent" && this.history.length>1) {
+                            } else if (nextWindow=="grandParent" && this.history.length>1) {
                                 this.history.pop();
                                 this.goBack(true);
                             }

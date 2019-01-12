@@ -165,7 +165,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </v-list>
 
  <v-list v-else class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
-  <v-subheader v-if="isTop && pinned.length>0"  @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</v-subheader>
+  <v-subheader v-if="isTop && pinned.length>0" @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
@@ -175,6 +175,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.svg" :tile="true">
+      <img :src="item.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
 
     <v-list-tile-content>
@@ -212,6 +215,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.svg" :tile="true">
+      <img :src="item.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="selection.length>0" :tile="true">
      <v-icon>check_box_outline_blank</v-icon>
@@ -436,17 +442,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: i18n("Random Albums"),
                   command: ["albums"],
                   params: [ALBUM_TAGS, "sort:random"],
-                  icon: "shuffle",
+                  svg: "dice-album",
                   type: "group",
                   id: TOP_RANDOM_ALBUMS_ID },
                 { title: i18n("Random Mix"),
-                  icon: "shuffle",
+                  svg: "dice-multiple",
                   id: TOP_RANDOM_MIX_ID,
                   disabled: !this.randomMix },
                 { title: i18n("Dynamic Playlists"),
                   command: ["dynamicplaylist", "browsejive"],
                   params: [],
-                  icon: "casino",
+                  svg: "dice-list",
                   id: TOP_DYNAMIC_PLAYLISTS_ID,
                   disabled: !this.dynamicPlaylists },
                 { title: i18n("Years"),
@@ -1351,7 +1357,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id=="randomplay") {
                                 this.serverTop.push({ title: i18n("Random Mix"),
-                                                      icon: "shuffle",
+                                                      svg: "dice-multiple",
                                                       id: TOP_RANDOM_MIX_ID,
                                                       group: GROUP_MY_MUSIC,
                                                       weight: c.weight ? parseFloat(c.weight) : 100 });
@@ -1385,14 +1391,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id.startsWith("myMusicFileSystem")) {
                                     item.icon = "computer";
                                 } else if (c.id == "myMusicRandomAlbums") {
-                                    item.icon = "shuffle";
+                                    item.svg = "dice-album";
                                     item.id=TOP_RANDOM_ALBUMS_ID;
                                 } else if (c.id.startsWith("myMusicTopTracks")) {
                                     item.icon = "arrow_upward";
                                 } else if (c.id.startsWith("myMusicFlopTracks")) {
                                     item.icon = "arrow_downward";
                                 } else if (c.id == "dynamicplaylist") {
-                                    item.icon = "casino";
+                                    item.svg = "dice-list";
                                 } else {
                                     item.icon = "music_note";
                                 }

@@ -16,6 +16,8 @@
 12. Transparent time progress background.
 13. If group players plugin is not enabled, then add 'Synchronise' to players
     menu in toolbar.
+14. Use same font-size for browse header entries ('My Music', etc) as for
+    regular items.
 
 0.2.5
 -----

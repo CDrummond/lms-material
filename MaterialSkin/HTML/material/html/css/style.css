@@ -720,3 +720,6 @@ progress {
     margin-bottom:4px;
 }
 
+div.v-subheader {
+    font-size: 16px;
+}

@@ -140,10 +140,7 @@ function setLocalStorageVal(key, val) {
 }
 
 function isMobile() {
-    return navigator.userAgent.indexOf("Mobile") !== -1 ||
-           navigator.userAgent.indexOf("iPhone") !== -1 ||
-           navigator.userAgent.indexOf("Android") !== -1 ||
-           navigator.userAgent.indexOf("Windows Phone") !== -1;
+    return /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
 }
 
 function replaceNewLines(str) {

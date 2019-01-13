@@ -1,3 +1,7 @@
+0.2.8
+-----
+1. Use pointer style for gid items, to indicate they are clickable.
+
 0.2.7
 -----
 1. Fix 'Random Albums' icon when using categories from server.

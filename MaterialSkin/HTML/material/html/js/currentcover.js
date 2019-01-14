@@ -35,11 +35,13 @@ var lmsServer = Vue.component('lms-currentcover', {
             var coverUrl = this.coverUrl;
 
             if (playerStatus.playlist.count == 0) {
+                this.queueIndex = undefined;
                 if (undefined===this.coverFromInfo || this.coverFromInfo || undefined==this.cover) {
                     coverUrl=resolveImage(DEFAULT_COVER);
                     this.coverFromInfo = false;
                 }
             } else {
+                this.queueIndex = playerStatus.current["playlist index"];
                 coverUrl = undefined;
                 if (playerStatus.current.artwork_url) {
                     coverUrl=resolveImage(null, playerStatus.current.artwork_url);
@@ -70,12 +72,12 @@ var lmsServer = Vue.component('lms-currentcover', {
 
             if (coverUrl!=this.coverUrl) {
                 this.coverUrl = coverUrl;
-                bus.$emit('currentCover', this.coverUrl);
+                bus.$emit('currentCover', this.coverUrl, this.queueIndex);
             }
         }.bind(this));
 
         bus.$on('getCurrentCover', function() {
-            bus.$emit('currentCover', this.coverUrl);
+            bus.$emit('currentCover', this.coverUrl, this.queueIndex);
         }.bind(this));
     }
 });

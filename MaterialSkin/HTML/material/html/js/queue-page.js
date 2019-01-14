@@ -249,7 +249,7 @@ var lmsQueue = Vue.component("lms-queue", {
             // Check for metadata changes in radio streams...
             if (playerStatus.current && 0==playerStatus.current.duration) {
                 var index = playerStatus.current["playlist index"];
-                if (index && index>=0 && this.items.length>0 && index<this.items.length && 0==this.items[index].duration) {
+                if (undefined!=index && index>=0 && index<this.items.length && 0==this.items[index].duration) {
                     var i = playerStatus.current;
                     var title = i.title;
                     if (this.showTrackNum && i.tracknum>0) {
@@ -621,8 +621,9 @@ var lmsQueue = Vue.component("lms-queue", {
         setBgndCover() {
             setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             // Check for cover changes in radio streams...
-            if (this.coverUrl && this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.legnth &&
-                this.items.length>0 && 0==this.items[this.coverTrackIndex].duration && this.items[this.coverTrackIndex].image!=this.coverUrl) {
+            if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length &&
+                0==this.items[this.coverTrackIndex].duration && this.items[this.coverTrackIndex].image!=this.coverUrl) {
+                console.log("Set cover");
                 this.items[this.coverTrackIndex].image=this.coverUrl;
                 this.$forceUpdate();
             }

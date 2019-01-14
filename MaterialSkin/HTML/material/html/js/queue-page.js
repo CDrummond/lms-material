@@ -48,12 +48,11 @@ function parseResp(data, showTrackNum) {
                     }
                 }
                 var image = queueItemCover(i);
-                var isStream = i.url && (i.url.startsWith("http:") || i.url.startsWith("https:"));
                 resp.items.push({
-                              id: "track_id:"+i.id,
+                              id: i.id,
                               title: title,
                               subtitle: subtitle,
-                              icon: image ? undefined : (isStream ? "wifi_tethering" : "music_note"),
+                              icon: image ? undefined : (0==i.duration ? "wifi_tethering" : "music_note"),
                               image: image,
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
                               duration: i.duration
@@ -248,28 +247,30 @@ var lmsQueue = Vue.component("lms-queue", {
             }
 
             // Check for metadata changes in radio streams...
-            if (playerStatus.current && 0==playerStatus.current.duration &&
-                this.items.length>0 && this.currentIndex<this.items.length && 0==this.items[this.currentIndex].duration) {
-                var i = playerStatus.current;
-                var title = i.title;
-                if (this.showTrackNum && i.tracknum>0) {
-                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
-                }
-                var subtitle = i.artist ? i.artist : i.trackartist;
-                if (i.album) {
-                    if (subtitle) {
-                        subtitle+=" - " + i.album;
-                    } else {
-                        sbtitle=i.album;
+            if (playerStatus.current && 0==playerStatus.current.duration) {
+                var index = playerStatus.current["playlist index"];
+                if (index && index>=0 && this.items.length>0 && index<this.items.length && 0==this.items[index].duration) {
+                    var i = playerStatus.current;
+                    var title = i.title;
+                    if (this.showTrackNum && i.tracknum>0) {
+                        title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                     }
-                    if (i.year && i.year>0) {
-                        subtitle+=" (" + i.year + ")";
+                    var subtitle = i.artist ? i.artist : i.trackartist;
+                    if (i.album) {
+                        if (subtitle) {
+                            subtitle+=" - " + i.album;
+                        } else {
+                            sbtitle=i.album;
+                        }
+                        if (i.year && i.year>0) {
+                            subtitle+=" (" + i.year + ")";
+                        }
                     }
-                }
-                if (title!=this.items[this.currentIndex].title || subtitle!=this.items[this.currentIndex].subtitle) {
-                    this.items[this.currentIndex].title = title;
-                    this.items[this.currentIndex].subtitle = subtitle;
-                    this.$forceUpdate();
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle) {
+                        this.items[index].title = title;
+                        this.items[index].subtitle = subtitle;
+                        this.$forceUpdate();
+                    }
                 }
             }
         }.bind(this));
@@ -277,8 +278,10 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$emit('refreshStatus');
 
         this.coverUrl = undefined;
-        bus.$on('currentCover', function(coverUrl) {
+        this.coverTrackIndex = undefined;
+        bus.$on('currentCover', function(coverUrl, queueIndex) {
             this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : coverUrl;
+            this.coverTrackIndex = queueIndex;
             this.setBgndCover();
         }.bind(this));
         bus.$emit('getCurrentCover');
@@ -482,6 +485,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.timestamp = resp.timestamp;
                 this.fetchingItems = false;
                 this.listSize = data.result.playlist_tracks;
+
                 this.getDuration();
                 if (needUpdate) {
                     this.scheduleUpdate();
@@ -528,6 +532,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.$nextTick(function () {
                         setScrollTop(this.scrollElement, currentPos>0 ? currentPos : 0);
                     });
+
                     if (needUpdate) {
                         this.scheduleUpdate();
                     } else {
@@ -616,9 +621,9 @@ var lmsQueue = Vue.component("lms-queue", {
         setBgndCover() {
             setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             // Check for cover changes in radio streams...
-            if (this.coverUrl && this.items.length>0 && this.currentIndex<this.items.length && 0==this.items[this.currentIndex].duration &&
-                this.items[this.currentIndex].image!=this.coverUrl) {
-                this.items[this.currentIndex].image=this.coverUrl;
+            if (this.coverUrl && this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.legnth &&
+                this.items.length>0 && 0==this.items[this.coverTrackIndex].duration && this.items[this.coverTrackIndex].image!=this.coverUrl) {
+                this.items[this.coverTrackIndex].image=this.coverUrl;
                 this.$forceUpdate();
             }
         }

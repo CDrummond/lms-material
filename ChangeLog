@@ -1,6 +1,6 @@
 0.2.8
 -----
-1. Use pointer style for gid items, to indicate they are clickable.
+1. Use pointer style for grid items, to indicate they are clickable.
 2. When updating steam meta-data for current queue item, use its "playlist
    index" to update correct item.
 3. Only show duration if greater than 0.

@@ -379,7 +379,7 @@ a {
 }
 
 .np-playpause {
-    margin: 2px !important;
+    margin: 0px 2px 2px 2px !important;
     width: 47px !important;
     height: 47px !important;
 }

@@ -49,7 +49,7 @@ function parseResp(data, showTrackNum) {
                 }
                 var image = queueItemCover(i);
                 resp.items.push({
-                              id: i.id,
+                              id: "track_id:"+i.id,
                               title: title,
                               subtitle: subtitle,
                               icon: image ? undefined : (0==i.duration ? "wifi_tethering" : "music_note"),

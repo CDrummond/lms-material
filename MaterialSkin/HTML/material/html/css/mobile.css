@@ -124,7 +124,7 @@
 .np-image {
     display: block;
     object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 12px));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 24px));
     width:calc(100vw - 16px);
     margin-left: auto;
     margin-right: auto;
@@ -134,7 +134,7 @@
 .np-image-landscape {
     padding:16px 16px 0px 16px;
     object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 132px));
+    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 118px));
     width: 50vw;
     margin-left: auto;
     margin-right: auto;

@@ -469,26 +469,26 @@ a {
 }
 
 .np-slider-mobile {
-    height: 4px !important;
+    height: 5px !important;
     width: 100%;
 }
 
 .np-pos {
-    font-size: 75%;
+    font-size: 85%;
     font-weight: 400;
     font-family: monospace, monospace;
     text-align: left;
 }
 
 .np-tech {
-    font-size: 75%;
+    font-size: 85%;
     font-weight: 400;
     font-family: monospace, monospace;
     text-align: center;
 }
 
 .np-duration {
-    font-size: 75%;
+    font-size: 85%;
     font-weight: 400;
     font-family: monospace, monospace;
     text-align: right;
@@ -496,7 +496,7 @@ a {
 
 .np-controls {
     font-weight:400;
-    padding:8px 8px 16px 8px; /* t, r, b, l */
+    padding:8px;
     width:100%;
     position:absolute;
     bottom:0px;
@@ -504,7 +504,7 @@ a {
 
 .np-controls-wide {
     font-weight:400;
-    padding:8px 8px 16px 8px; /* t, r, b, l */
+    padding:8px;
     width:calc(50vw - 16px);
     position:absolute;
     bottom:0px;

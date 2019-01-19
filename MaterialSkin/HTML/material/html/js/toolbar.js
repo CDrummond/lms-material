@@ -71,7 +71,7 @@ Vue.component('lms-toolbar', {
  <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-if="desktop && playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider"></v-slider>
  <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop && playerStatus.ison" class="vol-label">{{playerVolume.val}} %</p>
+ <p v-if="desktop && playerStatus.ison" class="vol-label">{{playerVolume.val}}%</p>
  <v-btn v-else-if="!desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>

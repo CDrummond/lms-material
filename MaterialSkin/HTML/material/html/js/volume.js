@@ -11,7 +11,7 @@ Vue.component('lms-volume', {
  <v-card>
   <v-container grid-list-md text-xs-center>
    <v-layout row wrap>
-    <v-flex xs12 class="vol-text">{{playerVolume}} %</v-flex xs12>
+    <v-flex xs12 class="vol-text">{{playerVolume}}%</v-flex xs12>
     <v-flex xs12>
      <v-layout>
       <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>

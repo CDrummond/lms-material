@@ -560,6 +560,10 @@ progress {
     background-color:rgba(25, 118, 210, 0.15);
 }
 
+.pq-current div.v-list__tile__title /*, .pq-current div.v-list__tile__sub-title, .pq-current div.v-list__tile__action.pq-time*/ {
+    font-weight: 600;
+}
+
 .pq-text {
     padding-left: 4px;
     padding-top:12px; /* TODO: This should not be required! */

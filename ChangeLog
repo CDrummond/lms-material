@@ -5,6 +5,7 @@
    index" to update correct item.
 3. Only show duration if greater than 0.
 4. Only use semi-transparent time progress for mobile and large desktop views.
+5. Don't lock webapp orientation to portait.
 
 0.2.7
 -----

@@ -45,8 +45,8 @@ html {
 .np-slider {
     color:#346dd2;
     background-color:#444;
-    border-top: 2px solid #212121 !important;
-    border-bottom: 2px solid #212121 !important;
+    border-top: 1px solid #212121 !important;
+    border-bottom: 3px solid #212121 !important;
 }
 
 .np-slider-mobile {

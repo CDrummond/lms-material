@@ -18,7 +18,7 @@ Vue.component('lms-toolbar', {
  <v-menu bottom class="toolbar-menu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis"><v-icon v-if="playerStatus.sleepTimer" style="padding-right: 8px">hotel</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
-   <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis">{{undefined===songInfo ? trans.nothingplaying : songInfo}}</div>
+   <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis">{{undefined===songInfo ? trans.nothingplaying : (!desktop && $route.path=='/nowplaying') ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list">
@@ -108,6 +108,7 @@ Vue.component('lms-toolbar', {
     data() {
         return { desktop:false,
                  songInfo:undefined,
+                 playlist: { count: undefined, duration: undefined, timestamp: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,
                  menuItems: [],
@@ -153,6 +154,24 @@ Vue.component('lms-toolbar', {
                 this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
             }
 
+            if (!this.desktop) {
+                if (playerStatus.playlist && playerStatus.playlist.count) {
+                    this.playlist.count = i18np("1 Track", "%1 Tracks", playerStatus.playlist.count);
+                } else {
+                    this.playlist.count = undefined;
+                }
+                if (!this.playlist.timestamp || this.playlist.timestamp!=playerStatus.playlist.timestamp) {
+                    this.playlist.timestamp = playerStatus.playlist.timestamp;
+                    lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
+                        var duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
+                        if (duration>0) {
+                            this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";
+                        } else {
+                            this.playlist.duration="";
+                        }
+                    });
+                }
+            }
             if (playerStatus.current.title!=this.playerStatus.current.title ||
                 (playerStatus.current.artist && playerStatus.current.artist!=this.playerStatus.current.artist) ||
                 (playerStatus.current.trackartist && playerStatus.current.trackartist!=this.playerStatus.current.artist) ) {

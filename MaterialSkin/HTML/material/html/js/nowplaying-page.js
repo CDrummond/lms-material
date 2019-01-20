@@ -426,7 +426,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         setInfoTrack() {
-            this.infoTrack={ title: this.playerStatus.current.title,
+            this.infoTrack={ title: this.playerStatus.current.title, track_id: this.playerStatus.current.id,
                              artist: this.playerStatus.current.artist, artist_id: this.playerStatus.current.artist_id,
                              albumartist: this.playerStatus.current.albumartist, albumartist_ids: this.playerStatus.current.albumartist_ids,
                              artist_ids: this.playerStatus.current.artist_ids,
@@ -445,12 +445,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         fetchLyrics() {
             if (this.info.tabs[LYRICS_TAB].artist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||
+                (this.infoTrack.track_id && this.info.tabs[LYRICS_TAB].track_id!=this.infoTrack.track_id)
                 (this.infoTrack.artist_id && this.info.tabs[LYRICS_TAB].artist_id!=this.infoTrack.artist_id)) {
                 this.info.tabs[LYRICS_TAB].text=i18n("Fetching...");
+                this.info.tabs[LYRICS_TAB].track_id=this.infoTrack.track_id;
                 this.info.tabs[LYRICS_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[LYRICS_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
                 var command = ["musicartistinfo", "lyrics", "title:"+this.infoTrack.title, "html:1"];
+                if (this.infoTrack.track_id) {
+                    command.push("track_id:"+this.infoTrack.track_id);
+                }
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
                 }

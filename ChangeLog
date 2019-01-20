@@ -2,6 +2,7 @@
 -----
 1. For mobile view, show queue count and duration in toolbar of now-playing
    view instead of repeating track details.
+2. Send track_id when fetching lyrics from MAI.
 
 0.2.8
 -----

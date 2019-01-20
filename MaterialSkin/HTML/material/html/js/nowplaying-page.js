@@ -90,7 +90,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon>link_off</v-icon></v-btn>
     <div style="width:32px"></div>
-    <v-btn flat icon @click="trackInfo()" :title="trans.more"><v-icon>more_horiz</v-icon></v-btn>
+    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
     <div style="width:32px"></div>
     <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
@@ -116,7 +116,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon>link_off</v-icon></v-btn>
     <div style="width:32px"></div>
-    <v-btn flat icon @click="trackInfo()" :title="trans.more"><v-icon>more_horiz</v-icon></v-btn>
+    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
     <div style="width:32px"></div>
     <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
@@ -602,6 +602,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return '';
             }
             return formatSeconds(Math.floor(value));
+        },
+        svgIcon: function (name, dark) {
+            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
         }
     },
     watch: {
@@ -670,6 +673,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                               (this.playerStatus.current.time && this.playerStatus.current.duration ? " / " : "") +
                               (this.playerStatus.current.duration ? formatSeconds(Math.floor(this.playerStatus.current.duration)) : "")
                         : undefined;
+        },
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     beforeDestroy() {

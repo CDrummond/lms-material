@@ -445,7 +445,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         fetchLyrics() {
             if (this.info.tabs[LYRICS_TAB].artist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||
-                (this.infoTrack.track_id && this.info.tabs[LYRICS_TAB].track_id!=this.infoTrack.track_id)
+                (this.infoTrack.track_id && this.info.tabs[LYRICS_TAB].track_id!=this.infoTrack.track_id) ||
                 (this.infoTrack.artist_id && this.info.tabs[LYRICS_TAB].artist_id!=this.infoTrack.artist_id)) {
                 this.info.tabs[LYRICS_TAB].text=i18n("Fetching...");
                 this.info.tabs[LYRICS_TAB].track_id=this.infoTrack.track_id;

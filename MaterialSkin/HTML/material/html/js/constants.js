@@ -21,3 +21,4 @@ const LMS_AZ_MAX_PER_LETTER = 300;
 const LMS_MATERIAL_UI_DEFAULT_PREF = "plugin.material-skin:defaults";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_STEP = 5;
+const LMS_VOLUME_CLOSE_TIMEOUT = 10000;

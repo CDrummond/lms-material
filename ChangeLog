@@ -7,6 +7,7 @@
    quite large.
 4. When focusing a search field, move field into via after 0.5 seconds, so as to
    give time for mobile's keyboard to be shown.
+5. Close mobile volume control 10seconds after last change.
 
 0.2.8
 -----

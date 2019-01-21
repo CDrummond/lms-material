@@ -36,6 +36,7 @@ Vue.component('lms-volume', {
                }
     },
     mounted() {
+        this.closeTimer = undefined;
         this.playerVolumeCurrent = -1;
         this.playerVolumePrev = -1;
         bus.$on('playerStatus', function(playerStatus) {
@@ -55,10 +56,14 @@ Vue.component('lms-volume', {
                         this.playerVolumePrev = vol;
                         this.playerVolume = vol;
                         this.show = true;
+                        this.resetCloseTimer();
                     }
                 }
             });
         }.bind(this));
+    },
+    beforeDestroy() {
+        this.cancelCloseTimer();
     },
     methods: {
         volumeDown() {
@@ -73,11 +78,24 @@ Vue.component('lms-volume', {
             } else {
                 return str;
             }
+        },
+        cancelCloseTimer() {
+            if (undefined!==this.closeTimer) {
+                clearTimeout(this.closeTimer);
+                this.closeTimer = undefined;
+            }
+        },
+        resetCloseTimer() {
+            this.cancelCloseTimer();
+            this.closeTimer = setTimeout(function () {
+                this.show = false;
+            }.bind(this), LMS_VOLUME_CLOSE_TIMEOUT);
         }
     },
     watch: {
         'playerVolume': function(newVal) {
             if (this.show && newVal>=0 && this.playerVolumeCurrent !== newVal) {
+                this.resetCloseTimer();
                 this.playerVolumePrev = this.playerVolumeCurrent;
                 this.playerVolumeCurrent = newVal;
                 this.lastUpdate = new Date();

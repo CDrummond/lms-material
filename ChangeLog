@@ -5,6 +5,8 @@
 2. Send track_id when fetching lyrics from MAI.
 3. Clear browse history before fetching artist info - otherwise stack could get
    quite large.
+4. When focusing a search field, move field into via after 0.5 seconds, so as to
+   give time for mobile's keyboard to be shown.
 
 0.2.8
 -----

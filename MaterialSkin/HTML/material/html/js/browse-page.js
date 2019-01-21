@@ -594,8 +594,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if ("search"==item.type) {
                 if (isMobile()) {
-                    event.target.scrollIntoView();
-                    //window.scrollBy(0, -64);
+                    // Scroll field into view, due to touch-keyboard.
+                    // Need to be in a timeout to give time for keyboard to appear.
+                    setTimeout(function () {
+                        event.target.scrollIntoView();
+                        this.scrollElement.scrollBy(0, -16); // Move item down a bit
+                    }.bind(this), 500);
                 }
                 return;
             }

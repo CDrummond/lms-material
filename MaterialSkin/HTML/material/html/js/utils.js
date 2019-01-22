@@ -260,3 +260,18 @@ function decrementVolume() {
     bus.$emit("adjustVolume", false);
 }
 
+function isVisible(elem) {
+    var rect = elem.getBoundingClientRect();
+    var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
+
+function ensureVisible(elem, attempt) {
+    elem.scrollIntoView();
+    if (!isVisible(elem) && (undefined==attempt || attempt<15)) {
+        window.setTimeout(function() {
+            ensureVisible(elem, undefined==attempt ? 1 : attempt+1);
+        }, 100);
+    }
+}
+

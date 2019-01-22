@@ -30,6 +30,12 @@ function setAutoLayout(al) {
     checkLayout();
 }
 
+function checkEntryFocus() {
+    if (isMobileBrowser && (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA")) {
+        ensureVisible(document.activeElement);
+    }
+}
+
 function initApp(app) {
     var t = getLocalStorageVal('translation', undefined);
     if (t!=undefined) {
@@ -94,6 +100,7 @@ function initApp(app) {
             }
             timeout = undefined;
             checkLayout();
+            checkEntryFocus();
         }, 50);
     }, false);
 

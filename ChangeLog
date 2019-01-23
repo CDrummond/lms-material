@@ -7,6 +7,7 @@
    quite large.
 4. Fix showing seatch entry field when mobile keyboard is shown.
 5. Close mobile volume control 10s econds after last change.
+6. Handle nextWindow="refresh"
 
 0.2.8
 -----

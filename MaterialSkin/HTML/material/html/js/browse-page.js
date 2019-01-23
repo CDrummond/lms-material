@@ -602,6 +602,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         command.command.push(p);
                     });
                     lmsCommand(this.playerId(), command.command).then(({data}) => {
+                        var resp = parseBrowseResp(data, this.current, this.options);
+                        var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
+                                        ? resp.items[0].title : item.title;
                         var nextWindow = item.nextWindow
                                             ? item.nextWindow
                                             : item.actions && item.actions.go && item.actions.go.nextWindow
@@ -609,12 +612,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                 : undefined;
                         if (nextWindow) {
                             if (nextWindow=="refresh") {
+                                bus.$emit('showMessage', message);
                                 this.refreshList();
                             } else if (nextWindow=="parent" && this.history.length>0) {
-                                bus.$emit('showMessage', item.title);
+                                bus.$emit('showMessage', message);
                                 this.goBack(true);
                             } else if (nextWindow=="grandParent" && this.history.length>1) {
-                                bus.$emit('showMessage', item.title);
+                                bus.$emit('showMessage', message);
                                 this.history.pop();
                                 this.goBack(true);
                             }

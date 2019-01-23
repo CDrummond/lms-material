@@ -9,6 +9,8 @@
 5. Close mobile volume control 10s econds after last change.
 6. Handle nextWindow="refresh"
 7. Use toast for some command response messages.
+8. If clicked items action is a ["...", "items"] action then send a list
+   request, i.e. ["...", "items", 0, 100, ...]
 
 0.2.8
 -----

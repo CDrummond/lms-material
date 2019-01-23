@@ -514,68 +514,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItems = true;
-
             //console.log("FETCH command:" + command.command + " params:" + command.params);
             var start = item.range ? item.range.start : 0;
             var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize;
             lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
                 var resp = parseBrowseResp(data, item, this.options, 0);
-
-                if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
-                    this.addHistory();
-                    this.command = command;
-                    this.current = item;
-                    this.currentBaseActions = this.baseActions;
-                    this.headerTitle=item.title ? item.title : "?";
-                    this.listSize = item.range ? item.range.count : data.result.count;
-                    this.items=resp.items;
-                    this.baseActions=resp.baseActions;
-                    this.menuActions=[];
-                    this.isTop = false;
-                    var changedView = this.useGrid != resp.useGrid;
-                    this.useGrid = resp.useGrid;
-
-                    if (this.current && this.current.menuActions) {
-                        this.current.menuActions.forEach(i => {
-                            if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
-                                this.menuActions=[ADD_ACTION, PLAY_ACTION];
-                                return;
-                            }
-                        });
-                    }
-
-                    // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                    if ((!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions &&
-                       !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
-                                                           this.command.command[0]=="albuminfo"))) {
-                        this.items[0].menuActions.forEach(i => {
-                            if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
-                                this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                                return;
-                            }
-                        });
-                    }
-
-                    if (this.listSize<0) {
-                        this.listSize=this.items.length;
-                    }
-                    if (resp.subtitle) {
-                        this.headerSubTitle=resp.subtitle;
-                    } else if (1==this.items.length && "text"==this.items[0].type) {
-                        this.headerSubTitle = undefined;
-                    } else {
-                        this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
-                    }
-                    this.sortItems();
-                    this.$nextTick(function () {
-                        if (changedView) {
-                            this.setScrollElement();
-                        }
-                        this.setGridAlignment();
-                        this.setBgndCover();
-                        setScrollTop(this.scrollElement, 0);
-                    });
-                }
+                this.handleListResponse(item, command, data, resp);
                 this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
@@ -583,9 +527,89 @@ var lmsBrowse = Vue.component("lms-browse", {
                 logError(err);
             });
         },
+        handleListResponse(item, command, data, resp) {
+            if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
+                this.addHistory();
+                this.command = command;
+                this.current = item;
+                this.currentBaseActions = this.baseActions;
+                this.headerTitle=item.title ? item.title : "?";
+                this.listSize = item.range ? item.range.count : data.result.count;
+                this.items=resp.items;
+                this.baseActions=resp.baseActions;
+                this.menuActions=[];
+                this.isTop = false;
+                var changedView = this.useGrid != resp.useGrid;
+                this.useGrid = resp.useGrid;
+
+                if (this.current && this.current.menuActions) {
+                    this.current.menuActions.forEach(i => {
+                        if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
+                            this.menuActions=[ADD_ACTION, PLAY_ACTION];
+                            return;
+                        }
+                    });
+                }
+                // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
+                if ((!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.menuActions.length==0 && this.items.length>0 && this.items[0].menuActions &&
+                   !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
+                                                       this.command.command[0]=="albuminfo"))) {
+                    this.items[0].menuActions.forEach(i => {
+                        if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
+                            this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                            return;
+                        }
+                    });
+                }
+                if (this.listSize<0) {
+                    this.listSize=this.items.length;
+                }
+                if (resp.subtitle) {
+                    this.headerSubTitle=resp.subtitle;
+                } else if (1==this.items.length && "text"==this.items[0].type) {
+                    this.headerSubTitle = undefined;
+                } else {
+                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
+                }
+                this.sortItems();
+                this.$nextTick(function () {
+                    if (changedView) {
+                        this.setScrollElement();
+                    }
+                    this.setGridAlignment();
+                    this.setBgndCover();
+                    setScrollTop(this.scrollElement, 0);
+                });
+            }
+        },
         toggleGroup(group) {
             this.$set(this.collapsed, group, !this.collapsed[group]);
             setLocalStorageVal('collapsed', this.collapsed.join(","));
+        },
+        handleTextClickResponse(item, command, data) {
+            var resp = parseBrowseResp(data, this.current, this.options);
+            var nextWindow = item.nextWindow
+                                ? item.nextWindow
+                                : item.actions && item.actions.go && item.actions.go.nextWindow
+                                    ? item.actions.go.nextWindow
+                                    : undefined;
+            if (nextWindow) {
+                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
+                                ? resp.items[0].title : item.title;
+                if (nextWindow=="refresh") {
+                    bus.$emit('showMessage', message);
+                    this.refreshList();
+                } else if (nextWindow=="parent" && this.history.length>0) {
+                    bus.$emit('showMessage', message);
+                    this.goBack(true);
+                } else if (nextWindow=="grandParent" && this.history.length>1) {
+                    bus.$emit('showMessage', message);
+                    this.history.pop();
+                    this.goBack(true);
+                }
+            } else {
+                this.handleListResponse(item, command, data, resp);
+            }
         },
         click(item, index, event, allowTextClick) {
             if (this.selection.length>0) {
@@ -601,29 +625,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                     command.params.forEach(p => {
                         command.command.push(p);
                     });
-                    lmsCommand(this.playerId(), command.command).then(({data}) => {
-                        var resp = parseBrowseResp(data, this.current, this.options);
-                        var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
-                                        ? resp.items[0].title : item.title;
-                        var nextWindow = item.nextWindow
-                                            ? item.nextWindow
-                                            : item.actions && item.actions.go && item.actions.go.nextWindow
-                                                ? item.actions.go.nextWindow
-                                                : undefined;
-                        if (nextWindow) {
-                            if (nextWindow=="refresh") {
-                                bus.$emit('showMessage', message);
-                                this.refreshList();
-                            } else if (nextWindow=="parent" && this.history.length>0) {
-                                bus.$emit('showMessage', message);
-                                this.goBack(true);
-                            } else if (nextWindow=="grandParent" && this.history.length>1) {
-                                bus.$emit('showMessage', message);
-                                this.history.pop();
-                                this.goBack(true);
-                            }
-                        }
-                    });
+                    if (command.command.length==2 && "items"==command.command[1]) {
+                        lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                            this.handleTextClickResponse(item, command, data);
+                        });
+                    } else {
+                        lmsCommand(this.playerId(), command.command).then(({data}) => {
+                            this.handleTextClickResponse(item, command, data);
+                        });
+                    }
                 }
                 return;
             }

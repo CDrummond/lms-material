@@ -111,6 +111,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical="true" v-if="desktop"></v-divider>
    <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon style="margin-right:4px; margin-top:-10px">arrow_right</v-icon><v-icon style="margin-left:-16px">music_note</v-icon></v-btn>
+   <v-btn :title="trans.addUrl" flat icon @click="addUrl()" class="toolbar-button"><v-icon>add</v-icon></v-btn>
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear</v-icon></v-btn>
   </v-layout>
@@ -171,7 +172,7 @@ var lmsQueue = Vue.component("lms-queue", {
             listSize:0,
             duration: 0.0,
             playerStatus: { ison:1, shuffle:0, repeat: 0 },
-            trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, saveAs:undefined, clear:undefined,
+            trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, addUrl:undefined, saveAs:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                      shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                      selectMultiple:undefined, remove:undefined },
@@ -352,7 +353,7 @@ var lmsQueue = Vue.component("lms-queue", {
             PQ_MORE_ACTION.title=i18n("More");
             PQ_SELECT_ACTION.title=i18n("Select");
             PQ_UNSELECT_ACTION.title=i18n("Un-select");
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), addUrl:i18n('Add URL'),
                           scrollToCurrent:i18n("Scroll to current track"),
                           save:i18n("Save"), clear:i18n("Clear"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
@@ -364,7 +365,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
-            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value };
+            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save' };
+        },
+        addUrl() {
+            this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
         },
         clear() {
             if (this.items.length<1) {
@@ -379,15 +383,20 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         dialogResponse(val) {
             if (val && this.dialog.value) {
-                var name = this.dialog.value.trim();
-                if (name.length>1) {
+                var str = this.dialog.value.trim();
+                if (str.length>1) {
                     this.dialog.show = false;
-                    lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({datax}) => {
-                        this.playlistName = name;
-                    }).catch(err => {
-                        bus.$emit('showError', err, i18n("Failed to save play queue!"));
-                        logError(err);
-                    });
+
+                    if ('add'==this.dialog.action) {
+                        lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", str]);
+                    } else {
+                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({datax}) => {
+                            this.playlistName = str;
+                        }).catch(err => {
+                            bus.$emit('showError', err, i18n("Failed to save play queue!"));
+                            logError(err);
+                        });
+                    }
                 }
             }
         },

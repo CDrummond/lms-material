@@ -147,7 +147,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>
      {{item.caption}}
     </v-card-text>
-    <v-card-text v-else class="image-grid-item" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" @click="click(item, index, $event, false)">
+    <v-card-text v-else class="image-grid-item" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" @click="click(item, index, $event)">
      <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(item, index)">
       <v-icon>{{item.selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
      </v-btn>
@@ -169,7 +169,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
-   <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event, false)" :key="item.id">
+   <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
@@ -199,14 +199,14 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)"><v-icon>{{undefined!=item.group && collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
 
    <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
-   <v-list-tile v-if="item.type=='text' && ( (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && item.actions && item.actions.go) )" avatar @click="click(item, index, $event, true)" v-bind:class="{'error-text': item.id==='error'}">
+   <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event, false)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag">
+   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag">
     <v-list-tile-avatar v-if="item.selected" :tile="true">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -611,7 +611,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.handleListResponse(item, command, data, resp);
             }
         },
-        click(item, index, event, allowTextClick) {
+        canClickText(item) {
+            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && item.actions && item.actions.go);
+        },
+        click(item, index, event) {
             if (this.selection.length>0) {
                 this.select(item, index);
                 return;
@@ -620,7 +623,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if ("text"==item.type) {
-                if (allowTextClick) {
+                if (this.canClickText(item)) {
                     var command = this.buildCommand(item);
                     command.params.forEach(p => {
                         command.command.push(p);

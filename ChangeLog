@@ -14,6 +14,7 @@
  9. Add 'More' action to genres.
 10. Make sleep timer options accessible via long press on play/pause buttons.
 11. Always add album sorts.
+12. Add support for text entry fields - for creating new playlist, etc.
 
 0.2.8
 -----

@@ -5,10 +5,10 @@
  2. Send track_id when fetching lyrics from MAI.
  3. Clear browse history before fetching artist info - otherwise stack could get
     quite large.
- 4. Fix showing sentry fields when mobile keyboard is shown.
+ 4. Fix showing entry fields when mobile keyboard is shown.
  5. Close mobile volume control 10 seconds after last change.
  6. Handle nextWindow="refresh"
- 7. Use toast for some command response messages.
+ 7. Use snackbar for some command response messages.
  8. If clicked item's action is a ["...", "items"] action then send a list
     request, i.e. ["...", "items", 0, 100, ...]
  9. Add 'More' action to genres.
@@ -16,7 +16,7 @@
 11. Always add album sorts.
 12. Add support for text entry fields - for creating new playlist, etc.
 13. Add '+' button to queue page allowing to add any URL.
-14. Add dialog to add/edit favorites.
+14. Add dialog to add/edit favourites.
 
 0.2.8
 -----

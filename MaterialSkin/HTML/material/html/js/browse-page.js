@@ -1061,7 +1061,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        buildCommand(item, commandName, doReplacements, addAlbumSort) {
+        buildCommand(item, commandName, doReplacements) {
             var origCommand = undefined;
 
             // Faking addall/playall, so build add/play command for first item...
@@ -1138,6 +1138,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var mode = undefined;
                     var hasSort = false;
                     var hasTags = false;
+                    var hasArtistId = false;
 
                     cmd.params.forEach(i => {
                         if (i.startsWith("mode:")) {
@@ -1164,6 +1165,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 hasSort = true;
                             } else if (i.startsWith("tags:")) {
                                 hasTags = true;
+                            } else if (i.startsWith("artist_id:")) {
+                                hasArtistId = true;
                             }
                         }
                     });
@@ -1180,8 +1183,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                             if (!hasTags) {
                                 p.push(ALBUM_TAGS);
                             }
-                            if (!hasSort && undefined!=addAlbumSort && addAlbumSort) {
-                                p.push("sort:"+ALBUM_SORT_PLACEHOLDER);
+                            if (!hasSort) {
+                                p.push("sort:"+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));
                             }
                         }
                         cmd = {command: c, params: p};
@@ -1387,7 +1390,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                       group: GROUP_MY_MUSIC,
                                                       weight: c.weight ? parseFloat(c.weight) : 100 });
                             } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect")) {
-                                var command = this.buildCommand(c, "go", false, true);
+                                var command = this.buildCommand(c, "go", false);
                                 var item = { title: c.text,
                                              command: command.command ,
                                              params: command.params,

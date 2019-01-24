@@ -13,6 +13,7 @@
     request, i.e. ["...", "items", 0, 100, ...]
  9. Add 'More' action to genres.
 10. Make sleep timer options accessible via long press on play/pause buttons.
+11. Always add album sorts.
 
 0.2.8
 -----

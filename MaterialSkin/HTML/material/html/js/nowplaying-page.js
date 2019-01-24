@@ -11,15 +11,24 @@ const LYRICS_TAB = 2;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
+    <div>
+     <v-menu offset-y v-model="sleep.show" :position-x="sleep.x" :position-y="sleep.y">
+  <v-list>
+   <template v-for="(item, index) in sleep.items">
+    <v-list-tile @click="setSleepTimer(item.duration)" v-if="item.duration>0 || playerStatus.sleepTimer">
+     <v-list-tile-title>{{item.label}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
 <div v-if="desktop && !largeView" class="np-bar noselect" id="np-bar">
-
  <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
-   <v-btn flat icon v-if="playerStatus.isplaying" @click="doAction(['pause'])"><v-icon large>pause</v-icon></v-btn>
-   <v-btn flat icon v-else @click="doAction(['play'])"><v-icon large>play_arrow</v-icon></v-btn>
+   <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause"><v-icon large>pause</v-icon></v-btn>
+   <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause"><v-icon large>play_arrow</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
    <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
@@ -33,8 +42,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])" class="np-std-button"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
-   <v-btn flat icon v-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-   <v-btn flat icon v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+   <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+   <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
@@ -157,15 +166,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs4>
        <v-layout v-if="stopButton" text-xs-center>
         <v-flex xs6>
-         <v-btn flat icon v-if="playerStatus.isplaying" @click="doAction(['pause'])"><v-icon large>pause</v-icon></v-btn>
-         <v-btn flat icon v-else @click="doAction(['play'])"><v-icon large>play_arrow</v-icon></v-btn>
+         <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause"><v-icon large>pause</v-icon></v-btn>
+         <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause"><v-icon large>play_arrow</v-icon></v-btn>
         </v-flex>
         <v-flex xs6>
          <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
         </v-flex>
        </v-layout>
-       <v-btn flat icon large v-else-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-       <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+       <v-btn flat icon large v-else-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+       <v-btn flat icon large v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
       </v-flex>
       <v-flex xs4>
        <v-layout text-xs-center>
@@ -214,15 +223,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs4>
     <v-layout v-if="stopButton" text-xs-center>
      <v-flex xs6>
-      <v-btn flat icon v-if="playerStatus.isplaying" @click="doAction(['pause'])"><v-icon large>pause</v-icon></v-btn>
-      <v-btn flat icon v-else @click="doAction(['play'])"><v-icon large>play_arrow</v-icon></v-btn>
+      <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause"><v-icon large>pause</v-icon></v-btn>
+      <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause"><v-icon large>play_arrow</v-icon></v-btn>
      </v-flex>
      <v-flex xs6>
       <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
      </v-flex>
     </v-layout>
-    <v-btn flat icon large v-else-if="playerStatus.isplaying" @click="doAction(['pause'])" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-    <v-btn flat icon large v-else @click="doAction(['play'])" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+    <v-btn flat icon large v-else-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
+    <v-btn flat icon large v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
    </v-flex>
    <v-flex xs4>
     <v-layout text-xs-center>
@@ -236,7 +245,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
   </v-layout>
  </div>
-</div>
+</div></div>
 `,
     props: [ 'desktop' ],
     data() {
@@ -244,6 +253,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  coverUrl:undefined,
                  playerStatus: {
                     isplaying: 1,
+                    sleepTimer: false,
                     current: { canseek:1, duration:0, time:0, title:undefined, artist:undefined, 
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0 },
                     playlist: { shuffle:0, repeat: 0 },
@@ -256,7 +266,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  showTotal: true,
                  landscape: false,
                  wide: false,
-                 largeView: false
+                 largeView: false,
+                 sleep: {show:false, items:[], x:0, y:0,}
                 };
     },
     mounted() {
@@ -294,6 +305,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.current.title!=this.playerStatus.current.title) {
                 this.playerStatus.current.title = playerStatus.current.title;
                 trackChanged = true;
+            }
+            if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
+                this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
             }
             var artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
             var artist_ids = playerStatus.current.artist_ids ? playerStatus.current.artist_ids : playerStatus.current.trackartist_ids;
@@ -405,6 +419,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
+            this.sleep.items=[
+                { duration: 15*60, label:i18n("Sleep after %1 minutes", 15)},
+                { duration: 30*60, label:i18n("Sleep after %1 minutes", 30)},
+                { duration: 45*60, label:i18n("Sleep after %1 minutes", 45)},
+                { duration: 60*60, label:i18n("Sleep after %1 minutes", 60)},
+                { duration: 90*60, label:i18n("Sleep after %1 minutes", 90)},
+                { duration: -1,    label:i18n("Sleep after remaining duration of current track")},/*
+                { duration: -2     label:xxx("Remaining duration of play queue")} */
+                { duration: 0,     label:i18n("Cancel sleep")}
+                ];
         },
         doAction(command) {
             bus.$emit('playerCommand', command);
@@ -594,7 +618,27 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.page && (!this.desktop || this.largeView)) {
                 setBgndCover(this.page, this.$store.state.nowPlayingBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             }
-        }
+        },
+        playPauseButton(showSleepMenu) {
+            if (showSleepMenu) {
+                var btn = document.getElementById('playPause');
+                if (btn) {
+                    var rect = btn.getBoundingClientRect();
+                    this.sleep.x = rect.x;
+                    this.sleep.y = rect.y+rect.height;
+                    this.sleep.show = true;
+                }
+            } else {
+                this.doAction([this.playerStatus.isplaying ? 'pause' : 'play']);
+            }
+        },
+        setSleepTimer(duration) {
+            if (-1==duration) { // Current track
+                bus.$emit('playerCommand', ["jiveendoftracksleep"]);
+            } else {
+                bus.$emit('playerCommand', ["sleep", duration]);
+            }
+        },
     },
     filters: {
         displayTime: function (value) {

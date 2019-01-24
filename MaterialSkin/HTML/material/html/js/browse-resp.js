@@ -232,6 +232,15 @@ function parseBrowseResp(data, parent, options, idStart) {
                     }
                 }
 
+                if (!i.type && !i.style && i.actions && i.actions.go && i.actions.go.params) {
+                    for (var key in i.actions.go.params) {
+                        if (i.actions.go.params[key]==TERM_PLACEHOLDER) {
+                            i.type = "entry";
+                            resp.useGrid = false;
+                        }
+                    }
+                }
+
                 // Issue #58 Pretend 'text' with a go action is just a text line, so that click() works
                 if (undefined==i.type && !i.style && i.actions && i.actions.go && !i.icon && !i["icon-id"] && !i.image && !i.window &&
                     (!i.addAction || i.actions.go.nextWindow)) {
@@ -320,6 +329,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                         }
                     });
                 }
+
                 if (!i.type && i.style && i.style=="itemNoAction") {
                     i.type = "text";
                     resp.useGrid = false;

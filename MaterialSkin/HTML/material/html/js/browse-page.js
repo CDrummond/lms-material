@@ -227,6 +227,10 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
     </v-list-tile-content>
 
+    <v-list-tile-content v-else-if="item.type=='entry'">
+     <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
+    </v-list-tile-content>
+
     <v-list-tile-content v-else>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
@@ -593,7 +597,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 : item.actions && item.actions.go && item.actions.go.nextWindow
                                     ? item.actions.go.nextWindow
                                     : undefined;
+
             if (nextWindow) {
+                nextWindow=nextWindow.toLowerCase();
                 var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
                                 ? resp.items[0].title : item.title;
                 if (nextWindow=="refresh") {
@@ -602,7 +608,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (nextWindow=="parent" && this.history.length>0) {
                     bus.$emit('showMessage', message);
                     this.goBack(true);
-                } else if (nextWindow=="grandParent" && this.history.length>1) {
+                } else if (nextWindow=="grandparent" && this.history.length>1) {
                     bus.$emit('showMessage', message);
                     this.history.pop();
                     this.goBack(true);
@@ -614,29 +620,32 @@ var lmsBrowse = Vue.component("lms-browse", {
         canClickText(item) {
             return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && item.actions && item.actions.go);
         },
+        doTextClick(item) {
+            var command = this.buildCommand(item);
+            command.params.forEach(p => {
+                command.command.push(p);
+            });
+            if (command.command.length==2 && "items"==command.command[1]) {
+                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+                    this.handleTextClickResponse(item, command, data);
+                });
+            } else {
+                lmsCommand(this.playerId(), command.command).then(({data}) => {
+                    this.handleTextClickResponse(item, command, data);
+                });
+            }
+        },
         click(item, index, event) {
             if (this.selection.length>0) {
                 this.select(item, index);
                 return;
             }
-            if ("search"==item.type) {
+            if ("search"==item.type || "entry"==item.type) {
                 return;
             }
             if ("text"==item.type) {
                 if (this.canClickText(item)) {
-                    var command = this.buildCommand(item);
-                    command.params.forEach(p => {
-                        command.command.push(p);
-                    });
-                    if (command.command.length==2 && "items"==command.command[1]) {
-                        lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                            this.handleTextClickResponse(item, command, data);
-                        });
-                    } else {
-                        lmsCommand(this.playerId(), command.command).then(({data}) => {
-                            this.handleTextClickResponse(item, command, data);
-                        });
-                    }
+                    this.doTextClick(item);
                 }
                 return;
             }
@@ -731,8 +740,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.fetchingItems) {
                 return;
             }
-            this.searchTerm = event.target._value;
+            this.enteredTerm = event.target._value;
             this.fetchItems(this.buildCommand(item), item);
+        },
+        entry(event, item) {
+            if (this.fetchingItems) {
+                return;
+            }
+            this.enteredTerm = event.target._value;
+            this.doTextClick(item);
         },
         dialogResponse(val) {
             if (val && this.dialog.value) {
@@ -1284,7 +1300,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var modifiedParams = [];
                 cmd.params.forEach(p => { modifiedParams.push(p.replace(ALBUM_SORT_PLACEHOLDER, this.$store.state.albumSort)
                                                                .replace(ARTIST_ALBUM_SORT_PLACEHOLDER, this.$store.state.artistAlbumSort)
-                                                               .replace(TERM_PLACEHOLDER, this.searchTerm)); });
+                                                               .replace(TERM_PLACEHOLDER, this.enteredTerm)); });
                 cmd.params = modifiedParams;
             }
             return cmd;

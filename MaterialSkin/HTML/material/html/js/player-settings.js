@@ -247,8 +247,8 @@ Vue.component('lms-player-settings', {
                 { duration: 45*60, label:i18n("%1 minutes", 45)},
                 { duration: 60*60, label:i18n("%1 minutes", 60)},
                 { duration: 90*60, label:i18n("%1 minutes", 90)},
-                { duration: 0,     label:i18n("Remaining duration of current track")}/*,
-                { duration: -1,    label:xxx("Remaining duration of play queue")} */
+                { duration: -1,    label:i18n("Remaining duration of current track")}/*,
+                { duration: -2,    label:xxx("Remaining duration of play queue")} */
                 ];
         },
         playerSettings(player) {
@@ -421,7 +421,7 @@ Vue.component('lms-player-settings', {
             }
         },
         setSleepTimer(duration) {
-            if (0==duration) { // Current track
+            if (-1==duration) { // Current track
                 bus.$emit('playerCommand', ["jiveendoftracksleep"]);
             } else {
                 bus.$emit('playerCommand', ["sleep", duration]);

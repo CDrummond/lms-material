@@ -1,17 +1,18 @@
 0.2.9
 -----
-1. For mobile view, show queue count and duration in toolbar of now-playing
-   view instead of repeating track details.
-2. Send track_id when fetching lyrics from MAI.
-3. Clear browse history before fetching artist info - otherwise stack could get
-   quite large.
-4. Fix showing seatch entry field when mobile keyboard is shown.
-5. Close mobile volume control 10s econds after last change.
-6. Handle nextWindow="refresh"
-7. Use toast for some command response messages.
-8. If clicked items action is a ["...", "items"] action then send a list
-   request, i.e. ["...", "items", 0, 100, ...]
-9. Add 'More' action to genres.
+ 1. For mobile view, show queue count and duration in toolbar of now-playing
+    view instead of repeating track details.
+ 2. Send track_id when fetching lyrics from MAI.
+ 3. Clear browse history before fetching artist info - otherwise stack could get
+    quite large.
+ 4. Fix showing seatch entry field when mobile keyboard is shown.
+ 5. Close mobile volume control 10s econds after last change.
+ 6. Handle nextWindow="refresh"
+ 7. Use toast for some command response messages.
+ 8. If clicked items action is a ["...", "items"] action then send a list
+    request, i.e. ["...", "items", 0, 100, ...]
+ 9. Add 'More' action to genres.
+10. Make sleep timer options accessible via long press on play/pause buttons.
 
 0.2.8
 -----

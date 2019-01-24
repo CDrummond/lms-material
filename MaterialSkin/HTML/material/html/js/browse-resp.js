@@ -288,11 +288,11 @@ function parseBrowseResp(data, parent, options, idStart) {
                         i.menuActions.push(DIVIDER);
                         addedDivider = true;
                     }
-                    i.menuActions.push(RENAME_FAV_ACTION);
                     i.menuActions.push(REMOVE_FROM_FAV_ACTION);
                     if (!i.type) {
                         i.isFavFolder = true;
                     }
+                    i.menuActions.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_FAV_ACTION);
                     // Only allow drag'n'drop of top-level favorites items.
                     i.canDrag = parent && parent.id==TOP_FAVORITES_ID && !options.sortFavorites;
                 } else if (i.presetParams) {
@@ -709,7 +709,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   app: parent.app,
                                   menuActions: "favorites"===parent.type
                                                 ? topLevelFavourites
-                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION]
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, EDIT_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION]
                                                     : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
                                                 : i.isaudio === 1
                                                     ? i.url
@@ -730,7 +730,7 @@ function parseBrowseResp(data, parent, options, idStart) {
                                   type: "track",
                                   menuActions: "favorites"===parent.type
                                                 ? topLevelFavourites
-                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION]
+                                                    ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, EDIT_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION]
                                                     : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
                                                 : i.url
                                                     ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]

@@ -11,6 +11,7 @@
 7. Use toast for some command response messages.
 8. If clicked items action is a ["...", "items"] action then send a list
    request, i.e. ["...", "items", 0, 100, ...]
+9. Add 'More' action to genres.
 
 0.2.8
 -----

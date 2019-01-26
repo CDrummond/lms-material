@@ -430,14 +430,14 @@ a {
 
 .np-text-landscape {
     margin:16px 8px 16px 8px;
-    font-size: 250%;
+    font-size: 400%;
     text-align: center;
 }
 
 @media only screen and (max-height: 800px) {
     .np-text-landscape {
         margin:12px !important;
-        font-size: 200% !important;
+        font-size: 300% !important;
         text-align: center;
     }
 }
@@ -445,12 +445,20 @@ a {
 @media only screen and (max-height: 700px) {
     .np-text-landscape {
         margin:8px !important;
-        font-size: 150% !important;
+        font-size: 225% !important;
         text-align: center;
     }
 }
 
 @media only screen and (max-height: 600px) {
+    .np-text-landscape {
+        margin:4px !important;
+        font-size: 175% !important;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 500px) {
     .np-text-landscape {
         margin:4px !important;
         font-size: 125% !important;
@@ -460,7 +468,7 @@ a {
 
 @media only screen and (max-height: 400px) {
     .np-text-landscape {
-        margin:0px 8px 0px 8px !important;
+        margin:4px !important;
         font-size: 100% !important;
         text-align: center;
     }
@@ -469,7 +477,7 @@ a {
 @media only screen and (max-height: 300px) {
     .np-text-landscape {
         margin:0px 2px 0px 2px !important;
-        font-size: 50% !important;
+        font-size: 75% !important;
         text-align: center;
     }
 }

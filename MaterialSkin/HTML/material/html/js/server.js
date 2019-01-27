@@ -134,7 +134,7 @@ var lmsServer = Vue.component('lms-server', {
                                        will_sleep_in: data.result.will_sleep_in
                                      };
 
-                        player.volume = data.result["mixer volume"];
+                        player.volume = undefined==data.result["mixer volume"] ? 0 : Math.round(data.result["mixer volume"]);
                         // Store volume, so that it can be accessed in 'adjustVolume' handler
                         this.volume = player.volume;
                         player.playlist = { shuffle: data.result["playlist shuffle"],

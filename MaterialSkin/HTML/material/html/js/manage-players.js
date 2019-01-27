@@ -23,7 +23,7 @@ Vue.component('lms-manage-players', {
    </v-toolbar>
   </v-card-title>
 
-  <v-card-text class="pmgr-card-text">
+  <div class="pmgr-card-text"> <!-- NOTE: NOT v-card-text as issues on older iOS?? -->
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <template v-for="(player, index) in players" :key="player.id">
@@ -67,7 +67,7 @@ Vue.component('lms-manage-players', {
      </template>
     </v-layout>
    </v-container>
-  </v-card-text>
+  </div>
   <div class="dialog-padding"></div>
  </v-card>
 

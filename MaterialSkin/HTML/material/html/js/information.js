@@ -15,7 +15,7 @@ Vue.component('lms-information-dialog', {
     <v-toolbar-title>{{title}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
-  <v-card-text class="settings-list">
+  <div class="settings-list info-pad"> <!-- NOTE: NOT v-card-text as issues on older iOS?? -->
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
@@ -54,7 +54,7 @@ Vue.component('lms-information-dialog', {
    </ul>
    <div class="dialog-padding"></div>
 
-  </v-card-text>
+  </div>
  </v-card>
 </v-dialog>
 `,

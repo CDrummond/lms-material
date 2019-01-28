@@ -20,6 +20,7 @@
 15. Larger font size for landscape now-playing text.
 16. Round volume values.
 17. Add some work-arounds for older iOS browser.
+18. Better handling of long strings in grid view.
 
 0.2.8
 -----

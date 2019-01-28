@@ -130,6 +130,12 @@ a {
 .image-grid-text {
     width: 134px;
     max-height: 144px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 
 .image-grid-item {
@@ -189,7 +195,7 @@ a {
     }
 
     .image-grid-text {;
-        width: 114px;
+        width: 118px;
     }
 
     .image-grid-btn {
@@ -219,7 +225,7 @@ a {
     }
 
     .image-grid-text {;
-        width: 99px;
+        width: 102px;
     }
 
     .image-grid-btn {
@@ -249,7 +255,7 @@ a {
     }
 
     .image-grid-text {;
-        width: 84px;
+        width: 88px;
     }
 
     .image-grid-btn {

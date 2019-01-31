@@ -52,10 +52,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <img :src="coverUrl" class="np-image-desktop"></img>
  <div>
   <v-layout row wrap>
-   <v-flex xs12><p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p></v-flex>
+   <v-flex xs12>
+    <p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+    <p class="np-text-desktop subtext ellipsis" v-else></p>
+   </v-flex>
    <v-flex xs12>
     <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-else></p>
    </v-flex>
    <v-flex xs12>
     <p class="np-text-desktop subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>

@@ -21,6 +21,8 @@
 16. Round volume values.
 17. Add some work-arounds for older iOS browser.
 18. Better handling of long strings in grid view.
+19. Fix text position in desktop now playing bar when no artist/album info (as
+    can happen with YouTube)
 
 0.2.8
 -----

@@ -1,4 +1,4 @@
-0.2.9
+0.3.0
 -----
  1. For mobile view, show queue count and duration in toolbar of now-playing
     view instead of repeating track details.
@@ -23,6 +23,10 @@
 18. Better handling of long strings in grid view.
 19. Fix text position in desktop now playing bar when no artist/album info (as
     can happen with YouTube)
+20. Experimental support for MediaSession with Chrome Android. Allows media
+    controls in notification bar, and lock screen. Issues; play/pause is always
+    shown as a play icon, need to interact with web page before session can be
+    initiated.
 
 0.2.8
 -----

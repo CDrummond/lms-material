@@ -12,11 +12,13 @@ var TB_INFO            = {id:"tb:info"           };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
 var toolbarComponent;
+var mediaInitialised = false;
 
 var initMediaSessionAudio = function() {
     let audio = document.createElement('audio');
     audio.src = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/audio/silence.ogg";
     audio.play().then(_ => {
+        mediaInitialised = true;
         audio.pause(); // Don't actually want to play the audio!
         toolbarComponent.updateMediaSession(toolbarComponent.media, true);
         // Setup now, so can remove this listener
@@ -291,6 +293,9 @@ Vue.component('lms-toolbar', {
     },
     methods: {
         updateMediaSession(track, force) {
+            if (!mediaInitialised) {
+                return;
+            }
             if ('mediaSession' in navigator) {
                 if (undefined==track) {
                     navigator.mediaSession.metadata = new MediaMetadata({});

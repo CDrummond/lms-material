@@ -11,6 +11,19 @@ var TB_SERVER_SETTINGS = {id:"tb:serversettings" };
 var TB_INFO            = {id:"tb:info"           };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
+var toolbarComponent;
+
+var initMediaSessionAudio = function() {
+    let audio = document.createElement('audio');
+    audio.src = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/audio/silence.ogg";
+    audio.play().then(_ => {
+        audio.pause(); // Don't actually want to play the audio!
+        toolbarComponent.updateMediaSession(toolbarComponent.media, true);
+        // Setup now, so can remove this listener
+        window.removeEventListener('touchstart', initMediaSessionAudio);
+    });
+};
+
 Vue.component('lms-toolbar', {
     template: `
 <div>
@@ -206,6 +219,7 @@ Vue.component('lms-toolbar', {
                     this.playerVolume.id = this.$store.state.player.id;
                 }
             }
+            this.updateMediaSession(playerStatus.current);
         }.bind(this));
         
         bus.$on('langChanged', function() {
@@ -247,8 +261,55 @@ Vue.component('lms-toolbar', {
         bus.$on('showMessage', function(msg) {
             this.snackbar = {msg: msg, show: true };
         }.bind(this));
+
+        if ('mediaSession' in navigator) {
+            toolbarComponent = this;
+            window.addEventListener('touchstart', initMediaSessionAudio);
+            this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
+            navigator.mediaSession.setActionHandler('play', function() {
+                if (toolbarComponent.playerStatus.isplaying) {
+                    bus.$emit('playerCommand', ['pause', '1']);
+                } else {
+                    bus.$emit('playerCommand', ['play']);
+                }
+            });
+            navigator.mediaSession.setActionHandler('pause', function() {
+                bus.$emit('playerCommand', ['pause', '1']);
+            });
+            navigator.mediaSession.setActionHandler('previoustrack', function() {
+                bus.$emit('playerCommand', ['button', 'jump_rew']);
+            });
+            navigator.mediaSession.setActionHandler('nexttrack', function() {
+                bus.$emit('playerCommand', ['playlist', 'index', '+1']);
+            });
+            bus.$on('currentCover', function(coverUrl) {
+                this.media.cover = coverUrl;
+                this.updateMediaSession(this.media, true);
+            }.bind(this));
+            bus.$emit('getCurrentCover');
+        }
     },
     methods: {
+        updateMediaSession(track, force) {
+            if ('mediaSession' in navigator) {
+                if (undefined==track) {
+                    navigator.mediaSession.metadata = new MediaMetadata({});
+                } else {
+                    var artist = track.trackartist ? track.trackartist : track.artist;
+                    if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
+                        this.media.title = track.title;
+                        this.media.artist = artist;
+                        this.media.album = track.album;
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: this.media.title,
+                            artist: this.media.artist,
+                            album: this.media.album,
+                            artwork: [ {src: this.media.cover, type: 'image/jpeg'}]
+                        });
+                    }
+                }
+            }
+        },
         initItems() {
             TB_UI_SETTINGS.title=i18n('Settings');
             TB_PLAYER_SETTINGS.title=i18n('Player Settings');

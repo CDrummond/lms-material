@@ -572,6 +572,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.items[0].menuActions.forEach(i => {
                         if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
                             this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                            // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
+                            if (this.items[0].params && this.items[0].params.item_id) {
+                                var parts = this.items[0].params.item_id.split(".");
+                                if (parts.length>1) {
+                                    parts.pop();
+                                    this.current.allid = "item_id:"+parts.join(".");
+                                }
+                            }
                             return;
                         }
                     });
@@ -1242,7 +1250,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 cmd.params.forEach(p=> {
                     if (p.startsWith("item_id:")) {
-                        c.params.push(this.current.id);
+                        c.params.push(undefined==this.current.allid ? this.current.id : this.current.allid);
                     } else {
                         c.params.push(p);
                     }

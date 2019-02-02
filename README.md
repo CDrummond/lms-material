@@ -1,5 +1,8 @@
 # Material skin for SlimServer (Logitech Media Server)
 
+NOTE: The following screenshots are from the 0.0.1 release, and there have been
+a few changes since.
+
 ![Browse](screenshots/browse.png)
 ![Now Playing](screenshots/now-playing.png)
 ![Queue](screenshots/queue.png)
@@ -12,7 +15,7 @@
    Genres, Playlists, Years, Composers, etc.
 3. Add random albums of artist, genre, or year
 4. Browse Radio, Favourites, and Apps
-5. Add, delete, and rename favourites
+5. Add, delete, and edit favourites
 6. Add, delete, and rename playlists
 7. Now playing
 8. Play queue with drag'n'drop editing
@@ -24,6 +27,7 @@
 14. Group player control; add, edit, delete
 15. Pin apps, etc, to main screen
 16. Swipe left/right to change views with mobile layout
+17. Lock screen controls when used with Chrome on Android
 
 ## Installation
 

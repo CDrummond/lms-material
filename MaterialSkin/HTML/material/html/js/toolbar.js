@@ -28,8 +28,8 @@ var initMediaSessionAudio = function() {
         setInterval(function() {
             audio.play().then(_ => {
                 audio.currentTime = 0; // Go back to start
-                navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
                 audio.pause();
+                navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
             });
         }, 15*1000);
     });

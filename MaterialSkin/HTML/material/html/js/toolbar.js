@@ -275,7 +275,7 @@ Vue.component('lms-toolbar', {
 
         if ('mediaSession' in navigator) {
             toolbarComponent = this;
-            window.addEventListener('touchstart', initMediaSessionAudio);
+            window.addEventListener('touchend', initMediaSessionAudio);
             this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
             navigator.mediaSession.setActionHandler('play', function() {
                 bus.$emit('playerCommand', ['play']);

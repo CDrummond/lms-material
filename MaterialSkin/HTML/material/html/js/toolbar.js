@@ -22,12 +22,12 @@ var initMediaSessionAudio = function() {
         audio.pause(); // Don't actually want to play the audio!
         toolbarComponent.updateMediaSession(toolbarComponent.media, true);
         // Setup now, so can remove this listener
-        window.removeEventListener('touchstart', initMediaSessionAudio);
+        window.removeEventListener('touchend', initMediaSessionAudio);
 
         // Repeatedly play/pause so that sesssion persists
-        alert("Start interval x");
         setInterval(function() {
             audio.play().then(_ => {
+                navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
                 audio.pause();
             });
         }, 15*1000);
@@ -277,11 +277,7 @@ Vue.component('lms-toolbar', {
             window.addEventListener('touchstart', initMediaSessionAudio);
             this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
             navigator.mediaSession.setActionHandler('play', function() {
-                if (toolbarComponent.playerStatus.isplaying) {
-                    bus.$emit('playerCommand', ['pause', '1']);
-                } else {
-                    bus.$emit('playerCommand', ['play']);
-                }
+                bus.$emit('playerCommand', ['play']);
             });
             navigator.mediaSession.setActionHandler('pause', function() {
                 bus.$emit('playerCommand', ['pause', '1']);
@@ -308,6 +304,7 @@ Vue.component('lms-toolbar', {
                 if (undefined==track) {
                     navigator.mediaSession.metadata = new MediaMetadata({});
                 } else {
+                    navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     var artist = track.trackartist ? track.trackartist : track.artist;
                     if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
                         this.media.title = track.title;

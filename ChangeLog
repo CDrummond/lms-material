@@ -24,9 +24,8 @@
 19. Fix text position in desktop now playing bar when no artist/album info (as
     can happen with YouTube)
 20. Experimental support for MediaSession with Chrome Android. Allows media
-    controls in notification bar, and lock screen. Issues; play/pause is always
-    shown as a play icon, need to interact with web page before session can be
-    initiated.
+    controls in notification bar, and lock screen. Need to interact with page
+    before session can be initiated.
 
 0.2.8
 -----

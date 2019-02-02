@@ -23,6 +23,14 @@ var initMediaSessionAudio = function() {
         toolbarComponent.updateMediaSession(toolbarComponent.media, true);
         // Setup now, so can remove this listener
         window.removeEventListener('touchstart', initMediaSessionAudio);
+
+        // Repeatedly play/pause so that sesssion persists
+        alert("Start interval x");
+        setInterval(function() {
+            audio.play().then(_ => {
+                audio.pause();
+            });
+        }, 15*1000);
     });
 };
 

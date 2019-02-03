@@ -220,7 +220,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             data.result.item_loop.forEach(i => {
                 if (!i.text || i.showBigArtwork==1) {
-                    data.result.count--;
+                    resp.total--;
                     return;
                 }
                 var addedPlayAction = false;
@@ -228,7 +228,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert,Fav commands
                     if (i.style && MORE_COMMANDS.has(i.style)) {
-                        data.result.count--;
+                        resp.total--;
                         return;
                     }
                     i.title = replaceNewLines(i.text);
@@ -435,7 +435,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                 id: parent.id+"."+idStart
                                });
                 resp.useGrid = false;
-            } else if (haveWithoutIcons && haveWithIcons && resp.items.length == data.result.count) {
+            } else if (haveWithoutIcons && haveWithIcons && resp.items.length == resp.total) {
                 var defCover = parent.image ? parent.image
                                             : resolveImage("music/0/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
                 resp.items.forEach(i => {
@@ -474,7 +474,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 resp.items.push(artist);
             });
-            resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : data.result.count);
+            resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : resp.total);
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             resp.useGrid = options.useGrid;
@@ -512,7 +512,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 resp.items.push(album);
             });
-            resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : data.result.count);
+            resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : resp.total);
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
@@ -534,14 +534,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: title,
                               subtitle: formatSeconds(i.duration),
                               //icon: "music_note",
-                              menuActions: allowPlayAlbum && data.result.count>1
+                              menuActions: allowPlayAlbum && resp.total>1
                                             ? [PLAY_ACTION, PLAY_ALBUM_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION]
                                             : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "track"
                           });
             });
-            resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
-            if (data.result.titles_loop.length===data.result.count) {
+            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
+            if (data.result.titles_loop.length===resp.total) {
                 resp.subtitle+=" ("+formatSeconds(duration)+")";
             }
         } else if (data.result.genres_loop) {
@@ -556,7 +556,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "group"
                           });
             });
-            resp.subtitle=i18np("1 Genre", "%1 Genres", data.result.count);
+            resp.subtitle=i18np("1 Genre", "%1 Genres", resp.total);
         } else if (data.result.playlists_loop) {
             data.result.playlists_loop.forEach(i => {
                 resp.items.push({
@@ -569,7 +569,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "group"
                           });
             });
-            resp.subtitle=i18np("1 Playlist", "%1 Playlists", data.result.count);
+            resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             data.result.playlisttracks_loop.forEach(i => {
@@ -598,7 +598,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "track"
                           });
             });
-            resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.count);
+            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
         } else if (data.result.years_loop) {
             data.result.years_loop.forEach(i => {
                 resp.items.push({
@@ -611,7 +611,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "group"
                           });
             });
-            resp.subtitle=i18np("1 Year", "%1 Years", data.result.count);
+            resp.subtitle=i18np("1 Year", "%1 Years", resp.total);
         } else if (data.result.folder_loop) {
             data.result.folder_loop.forEach(i => {
                 var isFolder = i.type==="folder";
@@ -626,7 +626,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               icon: isFolder ? "folder" : undefined
                           });
             });
-            resp.subtitle=i18np("1 Item", "%1 Items", data.result.count);
+            resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
         } else if (data.result.radioss_loop) {
             data.result.radioss_loop.forEach(i => {
                 if ("xmlbrowser"===i.type) {
@@ -677,8 +677,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                           });
                 }
             });
-            resp.subtitle=i18np("1 App", "%1 Apps", data.result.count);
-            if (data.result.appss_loop.length === data.result.count) {
+            resp.subtitle=i18np("1 App", "%1 Apps", resp.total);
+            if (data.result.appss_loop.length === resp.total) {
                 // Have all apps, so sort...
                 resp.items.sort(titleSort);
             }
@@ -744,8 +744,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   id: "item_id:"+i.id,
                                   favIcon: i.image ? i.image : i.icon
                                });
-                    if (i.description && 1==data.result.count) {
-                        data.result.count+=1;
+                    if (i.description && 1==resp.total) {
+                        resp.total+=1;
                         data.result.loop_loop.length+=1;
                         var details;
                         if (i.line1) {
@@ -768,7 +768,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
             });
-        } else if (0===data.result.count && data.result.networkerror) {
+        } else if (0===resp.total && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
             data.result.data.forEach(i => {
@@ -787,7 +787,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
                 resp.useGrid = true;
             }
-            data.result.count = resp.items.length;
+            resp.total = resp.items.length;
         }
 
         if (cacheKey && lmsLastScan) {

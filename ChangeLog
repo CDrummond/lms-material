@@ -23,9 +23,7 @@
 18. Better handling of long strings in grid view.
 19. Fix text position in desktop now playing bar when no artist/album info (as
     can happen with YouTube)
-20. Experimental support for MediaSession with Chrome Android. Allows media
-    controls in notification bar, and lock screen. Need to interact with page
-    before session can be initiated.
+20. Lock screen and notification controls when using Chrome under Android.
 21. Fix addall/playall for YouTube playlists.
 
 0.2.8

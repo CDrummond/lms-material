@@ -6,6 +6,7 @@
  */
 
 function updateUiSettings(state, val) {
+console.log("Update ui");
     var browseDisplayChanged = false;
     if (undefined!=val.darkUi && state.darkUi!=val.darkUi) {
         state.darkUi = val.darkUi;
@@ -37,6 +38,8 @@ function updateUiSettings(state, val) {
         state.useGrid = val.useGrid;
         setLocalStorageVal('useGrid', state.useGrid);
         browseDisplayChanged = true;
+        // Clear lsit cache, as this has iamge URLs which contain different size for list/grid
+        clearListCache(true);
     }
     if (undefined!=val.autoScrollQueue && state.autoScrollQueue!=val.autoScrollQueue) {
         state.autoScrollQueue = val.autoScrollQueue;

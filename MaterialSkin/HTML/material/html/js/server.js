@@ -6,6 +6,7 @@
  */
 
 var lmsServerAddress = "";
+var lmsLastScan = undefined;
 
 function lmsCheckConnection() {
     var url = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/css/blank.css?r"+(new Date().getTime());
@@ -26,11 +27,27 @@ function lmsCommand(playerid, command) {
     return axios(args);
 }
 
-function lmsList(playerid, command, params, start, batchSize) {
+function lmsList(playerid, command, params, start, batchSize, cancache) {
     var cmdParams = command.slice();
     cmdParams = [].concat(cmdParams, [start, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
+    }
+    if (cancache) {
+        try {
+            var key = cacheKey(command, params, start, batchSize);
+            var entry = getLocalStorageVal(key, undefined);
+
+            if (undefined!=entry) {
+                var cache = JSON.parse(entry);
+                // Return promise!
+                return new Promise(function(resolve, reject) {
+                    resolve({data:cache});
+                });
+            }
+        }  catch(e) {
+            logError(e);
+        }
     }
     return lmsCommand(playerid, cmdParams)   
 }
@@ -70,6 +87,10 @@ var lmsServer = Vue.component('lms-server', {
             //console.log("Refresh");
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 var players = [];
+                if (lmsLastScan!=data.result.lastscan) {
+                    lmsLastScan = data.result.lastscan;
+                    clearListCache();
+                }
                 if (data && data.result && data.result.players_loop) {
                     data.result.players_loop.forEach(i => {
                         if (1===i.connected) {

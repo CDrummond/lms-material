@@ -7,11 +7,12 @@
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
 
-function parseBrowseResp(data, parent, options, idStart) {
-    var resp = {items: [], baseActions:[], useGrid: false };
+function parseBrowseResp(data, parent, options, idStart, cacheKey) {
+    var resp = {items: [], baseActions:[], useGrid: false, total: 0 };
 
-    try{
+    try {
     if (data && data.result) {
+        resp.total = data.result.count;
         //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
@@ -779,6 +780,13 @@ function parseBrowseResp(data, parent, options, idStart) {
             }
             data.result.count = resp.items.length;
         }
+
+        if (cacheKey && lmsLastScan) {
+            resp.iscache=true;
+            setLocalStorageVal(cacheKey, JSON.stringify(resp));
+        }
+    } else if (data && data.iscache) { // From cache
+        resp = data;
     }
 
     } catch(e) {

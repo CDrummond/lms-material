@@ -22,3 +22,4 @@ const LMS_MATERIAL_UI_DEFAULT_PREF = "plugin.material-skin:defaults";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_STEP = 5;
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
+const LMS_CACHE_VERSION = 1;

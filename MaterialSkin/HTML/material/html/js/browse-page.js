@@ -1474,6 +1474,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "arrow_downward";
                                 } else if (c.id == "dynamicplaylist") {
                                     item.svg = "dice-list";
+                                } else if (c.id.startsWith("trackstat")) {
+                                    item.icon = "bar_chart";
                                 } else {
                                     item.icon = "music_note";
                                 }

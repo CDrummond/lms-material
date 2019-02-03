@@ -61,6 +61,7 @@ function resolveImage(icon, image, size) {
         return null;
     }
     if (image) {
+        image=""+image; // Ensure its a string!
         if (image.includes("://") && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
             return image;
         }
@@ -69,6 +70,7 @@ function resolveImage(icon, image, size) {
         }
         return lmsServerAddress+"/"+image+(size ? size : "");
     }
+    icon=""+icon; // Ensure its a string!
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
         return icon;
     }

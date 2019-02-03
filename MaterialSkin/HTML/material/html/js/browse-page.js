@@ -143,7 +143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
 
  <v-list v-if="useGrid" class="lms-image-grid noselect bgnd-cover" id="browse-grid">
-  <div v-for="(item, index) in items" :key="item.id" :id="'item'+index">
+  <div v-for="(item, index) in items" :key="item.id" :id="'item'+index" v-if="!item.disabled">
    <v-card flat tile :title="item | tooltip">
     <v-card-text v-if="item.type=='image'" class="image-grid-item">
      <v-img :src="item.thumb" :lazy-src="item.thumb" aspect-ratio="1" @click="showImage(index)"></v-img>

@@ -503,7 +503,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
                               favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined,
-                              origTitle: i.album
+                              origTitle: i.album,
+                              // Bug on my system? There is a 'No Album' entry with no tracks!
+                              disabled: undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist
                           };
                 if (params.length>0) {
                     params.forEach(p => {

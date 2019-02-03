@@ -644,14 +644,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         doTextClick(item) {
             var command = this.buildCommand(item);
-            command.params.forEach(p => {
-                command.command.push(p);
-            });
-            if (command.command.length==2 && "items"==command.command[1]) {
-                lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
+            if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1])) {
+                lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE).then(({data}) => {
                     this.handleTextClickResponse(item, command, data);
                 });
             } else {
+                command.params.forEach(p => {
+                    command.command.push(p);
+                });
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     this.handleTextClickResponse(item, command, data);
                 });
@@ -1157,16 +1157,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                     cmd.params = [];
+                    var addedParams = new Set();
                     if (command.params) {
                         for(var key in command.params) {
-                            cmd.params.push(key+":"+command.params[key]);
+                            var param = key+":"+command.params[key];
+                            cmd.params.push(param);
+                            addedParams.add(param);
                         }
                     }
                     var isMore = "more" == commandName;
                     if (command.itemsParams && item[command.itemsParams]) {
                         for(var key in item[command.itemsParams]) {
                             if (/*!isMore ||*/ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
-                                cmd.params.push(key+":"+item[command.itemsParams][key]);
+                                var param = key+":"+item[command.itemsParams][key];
+                                if (!addedParams.has(param)) {
+                                    cmd.params.push();
+                                }
                             }
                         }
                     }

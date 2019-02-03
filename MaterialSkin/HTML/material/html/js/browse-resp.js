@@ -151,6 +151,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         prevItem.subtitle = isArtists
                                                 ? i18np("1 Artist", "%1 Artists", prevItem.range.count)
                                                 : i18np("1 Album", "%1 Albums", prevItem.range.count);
+                        if (prevItem.range.count>=LMS_BATCH_SIZE) {
+                            prevItem.cancache = true;
+                        }
                         resp.items.push(prevItem);
                         prevItem = item;
                     } else {
@@ -161,6 +164,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     item.subtitle = isArtists
                                         ? i18np("1 Artist", "%1 Artists", count)
                                         : i18np("1 Album", "%1 Albums", count);
+                    if (count>=LMS_BATCH_SIZE) {
+                        prevItem.cancache = true;
+                    }
                     resp.items.push(item);
                 } else {
                     prevItem = item;
@@ -175,6 +181,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 prevItem.subtitle = isArtists
                                         ? i18np("1 Artist", "%1 Artists", prevItem.range.count)
                                         : i18np("1 Album", "%1 Albums", prevItem.range.count);
+                if (prevItem.range.count>=LMS_BATCH_SIZE) {
+                    prevItem.cancache = true;
+                }
                 resp.items.push(prevItem);
             }
 

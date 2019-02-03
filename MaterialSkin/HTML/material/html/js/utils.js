@@ -283,9 +283,10 @@ function cacheKey(command, params, start, batchSize) {
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + ":"+start+":"+batchSize;
 }
 
-function clearListCache() {
+function clearListCache(force) {
     for (var key in localStorage){
-        if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) && !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":")) {
+        if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) &&
+            (force || !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
             localStorage.removeItem(key);
         }
     }

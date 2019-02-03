@@ -26,6 +26,7 @@
 20. Lock screen and notification controls when using Chrome under Android.
 21. Fix addall/playall for YouTube playlists.
 22. Fix browsing 'Dynamic Playlists'
+23. Add caching of local library browsing (artists, albums, genres, years).
 
 0.2.8
 -----

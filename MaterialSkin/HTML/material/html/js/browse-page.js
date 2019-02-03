@@ -402,6 +402,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [],
+                  cancache: true,
                   icon: "group",
                   type: "group",
                   group: GROUP_MY_MUSIC,
@@ -409,6 +410,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: i18n("Albums"),
                   command: ["albums"],
                   params: [ALBUM_TAGS, "sort:"+ALBUM_SORT_PLACEHOLDER],
+                  cancache: true,
                   icon: "album",
                   type: "group",
                   group: GROUP_MY_MUSIC,
@@ -416,6 +418,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: i18n("Genres"),
                   command: ["genres"],
                   params: [],
+                  cancache: true,
                   icon: "label",
                   type: "group",
                   group: GROUP_MY_MUSIC,
@@ -433,6 +436,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.top.splice(2, 0, { title: i18n("Album Artists"),
                                         command: ["artists"],
                                         params: ["role_id:ALBUMARTIST"],
+                                        cancache: true,
                                         icon: "group",
                                         type: "group",
                                         group: GROUP_MY_MUSIC,
@@ -451,6 +455,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: i18n("Compilations"),
                   command: ["albums"],
                   params: ["compilation:1", ALBUM_TAGS, "sort:"+ALBUM_SORT_PLACEHOLDER],
+                  cancache: true,
                   icon: "album",
                   type: "group",
                   id: TOP_ID_PREFIX+"co" },
@@ -473,6 +478,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: i18n("Years"),
                   command: ["years"],
                   params: [],
+                  cancache: true,
                   icon: "date_range",
                   type: "group",
                   id: TOP_ID_PREFIX+"yr" },
@@ -531,10 +537,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.fetchingItems = true;
             //console.log("FETCH command:" + command.command + " params:" + command.params);
             var start = item.range ? item.range.start : 0;
-            var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize;
-            lmsList(this.playerId(), command.command, command.params, start, count).then(({data}) => {
-                var resp = parseBrowseResp(data, item, this.options, 0);
-                this.handleListResponse(item, command, data, resp);
+            var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize ? batchSize : LMS_BATCH_SIZE;
+            lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
+                var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
+                this.handleListResponse(item, command, resp);
                 this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
@@ -542,14 +548,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 logError(err);
             });
         },
-        handleListResponse(item, command, data, resp) {
+        handleListResponse(item, command, resp) {
             if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
                 this.addHistory();
                 this.command = command;
                 this.current = item;
                 this.currentBaseActions = this.baseActions;
                 this.headerTitle=item.title ? item.title : "?";
-                this.listSize = item.range ? item.range.count : data.result.count;
+                this.listSize = item.range ? item.range.count : resp.total;
                 this.items=resp.items;
                 this.baseActions=resp.baseActions;
                 this.menuActions=[];
@@ -636,7 +642,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.goBack(true);
                 }
             } else {
-                this.handleListResponse(item, command, data, resp);
+                this.handleListResponse(item, command, resp);
             }
         },
         canClickText(item) {
@@ -1000,8 +1006,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length>LMS_BATCH_SIZE ? this.items.length : LMS_BATCH_SIZE).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
-                if (data && data.result) {
-                    this.listSize = data.result.count;
+                if (resp && resp.total) {
+                    this.listSize = data.total;
                 } else {
                     this.listSize = 0;
                 }
@@ -1449,15 +1455,19 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                                 if (c.id.startsWith("myMusicArtists")) {
                                     item.icon = "group";
+                                    item.cancache = true;
                                 } else if (c.id.startsWith("myMusicAlbums")) {
                                     item.icon = "album";
+                                    item.cancache = true;
                                 } else if (c.id.startsWith("myMusicGenres")) {
                                     item.icon = "label";
+                                    item.cancache = true;
                                 } else if (c.id == "myMusicPlaylists") {
                                     item.icon = "list";
                                     item.id = TOP_PLAYLISTS_ID;
                                 } else if (c.id.startsWith("myMusicYears")) {
                                     item.icon = "date_range";
+                                    item.cancache = true;
                                 } else if (c.id == "myMusicNewMusic") {
                                     item.icon = "new_releases";
                                     item.id=TOP_NEW_MUSIC_ID;
@@ -1627,15 +1637,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
                     var count = this.current.range ? (this.current.range.count-this.items.length) < LMS_BATCH_SIZE ? (this.current.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
 
-                    lmsList(this.playerId(), this.command.command, this.command.params, start, count).then(({data}) => {
-                        var resp = parseBrowseResp(data, this.current, this.options, this.items.length);
+                    lmsList(this.playerId(), this.command.command, this.command.params, start, count, this.current.cancache).then(({data}) => {
+                        var resp = parseBrowseResp(data, this.current, this.options, this.items.length,
+                                                   this.current.cancache ? cacheKey(this.command.command, this.command.params, start, count) : undefined);
                         if (resp && resp.items) {
                             resp.items.forEach(i => {
                                 this.items.push(i);
                             });
                         }
-                        if (data && data.result && data.result.count) {
-                            this.listSize = data.result.count;
+                        if (resp && resp.total) {
+                            this.listSize = resp.total;
                         }
                         this.fetchingItems = false;
                     }).catch(err => {

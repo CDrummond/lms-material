@@ -277,3 +277,17 @@ function ensureVisible(elem, attempt) {
     }
 }
 
+const LMS_LIST_CACHE_PREFIX = "cache:list:";
+function cacheKey(command, params, start, batchSize) {
+    return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
+           (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + ":"+start+":"+batchSize;
+}
+
+function clearListCache() {
+    for (var key in localStorage){
+        if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) && !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":")) {
+            localStorage.removeItem(key);
+        }
+    }
+}
+

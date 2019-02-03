@@ -536,8 +536,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             this.fetchingItems = true;
             //console.log("FETCH command:" + command.command + " params:" + command.params);
+            var lmsBatchSize = item.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
             var start = item.range ? item.range.start : 0;
-            var count = item.range ? item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE : batchSize ? batchSize : LMS_BATCH_SIZE;
+            var count = item.range ? item.range.count < lmsBatchSize ? item.range.count : lmsBatchSize : batchSize ? batchSize : lmsBatchSize;
             lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
                 var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
                 this.handleListResponse(item, command, resp);
@@ -1634,8 +1635,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (bottomOfPage || pageHeight < visible) {
                     this.fetchingItems = true;
+                    var lmsBatchSize = this.current.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
                     var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                    var count = this.current.range ? (this.current.range.count-this.items.length) < LMS_BATCH_SIZE ? (this.current.range.count-this.items.length) : LMS_BATCH_SIZE : LMS_BATCH_SIZE;
+                    var count = this.current.range ? (this.current.range.count-this.items.length) < lmsBatchSize ? (this.current.range.count-this.items.length) : lmsBatchSize : lmsBatchSize;
 
                     lmsList(this.playerId(), this.command.command, this.command.params, start, count, this.current.cancache).then(({data}) => {
                         var resp = parseBrowseResp(data, this.current, this.options, this.items.length,

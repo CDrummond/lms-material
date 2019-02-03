@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const MORE_COMMANDS = ["item_add", "item_insert", "itemplay", "item_fav"];
+const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
 
 function parseBrowseResp(data, parent, options, idStart) {
     var resp = {items: [], baseActions:[], useGrid: false };
@@ -217,7 +217,7 @@ function parseBrowseResp(data, parent, options, idStart) {
 
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert,Fav commands
-                    if (i.style && MORE_COMMANDS.includes(i.style)) {
+                    if (i.style && MORE_COMMANDS.has(i.style)) {
                         data.result.count--;
                         return;
                     }

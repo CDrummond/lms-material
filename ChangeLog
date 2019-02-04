@@ -1,3 +1,7 @@
+0.3.1
+-----
+1. Fix missing params on certain requests.
+
 0.3.0
 -----
  1. For mobile view, show queue count and duration in toolbar of now-playing

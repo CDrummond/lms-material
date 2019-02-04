@@ -1178,7 +1178,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             if (/*!isMore ||*/ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
                                 var param = key+":"+item[command.itemsParams][key];
                                 if (!addedParams.has(param)) {
-                                    cmd.params.push();
+                                    cmd.params.push(param);
                                 }
                             }
                         }

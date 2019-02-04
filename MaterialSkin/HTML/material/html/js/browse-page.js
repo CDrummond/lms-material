@@ -1008,7 +1008,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 if (resp && resp.total) {
-                    this.listSize = data.total;
+                    this.listSize = resp.total;
                 } else {
                     this.listSize = 0;
                 }

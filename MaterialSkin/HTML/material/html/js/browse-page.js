@@ -1537,10 +1537,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                                   command: command.command, params: command.params, group: GROUP_PINNED});
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
-                for (var i=0; i<item.menuActions.length; ++i) {
-                    if (item.menuActions[i].cmd == PIN_ACTION.cmd) {
-                        item.menuActions[i] = UNPIN_ACTION;
-                        break;
+                if (item.menuActions) {
+                    for (var i=0; i<item.menuActions.length; ++i) {
+                        if (item.menuActions[i].cmd == PIN_ACTION.cmd) {
+                            item.menuActions[i] = UNPIN_ACTION;
+                            break;
+                        }
                     }
                 }
                 this.pinned.sort(titleSort);
@@ -1555,10 +1557,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                         setLocalStorageVal('pinned', JSON.stringify(this.pinned));
                         this.$forceUpdate();
 
-                        for (var i=0; i<item.menuActions.length; ++i) {
-                            if (item.menuActions[i].cmd == UNPIN_ACTION.cmd) {
-                                item.menuActions[i] = PIN_ACTION;
-                                break;
+                        if (item.menuActions) {
+                            for (var i=0; i<item.menuActions.length; ++i) {
+                                if (item.menuActions[i].cmd == UNPIN_ACTION.cmd) {
+                                    item.menuActions[i] = PIN_ACTION;
+                                    break;
+                                }
                             }
                         }
                     }

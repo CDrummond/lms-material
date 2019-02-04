@@ -1,6 +1,7 @@
 0.3.1
 -----
 1. Fix missing params on certain requests.
+2. Fix incorrect item count display.
 
 0.3.0
 -----

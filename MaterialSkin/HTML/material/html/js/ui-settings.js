@@ -146,6 +146,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="showMenuAudioQueue = !showMenuAudioQueue" class="switch-label">
+      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showMenuAudioQueue"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
@@ -185,6 +194,7 @@ Vue.component('lms-ui-settings', {
             stopButton:false,
             browseBackdrop:true,
             queueBackdrop:true,
+            showMenuAudioQueue:false,
             nowPlayingBackdrop:false,
             infoBackdrop:true,
             techInfo:false,
@@ -218,6 +228,7 @@ Vue.component('lms-ui-settings', {
                 this.sortFavorites = this.$store.state.sortFavorites;
                 this.serverMenus = this.$store.state.serverMenus;
                 this.showMenuAudio = this.$store.state.showMenuAudio;
+                this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
                 this.show = true;
@@ -290,6 +301,7 @@ Vue.component('lms-ui-settings', {
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
+                                                  showMenuAudioQueue:this.showMenuAudioQueue,
                                                   nowPlayingBackdrop:this.nowPlayingBackdrop,
                                                   infoBackdrop:this.infoBackdrop,
                                                   techInfo:this.techInfo
@@ -321,6 +333,7 @@ Vue.component('lms-ui-settings', {
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,
+                                     showMenuAudioQueue:this.showMenuAudioQueue,
                                      nowPlayingBackdrop:this.nowPlayingBackdrop,
                                      infoBackdrop:this.infoBackdrop,
                                      techInfo:this.techInfo

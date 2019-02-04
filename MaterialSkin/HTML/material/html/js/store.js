@@ -66,6 +66,10 @@ console.log("Update ui");
         state.queueBackdrop = val.queueBackdrop;
         setLocalStorageVal('queueBackdrop', state.queueBackdrop);
     }
+    if (undefined!=val.showMenuAudioQueue && state.showMenuAudioQueue!=val.showMenuAudioQueue) {
+        state.showMenuAudioQueue = val.showMenuAudioQueue;
+        setLocalStorageVal('showMenuAudioQueue', state.showMenuAudioQueue);
+    }
     if (undefined!=val.nowPlayingBackdrop && state.nowPlayingBackdrop!=val.nowPlayingBackdrop) {
         state.nowPlayingBackdrop = val.nowPlayingBackdrop;
         setLocalStorageVal('nowPlayingBackdrop', state.nowPlayingBackdrop);
@@ -102,6 +106,7 @@ const store = new Vuex.Store({
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
+        showMenuAudioQueue: false,
         nowPlayingBackdrop: false,
         infoBackdrop: true,
         techInfo: false
@@ -206,6 +211,7 @@ const store = new Vuex.Store({
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
+            state.showMenuAudioQueue = getLocalStorageBool('showMenuAudioQueue', state.showMenuAudioQueue);
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
             state.techInfo = getLocalStorageBool('techInfo', state.infoBackdrop);
@@ -235,6 +241,7 @@ const store = new Vuex.Store({
                                  stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
                                  browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                  queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
+                                 showMenuAudioQueue: getLocalStorageBool('showMenuAudioQueue', undefined==prefs.showMenuAudioQueue ? state.showMenuAudioQueue : prefs.showMenuAudioQueue),
                                  nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
                                  infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
                                  techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo)};

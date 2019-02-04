@@ -165,7 +165,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                         ? i18np("1 Artist", "%1 Artists", count)
                                         : i18np("1 Album", "%1 Albums", count);
                     if (count>=LMS_BATCH_SIZE) {
-                        prevItem.cancache = true;
+                        item.cancache = true;
                     }
                     resp.items.push(item);
                 } else {

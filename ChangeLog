@@ -1,6 +1,7 @@
 0.3.2
 -----
 1. Support ratings via TrackStat plugin.
+2. Don't show play actions unless an item has params with item_id.
 
 0.3.1
 -----

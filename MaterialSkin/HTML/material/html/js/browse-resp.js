@@ -279,17 +279,19 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.title = (num>9 ? num : ("0" + num))+" "+text;
                     }
 
-                    if (playAction) {
-                        i.menuActions.push(PLAY_ACTION);
-                        addedPlayAction = true;
-                    }
-                    if (insertAction) {
-                        i.menuActions.push(INSERT_ACTION);
-                        addedPlayAction = true;
-                    }
-                    if (addAction) {
-                        i.menuActions.push(ADD_ACTION);
-                        addedPlayAction = true;
+                    if (i.params && i.params.item_id) {
+                        if (playAction) {
+                            i.menuActions.push(PLAY_ACTION);
+                            addedPlayAction = true;
+                        }
+                        if (insertAction) {
+                            i.menuActions.push(INSERT_ACTION);
+                            addedPlayAction = true;
+                        }
+                        if (addAction) {
+                            i.menuActions.push(ADD_ACTION);
+                            addedPlayAction = true;
+                        }
                     }
                 }
                 var addedDivider = false;

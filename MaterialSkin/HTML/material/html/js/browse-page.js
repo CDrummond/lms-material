@@ -156,7 +156,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <img v-lazy="item.image"></img>
      <div class="image-grid-text truncate-multiline">{{item.title | clampText}}</div>
      <div class="image-grid-text truncate-multiline subtext">{{item.subtitle | clampText}}</div>
-     <v-btn flat icon @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
+     <v-btn flat icon v-if="item.menuActions && item.menuActions.length>0" @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
       <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
       <v-icon v-else-if="item.menuActions && item.menuActions.length===1 && undefined==item.menuActions[0].svg" :title="item.menuActions[0].title">{{item.menuActions[0].icon}}</v-icon>
       <img v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" class="svg-img" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>

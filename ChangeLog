@@ -1,9 +1,13 @@
+0.3.2
+-----
+1. Support ratings via TrackStat plugin.
+
 0.3.1
 -----
 1. Fix missing params on certain requests.
 2. Fix incorrect item count display.
 3. Fix error message with A..Z groups.
-4. Add option to always show menu wnen clicking an item in the queue.
+4. Add option to always show menu when clicking an item in the queue.
 
 0.3.0
 -----

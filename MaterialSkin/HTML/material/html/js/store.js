@@ -6,7 +6,6 @@
  */
 
 function updateUiSettings(state, val) {
-console.log("Update ui");
     var browseDisplayChanged = false;
     if (undefined!=val.darkUi && state.darkUi!=val.darkUi) {
         state.darkUi = val.darkUi;

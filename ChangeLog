@@ -2,6 +2,7 @@
 -----
 1. Support ratings via TrackStat plugin.
 2. Don't show play actions unless an item has params with item_id.
+3. Add support for CD player plugin.
 
 0.3.1
 -----

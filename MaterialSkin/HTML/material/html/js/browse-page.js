@@ -44,6 +44,7 @@ const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
+const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const ALBUM_TAGS = "tags:jlya";
 const TRACK_TAGS = "tags:ACdt";
 const SECTION_APPS = 1;
@@ -323,6 +324,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
+        this.cdPlayer=getLocalStorageBool('cdPlayer', false);
         this.previousScrollPos=0;
         this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
 
@@ -1407,6 +1409,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         group: GROUP_OTHER_MUSIC,
                         id: TOP_APPS_ID,
                         section: SECTION_APPS });
+            list.push({ title: i18n("CD Player"),
+                        command: ["cdplayer", "items"],
+                        params: [],
+                        svg: "cd-player",
+                        type: "group",
+                        group: GROUP_OTHER_MUSIC,
+                        id: TOP_CDPLAYER_ID,
+                        disabled:!this.cdPlayer });
             list.push({ title: i18n("Remote Libraries"),
                         command: ["selectRemoteLibrary", "items"],
                         params: ["menu:selectRemoteLibrary", "menu:1"],
@@ -1816,6 +1826,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.top.forEach(i => {
                         if (i.id == TOP_REMOTE_ID) {
                             i.disabled = !this.remoteLibraries;
+                            return;
+                        }
+                    });
+                }
+            }
+        });
+
+        lmsCommand("", ["can", "cdplayer", "items", "?"]).then(({data}) => {
+            if (data && data.result && undefined!=data.result._can) {
+                var can = 1==data.result._can;
+                if (can!=this.cdPlayer) {
+                    this.cdPlayer = can;
+                    setLocalStorageVal('cdPlayer', this.cdPlayer);
+                    this.top.forEach(i => {
+                        if (i.id == TOP_CDPLAYER_ID) {
+                            i.disabled = !this.cdPlayer;
                             return;
                         }
                     });

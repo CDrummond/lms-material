@@ -591,13 +591,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION];
-            if (allowPlayAlbum && resp.total>1) {
-                actions.push(PLAY_ALBUM_ACTION);
-            }
-            if (options.ratingsSupport) {
+            /*if (options.ratingsSupport) {
                 actions.push(DIVIDER);
                 actions.push(RATING_ACTION);
-            }
+            }*/
             data.result.playlisttracks_loop.forEach(i => {
                 var title = i.title;
                 if (i.artist) {

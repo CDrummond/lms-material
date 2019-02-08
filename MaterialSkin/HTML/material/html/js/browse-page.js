@@ -1784,7 +1784,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         getRatings() {
             this.showRatingButton = false;
             if (this.$store.state.ratingsSupport && this.listSize<=100 && this.items.length>0 && this.items.length==this.listSize &&
-                this.items[0].id && this.items[0].id.startsWith("track_id:")) {
+                !(this.current.id && this.current.id.startsWith("playlist_id:")) && this.items[0].id && this.items[0].id.startsWith("track_id:")) {
                 this.showRatingButton = true;
                 this.items.forEach(i => {
                     lmsCommand("", ["trackstat", "getrating", i.id.split(":")[1]]).then(({data}) => {

@@ -68,7 +68,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
    </v-flex>
   </v-layout>
-  <p v-if="rating.show && playerStatus.current.duration>0>0" class="np-text-desktop np-tech-desktop">
+  <p v-if="showRatings && playerStatus.current.duration>0" class="np-text-desktop np-tech-desktop">
    <v-icon small @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
    <v-icon small @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
    <v-icon small @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
@@ -153,7 +153,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div v-if="rating.show && playerStatus.current.duration>0>0" class="np-text-landscape">
+    <div v-if="showRatings && playerStatus.current.duration>0" class="np-text-landscape">
      <v-icon @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
      <v-icon @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
      <v-icon @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
@@ -219,7 +219,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <img v-if="!info.show" :src="coverUrl" class="np-image"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
-   <v-flex xs12 v-if="rating.show && playerStatus.current.duration>0>0 && techInfo" class="np-text">
+   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && techInfo" class="np-text">
     <v-icon @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
     <v-icon @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
     <v-icon @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
@@ -228,7 +228,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
    <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
    <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
-   <v-flex xs6 v-else-if="rating.show && playerStatus.current.duration>0>0">
+   <v-flex xs6 v-else-if="showRatings && playerStatus.current.duration>0">
     <v-icon @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
     <v-icon @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
     <v-icon @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
@@ -299,7 +299,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: false,
                  largeView: false,
                  sleep: {show:false, items:[], x:0, y:0},
-                 rating: {show: false, value:0, id:undefined}
+                 rating: {value:0, id:undefined},
                 };
     },
     mounted() {
@@ -313,7 +313,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }.bind(this));
         }
         this.info.sync=getLocalStorageBool("syncInfo", true);
-        this.rating.show=getLocalStorageBool("ratingsSupport", this.rating.show);
         bus.$on('playerStatus', function(playerStatus) {
             var playStateChanged = false;
             var trackChanged = false;
@@ -409,7 +408,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
             if (this.rating.id!=playerStatus.current.id) {
                 this.rating.id = playerStatus.current.id;
-                if (this.rating.show) {
+                if (this.$store.state.ratingsSupport) {
                     this.getRating();
                 }
             }
@@ -448,16 +447,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.showTotal = getLocalStorageBool('showTotal', true);
-
-        lmsCommand("", ["can", "trackstat", "getrating", "?"]).then(({data}) => {
-            if (data && data.result && undefined!=data.result._can) {
-                var can = 1==data.result._can;
-                if (can!=this.rating.show) {
-                    this.rating.show = can;
-                    setLocalStorageVal('ratingsSupport', this.rating.show);
-                }
-            }
-        });
     },
     methods: {
         initItems() {
@@ -786,6 +775,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         darkUi () {
             return this.$store.state.darkUi
+        },
+        showRatings() {
+            return this.$store.state.ratingsSupport
         }
     },
     beforeDestroy() {

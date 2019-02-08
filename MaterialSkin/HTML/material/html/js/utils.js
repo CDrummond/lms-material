@@ -292,3 +292,17 @@ function clearListCache(force) {
     }
 }
 
+function ratingString(current, val) {
+    var str = "";
+    if (current) {
+        str=current.replace(/&#x2605;/g, '').trim()
+        if (val>0) {
+            str+=" ";
+        }
+    }
+    for (r=0; r<val; ++r) {
+        str+="&#x2605;";
+    }
+    return str;
+}
+

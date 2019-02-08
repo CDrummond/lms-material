@@ -219,6 +219,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
 
             data.result.item_loop.forEach(i => {
+                // Ignore 'TrackStat' entries in 'More' - these are not handled well!
+                if (i.actions && i.actions.go && i.actions.go.cmd && i.actions.go.cmd.length>0 && i.actions.go.cmd[0]=="trackstat") {
+                    return;
+                }
                 if (!i.text || i.showBigArtwork==1) {
                     resp.total--;
                     return;
@@ -521,6 +525,18 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
             var allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
+            var actions = [PLAY_ACTION];
+            if (allowPlayAlbum && resp.total>1) {
+                actions.push(PLAY_ALBUM_ACTION);
+            }
+            actions.push(INSERT_ACTION);
+            actions.push(ADD_ACTION);
+            actions.push(DIVIDER);
+            actions.push(SELECT_ACTION);
+            if (options.ratingsSupport) {
+                actions.push(RATING_ACTION);
+            }
+            actions.push(MORE_LIB_ACTION);
             data.result.titles_loop.forEach(i => {
                 var title = i.title;
                 if (i.tracknum>0) {
@@ -538,9 +554,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: title,
                               subtitle: formatSeconds(i.duration),
                               //icon: "music_note",
-                              menuActions: allowPlayAlbum && resp.total>1
-                                            ? [PLAY_ACTION, PLAY_ALBUM_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION]
-                                            : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
+                              menuActions: actions,
                               type: "track"
                           });
             });
@@ -576,6 +590,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
+            var actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION];
+            if (allowPlayAlbum && resp.total>1) {
+                actions.push(PLAY_ALBUM_ACTION);
+            }
+            if (options.ratingsSupport) {
+                actions.push(DIVIDER);
+                actions.push(RATING_ACTION);
+            }
             data.result.playlisttracks_loop.forEach(i => {
                 var title = i.title;
                 if (i.artist) {
@@ -598,7 +620,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: title,
                               subtitle: subtitle,
                               //icon: "music_note",
-                              menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              menuActions: actions,
                               type: "track"
                           });
             });

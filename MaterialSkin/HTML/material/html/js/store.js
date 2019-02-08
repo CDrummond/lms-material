@@ -108,7 +108,8 @@ const store = new Vuex.Store({
         showMenuAudioQueue: false,
         nowPlayingBackdrop: false,
         infoBackdrop: true,
-        techInfo: false
+        techInfo: false,
+        ratingsSupport: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -214,6 +215,7 @@ const store = new Vuex.Store({
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
             state.techInfo = getLocalStorageBool('techInfo', state.infoBackdrop);
+            state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -245,6 +247,13 @@ const store = new Vuex.Store({
                                  infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
                                  techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo)};
                     updateUiSettings(state, opts);
+                }
+            });
+
+            lmsCommand("", ["can", "trackstat", "getrating", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._can) {
+                    state.ratingsSupport = 1==data.result._can;
+                    setLocalStorageVal('ratingsSupport', state.ratingsSupport);
                 }
             });
         },

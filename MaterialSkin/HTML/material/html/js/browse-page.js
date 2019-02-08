@@ -25,6 +25,7 @@ var PIN_ACTION              = {cmd:"pin",        svg: "pin"};
 var UNPIN_ACTION            = {cmd:"unpin",      svg: "unpin"};
 var SELECT_ACTION           = {cmd:"select",     icon:"check_box_outline_blank"};
 var UNSELECT_ACTION         = {cmd:"unselect",   icon:"check_box"};
+var RATING_ACTION           = {cmd:"rating",     icon:"stars"};
 
 const MAX_GRID_TEXT_LEN = 80;
 const DIVIDER = {divider:true};
@@ -136,6 +137,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 v-if="headerSubTitle" class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
+   <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-for="(action, index) in menuActions">
     <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button" :title="action.title"><v-icon>{{action.icon}}</v-icon></v-btn>
    </template>
@@ -279,6 +281,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
  <lms-randommix></lms-randommix>
  <lms-favorite></lms-favorite>
+ <lms-rating-dialog><lms-rating-dialog>
 </div>
       `,
     props: [ 'desktop' ],
@@ -289,7 +292,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             grid: false,
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
-            trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined },
+            trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             pinned: [],
@@ -375,6 +378,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             }
         }.bind(this));
+        bus.$on('ratingsSet', function(ids, value) {
+            if (ids.length>1) {
+                this.getRatings();
+            } else {
+                this.items.forEach(i=>{
+                    if (i.id==ids[0]) {
+                        i.rating = value;
+                        i.subtitle = ratingString(i.subtitle, i.rating);
+                    }
+                });
+            }
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -396,8 +411,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             UNPIN_ACTION.title=i18n("Un-pin from main page");
             SELECT_ACTION.title=i18n("Select");
             UNSELECT_ACTION.title=i18n("Un-select");
+            RATING_ACTION.title=i18n("Set rating");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
-                          addall:i18n("Add selection to queue"), playall:i18n("Play selection") };
+                          addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks") };
 
             this.top = [
                 { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC },
@@ -542,9 +558,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             var start = item.range ? item.range.start : 0;
             var count = item.range ? item.range.count < lmsBatchSize ? item.range.count : lmsBatchSize : batchSize ? batchSize : lmsBatchSize;
             lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
+                this.options.ratingsSupport=this.$store.state.ratingsSupport;
                 var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
                 this.handleListResponse(item, command, resp);
                 this.fetchingItems = false;
+                this.getRatings();
             }).catch(err => {
                 this.fetchingItems = false;
                 bus.$emit('showError', err);
@@ -949,6 +967,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.menuActions[idx]=SELECT_ACTION;
                     }
                 }
+            } else if (RATING_ACTION.cmd==act) {
+                bus.$emit("setRating", [item.id], item.rating);
             } else {
                 var command = this.buildFullCommand(item, act, index);
                 if (command.command.length===0) {
@@ -1760,6 +1780,34 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
+        },
+        getRatings() {
+            this.showRatingButton = false;
+            if (this.$store.state.ratingsSupport && this.listSize<=100 && this.items.length>0 && this.items.length==this.listSize &&
+                this.items[0].id && this.items[0].id.startsWith("track_id:")) {
+                this.showRatingButton = true;
+                this.items.forEach(i => {
+                    lmsCommand("", ["trackstat", "getrating", i.id.split(":")[1]]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result.rating && data.result.rating>0) {
+                            i.rating = data.result.rating;
+                            i.subtitle = ratingString(i.subtitle, i.rating);
+                        }
+                    });
+                });
+            }
+        },
+        setAlbumRating() {
+            var ids = [];
+            var rating = 0;
+            var count = 0;
+            this.items.forEach(i => {
+                ids.push(i.id);
+                if (i.rating && i.rating>0) {
+                    rating+=i.rating;
+                    count++;
+                }
+            });
+            bus.$emit("setRating", ids, Math.ceil(rating/count));
         }
     },
     mounted() {

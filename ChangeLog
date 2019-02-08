@@ -3,6 +3,8 @@
 1. Support ratings via TrackStat plugin.
 2. Don't show play actions unless an item has params with item_id.
 3. Add support for CD player plugin.
+4. Only show volume label in mobile view if player is on (as per the volume
+   button).
 
 0.3.1
 -----

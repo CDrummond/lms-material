@@ -101,7 +101,7 @@ Vue.component('lms-toolbar', {
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!desktop && playerStatus">{{playerStatus.volume}}%</div>
+ <div class="vol-label" v-if="!desktop && playerStatus && playerStatus.ison">{{playerStatus.volume}}%</div>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>

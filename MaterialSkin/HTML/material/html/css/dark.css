@@ -79,3 +79,8 @@ progress::-moz-progress-bar {
     border-top: 1px solid #333;
     background-color: #3d3d3d !important;
 }
+
+div.v-rating i.primary--text, div.v-rating i.accent--text {
+    color: #e0e0e0 !important;
+}
+

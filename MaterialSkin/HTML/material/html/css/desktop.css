@@ -184,6 +184,10 @@ body {
     height:2em;
 }
 
+.np-tech-desktop-rating {
+    right:2px;
+}
+
 .np-time-desktop {
     position:fixed;
     bottom:18px;

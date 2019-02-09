@@ -765,3 +765,12 @@ progress {
 div.v-subheader {
     font-size: 16px;
 }
+
+.rstar {
+    font-size: 14px;
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    vertical-align: bottom;
+}
+

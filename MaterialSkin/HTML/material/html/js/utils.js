@@ -292,17 +292,40 @@ function clearListCache(force) {
     }
 }
 
+const RATINGS=["",         // 0
+               "<i class=\"rstar\">star_half</i>", // 0.5
+               "<i class=\"rstar\">star</i>",  // 1
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 1.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 2
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 2.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 3
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 3.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 4
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
+
+var maxRating = 5;
+
 function ratingString(current, val) {
     var str = "";
     if (current) {
-        str=current.replace(/&#x2605;/g, '').trim()
-        if (val>0) {
-            str+=" ";
+        var prev=current.indexOf("<i class=\"rstar\">");
+        if (prev>-1) {
+            str = current.substring(0, prev);
+        } else {
+            str += current;
         }
     }
-    for (r=0; r<val; ++r) {
-        str+="&#x2605;";
-    }
-    return str;
+    var index=Math.ceil(val*2.0);
+    return str+"  "+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)];
+}
+
+function adjustRatingFromServer(val) {
+    var rating = parseInt(val);
+    return maxRating==5 ? rating : rating/2.0;
+}
+
+function adjustRatingToServer(val) {
+    return maxRating==5 ? Math.floor(val) : Math.ceil(val*2.0);
 }
 

@@ -13,8 +13,8 @@ Vue.component('lms-rating-dialog', {
   <v-card-text>
    <v-layout text-xs-center row wrap>
     <v-flex xs12 class="np-text">
-     <v-rating large v-if="maxRating>5" v-model="value" half-increments=true hover=true></v-rating>
-     <v-rating large v-else v-model="value" hover=true></v-rating>
+     <v-rating large v-if="maxRating>5" v-model="value" half-increments=true hover=true clearable></v-rating>
+     <v-rating large v-else v-model="value" hover=true clearable></v-rating>
     <v-flex>
    </v-layout>
   </v-card-text>

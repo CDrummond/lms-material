@@ -326,6 +326,6 @@ function adjustRatingFromServer(val) {
 }
 
 function adjustRatingToServer(val) {
-    return maxRating==5 ? Math.floor(val) : Math.ceil(val*2.0);
+    return maxRating==5 ? Math.floor(val) : (val>0.4 ? Math.ceil(val*2.0) : 0);
 }
 

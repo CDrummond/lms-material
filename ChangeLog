@@ -5,6 +5,7 @@
 3. Add support for CD player plugin.
 4. Only show volume label in mobile view if player is on (as per the volume
    button).
+5. Fix white background to grid items with light theme.
 
 0.3.1
 -----

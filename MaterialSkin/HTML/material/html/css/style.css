@@ -104,6 +104,10 @@ a {
     margin: 0px;
 }
 
+.lms-image-grid div div.v-card {
+    background-color:transparent !important;
+}
+
 .image-grid-item img {
     object-fit: cover;
     object-position: 50% 0%;

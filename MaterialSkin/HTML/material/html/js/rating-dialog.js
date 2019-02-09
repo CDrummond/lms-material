@@ -13,11 +13,8 @@ Vue.component('lms-rating-dialog', {
   <v-card-text>
    <v-layout text-xs-center row wrap>
     <v-flex xs12 class="np-text">
-     <v-icon large @click="value = (value == 1 ? 0 : 1)">{{value<1 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon large @click="value = (value == 2 ? 1 : 2)">{{value<2 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon large @click="value = (value == 3 ? 2 : 3)">{{value<3 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon large @click="value = (value == 4 ? 3 : 4)">{{value<4 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon large @click="value = (value == 5 ? 4 : 5)">{{value<5 ? 'star_border' : 'star'}}</v-icon>
+     <v-rating large v-if="maxRating>5" v-model="value" half-increments=true hover=true></v-rating>
+     <v-rating large v-else v-model="value" hover=true></v-rating>
     <v-flex>
    </v-layout>
   </v-card-text>
@@ -74,8 +71,7 @@ Vue.component('lms-rating-dialog', {
                 this.show=false;
                 bus.$emit('ratingsSet', this.ids, this.value);
             } else {
-                console.log("SET RATING FOR:"+this.toSet[0]);
-                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.toSet[0], this.value]).then(({data}) => {
+                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.toSet[0], adjustRatingToServer(this.value)]).then(({data}) => {
                     this.toSet.shift();
                     this.setRating();
                 });

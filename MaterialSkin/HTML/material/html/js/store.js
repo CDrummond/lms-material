@@ -216,6 +216,10 @@ const store = new Vuex.Store({
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
             state.techInfo = getLocalStorageBool('techInfo', state.infoBackdrop);
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
+            if (state.ratingsSupport) {
+                // maxRating defined in utils.js
+                maxRating = getLocalStorageBool('maxRating', maxRating);
+            }
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -254,6 +258,14 @@ const store = new Vuex.Store({
                 if (data && data.result && undefined!=data.result._can) {
                     state.ratingsSupport = 1==data.result._can;
                     setLocalStorageVal('ratingsSupport', state.ratingsSupport);
+                    if (state.ratingsSupport) {
+                        lmsCommand("", ["pref", "plugin.trackstat:rating_10scale", "?"]).then(({data}) => {
+                            if (data && data.result && data.result._p2 != null) {
+                                maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
+                                setLocalStorageVal('maxRating', maxRating);
+                            }
+                        });
+                    }
                 }
             });
         },

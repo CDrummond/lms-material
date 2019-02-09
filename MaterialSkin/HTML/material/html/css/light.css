@@ -74,7 +74,11 @@ progress::-moz-progress-bar {
     border-top: 1px solid #ddd;
 }
 
-div.v-avatar i.v-icon {
+div.v-avatar i.v-icon, .v-list__tile__title div i.v-icon {
     color: #272727;
+}
+
+div.v-rating i.primary--text, div.v-rating i.accent--text {
+    color: #0e0e0e !important;
 }
 

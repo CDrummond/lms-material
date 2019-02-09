@@ -68,12 +68,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
    </v-flex>
   </v-layout>
-  <p v-if="showRatings && playerStatus.current.duration>0" class="np-text-desktop np-tech-desktop">
-   <v-icon small @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
-   <v-icon small @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
-   <v-icon small @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
-   <v-icon small @click="toggleRating(4)">{{rating.value<4 ? 'star_border' : 'star'}}</v-icon>
-   <v-icon small @click="toggleRating(5)">{{rating.value<5 ? 'star_border' : 'star'}}</v-icon>
+  <p v-if="showRatings && playerStatus.current.duration>0" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
+   <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true></v-rating>
+   <v-rating small v-else v-model="rating.value" hover=true></v-rating>
   </p>
   <p class="np-text-desktop np-tech-desktop ellipsis" v-else-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
   <p class="np-text-desktop np-time-desktop cursor" @click="toggleTime()">{{formattedTime}}</p>
@@ -154,11 +151,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0" class="np-text-landscape">
-     <v-icon @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon @click="toggleRating(4)">{{rating.value<4 ? 'star_border' : 'star'}}</v-icon>
-     <v-icon @click="toggleRating(5)">{{rating.value<5 ? 'star_border' : 'star'}}</v-icon>
+     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true></v-rating>
+     <v-rating v-else v-model="rating.value" hover=true></v-rating>
     </div>
     <div v-if="wide">
 
@@ -220,20 +214,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && techInfo" class="np-text">
-    <v-icon @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(4)">{{rating.value<4 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(5)">{{rating.value<5 ? 'star_border' : 'star'}}</v-icon>
+    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true></v-rating>
+    <v-rating v-else v-model="rating.value" hover=true></v-rating>
    </v-flex>
    <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
    <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
    <v-flex xs6 v-else-if="showRatings && playerStatus.current.duration>0">
-    <v-icon @click="toggleRating(1)">{{rating.value<1 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(2)">{{rating.value<2 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(3)">{{rating.value<3 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(4)">{{rating.value<4 ? 'star_border' : 'star'}}</v-icon>
-    <v-icon @click="toggleRating(5)">{{rating.value<5 ? 'star_border' : 'star'}}</v-icon>
+    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true></v-rating>
+    <v-rating v-else v-model="rating.value" hover=true></v-rating>
    </v-flex>
    <v-flex xs6 v-else></v-flex>
    <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
@@ -299,7 +287,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: false,
                  largeView: false,
                  sleep: {show:false, items:[], x:0, y:0},
-                 rating: {value:0, id:undefined},
+                 rating: {value:0, id:undefined, setting:false},
                 };
     },
     mounted() {
@@ -407,7 +395,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
 
             if (this.rating.id!=playerStatus.current.id) {
-                this.rating.id = playerStatus.current.id;
+                this.rating.id = playerStatus.current.duration && playerStatus.current.duration>0 ? playerStatus.current.id : undefined;
                 if (this.$store.state.ratingsSupport) {
                     this.getRating();
                 }
@@ -678,19 +666,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 bus.$emit('playerCommand', ["sleep", duration]);
             }
         },
-        toggleRating(val) {
-            if (undefined!=this.rating.id) {
-                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.rating.id, val==this.rating.value ? val-1 : val]).then(({data}) => {
-                    this.getRating();
-                });
-            }
-        },
         getRating() {
             if (undefined!=this.rating.id) {
+                this.rating.setting = true;
                 lmsCommand("", ["trackstat", "getrating", this.rating.id]).then(({data}) => {
                     if (data && data.result && undefined!=data.result.rating) {
-                        this.rating.value = parseInt(data.result.rating);
+                        this.rating.value = adjustRatingFromServer(data.result.rating);
                     }
+                    this.rating.setting = false;
+                }).catch(err => {
+                    this.rating.setting = false;
+                    logError(err);
                 });
             }
         }
@@ -778,6 +764,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showRatings() {
             return this.$store.state.ratingsSupport
+        }
+    },
+    watch: {
+        'rating.value': function(newVal) {
+            if (this.$store.state.ratingsSupport && !this.rating.setting && undefined!=this.rating.id) {
+                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.rating.id, adjustRatingToServer(newVal)]).then(({data}) => {
+                    this.getRating();
+                });
+            }
         }
     },
     beforeDestroy() {

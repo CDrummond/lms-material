@@ -298,7 +298,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             pinned: [],
             libraryName: undefined,
             selection: [],
-            collapsed: [false, false, false]
+            collapsed: [false, false, false],
+            showRatingButton: false
         }
     },
     computed: {

@@ -198,6 +198,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
+            var isMore = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 &&
+                         (data.params[1][0]=="genreinfo" || data.params[1][0]=="artistinfo" || data.params[1][0]=="albuminfo" ||
+                          data.params[1][0]=="trackinfo");
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -220,7 +223,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             data.result.item_loop.forEach(i => {
                 // Ignore 'TrackStat' entries in 'More' - these are not handled well!
-                if (i.actions && i.actions.go && i.actions.go.cmd && i.actions.go.cmd.length>0 && i.actions.go.cmd[0]=="trackstat") {
+                if (isMore && i.actions && i.actions.go && i.actions.go.cmd && i.actions.go.cmd.length>0 && i.actions.go.cmd[0]=="trackstat") {
+                    resp.total--;
                     return;
                 }
                 if (!i.text || i.showBigArtwork==1) {

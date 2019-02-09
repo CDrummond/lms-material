@@ -737,6 +737,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.page = undefined;
             }
             bus.$emit('largeViewVisible', val);
+        },
+        'rating.value': function(newVal) {
+            if (this.$store.state.ratingsSupport && !this.rating.setting && undefined!=this.rating.id) {
+                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.rating.id, adjustRatingToServer(newVal)]).then(({data}) => {
+                    this.getRating();
+                });
+            }
         }
     },
     computed: {
@@ -764,15 +771,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showRatings() {
             return this.$store.state.ratingsSupport
-        }
-    },
-    watch: {
-        'rating.value': function(newVal) {
-            if (this.$store.state.ratingsSupport && !this.rating.setting && undefined!=this.rating.id) {
-                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.rating.id, adjustRatingToServer(newVal)]).then(({data}) => {
-                    this.getRating();
-                });
-            }
         }
     },
     beforeDestroy() {

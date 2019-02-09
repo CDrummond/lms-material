@@ -271,9 +271,10 @@
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
 "Album Mix":"",
+"Apply":"Anwenden",
 "Audio":"",
 "CD Player":"",
-"Crossfade":"",
+"Crossfade":"Überblenden",
 "Dynamic Playlists":"",
 "Firmware: %1":"",
 "IP: %1":"",
@@ -284,6 +285,9 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
+"Set rating":"Bewerten",
+"Set rating for %1 tracks":"Bewertung für %1 Titel",
+"Set rating for all tracks":"Bewertung für alle Titel",
 "Start":"",
 "URL":""
 }

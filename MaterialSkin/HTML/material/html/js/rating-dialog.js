@@ -35,6 +35,11 @@ Vue.component('lms-rating-dialog', {
             item: undefined
         }
     },
+    computed: {
+            maxRating() {
+            return this.$store.state.maxRating
+        }
+    },
     mounted() {
         bus.$on('setRating', function(ids, current) {
             this.ids = ids;

@@ -304,8 +304,6 @@ const RATINGS=["",         // 0
                "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
                "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
 
-var maxRating = 5;
-
 function ratingString(current, val) {
     var str = "";
     if (current) {
@@ -322,10 +320,15 @@ function ratingString(current, val) {
 
 function adjustRatingFromServer(val) {
     var rating = parseInt(val);
-    return maxRating==5 ? rating : rating/2.0;
+    if (rating<0) {
+        rating=0;
+    } else if (rating>100) {
+        rating=100;
+    }
+    return rating/20.0;
 }
 
 function adjustRatingToServer(val) {
-    return maxRating==5 ? Math.floor(val) : (val>0.4 ? Math.ceil(val*2.0) : 0);
+    return (val*20)+"%";
 }
 

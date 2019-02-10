@@ -1790,8 +1790,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.showRatingButton = true;
                 this.items.forEach(i => {
                     lmsCommand("", ["trackstat", "getrating", i.id.split(":")[1]]).then(({data}) => {
-                        if (data && data.result && undefined!=data.result.rating && data.result.rating>0) {
-                            i.rating = adjustRatingFromServer(data.result.rating);
+                        if (data && data.result && undefined!=data.result.ratingpercentage) {
+                            i.rating = adjustRatingFromServer(data.result.ratingpercentage);
                             i.subtitle = ratingString(i.subtitle, i.rating);
                         }
                     });

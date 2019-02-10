@@ -198,6 +198,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
+            var isTrackStat = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 &&
+                              data.params[1][0]=="trackstat";
             var isMore = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 &&
                          (data.params[1][0]=="genreinfo" || data.params[1][0]=="artistinfo" || data.params[1][0]=="albuminfo" ||
                           data.params[1][0]=="trackinfo");
@@ -207,7 +209,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             // need different IDs for the re-ordered items so that the correct cover is shown.
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
 
-            resp.useGrid = options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+            resp.useGrid = !isTrackStat && options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -222,11 +224,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
 
             data.result.item_loop.forEach(i => {
-                // Ignore 'TrackStat' entries in 'More' - these are not handled well!
-                if (isMore && i.actions && i.actions.go && i.actions.go.cmd && i.actions.go.cmd.length>0 && i.actions.go.cmd[0]=="trackstat") {
-                    resp.total--;
-                    return;
-                }
                 if (!i.text || i.showBigArtwork==1) {
                     resp.total--;
                     return;
@@ -287,7 +284,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.title = (num>9 ? num : ("0" + num))+" "+text;
                     }
 
-                    if (i.params && i.params.item_id) {
+                    if (!isMore && (i.params && (i.params.item_id || i.params.track))) {
                         if (playAction) {
                             i.menuActions.push(PLAY_ACTION);
                             addedPlayAction = true;

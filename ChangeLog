@@ -6,6 +6,8 @@
 4. Only show volume label in mobile view if player is on (as per the volume
    button).
 5. Fix white background to grid items with light theme.
+6. Only clear browse history (i.e. go to Home first) when 'More' action is
+   called from queue or now playing.
 
 0.3.1
 -----

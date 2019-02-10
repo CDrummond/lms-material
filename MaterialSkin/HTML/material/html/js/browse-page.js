@@ -371,6 +371,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('trackInfo', function(item) {
+            this.goHome();
             this.itemAction(MORE_LIB_ACTION.cmd, item);
         }.bind(this));
 
@@ -933,7 +934,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems(this.buildCommand(item, act), item);
             } else if (act===MORE_LIB_ACTION.cmd) {
                 if (item.id) {
-                    this.goHome();
                     if (item.id.startsWith("artist_id:")) {
                         this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
                     } else if (item.id.startsWith("album_id:")) {

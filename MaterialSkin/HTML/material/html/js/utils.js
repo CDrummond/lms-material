@@ -325,7 +325,7 @@ function adjustRatingFromServer(val) {
     } else if (rating>100) {
         rating=100;
     }
-    return rating/20.0;
+    return Math.round(rating/10.0)/2.0;  // Round to nearest 5%
 }
 
 function adjustRatingToServer(val) {

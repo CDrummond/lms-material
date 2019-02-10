@@ -670,8 +670,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (undefined!=this.rating.id) {
                 this.rating.setting = true;
                 lmsCommand("", ["trackstat", "getrating", this.rating.id]).then(({data}) => {
-                    if (data && data.result && undefined!=data.result.rating) {
-                        this.rating.value = adjustRatingFromServer(data.result.rating);
+                    if (data && data.result && undefined!=data.result.ratingpercentage) {
+                        this.rating.value = adjustRatingFromServer(data.result.ratingpercentage);
                     }
                     this.rating.setting = false;
                 }).catch(err => {
@@ -771,6 +771,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showRatings() {
             return this.$store.state.ratingsSupport
+        },
+        maxRating() {
+            return this.$store.state.maxRating
         }
     },
     beforeDestroy() {

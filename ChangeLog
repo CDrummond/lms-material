@@ -8,6 +8,7 @@
 5. Fix white background to grid items with light theme.
 6. Only clear browse history (i.e. go to Home first) when 'More' action is
    called from queue or now playing.
+7. Fix elliding of subtoolbar title.
 
 0.3.1
 -----

@@ -10,6 +10,7 @@
    called from queue or now playing.
 7. Fix elliding of subtoolbar title.
 8. Fix paddding in manage players dialog.
+9. Show ellipsis in desktop bottom toolbar for empty sub text if have main text.
 
 0.3.1
 -----

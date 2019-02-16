@@ -59,10 +59,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs12>
     <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.title">&#x22ef;</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else></p>
-   </v-flex>
-   <v-flex xs12>
-    <p class="np-text-desktop subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    </v-flex>
    <v-flex xs12>
     <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>

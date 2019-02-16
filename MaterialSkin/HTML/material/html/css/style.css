@@ -292,8 +292,11 @@ a {
     margin-left: 4px;
     margin-bottom:0px !important;
     padding-bottom:0px !important;
-    align-items: center;
-    display: flex;
+}
+
+.subtoolbar-title-single {
+    height:var(--sub-toolbar-height) !important;
+    line-height:var(--sub-toolbar-height) !important;
 }
 
 .subtext {
@@ -363,10 +366,6 @@ a {
 
 .pq-details {
     padding-left: 17px;
-}
-
-.subtoolbar-pad {
-    height:40px;
 }
 
 .toolbar-button {

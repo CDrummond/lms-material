@@ -700,7 +700,7 @@ progress {
 }
 
 .pmgr-card-text {
-    padding-top: 16px; /* add padding as not using v-card-text due to issues on older iOS?? */
+    padding: 16px 32px 16px 32px; /* add padding as not using v-card-text due to issues on older iOS?? */
     width:100%;
     height:100%;
 }

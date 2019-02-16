@@ -777,3 +777,7 @@ div.v-subheader {
     vertical-align: bottom;
 }
 
+.pointer {
+    cursor: pointer;
+}
+

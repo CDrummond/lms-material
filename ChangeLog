@@ -1,16 +1,18 @@
 0.3.2
 -----
-1. Support ratings via TrackStat plugin.
-2. Don't show play actions unless an item has params with item_id.
-3. Add support for CD player plugin.
-4. Only show volume label in mobile view if player is on (as per the volume
-   button).
-5. Fix white background to grid items with light theme.
-6. Only clear browse history (i.e. go to Home first) when 'More' action is
-   called from queue or now playing.
-7. Fix elliding of subtoolbar title.
-8. Fix paddding in manage players dialog.
-9. Show ellipsis in desktop bottom toolbar for empty sub text if have main text.
+ 1. Support ratings via TrackStat plugin.
+ 2. Don't show play actions unless an item has params with item_id.
+ 3. Add support for CD player plugin.
+ 4. Only show volume label in mobile view if player is on (as per the volume
+    button).
+ 5. Fix white background to grid items with light theme.
+ 6. Only clear browse history (i.e. go to Home first) when 'More' action is
+    called from queue or now playing.
+ 7. Fix elliding of subtoolbar title.
+ 8. Fix paddding in manage players dialog.
+ 9. Show ellipsis in desktop bottom toolbar for empty sub text if have main
+    text.
+10. When sorting favorites, don't sort genre, artist, album, or track lists.
 
 0.3.1
 -----

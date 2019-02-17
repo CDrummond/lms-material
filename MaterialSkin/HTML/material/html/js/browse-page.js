@@ -614,7 +614,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     });
                 }
-                if (this.menuActions.length==0 && SECTION_FAVORITES==this.current.section) {
+                if (this.menuActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.menuActions=[ADD_FAV_ACTION];
                 }
                 if (this.listSize<0) {
@@ -1059,15 +1059,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && this.listSize == this.items.length) {
                 if (this.current.id == TOP_APPS_ID) {
                     this.items.sort(titleSort);
-                } else if (SECTION_FAVORITES==this.current.section && this.$store.state.sortFavorites) {
-                    // Don't sort genre, artist, album, or track lists...
-                    if (!this.current.presetParams || !this.current.presetParams.favorites_url ||
-                        (!this.current.presetParams.favorites_url.startsWith("db:contributor.name=") &&
-                         !this.current.presetParams.favorites_url.startsWith("db:album.title=") &&
-                         !this.current.presetParams.favorites_url.startsWith("db:genre.name=") &&
-                         !this.current.presetParams.favorites_url.startsWith("db:year.id="))) {
-                        this.items.sort(favSort);
-                    }
+                } else if (SECTION_FAVORITES==this.current.section && this.$store.state.sortFavorites && this.current.isFavFolder) {
+                    this.items.sort(favSort);
                 }
             }
         },
@@ -1429,7 +1422,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         app: "favorites",
                         group: GROUP_OTHER_MUSIC,
                         id: TOP_FAVORITES_ID,
-                        section: SECTION_FAVORITES });
+                        section: SECTION_FAVORITES,
+                        isFavFolder: true });
             list.push({ title: i18n("Apps"),
                         command: ["myapps", "items"],
                         params: ["menu:1"],

@@ -1168,15 +1168,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined==commandName) {
                     commandName = "go";
                 }
+                var baseActions = this.current == item ? this.currentBaseActions : this.baseActions;
                 command = item.actions && item.actions[commandName]
                             ? item.actions[commandName]
                             : "go" == commandName && item.actions && item.actions["do"]
                                 ? item.actions["do"]
-                                : this.baseActions
-                                    ? this.baseActions[commandName]
-                                        ? this.baseActions[commandName]
-                                        : "go" == commandName && this.baseActions["do"]
-                                            ? this.baseActions["do"]
+                                : baseActions
+                                    ? baseActions[commandName]
+                                        ? baseActions[commandName]
+                                        : "go" == commandName && baseActions["do"]
+                                            ? baseActions["do"]
                                             : undefined
                                     : undefined;
 

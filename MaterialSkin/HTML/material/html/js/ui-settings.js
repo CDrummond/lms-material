@@ -42,6 +42,11 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
+    </v-list-tile>
 
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Browse')}}</v-header>
@@ -202,7 +207,13 @@ Vue.component('lms-ui-settings', {
             library: null,
             libraries: [],
             layout: null,
-            layoutItems: []
+            layoutItems: [],
+            volumeSteps: [ { value: 1,  label: "1%"},
+                           { value: 2,  label: "2%"},
+                           { value: 5,  label: "5%"},
+                           { value: 10, label: "10%"}
+                         ],
+            volumeStep: 5
         }
     },
     computed: {
@@ -231,6 +242,7 @@ Vue.component('lms-ui-settings', {
                 this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
+                this.volumeStep = volumeStep;
                 this.show = true;
                 bus.$emit('dialogOpen', this.show);
 
@@ -304,7 +316,8 @@ Vue.component('lms-ui-settings', {
                                                   showMenuAudioQueue:this.showMenuAudioQueue,
                                                   nowPlayingBackdrop:this.nowPlayingBackdrop,
                                                   infoBackdrop:this.infoBackdrop,
-                                                  techInfo:this.techInfo
+                                                  techInfo:this.techInfo,
+                                                  volumeStep:this.volumeStep
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
@@ -336,7 +349,8 @@ Vue.component('lms-ui-settings', {
                                      showMenuAudioQueue:this.showMenuAudioQueue,
                                      nowPlayingBackdrop:this.nowPlayingBackdrop,
                                      infoBackdrop:this.infoBackdrop,
-                                     techInfo:this.techInfo
+                                     techInfo:this.techInfo,
+                                     volumeStep:this.volumeStep
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

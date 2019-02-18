@@ -14,6 +14,7 @@
     text.
 10. When sorting favorites, don't sort genre, artist, album, or track lists.
 11. Fix playing an album from favourites by using the subtoolbar actions.
+12. Add volume step setting; 1%, 2%, 5%, or 10%
 
 0.3.1
 -----

@@ -81,6 +81,10 @@ function updateUiSettings(state, val) {
         state.techInfo = val.techInfo;
         setLocalStorageVal('techInfo', state.techInfo);
     }
+    if (undefined!=val.volumeStep && volumeStep!=val.volumeStep) {
+        volumeStep = val.volumeStep;
+        setLocalStorageVal('volumeStep', volumeStep);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -247,7 +251,8 @@ const store = new Vuex.Store({
                                  showMenuAudioQueue: getLocalStorageBool('showMenuAudioQueue', undefined==prefs.showMenuAudioQueue ? state.showMenuAudioQueue : prefs.showMenuAudioQueue),
                                  nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
                                  infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
-                                 techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo)};
+                                 techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
+                                 volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep))};
                     updateUiSettings(state, opts);
                 }
             });

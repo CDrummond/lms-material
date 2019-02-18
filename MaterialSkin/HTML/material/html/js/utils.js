@@ -208,23 +208,35 @@ function setBgndCover(elem, coverUrl, isDark) {
     }
 }
 
+var volumeStep = 5;
+
 function adjustVolume(vol, inc) {
+    if (1==volumeStep) {
+        if (inc) {
+            return vol+1;
+        } else if (0==vol) {
+            return 0;
+        } else {
+            return vol-1;
+        }
+    }
+
     if (inc) {
         // Always send volume up, even if at 100% already. Some users trap LMS
         // volume commands and forward on
-        return Math.floor((vol+LMS_VOLUME_STEP)/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
+        return Math.floor((vol+volumeStep)/volumeStep)*volumeStep;
     }
 
-    if (vol<=LMS_VOLUME_STEP) {
+    if (vol<=volumeStep) {
         return 0;
     }
 
-    var adj = Math.floor(vol/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
-    // If rounding down to LMS_VOLUME_STEP is 2% (or more) then use that, else make even lower
+    var adj = Math.floor(vol/volumeStep)*volumeStep;
+    // If rounding down to volumeStep is 2% (or more) then use that, else make even lower
     if ((vol-adj)>=2) {
         return adj;
     }
-    return Math.floor((vol-LMS_VOLUME_STEP)/LMS_VOLUME_STEP)*LMS_VOLUME_STEP;
+    return Math.floor((vol-volumeStep)/volumeStep)*volumeStep;
 }
 
 function parseQueryParams() {

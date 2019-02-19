@@ -21,6 +21,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </template>
   </v-list>
  </v-menu>
+ <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
+  <v-list>
+   <v-list-tile>
+    <v-list-tile-title @click="showPic()">{{menu.text}}</v-list-tile-title>
+   </v-list-tile>
+  </v-list>
+ </v-menu>
 <div v-if="desktop && !largeView" class="np-bar noselect" id="np-bar">
  <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
@@ -49,7 +56,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :src="coverUrl" class="np-image-desktop"></img>
+ <img :src="coverUrl" class="np-image-desktop" @contextmenu="showMenu"></img>
  <div>
   <v-layout row wrap>
    <v-flex xs12>
@@ -140,7 +147,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
  <div v-else>
   <div v-if="landscape">
-   <img v-if="!info.show" :src="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}"></img>
+   <img v-if="!info.show" :src="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}" @contextmenu="showMenu"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -208,7 +215,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text" v-else>&nbsp;</p>
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :src="coverUrl" class="np-image"></img>
+   <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && techInfo" class="np-text">
@@ -285,6 +292,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: false,
                  largeView: false,
                  sleep: {show:false, items:[], x:0, y:0},
+                 menu: { show: false, x:0, y:0, text: undefined },
                  rating: {value:0, id:undefined, setting:false},
                 };
     },
@@ -458,6 +466,36 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 { duration: -2     label:xxx("Remaining duration of play queue")} */
                 { duration: 0,     label:i18n("Cancel sleep")}
                 ];
+            this.menu.text=i18n("Show image");
+        },
+        showMenu(event) {
+            event.preventDefault();
+            if (this.coverUrl) {
+                this.menu.show = false;
+                this.menu.x = event.clientX;
+                this.menu.y = event.clientY;
+                this.$nextTick(() => {
+                    this.menu.show = true;
+                });
+            }
+        },
+        showPic() {
+            var that = this;
+            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, [{src:this.coverUrl, w:0, h:0}], {index: 0});
+            this.gallery.listen('gettingData', function (index, item) {
+                if (item.w < 1 || item.h < 1) {
+                    var img = new Image();
+                    img.onload = function () {
+                        item.w = this.width;
+                        item.h = this.height;
+                        that.gallery.updateSize(true);
+                    };
+                    img.src = item.src;
+                }
+            });
+            this.gallery.init();
+            bus.$emit('dialogOpen', true);
+            this.gallery.listen('close', function() { bus.$emit('dialogOpen', false); });
         },
         doAction(command) {
             bus.$emit('playerCommand', command);

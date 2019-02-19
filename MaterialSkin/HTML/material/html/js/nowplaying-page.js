@@ -53,7 +53,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <div>
   <v-layout row wrap>
    <v-flex xs12>
-    <p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+    <p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{title}}</p>
     <p class="np-text-desktop subtext ellipsis" v-else></p>
    </v-flex>
    <v-flex xs12>
@@ -142,7 +142,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="landscape">
    <img v-if="!info.show" :src="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}"></img>
    <div class="np-details-landscape">
-    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</div>
+    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div class="np-text-landscape subtext" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -202,7 +202,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
   </div>
   <div v-else>
-   <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+   <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
    <p class="np-text" v-else>&nbsp;</p>
@@ -272,7 +272,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     isplaying: 1,
                     sleepTimer: false,
                     current: { canseek:1, duration:0, time:0, title:undefined, artist:undefined, 
-                               album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0 },
+                               album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
                     playlist: { shuffle:0, repeat: 0 },
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
@@ -322,6 +322,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.current.title!=this.playerStatus.current.title) {
                 this.playerStatus.current.title = playerStatus.current.title;
+                trackChanged = true;
+            }
+            if (playerStatus.current.tracknum!=this.playerStatus.current.tracknum) {
+                this.playerStatus.current.tracknum = playerStatus.current.tracknum;
                 trackChanged = true;
             }
             if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
@@ -772,6 +776,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         maxRating() {
             return this.$store.state.maxRating
+        },
+        title() {
+            if (this.$store.state.nowPlayingTrackNum && this.playerStatus.current.tracknum) {
+                return (this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+" "+this.playerStatus.current.title;
+            }
+            return this.playerStatus.current.title;
         }
     },
     beforeDestroy() {

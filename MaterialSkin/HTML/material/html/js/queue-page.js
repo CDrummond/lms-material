@@ -195,17 +195,6 @@ var lmsQueue = Vue.component("lms-queue", {
         this.isVisible = true;
         this.autoScrollRequired = false;
         this.previousScrollPos = 0;
-        this.showTrackNum = getLocalStorageBool('showTrackNum', true);
-
-        lmsCommand("", ["serverstatus", 0, 0, "prefs:titleFormatWeb,titleFormat"]).then(({data}) => {
-            if (data && data.result && data.result) {
-                var idx = parseInt(data.result.titleFormatWeb);
-                if (idx<data.result.titleFormat.length) {
-                    this.showTrackNum = data.result.titleFormat[idx].includes("TRACKNUM");
-                    setLocalStorageVal('showTrackNum', this.showTrackNum);
-                }
-            }
-        });
     },
     mounted() {
         this.listSize=0;
@@ -494,7 +483,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.showTrackNum);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum);
                 resp.items.forEach(i => {
                     this.items.push(i);
                 });
@@ -541,7 +530,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
                         this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.showTrackNum);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==timestamp;
                     this.timestamp = resp.timestamp;

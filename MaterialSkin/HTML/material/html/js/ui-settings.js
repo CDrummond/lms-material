@@ -138,6 +138,15 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-list-tile>
+     <v-list-tile-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
+      <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Queue')}}</v-header>
 
@@ -165,6 +174,15 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
+      <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueShowTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
@@ -203,6 +221,8 @@ Vue.component('lms-ui-settings', {
             nowPlayingBackdrop:false,
             infoBackdrop:true,
             techInfo:false,
+            queueShowTrackNum:false,
+            nowPlayingTrackNum:false,
             albumSorts:[],
             library: null,
             libraries: [],
@@ -234,6 +254,8 @@ Vue.component('lms-ui-settings', {
                 this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
                 this.infoBackdrop = this.$store.state.infoBackdrop;
                 this.techInfo = this.$store.state.techInfo;
+                this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
+                this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
                 this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
                 this.useGrid=this.$store.state.useGrid;
                 this.sortFavorites = this.$store.state.sortFavorites;
@@ -317,6 +339,8 @@ Vue.component('lms-ui-settings', {
                                                   nowPlayingBackdrop:this.nowPlayingBackdrop,
                                                   infoBackdrop:this.infoBackdrop,
                                                   techInfo:this.techInfo,
+                                                  queueShowTrackNum:this.queueShowTrackNum,
+                                                  nowPlayingTrackNum:this.nowPlayingTrackNum,
                                                   volumeStep:this.volumeStep
                                                 } );
             if (this.libraries.length>0) {
@@ -350,6 +374,8 @@ Vue.component('lms-ui-settings', {
                                      nowPlayingBackdrop:this.nowPlayingBackdrop,
                                      infoBackdrop:this.infoBackdrop,
                                      techInfo:this.techInfo,
+                                     queueShowTrackNum:this.queueShowTrackNum,
+                                     nowPlayingTrackNum:this.nowPlayingTrackNum,
                                      volumeStep:this.volumeStep
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);

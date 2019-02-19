@@ -81,6 +81,14 @@ function updateUiSettings(state, val) {
         state.techInfo = val.techInfo;
         setLocalStorageVal('techInfo', state.techInfo);
     }
+    if (undefined!=val.queueShowTrackNum && state.queueShowTrackNum!=val.queueShowTrackNum) {
+        state.queueShowTrackNum = val.queueShowTrackNum;
+        setLocalStorageVal('queueShowTrackNum', state.queueShowTrackNum);
+    }
+    if (undefined!=val.nowPlayingTrackNum && state.techInfo!=val.nowPlayingTrackNum) {
+        state.nowPlayingTrackNum = val.nowPlayingTrackNum;
+        setLocalStorageVal('nowPlayingTrackNum', state.nowPlayingTrackNum);
+    }
     if (undefined!=val.volumeStep && volumeStep!=val.volumeStep) {
         volumeStep = val.volumeStep;
         setLocalStorageVal('volumeStep', volumeStep);
@@ -113,6 +121,8 @@ const store = new Vuex.Store({
         nowPlayingBackdrop: false,
         infoBackdrop: true,
         techInfo: false,
+        queueShowTrackNum: true,
+        nowPlayingTrackNum: false,
         ratingsSupport: false,
         maxRating: 5
     },
@@ -219,7 +229,9 @@ const store = new Vuex.Store({
             state.showMenuAudioQueue = getLocalStorageBool('showMenuAudioQueue', state.showMenuAudioQueue);
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
-            state.techInfo = getLocalStorageBool('techInfo', state.infoBackdrop);
+            state.techInfo = getLocalStorageBool('techInfo', state.techInfo);
+            state.queueShowTrackNum = getLocalStorageBool('queueShowTrackNum', state.queueShowTrackNum);
+            state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             setTheme(state.darkUi);
@@ -252,6 +264,8 @@ const store = new Vuex.Store({
                                  nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
                                  infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
                                  techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
+                                 queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
+                                 nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
                                  volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep))};
                     updateUiSettings(state, opts);
                 }

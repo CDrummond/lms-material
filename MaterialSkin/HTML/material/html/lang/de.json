@@ -288,10 +288,10 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Show image":"",
-"Show track number":"",
-"Show track's album number next to title.":"",
+"Show image":"Bild anzeigen",
+"Show track number":"Titelnummer anzeigen",
+"Show track's album number next to title.":"Zeige die Alben-Nummer neben dem Titel.",
 "Start":"",
 "URL":"",
-"Volume step":""
+"Volume step":"Lautstärke-Abstufung"
 }

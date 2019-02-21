@@ -344,3 +344,7 @@ function adjustRatingToServer(val) {
     return (val*20)+"%";
 }
 
+function isEmpty(str) {
+    return undefined==str || str.length<1;
+}
+

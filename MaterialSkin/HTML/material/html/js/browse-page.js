@@ -167,7 +167,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
-   <v-subheader v-if="item.header" @click="toggleGroup(item.group)"><v-icon>{{undefined!=item.group && collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
+   <v-subheader v-if="item.header" @click="toggleGroup(item.group)"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
 
    <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}">

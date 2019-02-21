@@ -19,6 +19,7 @@
     main LMS settings.
 14. Add 'show track number' for now playing.
 15. Add context menu to now-platying image with item to show full size image.
+16. Only top-level groups can be collapsed.
 
 0.3.1
 -----

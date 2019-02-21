@@ -12,28 +12,51 @@ var TB_INFO            = {id:"tb:info"           };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
 
 var toolbarComponent;
-var mediaInitialised = false;
+var mediaAudio = undefined;
+var mediaInterval = undefined;
 
-var initMediaSessionAudio = function() {
-    let audio = document.createElement('audio');
-    audio.src = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/audio/silence.ogg";
-    audio.play().then(_ => {
-        mediaInitialised = true;
-        audio.pause(); // Don't actually want to play the audio!
-        toolbarComponent.updateMediaSession(toolbarComponent.media, true);
-        // Setup now, so can remove this listener
+function initMediaSessionAudio() {
+    if (mediaAudio == undefined) {
+        mediaAudio = document.createElement('audio');
         window.removeEventListener('touchend', initMediaSessionAudio);
+    }
+}
 
-        // Repeatedly play/pause so that sesssion persists
-        setInterval(function() {
-            audio.play().then(_ => {
-                audio.currentTime = 0; // Go back to start
-                audio.pause();
+function startMediaSession() {
+    if (!mediaAudio || mediaInterval) {
+        return true;
+    }
+    mediaAudio.src = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/audio/silence.ogg";
+    // Repeatedly play/pause so that sesssion persists
+    mediaAudio.play().then(_ => {
+        mediaAudio.currentTime = 0; // Go back to start
+        mediaAudio.pause();
+        toolbarComponent.updateMediaSession(toolbarComponent.media, true);
+        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+        mediaInterval = setInterval(function() {
+            mediaAudio.play().then(_ => {
+                mediaAudio.currentTime = 0; // Go back to start
+                mediaAudio.pause();
                 navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
             });
         }, 15*1000);
     });
-};
+    return false;
+}
+
+function stopMediaSession() {
+    if (!mediaInterval) {
+        return;
+    }
+    if (mediaInterval) {
+        clearInterval(mediaInterval);
+        mediaInterval = undefined;
+    }
+    if (mediaAudio.src) {
+        mediaAudio.src = undefined;
+    }
+    navigator.mediaSession.metadata = undefined;
+}
 
 Vue.component('lms-toolbar', {
     template: `
@@ -298,13 +321,16 @@ Vue.component('lms-toolbar', {
     },
     methods: {
         updateMediaSession(track, force) {
-            if (!mediaInitialised) {
+            if (!mediaAudio) {
                 return;
             }
             if ('mediaSession' in navigator) {
-                if (undefined==track) {
-                    navigator.mediaSession.metadata = new MediaMetadata({});
-                } else {
+                if (undefined==track || (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album))) {
+                    stopMediaSession();
+                    this.media.title = undefined;
+                    this.media.artist = undefined;
+                    this.media.album = undefined;
+                } else if (startMediaSession()) {
                     navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     var artist = track.trackartist ? track.trackartist : track.artist;
                     if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
@@ -315,7 +341,7 @@ Vue.component('lms-toolbar', {
                             title: this.media.title,
                             artist: this.media.artist,
                             album: this.media.album,
-                            artwork: [ {src: this.media.cover, type: 'image/jpeg'}]
+                            artwork: [ {src: ""+this.media.cover, type: 'image/jpeg'}]
                         });
                     }
                 }

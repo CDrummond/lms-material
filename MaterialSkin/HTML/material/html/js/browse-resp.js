@@ -284,7 +284,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.title = (num>9 ? num : ("0" + num))+" "+text;
                     }
 
-                    if (!isMore && (i.params && (i.params.item_id || i.params.track))) {
+                    if (!isMore && ((i.params && (i.params.item_id || i.params.track || i.params.track_id))) ||
+                                   ((i.commonParams && (i.commonParams.item_id || i.commonParams.track || i.commonParams.track_id)))) {
                         if (playAction) {
                             i.menuActions.push(PLAY_ACTION);
                             addedPlayAction = true;

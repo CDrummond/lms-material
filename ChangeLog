@@ -22,6 +22,8 @@
 16. Only top-level groups can be collapsed.
 17. Only show notification and lock screen controls when there is a track
     playing.
+18. Show sync status in main toolbar.
+19. Show sync, and sleep, status in manage players dialog.
 
 0.3.1
 -----

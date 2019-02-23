@@ -152,7 +152,8 @@ var lmsServer = Vue.component('lms-server', {
                                        volume: -1,
                                        playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                                        current: { canseek: 0, time: 0, duration: 0 },
-                                       will_sleep_in: data.result.will_sleep_in
+                                       will_sleep_in: data.result.will_sleep_in,
+                                       synced: data.result.sync_master || data.result.sync_slaves
                                      };
 
                         player.volume = undefined==data.result["mixer volume"] ? 0 : Math.round(data.result["mixer volume"]);

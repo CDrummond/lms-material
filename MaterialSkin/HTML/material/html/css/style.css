@@ -781,3 +781,6 @@ div.v-subheader {
     cursor: pointer;
 }
 
+.player-icon-pad {
+    padding-right: 8px;
+}

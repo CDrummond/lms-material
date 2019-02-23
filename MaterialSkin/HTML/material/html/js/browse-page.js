@@ -758,6 +758,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             this.enteredTerm = event.target._value;
+            if (undefined==this.enteredTerm) {
+                return
+            }
+            this.enteredTerm=this.enteredTerm.trim();
+            if (isEmpty(this.enteredTerm)) {
+                return;
+            }
             this.fetchItems(this.buildCommand(item), item);
         },
         entry(event, item) {

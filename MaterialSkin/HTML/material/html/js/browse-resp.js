@@ -194,7 +194,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.section == SECTION_FAVORITES;
+            var isFavorites = parent && parent.isFavFolder;
             var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;

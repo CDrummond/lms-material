@@ -37,7 +37,7 @@ Vue.component('lms-manage-players', {
           <img :src="player.image">
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>&nbsp;&nbsp;&nbsp;{{player.name}}</v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.sleepTimer" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.synced" class="player-icon-pad">link</v-icon>{{player.name}}</v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(player)">
@@ -335,6 +335,8 @@ Vue.component('lms-manage-players', {
                 player.isplaying = data.result.mode === "play" && !data.result.waitingToPlay;
                 player.volume = data.result["mixer volume"] ? data.result["mixer volume"] : 0;
                 player.muted = player.volume<0;
+                player.synced = data.result.sync_master || data.result.sync_slaves;
+                player.sleepTimer = data.result.will_sleep_in
                 if (player.volume<0) {
                     player.volume *= -1;
                 }

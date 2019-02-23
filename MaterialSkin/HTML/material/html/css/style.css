@@ -749,6 +749,11 @@ progress {
     margin-bottom:4px;
 }
 
+.pmgr-master {
+    opacity: 0.7;
+    margin-left: 8px;
+}
+
 .svg-list-img {
     width: 32px !important;
     height: 32px !important;

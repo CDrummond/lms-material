@@ -24,6 +24,8 @@
     playing.
 18. Show sync status in main toolbar.
 19. Show sync, and sleep, status in manage players dialog.
+20. If player is synced to another, show its sync master name in manage
+    players dialog.
 
 0.3.1
 -----

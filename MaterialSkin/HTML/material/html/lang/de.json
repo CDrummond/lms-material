@@ -180,7 +180,10 @@
 "Show context menu when clicking anywhere on an audio item.":"Kontextmenü zeigen, wenn irgendwo auf ein Lied-Eintrag geklickt wird?",
 "Show current track information":"Informationen zum aktuellen Titel anzeigen",
 "Show file type, bitrate, etc.":"Zeige Dateityp, Bitrate etc. an",
+"Show image":"Bild anzeigen",
 "Show information in tabs":"Informationen auf separaten Seiten anzeigen",
+"Show track number":"Titelnummer anzeigen",
+"Show track's album number next to title.":"Zeige die Alben-Nummer neben dem Titel.",
 "Shuffle":"Zufällige Wiedergabe",
 "Shuffle albums":"Zufällige Albumreihenfolge",
 "Shuffle by album":"Zufällige Albumreihenfolge",
@@ -245,6 +248,7 @@
 "Use mobile layout":"Mobile Darstellung verwenden",
 "Useful when browsing a large list of artists, or albums.":"Hilfreich bei langen Listen von Interpreten oder Alben.",
 "Volume (%)":"Lautstärke",
+"Volume step":"Lautstärke-Abstufung",
 "Wednesday":"Mittwoch",
 "Weds":"Mit",
 "Year Mix":"Jahres-Mix",
@@ -288,10 +292,7 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Show image":"Bild anzeigen",
-"Show track number":"Titelnummer anzeigen",
-"Show track's album number next to title.":"Zeige die Alben-Nummer neben dem Titel.",
+"Search library":"",
 "Start":"",
-"URL":"",
-"Volume step":"Lautstärke-Abstufung"
+"URL":""
 }

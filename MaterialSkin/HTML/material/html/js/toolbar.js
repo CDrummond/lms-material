@@ -145,6 +145,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
+   <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">{{trans.startPlayer}}</v-list-tile>
   </v-list>
  </v-menu>
 </v-toolbar>
@@ -160,7 +161,7 @@ Vue.component('lms-toolbar', {
                  playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined,
-                        switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined},
+                        switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
@@ -359,7 +360,8 @@ Vue.component('lms-toolbar', {
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
-                          showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing")};
+                          showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
+                          startPlayer:i18n("Start player")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -409,6 +411,9 @@ Vue.component('lms-toolbar', {
         },
         infoPlugin () {
             return this.$store.state.infoPlugin
+        },
+        showPlayerMenuEntry () {
+            return isAndroid() && this.$store.state.showPlayerMenuEntry
         }
     },
     filters: {

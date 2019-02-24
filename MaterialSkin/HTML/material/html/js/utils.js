@@ -145,6 +145,10 @@ function isMobile() {
     return /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
 }
 
+function isAndroid() {
+    return /Android/i.test(navigator.userAgent);
+}
+
 function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }

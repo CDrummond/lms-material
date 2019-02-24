@@ -279,6 +279,9 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
+"(Currently only 'SB Player' is supported.)":"",
+"Add menu option to start player":"",
+"Add option to main menu to launch player.":"",
 "Album Mix":"",
 "Audio":"",
 "CD Player":"",
@@ -290,9 +293,11 @@
 "Mon":"",
 "Name":"",
 "OK":"",
+"Player":"",
 "Plugins":"",
 "Radio":"",
 "Search library":"",
 "Start":"",
+"Start player":"",
 "URL":""
 }

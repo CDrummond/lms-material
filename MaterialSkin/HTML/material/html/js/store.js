@@ -85,13 +85,17 @@ function updateUiSettings(state, val) {
         state.queueShowTrackNum = val.queueShowTrackNum;
         setLocalStorageVal('queueShowTrackNum', state.queueShowTrackNum);
     }
-    if (undefined!=val.nowPlayingTrackNum && state.techInfo!=val.nowPlayingTrackNum) {
+    if (undefined!=val.nowPlayingTrackNum && state.nowPlayingTrackNum!=val.nowPlayingTrackNum) {
         state.nowPlayingTrackNum = val.nowPlayingTrackNum;
         setLocalStorageVal('nowPlayingTrackNum', state.nowPlayingTrackNum);
     }
     if (undefined!=val.volumeStep && volumeStep!=val.volumeStep) {
         volumeStep = val.volumeStep;
         setLocalStorageVal('volumeStep', volumeStep);
+    }
+    if (undefined!=val.showPlayerMenuEntry && state.showPlayerMenuEntry!=val.showPlayerMenuEntry) {
+        state.showPlayerMenuEntry = val.showPlayerMenuEntry;
+        setLocalStorageVal('showPlayerMenuEntry', state.showPlayerMenuEntry);
     }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
@@ -124,7 +128,8 @@ const store = new Vuex.Store({
         queueShowTrackNum: true,
         nowPlayingTrackNum: false,
         ratingsSupport: false,
-        maxRating: 5
+        maxRating: 5,
+        showPlayerMenuEntry: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -234,6 +239,7 @@ const store = new Vuex.Store({
             state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
+            state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -266,7 +272,8 @@ const store = new Vuex.Store({
                                  techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
                                  queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
                                  nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
-                                 volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep))};
+                                 volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
+                                 showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry)};
                     updateUiSettings(state, opts);
                 }
             });

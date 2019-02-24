@@ -196,6 +196,16 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
     <div class="dialog-padding"></div>
+    <v-header v-if="isAndroid">{{i18n('Player')}}</v-header>
+
+    <v-list-tile v-if="isAndroid">
+     <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
+      <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <div class="dialog-padding"></div>
    </v-list>
   </v-card-text>
  </v-card>
@@ -233,7 +243,8 @@ Vue.component('lms-ui-settings', {
                            { value: 5,  label: "5%"},
                            { value: 10, label: "10%"}
                          ],
-            volumeStep: 5
+            volumeStep: 5,
+            showPlayerMenuEntry: false
         }
     },
     computed: {
@@ -265,6 +276,7 @@ Vue.component('lms-ui-settings', {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
                 this.volumeStep = volumeStep;
+                this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
                 this.show = true;
                 bus.$emit('dialogOpen', this.show);
 
@@ -341,7 +353,8 @@ Vue.component('lms-ui-settings', {
                                                   techInfo:this.techInfo,
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
-                                                  volumeStep:this.volumeStep
+                                                  volumeStep:this.volumeStep,
+                                                  showPlayerMenuEntry:this.showPlayerMenuEntry
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
@@ -376,7 +389,8 @@ Vue.component('lms-ui-settings', {
                                      techInfo:this.techInfo,
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
-                                     volumeStep:this.volumeStep
+                                     volumeStep:this.volumeStep,
+                                     showPlayerMenuEntry:this.showPlayerMenuEntry
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

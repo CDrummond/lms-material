@@ -26,6 +26,7 @@ var UNPIN_ACTION            = {cmd:"unpin",      svg: "unpin"};
 var SELECT_ACTION           = {cmd:"select",     icon:"check_box_outline_blank"};
 var UNSELECT_ACTION         = {cmd:"unselect",   icon:"check_box"};
 var RATING_ACTION           = {cmd:"rating",     icon:"stars"};
+var SEARCH_LIB_ACTION       = {cmd:"search-lib", icon:"search"};
 
 const MAX_GRID_TEXT_LEN = 80;
 const DIVIDER = {divider:true};
@@ -167,7 +168,11 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-for="(item, index) in items">
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
-   <v-subheader v-if="item.header" @click="toggleGroup(item.group)"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}</v-subheader>
+   <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
+    <v-subheader-action v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action.cmd, item, index)">
+     <v-btn icon><v-icon>{{item.action.icon}}</v-icon></v-btn>
+    </v-subheader-action>
+   </v-subheader>
 
    <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}">
@@ -380,11 +385,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             SELECT_ACTION.title=i18n("Select");
             UNSELECT_ACTION.title=i18n("Un-select");
             RATING_ACTION.title=i18n("Set rating");
+            SEARCH_LIB_ACTION.title=i18n("Search");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks") };
 
             this.top = [
-                { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC },
+                { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [],
@@ -781,13 +787,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.dialog.show = false;
                     var command = [];
                     this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
-                    lmsCommand(this.playerId(), command).then(({datax}) => {
-                        this.refreshList();
-                    }).catch(err => {
-                        bus.$emit('showError', err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"));
-                        logError(err);
-                    });
+
+                    if (this.dialog.params) {
+                        var params = [];
+                        this.dialog.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, str)); });
+                        this.fetchItems({command: command, params: params}, this.dialog.item);
+                    } else {
+                        lmsCommand(this.playerId(), command).then(({datax}) => {
+                            this.refreshList();
+                        }).catch(err => {
+                            bus.$emit('showError', err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"));
+                            logError(err);
+                        });
+                    }
                 }
+                this.dialog = {};
             }
         },
         itemAction(act, item, index, suppressNotification) {
@@ -797,6 +811,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act==RENAME_FAV_ACTION.cmd) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["favorites", "rename", removeUniqueness(item.id), "title:"+TERM_PLACEHOLDER]};
+            } else if (act==SEARCH_LIB_ACTION.cmd) {
+                this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
+                                command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
             } else if (act==ADD_FAV_ACTION.cmd) {
                 bus.$emit('addFavorite');
             } else if (act==EDIT_FAV_ACTION.cmd) {
@@ -1364,13 +1381,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.serverMenus ? this.serverTop : this.top;
         },
         addExtraItems(list, addMore) {
-            list.push({ title: i18n("Search"),
-                        command: ["search"],
-                        params: ["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER],
-                        icon: "search",
-                        type: "search",
-                        group: GROUP_MY_MUSIC,
-                        id: TOP_SEARCH_ID });
             if (addMore) {
                 list.push({ title: i18n("More"),
                             icon: "more_horiz",

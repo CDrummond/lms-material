@@ -26,6 +26,8 @@
 19. Show sync, and sleep, status in manage players dialog.
 20. If player is synced to another, show its sync master name in manage
     players dialog.
+21. Remove 'Search' entry from top-level library list, and replace with a
+    search button to right of 'My Music' header.
 
 0.3.1
 -----

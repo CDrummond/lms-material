@@ -71,7 +71,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-container grid-list-md>
      <v-layout wrap>
       <v-flex xs12>
-       <v-text-field :label="dialog.hint" v-model="dialog.value"></v-text-field>
+       <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
       </v-flex>
      </v-layout>
     </v-container>

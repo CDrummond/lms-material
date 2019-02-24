@@ -28,6 +28,7 @@
     players dialog.
 21. Remove 'Search' entry from top-level library list, and replace with a
     search button to right of 'My Music' header.
+22. When run under Android, add menu option to start 'SB Player'
 
 0.3.1
 -----

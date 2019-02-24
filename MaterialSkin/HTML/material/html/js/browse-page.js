@@ -1451,7 +1451,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
                     this.serverTop = [];
-                    this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC} );
+                    this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION} );
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id=="randomplay") {

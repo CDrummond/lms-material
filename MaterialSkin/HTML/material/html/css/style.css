@@ -789,3 +789,9 @@ div.v-subheader {
 .player-icon-pad {
     padding-right: 8px;
 }
+
+@media (hover: none) {
+    :hover:before {
+        background-color: transparent !important;
+    }
+}

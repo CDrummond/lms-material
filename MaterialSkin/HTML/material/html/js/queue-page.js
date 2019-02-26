@@ -631,7 +631,6 @@ var lmsQueue = Vue.component("lms-queue", {
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length &&
                 0==this.items[this.coverTrackIndex].duration && this.items[this.coverTrackIndex].image!=this.coverUrl) {
-                console.log("Set cover");
                 this.items[this.coverTrackIndex].image=this.coverUrl;
                 this.$forceUpdate();
             }

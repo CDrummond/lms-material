@@ -2,6 +2,9 @@
 -----
 1. Fix buttons staying in 'hover' state with touch devices.
 2. Only show player settings if on android.
+3. When using ["<app>", "playlist", "add/insert/play", "menu:<app>",...] and
+   have a favorites_url, then replace with ["playlist, "add/insert/play",
+   "favorites_url"]. Fixes SoundCloud.
 
 0.3.2
 -----

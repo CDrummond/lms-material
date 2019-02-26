@@ -1,6 +1,7 @@
 0.3.3
 -----
 1. Fix buttons staying in 'hover' state with touch devices.
+2. Only show player settings if on android.
 
 0.3.2
 -----

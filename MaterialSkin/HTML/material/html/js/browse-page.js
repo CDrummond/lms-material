@@ -966,7 +966,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;
                 }
-
+                // If we have a favourites_url, then use that to play/add. Fixes SoundCloud app
+                if (command.command.length>4 && "playlist"==command.command[1] && ("play"==command.command[2] || "add"==command.command[2] || "insert"==command.command[2]) &&
+                    command.command[3]==("menu:"+command.command[0]) && item.presetParams && item.presetParams.favorites_url) {
+                    command.command=["playlist", command.command[2], item.presetParams.favorites_url];
+                }
                 //console.log("ACTION", command.command);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     bus.$emit('refreshStatus');

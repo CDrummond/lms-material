@@ -52,6 +52,7 @@ const TRACK_TAGS = "tags:ACdt";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;
+const SECTION_PLAYLISTS = 4;
 const GROUP_PINNED = 0;
 const GROUP_MY_MUSIC = 1;
 const GROUP_OTHER_MUSIC = 2;
@@ -91,6 +92,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
+   <v-btn v-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems()" style="margin-right:32px"><v-icon>delete</v-icon></v-btn>
+   <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems()" style="margin-right:32px"><v-icon>delete_outline</v-icon></v-btn>
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="addSelectedItems()"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="playSelectedItems()"><v-icon>play_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -259,18 +262,21 @@ var lmsBrowse = Vue.component("lms-browse", {
     data() {
         return {
             desktop: false,
+            current: undefined,
             items: [],
             grid: false,
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
-            trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined },
+            trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
+                     deleteall:undefined, removeall:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             pinned: [],
             libraryName: undefined,
             selection: [],
             collapsed: [false, false, false],
-            showRatingButton: false
+            showRatingButton: false,
+            section: undefined
         }
     },
     computed: {
@@ -346,8 +352,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.itemAction(MORE_LIB_ACTION.cmd, item);
         }.bind(this));
 
-        bus.$on('refreshFavorites', function() {
-            if (this.current && SECTION_FAVORITES==this.current.section) {
+        bus.$on('refreshList', function(section) {
+            if (this.current && this.current.section==section) {
                 this.refreshList();
             }
         }.bind(this));
@@ -387,7 +393,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             RATING_ACTION.title=i18n("Set rating");
             SEARCH_LIB_ACTION.title=i18n("Search");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
-                          addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks") };
+                          addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
+                          deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
 
             this.top = [
                 { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
@@ -421,7 +428,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                   icon: "list",
                   type: "group",
                   group: GROUP_MY_MUSIC,
-                  id: TOP_PLAYLISTS_ID }
+                  id: TOP_PLAYLISTS_ID,
+                  section: SECTION_PLAYLISTS }
                 ];
             this.addExtraItems(this.top, true);
             if (this.separateArtists) {
@@ -822,6 +830,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         if (item.id.startsWith("playlist_id:")) {
+                            this.clearSelection();
                             lmsCommand(this.playerId(), ["playlists", "delete", item.id]).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
@@ -890,6 +899,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
+                        this.clearSelection();
                         lmsCommand(this.playerId(), ["favorites", "delete", removeUniqueness(item.id)]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
@@ -1605,6 +1615,24 @@ var lmsBrowse = Vue.component("lms-browse", {
         select(item, index) {
             if (this.selection.length>0) {
                 this.itemAction(this.selection.indexOf(index)<0 ? SELECT_ACTION.cmd : UNSELECT_ACTION.cmd, item, index);
+            }
+        },
+        deleteSelectedItems() {
+            if (1==this.selection.length) {
+                this.itemAction(SECTION_FAVORITES==this.current.section ? REMOVE_FROM_FAV_ACTION.cmd : DELETE_ACTION.cmd, this.items[idx], idx);
+            } else {
+                this.$confirm(SECTION_FAVORITES==this.current.section ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
+                             {buttonTrueText: SECTION_FAVORITES==this.current.section ? i18n("Remove") : i18n("Delete"),
+                              buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        var ids=[];
+                        this.selection.forEach(idx => {ids.push(removeUniqueness(this.items[idx].id))});
+                        ids.sort(function(a, b) { return a<b ? 1 : -1; });
+                        bus.$emit('doAllList', ids, this.current.section==SECTION_PLAYLISTS ? ["playlists", "delete"] : ["favorites", "delete"],
+                                  this.current.section);
+                        this.clearSelection();
+                    }
+                });
             }
         },
         addSelectedItems() {

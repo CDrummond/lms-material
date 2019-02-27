@@ -10,7 +10,7 @@ Vue.component('lms-bottomnav', {
 <v-footer height="auto" class="lms-footer">
  <v-bottom-nav class="lms-bottom-nav" :active.sync="route">
   <template v-for="(item, index) in items">
-   <v-btn flat :to="item.route" class="lms-bottom-nav-button">
+   <v-btn flat :to="item.route" class="lms-bottom-nav-button" @click="bus.$emit('nav', item.route)">
     <span>{{item.text}}</span>
     <v-icon>{{item.icon}}</v-icon>
    </v-btn>

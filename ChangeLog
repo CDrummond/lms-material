@@ -6,6 +6,8 @@
    have a favorites_url, then replace with ["playlist, "add/insert/play",
    "favorites_url"]. Fixes SoundCloud.
 4. Allow multiple favourites and playlists to be removed/deleted.
+5. When used on a mobile device, clicking on 'browse' bottom navigation button
+   will go back in browse history.
 
 0.3.2
 -----

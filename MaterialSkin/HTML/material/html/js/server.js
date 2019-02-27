@@ -226,6 +226,22 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 });
             }
+        },
+        doAllList(ids, command, section) {
+            if (ids.length>0) {
+                var id = ids.shift();
+                var cmd = command.slice();
+                cmd.push(id);
+                lmsCommand(this.$store.state.player.id, cmd).then(({data}) => {
+                    if (ids.length>0) {
+                        this.doAllList(ids, command, section);
+                    } else {
+                        bus.$emit('refreshList', section);
+                    }
+                }).catch(err => {
+                    bus.$emit('refreshList', section);
+                });
+            }
         }
     },
     created: function() {    
@@ -253,6 +269,11 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('moveQueueItems', function(indexes, to) {
             if (this.$store.state.player) {
                 this.moveQueueItems(indexes, to, 0, 0);
+            }
+        }.bind(this));
+        bus.$on('doAllList', function(ids, command, section) {
+            if (this.$store.state.player) {
+                this.doAllList(ids, command, section);
             }
         }.bind(this));
         bus.$on('power', function(state) {

@@ -94,6 +94,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.remove" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
+   <v-divider vertical="true" v-if="desktop"></v-divider>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>

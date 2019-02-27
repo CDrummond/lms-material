@@ -92,10 +92,12 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
-   <v-btn v-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems()" style="margin-right:32px"><v-icon>delete</v-icon></v-btn>
-   <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems()" style="margin-right:32px"><v-icon>delete_outline</v-icon></v-btn>
+   <v-btn v-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems()"><v-icon>delete</v-icon></v-btn>
+   <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems()"><v-icon>delete_outline</v-icon></v-btn>
+   <v-divider vertical="true" v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="addSelectedItems()"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="playSelectedItems()"><v-icon>play_circle_outline</v-icon></v-btn>
+   <v-divider vertical="true"></v-divider>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>

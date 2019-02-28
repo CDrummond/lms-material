@@ -8,6 +8,8 @@
 4. Allow multiple favourites and playlists to be removed/deleted.
 5. When used on a mobile device, clicking on 'browse' bottom navigation button
    will go back in browse history.
+6. Fix playing albums from favorite artists, etc.
+7. Attempt to hide 'All Songs' item.
 
 0.3.2
 -----

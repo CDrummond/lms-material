@@ -65,7 +65,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
    <v-flex xs12>
     <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artist}} - {{playerStatus.current.remote_title}}</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
+<p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.title">&#x22ef;</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else></p>
    </v-flex>
@@ -154,6 +156,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape subtext" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</div>
+    <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0" class="np-text-landscape">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true clearable></v-rating>
@@ -214,6 +217,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
    <p class="np-text" v-else>&nbsp;</p>
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+   <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
    <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
   </div>
@@ -310,6 +314,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('playerStatus', function(playerStatus) {
             var playStateChanged = false;
             var trackChanged = false;
+
             // Have other items changed
             if (playerStatus.isplaying!=this.playerStatus.isplaying) {
                 this.playerStatus.isplaying = playerStatus.isplaying;
@@ -364,6 +369,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 } else {
                     this.playerStatus.current.album = this.playerStatus.current.albumName;
                 }
+                trackChanged = true;
+            }
+            if (playerStatus.current.remote_title!=this.playerStatus.current.remote_title) {
+                this.playerStatus.current.remote_title = playerStatus.current.remote_title;
                 trackChanged = true;
             }
             if (playerStatus.playlist.shuffle!=this.playerStatus.playlist.shuffle) {

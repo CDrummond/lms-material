@@ -12,7 +12,7 @@ var PQ_MORE_ACTION =      { cmd: 'more',     svg:  'more'                    };
 var PQ_SELECT_ACTION =    { cmd: 'select',   icon: 'check_box_outline_blank' };
 var PQ_UNSELECT_ACTION =  { cmd: 'unselect', icon: 'check_box'               };
 
-const PQ_STATUS_TAGS = "tags:dcltuyAK";
+const PQ_STATUS_TAGS = "tags:dcltuyAKN";
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -45,6 +45,12 @@ function parseResp(data, showTrackNum) {
                     }
                     if (i.year && i.year>0) {
                         subtitle+=" (" + i.year + ")";
+                    }
+                } else if (i.remote_title && i.remote_title!=i.title) {
+                    if (subtitle) {
+                        subtitle+=" - " + i.remote_title;
+                    } else {
+                        sbtitle=i.remote_title;
                     }
                 }
                 var image = queueItemCover(i);
@@ -256,6 +262,12 @@ var lmsQueue = Vue.component("lms-queue", {
                         }
                         if (i.year && i.year>0) {
                             subtitle+=" (" + i.year + ")";
+                        }
+                    } else if (i.remote_title && i.remote_title!=i.title) {
+                        if (subtitle) {
+                            subtitle+=" - " + i.remote_title;
+                        } else {
+                            sbtitle=i.remote_title;
                         }
                     }
                     if (title!=this.items[index].title || subtitle!=this.items[index].subtitle) {

@@ -84,6 +84,8 @@ a {
     grid-gap: 0px;
     padding: 2px !important;
     margin: 0px !important;
+    padding-right:8px !important;
+    padding-right:8px !important;
     justify-items: center;
 }
 
@@ -139,7 +141,9 @@ a {
     -webkit-hyphens: auto;
     -ms-hyphens: auto;
     -moz-hyphens: auto;
+    padding-left:2px;
     hyphens: auto;
+    padding-left:2px;
 }
 
 .image-grid-item {
@@ -168,7 +172,7 @@ a {
 .image-grid-btn {
     position: absolute;
     top: 146px !important;
-    left: 124px !important;
+    left: 126px !important;
     width: 32px !important;
     height: 32px !important;
 }
@@ -203,7 +207,7 @@ a {
     }
 
     .image-grid-btn {
-        top: 126px !important;
+        top: 128px !important;
         left: 104px !important;
     }
 }
@@ -233,7 +237,7 @@ a {
     }
 
     .image-grid-btn {
-        top: 111px !important;
+        top: 114px !important;
         left: 89px !important;
     }
 }
@@ -264,7 +268,7 @@ a {
 
     .image-grid-btn {
         top: 96px !important;
-        left: 74px !important;
+        left: 76px !important;
     }
 }
 

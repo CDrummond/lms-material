@@ -43,7 +43,7 @@ function parseResp(data, showTrackNum) {
                     if (subtitle) {
                         subtitle+=SEPARATOR + i.album;
                     } else {
-                        sbtitle=i.album;
+                        subtitle=i.album;
                     }
                     if (i.year && i.year>0) {
                         subtitle+=" (" + i.year + ")";
@@ -52,7 +52,7 @@ function parseResp(data, showTrackNum) {
                     if (subtitle) {
                         subtitle+=SEPARATOR + remoteTitle;
                     } else {
-                        sbtitle=remoteTitle;
+                        subtitle=remoteTitle;
                     }
                 }
                 var image = queueItemCover(i);
@@ -261,7 +261,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         if (subtitle) {
                             subtitle+=SEPARATOR + i.album;
                         } else {
-                            sbtitle=i.album;
+                            subtitle=i.album;
                         }
                         if (i.year && i.year>0) {
                             subtitle+=" (" + i.year + ")";
@@ -270,7 +270,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         if (subtitle) {
                             subtitle+=SEPARATOR + remoteTitle;
                         } else {
-                            sbtitle=remoteTitle;
+                            subtitle=remoteTitle;
                         }
                     }
                     if (title!=this.items[index].title || subtitle!=this.items[index].subtitle) {

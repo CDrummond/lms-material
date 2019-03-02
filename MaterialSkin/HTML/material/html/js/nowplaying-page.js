@@ -23,8 +23,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </v-menu>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
-   <v-list-tile>
-    <v-list-tile-title @click="showPic()">{{menu.text}}</v-list-tile-title>
+   <v-list-tile @click="showPic()">
+    <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
+   </v-list-tile>
+   <v-list-tile @click="trackInfo()">
+    <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>
  </v-menu>
@@ -64,8 +67,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <p class="np-text-desktop subtext ellipsis" v-else></p>
    </v-flex>
    <v-flex xs12>
-    <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}} - {{playerStatus.current.album}}</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artist}} - {{playerStatus.current.remote_title}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artist && playerStatus.current.album">{{playerStatus.current.artist}}{{SEPARATOR}}{{playerStatus.current.album}}</p>
+    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artist}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artist">{{playerStatus.current.artist}}</p>
 <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
     <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.title">&#x22ef;</p>
@@ -296,7 +299,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: false,
                  largeView: false,
                  sleep: {show:false, items:[], x:0, y:0},
-                 menu: { show: false, x:0, y:0, text: undefined },
+                 menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, id:undefined, setting:false},
                 };
     },
@@ -475,7 +478,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 { duration: -2     label:xxx("Remaining duration of play queue")} */
                 { duration: 0,     label:i18n("Cancel sleep")}
                 ];
-            this.menu.text=i18n("Show image");
+            this.menu.text[0]=i18n("Show image");
+            this.menu.text[1]=i18n("Show track information");
         },
         showMenu(event) {
             event.preventDefault();

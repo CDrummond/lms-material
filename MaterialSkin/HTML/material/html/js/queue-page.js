@@ -13,6 +13,7 @@ var PQ_SELECT_ACTION =    { cmd: 'select',   icon: 'check_box_outline_blank' };
 var PQ_UNSELECT_ACTION =  { cmd: 'unselect', icon: 'check_box'               };
 
 const PQ_STATUS_TAGS = "tags:dcltuyAKN";
+const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -61,7 +62,7 @@ function parseResp(data, showTrackNum) {
                               subtitle: subtitle,
                               icon: image ? undefined : (0==i.duration ? "wifi_tethering" : "music_note"),
                               image: image,
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
+                              actions: PQ_STD_ACTIONS,
                               duration: i.duration
                           });
             });

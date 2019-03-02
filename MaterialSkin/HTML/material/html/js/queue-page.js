@@ -37,6 +37,7 @@ function parseResp(data, showTrackNum) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                 }
                 var subtitle = i.artist ? i.artist : i.trackartist;
+                var remoteTitle = checkRemoteTitle(i);
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=" - " + i.album;
@@ -46,11 +47,11 @@ function parseResp(data, showTrackNum) {
                     if (i.year && i.year>0) {
                         subtitle+=" (" + i.year + ")";
                     }
-                } else if (i.remote_title && i.remote_title!=i.title) {
+                } else if (remoteTitle && remoteTitle!=i.title) {
                     if (subtitle) {
-                        subtitle+=" - " + i.remote_title;
+                        subtitle+=" - " + remoteTitle;
                     } else {
-                        sbtitle=i.remote_title;
+                        sbtitle=remoteTitle;
                     }
                 }
                 var image = queueItemCover(i);
@@ -254,6 +255,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                     }
                     var subtitle = i.artist ? i.artist : i.trackartist;
+                    var remoteTitle = checkRemoteTitle(i);
                     if (i.album) {
                         if (subtitle) {
                             subtitle+=" - " + i.album;
@@ -263,11 +265,11 @@ var lmsQueue = Vue.component("lms-queue", {
                         if (i.year && i.year>0) {
                             subtitle+=" (" + i.year + ")";
                         }
-                    } else if (i.remote_title && i.remote_title!=i.title) {
+                    } else if (remoteTitle && remoteTitle!=i.title) {
                         if (subtitle) {
-                            subtitle+=" - " + i.remote_title;
+                            subtitle+=" - " + remoteTitle;
                         } else {
-                            sbtitle=i.remote_title;
+                            sbtitle=remoteTitle;
                         }
                     }
                     if (title!=this.items[index].title || subtitle!=this.items[index].subtitle) {

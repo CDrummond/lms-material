@@ -171,6 +171,7 @@ var lmsServer = Vue.component('lms-server', {
                             player.current = data.result.playlist_loop[0];
                             player.current.time = data.result.time;
                             player.current.canseek = data.result.can_seek;
+                            player.current.remote_title = checkRemoteTitle(player.current);
                         }
 
                         bus.$emit('playerStatus', player);

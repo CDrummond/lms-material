@@ -1,18 +1,20 @@
 0.3.3
 -----
-1. Fix buttons staying in 'hover' state with touch devices.
-2. Only show player settings if on android.
-3. When using ["<app>", "playlist", "add/insert/play", "menu:<app>",...] and
-   have a favorites_url, then replace with ["playlist, "add/insert/play",
-   "favorites_url"]. Fixes SoundCloud.
-4. Allow multiple favourites and playlists to be removed/deleted.
-5. When used on a mobile device, clicking on 'browse' bottom navigation button
-   will go back in browse history.
-6. Fix playing albums from favorite artists, etc.
-7. Attempt to hide 'All Songs' item.
-8. Show 'remote_title' (usually station name) if there is no album and this
-   title is different from track title.
-9. Add "Show track information" to now-playing image context menu.
+ 1. Fix buttons staying in 'hover' state with touch devices.
+ 2. Only show player settings if on android.
+ 3. When using ["<app>", "playlist", "add/insert/play", "menu:<app>",...] and
+    have a favorites_url, then replace with ["playlist, "add/insert/play",
+    "favorites_url"]. Fixes SoundCloud.
+ 4. Allow multiple favourites and playlists to be removed/deleted.
+ 5. When used on a mobile device, clicking on 'browse' bottom navigation button
+    will go back in browse history.
+ 6. Fix playing albums from favorite artists, etc.
+ 7. Attempt to hide 'All Songs' item.
+ 8. Show 'remote_title' (usually station name) if there is no album and this
+    title is different from track title.
+ 9. Add "Show track information" to now-playing image context menu.
+10. Draw a dimmed power icon next to player name in main toolbar if switched
+    off.
 
 0.3.2
 -----

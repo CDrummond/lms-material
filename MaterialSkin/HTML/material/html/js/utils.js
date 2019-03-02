@@ -4,7 +4,9 @@
  * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
- 
+
+const SEPARATOR = " \u2022 ";
+
 var bus = new Vue();
 
 function logError(err) {

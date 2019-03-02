@@ -41,7 +41,7 @@ function parseResp(data, showTrackNum) {
                 var remoteTitle = checkRemoteTitle(i);
                 if (i.album) {
                     if (subtitle) {
-                        subtitle+=" - " + i.album;
+                        subtitle+=SEPARATOR + i.album;
                     } else {
                         sbtitle=i.album;
                     }
@@ -50,7 +50,7 @@ function parseResp(data, showTrackNum) {
                     }
                 } else if (remoteTitle && remoteTitle!=i.title) {
                     if (subtitle) {
-                        subtitle+=" - " + remoteTitle;
+                        subtitle+=SEPARATOR + remoteTitle;
                     } else {
                         sbtitle=remoteTitle;
                     }
@@ -259,7 +259,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     var remoteTitle = checkRemoteTitle(i);
                     if (i.album) {
                         if (subtitle) {
-                            subtitle+=" - " + i.album;
+                            subtitle+=SEPARATOR + i.album;
                         } else {
                             sbtitle=i.album;
                         }
@@ -268,7 +268,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         }
                     } else if (remoteTitle && remoteTitle!=i.title) {
                         if (subtitle) {
-                            subtitle+=" - " + remoteTitle;
+                            subtitle+=SEPARATOR + remoteTitle;
                         } else {
                             sbtitle=remoteTitle;
                         }

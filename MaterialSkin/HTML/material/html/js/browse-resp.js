@@ -551,9 +551,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                      //title = i.tracknum + ". " + title; // SlimBrowse format
                 }
                 if (i.trackartist && ( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
-                     title+=" - " + i.trackartist;
+                     title+=SEPARATOR + i.trackartist;
                 } else if (i.artist && ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
-                     title+=" - " + i.artist;
+                     title+=SEPARATOR + i.artist;
                 }
                 duration+=parseFloat(i.duration || 0);
                 resp.items.push({
@@ -605,7 +605,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.playlisttracks_loop.forEach(i => {
                 var title = i.title;
                 if (i.artist) {
-                    title+=" - " + i.artist;
+                    title+=SEPARATOR + i.artist;
                 }
                 if (!title) {
                     title=i18n("Unknown");

@@ -12,6 +12,7 @@
 7. Attempt to hide 'All Songs' item.
 8. Show 'remote_title' (usually station name) if there is no album and this
    title is different from track title.
+9. Add "Show track information" to now-playing image context menu.
 
 0.3.2
 -----

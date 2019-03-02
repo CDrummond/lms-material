@@ -231,7 +231,7 @@ Vue.component('lms-toolbar', {
 
                 if (this.playerStatus.current.title) {
                     if (this.playerStatus.current.artist) {
-                        this.songInfo=this.playerStatus.current.title+" - "+this.playerStatus.current.artist;
+                        this.songInfo=this.playerStatus.current.title+SEPARATOR+this.playerStatus.current.artist;
                     } else {
                         this.songInfo=this.playerStatus.current.title;
                     }

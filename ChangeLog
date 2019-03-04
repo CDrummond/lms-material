@@ -18,6 +18,7 @@
 11. Pulse queue item when 'Scroll To Current' button is pressed.
 12. Center info images in desktop view as well as mobile.
 13. Select Mon-Fri as default alarm days.
+14. If title, artist, or album are empty, don't send 'undefined' to MAI.
 
 0.3.2
 -----
@@ -39,7 +40,7 @@
 13. Make 'show track number' in queue a config option of material, and not from
     main LMS settings.
 14. Add 'show track number' for now playing.
-15. Add context menu to now-platying image with item to show full size image.
+15. Add context menu to now-playing image with item to show full size image.
 16. Only top-level groups can be collapsed.
 17. Only show notification and lock screen controls when there is a track
     playing.

@@ -287,8 +287,8 @@
 "Album Mix":"",
 "Audio":"",
 "CD Player":"",
-"Delete all selected items":"",
-"Delete the selected items?":"",
+"Delete all selected items":"Alle ausgewählten Einträge löschen",
+"Delete the selected items?":"Sollen die ausgewählten Einträge gelöscht werden?",
 "Dynamic Playlists":"",
 "Firmware: %1":"",
 "IP: %1":"",
@@ -300,9 +300,9 @@
 "Player":"",
 "Plugins":"",
 "Radio":"",
-"Remove all selected items":"",
-"Remove the selected items?":"",
-"Show track information":"",
+"Remove all selected items":"Alle ausgewählten Einträge entfernen",
+"Remove the selected items?":"Sollen di ausgewählten Einträge entfernt werden?",
+"Show track information":"Titel-Information anzeigen",
 "Start":"",
 "URL":""
 }

@@ -382,7 +382,7 @@ a {
     padding:16px 16px 0px 16px;
 }
 
-.browse-text img, .np-info-text img, .np-info-text-full img {
+.browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img {
     max-width: 300px !important;
     max-height: 300px !important;
     margin-left: auto;

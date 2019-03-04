@@ -15,6 +15,7 @@
  9. Add "Show track information" to now-playing image context menu.
 10. Draw a dimmed power icon next to player name in main toolbar if switched
     off.
+11. Pulse queue item when 'Scroll To Current' button is pressed.
 
 0.3.2
 -----

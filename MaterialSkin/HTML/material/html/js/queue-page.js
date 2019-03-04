@@ -25,6 +25,34 @@ function queueItemCover(item) {
     return resolveImage("music/0/cover"+LMS_LIST_IMAGE_SIZE);
 }
 
+function animate(elem, from, to) {
+    var opacity = 0;
+    var steps = 10;
+    var val = from;
+    var orig = elem.style.opacity;
+    var origVal = orig ? orig : 1.0;
+    var step = (from-to)/steps;
+    var interval = setInterval(fadeOut, 40);
+    function fadeOut() {
+        if (val <= to) {
+            clearInterval(interval);
+            interval = setInterval(fadeIn, 40);
+        } else {
+            val-=step;
+            elem.style.opacity = origVal * val;
+        }
+    }
+    function fadeIn() {
+        if (val >= from) {
+            clearInterval(interval);
+            elem.style.opacity = orig;
+        } else {
+            val+=step;
+            elem.style.opacity = origVal * val;
+        }
+    }
+}
+
 function parseResp(data, showTrackNum) {
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
@@ -120,7 +148,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical="true" v-if="desktop"></v-divider>
-   <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent()" class="toolbar-button"><v-icon style="margin-right:4px; margin-top:-10px">arrow_right</v-icon><v-icon style="margin-left:-16px">music_note</v-icon></v-btn>
+   <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent(true)" class="toolbar-button"><v-icon style="margin-right:4px; margin-top:-10px">arrow_right</v-icon><v-icon style="margin-left:-16px">music_note</v-icon></v-btn>
    <v-btn :title="trans.addUrl" flat icon @click="addUrl()" class="toolbar-button"><v-icon>add</v-icon></v-btn>
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear</v-icon></v-btn>
@@ -572,17 +600,20 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             }
         },
-        scrollToCurrent() {
+        scrollToCurrent(pulse) {
             if (!this.playerStatus.ison) {
                 return;
             }
             this.autoScrollRequired = false;
-            if (this.items.length>5 && this.currentIndex>0) {
+            if (this.items.length>5 && this.currentIndex>=0) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the browse/nowplaying page!
                     if (this.currentIndex<this.items.length) {
                         var elem=document.getElementById('track'+this.currentIndex);
                         if (elem) {
                             setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                            if (pulse) {
+                                animate(elem, 1.0, 0.2);
+                            }
                         }
                     } else {
                         this.autoScrollRequired = true;

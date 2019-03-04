@@ -373,7 +373,7 @@ Vue.component('lms-player-settings', {
             });
         },
         addAlarm() {
-            this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["0", "1", "2", "3", "4"], repeat: false,
+            this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["1", "2", "3", "4", "5"], repeat: false,
                                  url: 'CURRENT_PLAYLIST', shuffle: this.alarmShuffeItems[0].key };
         },
         editAlarm(alarm) {

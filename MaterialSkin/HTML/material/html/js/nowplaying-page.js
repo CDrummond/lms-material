@@ -556,14 +556,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[LYRICS_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[LYRICS_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
-                var command = ["musicartistinfo", "lyrics", "title:"+this.infoTrack.title, "html:1"];
+                var command = ["musicartistinfo", "lyrics", "html:1"];
+                if (this.infoTrack.title) {
+                    command.push("title:"+this.infoTrack.title);
+                }
                 if (this.infoTrack.track_id) {
                     command.push("track_id:"+this.infoTrack.track_id);
                 }
                 if (this.infoTrack.artist_id) {
                     command.push("artist_id:"+this.infoTrack.artist_id);
                 }
-                if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1) {
+                if (this.infoTrack.artist && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1)) {
                     command.push("artist:"+this.infoTrack.artist);
                 }
                 lmsCommand("", command).then(({data}) => {
@@ -610,7 +613,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (this.infoTrack.artist_id) {
                         command.push("artist_id:"+this.infoTrack.artist_id);
                     }
-                    if (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1) {
+                    if (this.infoTrack.artist && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1)) {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                     lmsCommand("", command).then(({data}) => {
@@ -645,7 +648,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.infoTrack.album_id) {
                     command.push("album_id:"+this.infoTrack.album_id);
                 }
-                command.push("album:"+this.infoTrack.album);
+                if (this.infoTrack.album) {
+                    command.push("album:"+this.infoTrack.album);
+                }
 
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.albumreview || data.result.error)) {

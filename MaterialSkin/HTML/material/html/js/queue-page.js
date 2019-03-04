@@ -605,21 +605,24 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             this.autoScrollRequired = false;
-            if (this.items.length>5 && this.currentIndex>=0) {
+            var scroll = this.items.length>5 && this.currentIndex>=0;
+            if (scroll || (pulse && this.items.length>0)) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the browse/nowplaying page!
                     if (this.currentIndex<this.items.length) {
                         var elem=document.getElementById('track'+this.currentIndex);
                         if (elem) {
-                            setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                            if (scroll) {
+                                setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                            }
                             if (pulse) {
                                 animate(elem, 1.0, 0.2);
                             }
                         }
-                    } else {
+                    } else if (scroll) {
                         this.autoScrollRequired = true;
                         this.fetchItems();
                     }
-                } else {
+                } else if (scroll) {
                     this.autoScrollRequired = true;
                 }
             }

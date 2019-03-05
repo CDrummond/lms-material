@@ -143,6 +143,10 @@ function setLocalStorageVal(key, val) {
     localStorage.setItem(LS_PREFIX+key, val);
 }
 
+function removeLocalStorage(key) {
+    localStorage.removeItem(LS_PREFIX+key);
+}
+
 function isMobile() {
     return /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
 }

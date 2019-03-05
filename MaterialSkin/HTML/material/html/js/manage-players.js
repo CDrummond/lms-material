@@ -350,7 +350,7 @@ Vue.component('lms-manage-players', {
                                                          (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
                     if (data.result.playlist_loop[0].title) {
                         if (data.result.playlist_loop[0].artist) {
-                            player.track=data.result.playlist_loop[0].title+" - "+data.result.playlist_loop[0].artist;
+                            player.track=data.result.playlist_loop[0].title+SEPARATOR+data.result.playlist_loop[0].artist;
                         } else {
                             player.track=data.result.playlist_loop[0].title;
                         }

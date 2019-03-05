@@ -364,6 +364,10 @@ a {
     margin-left: 20px;
 }
 
+.slightly-dimmed {
+    opacity:0.5;
+}
+
 .dimmed {
     opacity:0.25;
 }

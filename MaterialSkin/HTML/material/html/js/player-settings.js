@@ -446,7 +446,7 @@ Vue.component('lms-player-settings', {
             if (haveSun) {
                 days.push(DAYS_OF_WEEK[0]);
             }
-            return formatTime(value.time, false)+" "+days.join(", ");
+            return formatTime(value.time, false)+" "+days.join(", ")+(value.repeat ? " (" + i18n("Repeat") + ")" : "");
         },
         displayTime: function (value) {
             if (undefined==value) {

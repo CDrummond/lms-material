@@ -13,13 +13,14 @@
  8. Show 'remote_title' (usually station name) if there is no album and this
     title is different from track title.
  9. Add "Show track information" to now-playing image context menu.
-10. Draw a dimmed power icon next to player name in main toolbar if switched
+10. Use dimmed player name (and sub-text) in main toolbar if player is switched
     off.
 11. Pulse queue item when 'Scroll To Current' button is pressed.
 12. Center info images in desktop view as well as mobile.
 13. Select Mon-Fri as default alarm days.
 14. If title, artist, or album are empty, don't send 'undefined' to MAI.
 15. Place "Album Artists" before "All Artists" for non-server side menus.
+16. Show "(Repeat)" for repeating alarms.
 
 0.3.2
 -----

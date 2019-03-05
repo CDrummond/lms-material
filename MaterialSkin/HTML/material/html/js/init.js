@@ -37,9 +37,9 @@ function checkEntryFocus() {
 }
 
 function initApp(app) {
-    var t = getLocalStorageVal('translation', undefined);
-    if (t!=undefined) {
-        setTranslation(JSON.parse(t));
+    var storedTrans = getLocalStorageVal('translation', undefined);
+    if (storedTrans!=undefined) {
+        setTranslation(JSON.parse(storedTrans));
     }
 
     isMobileBrowser = isMobile();
@@ -55,16 +55,18 @@ function initApp(app) {
         if (data && data.result && data.result._p2) {
             var lang = data.result._p2.toLowerCase();
             if (lang == 'en') {
-                var language = (window.navigator.userLanguage || window.navigator.language).toLowerCase();
-                if (language != 'en-us') {
-                    lang = language;
-                }
+                lang = (window.navigator.userLanguage || window.navigator.language).toLowerCase();
             }
-            if (lang != 'en') {
+            if (lang == 'en' || lang == 'en-us') {
+                if (storedTrans!=undefined) {
+                    removeLocalStorage('translation');
+                    setTranslation(undefined);
+                    bus.$emit('langChanged');
+                }
+            } else {
                 if (!LMS_SKIN_LANGUAGES.has(lang)) {
                     lang = lang.substr(0, 2);
                 }
-                
                 axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
                     var trans = eval(resp.data);
                     setLocalStorageVal('translation', JSON.stringify(trans));

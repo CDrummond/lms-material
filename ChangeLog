@@ -21,6 +21,8 @@
 14. If title, artist, or album are empty, don't send 'undefined' to MAI.
 15. Place "Album Artists" before "All Artists" for non-server side menus.
 16. Show "(Repeat)" for repeating alarms.
+17. Don't load a translation if LMS set to English and browser locale is 'en-us'
+18. Fix changing from non-Englisn translation to English.
 
 0.3.2
 -----

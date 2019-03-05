@@ -451,7 +451,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 ];
             this.addExtraItems(this.top, true);
             if (this.separateArtists) {
-                this.top.splice(2, 0, { title: i18n("Album Artists"),
+                this.top.splice(1, 0, { title: i18n("Album Artists"),
                                         command: ["artists"],
                                         params: ["role_id:ALBUMARTIST"],
                                         cancache: true,

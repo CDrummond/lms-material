@@ -1,7 +1,7 @@
 0.3.3
 -----
  1. Fix buttons staying in 'hover' state with touch devices.
- 2. Only show player settings if on android.
+ 2. Only show 'Start player' settings if on android.
  3. When using ["<app>", "playlist", "add/insert/play", "menu:<app>",...] and
     have a favorites_url, then replace with ["playlist, "add/insert/play",
     "favorites_url"]. Fixes SoundCloud.
@@ -22,7 +22,7 @@
 15. Place "Album Artists" before "All Artists" for non-server side menus.
 16. Show "(Repeat)" for repeating alarms.
 17. Don't load a translation if LMS set to English and browser locale is 'en-us'
-18. Fix changing from non-Englisn translation to English.
+18. Fix changing from non-English translation to English.
 
 0.3.2
 -----

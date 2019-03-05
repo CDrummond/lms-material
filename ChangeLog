@@ -19,6 +19,7 @@
 12. Center info images in desktop view as well as mobile.
 13. Select Mon-Fri as default alarm days.
 14. If title, artist, or album are empty, don't send 'undefined' to MAI.
+15. Place "Album Artists" before "All Artists" for non-server side menus.
 
 0.3.2
 -----

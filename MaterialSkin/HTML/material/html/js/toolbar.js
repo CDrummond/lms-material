@@ -151,7 +151,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
 </v-toolbar>
-<v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
+<v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
     `,
     props: ['desktop'],
@@ -284,8 +284,12 @@ Vue.component('lms-toolbar', {
             }.bind(this));
         }
 
-        bus.$on('showError', function(err, msg) {
-            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""), show: true, color: 'error' };
+        bus.$on('showError', function(err, msg, cmd) {
+            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : "") + (cmd ? "\n["+cmd+"]" : ""),
+                        show: true, color: 'error' };
+            if (cmd) {
+                info['timeout']=5000;
+            }
             if (undefined!=err && undefined==msg && !err.response) {
                 // If this is a network error, check if connection is up...
                 var that = this;

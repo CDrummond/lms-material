@@ -565,8 +565,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.getRatings();
             }).catch(err => {
                 this.fetchingItems = false;
-                bus.$emit('showError', err);
-                logError(err);
+                logAndShowError(err, undefined, command.command, command.params, start, count);
             });
         },
         handleListResponse(item, command, resp) {
@@ -674,6 +673,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1])) {
                 lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE).then(({data}) => {
                     this.handleTextClickResponse(item, command, data);
+                }).catch(err => {
+                    logError(err, command.command, command.params);
                 });
             } else {
                 command.params.forEach(p => {
@@ -681,6 +682,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     this.handleTextClickResponse(item, command, data);
+                }).catch(err => {
+                    logError(err, command.command);
                 });
             }
         },
@@ -822,8 +825,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         lmsCommand(this.playerId(), command).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
-                            bus.$emit('showError', err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"));
-                            logError(err);
+                            logAndShowError(err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
                         });
                     }
                 }
@@ -849,11 +851,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (res) {
                         if (item.id.startsWith("playlist_id:")) {
                             this.clearSelection();
-                            lmsCommand(this.playerId(), ["playlists", "delete", item.id]).then(({datax}) => {
+                            var command = ["playlists", "delete", item.id];
+                            lmsCommand(this.playerId(), command).then(({datax}) => {
                                 this.refreshList();
                             }).catch(err => {
-                                bus.$emit('showError', err, i18n("Failed to delete playlist!"));
-                                logError(err);
+                                logAndShowError(err, i18n("Failed to delete playlist!"), command);
                             });
                         }
                     }
@@ -889,11 +891,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     favIcon = item.image;
                 }
 
-                lmsCommand(this.playerId(), ["favorites", "exists", favUrl]).then(({data})=> {
+                var command = ["favorites", "exists", favUrl];
+                lmsCommand(this.playerId(), command).then(({data})=> {
                     if (data && data.result && data.result.exists==1) {
                         bus.$emit('showMessage', i18n("Already in favorites"));
                     } else {
-                        var command = ["favorites", "add", "url:"+favUrl, "title:"+favTitle];
+                        command = ["favorites", "add", "url:"+favUrl, "title:"+favTitle];
                         if (favType) {
                             command.push("type:"+favType);
                         }
@@ -906,23 +909,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                         lmsCommand(this.playerId(), command).then(({data})=> {
                             bus.$emit('showMessage', i18n("Added to favorites"));
                         }).catch(err => {
-                            bus.$emit('showError', err, i18n("Failed to add to favorites!"));
-                            logError(err);
+                            logAndShowError(err, i18n("Failed to add to favorites!"), command);
                         });
                     }
                 }).catch(err => {
                     bus.$emit('showMessage', i18n("Failed to add to favorites!"));
-                    logError(err);
+                    logError(err, command);
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
-                        lmsCommand(this.playerId(), ["favorites", "delete", removeUniqueness(item.id)]).then(({datax}) => {
+                        var command = ["favorites", "delete", removeUniqueness(item.id)];
+                        lmsCommand(this.playerId(), command).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
-                            bus.$emit('showError', err, i18n("Failed to remove favorite!"));
-                            logError(err);
+                            logAndShowError(err, i18n("Failed to remove favorite!"), command);
                         });
                     }
                 });
@@ -934,19 +936,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var resp = parseBrowseResp(data, this.current, this.options);
                     if (1===resp.items.length && resp.items[0].id) {
                         var item = resp.items[0];
-                        lmsCommand(this.playerId(), ["playlistcontrol", "cmd:add", item.id]).then(({data}) => {
+                        var command = ["playlistcontrol", "cmd:add", item.id];
+                        lmsCommand(this.playerId(), command).then(({data}) => {
                             bus.$emit('refreshStatus');
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         }).catch(err => {
                             bus.$emit('showError', err);
-                            logError(err);
+                            logError(err, command);
                         });
                     } else {
                         bus.$emit('showError', undefined, i18n("Failed to find an album!"));
                     }
                 }).catch(err => {
-                    bus.$emit('showError', err);
-                    logError(err);
+                    logAndShowError(err, undefined, ["albums"], params, 0, 1);
                 });
             } else if (act===MORE_ACTION.cmd) {
                 this.fetchItems(this.buildCommand(item, act), item);
@@ -1014,8 +1016,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                 }).catch(err => {
-                    bus.$emit('showError', err);
-                    logError(err);
+                    logAndShowError(err, undefined, command.command);
                 });
             }
         },
@@ -1072,8 +1073,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
-                bus.$emit('showError', err);
-                logError(err);
+                logAndShowError(err, undefined, this.command.command, this.command.params);
             });
         },
         sortItems() {
@@ -1552,8 +1552,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems=false;
             }).catch(err => {
                 this.fetchingItems = false;
-                bus.$emit('showError', err);
-                logError(err);
+                logAndShowError(err);
             });
         },
         addPinned() {
@@ -1687,6 +1686,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     this.doCommands(commands);
+                }).catch(err => {
+                    logError(err, command.command);
                 });
             }
         },
@@ -1723,7 +1724,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.fetchingItems = false;
                     }).catch(err => {
                         this.fetchingItems = false;
-                        logError(err);
+                        logError(err, this.command.command, this.command.params, start, count);
                     });
                 }
             });

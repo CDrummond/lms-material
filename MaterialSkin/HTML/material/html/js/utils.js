@@ -9,9 +9,30 @@ const SEPARATOR = " \u2022 ";
 
 var bus = new Vue();
 
-function logError(err) {
-    console.error("[" + new Date()+"] " + err);
+function commandToLog(command, params, start, count) {
+    var cmd = [];
+    if (undefined!=command) {
+        command.forEach(i => { cmd.push(i); });
+    }
+    if (undefined!=params) {
+        if (undefined!=start) {
+            cmd.push(start);
+            cmd.push(undefined==count ? LMS_BATCH_SIZE : count);
+        }
+        params.forEach(i => { cmd.push(i); });
+    }
+    return cmd
+}
+
+function logError(err, command, params, start, count) {
+    console.error("[" + new Date()+"] " + err, commandToLog(command, params, start, count));
     console.trace();
+}
+
+function logAndShowError(err, message, command, params, start, count) {
+    logError(err, command, params, start, count);
+    var cmd = commandToLog(command, params, start, count);
+    bus.$emit('showError', err, message, 0==cmd.length ? undefined : cmd);
 }
 
 function formatSeconds(secs, showDays) {

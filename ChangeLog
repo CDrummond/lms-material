@@ -25,6 +25,8 @@
 18. Fix changing from non-English translation to English.
 19. Use params.item_id for Radio id's and not favorites_url, as BBC iPlayer
     plugin sometimes returns duplicate urls.
+20. When a command fails, log its details to the console.
+21. When showing errors, also show command that caused the error.
 
 0.3.2
 -----

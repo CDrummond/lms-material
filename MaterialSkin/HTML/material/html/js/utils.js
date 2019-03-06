@@ -197,6 +197,15 @@ function removeUniqueness(id) {
     return id.split("?")[0];
 }
 
+function fixId(id, prefix) {
+    var parts = id.split(".");
+    if (parts.length>1) {
+        parts.shift();
+        return prefix + "."+parts.join(".");
+    }
+    return id;
+}
+
 function setBgndCover(elem, coverUrl, isDark) {
     if (elem) {
         elem.style.backgroundColor = isDark ? "#424242" : "#fff";

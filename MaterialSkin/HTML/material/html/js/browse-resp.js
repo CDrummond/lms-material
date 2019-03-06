@@ -208,6 +208,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
             // need different IDs for the re-ordered items so that the correct cover is shown.
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
+            var menu = undefined;
 
             resp.useGrid = !isTrackStat && options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
@@ -220,6 +221,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (resp.useGrid && parent && parent.actions && parent.actions.go && parent.actions.go.cmd &&
                     parent.actions.go.cmd[0] == "playhistory") {
                     resp.useGrid = false;
+                }
+                if (resp.baseActions[PLAY_ACTION.cmd] && resp.baseActions[PLAY_ACTION.cmd].params && resp.baseActions[PLAY_ACTION.cmd].params.menu) {
+                    menu = resp.baseActions[PLAY_ACTION.cmd].params.menu;
                 }
             }
 
@@ -361,11 +365,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (isApps && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                     if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
                         if (i.actions.go.params.item_id) {
-                            var parts = i.actions.go.params.item_id.split(".");
-                            if (parts.length>1) {
-                                parts.shift();
-                                i.id = "myapps."+parts.join(".");
-                            }
+                            i.id = fixId(i.actions.go.params.item_id, "myapps");
                         }
                     } else {
                         i.id = "apps."+i.actions.go.params.menu;
@@ -382,7 +382,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (isRadios && i.type!="search") {
                     if (!i.id) {
-                        if (i.presetParams && i.presetParams.favorites_url) {
+                        if (i.params && i.params.item_id) {
+                            i.id = fixId(i.params.item_id, undefined==menu ? "radio" : menu);
+                        } else if (i.presetParams && i.presetParams.favorites_url) {
                             i.id = "radio:"+i.presetParams.favorites_url;
                         } else if (parent && parent.id && TOP_RADIO_ID!=parent.id) {
                             i.id = parent.id+"."+i.title;

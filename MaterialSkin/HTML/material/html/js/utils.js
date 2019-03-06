@@ -8,6 +8,13 @@
 const SEPARATOR = " \u2022 ";
 
 var bus = new Vue();
+var debug = false;
+
+function logJsonMessage(type, msg) {
+    if (debug) {
+        console.log("[" + new Date().toLocaleTimeString()+"] "+type+"   :"+JSON.stringify(msg));
+    }
+}
 
 function commandToLog(command, params, start, count) {
     var cmd = [];
@@ -25,7 +32,7 @@ function commandToLog(command, params, start, count) {
 }
 
 function logError(err, command, params, start, count) {
-    console.error("[" + new Date()+"] " + err, commandToLog(command, params, start, count));
+    console.error("[" + new Date().toUTCString()+"] ERROR:" + err, commandToLog(command, params, start, count));
     console.trace();
 }
 
@@ -294,6 +301,8 @@ function parseQueryParams() {
             lmsServerAddress = "http://"+kv[1]+":9000";
         } else if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
+        } else if ("debug"==kv[0]) {
+            debug = "true"==kv[1];
         }
     }
 }

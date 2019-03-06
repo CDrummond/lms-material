@@ -23,7 +23,9 @@ function lmsCommand(playerid, command) {
                 method: "slim.request",
                 params: [playerid, command]
            }};
-    //console.log("CALL", args);
+    if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
+        logJsonMessage("REQ", args.data.params);
+    }
     return axios(args);
 }
 

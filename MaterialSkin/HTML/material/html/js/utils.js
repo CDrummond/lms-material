@@ -12,7 +12,7 @@ var debug = false;
 
 function logJsonMessage(type, msg) {
     if (debug) {
-        console.log("[" + new Date().toLocaleTimeString()+"] "+type+"   :"+JSON.stringify(msg));
+        console.log("[" + new Date().toLocaleTimeString()+"] "+type+": "+JSON.stringify(msg));
     }
 }
 

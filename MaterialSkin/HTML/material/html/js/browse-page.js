@@ -681,6 +681,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     command.command.push(p);
                 });
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
+                    logJsonMessage("RESP", data);
                     this.handleTextClickResponse(item, command, data);
                 }).catch(err => {
                     logError(err, command.command);
@@ -823,6 +824,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.fetchItems({command: command, params: params}, this.dialog.item);
                     } else {
                         lmsCommand(this.playerId(), command).then(({datax}) => {
+                            logJsonMessage("RESP", data);
                             this.refreshList();
                         }).catch(err => {
                             logAndShowError(err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
@@ -853,6 +855,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.clearSelection();
                             var command = ["playlists", "delete", item.id];
                             lmsCommand(this.playerId(), command).then(({datax}) => {
+                                logJsonMessage("RESP", datax);
                                 this.refreshList();
                             }).catch(err => {
                                 logAndShowError(err, i18n("Failed to delete playlist!"), command);
@@ -893,6 +896,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 var command = ["favorites", "exists", favUrl];
                 lmsCommand(this.playerId(), command).then(({data})=> {
+                    logJsonMessage("RESP", data);
                     if (data && data.result && data.result.exists==1) {
                         bus.$emit('showMessage', i18n("Already in favorites"));
                     } else {
@@ -907,6 +911,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             command.push("icon:"+favIcon);
                         }
                         lmsCommand(this.playerId(), command).then(({data})=> {
+                            logJsonMessage("RESP", data);
                             bus.$emit('showMessage', i18n("Added to favorites"));
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to add to favorites!"), command);
@@ -922,6 +927,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.clearSelection();
                         var command = ["favorites", "delete", removeUniqueness(item.id)];
                         lmsCommand(this.playerId(), command).then(({datax}) => {
+                            logJsonMessage("RESP", data);
                             this.refreshList();
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to remove favorite!"), command);
@@ -1003,6 +1009,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 //console.log("ACTION", command.command);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
+                    logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
                     if (!this.desktop) {
                         if (act===PLAY_ACTION.cmd) {
@@ -1685,6 +1692,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
 
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
+                    logJsonMessage("RESP", data);
                     this.doCommands(commands);
                 }).catch(err => {
                     logError(err, command.command);
@@ -1786,6 +1794,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var toId = removeUniqueness(this.items[to].id).replace("item_id:", "to_id:");
 
                 lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
+                    logJsonMessage("RESP", data);
                     this.refreshList();
                 }).catch(err => {
                     logError(err);

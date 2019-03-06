@@ -27,6 +27,8 @@
     plugin sometimes returns duplicate urls.
 20. When a command fails, log its details to the console.
 21. When showing errors, also show command that caused the error.
+22. Add "?debug=true" to URL to add request/response debug message to browser's
+    console.
 
 0.3.2
 -----

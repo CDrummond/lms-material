@@ -13,7 +13,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     try {
     if (data && data.result) {
         resp.total = data.result.count;
-        //console.log("RESP", JSON.stringify(data.result, null, 2), parent);
+        logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 resp.items.push({header: i18n("Artists")});

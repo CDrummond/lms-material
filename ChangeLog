@@ -1,3 +1,8 @@
+0.3.4
+-----
+1. Fix sub-toolbar actions when showing album track list navigated into via a
+   'More' menu.
+
 0.3.3
 -----
  1. Fix buttons staying in 'hover' state with touch devices.

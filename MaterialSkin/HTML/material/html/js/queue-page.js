@@ -300,9 +300,13 @@ var lmsQueue = Vue.component("lms-queue", {
                             subtitle=remoteTitle;
                         }
                     }
-                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle) {
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {11
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
+                        if (i.duration!=this.items[index].duration) {
+                            this.getDuration();
+                        }
+                        this.items[index].duration = i.duration;
                         this.$forceUpdate();
                     }
                 }

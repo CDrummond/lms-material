@@ -1001,6 +1001,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             } else if (RATING_ACTION.cmd==act) {
                 bus.$emit("setRating", [item.id], item.rating);
+            } else if (PLAY_ALBUM_ACTION.cmd==act) {
+                var command = this.buildFullCommand(this.current, PLAY_ACTION.cmd, index);
+                command.command.push("play_index:"+index);
+                lmsCommand(this.playerId(), command.command).then(({data}) => {
+                    logJsonMessage("RESP", data);
+                    bus.$emit('refreshStatus');
+                    if (!this.desktop) {
+                        this.$router.push('/nowplaying');
+                    }
+                }).catch(err => {
+                    logAndShowError(err, undefined, command.command);
+                });
             } else {
                 var command = this.buildFullCommand(item, act, index);
                 if (command.command.length===0) {
@@ -1018,8 +1030,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('refreshStatus');
                     if (!this.desktop) {
                         if (act===PLAY_ACTION.cmd) {
-                            this.$router.push('/nowplaying');
-                        } else if (act==PLAY_ALBUM_ACTION.cmd || act==PLAY_ALBUM_ACTION.cmd) {
                             this.$router.push('/nowplaying');
                         } else if (act===ADD_ACTION.cmd && (undefined==suppressNotification || !suppressNotification)) {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
@@ -1342,19 +1352,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", act, item.id];
                 } else if (item.id) {
-                    var itemId = item.id;
-                    var loadingItem = item;
-                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION.cmd || act==PLAY_ALBUM_ACTION.cmd ? "load" : act)];
+                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION.cmd ? "load" : act)];
 
-                    // NOTE(a): Play whole album, starting at selected track. First load album, then play track at index
-                    if (undefined!==index && PLAY_ALBUM_ACTION.cmd == act && item.id.startsWith("track_id:") && this.current && 
-                        this.current.id && this.current.id.startsWith("album_id:") ) {
-                        loadingItem = this.current;
-                        command.command.push("play_index:"+index);
-                    }
-
-                    if (loadingItem.id.startsWith("album_id:")  || loadingItem.id.startsWith("artist_id:")) {
-                        loadingItem.params.forEach(p => {
+                    if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
+                        item.params.forEach(p => {
                             if ( (!this.options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
                                  (!this.options.noGenreFilter && p.startsWith("genre_id:"))) {
                                 command.command.push(p);
@@ -1362,7 +1363,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
 
-                    command.command.push(loadingItem.id);
+                    command.command.push(item.id);
                 }
             }
 

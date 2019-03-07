@@ -10,6 +10,7 @@
    zero duration - as this is not a reliable way to detect a stream.
 6. Detect duration change of current item in queue.
 7. Center info images in desktop view when showing 3 panes.
+8. Show sync icon in toolbar, even if player is off.
 
 0.3.3
 -----

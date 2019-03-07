@@ -3,6 +3,8 @@
 1. Fix sub-toolbar actions when showing album track list navigated into via a
    'More' menu.
 2. Better 'Play album starting at track' handling.
+3. Add 'Play album starting at track' to album track list navigated into via a
+   'More' menu.
 
 0.3.3
 -----

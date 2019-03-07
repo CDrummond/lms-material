@@ -5,6 +5,7 @@
 2. Better 'Play album starting at track' handling.
 3. Add 'Play album starting at track' to album track list navigated into via a
    'More' menu.
+4. Remove 'SoundCloud' work-around, breaks others!
 
 0.3.3
 -----

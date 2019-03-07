@@ -6,6 +6,8 @@
 3. Add 'Play album starting at track' to album track list navigated into via a
    'More' menu.
 4. Remove 'SoundCloud' work-around, breaks others!
+5. Check ay current track in queue for meta-data changes, not just those with a
+   zero duration - as this is not a reliable way to detect a stream.
 
 0.3.3
 -----

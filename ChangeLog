@@ -8,6 +8,7 @@
 4. Remove 'SoundCloud' work-around, breaks others!
 5. Check ay current track in queue for meta-data changes, not just those with a
    zero duration - as this is not a reliable way to detect a stream.
+6. Detect duration change of current item in queue.
 
 0.3.3
 -----

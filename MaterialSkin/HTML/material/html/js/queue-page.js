@@ -88,7 +88,7 @@ function parseResp(data, showTrackNum) {
                               id: "track_id:"+i.id,
                               title: title,
                               subtitle: subtitle,
-                              icon: image ? undefined : (0==i.duration ? "wifi_tethering" : "music_note"),
+                              icon: image ? undefined : "music_note",
                               image: image,
                               actions: PQ_STD_ACTIONS,
                               duration: i.duration
@@ -163,8 +163,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.image" :tile="true">
-     <img v-if="0==item.duration" :src="item.image">
-     <img v-else v-lazy="item.image">
+     <img v-lazy="item.image">
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true">
      <v-icon>{{item.icon}}</v-icon>
@@ -275,9 +274,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
 
             // Check for metadata changes in radio streams...
-            if (playerStatus.current && 0==playerStatus.current.duration) {
+            if (playerStatus.current) {
                 var index = playerStatus.current["playlist index"];
-                if (undefined!=index && index>=0 && index<this.items.length && 0==this.items[index].duration) {
+                if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
                     var title = i.title;
                     if (this.showTrackNum && i.tracknum>0) {
@@ -680,7 +679,7 @@ var lmsQueue = Vue.component("lms-queue", {
             setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length &&
-                0==this.items[this.coverTrackIndex].duration && this.items[this.coverTrackIndex].image!=this.coverUrl) {
+                this.items[this.coverTrackIndex].image!=this.coverUrl) {
                 this.items[this.coverTrackIndex].image=this.coverUrl;
                 this.$forceUpdate();
             }

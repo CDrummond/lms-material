@@ -533,7 +533,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
-            var allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
+            var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:")) ||
+                                 (data.params[1].length>4 && data.params[1][0]=="tracks" && data.params[1][3].startsWith("album_id:"));
             var actions = [PLAY_ACTION];
             if (allowPlayAlbum && resp.total>1) {
                 actions.push(PLAY_ALBUM_ACTION);

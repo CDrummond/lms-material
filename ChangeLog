@@ -6,11 +6,12 @@
 3. Add 'Play album starting at track' to album track list navigated into via a
    'More' menu.
 4. Remove 'SoundCloud' work-around, breaks others!
-5. Check ay current track in queue for meta-data changes, not just those with a
+5. Check any current track in queue for meta-data changes, not just those with a
    zero duration - as this is not a reliable way to detect a stream.
 6. Detect duration change of current item in queue.
 7. Center info images in desktop view when showing 3 panes.
 8. Show sync icon in toolbar, even if player is off.
+9. Properly control when to show album rating button.
 
 0.3.3
 -----

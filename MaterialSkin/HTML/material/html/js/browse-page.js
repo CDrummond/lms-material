@@ -671,7 +671,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         canClickText(item) {
-            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && item.actions && item.actions.go);
+            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && ( (item.actions && item.actions.go) || item.nextWindow));
         },
         doTextClick(item) {
             var command = this.buildCommand(item);
@@ -702,7 +702,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
-            if ("text"==item.type) {
+            if ("text"==item.type || undefined==item.type) {
                 if (this.canClickText(item)) {
                     this.doTextClick(item);
                 }

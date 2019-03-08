@@ -12,7 +12,7 @@
  7. Center info images in desktop view when showing 3 panes.
  8. Show sync icon in toolbar, even if player is off.
  9. Properly control when to show album rating button.
-10. Add play actiosn to more entries in 'More'
+10. Add play actions to more entries in 'More' menu.
 11. Don't add 'More' entry to year in a 'More' entry.
 
 0.3.3

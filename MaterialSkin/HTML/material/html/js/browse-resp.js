@@ -415,10 +415,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.id=addUniqueness(i.id, uniqueness);
                 }
 
-                // Only show 'More' aciton if ('more' is in baseActions and item as item_id) OR
+                // Only show 'More' action if ('more' is in baseActions and item as item_id) OR
                 // 'more' is in item's actions. #57
-                if ((moreAction && i.menuActions.length>0 && i.params && i.params.item_id) ||
-                    (i.actions && i.actions.more && i.actions.more.cmd)) {
+                if ( ((moreAction && i.menuActions.length>0 && i.params && i.params.item_id) ||
+                     (i.actions && i.actions.more && i.actions.more.cmd)) &&
+                     !(i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.year)) {
                     if (!addedDivider && i.menuActions.length>0) {
                         i.menuActions.push(DIVIDER);
                         addedDivider = true;

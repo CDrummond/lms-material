@@ -401,3 +401,7 @@ function checkRemoteTitle(item) {
     return item && item.remote_title && !item.remote_title.startsWith("http:/") && !item.remote_title.startsWith("https:/")
         ? item.remote_title : undefined;
 }
+
+function hasPlayableId(item) {
+    return item.item_id || item.track || item.track_id || item.album_id || item.artist_id;
+}

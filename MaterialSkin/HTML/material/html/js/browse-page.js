@@ -545,6 +545,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.pos = this.scrollElement.scrollTop;
             prev.useGrid = this.useGrid;
             prev.command = this.command;
+            prev.showRatingButton = this.showRatingButton;
             this.history.push(prev);
         },
         fetchItems(command, item, batchSize) {
@@ -650,7 +651,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 : item.actions && item.actions.go && item.actions.go.nextWindow
                                     ? item.actions.go.nextWindow
                                     : undefined;
-
             if (nextWindow) {
                 nextWindow=nextWindow.toLowerCase();
                 var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
@@ -698,6 +698,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index);
                 return;
             }
+
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
@@ -1117,6 +1118,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var changedView = this.useGrid;
             this.useGrid = false;
             this.command = undefined;
+            this.showRatingButton = false;
             this.$nextTick(function () {
                 if (changedView) {
                     this.setScrollElement();
@@ -1158,6 +1160,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle = prev.headerSubTitle;
             this.menuActions = prev.menuActions;
             this.command = prev.command;
+            this.showRatingButton = prev.showRatingButton;
             if (refresh) {
                 this.refreshList();
             } else {
@@ -1829,9 +1832,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         getRatings() {
             this.showRatingButton = false;
-            if (this.$store.state.ratingsSupport && this.listSize<=100 && this.items.length>0 && this.items.length==this.listSize &&
+            if (this.$store.state.ratingsSupport && this.listSize<=100 && this.items.length>1 && this.items.length==this.listSize &&
                 !(this.current && this.current.id && this.current.id.startsWith("playlist_id:")) &&
-                this.items[0].id && this.items[0].id.startsWith("track_id:")) {
+                !(this.current && this.current.actions && this.current.actions.go && this.current.actions.go.cmd &&
+                  this.current.actions.go.cmd.length>1 && this.current.actions.go.cmd[0]=="trackstat") &&
+                this.items[0].id && this.items[0].id.startsWith("track_id:") &&
+                this.items[this.items.length-1].id && this.items[this.items.length-1].id.startsWith("track_id:")) {
                 this.showRatingButton = true;
                 this.items.forEach(i => {
                     lmsCommand("", ["trackstat", "getrating", i.id.split(":")[1]]).then(({data}) => {

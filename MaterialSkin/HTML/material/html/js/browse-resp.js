@@ -200,9 +200,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isApps = parent && parent.id == TOP_APPS_ID;
             var isTrackStat = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 &&
                               data.params[1][0]=="trackstat";
-            var isMore = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 &&
-                         (data.params[1][0]=="genreinfo" || data.params[1][0]=="artistinfo" || data.params[1][0]=="albuminfo" ||
-                          data.params[1][0]=="trackinfo");
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -284,6 +281,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     haveWithoutIcons = true;
                 }
                 i.menuActions=[];
+
                 if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
                     // Convert NUM. TITLE into 0NUM TITLE - e.g 1. Wibble => 01 Wibble
                     if (/^[0-9]+\.\s.+/.test(i.title)) {
@@ -292,9 +290,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         var text = i.title.substring(dot+2, i.title.length);
                         i.title = (num>9 ? num : ("0" + num))+" "+text;
                     }
-
-                    if (!isMore && ((i.params && (i.params.item_id || i.params.track || i.params.track_id || i.params.album_id || i.params.artist_id))) ||
-                                   ((i.commonParams && (i.commonParams.item_id || i.commonParams.track || i.commonParams.track_id || i.commonParams.album_id || i.commonParams.artist_id)))) {
+                    if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
+                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) ) {
                         if (playAction) {
                             i.menuActions.push(PLAY_ACTION);
                             addedPlayAction = true;

@@ -147,13 +147,13 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
    <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
-    <v-list-tile-avatar v-if="item.image" :tile="true">
+    <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.svg" :tile="true">
+    <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
       <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
 
@@ -180,27 +180,27 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-subheader>
 
    <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
-   <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}">
+   <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag">
-    <v-list-tile-avatar v-if="item.selected" :tile="true">
+   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag" class="lms-avatar">
+    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
      <img v-lazy="item.image"></img>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.svg" :tile="true">
+    <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
       <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="selection.length>0" :tile="true">
+    <v-list-tile-avatar v-else-if="selection.length>0" :tile="true" class="lms-avatar">
      <v-icon>check_box_outline_blank</v-icon>
     </v-list-tile-avatar>
 

@@ -159,13 +159,13 @@ var lmsQueue = Vue.component("lms-queue", {
   <!-- TODO: Fix and re-use virtual scroller -->
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
    <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
-    <v-list-tile-avatar v-if="item.selected" :tile="true">
+    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true">
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-content>

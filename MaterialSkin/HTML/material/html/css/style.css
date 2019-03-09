@@ -806,3 +806,9 @@ div.v-subheader {
         background-color: transparent !important;
     }
 }
+
+.lms-avatar .v-avatar {
+    width: 54px !important;
+    height: 54px !important;
+    margin-left: -8px;
+}

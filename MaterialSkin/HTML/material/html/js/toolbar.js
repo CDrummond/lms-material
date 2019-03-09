@@ -156,8 +156,7 @@ Vue.component('lms-toolbar', {
     `,
     props: ['desktop'],
     data() {
-        return { desktop:false,
-                 songInfo:undefined,
+        return { songInfo:undefined,
                  playlist: { count: undefined, duration: undefined, timestamp: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  playerGroups: false,

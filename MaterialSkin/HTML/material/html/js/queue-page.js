@@ -130,7 +130,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.remove" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
-   <v-divider vertical="true" v-if="desktop"></v-divider>
+   <v-divider vertical v-if="desktop"></v-divider>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
@@ -147,7 +147,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
-   <v-divider vertical="true" v-if="desktop"></v-divider>
+   <v-divider vertical v-if="desktop"></v-divider>
    <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent(true)" class="toolbar-button"><v-icon style="margin-right:4px; margin-top:-10px">arrow_right</v-icon><v-icon style="margin-left:-16px">music_note</v-icon></v-btn>
    <v-btn :title="trans.addUrl" flat icon @click="addUrl()" class="toolbar-button"><v-icon>add</v-icon></v-btn>
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
@@ -202,7 +202,6 @@ var lmsQueue = Vue.component("lms-queue", {
     props: [ 'desktop' ],
     data() {
         return {
-            desktop: false,
             items: [],
             currentIndex: -1,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},

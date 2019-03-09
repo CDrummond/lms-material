@@ -11,7 +11,7 @@ Vue.component('lms-information-dialog', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">
-    <v-btn flat icon @click.native="close()"><v-icon>arrow_back</b-icon></v-btn>
+    <v-btn flat icon @click.native="close()"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{title}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>

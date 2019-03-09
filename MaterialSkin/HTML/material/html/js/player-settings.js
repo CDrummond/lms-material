@@ -14,7 +14,7 @@ Vue.component('lms-player-settings', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar color="primary" dark app class="lms-toolbar">
-     <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+     <v-btn flat icon @click.native="close"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{TB_PLAYER_SETTINGS.title}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
@@ -60,7 +60,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile>
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
-       <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
       <v-list-tile-action><v-switch v-model="alarms.on"></v-switch></v-list-tile-action>
      </v-list-tile>
@@ -136,7 +136,7 @@ Vue.component('lms-player-settings', {
    <v-list-tile>
     <v-list-tile-content @click="alarmDialog.repeat = !alarmDialog.repeat" class="switch-label">
      <v-list-tile-title>{{i18n('Repeat')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Should alarms repeat')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n('Should alarms repeat')}}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action><v-switch v-model="alarmDialog.repeat"></v-switch></v-list-tile-action>
    </v-list-tile>

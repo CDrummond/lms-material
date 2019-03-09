@@ -79,8 +79,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
   </v-layout>
   <p v-if="showRatings && playerStatus.current.duration>0" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
-   <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true clearable></v-rating>
-   <v-rating small v-else v-model="rating.value" hover=true clearable></v-rating>
+   <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
+   <v-rating small v-else v-model="rating.value" hover clearable></v-rating>
   </p>
   <p class="np-text-desktop np-tech-desktop ellipsis" v-else-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
   <p class="np-text-desktop np-time-desktop cursor" @click="toggleTime()">{{formattedTime}}</p>
@@ -162,8 +162,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0" class="np-text-landscape">
-     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true clearable></v-rating>
-     <v-rating v-else v-model="rating.value" hover=true clearable></v-rating>
+     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
+     <v-rating v-else v-model="rating.value" hover clearable></v-rating>
     </div>
     <div v-if="wide">
 
@@ -226,14 +226,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && techInfo" class="np-text">
-    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true clearable></v-rating>
-    <v-rating v-else v-model="rating.value" hover=true clearable></v-rating>
+    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
+    <v-rating v-else v-model="rating.value" hover clearable></v-rating>
    </v-flex>
    <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
    <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
    <v-flex xs6 v-else-if="showRatings && playerStatus.current.duration>0">
-    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments=true hover=true clearable></v-rating>
-    <v-rating v-else v-model="rating.value" hover=true clearable></v-rating>
+    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
+    <v-rating v-else v-model="rating.value" hover clearable></v-rating>
    </v-flex>
    <v-flex xs6 v-else></v-flex>
    <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
@@ -280,8 +280,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 `,
     props: [ 'desktop' ],
     data() {
-        return { desktop:false,
-                 coverUrl:undefined,
+        return { coverUrl:undefined,
                  playerStatus: {
                     isplaying: 1,
                     sleepTimer: false,

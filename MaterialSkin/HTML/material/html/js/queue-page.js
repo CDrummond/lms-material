@@ -278,7 +278,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
                     var title = i.title;
-                    if (this.showTrackNum && i.tracknum>0) {
+                    if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                     }
                     var subtitle = i.artist ? i.artist : i.trackartist;

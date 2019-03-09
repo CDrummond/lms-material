@@ -684,13 +684,14 @@ progress {
 }
 
 .alarm-entry {
-    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 144px !important;
 }
 
 .alarm-divider {
     margin-top:8px;
-    margin-bottom:-16px;
-    height:4px;
+    margin-bottom:-8px;
+    height:12px;
 }
 
 .alarm-sched-header {

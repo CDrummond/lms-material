@@ -1,19 +1,18 @@
 0.3.4
 -----
  1. Fix sub-toolbar actions when showing album track list navigated into via a
-    'More' menu.
+    'More' menu, and add 'Play album starting at track' to tracks.
  2. Better 'Play album starting at track' handling.
- 3. Add 'Play album starting at track' to album track list navigated into via a
-    'More' menu.
- 4. Remove 'SoundCloud' work-around, breaks others!
- 5. Check any current track in queue for meta-data changes, not just those with
+ 3. Remove 'SoundCloud' work-around, breaks others!
+ 4. Check any current track in queue for meta-data changes, not just those with
     a zero duration - as this is not a reliable way to detect a stream.
- 6. Detect duration change of current item in queue.
- 7. Center info images in desktop view when showing 3 panes.
- 8. Show sync icon in toolbar, even if player is off.
- 9. Properly control when to show album rating button.
-10. Add play actions to more entries in 'More' menu.
-11. Don't add 'More' entry to year in a 'More' entry.
+ 5. Detect duration change of current item in queue.
+ 6. Center info images in desktop view when showing 3 panes.
+ 7. Show sync icon in toolbar, even if player is off.
+ 8. Properly control when to show album rating button.
+ 9. Add play actions to more entries in 'More' menu.
+10. Don't add 'More' entry to year in a 'More' entry.
+11. Allow more space for alarm entries.
 
 0.3.3
 -----

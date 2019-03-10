@@ -485,11 +485,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { title: i18n("Random Mix"),
                   svg: "dice-multiple",
                   id: TOP_RANDOM_MIX_ID,
+                  type: "app",
                   disabled: !this.randomMix },
                 { title: i18n("Dynamic Playlists"),
                   command: ["dynamicplaylist", "browsejive"],
                   params: [],
                   svg: "dice-list",
+                  type: "group",
                   id: TOP_DYNAMIC_PLAYLISTS_ID,
                   disabled: !this.dynamicPlaylists },
                 { title: i18n("Years"),
@@ -553,7 +555,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItems = true;
-            //console.log("FETCH command:" + command.command + " params:" + command.params);
             var lmsBatchSize = item.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
             var start = item.range ? item.range.start : 0;
             var count = item.range ? item.range.count < lmsBatchSize ? item.range.count : lmsBatchSize : batchSize ? batchSize : lmsBatchSize;
@@ -1334,7 +1335,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 cmd=c;
             }
-            //console.log("COMMAND", cmd.command, cmd.params);
             return cmd;
         },
         buildFullCommand(item, act, index) {
@@ -1500,6 +1500,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                       svg: "dice-multiple",
                                                       id: TOP_RANDOM_MIX_ID,
                                                       group: GROUP_MY_MUSIC,
+                                                      type: "app",
                                                       weight: c.weight ? parseFloat(c.weight) : 100 });
                             } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect")) {
                                 var command = this.buildCommand(c, "go", false);
@@ -1509,6 +1510,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              weight: c.weight ? parseFloat(c.weight) : 100,
                                              group: GROUP_MY_MUSIC,
                                              id: TOP_ID_PREFIX+c.id,
+                                             type: "group"
                                             };
 
                                 if (c.id.startsWith("myMusicArtists")) {
@@ -1535,7 +1537,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "computer";
                                 } else if (c.id == "myMusicRandomAlbums") {
                                     item.svg = "dice-album";
-                                    item.id=TOP_RANDOM_ALBUMS_ID;
+                                    item.id = TOP_RANDOM_ALBUMS_ID;
                                 } else if (c.id.startsWith("myMusicTopTracks")) {
                                     item.icon = "arrow_upward";
                                 } else if (c.id.startsWith("myMusicFlopTracks")) {

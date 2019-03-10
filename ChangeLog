@@ -4,6 +4,8 @@
 2. Reduce lsit image size to 50px, as this mataches what is requested from
    server.
 3. Allow 'Scroll to current' to work even if player is off.
+4. Check all command params for "album_id" when determining if can add a 'Play
+   album starting at track' action.
 
 0.3.5
 -----

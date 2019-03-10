@@ -3,6 +3,7 @@
 1. Fix pinned apps.
 2. Reduce lsit image size to 50px, as this mataches what is requested from
    server.
+3. Allow 'Scroll to current' to work even if player is off.
 
 0.3.5
 -----

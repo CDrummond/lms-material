@@ -1384,7 +1384,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         return;
                     }
                 });
-                 if (!haveLibId) {
+                if (!haveLibId) {
                     cmd.params.push("library_id:"+this.$store.state.library);
                 }
             }

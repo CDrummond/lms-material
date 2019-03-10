@@ -603,9 +603,6 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         scrollToCurrent(pulse) {
-            if (!this.playerStatus.ison) {
-                return;
-            }
             this.autoScrollRequired = false;
             var scroll = this.items.length>5 && this.currentIndex>=0;
             if (scroll || (pulse && this.items.length>0)) {

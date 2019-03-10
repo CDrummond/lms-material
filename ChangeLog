@@ -1,7 +1,7 @@
 0.3.6
 -----
 1. Fix pinned apps.
-2. Reduce lsit image size to 50px, as this mataches what is requested from
+2. Reduce list image size to 50px, as this matches what is requested from
    server.
 3. Allow 'Scroll to current' to work even if player is off.
 4. Check all command params for "album_id" when determining if can add a 'Play
@@ -20,7 +20,7 @@
  4. Check any current track in queue for meta-data changes, not just those with
     a zero duration - as this is not a reliable way to detect a stream.
  5. Detect duration change of current item in queue.
- 6. Center info images in desktop view when showing 3 panes.
+ 6. Centre info images in desktop view when showing 3 panes.
  7. Show sync icon in toolbar, even if player is off.
  8. Properly control when to show album rating button.
  9. Add play actions to more entries in 'More' menu.
@@ -46,7 +46,7 @@
 10. Use dimmed player name (and sub-text) in main toolbar if player is switched
     off.
 11. Pulse queue item when 'Scroll To Current' button is pressed.
-12. Center info images in desktop view as well as mobile.
+12. Centre info images in desktop view as well as mobile.
 13. Select Mon-Fri as default alarm days.
 14. If title, artist, or album are empty, don't send 'undefined' to MAI.
 15. Place "Album Artists" before "All Artists" for non-server side menus.
@@ -70,8 +70,8 @@
  5. Fix white background to grid items with light theme.
  6. Only clear browse history (i.e. go to Home first) when 'More' action is
     called from queue or now playing.
- 7. Fix elliding of subtoolbar title.
- 8. Fix paddding in manage players dialog.
+ 7. Fix eliding of subtoolbar title.
+ 8. Fix padding in manage players dialog.
  9. Show ellipsis in desktop bottom toolbar for empty sub text if have main
     text.
 10. When sorting favorites, don't sort genre, artist, album, or track lists.
@@ -234,7 +234,7 @@
  3. Remove swipe to change views; buggy, and material apps don't do this.
  4. Fix deleting playlists.
  5. Centre crop background image in mobile now playing info.
- 6. Don't add play actions to toolbar for track/album/atist info.
+ 6. Don't add play actions to toolbar for track/album/artist info.
  7. Fix buttons in fullscreen image view.
  8. Remove option to sort favourites, instead allow drag'n'drop re-ordering.
  9. Don't allow pining of favourites  - their IDs seem to change too, and
@@ -278,7 +278,7 @@
  7. Store command used to populate list, so that it can be re-used when
     fetching more.
  8. Fix un-pinnig of items.
- 9. When un-pinnnig an app, re-add 'Pin' menu entry.
+ 9. When un-pinnig an app, re-add 'Pin' menu entry.
 10. Only save the bare minimum of info required for pinned apps.
 11. Use item_id from actions to create pinning ID for mysqueezebox apps.
 
@@ -477,7 +477,7 @@
 4. Fix restoring dark/light status.
 5. If asked to scroll to current track, and its not in currently fetched list
    of items - then fetch to current index + 50
-6. For app entries that have isuadio=1 and hasitems=1 and there are actually
+6. For app entries that have isaudio=1 and hasitems=1 and there are actually
    child items, then use playall/addall. Fixes playing BandCampout weeklies
    "Listen to songs (without comments)" entries.
 7. Fix scrolling to more search results.

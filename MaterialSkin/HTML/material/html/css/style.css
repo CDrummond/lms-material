@@ -808,7 +808,7 @@ div.v-subheader {
 }
 
 .lms-avatar .v-avatar {
-    width: 54px !important;
-    height: 54px !important;
-    margin-left: -8px;
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: -4px;
 }

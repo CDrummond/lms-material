@@ -1,6 +1,8 @@
 0.3.6
 -----
 1. Fix pinned apps.
+2. Reduce lsit image size to 50px, as this mataches what is requested from
+   server.
 
 0.3.5
 -----

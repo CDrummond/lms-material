@@ -702,7 +702,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
-            if ("text"==item.type || undefined==item.type) {
+            if ("text"==item.type || (undefined==item.type && undefined==item.group)) { // if group is not undefined, its probably a pinned app
                 if (this.canClickText(item)) {
                     this.doTextClick(item);
                 }

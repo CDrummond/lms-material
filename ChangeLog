@@ -1,6 +1,7 @@
 0.3.7
 -----
 1. Don't ignore clicks on items with a menu.
+2. Fix some coding errors spotted by closure compiler.
 
 0.3.6
 -----

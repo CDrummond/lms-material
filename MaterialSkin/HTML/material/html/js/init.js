@@ -20,7 +20,7 @@ function checkLayout() {
 
     if (undefined==landscape || undefined==wide || landscape!=isLandscape() || wide!=isWide()) {
         landscape=isLandscape();
-        wide!=isWide();
+        wide=isWide();
         bus.$emit("screenLayoutChanged");
     }
 }

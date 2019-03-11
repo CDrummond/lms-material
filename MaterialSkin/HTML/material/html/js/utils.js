@@ -158,21 +158,21 @@ function setScrollTop(el, val) {
 const LS_PREFIX="lms-material::";
 
 function getLocalStorageBool(key, def) {
-    var val = localStorage.getItem(LS_PREFIX+key);
+    var val = window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? "true" == val : def;
 }
 
 function getLocalStorageVal(key, def) {
-    var val = localStorage.getItem(LS_PREFIX+key);
+    var val = window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? val : def;
 }
 
 function setLocalStorageVal(key, val) {
-    localStorage.setItem(LS_PREFIX+key, val);
+    window.localStorage.setItem(LS_PREFIX+key, val);
 }
 
 function removeLocalStorage(key) {
-    localStorage.removeItem(LS_PREFIX+key);
+    window.localStorage.removeItem(LS_PREFIX+key);
 }
 
 function isMobile() {
@@ -345,10 +345,10 @@ function cacheKey(command, params, start, batchSize) {
 }
 
 function clearListCache(force) {
-    for (var key in localStorage){
+    for (var key in window.localStorage){
         if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) &&
             (force || !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
-            localStorage.removeItem(key);
+            window.localStorage.removeItem(key);
         }
     }
 }

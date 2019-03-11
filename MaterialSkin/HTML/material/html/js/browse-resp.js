@@ -627,7 +627,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     if (subtitle) {
                         subtitle+=" ("+i.album+")";
                     } else {
-                        sbtitle=i.album;
+                        subtitle=i.album;
                     }
                 }
                 resp.items.push({

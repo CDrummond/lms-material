@@ -81,7 +81,7 @@ Vue.component('lms-information-dialog', {
                 }.bind(this), 2000);
                 this.show = true;
                 bus.$emit('dialogOpen', this.show);
-                that = this;
+                var that = this;
                 axios.get((lmsServerAddress.length>1 ? lmsServerAddress : (location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')))+"/updateinfo.json?x=time"+(new Date().getTime())).then(function (resp) {
                     that.updates = eval(resp.data);
                     if (!that.updates || !that.updates.plugins) {

@@ -299,7 +299,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             subtitle=remoteTitle;
                         }
                     }
-                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {11
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
                         if (i.duration!=this.items[index].duration) {
@@ -578,7 +578,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
                     var resp = parseResp(data, this.$store.state.queueShowTrackNum);
                     this.items = resp.items;
-                    var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==timestamp;
+                    var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;
                     this.fetchingItems = false;
                     this.listSize = data.result.playlist_tracks;

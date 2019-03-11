@@ -19,8 +19,39 @@ import sys
 INSTALL_XML = "MaterialSkin/install.xml"
 PUBLIC_XML = "public.xml"
 BUILD_FOLDER = "build"
-MINIFY_CODE = False # Change to true when nearer a full release
+HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
+MINIFY_CODE = False # Change to true when nearer a full release. TODO: Check this actually works!!!
+JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
+CSS_COMPRESSOR = "tools/yuicompressor/yuicompressor-2.4.8.jar"
+COMMON_JS_FILES = [  # Order is important!
+    "constants.js",
+    "currentcover.js",
+    "utils.js",
+    "noplayers.js",
+    "noconnection.js",
+    "toolbar.js",
+    "bottomnav.js",
+    "browse-resp.js",
+    "browse-page.js",
+    "nowplaying-page.js",
+    "queue-page.js",
+    "sync-dialog.js",
+    "groupplayers-dialog.js",
+    "server.js",
+    "ui-settings.js",
+    "player-settings.js",
+    "volume.js",
+    "information.js",
+    "randommix-dialog.js",
+    "rating-dialog.js",
+    "manage-players.js",
+    "favorite-dialog.js",
+    "i18n.js",
+    "store.js",
+    "init.js"
+]
 
+NON_MINIFIED_CSS = ["dark.css", "light.css", "blank.css"]
 
 def info(s):
     print("INFO: %s" %s)
@@ -104,68 +135,91 @@ def cleanup():
         shutil.rmtree(BUILD_FOLDER)
 
 
-def minify():
-    info("Minifying")
-    index = "%s/MaterialSkin/HTML/material/index.html" % BUILD_FOLDER
-    jsFiles = []
-    minifiedJs = "html/js/lms-material.min.js"
-    jsCommand = ["java", "-jar", "tools/closure-compiler/closure-compiler-v20181008.jar", "--js_output_file=%s/MaterialSkin/HTML/material/%s" % (BUILD_FOLDER, minifiedJs)]
-    replacedJs = False
-    replacedCss = False
-    fixedLines = []
-    with open(index, "r") as f:
-        lines=f.readlines()
-    for line in lines:
-        matchedJs = False
-        matchedCss = False
-        matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js\\"', line)
-        if matches:
-            for match in matches:
-                path = "%s/MaterialSkin/HTML/material/%s" % (BUILD_FOLDER, match.split('"')[1])
-                jsFiles.append(path)
-                jsCommand.append(path)
-                matchedJs = True
-        else:
-            matches = re.findall('"html/css/style.css"', line)
+def minifyJs():
+    info("...JS")
+
+    jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/common.min.js" % HTML_FOLDER]
+    for entry in COMMON_JS_FILES:
+        jsCommand.append("%s/js/%s" % (HTML_FOLDER, entry))
+
+    subprocess.call(jsCommand, shell=False)
+    for other in ["utils", "main", "main-desktop"]:
+        jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s.min.js" % (HTML_FOLDER, other), "%s/js/%s.js" % (HTML_FOLDER, other)]
+        subprocess.call(jsCommand, shell=False)
+
+
+def minifyCss():
+    info("...CSS")
+    for css in os.listdir("%s/css" % HTML_FOLDER):
+        if not css in NON_MINIFIED_CSS and css.endswith(".css"):
+            origCss = "%s/css/%s" % ( HTML_FOLDER, css)
+            minCss = origCss.replace(".css", ".min.css")
+            subprocess.call(["java", "-jar", CSS_COMPRESSOR, "-o", minCss, origCss], shell=False)
+
+
+def removeUnminified():
+    info("...removing non-minified files")
+    for entry in os.listdir("%s/js" % HTML_FOLDER):
+        if entry.endswith(".js") and not entry.endswith(".min.js"):
+            os.remove("%s/js/%s" % (HTML_FOLDER, entry))
+    for entry in os.listdir("%s/css" % HTML_FOLDER):
+        if not entry in NON_MINIFIED_CSS and entry.endswith(".css") and not entry.endswith(".min.css"):
+            os.remove("%s/css/%s" % (HTML_FOLDER, entry))
+
+
+def fixHtml():
+    info("...updating HTML files")
+    for html in ["index", "desktop", "mobile"]:
+        fixedLines = []
+        replacedJs = False
+        replacedCss = False
+        path = "%s/MaterialSkin/HTML/material/%s.html" % (BUILD_FOLDER, html)
+        with open(path, "r") as f:
+            lines=f.readlines()
+        for line in lines:
+            matchedJs = False
+            matchedCss = False
+            matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js', line)
             if matches:
                 for match in matches:
-                    matchedCss = True
+                    matchedJs = True
+            else:
+                for css in ["style", html]:
+                    matches = re.findall('"html/css/%s.css' % css, line)
+                    if matches:
+                        for match in matches:
+                            matchedCss = True
 
-        if matchedJs:
-            if not replacedJs:
-                fixedLines.append('    <script src="%s?r=[% material_revision %]"></script>\n' % minifiedJs)
-                replacedJs = True
-        elif matchedCss:
-            if not replacedCss:
-                fixedLines.append('    <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
-                replacedCss = True
-        else:
-            fixedLines.append(line)
+            if matchedJs:
+                if not replacedJs:
+                    if "index"==html:
+                        fixedLines.append('    <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
+                    else:
+                        fixedLines.append('    <script src="html/js/common.min.js?r=[% material_revision %]"></script>\n')
+                        if "desktop" == html:
+                            fixedLines.append('    <script src="html/js/main-desktop.min.js?r=[% material_revision %]"></script>\n')
+                        else:
+                            fixedLines.append('    <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
+                    replacedJs = True
+            elif matchedCss:
+                if not replacedCss:
+                    fixedLines.append('    <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
+                    fixedLines.append('    <link href="html/css/%s.min.css?r=[%% material_revision %%]" rel="stylesheet">\n' % html)
+                    replacedCss = True
+            else:
+                fixedLines.append(line)
 
-    # run JS command
-    try:
-        info("    ...JS")
-        subprocess.call(jsCommand, shell=False)
-    except:
-        error("Failed to minify JS")
+        with open(path, "w") as f:
+            for line in fixedLines:
+                f.write(line)
 
-    # run CSS command
-    origCss = "%s/MaterialSkin/HTML/material/html/css/style.css" % BUILD_FOLDER
-    minCss = "%s/MaterialSkin/HTML/material/html/css/style.min.css" % BUILD_FOLDER
-    try:
-        info("    ...CSS")
-        subprocess.call(["java", "-jar", "tools/yuicompressor/yuicompressor-2.4.8.jar", "-o", minCss, origCss], shell=False)
-    except:
-        error("Failed to minify CSS")
 
-    for f in jsFiles:
-        os.remove(f)
-    os.remove(origCss)
-
-    # Update index.html
-    with open(index, "w") as f:
-        for line in fixedLines:
-            f.write(line)
+def minify():
+    info("Minifying")
+    minifyJs()
+    minifyCss()
+    removeUnminified()
+    fixHtml()
 
 
 def createZip(version):

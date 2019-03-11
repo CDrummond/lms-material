@@ -293,7 +293,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerSubTitle=null;
         this.menuActions=[];
         var col=getLocalStorageVal('collapsed', "").split(",");
-        for (i=0; i<col.length && i<this.collapsed.length; ++i) {
+        for (var i=0; i<col.length && i<this.collapsed.length; ++i) {
            this.collapsed[i] = "true" == col[i];
         }
         this.options={artistImages: getLocalStorageBool('artistImages', false),
@@ -830,10 +830,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.fetchItems({command: command, params: params}, this.dialog.item);
                     } else {
                         lmsCommand(this.playerId(), command).then(({datax}) => {
-                            logJsonMessage("RESP", data);
+                            logJsonMessage("RESP", datax);
                             this.refreshList();
                         }).catch(err => {
-                            logAndShowError(err, dialog.command.length>2 && dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
+                            logAndShowError(err, this.dialog.command.length>2 && this.dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
                         });
                     }
                 }
@@ -933,7 +933,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.clearSelection();
                         var command = ["favorites", "delete", removeUniqueness(item.id)];
                         lmsCommand(this.playerId(), command).then(({datax}) => {
-                            logJsonMessage("RESP", data);
+                            logJsonMessage("RESP", datax);
                             this.refreshList();
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to remove favorite!"), command);
@@ -1209,7 +1209,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     commandName = "go";
                 }
                 var baseActions = this.current == item ? this.currentBaseActions : this.baseActions;
-                command = item.actions && item.actions[commandName]
+                var command = item.actions && item.actions[commandName]
                             ? item.actions[commandName]
                             : "go" == commandName && item.actions && item.actions["do"]
                                 ? item.actions["do"]
@@ -1647,7 +1647,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         deleteSelectedItems() {
             if (1==this.selection.length) {
-                this.itemAction(SECTION_FAVORITES==this.current.section ? REMOVE_FROM_FAV_ACTION.cmd : DELETE_ACTION.cmd, this.items[idx], idx);
+                this.itemAction(SECTION_FAVORITES==this.current.section ? REMOVE_FROM_FAV_ACTION.cmd : DELETE_ACTION.cmd, this.items[this.selection[0]], this.selection[0]);
             } else {
                 this.$confirm(SECTION_FAVORITES==this.current.section ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
                              {buttonTrueText: SECTION_FAVORITES==this.current.section ? i18n("Remove") : i18n("Delete"),

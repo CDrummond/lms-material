@@ -9,9 +9,6 @@ Vue.use(VueLazyload);
 
 var app = new Vue({
     el: '#app',
-    data() {
-        splitterPercent:50
-    },
     created() {
         parseQueryParams();
         this.$store.commit('initUiSettings');

@@ -135,7 +135,7 @@ const store = new Vuex.Store({
         setPlayers(state, players) {
             var changed = !state.players || state.players.length!=players.length;
             if (!changed) {
-                for (i=0; i<state.players.length; ++i) {
+                for (var i=0; i<state.players.length; ++i) {
                     var a = state.players[i];
                     var b = players[i];
                     if (a.id!=b.id || a.name!=b.name || a.canpoweroff!=b.canpoweroff || a.ison!=b.ison || a.isconnected!=b.isconnected || a.isgroup!=b.isgroup) {
@@ -154,7 +154,7 @@ const store = new Vuex.Store({
                 // Check current player is still valid
                 var found = false;
                 if (players) {
-                    for (i=0; i<state.players.length; ++i) {
+                    for (var i=0; i<state.players.length; ++i) {
                         if (state.players[i].id === state.player.id) {
                             found = true;
                             if (changed) {
@@ -179,7 +179,7 @@ const store = new Vuex.Store({
                     });
                 }
                 if (!state.player) { /* Choose first powered on player */
-                    for (i=0; i<state.players.length; ++i) {
+                    for (var i=0; i<state.players.length; ++i) {
                         if (state.players[i].ison) {
                             state.player=state.players[i];
                             setLocalStorageVal('player', state.player.id);
@@ -188,7 +188,7 @@ const store = new Vuex.Store({
                     }
                 }
                 if (!state.player) { /* Choose first connected on player */
-                    for (i=0; i<state.players.length; ++i) {
+                    for (var i=0; i<state.players.length; ++i) {
                         if (state.players[i].isconnected) {
                             state.player=state.players[i];
                             setLocalStorageVal('player', state.player.id);
@@ -204,7 +204,7 @@ const store = new Vuex.Store({
         },
         setPlayer(state, id) {
             if (state.players) {
-                for (i=0; i<state.players.length; ++i) {
+                for (var i=0; i<state.players.length; ++i) {
                     if (state.players[i].id === id) {
                         state.player = state.players[i];
                         setLocalStorageVal('player', id);

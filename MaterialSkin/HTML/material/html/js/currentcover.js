@@ -7,7 +7,7 @@
 
 const DEFAULT_COVER = "music/0/cover";
 
-var lmsServer = Vue.component('lms-currentcover', {
+var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div/>`,
     data() {
         return {

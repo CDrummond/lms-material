@@ -51,6 +51,6 @@ Vue.component('lms-noconnection', {
         }
     },
     beforeDestroy() {
-        cancelInterval();
+        this.cancelInterval();
     }
 })

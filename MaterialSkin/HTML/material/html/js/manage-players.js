@@ -270,7 +270,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
-                updatePlayer(player);
+                this.updatePlayer(player);
             });
         },
         playPause(player) {
@@ -278,7 +278,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
-                updatePlayer(player);
+                this.updatePlayer(player);
             });
         },
         stop(player) {
@@ -286,7 +286,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ['stop']).then(({data}) => {
-                updatePlayer(player);
+                this.updatePlayer(player);
             });
         },
         prevTrack(player) {
@@ -294,7 +294,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ['button', 'jump_rew']).then(({data}) => {
-                updatePlayer(player);
+                this.updatePlayer(player);
             });
         },
         nextTrack(player) {
@@ -302,7 +302,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ['playlist', 'index', '+1']).then(({data}) => {
-                updatePlayer(player);
+                this.updatePlayer(player);
             });
         },
         setActive(id) {

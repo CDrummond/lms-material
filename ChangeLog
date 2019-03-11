@@ -1,3 +1,7 @@
+0.3.7
+-----
+1. Don't ignore clicks on items with a menu.
+
 0.3.6
 -----
 1. Fix pinned apps.

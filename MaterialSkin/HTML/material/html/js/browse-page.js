@@ -683,7 +683,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         canClickText(item) {
-            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && ( (item.actions && item.actions.go) || item.nextWindow));
+            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && ( (item.actions && item.actions.go) || item.nextWindow || item.params /*CustomBrowse*/));
         },
         doTextClick(item) {
             var command = this.buildCommand(item);
@@ -1559,6 +1559,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.svg = "dice-list";
                                 } else if (c.id.startsWith("trackstat")) {
                                     item.icon = "bar_chart";
+                                } else if (c.id == "custombrowse") {
+                                    item.icon = "library_music";
                                 } else {
                                     item.icon = "music_note";
                                 }

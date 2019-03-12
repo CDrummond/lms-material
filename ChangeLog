@@ -4,6 +4,7 @@
 2. Fix some coding errors spotted by closure compiler.
 3. Fix playing items from virtual libraries.
 4. Don't use media session for 'SB Player', as it interferes with playback.
+5. Fix clicking on CustomBrowse items.
 
 0.3.6
 -----

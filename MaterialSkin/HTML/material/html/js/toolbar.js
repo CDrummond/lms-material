@@ -48,10 +48,8 @@ function stopMediaSession() {
     if (!mediaInterval) {
         return;
     }
-    if (mediaInterval) {
-        clearInterval(mediaInterval);
-        mediaInterval = undefined;
-    }
+    clearInterval(mediaInterval);
+    mediaInterval = undefined;
     if (mediaAudio.src) {
         mediaAudio.src = undefined;
     }
@@ -334,7 +332,8 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if ('mediaSession' in navigator) {
-                if (undefined==track || (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album))) {
+                if (undefined==track || (this.$store.state.player && this.$store.state.player.isandroidplayer) ||
+                   (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album))) {
                     stopMediaSession();
                     this.media.title = undefined;
                     this.media.artist = undefined;

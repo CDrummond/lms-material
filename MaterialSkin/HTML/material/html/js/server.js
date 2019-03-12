@@ -101,7 +101,8 @@ var lmsServer = Vue.component('lms-server', {
                                            canpoweroff: 1===i.canpoweroff,
                                            ison: 1===i.power,
                                            isconnected: 1===i.connected,
-                                           isgroup: 'group'===i.model
+                                           isgroup: 'group'===i.model,
+                                           isandroidplayer: 'SB Player' ===i.modelname
                                           });
                         }
                     });

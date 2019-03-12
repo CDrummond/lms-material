@@ -282,7 +282,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 i.menuActions=[];
 
-                if (i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
+                if (i.type=="artist" || i.type=="album" || i.type=="year" || i.type=="genre" || // CustomBrowse
+                    i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
                     // Convert NUM. TITLE into 0NUM TITLE - e.g 1. Wibble => 01 Wibble
                     if (/^[0-9]+\.\s.+/.test(i.title)) {
                         var dot = i.title.indexOf('.');

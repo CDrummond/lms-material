@@ -403,5 +403,6 @@ function checkRemoteTitle(item) {
 }
 
 function hasPlayableId(item) {
-    return item.item_id || item.track || item.track_id || item.album_id || item.artist_id;
+    return item.item_id || item.track || item.track_id || item.album_id || item.artist_id ||
+           item.album || item.artist || item.variousartist || item.year || item.genre || item.playlist; // CustomBrowse
 }

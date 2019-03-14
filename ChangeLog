@@ -8,6 +8,8 @@
 6. If 'SB Player' is running on current Android device, then disable
    notification and lock screen controls. The code to make these persistent
    interferes with local playback.
+7. Add a note to 'save defaults' dialog stating that 'Applicaiton layout' is
+   not saved as a default.
 
 0.3.6
 -----

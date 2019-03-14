@@ -5,6 +5,9 @@
 3. Fix playing items from virtual libraries.
 4. Don't use media session for 'SB Player', as it interferes with playback.
 5. Fix clicking on CustomBrowse items.
+6. If 'SB Player' is running on current Android device, then disable
+   notification and lock screen controls. The code to make these persistent
+   interferes with local playback.
 
 0.3.6
 -----

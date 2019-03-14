@@ -324,6 +324,9 @@ Vue.component('lms-toolbar', {
                 this.updateMediaSession(this.media, true);
             }.bind(this));
             bus.$emit('getCurrentCover');
+            bus.$on('haveLocalAndroidPlayer', function(coverUrl) {
+                this.updateMediaSession(undefined, true);
+            }.bind(this));
         }
     },
     methods: {
@@ -332,7 +335,7 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if ('mediaSession' in navigator) {
-                if (undefined==track || (this.$store.state.player && this.$store.state.player.isandroidplayer) ||
+                if (undefined==track || haveLocalAndroidPlayer ||
                    (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album))) {
                     stopMediaSession();
                     this.media.title = undefined;

@@ -7,6 +7,33 @@
 
 var lmsServerAddress = "";
 var lmsLastScan = undefined;
+var haveLocalAndroidPlayer = false;
+
+var currentIpAddress = undefined;
+var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+if (RTCPeerConnection)(function() {
+    var rtc = new RTCPeerConnection({iceServers:[]});
+    rtc.createDataChannel('', {reliable: false});
+    rtc.onicecandidate = function(evt) {
+        if (evt.candidate) {
+            grepSdp(evt.candidate.candidate);
+        }
+    };
+
+    rtc.createOffer(function(offerDesc) {
+        rtc.setLocalDescription(offerDesc);
+    }, function(e) { console.warn("Failed to get IP address", e); });
+
+    function grepSdp(sdp) {
+        var ip = /(192\.168\.(0|\d{0,3})\.(0|\d{0,3}))/i;
+        sdp.split('\r\n').forEach(function(line) {
+            if (line.match(ip)) {
+                currentIpAddress = line.match(ip)[0];
+            }
+        });
+    }
+})();
+
 
 function lmsCheckConnection() {
     var url = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/css/blank.css?r"+(new Date().getTime());
@@ -94,6 +121,7 @@ var lmsServer = Vue.component('lms-server', {
                     clearListCache();
                 }
                 if (data && data.result && data.result.players_loop) {
+                    var localAndroidPlayer = false;
                     data.result.players_loop.forEach(i => {
                         if (1===i.connected) {
                             players.push({ id: i.playerid,
@@ -101,11 +129,20 @@ var lmsServer = Vue.component('lms-server', {
                                            canpoweroff: 1===i.canpoweroff,
                                            ison: 1===i.power,
                                            isconnected: 1===i.connected,
-                                           isgroup: 'group'===i.model,
-                                           isandroidplayer: 'SB Player' ===i.modelname
+                                           isgroup: 'group'===i.model
                                           });
+                            // Check if we have a local SB Player - if so, can't use MediaSession
+                            if (!localAndroidPlayer && currentIpAddress && 'SB Player' ===i.modelname && i.ip.split(':')[0] == currentIpAddress) {
+                                localAndroidPlayer = true;
+                            }
                         }
                     });
+                    if (localAndroidPlayer != haveLocalAndroidPlayer) {
+                        haveLocalAndroidPlayer = localAndroidPlayer;
+                        if (haveLocalAndroidPlayer) {
+                            bus.$emit('haveLocalAndroidPlayer');
+                        }
+                    }
                     this.$store.commit('setPlayers', players.sort(function(a, b) {
                                                                         if (a.isgroup!=b.isgroup) {
                                                                             return a.isgroup ? -1 : 1;

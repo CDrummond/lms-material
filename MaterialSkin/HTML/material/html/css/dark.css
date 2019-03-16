@@ -6,32 +6,32 @@
  */
 
 ::-webkit-scrollbar {
- background: #3d3d3d;
+ background:#3d3d3d;
 }
 
 ::-webkit-scrollbar-thumb {
- background: #777;
+ background:#777;
 }
 
 ::-webkit-scrollbar-corner {
- background: #333;
+ background:#333;
 }
 
 html {
- background-color: #212121;
+ background-color:#212121;
 }
 
 .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text {
- color: #99ceff !important;
+ color:#99ceff !important;
 }
 
 .vue-splitter .splitter {
- background-color: #333 !important;
+ background-color:#333 !important;
 }
 
 .np-bar {
- background-color: #212121;
+ background-color:#212121;
 }
 
 .np-info-cover {
@@ -45,13 +45,13 @@ html {
 .np-slider {
  color:#346dd2;
  background-color:#444;
- border-top: 1px solid #212121 !important;
- border-bottom: 2px solid #212121 !important;
+ border-top:1px solid #212121 !important;
+ border-bottom:2px solid #212121 !important;
 }
 
 .np-slider-mobile {
  color:#346dd2;
- background-color: rgba(0, 0, 0, 0.15) !important;
+ background-color:rgba(0, 0, 0, 0.15) !important;
 }
 
 progress::-webkit-progress-bar {
@@ -59,7 +59,7 @@ progress::-webkit-progress-bar {
 }
 
 .np-slider-mobile::-webkit-progress-bar {
- background-color: rgba(0, 0, 0, 0.15) !important;
+ background-color:rgba(0, 0, 0, 0.15) !important;
 }
 
 progress::-webkit-progress-value {
@@ -71,16 +71,16 @@ progress::-moz-progress-bar {
 }
 
 .subtoolbar {
- background-color: #424242 !important;
- border-bottom: 1px solid #333;
+ background-color:#424242 !important;
+ border-bottom:1px solid #333;
 }
 
 .lms-bottom-nav {
- border-top: 1px solid #333;
- background-color: #3d3d3d !important;
+ border-top:1px solid #333;
+ background-color:#3d3d3d !important;
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {
- color: #e0e0e0 !important;
+ color:#e0e0e0 !important;
 }
 

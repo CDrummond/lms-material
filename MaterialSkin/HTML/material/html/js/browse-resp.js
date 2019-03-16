@@ -626,7 +626,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var subtitle = duration>0 ? formatSeconds(duration) : undefined;
                 if (i.album) {
                     if (subtitle) {
-                        subtitle+=" ("+i.album+")";
+                        subtitle+=SEPARATOR+i.album;
                     } else {
                         subtitle=i.album;
                     }

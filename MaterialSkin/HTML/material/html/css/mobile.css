@@ -6,9 +6,9 @@
  */
 
 :root {
- --main-toolbar-height: 56px;
- --sub-toolbar-height: 48px;
- --bottom-nav-height: 58px;
+ --main-toolbar-height:56px;
+ --sub-toolbar-height:48px;
+ --bottom-nav-height:58px;
 }
 
 .lms-toolbar {
@@ -16,9 +16,9 @@
 }
 
 .lms-toolbar > .v-toolbar__content {
- height: var(--main-toolbar-height) !important;
- margin-left: -7px !important;
- margin-right: -8px !important;
+ height:var(--main-toolbar-height) !important;
+ margin-left:-7px !important;
+ margin-right:-8px !important;
 }
 
 .subtoolbar {
@@ -33,7 +33,7 @@
  padding-right:8px;
  padding-bottom:0px;
  z-index:1;
- float: left;
+ float:left;
 }
 
 .lms-footer {
@@ -58,20 +58,20 @@
 /* Work-around issue where when swiping to switch views, a previously active nav button would have a
    slightly lighter background than the others */
 .lms-bottom-nav-button:before, .lms-bottom-nav-button:focus:before, .lms-bottom-nav-button:hover:before {
- background-color: transparent !important;
+ background-color:transparent !important;
 }
 
 .lms-bottom-nav-button .v-btn__content {
- height: 48px;
- margin: 0px;
- padding: 0px;
+ height:48px;
+ margin:0px;
+ padding:0px;
 }
 
 .lms-bottom-nav-button .v-btn__content span {
- overflow: hidden;
- text-overflow: ellipsis;
+ overflow:hidden;
+ text-overflow:ellipsis;
  max-width:100% !important;
- height: 18px;
+ height:18px;
 }
 
 .lms-list {
@@ -106,38 +106,38 @@
 
 .browse-progress {
  z-index:2;
- position: absolute;
+ position:absolute;
  top:0;
- bottom: 0;
- left: 0;
- right: 0;
- margin: auto;
+ bottom:0;
+ left:0;
+ right:0;
+ margin:auto;
 }
 
 .np-page {
- position: fixed;
+ position:fixed;
  top:var(--main-toolbar-height);
  bottom:var(--bottom-nav-height);
  width:100%;
 }
 
 .np-image {
- display: block;
- object-fit: contain;
+ display:block;
+ object-fit:contain;
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 32px));
  width:calc(100vw - 16px);
- margin-left: auto;
- margin-right: auto;
+ margin-left:auto;
+ margin-right:auto;
  padding:8px 8px 232px 8px; /* t, r, b, l */
 }
 
 .np-image-landscape {
  padding:16px 16px 0px 16px;
- object-fit: contain;
+ object-fit:contain;
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 118px));
- width: 50vw;
- margin-left: auto;
- margin-right: auto;
+ width:50vw;
+ margin-left:auto;
+ margin-right:auto;
  float:left;
 }
 
@@ -147,28 +147,28 @@
 
 .np-details-landscape {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 132px));
- width: 50vw;
+ width:50vw;
  display:flex;
- justify-content: center;
- flex-direction: column;
+ justify-content:center;
+ flex-direction:column;
 }
 
 .vol-label {
- margin: 0px;
- padding: 0px;
- font-size: 12px;
- font-family: monospace, monospace;
- text-align: center;
- vertical-align: middle;
- position: fixed;
+ margin:0px;
+ padding:0px;
+ font-size:12px;
+ font-family:monospace, monospace;
+ text-align:center;
+ vertical-align:middle;
+ position:fixed;
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- width: 36px !important;
- height: 18px !important;
- line-height: 18px !important;
- top: 38px;
- right: 58px;
- z-index: -1;
- opacity: 0.4;
+ width:36px !important;
+ height:18px !important;
+ line-height:18px !important;
+ top:38px;
+ right:58px;
+ z-index:-1;
+ opacity:0.4;
 }

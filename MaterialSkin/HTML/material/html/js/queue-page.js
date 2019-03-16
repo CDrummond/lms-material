@@ -151,7 +151,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent(true)" class="toolbar-button"><v-icon style="margin-right:4px; margin-top:-10px">arrow_right</v-icon><v-icon style="margin-left:-16px">music_note</v-icon></v-btn>
    <v-btn :title="trans.addUrl" flat icon @click="addUrl()" class="toolbar-button"><v-icon>add</v-icon></v-btn>
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><v-icon>clear</v-icon></v-btn>
+   <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">

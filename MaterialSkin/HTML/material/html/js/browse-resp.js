@@ -390,11 +390,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.id = "radio:"+i.title;
                         }
                     }
-                    if (!addedDivider && i.menuActions.length>0) {
-                        i.menuActions.push(DIVIDER);
-                        addedDivider = true;
+                    if ((i.icon || i.image) && i.type!="entry") {
+                        if (!addedDivider && i.menuActions.length>0) {
+                            i.menuActions.push(DIVIDER);
+                            addedDivider = true;
+                        }
+                        i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
-                    i.menuActions.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {
                         i.id = "item_id:"+i.params.item_id;

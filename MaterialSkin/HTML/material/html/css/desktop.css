@@ -6,243 +6,243 @@
  */
 
 :root {
-    --main-toolbar-height: 48px;
-    --sub-toolbar-height: 48px;
-    --bottom-toolbar-height: 80px;
+ --main-toolbar-height: 48px;
+ --sub-toolbar-height: 48px;
+ --bottom-toolbar-height: 80px;
 }
 
 body {
-    min-width:600px;
-    min-height:400px;
+ min-width:600px;
+ min-height:400px;
 }
 
 .lms-toolbar {
-    height:var(--main-toolbar-height) !important;
+ height:var(--main-toolbar-height) !important;
 }
 
 .lms-toolbar > .v-toolbar__content {
-    height:var(--main-toolbar-height) !important;
-    margin-left: -7px !important;
-    margin-right: -8px !important;
+ height:var(--main-toolbar-height) !important;
+ margin-left: -7px !important;
+ margin-right: -8px !important;
 }
 
 .lms-desktop-toolbar-pad {
-    height:var(--main-toolbar-height) !important;
+ height:var(--main-toolbar-height) !important;
 }
 
 .settings-title {
-    height: var(--main-toolbar-height) !important;
-    max-height: var(--main-toolbar-height) !important;
-    margin: 0px !important;
-    padding: 0px !important;
+ height: var(--main-toolbar-height) !important;
+ max-height: var(--main-toolbar-height) !important;
+ margin: 0px !important;
+ padding: 0px !important;
 }
 
 .pq-details {
-    margin-left:-16px !important;
+ margin-left:-16px !important;
 }
 
 .subtoolbar {
-    height:var(--sub-toolbar-height) !important;
-    white-space:nowrap;
-    overflow-x:hidden;
-    overflow-y:hidden;
-    padding-top:2px;
-    padding-right:8px;
-    padding-bottom:0px;
+ height:var(--sub-toolbar-height) !important;
+ white-space:nowrap;
+ overflow-x:hidden;
+ overflow-y:hidden;
+ padding-top:2px;
+ padding-right:8px;
+ padding-bottom:0px;
 }
 
 .lms-list {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
-    overflow:auto;
-    backface-visibility:hidden;
-    margin:0px;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ overflow:auto;
+ backface-visibility:hidden;
+ margin:0px;
 }
 
 .lms-list-sub {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
-    overflow:auto;
-    backface-visibility:hidden;
-    margin:0px;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ overflow:auto;
+ backface-visibility:hidden;
+ margin:0px;
 }
 
 .lms-image-grid {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
-    overflow:auto;
-    backface-visibility:hidden;
-    margin:0px;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ overflow:auto;
+ backface-visibility:hidden;
+ margin:0px;
 }
 
 .browse-progress {
-    z-index:2;
-    position: fixed;
-    top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 36px));
-    left: calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
+ z-index:2;
+ position: fixed;
+ top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 36px));
+ left: calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
 }
 
 .vol-slider {
-    max-width:200px;
+ max-width:200px;
 }
 
 .vol-label {
-    padding-top: 16px;
-    width:3.25em;
-    text-align: left;
-    opacity: 0.7;
+ padding-top: 16px;
+ width:3.25em;
+ text-align: left;
+ opacity: 0.7;
 }
 
 .np-bar {
-    padding:0px 16px 0px 16px; /* t, r, b, l */
-    position:fixed;
-    bottom:0;
-    width:100%;
-    height:var(--bottom-toolbar-height) !important;
-    box-shadow: 0px -2px 4px 1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
-    min-width:600px;
+ padding:0px 16px 0px 16px; /* t, r, b, l */
+ position:fixed;
+ bottom:0;
+ width:100%;
+ height:var(--bottom-toolbar-height) !important;
+ box-shadow: 0px -2px 4px 1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+ min-width:600px;
 }
 
 .np-page {
-    position: fixed;
-    top:var(--main-toolbar-height);
-    height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
-    bottom:0px;
-    width:100%;
+ position: fixed;
+ top:var(--main-toolbar-height);
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
+ bottom:0px;
+ width:100%;
 }
 
 .np-controls-desktop {
-    margin-left:-16px;
-    margin-top:16px;
-    max-width:270px;
-    float:left;
+ margin-left:-16px;
+ margin-top:16px;
+ max-width:270px;
+ float:left;
 }
 
 .np-image-desktop {
-    object-fit: cover;
-    object-position: 50% 0%;
-    display: block;
-    margin-top: 4px;
-    margin-left: 4px;
-    margin-right: 8px;
-    height:calc(var(--bottom-toolbar-height) - 8px) !important;
-    width:calc(var(--bottom-toolbar-height) - 8px) !important;
-    float:left;
+ object-fit: cover;
+ object-position: 50% 0%;
+ display: block;
+ margin-top: 4px;
+ margin-left: 4px;
+ margin-right: 8px;
+ height:calc(var(--bottom-toolbar-height) - 8px) !important;
+ width:calc(var(--bottom-toolbar-height) - 8px) !important;
+ float:left;
 }
 
 .np-text-desktop {
-    font-weight:400;
-    margin:12px 8px 0px 0px;
-    height:2em;
-    max-width:calc(100vw - 400px);
+ font-weight:400;
+ margin:12px 8px 0px 0px;
+ height:2em;
+ max-width:calc(100vw - 400px);
 }
 
 .np-text-sub-desktop {
-    font-weight:400;
-    margin: 0px 8px -4px 0px;
-    height:2em;
-    max-width:calc(100vw - 400px);
+ font-weight:400;
+ margin: 0px 8px -4px 0px;
+ height:2em;
+ max-width:calc(100vw - 400px);
 }
 
 .np-info-desktop {
-    position:fixed;
-    top:var(--main-toolbar-height);
-    left:0px;
-    height:auto;
-    width:100vw;
-    overflow:auto;
-    backface-visibility:hidden;
-    z-index:0;
+ position:fixed;
+ top:var(--main-toolbar-height);
+ left:0px;
+ height:auto;
+ width:100vw;
+ overflow:auto;
+ backface-visibility:hidden;
+ z-index:0;
 }
 
 .np-info-text-desktop {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 100px));
-    overflow:auto;
-    max-width:1000px;
-    margin:auto;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 100px));
+ overflow:auto;
+ max-width:1000px;
+ margin:auto;
 }
 
 .np-info-text-full-desktop {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 92px));
-    overflow:auto;
-    max-width:1000px;
-    margin:auto;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 92px));
+ overflow:auto;
+ max-width:1000px;
+ margin:auto;
 }
 
 .np-slider-desktop {
-    height: 8px !important;
-    width: 100% !important;
-    vertical-align: top !important;
+ height: 8px !important;
+ width: 100% !important;
+ vertical-align: top !important;
 }
 
 .np-tech-desktop {
-    position:fixed;
-    bottom:44px;
-    right:8px;
-    font-size: 85%;
-    font-weight: 400;
-    width: 16.5em;
-    font-family: monospace, monospace;
-    text-align: right;
-    height:2em;
+ position:fixed;
+ bottom:44px;
+ right:8px;
+ font-size: 85%;
+ font-weight: 400;
+ width: 16.5em;
+ font-family: monospace, monospace;
+ text-align: right;
+ height:2em;
 }
 
 .np-tech-desktop-rating {
-    right:2px;
+ right:2px;
 }
 
 .np-time-desktop {
-    position:fixed;
-    bottom:18px;
-    right:8px;
-    font-size: 85%;
-    font-weight: 400;
-    width: 16em;
-    font-family: monospace, monospace;
-    text-align: right;
-    height:2em;
+ position:fixed;
+ bottom:18px;
+ right:8px;
+ font-size: 85%;
+ font-weight: 400;
+ width: 16em;
+ font-family: monospace, monospace;
+ text-align: right;
+ height:2em;
 }
 
 .np-image {
-    display: block;
-    object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px));
-    width:calc(100vw - 16px);
-    margin-left: auto;
-    margin-right: auto;
-    padding:8px 8px 232px 8px; /* t, r, b, l */
+ display: block;
+ object-fit: contain;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px));
+ width:calc(100vw - 16px);
+ margin-left: auto;
+ margin-right: auto;
+ padding:8px 8px 232px 8px; /* t, r, b, l */
 }
 
 .np-image-landscape {
-    padding:16px 16px 0px 16px;
-    object-fit: contain;
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 120px));
-    width: 50vw;
-    margin-left: auto;
-    margin-right: auto;
-    float:left;
+ padding:16px 16px 0px 16px;
+ object-fit: contain;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 120px));
+ width: 50vw;
+ margin-left: auto;
+ margin-right: auto;
+ float:left;
 }
 
 .np-image-landscape-wide {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px)) !important;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px)) !important;
 }
 
 .np-details-landscape {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 132px));
-    width: 50vw;
-    display:flex;
-    justify-content: center;
-    flex-direction: column;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 132px));
+ width: 50vw;
+ display:flex;
+ justify-content: center;
+ flex-direction: column;
 }
 
 /* Moving the splitter sometimes causes now-playing bar text to be selected? Disable selection to work-around */
 .noselect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none; 
-    user-select: none; 
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none; 
+ user-select: none; 
 }
 
 .cursor {
-    cursor: pointer;
+ cursor: pointer;
 }
 

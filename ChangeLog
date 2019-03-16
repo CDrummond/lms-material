@@ -3,12 +3,11 @@
 1. Don't ignore clicks on items with a menu.
 2. Fix some coding errors spotted by closure compiler.
 3. Fix playing items from virtual libraries.
-4. Don't use media session for 'SB Player', as it interferes with playback.
-5. Fix clicking on CustomBrowse items.
-6. If 'SB Player' is running on current Android device, then disable
+4. Fix clicking on CustomBrowse items.
+5. If 'SB Player' is running on current Android device, then disable
    notification and lock screen controls. The code to make these persistent
    interferes with local playback.
-7. Add a note to 'save defaults' dialog stating that 'Applicaiton layout' is
+6. Add a note to 'save defaults' dialog stating that 'Applicaiton layout' is
    not saved as a default.
 
 0.3.6

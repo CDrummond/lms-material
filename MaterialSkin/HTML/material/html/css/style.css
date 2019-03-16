@@ -6,44 +6,40 @@
  */
 
 ::-webkit-scrollbar {
-    max-height: 10px;
-    max-width: 10px;
+ max-height: 10px;
+ max-width: 10px;
 }
 
 html { 
-    overflow-y: hidden;
-    margin:0px;
+ overflow-y: hidden;
+ margin:0px;
 }
 
 body {
-    height:100%; 
-    margin:0; 
-    padding:0;
+ height:100%; 
+ margin:0; 
+ padding:0;
 }
 
 [v-cloak] {
-    display: none;
+ display: none;
 }
 
-/* Chrome (android) seems to add blue underlines? Remove these... */
-/*.bottom-nav > a {
-    color: transparent !important;
-}*/
 a {
-    text-decoration: none;
+ text-decoration: none;
 }
 
 .about-header {
-    font-weight: 600;
-    padding-bottom: 0px;
+ font-weight: 600;
+ padding-bottom: 0px;
 }
 
 .lms-app {
-    min-height:400px;
+ min-height:400px;
 }
 
 .lms-search {
-    width:100%;
+ width:100%;
 }
 
 .v-divider {
@@ -58,519 +54,519 @@ a {
 
 /* Stop horizontal scrollbar in full screen dialogs */
 .v-dialog .v-card {
-    overflow-x: hidden !important;
+ overflow-x: hidden !important;
 }
 
 .lms-small-menu-icon {
-    margin-bottom:3px;
+ margin-bottom:3px;
 }
 
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
-    height: 40px;
+ height: 40px;
 }
 
 /* Make action buttons in lists closer together */
 .list__tile__action {
-    min-width: 48px !important;
-    max-width: 48px !important;
+ min-width: 48px !important;
+ max-width: 48px !important;
 }
 
 .lms-image-grid {
-    overflow-x: hidden !important;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
-    grid-auto-rows: min-content;
-    grid-gap: 0px;
-    padding: 2px !important;
-    margin: 0px !important;
-    padding-right:8px !important;
-    padding-right:8px !important;
-    justify-items: center;
+ overflow-x: hidden !important;
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
+ grid-auto-rows: min-content;
+ grid-gap: 0px;
+ padding: 2px !important;
+ margin: 0px !important;
+ padding-right:8px !important;
+ padding-right:8px !important;
+ justify-items: center;
 }
 
 .lms-image-grid-few {
-    grid-template-columns: repeat(auto-fit, minmax(154px, 166px)) !important;
+ grid-template-columns: repeat(auto-fit, minmax(154px, 166px)) !important;
 }
 
 .lms-image-grid .container {
-    padding: 0px 8px 8px 8px;
+ padding: 0px 8px 8px 8px;
 }
 
 .lms-image-grid .container .layout div .v-card__text {
-    padding: 0px;
+ padding: 0px;
 }
 
 .lms-image-grid .container .layout div {
-    padding: 1px;
-    margin: 0px;
+ padding: 1px;
+ margin: 0px;
 }
 
 .lms-image-grid div div.v-card {
-    background-color:transparent !important;
+ background-color:transparent !important;
 }
 
 .image-grid-item img {
-    object-fit: cover;
-    object-position: 50% 0%;
-    display: block;
-    height: 150px !important;
-    width: 150px !important;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 4px;
+ object-fit: cover;
+ object-position: 50% 0%;
+ display: block;
+ height: 150px !important;
+ width: 150px !important;
+ margin-left: auto;
+ margin-right: auto;
+ margin-bottom: 4px;
 }
 
 .v-avatar img {
-    object-fit: cover;
-    object-position: 50% 0%;
+ object-fit: cover;
+ object-position: 50% 0%;
 }
 
 .radio-image img {
-    object-fit:contain !important;
-    object-position: 50% 50% !important;
-    margin-top: auto !important;
-    margin-bottom: auto !important;
+ object-fit:contain !important;
+ object-position: 50% 50% !important;
+ margin-top: auto !important;
+ margin-bottom: auto !important;
 }
 
 .image-grid-text {
-    width: 134px;
-    max-height: 144px;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    padding-left:2px;
-    hyphens: auto;
-    padding-left:2px;
+ width: 134px;
+ max-height: 144px;
+ overflow-wrap: break-word;
+ word-wrap: break-word;
+ -webkit-hyphens: auto;
+ -ms-hyphens: auto;
+ -moz-hyphens: auto;
+ padding-left:2px;
+ hyphens: auto;
+ padding-left:2px;
 }
 
 .image-grid-item {
-    width: 150px;
-    min-height: 190px;
-    max-height: 462px;
-    padding:4px;
-    margin:0px;
-    background-color:rgba(0,0,0,0) !important;
-    cursor: pointer;
+ width: 150px;
+ min-height: 190px;
+ max-height: 462px;
+ padding:4px;
+ margin:0px;
+ background-color:rgba(0,0,0,0) !important;
+ cursor: pointer;
 }
 
 .lms-image-grid div.theme--dark.v-card {
-    background-color:rgba(0,0,0,0) !important;
+ background-color:rgba(0,0,0,0) !important;
 }
 
 .image-grid-select-btn, .image-grid-select-btn:hover {
-    position: absolute;
-    top: 0px !important;
-    left: 0px !important;
-    width: 32px !important;
-    height: 32px !important;
-    z-index:2;
+ position: absolute;
+ top: 0px !important;
+ left: 0px !important;
+ width: 32px !important;
+ height: 32px !important;
+ z-index:2;
 }
 
 .image-grid-btn {
-    position: absolute;
-    top: 146px !important;
-    left: 126px !important;
-    width: 32px !important;
-    height: 32px !important;
+ position: absolute;
+ top: 146px !important;
+ left: 126px !important;
+ width: 32px !important;
+ height: 32px !important;
 }
 
 .image-grid-btn:hover {
-    position: absolute;
-    z-index:2;
+ position: absolute;
+ z-index:2;
 }
 
 @media only screen and (max-width: 600px) {
-    .lms-image-grid {
-        grid-template-columns: repeat(auto-fit, minmax(134px, 1fr));
-    }
+ .lms-image-grid {
+  grid-template-columns: repeat(auto-fit, minmax(134px, 1fr));
+ }
 
-    .lms-image-grid-few {
-        grid-template-columns: repeat(auto-fit, minmax(134px, 146px)) !important;
-    }
+ .lms-image-grid-few {
+  grid-template-columns: repeat(auto-fit, minmax(134px, 146px)) !important;
+ }
 
-    .image-grid-item {
-        width: 130px !important;
-        min-height: 170px !important;
-        max-height: 442px !important;
-    }
+ .image-grid-item {
+  width: 130px !important;
+  min-height: 170px !important;
+  max-height: 442px !important;
+ }
 
-    .image-grid-item img {
-        height: 130px !important;
-        width: 130px !important;
-    }
+ .image-grid-item img {
+  height: 130px !important;
+  width: 130px !important;
+ }
 
-    .image-grid-text {;
-        width: 118px;
-    }
+ .image-grid-text {;
+  width: 118px;
+ }
 
-    .image-grid-btn {
-        top: 128px !important;
-        left: 104px !important;
-    }
+ .image-grid-btn {
+  top: 128px !important;
+  left: 104px !important;
+ }
 }
 
 @media only screen and (max-width: 450px) {
-    .lms-image-grid {
-        grid-template-columns: repeat(auto-fit, minmax(119px, 1fr));
-    }
+ .lms-image-grid {
+  grid-template-columns: repeat(auto-fit, minmax(119px, 1fr));
+ }
 
-    .lms-image-grid-few {
-        grid-template-columns: repeat(auto-fit, minmax(119px, 131px)) !important;
-    }
+ .lms-image-grid-few {
+  grid-template-columns: repeat(auto-fit, minmax(119px, 131px)) !important;
+ }
 
-    .image-grid-item {
-        width: 115px !important;
-        min-height: 155px !important;
-        max-height: 442px !important;
-    }
+ .image-grid-item {
+  width: 115px !important;
+  min-height: 155px !important;
+  max-height: 442px !important;
+ }
 
-    .image-grid-item img {
-        height: 115px !important;
-        width: 115px !important;
-    }
+ .image-grid-item img {
+  height: 115px !important;
+  width: 115px !important;
+ }
 
-    .image-grid-text {;
-        width: 102px;
-    }
+ .image-grid-text {;
+  width: 102px;
+ }
 
-    .image-grid-btn {
-        top: 114px !important;
-        left: 89px !important;
-    }
+ .image-grid-btn {
+  top: 114px !important;
+  left: 89px !important;
+ }
 }
 
 @media only screen and (max-width: 350px) {
-    .lms-image-grid {
-        grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
-    }
+ .lms-image-grid {
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+ }
 
-    .lms-image-grid-few {
-        grid-template-columns: repeat(auto-fit, minmax(104, 116px)) !important;
-    }
+ .lms-image-grid-few {
+  grid-template-columns: repeat(auto-fit, minmax(104, 116px)) !important;
+ }
 
-    .image-grid-item {
-        width: 100px !important;
-        min-height: 140px !important;
-        max-height: 442px !important;
-    }
+ .image-grid-item {
+  width: 100px !important;
+  min-height: 140px !important;
+  max-height: 442px !important;
+ }
 
-    .image-grid-item img {
-        height: 100px !important;
-        width: 100px !important;
-    }
+ .image-grid-item img {
+  height: 100px !important;
+  width: 100px !important;
+ }
 
-    .image-grid-text {
-        width: 88px;
-    }
+ .image-grid-text {
+  width: 88px;
+ }
 
-    .image-grid-btn {
-        top: 96px !important;
-        left: 76px !important;
-    }
+ .image-grid-btn {
+  top: 96px !important;
+  left: 76px !important;
+ }
 }
 
 .error-text {
-    background-color: red;
+ background-color: red;
 }
 
 .padding {
-    height:8px;
+ height:8px;
 }
 
 .dialog-padding {
-    height:24px;
+ height:24px;
 }
 
 .maintoolbar-title {
-    font-size:85% !important;
+ font-size:85% !important;
 }
 
 .maintoolbar-subtitle {
-    font-size:85% !important;
+ font-size:85% !important;
 }
 
 .subtoolbar-title {
-    margin-left: 4px;
-    margin-bottom:0px !important;
-    padding-bottom:0px !important;
+ margin-left: 4px;
+ margin-bottom:0px !important;
+ padding-bottom:0px !important;
 }
 
 .subtoolbar-title-single {
-    height:var(--sub-toolbar-height) !important;
-    line-height:var(--sub-toolbar-height) !important;
+ height:var(--sub-toolbar-height) !important;
+ line-height:var(--sub-toolbar-height) !important;
 }
 
 .subtext {
-    font-weight: 400;
-    opacity:0.7;
+ font-weight: 400;
+ opacity:0.7;
 }
 
 .subtoolbar-subtitle {
-    margin-left: 4px;
-    padding-top: 0px;
-    margin-top:-2px !important;
+ margin-left: 4px;
+ padding-top: 0px;
+ margin-top:-2px !important;
 }
 
 .vol-text {
-    width:100%;
-    text-align:center;
-    vertical-align: middle;
+ width:100%;
+ text-align:center;
+ vertical-align: middle;
 }
 
 .vol-slider {
-    margin-top:6px;
-    margin-left:8px;
-    margin-right:8px;
-    padding:0px;
-    height: 32px;
+ margin-top:6px;
+ margin-left:8px;
+ margin-right:8px;
+ padding:0px;
+ height: 32px;
 }
 
 .vol-btn {
-    width: 32px;
-    height: 32px;
+ width: 32px;
+ height: 32px;
 }
 
 .toolbar-menu {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
 }
 
 .toolbar-player-list {
-    max-height:calc((var(--vh, 1vh)*100) - 16px);
-    overflow-y:auto;
+ max-height:calc((var(--vh, 1vh)*100) - 16px);
+ overflow-y:auto;
 }
 
 .toolbar-player-list .v-list__tile .v-list__tile__content .v-list__tile__title {
-    margin-right: 20px;
+ margin-right: 20px;
 }
 
 /* Stop vuetify changing padding when width changes */
 @media only screen and (max-width: 959px) {
-  .v-toolbar__content,
-  .v-toolbar__extension {
-    padding: 0 24px;
+ .v-toolbar__content,
+ .v-toolbar__extension {
+   padding: 0 24px;
   }
 }
 
 .pm-noicon-indent {
-    margin-left: 44px;
+ margin-left: 44px;
 }
 
 .pm-icon-indent {
-    margin-left: 20px;
+ margin-left: 20px;
 }
 
 .slightly-dimmed {
-    opacity:0.5;
+ opacity:0.5;
 }
 
 .dimmed {
-    opacity:0.25;
+ opacity:0.25;
 }
 
 .pq-details {
-    padding-left: 17px;
+ padding-left: 17px;
 }
 
 .toolbar-button {
-    margin:4px;
-    min-height:36px !important;
-    min-width:36px !important;
+ margin:4px;
+ min-height:36px !important;
+ min-width:36px !important;
 }
 
 .browse-text {
-    padding:16px 16px 0px 16px;
-    font-size: 16px;
-    font-weight: 200;
+ padding:16px 16px 0px 16px;
+ font-size: 16px;
+ font-weight: 200;
 }
 
 .browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img {
-    max-width: 300px !important;
-    max-height: 300px !important;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 16px;
-    display: block;
+ max-width: 300px !important;
+ max-height: 300px !important;
+ margin-left: auto;
+ margin-right: auto;
+ margin-bottom: 16px;
+ display: block;
 }
 
 .np-playpause {
-    margin: 2px !important;
-    width: 48px !important;
-    height: 48px !important;
+ margin: 2px !important;
+ width: 48px !important;
+ height: 48px !important;
 }
 
 .np-std-button {
-    margin: 7px;
-    width: 38px !important;
-    height: 38px !important;
+ margin: 7px;
+ width: 38px !important;
+ height: 38px !important;
 }
 
 .np-info-lyrics {
-    text-align: center;
+ text-align: center;
 }
 
 .np-info-tab-cover {
-    background:transparent;
+ background:transparent;
 }
 
 .np-info .v-card {
-    box-shadow: none !important; /* Remove shadow at top of now-playing info dialog buttons */
-    border-radius: 0px; /* And border around cards, which makes holes in the corners! */
+ box-shadow: none !important; /* Remove shadow at top of now-playing info dialog buttons */
+ border-radius: 0px; /* And border around cards, which makes holes in the corners! */
 }
 
 .np-info .v-card__title {
-    padding: 16px 16px 0px 16px;
+ padding: 16px 16px 0px 16px;
 }
 
 .np-info .v-card__title p {
-    font-weight: 600;
-    width: 100%;
-    text-align: center !important;
-    text-transform: uppercase;
-    padding: 0px;
-    margin: 0px;
+ font-weight: 600;
+ width: 100%;
+ text-align: center !important;
+ text-transform: uppercase;
+ padding: 0px;
+ margin: 0px;
 }
 
 .np-title {
-    padding-top: 4px;
-    font-size: 125%;
-    font-weight: 500;
-    letter-spacing: .02em;
+ padding-top: 4px;
+ font-size: 125%;
+ font-weight: 500;
+ letter-spacing: .02em;
 }
 
 .np-text {
-    margin:0px 8px 0px 8px;
-    text-align: center;
+ margin:0px 8px 0px 8px;
+ text-align: center;
 }
 
 .np-text-landscape {
-    margin:16px 8px 16px 8px;
-    font-size: 400%;
-    text-align: center;
+ margin:16px 8px 16px 8px;
+ font-size: 400%;
+ text-align: center;
 }
 
 @media only screen and (max-height: 800px) {
-    .np-text-landscape {
-        margin:12px !important;
-        font-size: 300% !important;
-        text-align: center;
-    }
+ .np-text-landscape {
+  margin:12px !important;
+  font-size: 300% !important;
+  text-align: center;
+ }
 }
 
 @media only screen and (max-height: 700px) {
-    .np-text-landscape {
-        margin:8px !important;
-        font-size: 225% !important;
-        text-align: center;
-    }
+ .np-text-landscape {
+  margin:8px !important;
+  font-size: 225% !important;
+  text-align: center;
+ }
 }
 
 @media only screen and (max-height: 600px) {
-    .np-text-landscape {
-        margin:4px !important;
-        font-size: 175% !important;
-        text-align: center;
-    }
+ .np-text-landscape {
+  margin:4px !important;
+  font-size: 175% !important;
+  text-align: center;
+ }
 }
 
 @media only screen and (max-height: 500px) {
-    .np-text-landscape {
-        margin:4px !important;
-        font-size: 125% !important;
-        text-align: center;
-    }
+ .np-text-landscape {
+  margin:4px !important;
+  font-size: 125% !important;
+  text-align: center;
+ }
 }
 
 @media only screen and (max-height: 400px) {
-    .np-text-landscape {
-        margin:4px !important;
-        font-size: 100% !important;
-        text-align: center;
-    }
+ .np-text-landscape {
+  margin:4px !important;
+  font-size: 100% !important;
+  text-align: center;
+ }
 }
 
 @media only screen and (max-height: 300px) {
-    .np-text-landscape {
-        margin:0px 2px 0px 2px !important;
-        font-size: 75% !important;
-        text-align: center;
-    }
+ .np-text-landscape {
+  margin:0px 2px 0px 2px !important;
+  font-size: 75% !important;
+  text-align: center;
+ }
 }
 
 .np-slider-mobile {
-    height: 5px !important;
-    width: 100%;
+ height: 5px !important;
+ width: 100%;
 }
 
 .np-pos {
-    font-size: 85%;
-    font-weight: 400;
-    font-family: monospace, monospace;
-    text-align: left;
+ font-size: 85%;
+ font-weight: 400;
+ font-family: monospace, monospace;
+ text-align: left;
 }
 
 .np-tech {
-    font-size: 85%;
-    font-weight: 400;
-    font-family: monospace, monospace;
-    text-align: center;
+ font-size: 85%;
+ font-weight: 400;
+ font-family: monospace, monospace;
+ text-align: center;
 }
 
 .np-duration {
-    font-size: 85%;
-    font-weight: 400;
-    font-family: monospace, monospace;
-    text-align: right;
+ font-size: 85%;
+ font-weight: 400;
+ font-family: monospace, monospace;
+ text-align: right;
 }
 
 .np-controls {
-    font-weight:400;
-    padding:8px;
-    width:100%;
-    position:absolute;
-    bottom:0px;
+ font-weight:400;
+ padding:8px;
+ width:100%;
+ position:absolute;
+ bottom:0px;
 }
 
 .np-controls-wide {
-    font-weight:400;
-    padding:8px;
-    width:calc(50vw - 16px);
-    position:absolute;
-    bottom:0px;
+ font-weight:400;
+ padding:8px;
+ width:calc(50vw - 16px);
+ position:absolute;
+ bottom:0px;
 }
 
 .np-info {
-    width:100vw;
-    display: block;
-    height:auto;
+ width:100vw;
+ display: block;
+ height:auto;
 }
 
 .np-info-text {
-    height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 50px));
-    overflow:auto;
-    max-width:1000px;
-    margin-left: auto;
-    margin-right: auto;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 50px));
+ overflow:auto;
+ max-width:1000px;
+ margin-left: auto;
+ margin-right: auto;
 }
 
 progress {
-    border:0;
+ border:0;
 }
 
 .bgnd-cover {
-    background-size:cover !important;
-    background-repeat:no-repeat !important;
-    background-position:center top !important;
+ background-size:cover !important;
+ background-repeat:no-repeat !important;
+ background-position:center top !important;
 }
 
 .ellipsis {
-    text-overflow:ellipsis; 
-    overflow: hidden; 
-    white-space: nowrap;
+ text-overflow:ellipsis; 
+ overflow: hidden; 
+ white-space: nowrap;
 }
 
 .truncate-multiline {
@@ -582,233 +578,233 @@ progress {
 }
 
 .shuffle-albums {
-    border: 2px solid;
-    border-radius: 50%;
-    padding:-2px;
+ border: 2px solid;
+ border-radius: 50%;
+ padding:-2px;
 }
 
 .pq-current {
-    border: 1px solid rgb(25, 118, 210);
-    border-radius: 4px;
-    background-color:rgba(25, 118, 210, 0.15);
+ border: 1px solid rgb(25, 118, 210);
+ border-radius: 4px;
+ background-color:rgba(25, 118, 210, 0.15);
 }
 
-.pq-current div.v-list__tile__title /*, .pq-current div.v-list__tile__sub-title, .pq-current div.v-list__tile__action.pq-time*/ {
-    font-weight: 600;
+.pq-current div.v-list__tile__title {
+ font-weight: 600;
 }
 
 .pq-text {
-    padding-left: 4px;
-    padding-top:12px; /* TODO: This should not be required! */
-    display: table-cell !important;
-    vertical-align: middle !important;
+ padding-left: 4px;
+ padding-top:12px; /* TODO: This should not be required! */
+ display: table-cell !important;
+ vertical-align: middle !important;
 }
 
 .pq-time {
-    font-size:90%;
-    margin-right:-16px;
-    opacity:0.7;
+ font-size:90%;
+ margin-right:-16px;
+ opacity:0.7;
 }
 
 .dialog--fullscreen > .card {
-    padding-left:8px !important;
-    padding-right:8px !important;
+ padding-left:8px !important;
+ padding-right:8px !important;
 }
 
 .settings-title .lms-toolbar .v-toolbar__title {
-    font-size: 110% !important;
-    font-weight: 600;
+ font-size: 110% !important;
+ font-weight: 600;
 }
 
 .settings-title {
-    height: 56px !important;
-    max-height: 56px !important;
-    margin: 0px !important;
-    padding: 0px !important;
+ height: 56px !important;
+ max-height: 56px !important;
+ margin: 0px !important;
+ padding: 0px !important;
 }
 
 .settings-list {
-    width:100%;
-    height:100%;
-    max-width:700px;
-    padding-left:8px;
-    margin-left: auto;
-    margin-right: auto;
+ width:100%;
+ height:100%;
+ max-width:700px;
+ padding-left:8px;
+ margin-left: auto;
+ margin-right: auto;
 }
 
 .settings-sub-pad {
-    height: 16px;
+ height: 16px;
 }
 
 .settings-compact-row {
-    height: 48px !important;
+ height: 48px !important;
 }
 
 .switch-label {
-    cursor: pointer;
-    margin-right: 8px;
+ cursor: pointer;
+ margin-right: 8px;
 }
 
 #browse-list .v-subheader {
-    cursor: pointer;
+ cursor: pointer;
 }
 
 .switch-label .v-list__tile__title {
-    white-space: normal;
-    min-height: 24px;
-    max-height: 72px;
-    height: auto;
+ white-space: normal;
+ min-height: 24px;
+ max-height: 72px;
+ height: auto;
 }
 
 .switch-label .v-list__tile__sub-title {
-    white-space: normal;
-    min-height: 24px;
-    max-height: 240px;
-    height: auto;
+ white-space: normal;
+ min-height: 24px;
+ max-height: 240px;
+ height: auto;
 }
 
 .v-list__tile__action .v-input--switch {
-    max-width:36px;
+ max-width:36px;
 }
 
 .v-dialog .v-card .v-card__text .v-list--two-line .v-list__tile {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    min-height: 58px;
-    max-height: 232px;
-    height: auto;
+ margin-top: 8px;
+ margin-bottom: 8px;
+ min-height: 58px;
+ max-height: 232px;
+ height: auto;
 }
 
 .lms-dialog {
-    padding: 16px;
+ padding: 16px;
 }
 
 .alarm-entry {
-    min-height: 48px !important;
-    max-height: 144px !important;
+ min-height: 48px !important;
+ max-height: 144px !important;
 }
 
 .alarm-divider {
-    margin-top:8px;
-    margin-bottom:-8px;
-    height:12px;
+ margin-top:8px;
+ margin-bottom:-8px;
+ height:12px;
 }
 
 .alarm-sched-header {
-    height:22px;
+ height:22px;
 }
 
 .alarm-add {
-    margin-top: 16px;
+ margin-top: 16px;
 }
 
 .alarm-dialog {
-    max-width: 200px !important;
+ max-width: 200px !important;
 }
 
 .info-pad {
-    padding-top: 24px; /* add padding as not using v-card-text due to issues on older iOS?? */
+ padding-top: 24px; /* add padding as not using v-card-text due to issues on older iOS?? */
 }
 
 .pmgr-card-text {
-    padding: 16px 32px 16px 32px; /* add padding as not using v-card-text due to issues on older iOS?? */
-    width:100%;
-    height:100%;
+ padding: 16px 32px 16px 32px; /* add padding as not using v-card-text due to issues on older iOS?? */
+ width:100%;
+ height:100%;
 }
 
 .pmgr-playerlist {
-    margin-left:-12px;
-    margin-right:-14px;
+ margin-left:-12px;
+ margin-right:-14px;
 }
 
 .pmgr-container {
-    padding: 0px;
+ padding: 0px;
 }
 
 .pmgr-divider {
-    margin-top:4px;
-    margin-bottom:4px;
+ margin-top:4px;
+ margin-bottom:4px;
 }
 
 .pmgr-vol-slider {
-    margin-top:-12px;
-    margin-left:8px;
-    margin-right:8px;
-    height: 20px;
+ margin-top:-12px;
+ margin-left:8px;
+ margin-right:8px;
+ height: 20px;
 }
 
 .pmgr-btn {
-    margin: -12px 0px 0px 0px;
-    width: 32px;
-    height: 32px;
+ margin: -12px 0px 0px 0px;
+ width: 32px;
+ height: 32px;
 }
 
 .pmgr-vol {
-    width:82px;
-    padding-top: 0px;
-    margin-top: -6px;
-    height:32px;
-    text-align:center;
-    vertical-align: middle;
+ width:82px;
+ padding-top: 0px;
+ margin-top: -6px;
+ height:32px;
+ text-align:center;
+ vertical-align: middle;
 }
 
 .pmgr-grp-title {
-    font-weight: 600;
-    width: 100%;
-    text-transform: uppercase;
-    margin-top:16px;
-    margin-bottom:4px;
+ font-weight: 600;
+ width: 100%;
+ text-transform: uppercase;
+ margin-top:16px;
+ margin-bottom:4px;
 }
 
 .pmgr-master {
-    opacity: 0.7;
-    margin-left: 8px;
+ opacity: 0.7;
+ margin-left: 8px;
 }
 
 .svg-list-img {
-    width: 32px !important;
-    height: 32px !important;
-    vertical-align: middle;
+ width: 32px !important;
+ height: 32px !important;
+ vertical-align: middle;
 }
 
 .svg-img, .radio-image .svg-img {
-    width: 24px !important;
-    height: 24px !important;
-    vertical-align: middle;
+ width: 24px !important;
+ height: 24px !important;
+ vertical-align: middle;
 }
 
 .vue-splitter .splitter {
-    margin-bottom:4px;
+ margin-bottom:4px;
 }
 
 div.v-subheader {
-    font-size: 16px;
+ font-size: 16px;
 }
 
 .rstar {
-    font-size: 14px;
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    vertical-align: bottom;
+ font-size: 14px;
+ font-family: 'Material Icons';
+ font-weight: normal;
+ font-style: normal;
+ vertical-align: bottom;
 }
 
 .pointer {
-    cursor: pointer;
+ cursor: pointer;
 }
 
 .player-icon-pad {
-    padding-right: 8px;
+ padding-right: 8px;
 }
 
 @media (hover: none) {
-    :hover:before {
-        background-color: transparent !important;
-    }
+ :hover:before {
+  background-color: transparent !important;
+ }
 }
 
 .lms-avatar .v-avatar {
-    width: 50px !important;
-    height: 50px !important;
-    margin-left: -4px;
+ width: 50px !important;
+ height: 50px !important;
+ margin-left: -4px;
 }

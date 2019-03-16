@@ -6,79 +6,79 @@
  */
 
 ::-webkit-scrollbar {
-    background: #c0c0c0;
+ background: #c0c0c0;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #888;
+ background: #888;
 }
 
 ::-webkit-scrollbar-corner {
-    background: #ddd;
+ background: #ddd;
 }
 
 html {
-    background-color: #f5f5f5;
+ background-color: #f5f5f5;
 }
 
 .vue-splitter .splitter {
-    background-color: #f0f0f0 !important;
+ background-color: #f0f0f0 !important;
 }
 
 .np-bar {
-    background-color: #f5f5f5;
+ background-color: #f5f5f5;
 }
 
 .np-info-cover {
-    background-color:#fff;
+ background-color:#fff;
 }
 
 .np-info-card-cover, .np-info .theme--light.v-tabs__bar {
-    background:rgba(255, 255, 255, 0.9) !important;
+ background:rgba(255, 255, 255, 0.9) !important;
 }
 
 .np-slider {
-    color:#346dd2;
-    background-color: #ccc;
-    border-top: 2px solid #f5f5f5 !important;
-    border-bottom: 2px solid #f5f5f5 !important;
+ color:#346dd2;
+ background-color: #ccc;
+ border-top: 2px solid #f5f5f5 !important;
+ border-bottom: 2px solid #f5f5f5 !important;
 }
 
 .np-slider-mobile {
-    color:#346dd2;
-    background-color: rgba(0, 0, 0, 0.1) !important;
+ color:#346dd2;
+ background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 progress::-webkit-progress-bar {
-    background-color: #ccc;
+ background-color: #ccc;
 }
 
 .np-slider-mobile::-webkit-progress-bar {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+ background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 progress::-webkit-progress-value {
-    background-color:#346dd2;
+ background-color:#346dd2;
 }
 
 progress::-moz-progress-bar {
-    background-color:#346dd2;
+ background-color:#346dd2;
 }
 
 .subtoolbar {
-    background-color: #fff !important;
-    border-bottom: 1px solid #f0f0f0;
+ background-color: #fff !important;
+ border-bottom: 1px solid #f0f0f0;
 }
 
 .lms-bottom-nav {
-    border-top: 1px solid #ddd;
+ border-top: 1px solid #ddd;
 }
 
 div.v-avatar i.v-icon, .v-list__tile__title div i.v-icon {
-    color: #272727;
+ color: #272727;
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {
-    color: #0e0e0e !important;
+ color: #0e0e0e !important;
 }
 

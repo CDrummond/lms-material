@@ -10,6 +10,8 @@
 6. Add a note to 'save defaults' dialog stating that 'Applicaiton layout' is
    not saved as a default.
 7. Add custom add/remove favourite icons.
+9. Only allow to pin items that have an icon or image, and are not entry
+   fields.
 
 0.3.6
 -----

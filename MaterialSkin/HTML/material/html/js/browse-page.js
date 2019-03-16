@@ -17,10 +17,10 @@ var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"album"};
 var RENAME_PL_ACTION        = {cmd:"rename-pl",  icon:"edit"};
 var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
 var EDIT_FAV_ACTION         = {cmd:"edit-fav",   icon:"edit"};
-var ADD_FAV_ACTION          = {cmd:"add-fav",    icon:"favorite_border"};
+var ADD_FAV_ACTION          = {cmd:"add-fav",    svg:"add-favorite"};
 var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
-var ADD_TO_FAV_ACTION       = {cmd:"addfav",     icon:"favorite_border"};
-var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  icon:"delete_outline"};
+var ADD_TO_FAV_ACTION       = {cmd:"addfav",     svg:"add-favorite"};
+var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  svg:"remove-favorite"};
 var PIN_ACTION              = {cmd:"pin",        svg: "pin"};
 var UNPIN_ACTION            = {cmd:"unpin",      svg: "unpin"};
 var SELECT_ACTION           = {cmd:"select",     icon:"check_box_outline_blank"};
@@ -123,7 +123,10 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-for="(action, index) in menuActions">
-    <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button" :title="action.title"><v-icon>{{action.icon}}</v-icon></v-btn>
+    <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button" :title="action.title">
+      <img v-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{action.icon}}</v-icon>
+    </v-btn>
    </template>
   </v-layout>
  </div>

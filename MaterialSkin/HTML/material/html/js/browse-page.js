@@ -269,10 +269,6 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-list>
  </v-menu>
-
- <lms-randommix></lms-randommix>
- <lms-favorite></lms-favorite>
- <lms-rating-dialog><lms-rating-dialog>
 </div>
       `,
     props: [ 'desktop' ],

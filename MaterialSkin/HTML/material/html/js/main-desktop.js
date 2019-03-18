@@ -9,6 +9,9 @@ Vue.use(VueLazyload);
 
 var app = new Vue({
     el: '#app',
+    data() {
+        return { loaded: false}
+    },
     created() {
         parseQueryParams();
         this.$store.commit('initUiSettings');

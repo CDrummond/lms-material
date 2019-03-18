@@ -375,6 +375,14 @@ Vue.component('lms-toolbar', {
         menuAction(id) {
             if (TB_SERVER_SETTINGS.id==id) {
                 serverSettings();
+            } else if (TB_UI_SETTINGS.id==id) {
+                bus.$emit('dlg.open', 'uisettings');
+            } else if (TB_PLAYER_SETTINGS.id==id) {
+                bus.$emit('dlg.open', 'playersettings');
+            } else if (TB_INFO.id==id) {
+                bus.$emit('dlg.open', 'info');
+            } else if (TB_MANAGE_PLAYERS.id==id) {
+                bus.$emit('dlg.open', 'manage');
             } else {
                 bus.$emit('toolbarAction', id);
             }
@@ -402,7 +410,7 @@ Vue.component('lms-toolbar', {
             } else if (this.playerStatus.volume<0) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 0]);
             } else {
-                bus.$emit('volume');
+                bus.$emit('dlg.open', 'volume');
             }
         }
     },

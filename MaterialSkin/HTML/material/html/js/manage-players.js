@@ -30,7 +30,7 @@ Vue.component('lms-manage-players', {
     <v-layout row wrap>
      <template v-for="(player, index) in players" :key="player.id">
       <v-flex xs12 v-if="0==index && (manageGroups || player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat icon @click="bus.$emit('createGroup')" :title="i18n('Create group')"><v-icon>add_circle_outline</v-icon></v-btn></v-flex>
+      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat icon @click="createGroup" :title="i18n('Create group')"><v-icon>add_circle_outline</v-icon></v-btn></v-flex>
       <v-flex xs12 v-if="(manageGroups && 0==index && !player.isgroup) || (index>0 && players[index-1].isgroup && !player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
@@ -96,29 +96,27 @@ Vue.component('lms-manage-players', {
         }
     },
     mounted() {
-        bus.$on('toolbarAction', function(act) {
-            if (act==TB_MANAGE_PLAYERS.id) {
-                this.getPlayerList();
-                this.show = true;
-                bus.$emit('dialogOpen', this.show);
+        bus.$on('manage.open', function(act) {
+            this.getPlayerList();
+            this.show = true;
+            bus.$emit('dialogOpen', this.show);
 
-                // Check to see if we can manage groups...
-                this.manageGroups = getLocalStorageBool('manageGroups', false);
-                lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
-                    if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
-                        lmsCommand("", ["playergroups", "can-manage"]).then(({data}) => {
-                            this.manageGroups = undefined!=data.result && 1==data.result['can-manage'];
-                            setLocalStorageVal('manageGroups', this.manageGroups);
-                        }).catch(err => {
-                            this.manageGroups = false;
-                            setLocalStorageVal('manageGroups', this.manageGroups);
-                        });
-                    } else {
+            // Check to see if we can manage groups...
+            this.manageGroups = getLocalStorageBool('manageGroups', false);
+            lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
+                    lmsCommand("", ["playergroups", "can-manage"]).then(({data}) => {
+                        this.manageGroups = undefined!=data.result && 1==data.result['can-manage'];
+                        setLocalStorageVal('manageGroups', this.manageGroups);
+                    }).catch(err => {
                         this.manageGroups = false;
                         setLocalStorageVal('manageGroups', this.manageGroups);
-                    }
-                });
-            }
+                    });
+                } else {
+                    this.manageGroups = false;
+                    setLocalStorageVal('manageGroups', this.manageGroups);
+                }
+            });
         }.bind(this));
 
         bus.$on('syncChanged', function() {
@@ -161,15 +159,18 @@ Vue.component('lms-manage-players', {
             }
             this.menu.show = true;
         },
+        createGroup() {
+            bus.$emit('dlg.open', 'group', 'create')
+        },
         playerAction(player, cmd) {
             if (PMGR_EDIT_GROUP_ACTION.cmd==cmd) {
-                bus.$emit('editGroup', player);
+                bus.$emit('dlg.open', 'group', 'edit', player);
             } else if (PMGR_DELETE_GROUP_ACTION.cmd==cmd) {
                 this.deleteGroup(player);
             } else if (PMGR_SYNC_ACTION.cmd==cmd) {
-                bus.$emit('synchronise', player);
+                bus.$emit('dlg.open', 'sync', player);
             } else if (PMGR_SETTINGS_ACTION.cmd==cmd) {
-                bus.$emit('playerSettings', player);
+                bus.$emit('dlg.open', 'playersettings', player);
             } else if (PMGR_POWER_ON_ACTION.cmd==cmd || PMGR_POWER_OFF_ACTION.cmd==cmd) {
                 this.togglePower(player);
             }

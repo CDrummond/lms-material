@@ -47,7 +47,7 @@ Vue.component('lms-volume', {
             }
         }.bind(this));
         
-        bus.$on('volume', function() {
+        bus.$on('volume.open', function() {
             lmsCommand(this.$store.state.player.id, ["mixer", "volume", "?"]).then(({data}) => {
                 if (data && data.result && data.result._volume) {
                     var vol = parseInt(data.result._volume);

@@ -119,9 +119,5 @@ function initApp(app) {
 
     // https://github.com/timruffles/mobile-drag-drop/issues/77
     window.addEventListener( 'touchmove', function() {});
-
-    app.$nextTick(function () {
-        app.loaded = true;
-    });
 }
 

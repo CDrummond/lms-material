@@ -51,7 +51,7 @@ Vue.component('lms-randommix', {
         }
     },
     mounted() {
-        bus.$on('randomMix', function() {
+        bus.$on('rndmix.open', function() {
             this.playerId = this.$store.state.player.id;
             lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
                 if (data && data.result && data.result._randomplayisactive) {

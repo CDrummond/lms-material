@@ -54,7 +54,7 @@ Vue.component('lms-sync-dialog', {
         }
     },
     mounted() {
-        bus.$on('synchronise', function(player) {
+        bus.$on('sync.open', function(player) {
             this.player = player;
             lmsCommand(this.player.id, ["sync", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._sync) {

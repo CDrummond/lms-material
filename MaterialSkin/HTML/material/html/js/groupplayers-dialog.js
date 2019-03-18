@@ -74,35 +74,36 @@ Vue.component('lms-groupplayers-dialog', {
         }
     },
     mounted() {
-        bus.$on('editGroup', function(player) {
-            this.setDefaults();
-            this.player = player;
-            this.name = player.name;
-            this.prevName = player.name;
-            this.unknownIds = [];
+        bus.$on('group.open', function(mode, player) {
+            if ('edit'==mode) {
+                this.setDefaults();
+                this.player = player;
+                this.name = player.name;
+                this.prevName = player.name;
+                this.unknownIds = [];
 
-            lmsCommand(this.player.id, ["playergroup", 0, 255]).then(({data}) => {
-                if (data && data.result) {
-                    this.options.powerMaster = 1 == parseInt(data.result.powerMaster);
-                    this.options.powerPlay = 1 == parseInt(data.result.powerPlay);
-                    if (data.result.players_loop) {
-                        data.result.players_loop.forEach(p => {
-                            if (this.playerIds.has(p.id)) {
-                                this.chosenPlayers.push(p.id);
-                            } else {
-                                // Chosen player ID is not connected, or unknown?
-                                // Save, so that we re-add when updating
-                                this.unknownIds.push(p.id);
-                            }
-                        });
+                lmsCommand(this.player.id, ["playergroup", 0, 255]).then(({data}) => {
+                    if (data && data.result) {
+                        this.options.powerMaster = 1 == parseInt(data.result.powerMaster);
+                        this.options.powerPlay = 1 == parseInt(data.result.powerPlay);
+                        if (data.result.players_loop) {
+                            data.result.players_loop.forEach(p => {
+                                if (this.playerIds.has(p.id)) {
+                                    this.chosenPlayers.push(p.id);
+                                } else {
+                                    // Chosen player ID is not connected, or unknown?
+                                    // Save, so that we re-add when updating
+                                    this.unknownIds.push(p.id);
+                                }
+                            });
+                        }
+                        this.show = true;
                     }
-                    this.show = true;
-                }
-            });
-        }.bind(this));
-        bus.$on('createGroup', function() {
-            this.setDefaults();
-            this.show = true;
+                });
+            } else if ('create'==mode) {
+                this.setDefaults();
+                this.show = true;
+            }
         }.bind(this));
     },
     methods: {

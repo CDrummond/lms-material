@@ -254,57 +254,55 @@ Vue.component('lms-ui-settings', {
         }
     },
     mounted() {
-        bus.$on('toolbarAction', function(act) {
-            if (act==TB_UI_SETTINGS.id) {
-                this.darkUi = this.$store.state.darkUi;
-                this.artistAlbumSort = this.$store.state.artistAlbumSort;
-                this.albumSort = this.$store.state.albumSort;
-                this.autoScrollQueue = this.$store.state.autoScrollQueue;
-                this.stopButton = this.$store.state.stopButton;
-                this.browseBackdrop = this.$store.state.browseBackdrop;
-                this.queueBackdrop = this.$store.state.queueBackdrop;
-                this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
-                this.infoBackdrop = this.$store.state.infoBackdrop;
-                this.techInfo = this.$store.state.techInfo;
-                this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
-                this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
-                this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
-                this.useGrid=this.$store.state.useGrid;
-                this.sortFavorites = this.$store.state.sortFavorites;
-                this.serverMenus = this.$store.state.serverMenus;
-                this.showMenuAudio = this.$store.state.showMenuAudio;
-                this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
-                this.layout = getLocalStorageVal("layout", "auto");
-                this.layoutOrig = this.layout;
-                this.volumeStep = volumeStep;
-                this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
-                this.show = true;
-                bus.$emit('dialogOpen', this.show);
+        bus.$on('uisettings.open', function(act) {
+            this.darkUi = this.$store.state.darkUi;
+            this.artistAlbumSort = this.$store.state.artistAlbumSort;
+            this.albumSort = this.$store.state.albumSort;
+            this.autoScrollQueue = this.$store.state.autoScrollQueue;
+            this.stopButton = this.$store.state.stopButton;
+            this.browseBackdrop = this.$store.state.browseBackdrop;
+            this.queueBackdrop = this.$store.state.queueBackdrop;
+            this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
+            this.infoBackdrop = this.$store.state.infoBackdrop;
+            this.techInfo = this.$store.state.techInfo;
+            this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
+            this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
+            this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
+            this.useGrid=this.$store.state.useGrid;
+            this.sortFavorites = this.$store.state.sortFavorites;
+            this.serverMenus = this.$store.state.serverMenus;
+            this.showMenuAudio = this.$store.state.showMenuAudio;
+            this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
+            this.layout = getLocalStorageVal("layout", "auto");
+            this.layoutOrig = this.layout;
+            this.volumeStep = volumeStep;
+            this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
+            this.show = true;
+            bus.$emit('dialogOpen', this.show);
 
-                lmsList("", ["libraries"]).then(({data}) => {
-                    if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                        data.result.folder_loop.forEach(i => {
-                            this.libraries.push(i);
-                        });
-                        this.libraries.sort(function(a, b) {
-                                                                var nameA = a.name.toUpperCase();
-                                                                var nameB = b.name.toUpperCase();
-                                                                if (nameA < nameB) {
-                                                                    return -1;
-                                                                }
-                                                                if (nameA > nameB) {
-                                                                    return 1;
-                                                                }
-                                                                return 0;
-                                                            });
-                        this.libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
-                        this.library = this.$store.state.library;
-                        if (!this.library) {
-                            this.library=this.libraries[0].id;
-                        }
+            lmsList("", ["libraries"]).then(({data}) => {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                    data.result.folder_loop.forEach(i => {
+                        this.libraries.push(i);
+                    });
+                    this.libraries.sort(function(a, b) {
+                                                            var nameA = a.name.toUpperCase();
+                                                            var nameB = b.name.toUpperCase();
+                                                            if (nameA < nameB) {
+                                                                return -1;
+                                                            }
+                                                            if (nameA > nameB) {
+                                                                return 1;
+                                                            }
+                                                            return 0;
+                                                        });
+                    this.libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
+                    this.library = this.$store.state.library;
+                    if (!this.library) {
+                        this.library=this.libraries[0].id;
                     }
-                });
-            }
+                }
+            });
         }.bind(this));
 
         bus.$on('closeDialog', function(name) {

@@ -10,7 +10,8 @@ Vue.use(VueLazyload);
 var app = new Vue({
     el: '#app',
     data() {
-        return { loaded: false}
+        return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
+                            manage: false, rndmix: false, favorite: false, rating: false }}
     },
     created() {
         parseQueryParams();
@@ -19,6 +20,12 @@ var app = new Vue({
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         initApp(this);
+        bus.$on('dlg.open', function(name, a, b) {
+            this.dialogs[name] = true; // Mount
+            this.$nextTick(function () {
+                bus.$emit(name+".open", a, b);
+            });
+        }.bind(this));
     },
     computed: {
         darkUi() {

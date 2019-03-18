@@ -38,8 +38,7 @@ function logError(err, command, params, start, count) {
 
 function logAndShowError(err, message, command, params, start, count) {
     logError(err, command, params, start, count);
-    var cmd = commandToLog(command, params, start, count);
-    bus.$emit('showError', err, message, 0==cmd.length ? undefined : cmd);
+    bus.$emit('showError', err, message);
 }
 
 function formatSeconds(secs, showDays) {

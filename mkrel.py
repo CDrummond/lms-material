@@ -20,7 +20,8 @@ INSTALL_XML = "MaterialSkin/install.xml"
 PUBLIC_XML = "public.xml"
 BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
-MINIFY_CODE = False # Change to true when nearer a full release. TODO: Check this actually works!!!
+MINIFY_JS = True # Change to true when nearer a full release. TODO: Check this actually works!!!
+MINIFY_CSS = False # Change to true when nearer a full release. TODO: Check this actually works!!!
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
 CSS_COMPRESSOR = "tools/yuicompressor/yuicompressor-2.4.8.jar"
 COMMON_JS_FILES = [  # Order is important!
@@ -159,12 +160,14 @@ def minifyCss():
 
 def removeUnminified():
     info("...removing non-minified files")
-    for entry in os.listdir("%s/js" % HTML_FOLDER):
-        if entry.endswith(".js") and not entry.endswith(".min.js"):
-            os.remove("%s/js/%s" % (HTML_FOLDER, entry))
-    for entry in os.listdir("%s/css" % HTML_FOLDER):
-        if not entry in NON_MINIFIED_CSS and entry.endswith(".css") and not entry.endswith(".min.css"):
-            os.remove("%s/css/%s" % (HTML_FOLDER, entry))
+    if MINIFY_JS:
+        for entry in os.listdir("%s/js" % HTML_FOLDER):
+            if entry.endswith(".js") and not entry.endswith(".min.js"):
+                os.remove("%s/js/%s" % (HTML_FOLDER, entry))
+    if MINIFY_CSS:
+        for entry in os.listdir("%s/css" % HTML_FOLDER):
+            if not entry in NON_MINIFIED_CSS and entry.endswith(".css") and not entry.endswith(".min.css"):
+                os.remove("%s/css/%s" % (HTML_FOLDER, entry))
 
 
 def fixHtml():
@@ -190,18 +193,18 @@ def fixHtml():
                         for match in matches:
                             matchedCss = True
 
-            if matchedJs:
+            if MINIFY_JS and matchedJs:
                 if not replacedJs:
                     if "index"==html:
-                        fixedLines.append('    <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
+                        fixedLines.append('  <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
                     else:
-                        fixedLines.append('    <script src="html/js/common.min.js?r=[% material_revision %]"></script>\n')
+                        fixedLines.append('  <script src="html/js/common.min.js?r=[% material_revision %]"></script>\n')
                         if "desktop" == html:
-                            fixedLines.append('    <script src="html/js/main-desktop.min.js?r=[% material_revision %]"></script>\n')
+                            fixedLines.append('  <script src="html/js/main-desktop.min.js?r=[% material_revision %]"></script>\n')
                         else:
-                            fixedLines.append('    <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
+                            fixedLines.append('  <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
                     replacedJs = True
-            elif matchedCss:
+            elif MINIFY_CSS and matchedCss:
                 if not replacedCss:
                     fixedLines.append('    <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
                     fixedLines.append('    <link href="html/css/%s.min.css?r=[%% material_revision %%]" rel="stylesheet">\n' % html)
@@ -216,8 +219,10 @@ def fixHtml():
 
 def minify():
     info("Minifying")
-    minifyJs()
-    minifyCss()
+    if MINIFY_JS:
+        minifyJs()
+    if MINIFY_CSS:
+        minifyCss()
     removeUnminified()
     fixHtml()
 
@@ -288,7 +293,7 @@ checkVersion(version)
 checkVersionExists(version)
 updateInstallXml(version)
 prepare()
-if MINIFY_CODE:
+if MINIFY_JS or MINIFY_CSS:
     minify()
 
 zipFile = createZip(version)

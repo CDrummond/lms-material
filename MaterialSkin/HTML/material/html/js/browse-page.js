@@ -1365,7 +1365,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.params.forEach(p => {
                             if ( (!this.options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
                                  (!this.options.noGenreFilter && p.startsWith("genre_id:"))) {
-                                command.command.push(p);
+                                if (!item.id.startsWith("artist_id:") || !p.startsWith("artist_id:")) {
+                                    command.command.push(p);
+                                }
                             }
                         });
                     }

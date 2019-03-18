@@ -44,47 +44,45 @@
     <lms-now-playing :desktop="true"></lms-now-playing>
     <lms-noplayer></lms-noplayer>
     <lms-noconnection></lms-noconnection>
-    <div v-if="loaded">
-     <lms-ui-settings></lms-ui-settings>
-     <lms-player-settings></lms-player-settings>
-     <lms-information-dialog></lms-information-dialog>
-     <lms-sync-dialog></lms-sync-dialog>
-     <lms-groupplayers-dialog></lms-groupplayers-dialog>
-     <lms-volume></lms-volume>
-     <lms-manage-players></lms-manage-players>
-     <lms-randommix></lms-randommix>
-     <lms-favorite></lms-favorite>
-     <lms-rating-dialog></lms-rating-dialog>
-     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="pswp__bg"></div>
-      <div class="pswp__scroll-wrap">
-       <div class="pswp__container">
-        <div class="pswp__item"></div>
-        <div class="pswp__item"></div>
-        <div class="pswp__item"></div>
-       </div>
-       <div class="pswp__ui pswp__ui--hidden">
-        <div class="pswp__top-bar">
-         <div class="pswp__counter"></div>
-         <button class="pswp__button pswp__button--close"></button>
-         <button class="pswp__button pswp__button--fs"></button>
-         <button class="pswp__button pswp__button--zoom"></button>
-         <div class="pswp__preloader">
-          <div class="pswp__preloader__icn">
-           <div class="pswp__preloader__cut">
-            <div class="pswp__preloader__donut"></div>
-           </div>
+<lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>
+    <lms-player-settings v-if="dialogs.playersettings"></lms-player-settings>
+    <lms-information-dialog v-if="dialogs.info"></lms-information-dialog>
+    <lms-sync-dialog v-if="dialogs.sync"></lms-sync-dialog>
+    <lms-groupplayers-dialog v-if="dialogs.group"></lms-groupplayers-dialog>
+    <lms-volume v-if="dialogs.volume"></lms-volume>
+    <lms-manage-players v-if="dialogs.manage"></lms-manage-players>
+    <lms-randommix v-if="dialogs.rndmix"></lms-randommix>
+    <lms-favorite v-if="dialogs.favorite"></lms-favorite>
+    <lms-rating-dialog v-if="dialogs.rating"></lms-rating-dialog>
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+     <div class="pswp__bg"></div>
+     <div class="pswp__scroll-wrap">
+      <div class="pswp__container">
+       <div class="pswp__item"></div>
+       <div class="pswp__item"></div>
+       <div class="pswp__item"></div>
+      </div>
+      <div class="pswp__ui pswp__ui--hidden">
+       <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--close"></button>
+        <button class="pswp__button pswp__button--fs"></button>
+        <button class="pswp__button pswp__button--zoom"></button>
+        <div class="pswp__preloader">
+         <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+           <div class="pswp__preloader__donut"></div>
           </div>
          </div>
         </div>
-        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-         <div class="pswp__share-tooltip"></div>
-        </div>
-        <button class="pswp__button pswp__button--arrow--left"></button>
-        <button class="pswp__button pswp__button--arrow--right"></button>
-        <div class="pswp__caption">
-         <div class="pswp__caption__center"></div>
-        </div>
+       </div>
+       <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+       </div>
+       <button class="pswp__button pswp__button--arrow--left"></button>
+       <button class="pswp__button pswp__button--arrow--right"></button>
+       <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
        </div>
       </div>
      </div>

@@ -46,28 +46,30 @@ Vue.use(VueLazyload);
 var app = new Vue({
     el: '#app',
     data() {
-        return { loaded: false}
+        return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
+                            volume: false, manage: false, rndmix: false, favorite: false, rating: false }}
     },
     created() {
         parseQueryParams();
         this.$store.commit('initUiSettings');
 
-        this.openDialogs = [];
-        bus.$on('dialog', function(name, open) {
-            if (open) {
-                this.openDialogs.push(name);
-            } else {
-                var index = this.openDialogs.indexOf(name);
-                if (index>=0) {
-                    this.openDialogs.splice(index, 1);
-                }
-            }
+        bus.$on('dlg.open', function(name, a, b) {
+            this.dialogs[name] = true; // Mount
+            this.$nextTick(function () {
+                bus.$emit(name+".open", a, b);
+            });
         }.bind(this));
 
         initApp(this);
         this.openDialogs = 0;
 
-        bus.$on('dialogOpen', function(open) {
+        bus.$on('dialogOpen', function(name, open) {
+            this.dialogs['name']=open;
+            if (open) {
+                this.$nextTick(function () {
+                    bus.$emit(name+".open");
+                });
+            }
             if (open) {
                 this.openDialogs++;
             } else if (this.openDialogs>0) {

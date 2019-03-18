@@ -41,19 +41,20 @@ Vue.component('lms-favorite', {
         }
     },
     mounted() {
-        bus.$on('editFavorite', function(item) {
-            this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
-            this.item = item;
-            this.name = item.title;
-            this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
-            this.show = true;
-        }.bind(this));
-        bus.$on('addFavorite', function() {
-            this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
-            this.item = undefined;
-            this.name = "";
-            this.url = "";
-            this.show=true;
+        bus.$on('favorite.open', function(mode, item) {
+            if ('edit'==mode) {
+                this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
+                this.item = item;
+                this.name = item.title;
+                this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
+                this.show = true;
+            } else if ('add'==mode) {
+                this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
+                this.item = undefined;
+                this.name = "";
+                this.url = "";
+                this.show=true;
+            }
         }.bind(this));
     },
     methods: {

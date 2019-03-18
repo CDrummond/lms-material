@@ -208,49 +208,15 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
 
-        bus.$on('toolbarAction', function(act) {
-            if (act==TB_PLAYER_SETTINGS.id && this.$store.state.player && !this.show) {
+        bus.$on('playersettings.open', function(player) {
+            if (undefined==player && this.$store.state.player && !this.show) {
                 this.playerSettings(this.$store.state.player);
-            }
-        }.bind(this));
-
-        bus.$on('playerSettings', function(player) {
-            if (!this.show) {
+            } else if (undefined!=player && !this.show) {
                 this.playerSettings(player);
             }
         }.bind(this));
     },
     methods: {
-        initItems() {
-            this.crossfadeItems=[
-                { key:'0', label:i18n("No fade")},
-                { key:'1', label:i18n("Crossfade")},
-                { key:'2', label:i18n("Fade in")},
-                { key:'3', label:i18n("Fade out")},
-                { key:'4', label:i18n("Fade in and out")}
-                ];
-            this.replaygainItems=[
-                { key:'0', label:i18n("None")},
-                { key:'1', label:i18n("Track gain")},
-                { key:'2', label:i18n("Album gain")},
-                { key:'3', label:i18n("Smart gain")}
-                ];
-            this.alarmShuffeItems=[
-                { key:'0', label:i18n("Don't shuffle")},
-                { key:'1', label:i18n("Shuffle by song")},
-                { key:'2', label:i18n("Shuffle by album")},
-                ];
-            DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
-            this.sleep.items=[
-                { duration: 15*60, label:i18n("%1 minutes", 15)},
-                { duration: 30*60, label:i18n("%1 minutes", 30)},
-                { duration: 45*60, label:i18n("%1 minutes", 45)},
-                { duration: 60*60, label:i18n("%1 minutes", 60)},
-                { duration: 90*60, label:i18n("%1 minutes", 90)},
-                { duration: -1,    label:i18n("Remaining duration of current track")}/*,
-                { duration: -2,    label:xxx("Remaining duration of play queue")} */
-                ];
-        },
         playerSettings(player) {
             this.dstmItems=[];
             this.crossfade='0';
@@ -332,8 +298,38 @@ Vue.component('lms-player-settings', {
                 }
                 this.loadAlarms();
             });
-            this.show = true;
+            this.show=true;
             bus.$emit('dialogOpen', this.show);
+        },
+        initItems() {
+            this.crossfadeItems=[
+                { key:'0', label:i18n("No fade")},
+                { key:'1', label:i18n("Crossfade")},
+                { key:'2', label:i18n("Fade in")},
+                { key:'3', label:i18n("Fade out")},
+                { key:'4', label:i18n("Fade in and out")}
+                ];
+            this.replaygainItems=[
+                { key:'0', label:i18n("None")},
+                { key:'1', label:i18n("Track gain")},
+                { key:'2', label:i18n("Album gain")},
+                { key:'3', label:i18n("Smart gain")}
+                ];
+            this.alarmShuffeItems=[
+                { key:'0', label:i18n("Don't shuffle")},
+                { key:'1', label:i18n("Shuffle by song")},
+                { key:'2', label:i18n("Shuffle by album")},
+                ];
+            DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
+            this.sleep.items=[
+                { duration: 15*60, label:i18n("%1 minutes", 15)},
+                { duration: 30*60, label:i18n("%1 minutes", 30)},
+                { duration: 45*60, label:i18n("%1 minutes", 45)},
+                { duration: 60*60, label:i18n("%1 minutes", 60)},
+                { duration: 90*60, label:i18n("%1 minutes", 90)},
+                { duration: -1,    label:i18n("Remaining duration of current track")}/*,
+                { duration: -2,    label:xxx("Remaining duration of play queue")} */
+                ];
         },
         close() {
             this.show=false;

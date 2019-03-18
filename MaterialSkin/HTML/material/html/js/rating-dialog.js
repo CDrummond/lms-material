@@ -41,7 +41,7 @@ Vue.component('lms-rating-dialog', {
         }
     },
     mounted() {
-        bus.$on('setRating', function(ids, current) {
+        bus.$on('rating.open', function(ids, current) {
             this.ids = ids;
             if (ids.length>1) {
                 this.title=i18n("Set rating for %1 tracks", ids.length);

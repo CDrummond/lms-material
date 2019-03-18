@@ -73,28 +73,26 @@ Vue.component('lms-information-dialog', {
         }
     },
     mounted() {
-        bus.$on('toolbarAction', function(act) {
-            if (act==TB_INFO.id) {
+        bus.$on('info.open', function(act) {
+            this.update();
+            this.timer = setInterval(function () {
                 this.update();
-                this.timer = setInterval(function () {
-                    this.update();
-                }.bind(this), 2000);
-                this.show = true;
-                bus.$emit('dialogOpen', this.show);
-                var that = this;
-                axios.get((lmsServerAddress.length>1 ? lmsServerAddress : (location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')))+"/updateinfo.json?x=time"+(new Date().getTime())).then(function (resp) {
-                    that.updates = eval(resp.data);
-                    if (!that.updates || !that.updates.plugins) {
-                        that.updates = { plugins: [] };
-                    } else if (that.updates && that.updates.plugins && 1==that.updates.plugins.length && null==that.updates.plugins[0]) {
-                        that.updates.plugins=[];
-                        that.updates.error=i18n('Failed to determine plugin status.');
-                    }
-                }).catch(err => {
+            }.bind(this), 2000);
+            this.show = true;
+            bus.$emit('dialogOpen', this.show);
+            var that = this;
+            axios.get((lmsServerAddress.length>1 ? lmsServerAddress : (location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')))+"/updateinfo.json?x=time"+(new Date().getTime())).then(function (resp) {
+                that.updates = eval(resp.data);
+                if (!that.updates || !that.updates.plugins) {
+                    that.updates = { plugins: [] };
+                } else if (that.updates && that.updates.plugins && 1==that.updates.plugins.length && null==that.updates.plugins[0]) {
+                    that.updates.plugins=[];
                     that.updates.error=i18n('Failed to determine plugin status.');
-                    logError(err);
-                });
-            }
+                }
+            }).catch(err => {
+                that.updates.error=i18n('Failed to determine plugin status.');
+                logError(err);
+            });
         }.bind(this));
 
         bus.$on('langChanged', function() {

@@ -740,7 +740,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
-                bus.$emit('randomMix');
+                bus.$emit('dlg.open', 'rndmix');
             } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
                        "artists"==item.command[0] && item.params[0].startsWith("genre_id:")) {
                 if (this.fetchingItems) {
@@ -862,9 +862,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
                                 command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
             } else if (act==ADD_FAV_ACTION.cmd) {
-                bus.$emit('addFavorite');
+                bus.$emit('dlg.open', 'favorite', 'add');
             } else if (act==EDIT_FAV_ACTION.cmd) {
-                bus.$emit('editFavorite', item);
+                bus.$emit('dlg.open', 'favorite', 'edit', item);
             } else if (act===DELETE_ACTION.cmd) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -1012,7 +1012,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             } else if (RATING_ACTION.cmd==act) {
-                bus.$emit("setRating", [item.id], item.rating);
+                bus.$emit('dlg.open', 'rating', [item.id], item.rating);
             } else if (PLAY_ALBUM_ACTION.cmd==act) {
                 var command = this.buildFullCommand(this.current, PLAY_ACTION.cmd, index);
                 command.command.push("play_index:"+index);
@@ -1875,7 +1875,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     count++;
                 }
             });
-            bus.$emit("setRating", ids, Math.ceil(rating/count));
+            bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));
         }
     },
     mounted() {

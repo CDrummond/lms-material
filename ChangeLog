@@ -1,8 +1,11 @@
-0.3.8
+0.4.0
 -----
 1. Don't show command in popup error messages.
 2. When editing queue, and auto-scroll is enabled, don't scroll unless current
    track index changes.
+3. Speed up initial page load, by not 'mounting' dialogs (settings, sync,
+   etc.) until required.
+4. Minify code for releases.
 
 0.3.7
 -----

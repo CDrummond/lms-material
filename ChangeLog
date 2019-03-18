@@ -1,6 +1,8 @@
 0.3.8
 -----
 1. Don't show command in popup error messages.
+2. When editing queue, and auto-scroll is enabled, don't scroll unless current
+   track index changes.
 
 0.3.7
 -----

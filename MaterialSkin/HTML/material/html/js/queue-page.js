@@ -572,6 +572,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.fetchItems();
             } else {
                 var currentPos = this.scrollElement.scrollTop;
+                var prevIndex = this.currentIndex;
                 this.fetchingItems = true;
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
@@ -589,12 +590,10 @@ var lmsQueue = Vue.component("lms-queue", {
 
                     if (needUpdate) {
                         this.scheduleUpdate();
-                    } else {
-                        if (this.$store.state.autoScrollQueue) {
-                            this.$nextTick(function () {
-                                this.scrollToCurrent();
-                            });
-                        }
+                    } else if (prevIndex!=this.currentIndex && this.$store.state.autoScrollQueue) {
+                        this.$nextTick(function () {
+                            this.scrollToCurrent();
+                        });
                     }
                 }).catch(err => {
                     this.fetchingItems = false;

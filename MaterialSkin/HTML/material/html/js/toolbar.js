@@ -281,12 +281,9 @@ Vue.component('lms-toolbar', {
             }.bind(this));
         }
 
-        bus.$on('showError', function(err, msg, cmd) {
-            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : "") + (cmd ? "\n["+cmd+"]" : ""),
+        bus.$on('showError', function(err, msg) {
+            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : "")),
                         show: true, color: 'error' };
-            if (cmd) {
-                info['timeout']=5000;
-            }
             if (undefined!=err && undefined==msg && !err.response) {
                 // If this is a network error, check if connection is up...
                 var that = this;

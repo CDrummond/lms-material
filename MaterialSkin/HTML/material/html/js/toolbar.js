@@ -282,7 +282,7 @@ Vue.component('lms-toolbar', {
         }
 
         bus.$on('showError', function(err, msg) {
-            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : "")),
+            var info = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
                         show: true, color: 'error' };
             if (undefined!=err && undefined==msg && !err.response) {
                 // If this is a network error, check if connection is up...

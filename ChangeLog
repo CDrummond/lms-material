@@ -6,6 +6,7 @@
 3. Speed up initial page load, by not 'mounting' dialogs (settings, sync,
    etc.) until required.
 4. Minify code for releases.
+5. Don't add add/play-all buttons for A..Z groups.
 
 0.3.7
 -----

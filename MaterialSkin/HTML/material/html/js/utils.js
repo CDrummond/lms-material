@@ -406,6 +406,24 @@ function hasPlayableId(item) {
            item.album || item.artist || item.variousartist || item.year || item.genre || item.playlist; // CustomBrowse
 }
 
+function shouldAddLibraryId(command) {
+    if (command.command && command.command.length>0) {
+        if (command.command[0]=="artists" || command.command[0]=="albums" || command.command[0]=="tracks" ||
+            command.command[0]=="genres" || command.command[0]=="playlists" || "browselibrary"==command.command[0]) {
+            return true;
+        }
+        if (command.command[0]=="playlistcontrol") {
+            for (var i=1; i<command.command.length; ++i) {
+                if (command.command[i].startsWith("artist_id:") || command.command[i].startsWith("album_id:") ||
+                    command.command[i].startsWith("track_id:") || command.command[i].startsWith("genre_id:") || command.command[i].startsWith("year:")) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 // Determine if an item is a 'text' item - i.e. cannot browse into
 function isTextItem(item) {
     return "text"==item.type ||

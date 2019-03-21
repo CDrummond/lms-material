@@ -114,6 +114,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         prevItem.subtitle = isArtists
                                                 ? i18np("1 Artist", "%1 Artists", prevItem.range.count)
                                                 : i18np("1 Album", "%1 Albums", prevItem.range.count);
+                        prevItem.id="az:"+resp.items.length;
                         resp.items.push(prevItem);
                         prevItem = undefined;
                     }
@@ -128,7 +129,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                             range: {start: start+c, count: total},
                                             type: "group",
                                             command: parent.command,
-                                            params: parent.params
+                                            params: parent.params,
+                                            id: "az:"+resp.items.length
                                         });
                     }
                     start += count;
@@ -154,6 +156,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         if (prevItem.range.count>=LMS_BATCH_SIZE) {
                             prevItem.cancache = true;
                         }
+                        prevItem.id="az:"+resp.items.length;
                         resp.items.push(prevItem);
                         prevItem = item;
                     } else {
@@ -167,6 +170,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     if (count>=LMS_BATCH_SIZE) {
                         item.cancache = true;
                     }
+                    item.id="az:"+resp.items.length;
                     resp.items.push(item);
                 } else {
                     prevItem = item;
@@ -184,9 +188,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (prevItem.range.count>=LMS_BATCH_SIZE) {
                     prevItem.cancache = true;
                 }
+                prevItem.id="az:"+resp.items.length;
                 resp.items.push(prevItem);
             }
-
             resp.total=resp.items.length;
             resp.subtitle=i18np("1 Category", "%1 Categories", resp.total);
         } else if (data.result.item_loop) {  // SlimBrowse response

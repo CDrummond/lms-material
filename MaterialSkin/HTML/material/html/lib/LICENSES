@@ -39,7 +39,7 @@ vue-router
     License: MIT
 
 vue-virtual-scroller:
-    Version: 0.12.2
+    Version: 1.0.0-rc2
     URL: https://github.com/Akryum/vue-virtual-scroller
     License: MIT
 

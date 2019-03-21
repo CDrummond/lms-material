@@ -1742,9 +1742,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         var resp = parseBrowseResp(data, this.current, this.options, this.items.length,
                                                    this.current.cancache ? cacheKey(this.command.command, this.command.params, start, count) : undefined);
                         if (resp && resp.items) {
-                            resp.items.forEach(i => {
-                                this.items.push(i);
-                            });
+                            this.items.push.apply(this.items, resp.items);
                         }
                         if (resp && resp.total) {
                             this.listSize = resp.total;

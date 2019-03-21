@@ -1653,7 +1653,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             });
-
             this.selection = [];
         },
         select(item, index) {
@@ -1729,7 +1728,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 const visible = this.scrollElement.clientHeight;
                 const pageHeight = this.scrollElement.scrollHeight;
                 const pad = (visible*2.5);
-
                 const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
 
                 if (bottomOfPage || pageHeight < visible) {
@@ -1878,6 +1876,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
             bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));
+        },
+        checkFeature(command, key, id) {
+            lmsCommand("", command).then(({data}) => {
+                if (data && data.result && undefined!=data.result._can) {
+                    var can = 1==data.result._can;
+                    if (can!=this[key]) {
+                        this[key] = can;
+                        setLocalStorageVal(key, this[key]);
+                        this.other.forEach(i => {
+                            if (i.id == id) {
+                                i.disabled = !this[key];
+                                return;
+                            }
+                        });
+                    }
+                }
+            });
         }
     },
     mounted() {
@@ -1903,69 +1918,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         });
 
-        lmsCommand("", ["can", "randomplay", "?"]).then(({data}) => {
-            if (data && data.result && undefined!=data.result._can) {
-                var can = 1==data.result._can;
-                if (can!=this.randomMix) {
-                    this.randomMix = can;
-                    setLocalStorageVal('randomMix', this.randomMix);
-                    this.other.forEach(i => {
-                        if (i.id == TOP_RANDOM_MIX_ID) {
-                            i.disabled = !this.randomMix;
-                            return;
-                        }
-                    });
-                }
-            }
-        });
-
-        lmsCommand("", ["can", "dynamicplaylist", "browsejive", "?"]).then(({data}) => {
-            if (data && data.result && undefined!=data.result._can) {
-                var can = 1==data.result._can;
-                if (can!=this.dynamicPlaylists) {
-                    this.dynamicPlaylists = can;
-                    setLocalStorageVal('dynamicPlaylists', this.dynamicPlaylists);
-                    this.other.forEach(i => {
-                        if (i.id == TOP_DYNAMIC_PLAYLISTS_ID) {
-                            i.disabled = !this.randomMix;
-                            return;
-                        }
-                    });
-                }
-            }
-        });
-
-        lmsCommand("", ["can", "selectRemoteLibrary", "items", "?"]).then(({data}) => {
-            if (data && data.result && undefined!=data.result._can) {
-                var can = 1==data.result._can;
-                if (can!=this.remoteLibraries) {
-                    this.remoteLibraries = can;
-                    setLocalStorageVal('remoteLibraries', this.remoteLibraries);
-                    this.top.forEach(i => {
-                        if (i.id == TOP_REMOTE_ID) {
-                            i.disabled = !this.remoteLibraries;
-                            return;
-                        }
-                    });
-                }
-            }
-        });
-
-        lmsCommand("", ["can", "cdplayer", "items", "?"]).then(({data}) => {
-            if (data && data.result && undefined!=data.result._can) {
-                var can = 1==data.result._can;
-                if (can!=this.cdPlayer) {
-                    this.cdPlayer = can;
-                    setLocalStorageVal('cdPlayer', this.cdPlayer);
-                    this.top.forEach(i => {
-                        if (i.id == TOP_CDPLAYER_ID) {
-                            i.disabled = !this.cdPlayer;
-                            return;
-                        }
-                    });
-                }
-            }
-        });
+        this.checkFeature(["can", "randomplay", "?"], "randomMix", TOP_RANDOM_MIX_ID);
+        this.checkFeature(["can", "dynamicplaylist", "browsejive", "?"], "dynamicPlaylists", TOP_DYNAMIC_PLAYLISTS_ID);
+        this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], "remoteLibraries", TOP_REMOTE_ID);
+        this.checkFeature(["can", "cdplayer", "items", "?"], "cdPlayer", TOP_CDPLAYER_ID);
 
         bus.$on('browseDisplayChanged', function(act) {
             this.options.useGrid=this.$store.state.useGrid;

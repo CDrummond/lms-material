@@ -709,11 +709,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index);
                 return;
             }
-
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
-            if ("text"==item.type || (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1))) { // if group is not undefined, its probably a pinned app
+            if (isTextItem(item)) {
                 if (this.canClickText(item)) {
                     this.doTextClick(item);
                 }
@@ -766,14 +765,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.listSize = this.items.length;
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;
-            } else if (this.$store.state.splitArtistsAndAlbums && item.id && item.id.startsWith(TOP_ID_PREFIX) &&
-                       item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
-                       item.command && (item.command[0]=="artists" || item.command[0]=="albums")) {
-                var command = { command: item.command, params: ["tags:CCZs"]};
-                if (item.params) {
-                    item.params.forEach(p => { if (!p.startsWith("tags:")) { command.params.push(p); } } );
-                }
-                this.fetchItems(this.replaceCommandTerms(command), item, 5);
             } else if (item.weblink) {
                 window.open(item.weblink);
             } else {
@@ -785,7 +776,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     return;
                 }
-                this.fetchItems(command, item);
+
+                if (this.$store.state.splitArtistsAndAlbums && canSplitIntoLetterGroups(item, command)) {
+                    var cmd = { command: command.command, params: ["tags:CCZs"]};
+                    if (command.params) {
+                        command.params.forEach(p => { if (!p.startsWith("tags:")) { cmd.params.push(p); } } );
+                    }
+                    this.fetchItems(cmd, item, 5);
+                } else {
+                    this.fetchItems(command, item);
+                }
             }
         },
         showImage(index) {

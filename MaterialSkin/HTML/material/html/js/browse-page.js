@@ -57,24 +57,6 @@ const GROUP_PINNED = 0;
 const GROUP_MY_MUSIC = 1;
 const GROUP_OTHER_MUSIC = 2;
 
-function shouldAddLibraryId(command) {
-    if (command.command && command.command.length>0) {
-        if (command.command[0]=="artists" || command.command[0]=="albums" || command.command[0]=="tracks" ||
-            command.command[0]=="genres" || command.command[0]=="playlists" || "browselibrary"==command.command[0]) {
-            return true;
-        }
-        if (command.command[0]=="playlistcontrol") {
-            for (var i=1; i<command.command.length; ++i) {
-                if (command.command[i].startsWith("artist_id:") || command.command[i].startsWith("album_id:") ||
-                    command.command[i].startsWith("track_id:") || command.command[i].startsWith("genre_id:") || command.command[i].startsWith("year:")) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div>

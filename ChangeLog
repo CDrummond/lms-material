@@ -7,6 +7,7 @@
    etc.) until required.
 4. Minify code for releases.
 5. Don't add add/play-all buttons for A..Z groups.
+6. Fix changing layout in settings.
 
 0.3.7
 -----

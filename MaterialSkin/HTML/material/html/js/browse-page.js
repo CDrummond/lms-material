@@ -687,15 +687,20 @@ var lmsBrowse = Vue.component("lms-browse", {
         doTextClick(item) {
             var command = this.buildCommand(item);
             if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1])) {
+                this.fetchingItems = true;
                 lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE).then(({data}) => {
+                    this.fetchingItems = false;
                     this.handleTextClickResponse(item, command, data);
                 }).catch(err => {
+                    this.fetchingItems = false;
                     logError(err, command.command, command.params);
                 });
-            } else {
-                command.params.forEach(p => {
-                    command.command.push(p);
-                });
+            } else if (command.command.length>0) {
+                if (command.params) {
+                    command.params.forEach(p => {
+                        command.command.push(p);
+                    });
+                }
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
                     this.handleTextClickResponse(item, command, data);
@@ -705,6 +710,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         click(item, index, event) {
+            if (this.fetchingItems) {
+                 return;
+            }
             if (this.selection.length>0) {
                 this.select(item, index);
                 return;
@@ -728,9 +736,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (TOP_MORE_ID===item.id) {
-                if (this.fetchingItems) {
-                    return;
-                }
                 this.addHistory();
                 this.items = this.other;
                 this.headerTitle = item.title;
@@ -742,9 +747,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('dlg.open', 'rndmix');
             } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
                        "artists"==item.command[0] && item.params[0].startsWith("genre_id:")) {
-                if (this.fetchingItems) {
-                    return;
-                }
                 // When listing a genre's items, ask whether to list Artists or Albums
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),

@@ -155,9 +155,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
-  <template v-for="(item, index) in items">
-  <!-- TODO: Fix and re-use virtual scroller -->
-  <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
+  <template><RecycleScroller :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
    <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -179,8 +177,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
    </v-list-tile>
    <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
-   <!-- </div></recycle-list></template> -->
-  </template>
+   </div></RecycleScroller></template>
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 

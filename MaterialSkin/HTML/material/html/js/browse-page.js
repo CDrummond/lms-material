@@ -167,9 +167,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <template v-for="(item, index) in items">
-  <!-- TODO: Fix and re-use virtual scroller -->
-  <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
+  <template><RecycleScroller :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action.cmd, item, index)">
      <v-btn icon><v-icon>{{item.action.icon}}</v-icon></v-btn>
@@ -226,8 +224,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
-  <!-- </div></recycle-list></template> -->
-  </template>
+  </div></RecycleScroller></template>
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 
@@ -407,7 +404,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
 
             this.top = [
-                { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
+                { header: i18n("My Music")+" (dev)", id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [],
@@ -1166,6 +1163,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setGridAlignment();
                     this.setBgndCover();
                     setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                    // When using RecycleScroller, and changing view, the setScrollTop above does not seem to work, so try again after 10ms
+                    if (changedView) {
+                        setTimeout(function () {
+                            setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                        }.bind(this), 10);
+                    }
                 });
             }
         },

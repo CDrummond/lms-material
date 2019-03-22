@@ -36,6 +36,7 @@ const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
 const TOP_ID_PREFIX = "top:/";
 const TOP_MMHDR_ID = TOP_ID_PREFIX+"mmh";
 const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
+const TOP_GENRES_ID = TOP_ID_PREFIX+"genre";
 const TOP_PLAYLISTS_ID = TOP_ID_PREFIX+"pl";
 const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
@@ -428,7 +429,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   icon: "label",
                   type: "group",
                   group: GROUP_MY_MUSIC,
-                  id: TOP_ID_PREFIX+"ge" },
+                  id: TOP_GENRES_ID },
                 { title: i18n("Playlists"),
                   command: ["playlists"],
                   params: [],
@@ -724,8 +725,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('dlg.open', 'rndmix');
-            } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
-                       "artists"==item.command[0] && item.params[0].startsWith("genre_id:")) {
+            } else if (TOP_GENRES_ID==item.id) {
                 // When listing a genre's items, ask whether to list Artists or Albums
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
@@ -1523,6 +1523,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id.startsWith("myMusicGenres")) {
                                     item.icon = "label";
                                     item.cancache = true;
+                                    item.id = TOP_GENRES_ID;
                                 } else if (c.id == "myMusicPlaylists") {
                                     item.icon = "list";
                                     item.id = TOP_PLAYLISTS_ID;

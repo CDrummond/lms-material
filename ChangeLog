@@ -9,6 +9,7 @@
 5. Don't add add/play-all buttons for A..Z groups.
 6. Fix changing layout in settings.
 7. Show spinner when click text items, as these may fetch items.
+8. Only show "Artist or albums" prompt for top-level genre listing.
 
 0.3.7
 -----

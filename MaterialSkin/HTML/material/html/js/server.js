@@ -212,6 +212,11 @@ var lmsServer = Vue.component('lms-server', {
                             player.current.time = data.result.time;
                             player.current.canseek = data.result.can_seek;
                             player.current.remote_title = checkRemoteTitle(player.current);
+                            // BBC iPlayer Extras streams can change duration. *But* on the duration in data.result seems to
+                            // get updated. So, if there is a duration there, use that as the current tracks duration.
+                            if (data.result.duration) {
+                                player.current.duration = data.result.duration;
+                            }
                         }
 
                         bus.$emit('playerStatus', player);

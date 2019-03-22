@@ -10,6 +10,7 @@
 6. Fix changing layout in settings.
 7. Show spinner when click text items, as these may fetch items.
 8. Only show "Artist or albums" prompt for top-level genre listing.
+9. Handle BBC iPlayer streams duration change.
 
 0.3.7
 -----

@@ -8,15 +8,16 @@
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
-    var resp = {items: [], baseActions:[], useGrid: false, total: 0 };
+    var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false };
 
     try {
     if (data && data.result) {
         resp.total = data.result.count;
+        resp.useScroller = resp.total >= LMS_MIN_LIST_SCROLLER_ITEMS;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
-                resp.items.push({header: i18n("Artists")});
+                resp.items.push({header: i18n("Artists"), id:"search.artists"});
                 data.result.contributors_loop.forEach(i => {
                     var infoPlugin = getLocalStorageBool('infoPlugin');
                     resp.items.push({
@@ -33,7 +34,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             if (data.result.albums_loop && data.result.albums_count>0) {
-                resp.items.push({header: i18n("Albums")});
+                resp.items.push({header: i18n("Albums"), id:"search.albums"});
                 data.result.albums_loop.forEach(i => {
                     resp.items.push({
                                   id: "album_id:"+i.album_id,
@@ -49,7 +50,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             if (data.result.tracks_loop && data.result.tracks_count>0) {
                 if (idStart<=0 || (data.result.contributors_loop && data.result.contributors_count>0) || (data.result.albums_loop && data.result.albums_count>0)) {
-                    resp.items.push({header: i18n("Tracks")});
+                    resp.items.push({header: i18n("Tracks"), id:"search.tracks"});
                 }
                 data.result.tracks_loop.forEach(i => {
                     resp.items.push({
@@ -62,7 +63,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             if (data.result.genres_loop && data.result.genres_count>0) {
-                resp.items.push({header: i18n("Genres")});
+                resp.items.push({header: i18n("Genres"), id:"search.genres"});
                 data.result.genres_loop.forEach(i => {
                     resp.items.push({
                                   id: "genre_id:"+i.genre_id,
@@ -837,7 +838,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.total = resp.items.length;
         }
-
+        if (resp.useScroller && resp.useGrid && resp.total>LMS_MAX_GRID_ITEMS) {
+            resp.useGrid = false;
+        }
         if (cacheKey && lmsLastScan) {
             resp.iscache=true;
             setLocalStorageVal(cacheKey, JSON.stringify(resp));

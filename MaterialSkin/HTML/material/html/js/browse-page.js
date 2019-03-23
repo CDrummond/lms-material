@@ -728,8 +728,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('dlg.open', 'rndmix');
-            } else if (TOP_GENRES_ID==item.id) {
-                // When listing a genre's items, ask whether to list Artists or Albums
+            } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
+                       "artists"==item.command[0] && item.params[0].startsWith("genre_id:") &&
+                       this.current && this.current.id==TOP_GENRES_ID) {
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],

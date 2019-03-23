@@ -441,7 +441,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
 
             this.top = [
-                { header: i18n("My Music")+" (dev)", id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
+                { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [],

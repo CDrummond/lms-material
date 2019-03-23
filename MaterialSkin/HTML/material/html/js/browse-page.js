@@ -601,9 +601,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
                 this.addHistory();
                 this.command = command;
-                this.current = item;
                 this.currentBaseActions = this.baseActions;
-                this.headerTitle=item.title ? item.title : "?";
+                this.headerTitle=item.title ? (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title) : "?";
+                this.current = item;
                 this.listSize = item.range ? item.range.count : resp.total;
                 this.items=resp.items;
                 this.baseActions=resp.baseActions;
@@ -763,8 +763,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (TOP_RANDOM_MIX_ID==item.id) {
                 bus.$emit('dlg.open', 'rndmix');
-            } else if (TOP_GENRES_ID==item.id) {
-                // When listing a genre's items, ask whether to list Artists or Albums
+            } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
+                       "artists"==item.command[0] && item.params[0].startsWith("genre_id:") &&
+                       this.current && this.current.id==TOP_GENRES_ID) {
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],

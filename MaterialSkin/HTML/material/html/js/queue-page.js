@@ -156,7 +156,7 @@ var lmsQueue = Vue.component("lms-queue", {
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
   <template v-if="items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS" v-for="(item, index) in items">
-   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -176,8 +176,8 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
    <!-- </div></recycle-list></template> -->
   </template>
-  <RecycleScroller v-else :items="items" :item-size="56" key-field="key" :buffer="500" page-mode><div slot-scope="{item, index}">
-   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
+  <RecycleScroller v-else :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -633,6 +633,9 @@ var lmsQueue = Vue.component("lms-queue", {
                         } else if (scroll) { // TODO: pulse not implemented!
                             var pos = this.currentIndex>3 ? (this.currentIndex-3)*56 : 0;
                             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                            setTimeout(function () {
+                                setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                            }.bind(this), 100);
                         }
                     } else if (scroll) {
                         this.autoScrollRequired = true;

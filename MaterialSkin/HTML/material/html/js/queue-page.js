@@ -207,7 +207,7 @@ var lmsQueue = Vue.component("lms-queue", {
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             listSize:0,
             duration: 0.0,
-            playerStatus: { ison:1, shuffle:0, repeat: 0 },
+            playerStatus: { shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, addUrl:undefined, saveAs:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                      shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
@@ -241,9 +241,6 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
-            if (playerStatus.ison!=this.playerStatus.ison) {
-                this.playerStatus.ison = playerStatus.ison;
-            }
             if (playerStatus.playlist.shuffle!=this.playerStatus.shuffle) {
                 this.playerStatus.shuffle = playerStatus.playlist.shuffle;
             }

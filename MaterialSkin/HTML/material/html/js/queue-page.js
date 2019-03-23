@@ -620,14 +620,19 @@ var lmsQueue = Vue.component("lms-queue", {
             if (scroll || (pulse && this.items.length>0)) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the browse/nowplaying page!
                     if (this.currentIndex<this.items.length) {
-                        var elem=document.getElementById('track'+this.currentIndex);
-                        if (elem) {
-                            if (scroll) {
-                                setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                        if (this.items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS) {
+                            var elem=document.getElementById('track'+this.currentIndex);
+                            if (elem) {
+                                if (scroll) {
+                                    setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                                }
+                                if (pulse) {
+                                    animate(elem, 1.0, 0.2);
+                                }
                             }
-                            if (pulse) {
-                                animate(elem, 1.0, 0.2);
-                            }
+                        } else if (scroll) { // TODO: pulse not implemented!
+                            var pos = this.currentIndex>3 ? (this.currentIndex-3)*56 : 0;
+                            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                         }
                     } else if (scroll) {
                         this.autoScrollRequired = true;

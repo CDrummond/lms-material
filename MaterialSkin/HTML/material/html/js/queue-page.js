@@ -53,7 +53,7 @@ function animate(elem, from, to) {
     }
 }
 
-function parseResp(data, showTrackNum) {
+function parseResp(data, showTrackNum, index) {
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;
@@ -83,16 +83,16 @@ function parseResp(data, showTrackNum) {
                         subtitle=remoteTitle;
                     }
                 }
-                var image = queueItemCover(i);
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
                               subtitle: subtitle,
-                              icon: image ? undefined : "music_note",
-                              image: image,
+                              image: queueItemCover(i),
                               actions: PQ_STD_ACTIONS,
-                              duration: i.duration
+                              duration: i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
+                              key: i.id+"."+index
                           });
+                index++;
             });
         }
     }
@@ -155,7 +155,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
-  <template><RecycleScroller :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
+  <RecycleScroller :items="items" :item-size="56" key-field="key" :buffer="500" page-mode><div slot-scope="{item, index}">
    <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -163,21 +163,17 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
      <img v-lazy="item.image">
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
-     <v-icon>{{item.icon}}</v-icon>
-    </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
      <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-    <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
+    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
    </v-list-tile>
    <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
-   </div></RecycleScroller></template>
+   </div></RecycleScroller>
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 
@@ -280,6 +276,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     var subtitle = i.artist ? i.artist : i.trackartist;
                     var remoteTitle = checkRemoteTitle(i);
+                    var duration = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
                     if (i.album) {
                         if (subtitle) {
                             subtitle+=SEPARATOR + i.album;
@@ -296,13 +293,13 @@ var lmsQueue = Vue.component("lms-queue", {
                             subtitle=remoteTitle;
                         }
                     }
-                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
-                        if (i.duration!=this.items[index].duration) {
+                        if (duration!=this.items[index].duration) {
                             this.getDuration();
                         }
-                        this.items[index].duration = i.duration;
+                        this.items[index].duration = duration;
                         this.$forceUpdate();
                     }
                 }
@@ -526,7 +523,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -572,7 +569,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
                         this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;

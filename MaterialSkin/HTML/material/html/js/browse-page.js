@@ -168,7 +168,41 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <template><RecycleScroller :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
+  <RecycleScroller v-if="useScroller" :items="items" :item-size="56" page-mode v-else><div slot-scope="{item, index}">
+   <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%">{{ item.header }}</v-subheader>
+   <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
+   <v-list-tile v-if="!item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag" class="lms-avatar">
+    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
+     <v-icon>check_box</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
+     <img v-lazy="item.image"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="selection.length>0" :tile="true" class="lms-avatar">
+     <v-icon>check_box_outline_blank</v-icon>
+    </v-list-tile-avatar>
+
+    <!-- TODO: Do we have search fields with large lists?? -->
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+    </v-list-tile-content>
+
+    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon>
+      <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
+     <v-btn icon>
+      <v-icon v-if="undefined==item.menuActions[0].svg">{{item.menuActions[0].icon}}</v-icon>
+      <img v-else class="svg-img" :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
+     </v-btn>
+    </v-list-tile-action>
+   </v-list-tile>
+  </div></RecycleScroller>
+
+  <template v-else v-for="(item, index) in items">
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action.cmd, item, index)">
      <v-btn icon><v-icon>{{item.action.icon}}</v-icon></v-btn>
@@ -225,7 +259,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
-  </div></RecycleScroller></template>
+  </template>
+
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 
@@ -312,6 +347,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.addPinned();
         }
         this.useGrid=false;
+        this.useScroller=false;
 
         if (!this.desktop) {
             // Clicking on 'browse' nav button whilst in browse page goes back. But, when clicking from another
@@ -536,6 +572,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.menuActions = this.menuActions;
             prev.pos = this.scrollElement.scrollTop;
             prev.useGrid = this.useGrid;
+            prev.useScroller = this.useScroller;
             prev.command = this.command;
             prev.showRatingButton = this.showRatingButton;
             this.history.push(prev);
@@ -574,6 +611,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
                 var changedView = this.useGrid != resp.useGrid;
                 this.useGrid = resp.useGrid;
+                this.useScroller = resp.useScroller;
 
                 if (this.current && this.current.menuActions) {
                     this.current.menuActions.forEach(i => {
@@ -1109,6 +1147,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.isTop = true;
             var changedView = this.useGrid;
             this.useGrid = false;
+            this.useScroller = false;
             this.command = undefined;
             this.showRatingButton = false;
             this.$nextTick(function () {
@@ -1144,6 +1183,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var changedView = this.useGrid != prev.useGrid;
             this.items = prev.items;
             this.useGrid = prev.useGrid;
+            this.useScroller = prev.useScroller;
             this.baseActions = prev.baseActions;
             this.listSize = prev.listSize;
             this.current = prev.current;

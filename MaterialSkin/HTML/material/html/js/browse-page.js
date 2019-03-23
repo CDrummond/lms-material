@@ -567,9 +567,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
                 this.addHistory();
                 this.command = command;
-                this.current = item;
                 this.currentBaseActions = this.baseActions;
-                this.headerTitle=item.title ? item.title : "?";
+                this.headerTitle=item.title ? (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title) : "?";
+                this.current = item;
                 this.listSize = item.range ? item.range.count : resp.total;
                 this.items=resp.items;
                 this.baseActions=resp.baseActions;

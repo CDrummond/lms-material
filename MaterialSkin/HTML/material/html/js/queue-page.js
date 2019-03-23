@@ -155,7 +155,28 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
-  <RecycleScroller :items="items" :item-size="56" key-field="key" :buffer="500" page-mode><div slot-scope="{item, index}">
+  <template v-if="items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS" v-for="(item, index) in items">
+   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
+    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
+     <v-icon>check_box</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
+     <img v-lazy="item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
+    <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+    <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
+   </v-list-tile>
+   <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
+   <!-- </div></recycle-list></template> -->
+  </template>
+  <RecycleScroller v-else :items="items" :item-size="56" key-field="key" :buffer="500" page-mode><div slot-scope="{item, index}">
    <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>

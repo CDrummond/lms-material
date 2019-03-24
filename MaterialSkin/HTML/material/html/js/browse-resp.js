@@ -8,12 +8,12 @@
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
-    var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false };
+    var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false, jumplist:[] };
 
     try {
     if (data && data.result) {
         resp.total = data.result.count;
-        resp.useScroller = resp.total >= LMS_MIN_LIST_SCROLLER_ITEMS;
+        resp.useScroller = (parent && parent.range ? parent.range.count : resp.total) >= LMS_MIN_LIST_SCROLLER_ITEMS;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
@@ -76,9 +76,25 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               });
                 });
             }
-        } else if (data.result.indexList) {
+        } else if (data.result.indexList) { // Split artist/albums into A..Z groups
             var start=0;
             var isArtists = data.result.artists_loop;
+
+            // Ensure we have at lest "tags:s" for textkey
+            var parentParams = [];
+            var hasTags = false;
+            parent.params.forEach(p=>{
+                if (p.startsWith("tags:")) {
+                    if (p.split(":")[1].indexOf('s')<0) {
+                        p+='s';
+                    }
+                    parentParams.push(p);
+                    hasTags = true;
+                }
+            });
+            if (!hasTags) {
+                parentParams.push("tags:s");
+            }
 
             // Look for first valid key? Looks like 'No Album' messes up album txtkeys? First 2 seem to be garbage...
             if (data.result.artists_loop) {
@@ -130,7 +146,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                             range: {start: start+c, count: total},
                                             type: "group",
                                             command: parent.command,
-                                            params: parent.params,
+                                            params: parentParams,
                                             id: "az:"+resp.items.length
                                         });
                     }
@@ -143,7 +159,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                 range: {start: start, count: count},
                                 type: "group",
                                 command: parent.command,
-                                params: parent.params
+                                params: parentParams
                             };
 
                 if (prevItem) {
@@ -477,13 +493,17 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var infoPlugin = getLocalStorageBool('infoPlugin');
             resp.useGrid = options.useGrid && infoPlugin && options.artistImages;
             data.result.artists_loop.forEach(i => {
+                var key = i.textkey;
+                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.artist});
+                }
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               command: ["albums"],
                               image: (infoPlugin && options.artistImages) ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image" +
                                     (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE) : undefined,
-                              params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
+                              params: ["artist_id:"+ i.id, "tags:jlys", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
                               favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
@@ -513,6 +533,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var title = i.album;
                 if (i.year && i.year>0) {
                     title+=" (" + i.year + ")";
+                }
+                var key = i.textkey;
+                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: title});
                 }
                 var album = {
                               id: "album_id:"+i.id,
@@ -590,6 +614,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
         } else if (data.result.genres_loop) {
             data.result.genres_loop.forEach(i => {
+                var key = i.textkey;
+                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.genre});
+                }
                 resp.items.push({
                               id: "genre_id:"+i.id,
                               title: i.genre,
@@ -650,12 +678,16 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
         } else if (data.result.years_loop) {
             data.result.years_loop.forEach(i => {
+                var key = i.textkey;
+                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.year});
+                }
                 resp.items.push({
                               id: "year:"+i.year,
                               title: i.year,
                               command: ["albums"],
                               //icon: "date_range",
-                              params: ["year:"+ i.year, "tags:ajly"],
+                              params: ["year:"+ i.year, "tags:ajlys"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION],
                               type: "group"
                           });
@@ -664,19 +696,23 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.folder_loop) {
             data.result.folder_loop.forEach(i => {
                 var isFolder = i.type==="folder";
+                var key = i.textkey;
+                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.filename});
+                }
                 resp.items.push({
                               id: (isFolder ? "folder_id:" : "track_id:") + i.id,
                               title: i.filename,
                               subtitle: i.duration!="" && !isFolder ? i.duration : undefined,
                               command: ["musicfolder"],
-                              params: ["folder_id:"+i.id, "type:audio", "tags:d"],
+                              params: ["folder_id:"+i.id, "type:audio", "tags:ds"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
                               icon: isFolder ? "folder" : undefined
                           });
             });
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
-        } else if (data.result.radioss_loop) {
+        } /*else if (data.result.radioss_loop) {
             data.result.radioss_loop.forEach(i => {
                 if ("xmlbrowser"===i.type) {
                     resp.items.push({
@@ -817,7 +853,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
             });
-        } else if (0===resp.total && data.result.networkerror) {
+        } */ else if (0===resp.total && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
             data.result.data.forEach(i => {

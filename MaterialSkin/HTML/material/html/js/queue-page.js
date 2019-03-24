@@ -176,7 +176,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
    <!-- </div></recycle-list></template> -->
   </template>
-  <RecycleScroller v-else :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
+  <RecycleScroller v-else :items="items" :item-size="56" page-mode><div slot-scope="{item, index}" key-field="key">
    <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>

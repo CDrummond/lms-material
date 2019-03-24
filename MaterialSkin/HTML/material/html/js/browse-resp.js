@@ -463,6 +463,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
                 i.section = parent ? parent.section : undefined;
+                
+                var key = i.textkey;
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.filename});
+                }
                 resp.items.push(i);
             });
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
@@ -494,7 +499,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.useGrid = options.useGrid && infoPlugin && options.artistImages;
             data.result.artists_loop.forEach(i => {
                 var key = i.textkey;
-                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.artist});
                 }
                 var artist = {
@@ -535,7 +540,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     title+=" (" + i.year + ")";
                 }
                 var key = i.textkey;
-                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart, title: title});
                 }
                 var album = {
@@ -615,7 +620,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.genres_loop) {
             data.result.genres_loop.forEach(i => {
                 var key = i.textkey;
-                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.genre});
                 }
                 resp.items.push({
@@ -679,7 +684,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.years_loop) {
             data.result.years_loop.forEach(i => {
                 var key = i.textkey;
-                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.year});
                 }
                 resp.items.push({
@@ -697,7 +702,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.folder_loop.forEach(i => {
                 var isFolder = i.type==="folder";
                 var key = i.textkey;
-                if (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.filename});
                 }
                 resp.items.push({

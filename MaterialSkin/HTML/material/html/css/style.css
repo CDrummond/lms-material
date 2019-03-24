@@ -335,7 +335,7 @@ a {
  text-overflow:ellipsis;
 }
 
-.toolbar-player-list {
+.toolbar-player-list, .jumplist-menu {
  max-height:calc((var(--vh, 1vh)*100) - 16px);
  overflow-y:auto;
 }

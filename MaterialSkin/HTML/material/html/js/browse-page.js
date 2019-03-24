@@ -1781,7 +1781,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             ev.preventDefault(); // Otherwise drop is never called!
         },
         scrollList(step) {
-            setScrollTop(this.scrollElement, this.scrollElement.scrollTop + step);
+            var pos = this.scrollElement.scrollTop + step;
+            setScrollTop(this.scrollElement, pos);
+            if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
+                this.stopScrolling = true;
+            }
             if (!this.stopScrolling) {
                 setTimeout(function () {
                     this.scrollList(step);

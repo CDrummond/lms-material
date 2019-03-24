@@ -156,7 +156,7 @@ var lmsQueue = Vue.component("lms-queue", {
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
   <template v-if="items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS" v-for="(item, index) in items">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -177,7 +177,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <!-- </div></recycle-list></template> -->
   </template>
   <RecycleScroller v-else :items="items" :item-size="56" page-mode><div slot-scope="{item, index}">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -652,6 +652,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.clearSelection();
             }
         },
+        dragEnd() {
+            this.stopScrolling = true;
+            this.dragIndex = undefined;
+        },
         dragOver(ev) {
             // Drag over item at top/bottom of list to start scrolling
             this.stopScrolling = true;
@@ -667,7 +671,11 @@ var lmsQueue = Vue.component("lms-queue", {
             ev.preventDefault(); // Otherwise drop is never called!
         },
         scrollList(step) {
-            setScrollTop(this.scrollElement, this.scrollElement.scrollTop + step);
+            var pos = this.scrollElement.scrollTop + step;
+            setScrollTop(this.scrollElement, pos);
+            if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
+                this.stopScrolling = true;
+            }
             if (!this.stopScrolling) {
                 setTimeout(function () {
                     this.scrollList(step);

@@ -169,7 +169,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <RecycleScroller v-if="useScroller" :items="items" :item-size="56" page-mode v-else><div slot-scope="{item, index}">
+  <RecycleScroller v-if="useScroller" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode v-else><div slot-scope="{item, index}">
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%">{{ item.header }}</v-subheader>
    <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="!item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragend="dragEnd()"  @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag" class="lms-avatar">
@@ -1962,7 +1962,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     elem.scrollIntoView(true);
                 }
             } else {
-                var pos = item.index*56;
+                var pos = item.index*LMS_LIST_ELEMENT_SIZE;
                 setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                 setTimeout(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);

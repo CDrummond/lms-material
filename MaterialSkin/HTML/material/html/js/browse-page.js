@@ -1773,57 +1773,63 @@ var lmsBrowse = Vue.component("lms-browse", {
         setScrollElement() {
             this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");
             this.scrollElement.addEventListener('scroll', () => {
-                if (this.jumplist && this.jumplist.length>1 && !this.useGrid) {
-                    if (undefined!==this.letterTimeout) {
-                        clearTimeout(this.letterTimeout);
-                    }
-                    var index = Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
-                    if (index>=0 && index<this.items.length) {
-                        var letter = this.items[index].textkey;
-                        if (this.letter!=letter) {
-                            this.letter = letter; 
-                            this.letterOverlay.innerHTML = letter;
-                        }
-                        this.letterTimeout = setTimeout(function () {
-                            this.letter = undefined;
-                        }.bind(this), 500);
-                    } else {
-                        this.letter = undefined;
-                    }
-                }
-
-                if (this.fetchingItems || this.listSize<=this.items.length) {
-                    return;
-                }
-
-                const scrollY = this.scrollElement.scrollTop;
-                const visible = this.scrollElement.clientHeight;
-                const pageHeight = this.scrollElement.scrollHeight;
-                const pad = (visible*2.5);
-                const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-                if (bottomOfPage || pageHeight < visible) {
-                    this.fetchingItems = true;
-                    var lmsBatchSize = this.current.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
-                    var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                    var count = this.current.range ? (this.current.range.count-this.items.length) < lmsBatchSize ? (this.current.range.count-this.items.length) : lmsBatchSize : lmsBatchSize;
-
-                    lmsList(this.playerId(), this.command.command, this.command.params, start, count, this.current.cancache).then(({data}) => {
-                        var resp = parseBrowseResp(data, this.current, this.options, this.items.length,
-                                                   this.current.cancache ? cacheKey(this.command.command, this.command.params, start, count) : undefined);
-                        if (resp && resp.items) {
-                            this.items.push.apply(this.items, resp.items);
-                        }
-                        if (resp && resp.total) {
-                            this.listSize = resp.total;
-                        }
-                        this.fetchingItems = false;
-                    }).catch(err => {
-                        this.fetchingItems = false;
-                        logError(err, this.command.command, this.command.params, start, count);
-                    });
+                if (!this.scrollAnimationFrameReq) {
+                    this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
                 }
             });
+        },
+        handleScroll() {
+            this.scrollAnimationFrameReq = undefined;
+            if (this.jumplist && this.jumplist.length>1 && !this.useGrid) {
+                if (undefined!==this.letterTimeout) {
+                    clearTimeout(this.letterTimeout);
+                }
+                var index = Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                if (index>=0 && index<this.items.length) {
+                    var letter = this.items[index].textkey;
+                    if (this.letter!=letter) {
+                        this.letter = letter;
+                        this.letterOverlay.innerHTML = letter;
+                    }
+                    this.letterTimeout = setTimeout(function () {
+                        this.letter = undefined;
+                    }.bind(this), 500);
+                } else {
+                    this.letter = undefined;
+                }
+            }
+
+            if (this.fetchingItems || this.listSize<=this.items.length) {
+                return;
+            }
+
+            const scrollY = this.scrollElement.scrollTop;
+            const visible = this.scrollElement.clientHeight;
+            const pageHeight = this.scrollElement.scrollHeight;
+            const pad = (visible*2.5);
+            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchingItems = true;
+                var lmsBatchSize = this.current.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
+                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
+                var count = this.current.range ? (this.current.range.count-this.items.length) < lmsBatchSize ? (this.current.range.count-this.items.length) : lmsBatchSize : lmsBatchSize;
+
+                lmsList(this.playerId(), this.command.command, this.command.params, start, count, this.current.cancache).then(({data}) => {
+                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length,
+                                               this.current.cancache ? cacheKey(this.command.command, this.command.params, start, count) : undefined);
+                    if (resp && resp.items) {
+                        this.items.push.apply(this.items, resp.items);
+                    }
+                    if (resp && resp.total) {
+                        this.listSize = resp.total;
+                    }
+                    this.fetchingItems = false;
+                }).catch(err => {
+                    this.fetchingItems = false;
+                    logError(err, this.command.command, this.command.params, start, count);
+                });
+            }
         },
         setGridAlignment() {
             if (!this.useGrid) {

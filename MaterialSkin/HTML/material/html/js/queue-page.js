@@ -250,8 +250,8 @@ var lmsQueue = Vue.component("lms-queue", {
         this.items=[];
         this.timestamp=0;
         bus.$on('playerChanged', function() {
-	        this.items=[];
-	        this.timestamp=0;
+            this.items=[];
+            this.timestamp=0;
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
@@ -370,18 +370,8 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length) {
-                return;
-            }
-            const scrollY = this.scrollElement.scrollTop;
-            const visible = this.scrollElement.clientHeight;
-            const pageHeight = this.scrollElement.scrollHeight;
-            const pad = (visible*2.5);
-
-            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchItems();
+            if (!this.scrollAnimationFrameReq) {
+                this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
             }
         });
 
@@ -407,6 +397,22 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};
+        },
+        handleScroll() {
+            this.scrollAnimationFrameReq = undefined;
+            if (this.fetchingItems || this.listSize<=this.items.length) {
+                return;
+            }
+            const scrollY = this.scrollElement.scrollTop;
+            const visible = this.scrollElement.clientHeight;
+            const pageHeight = this.scrollElement.scrollHeight;
+            const pad = (visible*2.5);
+
+            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchItems();
+            }
         },
         save() {
             if (this.items.length<1) {

@@ -511,7 +511,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               params: ["artist_id:"+ i.id, "tags:jlys", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
-                              favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
+                              favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined,
+                              textkey: key
                           };
                 if (params.length>0) {
                     params.forEach(p => {
@@ -555,7 +556,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined,
                               origTitle: i.album,
                               // Bug on my system? There is a 'No Album' entry with no tracks!
-                              disabled: undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist
+                              disabled: undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist,
+                              textkey: key
                           };
                 if (params.length>0) {
                     params.forEach(p => {
@@ -630,7 +632,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               //icon: "label",
                               params: ["genre_id:"+ i.id],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
-                              type: "group"
+                              type: "group",
+                              textkey: key
                           });
             });
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.total);
@@ -694,7 +697,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               //icon: "date_range",
                               params: ["year:"+ i.year, "tags:ajlys"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION],
-                              type: "group"
+                              type: "group",
+                              textkey: key
                           });
             });
             resp.subtitle=i18np("1 Year", "%1 Years", resp.total);
@@ -713,7 +717,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               params: ["folder_id:"+i.id, "type:audio", "tags:ds"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
-                              icon: isFolder ? "folder" : undefined
+                              icon: isFolder ? "folder" : undefined,
+                              textkey: key
                           });
             });
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);

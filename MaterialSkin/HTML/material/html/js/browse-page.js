@@ -115,6 +115,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
  </div>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
+ <div v-show="letter" id="letterOverlay"></div>
 
  <v-list v-if="useGrid" class="lms-image-grid noselect bgnd-cover" id="browse-grid">
   <div v-for="(item, index) in items" :key="item.id" :id="'item'+index" v-if="!item.disabled">
@@ -311,7 +312,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             selection: [],
             collapsed: [false, false, false],
             showRatingButton: false,
-            section: undefined
+            section: undefined,
+            letter: undefined
         }
     },
     computed: {
@@ -1771,9 +1773,29 @@ var lmsBrowse = Vue.component("lms-browse", {
         setScrollElement() {
             this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");
             this.scrollElement.addEventListener('scroll', () => {
+                if (this.jumplist && this.jumplist.length>1 && !this.useGrid) {
+                    if (undefined!==this.letterTimeout) {
+                        clearTimeout(this.letterTimeout);
+                    }
+                    var index = Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                    if (index>=0 && index<this.items.length) {
+                        var letter = this.items[index].textkey;
+                        if (this.letter!=letter) {
+                            this.letter = letter; 
+                            this.letterOverlay.innerHTML = letter;
+                        }
+                        this.letterTimeout = setTimeout(function () {
+                            this.letter = undefined;
+                        }.bind(this), 500);
+                    } else {
+                        this.letter = undefined;
+                    }
+                }
+
                 if (this.fetchingItems || this.listSize<=this.items.length) {
                     return;
                 }
+
                 const scrollY = this.scrollElement.scrollTop;
                 const visible = this.scrollElement.clientHeight;
                 const pageHeight = this.scrollElement.scrollHeight;
@@ -2029,6 +2051,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.setBgndCover();
         }.bind(this));
         this.setBgndCover();
+        this.letterOverlay=document.getElementById("letterOverlay");
+        this.letterOverlay.style.transform = "scale(10, 10)";
     },
     filters: {
         tooltip: function (item) {

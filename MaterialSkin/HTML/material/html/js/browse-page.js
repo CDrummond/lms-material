@@ -2058,7 +2058,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.setBgndCover();
         this.letterOverlay=document.getElementById("letterOverlay");
-        this.letterOverlay.style.transform = "scale(10, 10)";
     },
     filters: {
         tooltip: function (item) {

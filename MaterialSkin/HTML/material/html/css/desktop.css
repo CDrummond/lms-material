@@ -249,7 +249,9 @@ body {
 #letterOverlay {
  z-index:2;
  position: fixed;
- top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2)));
- left: calc(((100vw * (var(--splitter-pc)/100))/2) );
+ top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 80px));
+ left: calc(((100vw * (var(--splitter-pc)/100))/2) - 80px);
+ font-size: 160px;
+ line-height: 160px;
 }
 

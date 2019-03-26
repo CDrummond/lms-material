@@ -176,8 +176,11 @@
 #letterOverlay {
  z-index:2;
  position: fixed;
- top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)))/2) - 80px));
- left: calc(50vw - 80px);
+ top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)))/2) - 60px));
+ left: 0;
+ text-align:center;
+ vertical-align:middle;
  font-size: 160px;
  line-height: 160px;
+ width: 100%;
 }

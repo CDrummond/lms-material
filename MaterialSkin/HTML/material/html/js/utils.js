@@ -148,10 +148,14 @@ function favSort(a, b) {
 }
 
 function setScrollTop(el, val) {
-    // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
-    el.style['-webkit-overflow-scrolling'] = 'auto';
-    el.scrollTop=val;
-    el.style['-webkit-overflow-scrolling'] = 'touch';
+    // When using RecycleScroller we need to wait for the next animation frame to scroll, so
+    // just do this for all scrolls.
+    window.requestAnimationFrame(function () {
+        // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
+        el.style['-webkit-overflow-scrolling'] = 'auto';
+        el.scrollTop=val;
+        el.style['-webkit-overflow-scrolling'] = 'touch';
+    });
 }
 
 const LS_PREFIX="lms-material::";

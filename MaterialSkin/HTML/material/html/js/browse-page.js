@@ -1206,12 +1206,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setGridAlignment();
                     this.setBgndCover();
                     setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
-                    // When using RecycleScroller, and changing view, the setScrollTop above does not seem to work, so try again after 10ms
-                    if (changedView) {
-                        setTimeout(function () {
-                            setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
-                        }.bind(this), 10);
-                    }
                 });
             }
         },
@@ -1979,9 +1973,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 var pos = item.index*LMS_LIST_ELEMENT_SIZE;
                 setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-                setTimeout(function () {
-                    setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-                }.bind(this), 100);
             }
         }
     },

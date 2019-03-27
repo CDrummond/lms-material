@@ -210,6 +210,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.total=resp.items.length;
             resp.subtitle=i18np("1 Category", "%1 Categories", resp.total);
+            resp.useScroller = false;
         } else if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;

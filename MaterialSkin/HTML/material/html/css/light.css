@@ -57,6 +57,10 @@ progress::-webkit-progress-bar {
  background-color:rgba(0, 0, 0, 0.1) !important;
 }
 
+.vue-recycle-scroller__item-view {
+ border-bottom: 0.5px solid #e0e0e0;
+}
+
 progress::-webkit-progress-value {
  background-color:#346dd2;
 }

@@ -42,11 +42,6 @@ a {
  width:100%;
 }
 
-.v-divider {
-   margin-left:8px;
-   margin-right:8px;
-}
-
 .v-divider--vertical {
    margin-top:8px;
    margin-bottom:8px;

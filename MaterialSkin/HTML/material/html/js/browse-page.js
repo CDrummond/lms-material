@@ -170,39 +170,26 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <RecycleScroller v-if="useScroller" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode v-else><div slot-scope="{item, index}">
-   <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%">{{ item.header }}</v-subheader>
-   <v-divider v-else-if="index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
-   <v-list-tile v-if="!item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragend="dragEnd()"  @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag" class="lms-avatar">
-    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
-     <v-icon>check_box</v-icon>
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
-     <img v-lazy="item.image"></img>
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="selection.length>0" :tile="true" class="lms-avatar">
-     <v-icon>check_box_outline_blank</v-icon>
+  <RecycleScroller v-if="useScroller" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
+   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" slot-scope="{item, index}">
+    <v-list-tile-avatar v-if="item.selected || item.image" :tile="true" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" :src="item.image"></img>
     </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
     <v-list-tile-content>
-     <v-list-tile-title v-html="item.title"></v-list-tile-title>
-     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action v-if="item.menuActions" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
-     <v-btn icon>
-      <v-icon v-if="undefined==item.menuActions[0].svg">{{item.menuActions[0].icon}}</v-icon>
-      <img v-else class="svg-img" :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
-     </v-btn>
-    </v-list-tile-action>
    </v-list-tile>
-  </div></RecycleScroller>
+  </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
@@ -245,8 +232,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-content v-else>
-     <v-list-tile-title v-html="item.title"></v-list-tile-title>
-     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menuActions && item.menuActions.length>1" @click.stop="itemMenu(item, index, $event)">

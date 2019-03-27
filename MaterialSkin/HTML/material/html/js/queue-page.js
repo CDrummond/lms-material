@@ -157,32 +157,9 @@ var lmsQueue = Vue.component("lms-queue", {
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
   <template v-if="items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS" v-for="(item, index) in items">
    <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
-    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
-     <v-icon>check_box</v-icon>
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
-     <img v-lazy="item.image">
-    </v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
-    </v-list-tile-content>
-    <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-    <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
-    </v-list-tile-action>
-    <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
-   </v-list-tile>
-   <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
-   <!-- </div></recycle-list></template> -->
-  </template>
-  <RecycleScroller v-else :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode><div slot-scope="{item, index}" key-field="key">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
-    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
-     <v-icon>check_box</v-icon>
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
-     <img v-lazy="item.image">
+    <v-list-tile-avatar :tile="true" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else v-lazy="item.image">
     </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -194,7 +171,24 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-action>
    </v-list-tile>
    <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
-   </div></RecycleScroller>
+   <!-- </div></recycle-list></template> -->
+  </template>
+  <RecycleScroller v-else :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode>
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
+    <v-list-tile-avatar :tile="true" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" :src="item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
+    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+   </v-list-tile>
+  </RecycleScroller>
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 

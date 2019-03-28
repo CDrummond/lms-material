@@ -61,6 +61,14 @@ a {
  height:40px;
 }
 
+.lms-list {
+ padding:0px;
+}
+
+.lms-list-sub {
+ padding:0px;
+}
+
 /* Make action buttons in lists closer together */
 .list__tile__action {
  min-width:48px !important;

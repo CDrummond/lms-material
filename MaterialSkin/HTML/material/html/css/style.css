@@ -811,3 +811,23 @@ div.v-subheader {
  height:50px !important;
  margin-left:-4px;
 }
+
+.lms-jumplist {
+ padding:8px 0px 8px 0px; /* t, r, b, l */
+ margin:0px !important;
+ width:24px;
+ background-color:#444;
+ float:left;
+ display:grid;
+ grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));
+ grid-gap:0px;
+ overflow-y:hidden !important;
+}
+
+.lms-jumplist div {
+ width:100%;
+ text-align:center;
+ vertical-align:middle;
+ cursor:pointer;
+ opacity:0.5;
+}

@@ -94,6 +94,18 @@
  margin:0px;
 }
 
+.lms-list-jump {
+ width:calc(100vw - 24px);
+ left:24px;
+}
+
+.lms-jumplist {
+ position:fixed;
+ top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
+ left:0px;
+}
+
 .lms-image-grid {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));

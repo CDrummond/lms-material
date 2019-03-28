@@ -467,7 +467,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.filename});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title: i.title});
                 }
                 resp.items.push(i);
             });

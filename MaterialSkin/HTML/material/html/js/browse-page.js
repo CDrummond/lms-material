@@ -104,7 +104,6 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer></v-spacer>
-   <v-btn flat icon v-if="jumplist && jumplist.length>1 && items.length>10" @click.stop="jumpListMenu($event)" class="toolbar-button" :title="trans.jumpto"><v-icon>low_priority</v-icon></v-btn>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-for="(action, index) in menuActions">
     <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button" :title="action.title">
@@ -140,8 +139,15 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-card>
   </div>
  </v-list>
+ <div v-else>
 
- <v-list v-else class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle}" id="browse-list">
+ <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1 && items.length>10">
+  <template v-for="(item) in filteredJumplist">
+   <div @click="jumpTo(item)">{{item.key==' ' ? '?' : item.key}}</div>
+  </template>
+ </div>
+
+ <v-list class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1 && items.length>10}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0" @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
@@ -252,6 +258,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
+ </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
   <v-list v-if="menu.item">
@@ -272,13 +279,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list v-if="menu.jumplist" class="jumplist-menu">
-   <template v-for="(item, index) in menu.jumplist">
-    <v-list-tile @click="jumpTo(item)">
-     <v-list-tile-title>{{item.key==' ' ? '' : (item.key+' - ')}}{{item.title}}</v-list-tile-title>
-    </v-list-tile>
-   </template>
-  </v-list>
  </v-menu>
 </div>
       `,
@@ -291,7 +291,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
-                     deleteall:undefined, removeall:undefined, jumpto:undefined },
+                     deleteall:undefined, removeall:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             pinned: [],
@@ -300,7 +300,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             collapsed: [false, false, false],
             showRatingButton: false,
             section: undefined,
-            letter: undefined
+            letter: undefined,
+            filteredJumplist: []
         }
     },
     computed: {
@@ -435,8 +436,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             SEARCH_LIB_ACTION.title=i18n("Search");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
-                          deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items"),
-                          jumpto:i18n("Jump to") };
+                          deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
 
             this.top = [
                 { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
@@ -606,6 +606,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.listSize = item.range ? item.range.count : resp.total;
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
+                this.filteredJumplist = [];
                 this.baseActions=resp.baseActions;
                 this.menuActions=[];
                 this.isTop = false;
@@ -666,6 +667,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setGridAlignment();
                     this.setBgndCover();
                     setScrollTop(this.scrollElement, 0);
+                    this.filterJumplist();
                 });
             }
         },
@@ -1101,6 +1103,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length>LMS_BATCH_SIZE ? this.items.length : LMS_BATCH_SIZE).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
+                this.jumplist=resp.jumplist;
+                this.filteredJumplist = [];
                 if (resp && resp.total) {
                     this.listSize = resp.total;
                 } else {
@@ -1117,6 +1121,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.sortItems();
                 this.$nextTick(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                    this.filterJumplist();
                 });
                 this.fetchingItems = false;
             }).catch(err => {
@@ -1140,6 +1145,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var prev = this.history.length>0 ? this.history[0].pos : 0;
             this.items = this.getTop();
             this.jumplist = [];
+            this.filteredJumplist = [];
             this.listSize = this.items.length;
             this.history=[];
             this.current = null;
@@ -1185,6 +1191,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var changedView = this.useGrid != prev.useGrid;
             this.items = prev.items;
             this.jumplist = prev.jumplist;
+            this.filteredJumplist = [];
             this.useGrid = prev.useGrid;
             this.useScroller = prev.useScroller;
             this.baseActions = prev.baseActions;
@@ -1206,6 +1213,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setGridAlignment();
                     this.setBgndCover();
                     setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                    this.filterJumplist();
                 });
             }
         },
@@ -1974,9 +1982,43 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var pos = item.index*LMS_LIST_ELEMENT_SIZE;
                 setScrollTop(this.scrollElement, pos>0 ? pos : 0);
             }
+        },
+        filterJumplist(isResize) {
+            if (this.jumplist.length<=1) {
+                return;
+            }
+
+            var maxItems = Math.floor((this.scrollElement.clientHeight-(48+16))/24); // TODO: SIze???
+            if (maxItems>=this.jumplist.length) {
+                if (!isResize || (maxItems!=this.filteredJumplist.lenth)) {
+                    this.filteredJumplist = this.jumplist;
+                }
+            } else {
+                var items = [this.jumplist[0]];
+                var interval = Math.floor((this.jumplist.length - 2)/(maxItems - 2));
+                for (var i = 1; i < maxItems - 1; i++) {
+                    items.push(this.jumplist[i * interval]);
+                }
+                items.push(this.jumplist[this.jumplist.length-1]);
+                if (!isResize || (items.length!=this.filteredJumplist.lenth)) {
+                    this.filteredJumplist = items;
+                }
+            }
         }
     },
     mounted() {
+        let that = this;
+        let timeout = undefined;
+        window.addEventListener('resize', () => {
+            if (that.useScroller) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+                timeout = setTimeout(function () {
+                    that.filterJumplist(true);
+                }, 50);
+            }
+        }, false);
         // Get server prefs  for:
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?

@@ -65,6 +65,10 @@ body {
  margin:0px;
 }
 
+.lms-jumplist {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+}
+
 .lms-image-grid {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  overflow:auto;

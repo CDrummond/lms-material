@@ -171,7 +171,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </template>
 
   <RecycleScroller v-if="useScroller" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
-   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" slot-scope="{item, index}">
+   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}">
     <v-list-tile-avatar v-if="item.selected || item.image" :tile="true" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" :src="item.image"></img>

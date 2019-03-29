@@ -351,6 +351,10 @@ a {
  transition:none !important;
 }
 
+.v-list__tile--avatar .v-subheader {
+ padding:0 3px;
+}
+
 /* Stop vuetify changing padding when width changes */
 @media only screen and (max-width:959px) {
  .v-toolbar__content,

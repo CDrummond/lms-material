@@ -347,6 +347,10 @@ a {
  margin-right:20px;
 }
 
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub {
+ transition:none !important;
+}
+
 /* Stop vuetify changing padding when width changes */
 @media only screen and (max-width:959px) {
  .v-toolbar__content,

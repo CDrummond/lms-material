@@ -1,6 +1,7 @@
 0.4.1
 -----
 1. Reduce space used to cache artist, and album, lists.
+2. Fix 'Move to next in queue' for tracks before the current track.
 
 0.4.0
 -----

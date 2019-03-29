@@ -456,7 +456,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ["playlist", "index", index]);
             } else if (PQ_PLAY_NEXT_ACTION===act) {
                 if (index!==this.currentIndex) {
-                    bus.$emit('playerCommand', ["playlist", "move", index, this.currentIndex+1]);
+                    bus.$emit('playerCommand', ["playlist", "move", index, index>this.currentIndex ? this.currentIndex+1 : this.currentIndex]);
                 }
             } else if (PQ_REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);

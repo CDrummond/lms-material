@@ -13,6 +13,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     try {
     if (data && data.result) {
         resp.total = data.result.count;
+        if (resp.total>LMS_BATCH_SIZE) {
+            resp.total = 1;
+            resp.subtitle=i18n("%1 Items", data.result.count);
+            resp.items.push({title:i18n("ERROR: Too many items. A maximum of %1 items can be handled. Please use A..Z groups"), type: 'text', id:'error'});
+            return resp;
+        }
+
         resp.useScroller = (parent && parent.range ? parent.range.count : resp.total) >= LMS_MIN_LIST_SCROLLER_ITEMS;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {

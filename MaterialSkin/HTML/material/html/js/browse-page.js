@@ -184,7 +184,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
-    <v-list-tile-content>
+    <v-subheader v-if="item.header">{{item.header}}</v-subheader>
+    <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
      <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
     </v-list-tile-content>
@@ -204,7 +205,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </div>
    </v-subheader>
 
-   <v-divider v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
+   <v-divider v-else-if="!current && !item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -254,6 +255,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
+   <v-divider v-if="current"></v-divider>
   </template>
 
   <v-list-tile class="lms-list-pad"></v-list-tile>

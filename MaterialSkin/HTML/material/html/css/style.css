@@ -347,7 +347,7 @@ a {
  margin-right:20px;
 }
 
-.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub {
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card {
  transition:none !important;
 }
 

@@ -16,8 +16,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         resp.useScroller = (parent && parent.range ? parent.range.count : resp.total) >= LMS_MIN_LIST_SCROLLER_ITEMS;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
+            var totalResults = 0;
             if (data.result.contributors_loop && data.result.contributors_count>0) {
-                resp.items.push({header: i18n("Artists"), id:"search.artists"});
+                totalResults += data.result.contributors_count;
+                resp.items.push({header: i18np("1 Artist", "%1 Artists", data.result.contributors_count), id:"search.artists"});
                 data.result.contributors_loop.forEach(i => {
                     var infoPlugin = getLocalStorageBool('infoPlugin');
                     resp.items.push({
@@ -34,7 +36,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             if (data.result.albums_loop && data.result.albums_count>0) {
-                resp.items.push({header: i18n("Albums"), id:"search.albums"});
+                totalResults += data.result.albums_count;
+                resp.items.push({header: i18np("1 Album", "%1 Albums", data.result.albums_count), id:"search.albums"});
                 data.result.albums_loop.forEach(i => {
                     resp.items.push({
                                   id: "album_id:"+i.album_id,
@@ -49,9 +52,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             if (data.result.tracks_loop && data.result.tracks_count>0) {
-                if (idStart<=0 || (data.result.contributors_loop && data.result.contributors_count>0) || (data.result.albums_loop && data.result.albums_count>0)) {
-                    resp.items.push({header: i18n("Tracks"), id:"search.tracks"});
-                }
+                totalResults += data.result.tracks_count;
+                resp.items.push({header: i18np("1 Track", "%1 Tracks", data.result.tracks_count), id:"search.tracks"});
                 data.result.tracks_loop.forEach(i => {
                     resp.items.push({
                                   id: "track_id:"+i.track_id,
@@ -63,7 +65,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             if (data.result.genres_loop && data.result.genres_count>0) {
-                resp.items.push({header: i18n("Genres"), id:"search.genres"});
+                totalResults += data.result.genres_count;
+                resp.items.push({header: i18np("1 Genre", "%1 Genres", data.result.genres_count), id:"search.genres"});
                 data.result.genres_loop.forEach(i => {
                     resp.items.push({
                                   id: "genre_id:"+i.genre_id,
@@ -76,6 +79,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               });
                 });
             }
+            resp.subtitle=i18np("1 Item", "%1 Items", totalResults);
+            resp.total = resp.items.length;
         } else if (data.result.indexList) { // Split artist/albums into A..Z groups
             var start=0;
             var isArtists = data.result.artists_loop;

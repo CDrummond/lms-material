@@ -27,8 +27,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   image: (infoPlugin && options.artistImages) ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
-                                  type: "group",
-                                  favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.contributor_id+"/image.png" : undefined
+                                  type: "group"
                               });
                 });
             }
@@ -42,8 +41,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, "sort:tracknum"],
                                   image: lmsServerAddress+"/music/" + i.artwork + "/cover" + LMS_LIST_IMAGE_SIZE,
                                   menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
-                                  type: "group",
-                                  favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined
+                                  type: "group"
                               });
                 });
             }
@@ -480,8 +478,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                     (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE) : undefined,
                               params: ["artist_id:"+ i.id, "tags:jly", "sort:"+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
-                              type: "group",
-                              favIcon: (infoPlugin && options.artistImages) ? "imageproxy/mai/artist/"+i.id+"/image.png" : undefined
+                              type: "group"
                           };
                 if (params.length>0) {
                     params.forEach(p => {
@@ -518,7 +515,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               params: ["album_id:"+ i.id, TRACK_TAGS, "sort:tracknum"],
                               menuActions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",
-                              favIcon: i.artwork_track_id ? "music/"+i.artwork_track_id+"/cover" : undefined,
                               origTitle: i.album,
                               // Bug on my system? There is a 'No Album' entry with no tracks!
                               disabled: undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist

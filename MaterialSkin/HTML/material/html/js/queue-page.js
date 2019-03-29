@@ -548,7 +548,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
-            var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
+            var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + (LMS_QUEUE_BATCH_SIZE/2) : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length);
                 this.items.push.apply(this.items, resp.items);
@@ -595,7 +595,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.fetchingItems = true;
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
-                        this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
+                        this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
                     var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;

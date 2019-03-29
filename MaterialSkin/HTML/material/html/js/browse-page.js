@@ -609,9 +609,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItems = true;
-            var lmsBatchSize = item.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
             var start = item.range ? item.range.start : 0;
-            var count = item.range ? item.range.count < lmsBatchSize ? item.range.count : lmsBatchSize : batchSize ? batchSize : lmsBatchSize;
+            var count = item.range && item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE;
             lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
                 this.options.ratingsSupport=this.$store.state.ratingsSupport;
                 var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
@@ -1129,7 +1128,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.clearSelection();
             var pos=this.scrollElement.scrollTop;
             this.fetchingItems = true;
-            lmsList(this.playerId(), this.command.command, this.command.params, 0, this.items.length>LMS_BATCH_SIZE ? this.items.length : LMS_BATCH_SIZE).then(({data}) => {
+            lmsList(this.playerId(), this.command.command, this.command.params).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
@@ -1812,38 +1811,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     this.letter = undefined;
                 }
-            }
-
-            if (this.fetchingItems || this.listSize<=this.items.length) {
-                return;
-            }
-
-            const scrollY = this.scrollElement.scrollTop;
-            const visible = this.scrollElement.clientHeight;
-            const pageHeight = this.scrollElement.scrollHeight;
-            const pad = (visible*2.5);
-            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchingItems = true;
-                var lmsBatchSize = this.current.cancache ? LMS_CACHE_BATCH_SIZE : LMS_BATCH_SIZE;
-                var start = this.current.range ? this.current.range.start+this.items.length : this.items.length;
-                var count = this.current.range ? (this.current.range.count-this.items.length) < lmsBatchSize ? (this.current.range.count-this.items.length) : lmsBatchSize : lmsBatchSize;
-
-                lmsList(this.playerId(), this.command.command, this.command.params, start, count, this.current.cancache).then(({data}) => {
-                    var resp = parseBrowseResp(data, this.current, this.options, this.items.length,
-                                               this.current.cancache ? cacheKey(this.command.command, this.command.params, start, count) : undefined);
-                    if (resp && resp.items) {
-                        this.items.push.apply(this.items, resp.items);
-                    }
-                    if (resp && resp.total) {
-                        this.listSize = resp.total;
-                    }
-                    this.fetchingItems = false;
-                }).catch(err => {
-                    this.fetchingItems = false;
-                    logError(err, this.command.command, this.command.params, start, count);
-                });
             }
         },
         setGridAlignment() {

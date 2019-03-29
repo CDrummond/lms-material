@@ -5,31 +5,56 @@
  * MIT license.
  */
 
-var PLAY_ACTION             = {cmd:"play",       icon:"play_circle_outline"};
-var PLAY_ALBUM_ACTION       = {cmd:"play_album", icon:"album"};
-var PLAY_ALL_ACTION         = {cmd:"playall",    icon:"play_circle_outline"};
-var ADD_ACTION              = {cmd:"add",        icon:"add_circle_outline"};
-var ADD_ALL_ACTION          = {cmd:"addall",     icon:"add_circle_outline"};
-var INSERT_ACTION           = {cmd:"add-hold",   icon:"format_indent_increase"};
-var MORE_ACTION             = {cmd:"more",       svg: "more"};
-var MORE_LIB_ACTION         = {cmd:"lib-more",   svg: "more"};
-var ADD_RANDOM_ALBUM_ACTION = {cmd:"random",     icon:"album"};
-var RENAME_PL_ACTION        = {cmd:"rename-pl",  icon:"edit"};
-var RENAME_FAV_ACTION       = {cmd:"rename-fav", icon:"edit"};
-var EDIT_FAV_ACTION         = {cmd:"edit-fav",   icon:"edit"};
-var ADD_FAV_ACTION          = {cmd:"add-fav",    svg:"add-favorite"};
-var DELETE_ACTION           = {cmd:"delete",     icon:"delete"};
-var ADD_TO_FAV_ACTION       = {cmd:"addfav",     svg:"add-favorite"};
-var REMOVE_FROM_FAV_ACTION  = {cmd:"removefav",  svg:"remove-favorite"};
-var PIN_ACTION              = {cmd:"pin",        svg: "pin"};
-var UNPIN_ACTION            = {cmd:"unpin",      svg: "unpin"};
-var SELECT_ACTION           = {cmd:"select",     icon:"check_box_outline_blank"};
-var UNSELECT_ACTION         = {cmd:"unselect",   icon:"check_box"};
-var RATING_ACTION           = {cmd:"rating",     icon:"stars"};
-var SEARCH_LIB_ACTION       = {cmd:"search-lib", icon:"search"};
+const DIVIDER                 = -1;
+const PLAY_ACTION             = 0;
+const PLAY_ALBUM_ACTION       = 1;
+const PLAY_ALL_ACTION         = 2;
+const ADD_ACTION              = 3;
+const ADD_ALL_ACTION          = 4;
+const INSERT_ACTION           = 5;
+const MORE_ACTION             = 6;
+const MORE_LIB_ACTION         = 7;
+const ADD_RANDOM_ALBUM_ACTION = 8;
+const RENAME_PL_ACTION        = 9;
+const RENAME_FAV_ACTION       = 10;
+const EDIT_FAV_ACTION         = 11;
+const ADD_FAV_ACTION          = 12;
+const DELETE_ACTION           = 13;
+const ADD_TO_FAV_ACTION       = 14;
+const REMOVE_FROM_FAV_ACTION  = 15;
+const PIN_ACTION              = 16;
+const UNPIN_ACTION            = 17;
+const SELECT_ACTION           = 18;
+const UNSELECT_ACTION         = 19;
+const RATING_ACTION           = 20;
+const SEARCH_LIB_ACTION       = 21;
+
+var B_ACTIONS=[
+    {cmd:"play",       icon:"play_circle_outline"},
+    {cmd:"play_album", icon:"album"},
+    {cmd:"playall",    icon:"play_circle_outline"},
+    {cmd:"add",        icon:"add_circle_outline"},
+    {cmd:"addall",     icon:"add_circle_outline"},
+    {cmd:"add-hold",   icon:"format_indent_increase"},
+    {cmd:"more",       svg: "more"},
+    {cmd:"lib-more",   svg: "more"},
+    {cmd:"random",     icon:"album"},
+    {cmd:"rename-pl",  icon:"edit"},
+    {cmd:"rename-fav", icon:"edit"},
+    {cmd:"edit-fav",   icon:"edit"},
+    {cmd:"add-fav",    svg:"add-favorite"},
+    {cmd:"delete",     icon:"delete"},
+    {cmd:"addfav",     svg:"add-favorite"},
+    {cmd:"removefav",  svg:"remove-favorite"},
+    {cmd:"pin",        svg: "pin"},
+    {cmd:"unpin",      svg: "unpin"},
+    {cmd:"select",     icon:"check_box_outline_blank"},
+    {cmd:"unselect",   icon:"check_box"},
+    {cmd:"rating",     icon:"stars"},
+    {cmd:"search-lib", icon:"search"}
+];
 
 const MAX_GRID_TEXT_LEN = 80;
-const DIVIDER = {divider:true};
 const TERM_PLACEHOLDER        = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "__ALBUM_SORT__";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "__ARTIST_ALBUM_SORT__";
@@ -106,9 +131,9 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-for="(action, index) in menuActions">
-    <v-btn flat icon @click.stop="headerAction(action.cmd)" class="toolbar-button" :title="action.title">
-      <img v-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{action.icon}}</v-icon>
+    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="B_ACTIONS[action].title">
+      <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
   </v-layout>
@@ -132,8 +157,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div class="image-grid-text truncate-multiline subtext">{{item.subtitle | clampText}}</div>
      <v-btn flat icon v-if="item.menuActions && item.menuActions.length>0" @click.stop="itemMenu(item, index, $event)" class="image-grid-btn">
       <v-icon v-if="item.menuActions && item.menuActions.length>1">more_vert</v-icon>
-      <v-icon v-else-if="item.menuActions && item.menuActions.length===1 && undefined==item.menuActions[0].svg" :title="item.menuActions[0].title">{{item.menuActions[0].icon}}</v-icon>
-      <img v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" class="svg-img" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else-if="item.menuActions && item.menuActions.length===1 && undefined==B_ACTIONS[item.menuActions[0]].svg" :title="B_ACTIONS[item.menuActions[0]].title">{{B_ACTIONS[item.menuActions[0]].icon}}</v-icon>
+      <img v-else-if="item.menuActions && item.menuActions.length===1" :title="B_ACTIONS[item.menuActions[0]].title" class="svg-img" :src="B_ACTIONS[item.menuActions[0]].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-card-text>
    </v-card>
@@ -167,9 +192,9 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>
 
-    <v-list-tile-action :title="UNPIN_ACTION.title" @click.stop="itemAction(UNPIN_ACTION.cmd, item, index)">
+    <v-list-tile-action :title="B_ACTIONS[UNPIN_ACTION].title" @click.stop="itemAction(UNPIN_ACTION, item, index)">
      <v-btn icon>
-      <img class="svg-img" :src="UNPIN_ACTION.svg | svgIcon(darkUi)"></img>
+      <img class="svg-img" :src="B_ACTIONS[UNPIN_ACTION].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
 
@@ -200,7 +225,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
   <template v-else v-for="(item, index) in items">
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
-    <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action.cmd, item, index)">
+    <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action, item, index)">
      <v-btn icon><v-icon>{{item.action.icon}}</v-icon></v-btn>
     </div>
    </v-subheader>
@@ -248,10 +273,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="item.menuActions[0].title" @click.stop="itemAction(item.menuActions[0].cmd, item, index)">
+    <v-list-tile-action v-else-if="item.menuActions && item.menuActions.length===1" :title="B_ACTIONS[item.menuActions[0]].title" @click.stop="itemAction(item.menuActions[0], item, index)">
      <v-btn icon>
-      <v-icon v-if="undefined==item.menuActions[0].svg">{{item.menuActions[0].icon}}</v-icon>
-      <img v-else class="svg-img" :title="item.menuActions[0].title" :src="item.menuActions[0].svg | svgIcon(darkUi)"></img>
+      <v-icon v-if="undefined==B_ACTIONS[item.menuActions[0]].svg">{{B_ACTIONS[item.menuActions[0]].icon}}</v-icon>
+      <img v-else class="svg-img" :title="B_ACTIONS[item.menuActions[0]].title" :src="B_ACTIONS[item.menuActions[0]].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -265,11 +290,11 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.menuActions">
-    <v-divider v-if="action.divider"></v-divider>
-    <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
+    <v-divider v-if="DIVIDER==action"></v-divider>
+    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-title>
-       <div v-if="undefined==action.svg"><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</div>
-       <div v-else><img class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{action.title}}</div>
+       <div v-if="undefined==B_ACTIONS[action].svg"><v-icon>{{B_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
+       <div v-else><img class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
      </v-list-tile-title>
     </v-list-tile>
    </template>
@@ -393,7 +418,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('trackInfo', function(item) {
             this.goHome();
-            this.itemAction(MORE_LIB_ACTION.cmd, item);
+            this.itemAction(MORE_LIB_ACTION, item);
         }.bind(this));
 
         bus.$on('refreshList', function(section) {
@@ -416,26 +441,26 @@ var lmsBrowse = Vue.component("lms-browse", {
     },
     methods: {
         initItems() {
-            PLAY_ACTION.title=PLAY_ALL_ACTION.title=i18n("Play now");
-            PLAY_ALBUM_ACTION.title=i18n("Play album starting at track");
-            ADD_ACTION.title=ADD_ALL_ACTION.title=i18n("Append to queue");
-            ADD_RANDOM_ALBUM_ACTION.title=i18n("Append random album to queue");
-            INSERT_ACTION.title=i18n("Play next");
-            MORE_ACTION.title=i18n("More");
-            MORE_LIB_ACTION.title=i18n("More");
-            RENAME_PL_ACTION.title=i18n("Rename");
-            RENAME_FAV_ACTION.title=i18n("Rename");
-            EDIT_FAV_ACTION.title=i18n("Edit");
-            ADD_FAV_ACTION.title=i18n("Add favorite");
-            DELETE_ACTION.title=i18n("Delete");
-            ADD_TO_FAV_ACTION.title=i18n("Add to favorites");
-            REMOVE_FROM_FAV_ACTION.title=i18n("Remove from favorites");
-            PIN_ACTION.title=i18n("Pin to main page");
-            UNPIN_ACTION.title=i18n("Un-pin from main page");
-            SELECT_ACTION.title=i18n("Select");
-            UNSELECT_ACTION.title=i18n("Un-select");
-            RATING_ACTION.title=i18n("Set rating");
-            SEARCH_LIB_ACTION.title=i18n("Search");
+            B_ACTIONS[PLAY_ACTION].title=B_ACTIONS[PLAY_ALL_ACTION].title=i18n("Play now");
+            B_ACTIONS[PLAY_ALBUM_ACTION].title=i18n("Play album starting at track");
+            B_ACTIONS[ADD_ACTION].title=B_ACTIONS[ADD_ALL_ACTION].title=i18n("Append to queue");
+            B_ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
+            B_ACTIONS[INSERT_ACTION].title=i18n("Play next");
+            B_ACTIONS[MORE_ACTION].title=i18n("More");
+            B_ACTIONS[MORE_LIB_ACTION].title=i18n("More");
+            B_ACTIONS[RENAME_PL_ACTION].title=i18n("Rename");
+            B_ACTIONS[RENAME_FAV_ACTION].title=i18n("Rename");
+            B_ACTIONS[EDIT_FAV_ACTION].title=i18n("Edit");
+            B_ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
+            B_ACTIONS[DELETE_ACTION].title=i18n("Delete");
+            B_ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
+            B_ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
+            B_ACTIONS[PIN_ACTION].title=i18n("Pin to main page");
+            B_ACTIONS[UNPIN_ACTION].title=i18n("Un-pin from main page");
+            B_ACTIONS[SELECT_ACTION].title=i18n("Select");
+            B_ACTIONS[UNSELECT_ACTION].title=i18n("Un-select");
+            B_ACTIONS[RATING_ACTION].title=i18n("Set rating");
+            B_ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
@@ -618,7 +643,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (this.current && this.current.menuActions) {
                     this.current.menuActions.forEach(i => {
-                        if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
+                        if (i==ADD_ACTION|| i==PLAY_ACTION) {
                             this.menuActions=[ADD_ACTION, PLAY_ACTION];
                             return;
                         }
@@ -634,7 +659,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                    !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
                                                        this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
                     this.items[0].menuActions.forEach(i => {
-                        if (i.cmd==ADD_ACTION.cmd || i.cmd==PLAY_ACTION.cmd) {
+                        if (i==ADD_ACTION || i==PLAY_ACTION) {
                             this.menuActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                             // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
                             if (this.items[0].params && this.items[0].params.item_id) {
@@ -876,20 +901,20 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, suppressNotification) {
-            if (act===RENAME_PL_ACTION.cmd) {
+            if (act===RENAME_PL_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename playlist"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};
-            } else if (act==RENAME_FAV_ACTION.cmd) {
+            } else if (act==RENAME_FAV_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["favorites", "rename", removeUniqueness(item.id), "title:"+TERM_PLACEHOLDER]};
-            } else if (act==SEARCH_LIB_ACTION.cmd) {
+            } else if (act==SEARCH_LIB_ACTION) {
                 this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
                                 command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
-            } else if (act==ADD_FAV_ACTION.cmd) {
+            } else if (act==ADD_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add');
-            } else if (act==EDIT_FAV_ACTION.cmd) {
+            } else if (act==EDIT_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'edit', item);
-            } else if (act===DELETE_ACTION.cmd) {
+            } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         if (item.id.startsWith("playlist_id:")) {
@@ -904,7 +929,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                 });
-            } else if (act===ADD_TO_FAV_ACTION.cmd) {
+            } else if (act===ADD_TO_FAV_ACTION) {
                 var favUrl = item.favUrl ? item.favUrl : item.url;
                 var favIcon = item.favIcon;
                 var favType = "audio";
@@ -922,8 +947,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     favIcon="html/images/genres.png";
                 } else if (item.id.startsWith("artist_id:")) {
                     favUrl="db:contributor.name="+encodeURIComponent(favTitle);
+                    favIcon=removeImageSizing(item.image);
                 } else if (item.id.startsWith("album_id:")) {
                     favUrl="db:album.title="+encodeURIComponent(favTitle);
+                    favIcon=removeImageSizing(item.image);
                 } else if (item.id.startsWith("year:")) {
                     favUrl="db:year.id="+encodeURIComponent(favTitle);
                     favIcon="html/images/years.png";
@@ -962,7 +989,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('showMessage', i18n("Failed to add to favorites!"));
                     logError(err, command);
                 });
-            } else if (act===REMOVE_FROM_FAV_ACTION.cmd) {
+            } else if (act===REMOVE_FROM_FAV_ACTION) {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
@@ -975,7 +1002,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                 });
-            } else if (act===ADD_RANDOM_ALBUM_ACTION.cmd) {
+            } else if (act===ADD_RANDOM_ALBUM_ACTION) {
                 var params = [];
                 item.params.forEach(p => { params.push(p); });
                 params.push("sort:random");
@@ -997,9 +1024,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }).catch(err => {
                     logAndShowError(err, undefined, ["albums"], params, 0, 1);
                 });
-            } else if (act===MORE_ACTION.cmd) {
+            } else if (act===MORE_ACTION) {
                 this.fetchItems(this.buildCommand(item, act), item);
-            } else if (act===MORE_LIB_ACTION.cmd) {
+            } else if (act===MORE_LIB_ACTION) {
                 if (item.id) {
                     if (item.id.startsWith("artist_id:")) {
                         this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
@@ -1011,11 +1038,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.fetchItems({command: ["genreinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
                     }
                 }
-            } else if (act===PIN_ACTION.cmd) {
+            } else if (act===PIN_ACTION) {
                 this.pin(item, true);
-            } else if (act===UNPIN_ACTION.cmd) {
+            } else if (act===UNPIN_ACTION) {
                 this.pin(item, false);
-            } else if (SELECT_ACTION.cmd===act) {
+            } else if (SELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
                 if (idx<0) {
                     this.selection.push(index);
@@ -1025,7 +1052,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.menuActions[idx]=UNSELECT_ACTION;
                     }
                 }
-            } else if (UNSELECT_ACTION.cmd===act) {
+            } else if (UNSELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
                 if (idx>-1) {
                     this.selection.splice(idx, 1);
@@ -1035,10 +1062,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.menuActions[idx]=SELECT_ACTION;
                     }
                 }
-            } else if (RATING_ACTION.cmd==act) {
+            } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);
-            } else if (PLAY_ALBUM_ACTION.cmd==act) {
-                var command = this.buildFullCommand(this.current, PLAY_ACTION.cmd, index);
+            } else if (PLAY_ALBUM_ACTION==act) {
+                var command = this.buildFullCommand(this.current, B_ACTIONS[PLAY_ACTION].cmd, index);
                 command.command.push("play_index:"+index);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
@@ -1059,9 +1086,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
                     if (!this.desktop) {
-                        if (act===PLAY_ACTION.cmd) {
+                        if (act===PLAY_ACTION) {
                             this.$router.push('/nowplaying');
-                        } else if (act===ADD_ACTION.cmd && (undefined==suppressNotification || !suppressNotification)) {
+                        } else if (act===ADD_ACTION && (undefined==suppressNotification || !suppressNotification)) {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         } else if (act==="insert") {
                             bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", item.title));
@@ -1076,12 +1103,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!item.menuActions) {
                 return;
             }
-            if (1==item.menuActions.length && item.menuActions[0].cmd==MORE_ACTION.cmd) {
+            if (1==item.menuActions.length && item.menuActions[0]==MORE_ACTION) {
                 // Only have 'More' - dont display menu, just activate action...
-                this.itemAction(MORE_ACTION.cmd, item);
-            } else if (1==item.menuActions.length && item.menuActions[0].cmd==MORE_LIB_ACTION.cmd) {
+                this.itemAction(MORE_ACTION, item);
+            } else if (1==item.menuActions.length && item.menuActions[0]==MORE_LIB_ACTION) {
                 // Only have 'More' - dont display menu, just activate action...
-                this.itemAction(MORE_LIB_ACTION.cmd, item);
+                this.itemAction(MORE_LIB_ACTION, item);
             } else {
                 this.menu={show:true, item:item, x:event.clientX, y:event.clientY, index:index};
             }
@@ -1223,10 +1250,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             var origCommand = undefined;
 
             // Faking addall/playall, so build add/play command for first item...
-            if (PLAY_ALL_ACTION.cmd==commandName || ADD_ALL_ACTION.cmd==commandName) {
+            if (B_ACTIONS[PLAY_ALL_ACTION].cmd==commandName || B_ACTIONS[ADD_ALL_ACTION].cmd==commandName) {
                 item = this.items[0];
                 origCommand = commandName;
-                commandName = PLAY_ALL_ACTION.cmd==commandName ? "play" : "add";
+                commandName = B_ACTIONS[PLAY_ALL_ACTION].cmd==commandName ? "play" : "add";
             }
 
             var cmd = {command: [], params: [] };
@@ -1370,7 +1397,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             // If this *was* playall/addall, then need to convert back and set ID to parent
-            if (origCommand && (PLAY_ALL_ACTION.cmd==origCommand || ADD_ALL_ACTION.cmd==origCommand)) {
+            if (origCommand && (B_ACTIONS[PLAY_ALL_ACTION].cmd==origCommand || B_ACTIONS[ADD_ALL_ACTION].cmd==origCommand)) {
                 var c={command:[], params:[]};
                 cmd.command.forEach(p=> {
                     if (p=="play" || p=="add") {
@@ -1391,17 +1418,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             return cmd;
         },
         buildFullCommand(item, act, index) {
-            var command = this.buildCommand(item, act);
+            var command = this.buildCommand(item, B_ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
-                if (INSERT_ACTION.cmd==act) {
-                    act="insert";
-                }
                 if (item.url) {
-                    command.command = ["playlist", act, item.url, item.title];
+                    command.command = ["playlist", INSERT_ACTION==act ? "insert" : B_ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
-                    command.command = [item.app, "playlist", act, item.id];
+                    command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :B_ACTIONS[act].cmd, item.id];
                 } else if (item.id) {
-                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION.cmd ? "load" : act)];
+                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :B_ACTIONS[act].cmd)];
 
                     if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
                         item.params.forEach(p => {
@@ -1656,7 +1680,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
                 if (item.menuActions) {
                     for (var i=0; i<item.menuActions.length; ++i) {
-                        if (item.menuActions[i].cmd == PIN_ACTION.cmd) {
+                        if (item.menuActions[i] == PIN_ACTION) {
                             item.menuActions[i] = UNPIN_ACTION;
                             break;
                         }
@@ -1676,7 +1700,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                         if (item.menuActions) {
                             for (var i=0; i<item.menuActions.length; ++i) {
-                                if (item.menuActions[i].cmd == UNPIN_ACTION.cmd) {
+                                if (item.menuActions[i] == UNPIN_ACTION) {
                                     item.menuActions[i] = PIN_ACTION;
                                     break;
                                 }
@@ -1700,12 +1724,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         select(item, index) {
             if (this.selection.length>0) {
-                this.itemAction(this.selection.indexOf(index)<0 ? SELECT_ACTION.cmd : UNSELECT_ACTION.cmd, item, index);
+                this.itemAction(this.selection.indexOf(index)<0 ? SELECT_ACTION : UNSELECT_ACTION, item, index);
             }
         },
         deleteSelectedItems() {
             if (1==this.selection.length) {
-                this.itemAction(SECTION_FAVORITES==this.current.section ? REMOVE_FROM_FAV_ACTION.cmd : DELETE_ACTION.cmd, this.items[this.selection[0]], this.selection[0]);
+                this.itemAction(SECTION_FAVORITES==this.current.section ? REMOVE_FROM_FAV_ACTION : DELETE_ACTION, this.items[this.selection[0]], this.selection[0]);
             } else {
                 this.$confirm(SECTION_FAVORITES==this.current.section ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
                              {buttonTrueText: SECTION_FAVORITES==this.current.section ? i18n("Remove") : i18n("Delete"),
@@ -1726,7 +1750,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.selection.sort(function(a, b) { return a<b ? -1 : 1; });
             this.selection.forEach(idx => {
                 if (idx>-1 && idx<this.items.length) {
-                    commands.push({act:ADD_ACTION.cmd, item:this.items[idx], idx:idx});
+                    commands.push({act:ADD_ACTION, item:this.items[idx], idx:idx});
                 }
             });
             this.doCommands(commands);
@@ -1738,7 +1762,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (var i=0; i<this.selection.length; ++i) {
                 var idx = this.selection[i];
                 if (idx>-1 && idx<this.items.length) {
-                    commands.push({act:0==i ? PLAY_ACTION.cmd : ADD_ACTION.cmd, item:this.items[idx], idx:idx});
+                    commands.push({act:0==i ? PLAY_ACTION : ADD_ACTION, item:this.items[idx], idx:idx});
                 }
             }
             this.doCommands(commands);
@@ -1908,15 +1932,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var url = this.$store.state.browseBackdrop && this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;
 
             if (url) {
-                if (url.endsWith(LMS_LIST_IMAGE_SIZE+".png")) {
-                    url = url.replace(LMS_LIST_IMAGE_SIZE+".png", ".png");
-                } else if (url.endsWith(LMS_GRID_IMAGE_SIZE+".png")) {
-                    url = url.replace(LMS_GRID_IMAGE_SIZE+".png", ".png");
-                } else if (url.endsWith(LMS_LIST_IMAGE_SIZE)) {
-                    url = url.substring(0, url.length - LMS_LIST_IMAGE_SIZE.length);
-                } else if (url.endsWith(LMS_GRID_IMAGE_SIZE)) {
-                    url = url.substring(0, url.length - LMS_GRID_IMAGE_SIZE.length);
-                }
+               url=removeImageSizing(url);
             }
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
         },

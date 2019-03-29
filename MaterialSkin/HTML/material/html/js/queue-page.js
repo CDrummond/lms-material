@@ -5,15 +5,24 @@
  * MIT license.
  */
 
-var PQ_PLAY_NOW_ACTION =  { cmd: 'playnow',  icon: 'play_circle_outline'     };
-var PQ_PLAY_NEXT_ACTION = { cmd: 'playnext', icon: 'play_circle_filled'      };
-var PQ_REMOVE_ACTION =    { cmd: 'remove',   icon: 'remove_circle_outline'   };
-var PQ_MORE_ACTION =      { cmd: 'more',     svg:  'more'                    };
-var PQ_SELECT_ACTION =    { cmd: 'select',   icon: 'check_box_outline_blank' };
-var PQ_UNSELECT_ACTION =  { cmd: 'unselect', icon: 'check_box'               };
+const PQ_PLAY_NOW_ACTION =  0;
+const PQ_PLAY_NEXT_ACTION = 1;
+const PQ_REMOVE_ACTION =    2;
+const PQ_MORE_ACTION =      3;
+const PQ_SELECT_ACTION =    4;
+const PQ_UNSELECT_ACTION =  5;
 
 const PQ_STATUS_TAGS = "tags:dcltuyAKN";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
+
+var PQ_ACTIONS = [
+    { icon: 'play_circle_outline'     },
+    { icon: 'play_circle_filled'      },
+    { icon: 'remove_circle_outline'   },
+    { svg:  'more'                    },
+    { icon: 'check_box_outline_blank' },
+    { icon: 'check_box'               }
+];
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -195,11 +204,11 @@ var lmsQueue = Vue.component("lms-queue", {
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.actions">
-    <v-divider v-if="action.divider"></v-divider>
-    <v-list-tile v-else @click="itemAction(action.cmd, menu.item, menu.index)">
+    <v-divider v-if="DIVIDER==action"></v-divider>
+    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-title>
-      <div v-if="undefined==action.svg"><v-icon>{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</div>
-      <div v-else><img style="vertical-align: middle" :src="action.svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{action.title}}</div>
+      <div v-if="undefined==PQ_ACTIONS[action].svg"><v-icon>{{PQ_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{PQ_ACTIONS[action].title}}</div>
+      <div v-else><img style="vertical-align: middle" :src="PQ_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{PQ_ACTIONS[action].title}}</div>
      </v-list-tile-title>
     </v-list-tile>
    </template>
@@ -379,12 +388,12 @@ var lmsQueue = Vue.component("lms-queue", {
     },
     methods: {
         initItems() {
-            PQ_PLAY_NOW_ACTION.title=i18n('Play now');
-            PQ_PLAY_NEXT_ACTION.title=i18n('Move to next in queue');
-            PQ_REMOVE_ACTION.title=i18n('Remove from queue');
-            PQ_MORE_ACTION.title=i18n("More");
-            PQ_SELECT_ACTION.title=i18n("Select");
-            PQ_UNSELECT_ACTION.title=i18n("Un-select");
+            PQ_ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n('Play now');
+            PQ_ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n('Move to next in queue');
+            PQ_ACTIONS[PQ_REMOVE_ACTION].title=i18n('Remove from queue');
+            PQ_ACTIONS[PQ_MORE_ACTION].title=i18n("More");
+            PQ_ACTIONS[PQ_SELECT_ACTION].title=i18n("Select");
+            PQ_ACTIONS[PQ_UNSELECT_ACTION].title=i18n("Un-select");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), addUrl:i18n('Add URL'),
                           scrollToCurrent:i18n("Scroll to current track"),
                           save:i18n("Save"), clear:i18n("Clear"),
@@ -458,15 +467,15 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemAction(act, item, index) {
-            if (PQ_PLAY_NOW_ACTION.cmd===act) {
+            if (PQ_PLAY_NOW_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "index", index]);
-            } else if (PQ_PLAY_NEXT_ACTION.cmd===act) {
+            } else if (PQ_PLAY_NEXT_ACTION===act) {
                 if (index!==this.currentIndex) {
-                    bus.$emit('playerCommand', ["playlist", "move", index, this.currentIndex+1]);
+                    bus.$emit('playerCommand', ["playlist", "move", index, index>this.currentIndex ? this.currentIndex+1 : this.currentIndex]);
                 }
-            } else if (PQ_REMOVE_ACTION.cmd===act) {
+            } else if (PQ_REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
-            } else if (PQ_MORE_ACTION.cmd===act) {
+            } else if (PQ_MORE_ACTION===act) {
                 if (this.desktop) {
                     bus.$emit('trackInfo', item);
                 } else {
@@ -475,7 +484,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         bus.$emit('trackInfo', item);
                     });
                 }
-            } else if (PQ_SELECT_ACTION.cmd===act) {
+            } else if (PQ_SELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
                 if (idx<0) {
                     this.selection.push(index);
@@ -485,7 +494,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         item.actions[idx]=PQ_UNSELECT_ACTION;
                     }
                 }
-            } else if (PQ_UNSELECT_ACTION.cmd===act) {
+            } else if (PQ_UNSELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
                 if (idx>-1) {
                     this.selection.splice(idx, 1);
@@ -520,7 +529,7 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         select(item, index) {
             if (this.selection.length>0) {
-                this.itemAction(this.selection.indexOf(index)<0 ? PQ_SELECT_ACTION.cmd : PQ_UNSELECT_ACTION.cmd, item, index);
+                this.itemAction(this.selection.indexOf(index)<0 ? PQ_SELECT_ACTION : PQ_UNSELECT_ACTION, item, index);
             }
         },
         getDuration() {

@@ -117,6 +117,21 @@ function resolveImage(icon, image, size) {
     return lmsServerAddress+"/"+icon;
 }
 
+function removeImageSizing(path) {
+    if (undefined!=path) {
+        if (path.endsWith(LMS_LIST_IMAGE_SIZE+".png")) {
+            return path.replace(LMS_LIST_IMAGE_SIZE+".png", ".png");
+        } else if (path.endsWith(LMS_GRID_IMAGE_SIZE+".png")) {
+            return path.replace(LMS_GRID_IMAGE_SIZE+".png", ".png");
+        } else if (path.endsWith(LMS_LIST_IMAGE_SIZE)) {
+            return path.substring(0, path.length - LMS_LIST_IMAGE_SIZE.length);
+        } else if (path.endsWith(LMS_GRID_IMAGE_SIZE)) {
+            return path.substring(0, path.length - LMS_GRID_IMAGE_SIZE.length);
+        }
+    }
+    return path;
+}
+
 function titleSort(a, b) {
     var titleA = a.title.toUpperCase();
     var titleB = b.title.toUpperCase();

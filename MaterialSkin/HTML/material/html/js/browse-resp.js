@@ -22,6 +22,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         }
 
         resp.useScroller = (parent && parent.range ? parent.range.count : resp.total) >= LMS_MIN_LIST_SCROLLER_ITEMS;
+        var canUseGrid = !resp.useScroller || resp.total<LMS_MAX_GRID_ITEMS;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             var totalResults = 0;
@@ -240,7 +241,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
 
-            resp.useGrid = !isTrackStat && options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+            resp.useGrid = canUseGrid && !isTrackStat && options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -508,7 +509,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             var infoPlugin = getLocalStorageBool('infoPlugin');
-            resp.useGrid = options.useGrid && infoPlugin && options.artistImages;
+            resp.useGrid = canUseGrid && options.useGrid && infoPlugin && options.artistImages;
             data.result.artists_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
@@ -893,9 +894,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 resp.useGrid = true;
             }
             resp.total = resp.items.length;
-        }
-        if (resp.useScroller && resp.useGrid && resp.total>LMS_MAX_GRID_ITEMS) {
-            resp.useGrid = false;
         }
         if (cacheKey && lmsLastScan) {
             resp.iscache=true;

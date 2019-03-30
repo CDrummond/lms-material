@@ -198,7 +198,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}">-->
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action, item, index)">
-     <v-btn icon><v-icon>{{item.action.icon}}</v-icon></v-btn>
+     <v-btn icon><v-icon>{{B_ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>
    </v-subheader>
 

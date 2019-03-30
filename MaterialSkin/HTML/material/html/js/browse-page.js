@@ -139,7 +139,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
  </div>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
- <div v-show="letter" id="letterOverlay"></div>
+ <!-- <div v-show="letter" id="letterOverlay"></div> -->
 
  <v-list v-if="useGrid" class="lms-image-grid noselect bgnd-cover" id="browse-grid">
   <div v-for="(item, index) in items" :key="item.id" :id="'item'+index" v-if="!item.disabled">
@@ -1786,13 +1786,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         setScrollElement() {
             this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");
+            /*
             this.scrollElement.addEventListener('scroll', () => {
                 if (!this.scrollAnimationFrameReq) {
                     this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
                 }
-            });
+            });*/
         },
-        handleScroll() {
+        /*handleScroll() {
             this.scrollAnimationFrameReq = undefined;
             if (this.jumplist && this.jumplist.length>1 && !this.useGrid) {
                 if (undefined!==this.letterTimeout) {
@@ -1812,7 +1813,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.letter = undefined;
                 }
             }
-        },
+        },*/
         setGridAlignment() {
             if (!this.useGrid) {
                 return;

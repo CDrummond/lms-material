@@ -118,7 +118,7 @@ const store = new Vuex.Store({
         darkUi: true,
         artistAlbumSort:'yearalbum',
         albumSort:'album',
-        splitArtistsAndAlbums:true,
+        splitArtistsAndAlbums:false,
         useGrid:'albums',
         sortFavorites:true,
         showMenuAudio:true,

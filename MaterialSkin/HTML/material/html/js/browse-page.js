@@ -358,17 +358,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.previousScrollPos = this.scrollElement.scrollTop;
                 }
             }.bind(this));
-            if (isMobile()) {
                 bus.$on('nav', function(route) {
-                    if ('/browse'==route) {
-                        if (ignoreClick) {
-                            ignoreClick = false;
-                        } else if (this.history.length>0) {
-                            this.goBack();
-                        }
+                if ('/browse'==route) {
+                    if (ignoreClick) {
+                        ignoreClick = false;
+                    } else if (this.history.length>0) {
+                        this.goBack();
                     }
-                }.bind(this));
-            }
+                }
+              }.bind(this));
         }
 
         bus.$on('langChanged', function() {

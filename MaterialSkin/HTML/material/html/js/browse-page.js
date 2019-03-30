@@ -226,7 +226,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-else v-for="(item, index) in items">
    <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action, item, index)">
-     <v-btn icon><v-icon>{{item.action.icon}}</v-icon></v-btn>
+     <v-btn icon><v-icon>{{B_ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>
    </v-subheader>
 
@@ -377,7 +377,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         if (!this.desktop) {
             // Clicking on 'browse' nav button whilst in browse page goes back. But, when clicking from another
             // page to browse, we get 'routeChange' then 'nav'. So, we need to ignore the 1st 'nav' afer a 'routeChange'
-            var ignoreClick = true;
+            var ignoreClick = false;
 
             // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
             // page, so that it can be restored when going back here.
@@ -391,17 +391,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.previousScrollPos = this.scrollElement.scrollTop;
                 }
             }.bind(this));
-            if (isMobile()) {
                 bus.$on('nav', function(route) {
-                    if ('/browse'==route) {
-                        if (ignoreClick) {
-                            ignoreClick = false;
-                        } else if (this.history.length>0) {
-                            this.goBack();
-                        }
+                if ('/browse'==route) {
+                    if (ignoreClick) {
+                        ignoreClick = false;
+                    } else if (this.history.length>0) {
+                        this.goBack();
                     }
-                }.bind(this));
-            }
+                }
+              }.bind(this));
         }
 
         bus.$on('langChanged', function() {

@@ -119,7 +119,7 @@ const store = new Vuex.Store({
         artistAlbumSort:'yearalbum',
         albumSort:'album',
         splitArtistsAndAlbums:true,
-        useGrid:true,
+        useGrid:'albums',
         sortFavorites:true,
         showMenuAudio:true,
         serverMenus:false,

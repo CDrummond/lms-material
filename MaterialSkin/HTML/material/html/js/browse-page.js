@@ -1969,27 +1969,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 setScrollTop(this.scrollElement, pos>0 ? pos : 0);
             }
         },
-        filterJumplist(isResize) {
+        filterJumplist() {
             if (this.jumplist.length<=1) {
                 return;
             }
 
             var maxItems = Math.floor((this.scrollElement.clientHeight-(48+16))/24); // TODO: SIze???
-            if (maxItems>=this.jumplist.length) {
-                if (!isResize || (maxItems!=this.filteredJumplist.lenth)) {
-                    this.filteredJumplist = this.jumplist;
-                }
-            } else {
-                var items = [this.jumplist[0]];
-                var interval = Math.floor((this.jumplist.length - 2)/(maxItems - 2));
-                for (var i = 1; i < maxItems - 1; i++) {
-                    items.push(this.jumplist[i * interval]);
-                }
-                items.push(this.jumplist[this.jumplist.length-1]);
-                if (!isResize || (items.length!=this.filteredJumplist.lenth)) {
-                    this.filteredJumplist = items;
-                }
-            }
+            this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
         }
     },
     mounted() {
@@ -2001,7 +1987,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     clearTimeout(timeout);
                 }
                 timeout = setTimeout(function () {
-                    that.filterJumplist(true);
+                    that.filterJumplist();
                 }, 50);
             }
         }, false);

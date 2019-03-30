@@ -66,11 +66,7 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="libraries.length>0"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="useGrid = !useGrid" class="switch-label">
-      <v-list-tile-title>{{i18n('Use a grid for albums, and artists')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Place album covers, artist images (if supported), and others in a grid.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="useGrid"></v-switch></v-list-tile-action>
+     <v-select :items="gridItems" :label="i18n('Display items in a grid')" v-model="useGrid" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -219,7 +215,8 @@ Vue.component('lms-ui-settings', {
             artistAlbumSort:'yearalbum',
             albumSort:'album',
             splitArtistsAndAlbums: false,
-            useGrid:true,
+            useGrid:'albums',
+            gridItems: [],
             showMenuAudio:false,
             sortFavorites:false,
             serverMenus:false,
@@ -329,6 +326,11 @@ Vue.component('lms-ui-settings', {
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
+                ];
+            this.gridItems=[
+                { key:"never",  label:i18n("Never")},
+                { key:"always", label:i18n("Whenever possible")},
+                { key:"albums", label:i18n("For local albums only")}
                 ];
         },
         close() {

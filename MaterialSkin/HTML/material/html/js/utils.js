@@ -528,3 +528,18 @@ function getFromCache(key) {
     }
     return undefined;
 }
+
+function shrinkAray(array, limit) {
+    if (array.length<=limit) {
+        return array;
+    }
+    var res = [];
+    var i = 0;
+    var scale = array.length / limit;
+    while (i < limit) {
+        res.push(array[Math.round(i * scale)]);
+        i++;
+    }
+    res[res.length-1]=array[array.length-1];
+    return res;
+}

@@ -492,7 +492,9 @@ function canSplitIntoLetterGroups(item, command) {
 }
 
 function addToCache(key, resp) {
-    if (resp.items.length>LMS_CACHE_MAX_ITEMS) {
+    if (resp.items.length<5) {
+        removeLocalStorage(key);
+    } else if (resp.items.length>LMS_CACHE_MAX_ITEMS) {
         var copy = {items: [], baseActions:resp.baseActions, useGrid: resp.useGrid, total: resp.total, useScroller: resp.useScroller, jumplist:resp.jumplist };
         var copied = 0;
         var count = 0;

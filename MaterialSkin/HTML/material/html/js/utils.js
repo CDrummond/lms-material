@@ -490,3 +490,41 @@ function canSplitIntoLetterGroups(item, command) {
 
     return false;
 }
+
+function addToCache(key, resp) {
+    if (resp.items.length>LMS_CACHE_MAX_ITEMS) {
+        var copy = {items: [], baseActions:resp.baseActions, useGrid: resp.useGrid, total: resp.total, useScroller: resp.useScroller, jumplist:resp.jumplist };
+        var copied = 0;
+        var count = 0;
+        do {
+            copy.items = resp.items.slice(copied, copied+LMS_CACHE_MAX_ITEMS);
+            setLocalStorageVal(0==count ? key : (key+"{"+count+"}"), JSON.stringify(0==count ? copy : copy.items));
+            copied += LMS_CACHE_MAX_ITEMS;
+            count++;
+        } while (copied<resp.items.length)
+    } else {
+        setLocalStorageVal(key, JSON.stringify(resp));
+    }
+}
+
+function getFromCache(key) {
+    var entry = getLocalStorageVal(key, undefined);
+
+    if (undefined!=entry) {
+        // Return promise!
+        return new Promise(function(resolve, reject) {
+            var cache = JSON.parse(entry);
+            var maxEntries = Math.ceil(LMS_BATCH_SIZE/LMS_CACHE_MAX_ITEMS)+1;
+            for (var c = 1; c<maxEntries; ++c) {
+                entry = getLocalStorageVal(key+"{"+c+"}", undefined);
+                if (undefined==entry) {
+                    break;
+                }
+                cache.items.push.apply(cache.items, JSON.parse(entry));
+            }
+            cache.iscache = true;
+            resolve({data:cache});
+        });
+    }
+    return undefined;
+}

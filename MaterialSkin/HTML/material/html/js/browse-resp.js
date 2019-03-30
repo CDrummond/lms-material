@@ -8,6 +8,7 @@
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
+    // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false, jumplist:[] };
 
     try {
@@ -898,7 +899,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         }
         if (cacheKey && lmsLastScan) {
             resp.iscache=true;
-            setLocalStorageVal(cacheKey, JSON.stringify(resp));
+            addToCache(cacheKey, resp);
         }
     } else if (data && data.iscache) { // From cache
         resp = data;

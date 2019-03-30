@@ -63,19 +63,9 @@ function lmsList(playerid, command, params, start, batchSize, cancache) {
         cmdParams = [].concat(cmdParams, params);
     }
     if (cancache) {
-        try {
-            var key = cacheKey(command, params, start, batchSize);
-            var entry = getLocalStorageVal(key, undefined);
-
-            if (undefined!=entry) {
-                var cache = JSON.parse(entry);
-                // Return promise!
-                return new Promise(function(resolve, reject) {
-                    resolve({data:cache});
-                });
-            }
-        }  catch(e) {
-            logError(e);
+        var resp = getFromCache(cacheKey(command, params, start, batchSize));
+        if (undefined!=resp) {
+            return resp;
         }
     }
     return lmsCommand(playerid, cmdParams)   

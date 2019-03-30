@@ -340,11 +340,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.addPinned();
         }
         this.useGrid=false;
-
         if (!this.desktop) {
             // Clicking on 'browse' nav button whilst in browse page goes back. But, when clicking from another
             // page to browse, we get 'routeChange' then 'nav'. So, we need to ignore the 1st 'nav' afer a 'routeChange'
-            var ignoreClick = true;
+            var ignoreClick = false;
 
             // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
             // page, so that it can be restored when going back here.

@@ -241,7 +241,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
 
-            resp.useGrid = canUseGrid && !isTrackStat && options.useGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+            resp.useGrid = canUseGrid && !isTrackStat && options.useGrid=='always' && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -509,7 +509,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
             var infoPlugin = getLocalStorageBool('infoPlugin');
-            resp.useGrid = canUseGrid && options.useGrid && infoPlugin && options.artistImages;
+            resp.useGrid = canUseGrid && options.useGrid=='always' && infoPlugin && options.artistImages;
             data.result.artists_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
@@ -536,7 +536,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : resp.total);
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
-            resp.useGrid = options.useGrid;
+            resp.useGrid = options.useGrid!='never';
             var params = [];
             if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
                 parent.params.forEach(p => {

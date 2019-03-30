@@ -102,6 +102,15 @@ function updateUiSettings(state, val) {
     }
 }
 
+function convertGridConfigItem(val) {
+    if ('true'==val) {
+        return 'always';
+    } else if ('false'==val) {
+        return 'never';
+    }
+    return val;
+}
+
 const store = new Vuex.Store({
     state: {
         players: null, // List of players
@@ -224,7 +233,7 @@ const store = new Vuex.Store({
             state.library = getLocalStorageVal('library', state.library);
             state.splitArtistsAndAlbums = getLocalStorageBool('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
-            state.useGrid = getLocalStorageBool('useGrid', state.useGrid);
+            state.useGrid = convertGridConfigItem(getLocalStorageVal('useGrid', state.useGrid));
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
@@ -259,7 +268,7 @@ const store = new Vuex.Store({
                                  albumSort: getLocalStorageVal('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
                                  autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                  splitArtistsAndAlbums: getLocalStorageBool('splitArtistsAndAlbums', undefined==prefs.splitArtistsAndAlbums ? state.splitArtistsAndAlbums : prefs.splitArtistsAndAlbums),
-                                 useGrid: getLocalStorageBool('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid),
+                                 useGrid: convertGridConfigItem(getLocalStorageVal('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid)),
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                  showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
                                  serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus),

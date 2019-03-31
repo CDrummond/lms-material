@@ -14,7 +14,7 @@ PhotoSwipe:
     License: MIT
 
 vue
-    Version: 2.5.17
+    Version: 2.6.10
     URL: https://github.com/vuejs/vue
     License: MIT
 
@@ -24,7 +24,7 @@ vue-lazyload
     License: MIT
 
 vue-router
-    Version: 3.0.1
+    Version: 3.0.2
     URL: https://github.com/vuejs/vue-router
     License: MIT
 
@@ -40,12 +40,12 @@ vuetify-confirm:
               button colours.
 
 vuetify
-    Version: 1.3.5
+    Version: 1.5.8
     URL: https://github.com/vuetifyjs/vuetify
     License: MIT
 
 vuex    
-    Version: 2.0.0
+    Version: 3.1.0
     URL: https://github.com/vuejs/vuex
     License: MIT
 

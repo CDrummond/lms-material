@@ -536,7 +536,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : resp.total);
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
-            resp.useGrid = options.useGrid!='never';
+            resp.useGrid = canUseGrid && options.useGrid!='never';
             var params = [];
             if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
                 parent.params.forEach(p => {

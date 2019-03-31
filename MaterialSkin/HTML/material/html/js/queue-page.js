@@ -677,7 +677,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         bus.$emit('moveQueueItems', this.selection.sort(function(a, b) { return a<b ? -1 : 1; }), to);
                     }
                 } else {
-                    bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
+                    bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to>this.dragIndex ? to-1 : to]);
                 }
                 this.clearSelection();
             }

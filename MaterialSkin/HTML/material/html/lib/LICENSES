@@ -8,11 +8,6 @@ intersection-observer
     URL: https://github.com/w3c/IntersectionObserver
     License: W3C Software and Document License.
 
-mobile-drag-drop
-    Version: 2.3.0-rc.1
-    URL: https://github.com/timruffles/mobile-drag-drop
-    License: MIT
-
 PhotoSwipe:
     Version: 4.1.2
     URL: https://github.com/dimsemenov/PhotoSwipe

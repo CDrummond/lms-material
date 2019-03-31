@@ -139,7 +139,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
  </div>
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
- <!-- <div v-show="letter" id="letterOverlay"></div> -->
+ <div v-show="letter" id="letterOverlay"></div>
 
  <v-list v-if="useGrid" class="lms-image-grid noselect bgnd-cover" id="browse-grid">
   <div v-for="(item, index) in items" :key="item.id" :id="'item'+index" v-if="!item.disabled">
@@ -1185,9 +1185,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.command = undefined;
             this.showRatingButton = false;
             this.$nextTick(function () {
-                if (changedView) {
-                    this.setScrollElement();
-                }
+                this.setScrollElement();
                 this.setBgndCover();
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
@@ -1784,34 +1782,35 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         setScrollElement() {
             this.scrollElement = document.getElementById(this.useGrid ? "browse-grid" : "browse-list");
-            /*
-            this.scrollElement.addEventListener('scroll', () => {
-                if (!this.scrollAnimationFrameReq) {
-                    this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
-                }
-            });*/
-        },
-        /*handleScroll() {
-            this.scrollAnimationFrameReq = undefined;
-            if (this.jumplist && this.jumplist.length>1 && !this.useGrid) {
-                if (undefined!==this.letterTimeout) {
-                    clearTimeout(this.letterTimeout);
-                }
-                var index = Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
-                if (index>=0 && index<this.items.length) {
-                    var letter = this.items[index].textkey;
-                    if (this.letter!=letter) {
-                        this.letter = letter;
-                        this.letterOverlay.innerHTML = letter;
-                    }
-                    this.letterTimeout = setTimeout(function () {
-                        this.letter = undefined;
-                    }.bind(this), 500);
-                } else {
-                    this.letter = undefined;
-                }
+            this.scrollElement.removeEventListener('scroll', this.handleScroll);
+            if (!this.useGrid && this.$store.state.letterOverlay) {
+                this.scrollElement.addEventListener('scroll', this.handleScroll);
             }
-        },*/
+        },
+        handleScroll() {
+            if (this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
+                var that = this;
+                this.scrollAnimationFrameReq = window.requestAnimationFrame(() => { 
+                    that.scrollAnimationFrameReq = undefined;
+                    if (undefined!==that.letterTimeout) {
+                        clearTimeout(that.letterTimeout);
+                    }
+                    var index = Math.floor(that.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                    if (index>=0 && index<that.items.length) {
+                        var letter = that.items[index].textkey;
+                        if (that.letter!=letter) {
+                            that.letter = letter;
+                            that.letterOverlay.innerHTML = letter;
+                        }
+                        that.letterTimeout = setTimeout(function () {
+                            that.letter = undefined;
+                        }.bind(that), 500);
+                    } else {
+                        that.letter = undefined;
+                    }
+                });
+            }
+        },
         setGridAlignment() {
             if (!this.useGrid) {
                 return;

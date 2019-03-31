@@ -80,6 +80,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="letterOverlay"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
       <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
@@ -217,6 +226,7 @@ Vue.component('lms-ui-settings', {
             splitArtistsAndAlbums: false,
             useGrid:'albums',
             gridItems: [],
+            letterOverlay:false,
             showMenuAudio:false,
             sortFavorites:false,
             serverMenus:false,
@@ -266,6 +276,7 @@ Vue.component('lms-ui-settings', {
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
             this.useGrid=this.$store.state.useGrid;
+            this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.serverMenus = this.$store.state.serverMenus;
             this.showMenuAudio = this.$store.state.showMenuAudio;
@@ -342,6 +353,7 @@ Vue.component('lms-ui-settings', {
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                                   useGrid:this.useGrid,
+                                                  letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus,
@@ -381,6 +393,7 @@ Vue.component('lms-ui-settings', {
                                      autoScrollQueue:this.autoScrollQueue,
                                      splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                      useGrid:this.useGrid,
+                                     letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,
                                      showMenuAudio:this.showMenuAudio,
                                      serverMenus:this.serverMenus,

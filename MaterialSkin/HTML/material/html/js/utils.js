@@ -364,6 +364,7 @@ function cacheKey(command, params, start, batchSize) {
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + ":"+start+":"+batchSize;
 }
 
+var canUseCache = true;
 function clearListCache(force) {
     // Delete old local-storage cache
     for (var key in window.localStorage) {
@@ -379,6 +380,8 @@ function clearListCache(force) {
                 idbKeyval.del(keys[i]);
             }
         }
+    }).catch(err => {
+        canUseCache = false;
     });
 }
 

@@ -62,7 +62,7 @@ async function lmsList(playerid, command, params, start, batchSize, cancache) {
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }
-    if (cancache) {
+    if (cancache && canUseCache) { // canUseCache defined in utils.js
         return idbKeyval.get(cacheKey(command, params, start, batchSize)).then(val => {
             if (undefined==val) {
                 return lmsCommand(playerid, cmdParams);

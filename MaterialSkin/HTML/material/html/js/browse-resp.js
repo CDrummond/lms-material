@@ -895,7 +895,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.total = resp.items.length;
         }
-        if (cacheKey && lmsLastScan) {
+        if (cacheKey && lmsLastScan && canUseCache) { // canUseCache defined in utils.js
             resp.iscache=true;
             idbKeyval.set(cacheKey, resp);
         }

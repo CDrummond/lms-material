@@ -14,6 +14,7 @@
 6. Use IndexedDB, and not local storage, to cache browse lists.
 7. Fix 'Move to next in queue' for tracks before the current track.
 8. Fix iOS drag'n'drop.
+9. Add 'Synchronise' to players menu even if group players plugin installed.
 
 0.4.0
 -----

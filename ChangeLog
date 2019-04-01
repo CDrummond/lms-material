@@ -11,6 +11,7 @@
 4. Change 'Use grid' option to have 3 settings; never, always, and only for
    local libraries.
 5. Update some of the underlying libraries (Vue, Vuetify, Vue Router, and Vuex).
+6. Use IndexedDB, and not local storage, to cache browse lists.
 
 0.4.1
 -----

@@ -12,12 +12,8 @@
    local libraries.
 5. Update some of the underlying libraries (Vue, Vuetify, Vue Router, and Vuex).
 6. Use IndexedDB, and not local storage, to cache browse lists.
-
-0.4.1
------
-1. Reduce space used to cache artist, and album, lists.
-2. Fix 'Move to next in queue' for tracks before the current track.
-3. Fix iOS drag'n'drop.
+7. Fix 'Move to next in queue' for tracks before the current track.
+8. Fix iOS drag'n'drop.
 
 0.4.0
 -----

@@ -897,7 +897,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         }
         if (cacheKey && lmsLastScan) {
             resp.iscache=true;
-            addToCache(cacheKey, resp);
+            idbKeyval.set(cacheKey, resp);
         }
     } else if (data && data.iscache) { // From cache
         resp = data;

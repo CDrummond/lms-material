@@ -321,6 +321,8 @@ function parseQueryParams() {
             setLocalStorageVal("player", kv[1]);
         } else if ("debug"==kv[0]) {
             debug = "true"==kv[1];
+        } else if ("clearcache"==kv[0] && "true"==kv[1]) {
+            clearListCache(true);
         }
     }
 }

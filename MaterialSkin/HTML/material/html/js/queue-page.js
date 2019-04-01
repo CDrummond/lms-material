@@ -62,7 +62,7 @@ function animate(elem, from, to) {
     }
 }
 
-function parseResp(data, showTrackNum) {
+function parseResp(data, showTrackNum, index) {
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;
@@ -92,16 +92,16 @@ function parseResp(data, showTrackNum) {
                         subtitle=remoteTitle;
                     }
                 }
-                var image = queueItemCover(i);
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
                               subtitle: subtitle,
-                              icon: image ? undefined : "music_note",
-                              image: image,
+                              image: queueItemCover(i),
                               actions: PQ_STD_ACTIONS,
-                              duration: i.duration
+                              duration: i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
+                              key: i.id+"."+index
                           });
+                index++;
             });
         }
     }
@@ -164,32 +164,40 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
-  <template v-for="(item, index) in items">
-  <!-- TODO: Fix and re-use virtual scroller -->
-  <!-- <template><recycle-list :items="items" :item-height="56" page-mode><div slot-scope="{item, index}"> -->
-   <v-list-tile :key="item.title" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
-    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
-     <v-icon>check_box</v-icon>
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
-     <img v-lazy="item.image">
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
-     <v-icon>{{item.icon}}</v-icon>
+  <template v-if="items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS" v-for="(item, index) in items">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)">
+    <v-list-tile-avatar :tile="true" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else v-lazy="item.image">
     </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
      <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action v-if="item.duration>0" class="pq-time">{{item.duration | displayTime}}</v-list-tile-action>
-    <v-list-tile-action v-if="item.actions && item.actions.length>0" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
+    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else><v-btn icon disabled></v-btn></v-list-tile-action>
    </v-list-tile>
    <v-divider v-if="(index+1 < items.length) && (index!==currentIndex && (index+1)!==currentIndex)"></v-divider>
    <!-- </div></recycle-list></template> -->
   </template>
+  <RecycleScroller v-else :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode>
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
+    <v-list-tile-avatar :tile="true" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" :src="item.image">
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
+    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+   </v-list-tile>
+  </RecycleScroller>
   <v-list-tile class="lms-list-pad"></v-list-tile>
  </v-list>
 
@@ -245,8 +253,8 @@ var lmsQueue = Vue.component("lms-queue", {
         this.items=[];
         this.timestamp=0;
         bus.$on('playerChanged', function() {
-	        this.items=[];
-	        this.timestamp=0;
+            this.items=[];
+            this.timestamp=0;
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
@@ -289,6 +297,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     var subtitle = i.artist ? i.artist : i.trackartist;
                     var remoteTitle = checkRemoteTitle(i);
+                    var duration = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
                     if (i.album) {
                         if (subtitle) {
                             subtitle+=SEPARATOR + i.album;
@@ -305,13 +314,13 @@ var lmsQueue = Vue.component("lms-queue", {
                             subtitle=remoteTitle;
                         }
                     }
-                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
-                        if (i.duration!=this.items[index].duration) {
+                        if (duration!=this.items[index].duration) {
                             this.getDuration();
                         }
-                        this.items[index].duration = i.duration;
+                        this.items[index].duration = duration;
                         this.$forceUpdate();
                     }
                 }
@@ -364,18 +373,8 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
-            if (this.fetchingItems || this.listSize<=this.items.length) {
-                return;
-            }
-            const scrollY = this.scrollElement.scrollTop;
-            const visible = this.scrollElement.clientHeight;
-            const pageHeight = this.scrollElement.scrollHeight;
-            const pad = (visible*2.5);
-
-            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchItems();
+            if (!this.scrollAnimationFrameReq) {
+                this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
             }
         });
 
@@ -401,6 +400,22 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};
+        },
+        handleScroll() {
+            this.scrollAnimationFrameReq = undefined;
+            if (this.fetchingItems || this.listSize<=this.items.length) {
+                return;
+            }
+            const scrollY = this.scrollElement.scrollTop;
+            const visible = this.scrollElement.clientHeight;
+            const pageHeight = this.scrollElement.scrollHeight;
+            const pad = (visible*2.5);
+
+            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+            if (bottomOfPage || pageHeight < visible) {
+                this.fetchItems();
+            }
         },
         save() {
             if (this.items.length<1) {
@@ -533,9 +548,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
-            var fetchCount = this.currentIndex > this.items.length + LMS_BATCH_SIZE ? this.currentIndex + (LMS_BATCH_SIZE/2) : LMS_BATCH_SIZE;
+            var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + (LMS_QUEUE_BATCH_SIZE/2) : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -580,8 +595,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.fetchingItems = true;
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
-                        this.items.length < LMS_BATCH_SIZE ? LMS_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum);
+                        this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;
@@ -611,14 +626,22 @@ var lmsQueue = Vue.component("lms-queue", {
             if (scroll || (pulse && this.items.length>0)) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the browse/nowplaying page!
                     if (this.currentIndex<this.items.length) {
-                        var elem=document.getElementById('track'+this.currentIndex);
-                        if (elem) {
-                            if (scroll) {
-                                setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                        if (this.items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS) {
+                            var elem=document.getElementById('track'+this.currentIndex);
+                            if (elem) {
+                                if (scroll) {
+                                    setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                                }
+                                if (pulse) {
+                                    animate(elem, 1.0, 0.2);
+                                }
                             }
-                            if (pulse) {
-                                animate(elem, 1.0, 0.2);
-                            }
+                        } else if (scroll) { // TODO: pulse not implemented!
+                            var pos = this.currentIndex>3 ? (this.currentIndex-3)*LMS_LIST_ELEMENT_SIZE : 0;
+                            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                            setTimeout(function () {
+                                setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                            }.bind(this), 100);
                         }
                     } else if (scroll) {
                         this.autoScrollRequired = true;

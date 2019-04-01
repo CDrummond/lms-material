@@ -56,29 +56,24 @@ function lmsCommand(playerid, command) {
     return axios(args);
 }
 
-function lmsList(playerid, command, params, start, batchSize, cancache) {
+async function lmsList(playerid, command, params, start, batchSize, cancache) {
     var cmdParams = command.slice();
-    cmdParams = [].concat(cmdParams, [start, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
+    cmdParams = [].concat(cmdParams, [undefined==start ? 0 : start, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }
     if (cancache) {
-        try {
-            var key = cacheKey(command, params, start, batchSize);
-            var entry = getLocalStorageVal(key, undefined);
-
-            if (undefined!=entry) {
-                var cache = JSON.parse(entry);
-                // Return promise!
-                return new Promise(function(resolve, reject) {
-                    resolve({data:cache});
-                });
+        return idbKeyval.get(cacheKey(command, params, start, batchSize)).then(val => {
+            if (undefined==val) {
+                return lmsCommand(playerid, cmdParams);
             }
-        }  catch(e) {
-            logError(e);
-        }
+            return new Promise(function(resolve, reject) {
+                resolve({data:val});
+            });
+        });
+    } else {
+        return lmsCommand(playerid, cmdParams);
     }
-    return lmsCommand(playerid, cmdParams)   
 }
 
 var lmsServer = Vue.component('lms-server', {

@@ -163,10 +163,14 @@ function favSort(a, b) {
 }
 
 function setScrollTop(el, val) {
-    // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
-    el.style['-webkit-overflow-scrolling'] = 'auto';
-    el.scrollTop=val;
-    el.style['-webkit-overflow-scrolling'] = 'touch';
+    // When using RecycleScroller we need to wait for the next animation frame to scroll, so
+    // just do this for all scrolls.
+    window.requestAnimationFrame(function () {
+        // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
+        el.style['-webkit-overflow-scrolling'] = 'auto';
+        el.scrollTop=val;
+        el.style['-webkit-overflow-scrolling'] = 'touch';
+    });
 }
 
 const LS_PREFIX="lms-material::";
@@ -317,6 +321,8 @@ function parseQueryParams() {
             setLocalStorageVal("player", kv[1]);
         } else if ("debug"==kv[0]) {
             debug = "true"==kv[1];
+        } else if ("clearcache"==kv[0] && "true"==kv[1]) {
+            clearListCache(true);
         }
     }
 }
@@ -359,12 +365,21 @@ function cacheKey(command, params, start, batchSize) {
 }
 
 function clearListCache(force) {
-    for (var key in window.localStorage){
+    // Delete old local-storage cache
+    for (var key in window.localStorage) {
         if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) &&
             (force || !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
             window.localStorage.removeItem(key);
         }
     }
+    // Delete IndexedDB cache
+    idbKeyval.keys().then(keys => {
+        for (var i=0; i<keys.length; ++i) {
+            if (keys[i].startsWith(LMS_LIST_CACHE_PREFIX) && (force || !keys[i].startsWith(LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
+                idbKeyval.del(keys[i]);
+            }
+        }
+    });
 }
 
 const RATINGS=["",         // 0
@@ -485,4 +500,19 @@ function canSplitIntoLetterGroups(item, command) {
     */
 
     return false;
+}
+
+function shrinkAray(array, limit) {
+    if (array.length<=limit) {
+        return array;
+    }
+    var res = [];
+    var i = 0;
+    var scale = array.length / limit;
+    while (i < limit) {
+        res.push(array[Math.round(i * scale)]);
+        i++;
+    }
+    res[res.length-1]=array[array.length-1];
+    return res;
 }

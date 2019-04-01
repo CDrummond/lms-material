@@ -66,11 +66,7 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="libraries.length>0"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="useGrid = !useGrid" class="switch-label">
-      <v-list-tile-title>{{i18n('Use a grid for albums, and artists')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Place album covers, artist images (if supported), and others in a grid.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="useGrid"></v-switch></v-list-tile-action>
+     <v-select :items="gridItems" :label="i18n('Display items in a grid')" v-model="useGrid" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -80,6 +76,15 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Useful when browsing a large list of artists, or albums.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="splitArtistsAndAlbums"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="letterOverlay"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -220,7 +225,9 @@ Vue.component('lms-ui-settings', {
             artistAlbumSort:'yearalbum',
             albumSort:'album',
             splitArtistsAndAlbums: false,
-            useGrid:true,
+            useGrid:'albums',
+            gridItems: [],
+            letterOverlay:false,
             showMenuAudio:false,
             sortFavorites:false,
             serverMenus:false,
@@ -270,6 +277,7 @@ Vue.component('lms-ui-settings', {
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
             this.useGrid=this.$store.state.useGrid;
+            this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.serverMenus = this.$store.state.serverMenus;
             this.showMenuAudio = this.$store.state.showMenuAudio;
@@ -331,6 +339,11 @@ Vue.component('lms-ui-settings', {
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
                 ];
+            this.gridItems=[
+                { key:"never",  label:i18n("Never")},
+                { key:"always", label:i18n("Whenever possible")},
+                { key:"albums", label:i18n("For local albums only")}
+                ];
         },
         close() {
             this.show=false;
@@ -341,6 +354,7 @@ Vue.component('lms-ui-settings', {
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                                   useGrid:this.useGrid,
+                                                  letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus,
@@ -380,6 +394,7 @@ Vue.component('lms-ui-settings', {
                                      autoScrollQueue:this.autoScrollQueue,
                                      splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                      useGrid:this.useGrid,
+                                     letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,
                                      showMenuAudio:this.showMenuAudio,
                                      serverMenus:this.serverMenus,

@@ -42,11 +42,6 @@ a {
  width:100%;
 }
 
-.v-divider {
-   margin-left:8px;
-   margin-right:8px;
-}
-
 .v-divider--vertical {
    margin-top:8px;
    margin-bottom:8px;
@@ -64,6 +59,14 @@ a {
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
  height:40px;
+}
+
+.lms-list {
+ padding:0px;
+}
+
+.lms-list-sub {
+ padding:0px;
 }
 
 /* Make action buttons in lists closer together */
@@ -335,13 +338,21 @@ a {
  text-overflow:ellipsis;
 }
 
-.toolbar-player-list {
+.toolbar-player-list, .jumplist-menu {
  max-height:calc((var(--vh, 1vh)*100) - 16px);
  overflow-y:auto;
 }
 
 .toolbar-player-list .v-list__tile .v-list__tile__content .v-list__tile__title {
  margin-right:20px;
+}
+
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card {
+ transition:none !important;
+}
+
+.v-list__tile--avatar .v-subheader {
+ padding:0 3px;
 }
 
 /* Stop vuetify changing padding when width changes */
@@ -807,4 +818,24 @@ div.v-subheader {
  width:50px !important;
  height:50px !important;
  margin-left:-4px;
+}
+
+.lms-jumplist {
+ padding:8px 0px 8px 0px; /* t, r, b, l */
+ margin:0px !important;
+ width:24px;
+ background-color:#444;
+ float:left;
+ display:grid;
+ grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));
+ grid-gap:0px;
+ overflow-y:hidden !important;
+}
+
+.lms-jumplist div {
+ width:100%;
+ text-align:center;
+ vertical-align:middle;
+ cursor:pointer;
+ opacity:0.5;
 }

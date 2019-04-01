@@ -1,3 +1,18 @@
+0.5.0
+-----
+1. When browsing, load all list items (max 25k) at once. Use view recycler
+   library to keep lists responsive - only items on screen are part of the HTML
+   page. An A..Z quick list is shown to the left of the list allowing to quickly
+   jump within list.
+2. Due to the above, a maximum of 300 items can be shown in a grid, if there
+   are more then a list is used.
+3. Optionally show a large letter when scrolling lists, to indicate current
+   position.
+4. Change 'Use grid' option to have 3 settings; never, always, and only for
+   local libraries.
+5. Update some of the underlying libraries (Vue, Vuetify, Vue Router, and Vuex).
+6. Use IndexedDB, and not local storage, to cache browse lists.
+
 0.4.1
 -----
 1. Reduce space used to cache artist, and album, lists.

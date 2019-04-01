@@ -91,7 +91,7 @@ Vue.component('lms-toolbar', {
     </v-list-tile-content>
    </v-list-tile>
 
-   <v-list-tile v-if="!playerGroups && players && players.length>1" @click="bus.$emit('synchronise', player)">
+   <v-list-tile v-if="players && players.length>1" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-content><v-list-tile-title class="pm-icon-indent"><v-icon>link</v-icon>&nbsp;{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
 
@@ -157,7 +157,6 @@ Vue.component('lms-toolbar', {
         return { songInfo:undefined,
                  playlist: { count: undefined, duration: undefined, timestamp: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
-                 playerGroups: false,
                  menuItems: [],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined,
                         switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined},
@@ -184,9 +183,6 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         */
 
-        lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {
-            this.playerGroups = data && data.result && undefined!=data.result._can && 1==data.result._can;
-        });
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;

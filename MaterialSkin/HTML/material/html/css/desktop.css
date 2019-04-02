@@ -164,7 +164,7 @@ body {
 }
 
 .np-info-text-full-desktop {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 92px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 89px));
  overflow:auto;
  max-width:1000px;
  margin:auto;

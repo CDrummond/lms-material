@@ -8,18 +8,12 @@
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
+    // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false, jumplist:[] };
 
     try {
     if (data && data.result) {
         resp.total = data.result.count;
-        if (resp.total>LMS_BATCH_SIZE) {
-            resp.total = 1;
-            resp.subtitle=i18n("%1 Items", data.result.count);
-            resp.items.push({title:i18n("ERROR: Too many items. A maximum of %1 items can be handled. Please use A..Z groups"), type: 'text', id:'error'});
-            return resp;
-        }
-
         resp.useScroller = (parent && parent.range ? parent.range.count : resp.total) >= LMS_MIN_LIST_SCROLLER_ITEMS;
         var canUseGrid = !resp.useScroller || resp.total<LMS_MAX_GRID_ITEMS;
         logJsonMessage("RESP", data);
@@ -894,6 +888,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.total = resp.items.length;
         }
+
+        if (resp.total>LMS_BATCH_SIZE) {
+            resp.subtitle = i18n("Only showing %1 items", LMS_BATCH_SIZE);
+            resp.total = LMS_BATCH_SIZE;
+        }
+
         if (cacheKey && lmsLastScan && canUseCache) { // canUseCache defined in utils.js
             resp.iscache=true;
             idbKeyval.set(cacheKey, resp);

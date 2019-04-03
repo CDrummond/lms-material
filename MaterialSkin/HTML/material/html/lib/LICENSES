@@ -3,6 +3,11 @@ axios
     URL: https://github.com/axios/axios
     License: MIT
 
+cometd
+    Version: 4.0.3 (minified)
+    URL: https://github.com/cometd/cometd-javascript
+    License: Apache License Version 2.0
+
 idb-keyval:
     Version: 3.1.0 with pull req 50
     URL: https://github.com/jakearchibald/idb-keyval

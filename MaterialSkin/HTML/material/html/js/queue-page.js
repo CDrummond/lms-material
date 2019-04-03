@@ -462,9 +462,24 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.select(item, index);
                 return;
             }
+            if (!this.clickTimer) {
+                this.clickTimer = setTimeout(function () {
+                    this.clickTimer = undefined;
+                    this.singleClick(item, index, event);
+                }.bind(this), 300);
+            } else {
+                clearTimeout(this.clickTimer);
+                this.clickTimer = undefined;
+                this.doubleClick(item, index, event);
+            }
+        },
+        singleClick(item, index, event) {
             if (this.$store.state.showMenuAudioQueue) {
                 this.itemMenu(item, index, event);
             }
+        },
+        doubleClick(item, index, event) {
+            this.itemAction(PQ_PLAY_NOW_ACTION, item, index);
         },
         itemAction(act, item, index) {
             if (PQ_PLAY_NOW_ACTION===act) {

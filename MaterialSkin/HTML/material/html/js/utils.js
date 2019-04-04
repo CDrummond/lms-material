@@ -162,6 +162,21 @@ function favSort(a, b) {
     return titleSort(a, b);
 }
 
+function playerSort(a, b) {
+    if (a.isgroup!=b.isgroup) {
+        return a.isgroup ? -1 : 1;
+    }
+    var nameA = a.name.toUpperCase();
+    var nameB = b.name.toUpperCase();
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+    return 0;
+}
+
 function setScrollTop(el, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.

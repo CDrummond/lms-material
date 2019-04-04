@@ -326,8 +326,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }
         }.bind(this));
-        // Refresh status now, in case we were mounted after initial status call
-        bus.$emit('refreshStatus');
 
         this.coverUrl = undefined;
         this.coverTrackIndex = undefined;

@@ -1010,7 +1010,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                         var item = resp.items[0];
                         var command = ["playlistcontrol", "cmd:add", item.id];
                         lmsCommand(this.playerId(), command).then(({data}) => {
-                            bus.$emit('refreshStatus');
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         }).catch(err => {
                             bus.$emit('showError', err);
@@ -1067,7 +1066,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 command.command.push("play_index:"+index);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
-                    bus.$emit('refreshStatus');
                     if (!this.desktop) {
                         this.$router.push('/nowplaying');
                     }
@@ -1082,7 +1080,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
-                    bus.$emit('refreshStatus');
                     if (!this.desktop) {
                         if (act===PLAY_ACTION) {
                             this.$router.push('/nowplaying');

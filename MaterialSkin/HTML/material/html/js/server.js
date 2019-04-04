@@ -5,6 +5,8 @@
  * MIT license.
  */
 
+const PLAYER_STATUS_TAGS = "tags:cdeloyrstAKNS";
+
 var lmsServerAddress = "";
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
@@ -179,7 +181,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             var nextInterval = LMS_STATUS_REFRESH_MAX;
             if (this.$store.state.players && this.$store.state.players.length>0 && this.$store.state.player.id) {
-                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:cdeloyrstAKNS"]).then(({data}) => {
+                lmsCommand(this.$store.state.player.id, ["status", "-", 1, PLAYER_STATUS_TAGS]).then(({data}) => {
                     var nextInterval = LMS_STATUS_REFRESH_MAX;
                     if (data && data.result) {
                         var player = { ison: data.result.power,
@@ -292,6 +294,23 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this), LMS_STATUS_REFRESH_MAX);
     },
     mounted: function() {
+        var cometd = new org.cometd.CometD();
+        cometd.init({url: lmsServerAddress + '/cometd', logLevel:'off'});
+        cometd.addListener('/meta/handshake', function(message) {
+            if (eval(message).successful) {
+                cometd.subscribe('/'+cometd.getClientId()+'/**',
+                                function(res) { console.log("MSG:"+JSON.stringify(res, null, 2));});
+                cometd.subscribe('/slim/subscribe',
+                                function(res) { },
+                                {data:{response:'/'+cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}},
+                                function(res) { });
+                /*cometd.subscribe('/slim/subscribe',
+                                function(res) { },
+                                {data:{response:'/'+cometd.getClientId()+'/slim/playerstatus/<mac>', request:['<mac>', ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:30"]]}},
+                                function(res) { });*/
+            }
+        });
+
         bus.$on('refreshStatus', function() {
 	        this.refreshStatus();
         }.bind(this));

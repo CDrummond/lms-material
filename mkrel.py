@@ -129,6 +129,16 @@ def prepare():
     except Exception as e:
         error("Failed to copy files to %s folder - %s" % (BUILD_FOLDER, str(e)))
 
+    # Remove unminfied versions of JS files, if we have the minified version
+    for js in os.listdir("%s/lib" % HTML_FOLDER):
+        if js.endswith(".min.js"):
+            orig = js.replace(".min.js", ".js")
+            if os.path.exists("%s/lib/%s" % (HTML_FOLDER, orig)):
+                os.remove("%s/lib/%s" % (HTML_FOLDER, orig))
+            orig = js.replace(".min.js", ".orig.js")
+            if os.path.exists("%s/lib/%s" % (HTML_FOLDER, orig)):
+                os.remove("%s/lib/%s" % (HTML_FOLDER, orig))
+
 
 def cleanup():
     info("Removing build folder")

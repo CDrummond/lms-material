@@ -144,7 +144,6 @@ var lmsServer = Vue.component('lms-server', {
             if (!msg.channel || !msg.data) {
                 return;
             }
-            //console.log("CometD:"+JSON.stringify(msg.data, null, 2));
             if (msg.channel.endsWith("/slim/serverstatus")) {
                 this.handleServerStatus(msg.data);
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
@@ -152,7 +151,6 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleServerStatus(data) {
-            var subscribedPlayers = new Set();
             var players = [];
             if (lmsLastScan!=data.lastscan) {
                 lmsLastScan = data.lastscan;
@@ -173,12 +171,6 @@ var lmsServer = Vue.component('lms-server', {
                         if (!localAndroidPlayer && currentIpAddress && 'SB Player' ===i.modelname && i.ip.split(':')[0] == currentIpAddress) {
                             localAndroidPlayer = true;
                         }
-
-                        if (!this.subscribedPlayers.has(i.playerid)) {
-                            this.cometd.subscribe('/slim/subscribe', function(res) { },
-                                      {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+i.playerid, request:[i.playerid, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:60"]]}});
-                        }
-                        subscribedPlayers.add(i.playerid);
                     }
                 });
                 if (localAndroidPlayer != haveLocalAndroidPlayer) {
@@ -187,26 +179,7 @@ var lmsServer = Vue.component('lms-server', {
                         bus.$emit('haveLocalAndroidPlayer');
                     }
                 }
-                this.$store.commit('setPlayers', players.sort(  function(a, b) {
-                                                                    if (a.isgroup!=b.isgroup) {
-                                                                        return a.isgroup ? -1 : 1;
-                                                                    }
-                                                                    var nameA = a.name.toUpperCase();
-                                                                    var nameB = b.name.toUpperCase();
-                                                                    if (nameA < nameB) {
-                                                                        return -1;
-                                                                    }
-                                                                    if (nameA > nameB) {
-                                                                        return 1;
-                                                                    }
-                                                                    return 0;
-                                                                }));
-                this.subscribedPlayers.forEach(p=> {
-                    if (!subscribedPlayers.has(p)) {
-                        // TODO: Unsubscribe removed players
-                    }
-                });
-                this.subscribedPlayers = subscribedPlayers;
+                this.$store.commit('setPlayers', players.sort(playerSort));
             }
         },
         handlePlayerStatus(playerId, data) {
@@ -217,8 +190,10 @@ var lmsServer = Vue.component('lms-server', {
                            current: { canseek: 0, time: 0, duration: 0 },
                            will_sleep_in: data.will_sleep_in,
                            synced: data.sync_master || data.sync_slaves,
+                           issyncmaster: data.sync_master == playerId,
+                           syncmaster: data.sync_master,
                            id: playerId,
-                           current: this.$store.state.player && playerId==this.$store.state.player.id ? true : false
+                           name: data.player_name
                          };
 
             player.volume = undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
@@ -250,7 +225,7 @@ var lmsServer = Vue.component('lms-server', {
             if (player.current) {
                 bus.$emit('playerStatus', player);
             } else {
-                // bus.$emit('otherPlayerStatus', player); TODO - for manage payers dialog.
+                bus.$emit('otherPlayerStatus', player);
             }
         },
         updateCurrentPlayer() {
@@ -262,9 +237,38 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 });
             }
+        },
+        subscribe(id) {
+            if (!this.subscribedPlayers.has(id)) {
+                this.cometd.subscribe('/slim/subscribe', function(res) { },
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:60"]]}});
+                this.subscribedPlayers.add(id);
+            }
+        },
+        unsubscribe(id) {
+            if (this.subscribedPlayers.has(id)) {
+                this.cometd.subscribe('/slim/subscribe', function(res) { },
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:"]]}});
+                this.subscribedPlayers.delete(id);
+            }
+        },
+        playerChanged() {
+            if (this.$store.state.player && !this.subscribedPlayers.has(this.$store.state.player.id)) {
+                if (!this.subscribeAll) {
+                    // If not subscribing to all, remove other subscriptions...
+                    var subedPlayers = Array.from(this.subscribedPlayers);
+                    for (var i=0; i<subedPlayers.length; ++i) {
+                        this.unsubscribe(subedPlayers[i]);
+                    }
+                }
+                this.subscribe(this.$store.state.player.id);
+            } else {
+                this.updateCurrentPlayer();
+            }
         }
     },
     created: function() {
+        this.subscribeAll = false;
         this.connectToCometD();
     },
     mounted: function() {
@@ -307,11 +311,27 @@ var lmsServer = Vue.component('lms-server', {
                 lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]);
             }
         }.bind(this));
+        bus.$on('subscribeAll', function(all) {
+            if (all==this.subscribeAll) {
+                return;
+            }
+            this.subscribeAll = all;
+            if (all) {
+                this.updateCurrentPlayer();
+            }
+            for (var i=0; i<this.$store.state.players.length; ++i) {
+                if (all && this.$store.state.players[i].id!=this.$store.state.player.id) {
+                    this.subscribe(this.$store.state.players[i].id);
+                } else if (!all && this.$store.state.players[i].id!=this.$store.state.player.id) {
+                    this.unsubscribe(this.$store.state.players[i].id);
+                }
+            }
+        }.bind(this));
     },
     watch: {
         '$store.state.player': function (newVal) {
             bus.$emit("playerChanged");
-            this.updateCurrentPlayer()
+            this.playerChanged()
         }
     }
 });

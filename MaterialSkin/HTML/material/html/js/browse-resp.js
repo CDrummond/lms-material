@@ -345,8 +345,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.isFavFolder = true;
                     }
                     i.menu.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_FAV_ACTION);
-                    // Only allow drag'n'drop of top-level favorites items.
-                    i.canDrag = parent && parent.id==TOP_FAVORITES_ID && !options.sortFavorites;
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);

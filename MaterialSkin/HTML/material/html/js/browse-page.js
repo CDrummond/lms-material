@@ -239,7 +239,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="!item.selected && item.canDrag" class="lms-avatar" :id="'item'+index">
+   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -1825,70 +1825,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (!this.scrollElement.classList.contains("lms-image-grid-few")) {
                 this.scrollElement.classList.add("lms-image-grid-few");
             }
-        },
-        dragStart(which, ev) {
-            ev.dataTransfer.dropEffect = 'move';
-            ev.dataTransfer.setData('Text', this.id);
-            this.dragIndex = which;
-            this.stopScrolling = false;
-            //if (this.selection.length>0 && this.selection.indexOf(which)<0) {
-                this.clearSelection();
-            //}
-        },
-        dragEnd() {
-            this.stopScrolling = true;
-            this.dragIndex = undefined;
-        },
-        dragOver(ev) {
-            // Drag over item at top/bottom of list to start scrolling
-            this.stopScrolling = true;
-            if (ev.clientY < 110) {
-                this.stopScrolling = false;
-                this.scrollList(-5)
-            }
-
-            if (ev.clientY > (window.innerHeight - 70)) {
-                this.stopScrolling = false;
-                this.scrollList(5)
-            }
-            ev.preventDefault(); // Otherwise drop is never called!
-        },
-        scrollList(step) {
-            var pos = this.scrollElement.scrollTop + step;
-            setScrollTop(this.scrollElement, pos);
-            if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
-                this.stopScrolling = true;
-            }
-            if (!this.stopScrolling) {
-                setTimeout(function () {
-                    this.scrollList(step);
-                }.bind(this), 100);
-            }
-        },
-        drop(to, ev) {
-            this.stopScrolling = true;
-            ev.preventDefault();
-            if (this.dragIndex!=undefined && to!=this.dragIndex && this.dragIndex<this.items.length && to<this.items.length) {;
-                var fromId = removeUniqueness(this.items[this.dragIndex].id).replace("item_id:", "from_id:");
-                var toId = removeUniqueness(this.items[to].id).replace("item_id:", "to_id:");
-
-                lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
-                    logJsonMessage("RESP", data);
-                    this.refreshList();
-                }).catch(err => {
-                    logError(err);
-                });
-                /*if (this.selection.length>0) {
-                    if (this.selection.indexOf(to)<0) {
-                        bus.$emit('moveQueueItems', this.selection.sort(function(a, b) { return a<b ? -1 : 1; }), to);
-                    }
-                } else {
-                    bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
-                }
-                this.clearSelection();
-                */
-            }
-            this.dragIndex = undefined;
         },
         setBgndCover() {
             var url = this.$store.state.browseBackdrop && this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;

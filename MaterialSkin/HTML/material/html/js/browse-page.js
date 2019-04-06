@@ -1898,7 +1898,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (timeout) {
                     clearTimeout(timeout);
                 }
-                timeout = setTimeout(function () {
+                timeout = setTimeout(() => {
                     this.filterJumplist();
                 }, 50);
             }

@@ -117,6 +117,9 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         connectToCometD() {
+            if (this.cometd) {
+                this.cometd.disconnect();
+            }
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
             this.cometd.init({url: '/cometd', logLevel:'off'});
@@ -275,6 +278,9 @@ var lmsServer = Vue.component('lms-server', {
         this.connectToCometD();
     },
     mounted: function() {
+        bus.$on('reconnect', function() {
+            this.connectToCometD();
+        }.bind(this));
         bus.$on('refreshStatus', function() {
             this.updateCurrentPlayer();
         }.bind(this));

@@ -132,9 +132,6 @@ var lmsServer = Vue.component('lms-server', {
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}});
                 }
             });
-            this.cometd.onTransportException = (_cometd, failure, oldTransport, newTransport) => {
-                console.log("FAIL");
-            };
         },
         handleCometDMessage(msg) {
             if (!msg.channel || !msg.data) {

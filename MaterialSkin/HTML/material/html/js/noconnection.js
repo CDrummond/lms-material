@@ -12,6 +12,7 @@ Vue.component('lms-noconnection', {
   <table>
    <tr><td style="text-align: center; padding-bottom: 32px;"><h2>{{i18n('Server connection lost...')}}</h2></td></tr>
    <tr><td style="text-align: center;"><v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular></td></tr>
+   <tr><td style="text-align: center;"><v-btn @click="reconnect()">{{i18n('Reconnect'}}</v-btn></td></tr>
   </table>
  </v-card>
 </v-dialog>
@@ -33,6 +34,9 @@ Vue.component('lms-noconnection', {
     methods: {
         i18n(str) {
             return this.show ? i18n(str) : str;
+        },
+        reconnect() {
+            bus.$emit("reconnect");
         }
     }
 })

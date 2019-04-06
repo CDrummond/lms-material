@@ -20,7 +20,6 @@
 "Albums":"Alben",
 "All Artists":"Alle Interpreten",
 "All plugins up to date.":"Alle Plugins sind aktuell.",
-"Alphabetically sort favorites, rather than server supplied order.":"Sortiere alphabetisch, ignoriere Einstellungen des Servers.",
 "Already in favorites":"Bereits bei Favoriten",
 "Always show menu":"Menü immer anzeigen",
 "Append random album to queue":"Zufälliges Album anfügen",
@@ -214,7 +213,6 @@
 "Song Mix":"Titel Mix",
 "Sort album list by":"Albumreihenfolge",
 "Sort albums under artists by":"Albumreihenfolge bei Interpreten",
-"Sort favorites list":"Favoriten sortieren",
 "Sound":"Weckton",
 "Split artist (and album) lists into A..Z":"Interpreten und Alben in Listen A..Z unterteilen",
 "Standard Players":"Standard Gerät",
@@ -308,6 +306,7 @@
 "Player":"",
 "Plugins":"",
 "Radio":"",
+"Reconnect":"",
 "Start":"",
 "URL":""
 }

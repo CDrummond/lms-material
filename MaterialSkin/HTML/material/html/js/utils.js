@@ -95,9 +95,9 @@ function resolveImage(icon, image, size) {
             return image;
         }
         if (image.startsWith("/")) {
-            return lmsServerAddress+image+(size ? size : "");
+            return image+(size ? size : "");
         }
-        return lmsServerAddress+"/"+image+(size ? size : "");
+        return "/"+image+(size ? size : "");
     }
     icon=""+icon; // Ensure its a string!
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
@@ -109,12 +109,12 @@ function resolveImage(icon, image, size) {
         icon = icon.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+".png";
     }
     if (icon.startsWith("/")) {
-        return lmsServerAddress+icon;
+        return icon;
     }
     if (idx<0 && /^[0-9a-fA-F]+$/.test(icon)) {
         icon="music/"+icon+"/cover"+(size ? size : LMS_LIST_IMAGE_SIZE);
     }
-    return lmsServerAddress+"/"+icon;
+    return "/"+icon;
 }
 
 function removeImageSizing(path) {
@@ -238,16 +238,8 @@ function setTheme(dark) {
     }
 }
 
-function changeLayout(layout) {
-    if (lmsServerAddress.length>0) {
-        window.location.href = layout + ".html?lms="+lmsServerAddress.replace("http://", "").replace(":9000", "");
-    } else {
-        window.location.href = layout;
-    }
-}
-
 function serverSettings(page) {
-    window.open((lmsServerAddress.length>0 ? lmsServerAddress : '..') + '/Default/settings/index.html' + (page ? '?activePage='+page : ''), '_blank');
+    window.open('../Default/settings/index.html' + (page ? '?activePage='+page : ''), '_blank');
 }
 
 function addUniqueness(id, uniqueness) {
@@ -330,9 +322,7 @@ function parseQueryParams() {
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
-        if ("lms"==kv[0]) {
-            lmsServerAddress = "http://"+kv[1]+":9000";
-        } else if ("player"==kv[0]) {
+        if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
         } else if ("debug"==kv[0]) {
             debug = "true"==kv[1];

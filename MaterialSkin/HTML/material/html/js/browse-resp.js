@@ -29,7 +29,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   title: i.contributor,
                                   command: ["albums"],
                                   params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                                  image: (infoPlugin && options.artistImages) ? lmsServerAddress+"/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
+                                  image: (infoPlugin && options.artistImages) ? "/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group"
@@ -45,7 +45,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   title: i.album,
                                   command: ["tracks"],
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, SORT_KEY+"tracknum"],
-                                  image: lmsServerAddress+"/music/" + i.artwork + "/cover" + LMS_LIST_IMAGE_SIZE,
+                                  image: "/music/" + i.artwork + "/cover" + LMS_LIST_IMAGE_SIZE,
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group"
                               });
@@ -58,7 +58,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     resp.items.push({
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
-                                  image: lmsServerAddress+"/music/" + i.coverid + "/cover" +LMS_LIST_IMAGE_SIZE,
+                                  image: "/music/" + i.coverid + "/cover" +LMS_LIST_IMAGE_SIZE,
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "track"
                               });
@@ -512,7 +512,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               command: ["albums"],
-                              image: (infoPlugin && options.artistImages) ? lmsServerAddress+"/imageproxy/mai/artist/" + i.id + "/image" +
+                              image: (infoPlugin && options.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" +
                                     (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE) : undefined,
                               params: ["artist_id:"+ i.id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
@@ -554,7 +554,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: title,
                               subtitle: i.artist ? i.artist : undefined,
                               command: ["tracks"],
-                              image: lmsServerAddress+"/music/" + i.artwork_track_id + "/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE),
+                              image: "/music/" + i.artwork_track_id + "/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE),
                               params: ["album_id:"+ i.id, TRACK_TAGS, SORT_KEY+"tracknum"],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                               type: "group",

@@ -292,10 +292,10 @@ Vue.component('lms-manage-players', {
                     player.image=resolveImage(null, player.current.artwork_url);
                 }
                 if (undefined==player.image && player.current.coverid) {
-                    player.image=lmsServerAddress+"/music/"+player.current.coverid+"/cover.jpg";
+                    player.image="/music/"+player.current.coverid+"/cover.jpg";
                 }
                 if (undefined==player.image) {
-                    player.image=lmsServerAddress+"/music/current/cover.jpg?player=" + player.id;
+                    player.image="/music/current/cover.jpg?player=" + player.id;
                 }
             }
             if (undefined==player.image) {

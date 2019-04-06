@@ -7,7 +7,6 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdeloyrstAKNS";
 
-var lmsServerAddress = "";
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
 
@@ -39,7 +38,7 @@ if (RTCPeerConnection)(function() {
 function lmsCommand(playerid, command) {
     var args = {
             method: "post",
-            url: lmsServerAddress+"/jsonrpc.js",
+            url: "/jsonrpc.js",
             headers: {'Content-Type': 'text/plain'},
             data: {
                 id: 1,
@@ -120,7 +119,7 @@ var lmsServer = Vue.component('lms-server', {
         connectToCometD() {
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
-            this.cometd.init({url: lmsServerAddress + '/cometd', logLevel:'off'});
+            this.cometd.init({url: '/cometd', logLevel:'off'});
 
             this.cometd.addListener('/meta/handshake', (message) => {
                 if (eval(message).successful) {

@@ -836,7 +836,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         showImage(index) {
-            var that = this;
+            var browsePage = this;
             this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, this.items, {index: index});
             this.gallery.listen('gettingData', function (index, item) {
                 if (item.w < 1 || item.h < 1) {
@@ -844,7 +844,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     img.onload = function () {
                         item.w = this.width;
                         item.h = this.height;
-                        that.gallery.updateSize(true);
+                        browsePage.gallery.updateSize(true);
                     };
                     img.src = item.src;
                 }
@@ -1787,24 +1787,23 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleScroll() {
             if (this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
-                var that = this;
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(() => { 
-                    that.scrollAnimationFrameReq = undefined;
-                    if (undefined!==that.letterTimeout) {
-                        clearTimeout(that.letterTimeout);
+                    this.scrollAnimationFrameReq = undefined;
+                    if (undefined!==this.letterTimeout) {
+                        clearTimeout(this.letterTimeout);
                     }
-                    var index = Math.floor(that.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
-                    if (index>=0 && index<that.items.length) {
-                        var letter = that.items[index].textkey;
-                        if (that.letter!=letter) {
-                            that.letter = letter;
-                            that.letterOverlay.innerHTML = letter;
+                    var index = Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                    if (index>=0 && index<this.items.length) {
+                        var letter = this.items[index].textkey;
+                        if (this.letter!=letter) {
+                            this.letter = letter;
+                            this.letterOverlay.innerHTML = letter;
                         }
-                        that.letterTimeout = setTimeout(function () {
-                            that.letter = undefined;
-                        }.bind(that), 500);
+                        this.letterTimeout = setTimeout(function () {
+                            this.letter = undefined;
+                        }.bind(this), 500);
                     } else {
-                        that.letter = undefined;
+                        this.letter = undefined;
                     }
                 });
             }
@@ -1969,15 +1968,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     mounted() {
-        let that = this;
         let timeout = undefined;
         window.addEventListener('resize', () => {
-            if (that.useScroller) {
+            if (this.useScroller) {
                 if (timeout) {
                     clearTimeout(timeout);
                 }
                 timeout = setTimeout(function () {
-                    that.filterJumplist();
+                    this.filterJumplist();
                 }, 50);
             }
         }, false);

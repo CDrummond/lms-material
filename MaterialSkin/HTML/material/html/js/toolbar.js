@@ -282,9 +282,8 @@ Vue.component('lms-toolbar', {
                         show: true, color: 'error' };
             if (undefined!=err && undefined==msg && !err.response) {
                 // If this is a network error, check if connection is up...
-                var that = this;
-                axios.get("html/css/blank.css?r"+(new Date().getTime())).then(function (resp) {
-                    that.snackbar = info;
+                axios.get("html/css/blank.css?r"+(new Date().getTime())).then((resp) => {
+                    this.snackbar = info;
                  }).catch(err => {
                     bus.$emit('noNetwork');
                 });

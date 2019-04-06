@@ -493,7 +493,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showPic() {
-            var that = this;
+            var npPage = this;
             this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, [{src:this.coverUrl, w:0, h:0}], {index: 0});
             this.gallery.listen('gettingData', function (index, item) {
                 if (item.w < 1 || item.h < 1) {
@@ -501,7 +501,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     img.onload = function () {
                         item.w = this.width;
                         item.h = this.height;
-                        that.gallery.updateSize(true);
+                        npPage.gallery.updateSize(true);
                     };
                     img.src = item.src;
                 }

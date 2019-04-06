@@ -26,7 +26,7 @@ function startMediaSession() {
     if (!mediaAudio || mediaInterval) {
         return true;
     }
-    mediaAudio.src = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/audio/silence.ogg";
+    mediaAudio.src = "html/audio/silence.ogg";
     // Repeatedly play/pause so that sesssion persists
     mediaAudio.play().then(_ => {
         mediaAudio.currentTime = 0; // Go back to start

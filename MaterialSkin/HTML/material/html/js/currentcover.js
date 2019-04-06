@@ -31,12 +31,12 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     coverUrl=resolveImage(null, playerStatus.current.artwork_url);
                 }
                 if (undefined==coverUrl && playerStatus.current.coverid) {
-                    coverUrl=lmsServerAddress+"/music/"+playerStatus.current.coverid+"/cover.jpg";
+                    coverUrl="/music/"+playerStatus.current.coverid+"/cover.jpg";
                 }
                 if (undefined==coverUrl) {
                     // Use players current cover as cover image. Need to add extra (coverid, etc) params so that
                     // the URL is different between tracks...
-                    coverUrl=lmsServerAddress+"/music/current/cover.jpg?player=" + this.$store.state.player.id;
+                    coverUrl="/music/current/cover.jpg?player=" + this.$store.state.player.id;
                     if (playerStatus.current.album_id) {
                         coverUrl+="&album_id="+playerStatus.current.album_id;
                     } else {

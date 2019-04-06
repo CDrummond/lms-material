@@ -132,7 +132,6 @@ const store = new Vuex.Store({
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
-        noNetwork: false,
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
@@ -320,9 +319,6 @@ const store = new Vuex.Store({
         setInfoPlugin(state, val) {
             state.infoPlugin = val;
             setLocalStorageVal('infoPlugin', val);
-        },
-        setNoNetwork(state, val) {
-            state.noNetwork = val;
         }
     }
 })

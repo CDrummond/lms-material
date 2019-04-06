@@ -7,7 +7,7 @@
  
 Vue.component('lms-noconnection', {
     template: `
-<v-dialog v-model="noNetwork" persistent fullscreen>
+<v-dialog v-model="show" persistent fullscreen>
  <v-card style="width:100%; height:100%; display: flex; justify-content: center; align-items: center;">
   <table>
    <tr><td style="text-align: center; padding-bottom: 32px;"><h2>{{i18n('Server connection lost...')}}</h2></td></tr>
@@ -18,7 +18,7 @@ Vue.component('lms-noconnection', {
 `,
     props: [],
     data () {
-        return { }
+        return { show:false }
     },
     computed: {
         noNetwork () {
@@ -26,30 +26,13 @@ Vue.component('lms-noconnection', {
         }
     },
     mounted() {
-        bus.$on('noNetwork', function() {
-            this.cancelInterval();
-            this.$store.commit('setNoNetwork', true);
-            this.refreshInterval = setInterval(function () {
-                lmsCheckConnection().then((resp) => {
-                    this.$store.commit('setNoNetwork', false);
-                    bus.$emit('networkReconnected');
-                    this.cancelInterval();
-                });
-            }.bind(this), 1500);
+        bus.$on('networkStatus', function(connected) {
+            this.show = !connected;
         }.bind(this));
     },
     methods: {
         i18n(str) {
-            return i18n(str);
-        },
-        cancelInterval() {
-            if (undefined!==this.refreshInterval) {
-                clearInterval(this.refreshInterval);
-                this.refreshInterval = undefined;
-            }
+            return this.show ? i18n(str) : str;
         }
-    },
-    beforeDestroy() {
-        this.cancelInterval();
     }
 })

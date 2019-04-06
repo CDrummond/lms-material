@@ -36,18 +36,6 @@ if (RTCPeerConnection)(function() {
     }
 })();
 
-function lmsCheckConnection() {
-    var url = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/css/blank.css?r"+(new Date().getTime());
-    return axios({ method: "get", url: url, timeout: 1000});
-}
-
-window.addEventListener('unhandledrejection', function(event) {
-    lmsCheckConnection().then((resp) => {
-    }).catch(err => {
-        bus.$emit('noNetwork');
-    });
-});
-
 function lmsCommand(playerid, command) {
     var args = {
             method: "post",
@@ -130,12 +118,13 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         connectToCometD() {
-            this.disconnectFromCometD();
+            this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
             this.cometd.init({url: lmsServerAddress + '/cometd', logLevel:'off'});
 
             this.cometd.addListener('/meta/handshake', (message) => {
                 if (eval(message).successful) {
+                    bus.$emit("networkStatus", true);
                     this.subscribedPlayers = new Set();
                     this.cometd.subscribe('/'+this.cometd.getClientId()+'/**', (res) => { this.handleCometDMessage(res); });
                     this.cometd.subscribe('/slim/subscribe',
@@ -143,17 +132,9 @@ var lmsServer = Vue.component('lms-server', {
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}});
                 }
             });
-        },
-        disconnectFromCometD() {
-            if (undefined!=this.cometd) {
-                var subedPlayers = Array.from(this.subscribedPlayers);
-                for (var i=0; i<subedPlayers.length; ++i) {
-                    this.unsubscribe(subedPlayers[i]);
-                }
-                this.cometd.clearListeners();
-                this.cometd.disconnect();
-            }
-            this.subscribedPlayers = new Set();
+            this.cometd.onTransportException = (_cometd, failure, oldTransport, newTransport) => {
+                console.log("FAIL");
+            };
         },
         handleCometDMessage(msg) {
             if (!msg.channel || !msg.data) {
@@ -323,9 +304,6 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
         bus.$on('power', function(state) {
             lmsCommand(this.$store.state.player.id, ["power", state]);
-        }.bind(this));
-        bus.$on('networkReconnected', function() {
-            this.connectToCometD();
         }.bind(this));
         bus.$on('adjustVolume', function(inc) {
             if (this.$store.state.player) {

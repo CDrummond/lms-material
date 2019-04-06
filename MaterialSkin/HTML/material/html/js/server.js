@@ -301,11 +301,6 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('networkReconnected', function() {
             this.connectToCometD();
         }.bind(this));
-/// TODO: Check where this is used
-//        bus.$on('updateServerStatus', function() {
-//            this.refreshServerStatus();
-//            this.refreshStatus();
-//        }.bind(this));
         bus.$on('adjustVolume', function(inc) {
             if (this.$store.state.player) {
                 lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]);

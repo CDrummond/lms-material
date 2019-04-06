@@ -345,9 +345,7 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
             if (this.playerOrigName!=this.playerName) {
-                lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
-                    bus.$emit('updateServerStatus');
-                });
+                lmsCommand(this.playerId, ['name', this.playerName]);
             }
             this.playerId = undefined;
         },

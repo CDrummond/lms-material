@@ -130,21 +130,30 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         connectToCometD() {
-            if (undefined!=this.cometd) {
-                delete this.cometd;
-            }
-            this.subscribedPlayers = new Set();
+            this.disconnectFromCometD();
             this.cometd = new org.cometd.CometD();
             this.cometd.init({url: lmsServerAddress + '/cometd', logLevel:'off'});
 
             this.cometd.addListener('/meta/handshake', (message) => {
                 if (eval(message).successful) {
+                    this.subscribedPlayers = new Set();
                     this.cometd.subscribe('/'+this.cometd.getClientId()+'/**', (res) => { this.handleCometDMessage(res); });
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}});
                 }
             });
+        },
+        disconnectFromCometD() {
+            if (undefined!=this.cometd) {
+                var subedPlayers = Array.from(this.subscribedPlayers);
+                for (var i=0; i<subedPlayers.length; ++i) {
+                    this.unsubscribe(subedPlayers[i]);
+                }
+                this.cometd.clearListeners();
+                this.cometd.disconnect();
+            }
+            this.subscribedPlayers = new Set();
         },
         handleCometDMessage(msg) {
             if (!msg.channel || !msg.data) {
@@ -186,6 +195,17 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
                 this.$store.commit('setPlayers', players.sort(playerSort));
+
+                if (0==this.subscribedPlayers.size) {
+                    // Upon reconnect, will will need to re-sub to current player...
+                    if (this.subscribeAll) {
+                        for (var i=0; i<players.length; ++i) {
+                            this.subscribe(players[i].id);
+                        }
+                    } else if (this.$store.state.player && this.$store.state.player.id) {
+                        this.subscribe(this.$store.state.player.id);
+                    }
+                }
             }
         },
         handlePlayerStatus(playerId, data) {

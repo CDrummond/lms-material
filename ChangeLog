@@ -17,6 +17,7 @@
  8. Fix iOS drag'n'drop.
  9. Add 'Synchronise' to players menu even if group players plugin installed.
 10. Double-click queue item to play.
+11. Fix clicking on dynamic playlist item.
 
 0.4.0
 -----

@@ -3,6 +3,13 @@ axios
     URL: https://github.com/axios/axios
     License: MIT
 
+cometd
+    Version: 4.0.3 (modfified)
+    URL: https://github.com/cometd/cometd-javascript
+    License: Apache License Version 2.0
+    Notes: Renamed to libcometd.js. Changess made to work with LMS. Original is
+           libcometd.orig.js
+
 idb-keyval:
     Version: 3.1.0 with pull req 50
     URL: https://github.com/jakearchibald/idb-keyval
@@ -41,8 +48,8 @@ vue-virtual-scroller:
 vuetify-confirm:
     URL: https://github.com/yariksav/vuetify-confirm
     License: MIT
-    Modified: Swapped location of True/False buttons, remove default setting of
-              button colours.
+    Notes: Swapped location of True/False buttons, remove default setting of
+           button colours.
 
 vuetify
     Version: 1.5.8

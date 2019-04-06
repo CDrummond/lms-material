@@ -36,8 +36,8 @@ Vue.component('lms-information-dialog', {
    <p v-if="updates.plugins.length>0">{{i18n('The following plugins have updates available:')}}</p>
    <p v-else-if="undefined!=updates.error">{{updates.error}}</p>
    <p v-else>{{i18n('All plugins up to date.')}}</p>
-   <ul>
-    <template v-for="(info, index) in updates.plugins"><li>{{info.title}}</li></template>
+   <ul v-if="updates.plugins.length>0">
+    <template v-for="(plug, index) in updates.plugins"><li>{{plug.title}}</li></template>
    </ul>
    <v-btn v-if="updates.plugins.length>0" @click="serverSettings('SETUP_PLUGINS')" flat>{{i18n('Server Settings')}}</v-btn>
    <div class="dialog-padding"></div>
@@ -80,17 +80,16 @@ Vue.component('lms-information-dialog', {
             }.bind(this), 2000);
             this.show = true;
             bus.$emit('dialogOpen', this.show);
-            var that = this;
-            axios.get((lmsServerAddress.length>1 ? lmsServerAddress : (location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')))+"/updateinfo.json?x=time"+(new Date().getTime())).then(function (resp) {
-                that.updates = eval(resp.data);
-                if (!that.updates || !that.updates.plugins) {
-                    that.updates = { plugins: [] };
-                } else if (that.updates && that.updates.plugins && 1==that.updates.plugins.length && null==that.updates.plugins[0]) {
-                    that.updates.plugins=[];
-                    that.updates.error=i18n('Failed to determine plugin status.');
+            axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
+                this.updates = eval(resp.data);
+                if (!this.updates || !this.updates.plugins) {
+                    this.updates = { plugins: [] };
+                } else if (this.updates && this.updates.plugins && 1==this.updates.plugins.length && null==this.updates.plugins[0]) {
+                    this.updates.plugins=[];
+                    this.updates.error=i18n('Failed to determine plugin status.');
                 }
             }).catch(err => {
-                that.updates.error=i18n('Failed to determine plugin status.');
+                this.updates.error=i18n('Failed to determine plugin status.');
                 logError(err);
             });
         }.bind(this));

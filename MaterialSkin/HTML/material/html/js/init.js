@@ -12,9 +12,9 @@ var wide = undefined;
 function checkLayout() {
     if (autoLayout && !isMobileBrowser) {
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
-            changeLayout("mobile");
+            window.location.href = "mobile";
         } else if (window.innerWidth>=600 && window.location.href.indexOf("/mobile")>1) {
-            changeLayout("desktop");
+            window.location.href = "desktop";
         }
     }
 

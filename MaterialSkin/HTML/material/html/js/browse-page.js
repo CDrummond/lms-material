@@ -352,8 +352,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
                       pinned: new Set(),
-                      useGrid: this.$store.state.useGrid,
-                      sortFavorites: this.$store.state.sortFavorites};
+                      useGrid: this.$store.state.useGrid};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
@@ -684,7 +683,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                 }
-                this.sortItems();
                 this.$nextTick(function () {
                     if (changedView) {
                         this.setScrollElement();
@@ -1142,7 +1140,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     this.headerSubTitle=i18np("1 Item", "%1 Items", this.listSize);
                 }
-                this.sortItems();
                 this.$nextTick(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                     this.filterJumplist();
@@ -1152,15 +1149,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
                 logAndShowError(err, undefined, this.command.command, this.command.params);
             });
-        },
-        sortItems() {
-            if (this.current && this.listSize == this.items.length) {
-                if (this.current.id == TOP_APPS_ID) {
-                    this.items.sort(titleSort);
-                } else if (SECTION_FAVORITES==this.current.section && this.$store.state.sortFavorites && this.current.isFavFolder) {
-                    this.items.sort(favSort);
-                }
-            }
         },
         goHome() {
             if (this.fetchingItems) {
@@ -1944,7 +1932,6 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browseDisplayChanged', function(act) {
             this.options.useGrid=this.$store.state.useGrid;
-            this.options.sortFavorites=this.$store.state.sortFavorites;
             if (this.playerId() && this.$store.state.serverMenus) {
                 this.playerMenu();
             }

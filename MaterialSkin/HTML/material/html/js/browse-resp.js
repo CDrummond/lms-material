@@ -490,6 +490,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 });
             }
+
+            if (resp.total == resp.items.length) {
+                if (isApps) {
+                    resp.items.sort(titleSort);
+                } else if (isFavorites) {
+                    resp.items.sort(favSort);
+                }
+            }
         } else if (data.result.artists_loop) {
             var params = [];
             if (parent && parent.params) {

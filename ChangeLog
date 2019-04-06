@@ -18,7 +18,7 @@
  9. Add 'Synchronise' to players menu even if group players plugin installed.
 10. Double-click queue item to play.
 11. Fix clicking on dynamic playlist item.
-12. Use cometd for status updates, isntead of polling server.
+12. Use cometd for status updates, instead of polling server.
 
 0.4.0
 -----
@@ -44,10 +44,10 @@
 5. If 'SB Player' is running on current Android device, then disable
    notification and lock screen controls. The code to make these persistent
    interferes with local playback.
-6. Add a note to 'save defaults' dialog stating that 'Applicaiton layout' is
+6. Add a note to 'save defaults' dialog stating that 'Application layout' is
    not saved as a default.
 7. Add custom add/remove favourite, and clear queue, icons.
-9. Only allow to pin items that have an icon or image, and are not entry
+8. Only allow to pin items that have an icon or image, and are not entry
    fields.
 
 0.3.6

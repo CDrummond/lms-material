@@ -664,6 +664,8 @@
                         }
                     },
                     onError: function(reason, exception) {
+                        // TODO: Is this really the best place for this?
+                        bus.$emit("networkStatus", false);
                         self._debug('Transport', self.getType(), 'received error', reason, exception);
                         _supportsCrossDomain = false;
                         var failure = {

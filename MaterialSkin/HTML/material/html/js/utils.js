@@ -132,9 +132,19 @@ function removeImageSizing(path) {
     return path;
 }
 
+function fixTitle(str) {
+    var prefixes = ["the", "el", "la", "los", "las", "le", "les"];
+    for (var p=0; p<prefixes.length; ++p) {
+        if (str.startsWith(prefixes[p]+" ")) {
+            return str.substring(prefixes[p].length+1)+", "+prefixes[p];
+        }
+    }
+    return str;
+}
+
 function titleSort(a, b) {
-    var titleA = a.title.toUpperCase();
-    var titleB = b.title.toUpperCase();
+    var titleA = fixTitle(a.title.toLowerCase());
+    var titleB = fixTitle(b.title.toLowerCase());
     if (titleA < titleB) {
         return -1;
     }
@@ -166,8 +176,8 @@ function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
         return a.isgroup ? -1 : 1;
     }
-    var nameA = a.name.toUpperCase();
-    var nameB = b.name.toUpperCase();
+    var nameA = a.name.toLowerCase();
+    var nameB = b.name.toLowerCase();
     if (nameA < nameB) {
         return -1;
     }

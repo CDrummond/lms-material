@@ -21,6 +21,8 @@
 12. Use cometd for status updates, instead of polling server.
 13. Remove drag'n'drop re-ordering of favorites.
 14. Always sort favourites.
+15. Ignore "The, El, La, Los, Las, Le, and Les" prefixes when sorting apps and
+    favourites.
 
 0.4.0
 -----

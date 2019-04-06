@@ -213,7 +213,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-subheader v-if="item.header">{{item.header}}</v-subheader>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menu" @click.stop="itemMenu(item, index, $event)">
@@ -265,8 +265,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-content v-else>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menu && item.menu.length>1" @click.stop="itemMenu(item, index, $event)">

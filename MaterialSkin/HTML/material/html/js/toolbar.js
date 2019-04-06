@@ -118,13 +118,13 @@ Vue.component('lms-toolbar', {
  <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-if="desktop && playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider"></v-slider>
  <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop && playerStatus.ison" class="vol-label">{{playerVolume.val}}%</p>
+ <p v-if="desktop && playerStatus.ison" class="vol-label">{{playerVolume.val|displayVolume}}%</p>
  <v-btn v-else-if="!desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!desktop && playerStatus && playerStatus.ison">{{playerStatus.volume}}%</div>
+ <div class="vol-label" v-if="!desktop && playerStatus && playerStatus.ison">{{playerStatus.volume|displayVolume}}%</div>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
@@ -379,14 +379,14 @@ Vue.component('lms-toolbar', {
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
-                this.playerVolume.val = adjustVolume(this.playerVolume.val, false);
+                this.playerVolume.val = adjustVolume(Math.abs(this.playerVolume.val), false);
             }
         },
         volumeUp(toggleMute) {
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
-                this.playerVolume.val = adjustVolume(this.playerVolume.val, true);
+                this.playerVolume.val = adjustVolume(Math.abs(this.playerVolume.val), true);
             }
         },
         volumeClick(toggleMute) {
@@ -419,7 +419,13 @@ Vue.component('lms-toolbar', {
                 return '';
             }
             return formatSeconds(Math.floor(value));
-        }
+        },
+        displayVolume: function (value) {
+            if (undefined==value) {
+                return '';
+            }
+            return value<0 ? -1*value : value;
+        },
     },
     watch: {
         'playerVolume.val': function(newVal) {

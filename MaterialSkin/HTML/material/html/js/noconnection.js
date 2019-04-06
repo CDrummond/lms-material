@@ -30,11 +30,10 @@ Vue.component('lms-noconnection', {
             this.cancelInterval();
             this.$store.commit('setNoNetwork', true);
             this.refreshInterval = setInterval(function () {
-                var that = this;
-                lmsCheckConnection().then(function (resp) {
-                    that.$store.commit('setNoNetwork', false);
+                lmsCheckConnection().then((resp) => {
+                    this.$store.commit('setNoNetwork', false);
                     bus.$emit('networkReconnected');
-                    that.cancelInterval();
+                    this.cancelInterval();
                 });
             }.bind(this), 1500);
         }.bind(this));

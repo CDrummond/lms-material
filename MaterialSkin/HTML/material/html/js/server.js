@@ -130,13 +130,13 @@ var lmsServer = Vue.component('lms-server', {
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
             this.cometd.init({url: lmsServerAddress + '/cometd', logLevel:'off'});
-            var that = this;
-            this.cometd.addListener('/meta/handshake', function(message) {
+
+            this.cometd.addListener('/meta/handshake', (message) => {
                 if (eval(message).successful) {
-                    that.cometd.subscribe('/'+that.cometd.getClientId()+'/**', function(res) { that.handleCometDMessage(res); });
-                    that.cometd.subscribe('/slim/subscribe',
+                    this.cometd.subscribe('/'+this.cometd.getClientId()+'/**', (res) => { this.handleCometDMessage(res); });
+                    this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
-                                    {data:{response:'/'+that.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}});
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}});
                 }
             });
         },

@@ -36,11 +36,17 @@ if (RTCPeerConnection)(function() {
     }
 })();
 
-
 function lmsCheckConnection() {
     var url = (lmsServerAddress.length>0 ? lmsServerAddress + "/material/" : "") + "html/css/blank.css?r"+(new Date().getTime());
     return axios({ method: "get", url: url, timeout: 1000});
 }
+
+window.addEventListener('unhandledrejection', function(event) {
+    lmsCheckConnection().then((resp) => {
+    }).catch(err => {
+        bus.$emit('noNetwork');
+    });
+});
 
 function lmsCommand(playerid, command) {
     var args = {

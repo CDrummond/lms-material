@@ -230,7 +230,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
                                 repeat: parseInt(data["playlist repeat"]),
-                                duration: parseFloat(data["playlist duration"]),
+                                duration: undefined==data["playlist duration"] ? undefined : parseFloat(data["playlist duration"]),
                                 name: data.playlist_name,
                                 current: undefined==data.playlist_cur_index ? -1 : parseInt(data.playlist_cur_index),
                                 count: parseInt(data.playlist_tracks),
@@ -238,7 +238,7 @@ var lmsServer = Vue.component('lms-server', {
                               };
             if (data.playlist_loop && data.playlist_loop.length>0) {
                 player.current = data.playlist_loop[0];
-                player.current.time = parseFloat(data.time);
+                player.current.time = undefined==data.time ? undefined : parseFloat(data.time);
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
                 // BBC iPlayer Extras streams can change duration. *But* on the duration in data seems to

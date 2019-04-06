@@ -15,7 +15,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     if (data && data.result) {
         resp.total = data.result.count;
         resp.useScroller = (parent && parent.range ? parent.range.count : resp.total) >= LMS_MIN_LIST_SCROLLER_ITEMS;
-        var canUseGrid = !resp.useScroller || resp.total<LMS_MAX_GRID_ITEMS;
+        var canUseGrid = !resp.useScroller || resp.total<=LMS_MAX_GRID_ITEMS;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             var totalResults = 0;

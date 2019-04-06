@@ -7,7 +7,7 @@
  2. Due to the above, a maximum of 300 items can be shown in a grid, if there
     are more then a list is used.
  3. Optionally show a large letter when scrolling lists, to indicate current
-    position.
+    position. Thanks to sanc909 for the original idea and code.
  4. Change 'Use grid' option to have 3 settings; never, always, and only for
     local libraries.
  5. Update some of the underlying libraries (Vue, Vuetify, Vue Router, and
@@ -18,6 +18,7 @@
  9. Add 'Synchronise' to players menu even if group players plugin installed.
 10. Double-click queue item to play.
 11. Fix clicking on dynamic playlist item.
+12. Use cometd for status updates, isntead of polling server.
 
 0.4.0
 -----

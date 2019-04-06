@@ -29,7 +29,7 @@ function queueItemCover(item) {
         return resolveImage(null, item.artwork_url);
     }
     if (item.coverid) {
-        return lmsServerAddress+"/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
+        return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
     }
     return resolveImage("music/0/cover"+LMS_LIST_IMAGE_SIZE);
 }
@@ -278,7 +278,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (playerStatus.playlist.timestamp!==this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1)) {
                 this.currentIndex = playerStatus.playlist.current;
                 this.timestamp = playerStatus.playlist.timestamp;
-                this.scheduleUpdate();
+                this.updateItems();
             } else if (playerStatus.playlist.current!==this.currentIndex) {
                 this.currentIndex = playerStatus.playlist.current;
                 if (this.$store.state.autoScrollQueue) {
@@ -326,8 +326,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }
         }.bind(this));
-        // Refresh status now, in case we were mounted after initial status call
-        bus.$emit('refreshStatus');
 
         this.coverUrl = undefined;
         this.coverTrackIndex = undefined;
@@ -340,7 +338,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
         bus.$on('networkReconnected', function() {
             this.timestamp=0;
-            this.scheduleUpdate();
+            this.updateItems();
         }.bind(this));
 
         if (!this.desktop) {
@@ -350,7 +348,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.isVisible = '/queue'==to;
                 if (this.isVisible) {
                     if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
-                        this.scheduleUpdate();
+                        this.updateItems();
                     } else {
                         setTimeout(function () {
                             setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
@@ -563,7 +561,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
-            var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + (LMS_QUEUE_BATCH_SIZE/2) : LMS_QUEUE_BATCH_SIZE;
+            var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length);
                 this.items.push.apply(this.items, resp.items);
@@ -572,11 +570,13 @@ var lmsQueue = Vue.component("lms-queue", {
                 var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                 this.timestamp = resp.timestamp;
                 this.fetchingItems = false;
-                this.listSize = data.result.playlist_tracks;
+                this.listSize = resp.size;
 
                 this.getDuration();
                 if (needUpdate) {
-                    this.scheduleUpdate();
+                    this.$nextTick(function () {
+                        this.updateItems();
+                    });
                 } else {
                     if (this.$store.state.autoScrollQueue) {
                         this.$nextTick(function () {
@@ -588,15 +588,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.fetchingItems = false;
                 logError(err);
             });
-        },
-        scheduleUpdate() {
-            // Debounce updates, incase we have lots of changes together
-            if (this.updateTimer) {
-                clearTimeout(this.updateTimer);
-            }
-            this.updateTimer = setTimeout(function () {
-                this.updateItems();
-            }.bind(this), 50);
         },
         updateItems() {
             if (this.fetchingItems) {
@@ -616,14 +607,16 @@ var lmsQueue = Vue.component("lms-queue", {
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;
                     this.fetchingItems = false;
-                    this.listSize = data.result.playlist_tracks;
+                    this.listSize = resp.size;
                     this.getDuration();
                     this.$nextTick(function () {
                         setScrollTop(this.scrollElement, currentPos>0 ? currentPos : 0);
                     });
 
                     if (needUpdate) {
-                        this.scheduleUpdate();
+                        this.$nextTick(function () {
+                            this.scheduleUpdate();
+                        });
                     } else if (prevIndex!=this.currentIndex && this.$store.state.autoScrollQueue) {
                         this.$nextTick(function () {
                             this.scrollToCurrent();

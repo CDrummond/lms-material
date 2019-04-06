@@ -39,7 +39,7 @@ Vue.component('lms-manage-players', {
           <img :src="player.image">
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.sleepTimer" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player.name}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player.name}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(player)">
@@ -96,10 +96,11 @@ Vue.component('lms-manage-players', {
         }
     },
     mounted() {
+        this.noImage = resolveImage("music/0/cover_50x50");
         bus.$on('manage.open', function(act) {
-            this.getPlayerList();
             this.show = true;
             bus.$emit('dialogOpen', this.show);
+            bus.$emit('subscribeAll', true);
 
             // Check to see if we can manage groups...
             this.manageGroups = getLocalStorageBool('manageGroups', false);
@@ -135,6 +136,14 @@ Vue.component('lms-manage-players', {
         }.bind(this));
 
         this.initItems();
+
+        bus.$on('playerStatus', function(player) {
+            this.updatePlayer(player);
+        }.bind(this));
+
+        bus.$on('otherPlayerStatus', function(player) {
+            this.updatePlayer(player);
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -175,47 +184,10 @@ Vue.component('lms-manage-players', {
                 this.togglePower(player);
             }
         },
-        getPlayerList() {
-            var players = [];
-            this.$store.state.players.forEach(p => {
-                // Do we know this player already?
-                var existing = undefined;
-                // First, quick check on position (saves search)
-                if (players.length<this.players.length && this.players[players.length].id==p.id) {
-                    existing = this.players[players.length];
-                }
-                if (!existing) { // Nope, so iterate through list...
-                    for (var i=0; i<this.players.length; ++i) {
-                        if (this.players[i].id==p.id) {
-                            existing = this.players[i];
-                        }
-                    }
-                }
-
-                if (existing) {
-                    existing.name = p.name; // Might have changed
-                    existing.index = players.length; // Save index for quick lookups
-                    players.push(existing);
-                } else {
-                    p.track="...";
-                    p.index = players.length; // Save index for quick lookups
-                    players.push(p);
-                }
-            });
-
-            this.players = players;
-            this.updateAll();
-            this.timer = setInterval(function () {
-                this.updateAll();
-            }.bind(this), 2000);
-        },
         close() {
             this.show=false;
             bus.$emit('dialogOpen', this.show);
-            if (this.timer) {
-                clearInterval(this.timer);
-                this.timer = undefined;
-            }
+            bus.$emit('subscribeAll', false);
         },
         i18n(str) {
             if (this.show) {
@@ -270,41 +242,31 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
-                this.updatePlayer(player);
-            });
+            lmsCommand(player.id, ["power", player.ison ? "0" : "1"]);
         },
         playPause(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
-                this.updatePlayer(player);
-            });
+            lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']);
         },
         stop(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ['stop']).then(({data}) => {
-                this.updatePlayer(player);
-            });
+            lmsCommand(player.id, ['stop']);
         },
         prevTrack(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ['button', 'jump_rew']).then(({data}) => {
-                this.updatePlayer(player);
-            });
+            lmsCommand(player.id, ['button', 'jump_rew']);
         },
         nextTrack(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ['playlist', 'index', '+1']).then(({data}) => {
-                this.updatePlayer(player);
-            });
+            lmsCommand(player.id, ['playlist', 'index', '+1']);
         },
         setActive(id) {
             if (id != this.$store.state.player.id) {
@@ -314,87 +276,58 @@ Vue.component('lms-manage-players', {
         deleteGroup(player) {
             this.$confirm(i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
-                    lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
-                        bus.$emit('updateServerStatus');
-                    });
-                }
-            });
-        },
-        updateAll() {
-            this.players.forEach(p => {
-                if (!p.updating && (undefined==p.lastUpdate || ((new Date())-p.lastUpdate)>500)) {
-                    this.updatePlayer(p);
+                    lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]);
                 }
             });
         },
         updatePlayer(player) {
-            player.updating=true;
-            lmsCommand(player.id, ["status", "-", 1, "tags:adclK"]).then(({data}) => {
-                player.updating=false;
-                if (!this.show) {
-                    return;
-                }
-                player.ison = 1==data.result.power;
-                player.isplaying = data.result.mode === "play" && !data.result.waitingToPlay;
-                player.volume = data.result["mixer volume"] ? data.result["mixer volume"] : 0;
-                player.muted = player.volume<0;
-                player.issyncmaster = data.result.sync_master == player.id;
-                player.syncmaster = data.result.sync_master;
-                player.sleepTimer = data.result.will_sleep_in
-                if (player.volume<0) {
-                    player.volume *= -1;
-                }
-                player.synced = undefined!==data.result.sync_master || undefined!==data.result.sync_slaves;
-                nameMap[player.id]=player.name;
-                if (data.result.playlist_loop && data.result.playlist_loop.length>0) {
-                    player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :
-                                                         (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
-                    if (data.result.playlist_loop[0].title) {
-                        if (data.result.playlist_loop[0].artist) {
-                            player.track=data.result.playlist_loop[0].title+SEPARATOR+data.result.playlist_loop[0].artist;
-                        } else {
-                            player.track=data.result.playlist_loop[0].title;
-                        }
-                    } else if (data.result.playlist_loop[0].artist) {
-                        player.track=data.result.playlist_loop[0].artist;
-                    } else {
-                        player.track=i18n("Unknown");
-                    }
+            if (!this.show) {
+                return;
+            }
+            nameMap[player.id]=player.name;
 
-                    player.image = undefined;
-                    if (data.result.playlist_loop[0].artwork_url) {
-                        player.image=resolveImage(null, data.result.playlist_loop[0].artwork_url);
-                    }
-                    if (undefined==player.image && data.result.playlist_loop[0].coverid) {
-                        player.image=lmsServerAddress+"/music/"+data.result.playlist_loop[0].coverid+"/cover.jpg";
-                    }
-                    if (undefined==player.image) {
-                        player.image=lmsServerAddress+"/music/current/cover.jpg?player=" + player.id;
-                    }
-                } else {
-                    player.image = resolveImage("music/0/cover_50x50");
-                    player.track = i18n('Nothing playing');
-                    player.playIcon = undefined;
+            player.image = undefined;
+            if (player.current) {
+                if (player.current.artwork_url) {
+                    player.image=resolveImage(null, player.current.artwork_url);
                 }
+                if (undefined==player.image && player.current.coverid) {
+                    player.image="/music/"+player.current.coverid+"/cover.jpg";
+                }
+                if (undefined==player.image) {
+                    player.image="/music/current/cover.jpg?player=" + player.id;
+                }
+            }
+            if (undefined==player.image) {
+                player.image = this.noImage;
+            }
+
+            player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :
+                                                 (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
+            if (player.current.title) {
+                if (player.current.artist) {
+                    player.track=player.current.title+SEPARATOR+player.current.artist;
+                } else {
+                    player.track=player.current.title;
+                }
+            } else if (player.current.artist) {
+                player.track=player.current.artist;
+            } else {
+                player.track=i18n("Unknown");
+            }
             
-                player.lastUpdate = new Date();
-                // Cause view to update
-                if (player.index<this.players.length && this.players[player.index].id==player.id) {
-                    this.$set(this.players, player.index, player);
-                } else {
-                    for (var i=0; i<this.players.length; ++i) {
-                        if (this.players[i].id == player.id) {
-                            player.index = i;
-                            this.$set(this.players, i, player);
-                            break;
-                        }
-                    }
+            var found = false;
+            for (var i=0; i<this.players.length; ++i) {
+                if (this.players[i].id==player.id) {
+                    found=true;
+                    break;
                 }
-            }).catch(err => {
-                window.console.error(err);
-                player.updating=false;
-            });
-        }
+            }
+            if (!found) {
+                this.players.push(player);
+            }
+            this.players.sort(playerSort);
+        },
     },
     computed: {
         currentPlayer() {
@@ -404,24 +337,10 @@ Vue.component('lms-manage-players', {
             return this.$store.state.stopButton
         }
     },
-    watch: {
-        '$store.state.players': function () {
-            if (!this.show) {
-                return;
-            }
-            this.getPlayerList();
-        }
-    },
     filters: {
         name(id) {
             var n = nameMap[id];
             return n ? "("+n+")" : "";
-        }
-    },
-    beforeDestroy() {
-        if (undefined!==this.timer) {
-            clearInterval(this.timer);
-            this.timer = undefined;
         }
     }
 })

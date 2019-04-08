@@ -563,6 +563,6 @@ function updateItemFavorites(item) {
 
 function isInFavorites(item) {
     updateItemFavorites(item);
-    return lmsFavorites.has(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
+    return undefined!=lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl];
 }
 

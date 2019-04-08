@@ -292,10 +292,10 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.menu">
     <v-divider v-if="DIVIDER==action"></v-divider>
-    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" style="opacity:0.35">
+    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index)">
      <v-list-tile-title>
-      <div v-if="undefined==B_ACTIONS[action].svg"><v-icon>{{B_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
-      <div v-else><img class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
+      <div v-if="undefined==B_ACTIONS[REMOVE_FROM_FAV_ACTION].svg"><v-icon>{{B_ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>&nbsp;&nbsp;{{B_ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</div>
+      <div v-else><img class="svg-img" :src="B_ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{B_ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</div>
      </v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
@@ -975,10 +975,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logError(err, command);
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION) {
+                var id = SECTION_FAVORITES==this.current.section ? item.id : lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl];
+                if (undefined==id) {
+                    return;
+                }
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
-                        var command = ["favorites", "delete", removeUniqueness(item.id)];
+                        var command = ["favorites", "delete", removeUniqueness(id)];
                         lmsCommand(this.playerId(), command).then(({datax}) => {
                             logJsonMessage("RESP", datax);
                             this.refreshList();

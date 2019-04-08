@@ -244,15 +244,15 @@ var lmsServer = Vue.component('lms-server', {
         updateFavorites() { // Update set of favorites URLs
             lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
-                    lmsFavorites = new Set();
+                    lmsFavorites = {};
                     for (var i=0; i<data.result.item_loop.length; ++i) {
-                        if (data.result.item_loop[i].presetParams && data.result.item_loop[i].presetParams.favorites_url) {
+                        if (data.result.item_loop[i].presetParams && data.result.item_loop[i].presetParams.favorites_url && data.result.item_loop[i].params) {
                             var url = data.result.item_loop[i].presetParams.favorites_url;
                             var lib = url.indexOf("libraryTracks.library=");
                             if (lib>0) {
                                 url=url.substring(0, lib-1);
                             }
-                            lmsFavorites.add(url);
+                            lmsFavorites[url]="item_id:"+data.result.item_loop[i].params.item_id;
                         }
                     }
                 } 

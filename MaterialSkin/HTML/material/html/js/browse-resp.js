@@ -431,6 +431,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
 
                 if (!i.id) {
+                    if (undefined==idStart) {
+                        idStart = 0;
+                    }
                     if (parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+idStart;
                     } else {

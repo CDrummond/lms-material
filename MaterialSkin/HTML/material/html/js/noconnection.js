@@ -29,32 +29,51 @@ Vue.component('lms-noconnection', {
     mounted() {
         this.pressTimer = undefined;
         bus.$on('networkStatus', function(connected) {
-            if (connected==this.show) {
-                this.disableBtn = connected;
-                this.cancelTimer();
+            if (connected==this.show) { // Only act if state changed
+                this.disableBtn = true;
+                this.cancelPressTimer();
                 this.show = !connected;
+
+                // Don't enable reconnect button until 30 seconds after
+                // initially showing
+                if (this.show) {
+                    this.initialTimer = setTimeout(function () {
+                        this.initialTimer = undefined;
+                        this.disableBtn = false;
+                    }.bind(this), 30000);
+                } else {
+                    this.cancelInitialTimer();
+                }
             }
         }.bind(this));
     },
     beforeDestroy() {
-        this.cancelTimer();
+        this.cancelInitialTimer();
+        this.cancelPressTimer();
     },
     methods: {
         i18n(str) {
             return this.show ? i18n(str) : str;
         },
         reconnect() {
-            if (undefined==this.pressTimer) {
+            if (!this.disableBtn) {
                 bus.$emit("reconnect");
+                // Disable reconnect button for 10 seconds after pressed
                 this.disableBtn = true;
-                console.log(this.disableBtn);
                 this.pressTimer = setTimeout(function () {
                     this.pressTimer = undefined;
                     this.disableBtn = false;
                 }.bind(this), 10000);
             }
         },
-        cancelTimer() {
+        cancelInitialTimer() {
+             if (undefined!==this.initialTimer) {
+                clearTimeout(this.initialTimer);
+                this.initialTimer = undefined;
+                this.disableBtn = false;
+            }
+        },
+        cancelPressTimer() {
              if (undefined!==this.pressTimer) {
                 clearTimeout(this.pressTimer);
                 this.pressTimer = undefined;

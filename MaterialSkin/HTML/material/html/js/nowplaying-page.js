@@ -169,13 +169,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div v-if="wide">
 
      <v-layout text-xs-center row wrap class="np-controls-wide">
-      <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
-      <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
-      <v-flex xs6 v-else></v-flex>
-      <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
-      <v-flex xs3 class="np-duration cursor" v-else-if="!info.show && !showTotal && playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</v-flex>
+      <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
       <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
-       <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+       <v-layout>
+        <p class="np-pos">{{playerStatus.current.time | displayTime}}</p>
+        <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+        <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
+        <p class="np-duration cursor" v-else @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
+       </v-layout>
       </v-flex>
       <v-flex xs4>
        <v-layout text-xs-center>
@@ -226,22 +227,21 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
-   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && techInfo" class="np-text">
+   <v-flex xs12 v-if="showRatings" class="np-text">
     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
     <v-rating v-else v-model="rating.value" hover clearable></v-rating>
    </v-flex>
-   <v-flex xs3 class="np-pos" v-if="!info.show">{{playerStatus.current.time | displayTime}}</v-flex>
-   <v-flex xs6 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
-   <v-flex xs6 v-else-if="showRatings && playerStatus.current.duration>0">
-    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
-    <v-rating v-else v-model="rating.value" hover clearable></v-rating>
-   </v-flex>
-   <v-flex xs6 v-else></v-flex>
-   <v-flex xs3 class="np-duration cursor" v-if="!info.show && (showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</v-flex>
-   <v-flex xs3 class="np-duration cursor" v-else-if="!info.show && !showTotal && playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</v-flex>
+   <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
+
    <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
-    <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+    <v-layout>
+     <p class="np-pos">{{playerStatus.current.time | displayTime}}</p>
+     <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+     <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
+     <p class="np-duration cursor" v-else @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
+    </v-layout>
    </v-flex>
+
    <v-flex xs4>
     <v-layout text-xs-center>
      <v-flex xs6>

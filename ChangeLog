@@ -23,6 +23,8 @@
 14. Always sort favourites.
 15. Ignore "The, El, La, Los, Las, Le, and Les" prefixes when sorting apps and
     favourites.
+16. Show times to left/right of now-playing progress bar, as opposed to above
+    the bar.
 
 0.4.0
 -----

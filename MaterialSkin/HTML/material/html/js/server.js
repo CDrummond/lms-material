@@ -7,6 +7,7 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdeloyrstAKNS";
 
+var lmsFavorites = new Set();
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
 
@@ -132,6 +133,10 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, 100, 'subscribe:60']]}});
+                    this.cometd.subscribe('/slim/subscribe',
+                                    function(res) { },
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
+                    this.updateFavorites();
                 }
             });
         },
@@ -143,6 +148,8 @@ var lmsServer = Vue.component('lms-server', {
                 this.handleServerStatus(msg.data);
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
                 this.handlePlayerStatus(msg.channel.split('/').pop(), msg.data);
+            } else if (msg.channel.endsWith("/slim/favorites")) {
+                this.updateFavorites();
             }
         },
         handleServerStatus(data) {
@@ -233,6 +240,23 @@ var lmsServer = Vue.component('lms-server', {
             } else {
                 bus.$emit('otherPlayerStatus', player);
             }
+        },
+        updateFavorites() { // Update set of favorites URLs
+            lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
+                if (data && data.result && data.result.item_loop) {
+                    lmsFavorites = new Set();
+                    for (var i=0; i<data.result.item_loop.length; ++i) {
+                        if (data.result.item_loop[i].presetParams && data.result.item_loop[i].presetParams.favorites_url) {
+                            var url = data.result.item_loop[i].presetParams.favorites_url;
+                            var lib = url.indexOf("libraryTracks.library=");
+                            if (lib>0) {
+                                url=url.substring(0, lib-1);
+                            }
+                            lmsFavorites.add(url);
+                        }
+                    }
+                } 
+            });
         },
         updateCurrentPlayer() {
             if (this.$store.state.player) {

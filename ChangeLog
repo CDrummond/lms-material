@@ -25,6 +25,7 @@
     favourites.
 16. Show times to left/right of now-playing progress bar, as opposed to above
     the bar.
+17. Disable "Add to favourites" menu entry if item is already in favourites.
 
 0.4.0
 -----

@@ -101,12 +101,16 @@ function resolveImage(icon, image, size) {
     }
     icon=""+icon; // Ensure its a string!
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
-        return icon;
+        return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
     }
     
     var idx = icon.lastIndexOf(".png");
+    if (idx < 0) {
+        idx = icon.lastIndexOf(".jpg");
+    }
+
     if (idx>0) {
-        icon = icon.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+".png";
+        icon = icon.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+icon.substring(idx);
     }
     if (icon.startsWith("/")) {
         return icon;

@@ -71,11 +71,11 @@ Vue.component('lms-favorite', {
                 if (name == this.item.title) {
                     return;
                 }
-                lmsCommand(this.playerId, ["favorites", "rename", removeUniqueness(this.item.id), "title:"+name]).then(({data})=> {
+                lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
                     bus.$emit('refreshFavorites');
                 });
             } else {
-                lmsCommand(this.playerId, ["favorites", "delete", removeUniqueness(this.item.id)]).then(({data})=> {
+                lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
                     lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
                         bus.$emit('refreshFavorites');
                     });

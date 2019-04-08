@@ -252,14 +252,6 @@ function serverSettings(page) {
     window.open('../Default/settings/index.html' + (page ? '?activePage='+page : ''), '_blank');
 }
 
-function addUniqueness(id, uniqueness) {
-    return id+"?"+uniqueness;
-}
-
-function removeUniqueness(id) {
-    return id.split("?")[0];
-}
-
 function fixId(id, prefix) {
     var parts = id.split(".");
     if (parts.length>1) {

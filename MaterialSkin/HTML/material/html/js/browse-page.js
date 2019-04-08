@@ -908,7 +908,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};
             } else if (act==RENAME_FAV_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                command:["favorites", "rename", removeUniqueness(item.id), "title:"+TERM_PLACEHOLDER]};
+                                command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
             } else if (act==SEARCH_LIB_ACTION) {
                 this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
                                 command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
@@ -982,7 +982,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
-                        var command = ["favorites", "delete", removeUniqueness(id)];
+                        var command = ["favorites", "delete", id];
                         lmsCommand(this.playerId(), command).then(({datax}) => {
                             logJsonMessage("RESP", datax);
                             this.refreshList();
@@ -1710,7 +1710,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         var ids=[];
-                        this.selection.forEach(idx => {ids.push(removeUniqueness(this.items[idx].id))});
+                        this.selection.forEach(idx => {ids.push(this.items[idx].id)});
                         ids.sort(function(a, b) { return a<b ? 1 : -1; });
                         bus.$emit('doAllList', ids, this.current.section==SECTION_PLAYLISTS ? ["playlists", "delete"] : ["favorites", "delete"],
                                   this.current.section);

@@ -86,3 +86,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#0e0e0e !important;
 }
 
+.np-rating-shadow {
+    text-shadow: 2px 2px 5px #ddd;
+}

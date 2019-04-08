@@ -292,10 +292,16 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.menu">
     <v-divider v-if="DIVIDER==action"></v-divider>
+    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" style="opacity:0.35">
+     <v-list-tile-title>
+      <div v-if="undefined==B_ACTIONS[action].svg"><v-icon>{{B_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
+      <div v-else><img class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
+     </v-list-tile-title>
+    </v-list-tile>
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-title>
-       <div v-if="undefined==B_ACTIONS[action].svg"><v-icon>{{B_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
-       <div v-else><img class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
+      <div v-if="undefined==B_ACTIONS[action].svg"><v-icon>{{B_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
+      <div v-else><img class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{B_ACTIONS[action].title}}</div>
      </v-list-tile-title>
     </v-list-tile>
    </template>
@@ -926,10 +932,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             } else if (act===ADD_TO_FAV_ACTION) {
+                updateItemFavorites(item);
                 var favUrl = item.favUrl ? item.favUrl : item.url;
                 var favIcon = item.favIcon;
                 var favType = "audio";
-                var favTitle = item.origTitle ? item.origTitle : item.title;
+                var favTitle = item.favTitle;
 
                 if (item.presetParams && item.presetParams.favorites_url) {
                     favUrl = item.presetParams.favorites_url;
@@ -938,24 +945,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (item.presetParams.favorites_title) {
                         favTitle = item.presetParams.favorites_title;
                     }
-                } else if (item.id.startsWith("genre_id:")) {
-                    favUrl="db:genre.name="+encodeURIComponent(favTitle);
-                    favIcon="html/images/genres.png";
-                } else if (item.id.startsWith("artist_id:")) {
-                    favUrl="db:contributor.name="+encodeURIComponent(favTitle);
-                    favIcon=removeImageSizing(item.image);
-                } else if (item.id.startsWith("album_id:")) {
-                    favUrl="db:album.title="+encodeURIComponent(favTitle);
-                    favIcon=removeImageSizing(item.image);
-                } else if (item.id.startsWith("year:")) {
-                    favUrl="db:year.id="+encodeURIComponent(favTitle);
-                    favIcon="html/images/years.png";
-                } else if (item.id.startsWith("playlist:")) {
-                    favIcon="html/images/playlists.png";
-                }
-
-                if (!favIcon && item.image) {
-                    favIcon = item.image;
                 }
 
                 var command = ["favorites", "exists", favUrl];

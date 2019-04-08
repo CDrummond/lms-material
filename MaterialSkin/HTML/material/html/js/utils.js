@@ -534,3 +534,35 @@ function shrinkAray(array, limit) {
     res[res.length-1]=array[array.length-1];
     return res;
 }
+
+function updateItemFavorites(item) {
+    if ( (item.favUrl && item.favIcon) || (item.presetParams && item.presetParams.favorites_url)) {
+        return;
+    }
+
+    var favTitle = item.origTitle ? item.origTitle : item.title;
+    if (item.id.startsWith("genre_id:")) {
+        item.favUrl="db:genre.name="+encodeURIComponent(favTitle);
+        item.favIcon="html/images/genres.png";
+    } else if (item.id.startsWith("artist_id:")) {
+        item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
+        item.favIcon=removeImageSizing(item.image);
+    } else if (item.id.startsWith("album_id:")) {
+        favUrl="db:album.title="+encodeURIComponent(favTitle);
+        favIcon=removeImageSizing(item.image);
+    } else if (item.id.startsWith("year:")) {
+        item.favUrl="db:year.id="+encodeURIComponent(favTitle);
+        item.favIcon="html/images/years.png";
+    } else if (item.id.startsWith("playlist:")) {
+        item.favIcon="html/images/playlists.png";
+    }
+
+    item.favUrl = item.favUrl ? item.favUrl : item.url;
+    item.favIcon = item.favIcon ? item.favIcon : item.image
+}
+
+function isInFavorites(item) {
+    updateItemFavorites(item);
+    return lmsFavorites.has(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
+}
+

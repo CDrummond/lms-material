@@ -442,6 +442,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     idStart++;
                 }
 
+                // TrackStat...
+                if (!i.type && i.params && i.params.track) {
+                    i.type = "audio";
+                }
+
                 // Only show 'More' action if ('more' is in baseActions and item as item_id) OR
                 // 'more' is in item's actions. #57
                 if ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) ||

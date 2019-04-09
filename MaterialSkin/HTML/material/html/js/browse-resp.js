@@ -10,6 +10,9 @@ const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false, jumplist:[] };
+    if (undefined==idStart) {
+        idStart = 0;
+    }
 
     try {
     if (data && data.result) {
@@ -431,9 +434,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
 
                 if (!i.id) {
-                    if (undefined==idStart) {
-                        idStart = 0;
-                    }
                     if (parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+idStart;
                     } else {
@@ -721,7 +721,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var isFolder = i.type==="folder";
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart, title});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 resp.items.push({
                               id: (isFolder ? "folder_id:" : "track_id:") + i.id,

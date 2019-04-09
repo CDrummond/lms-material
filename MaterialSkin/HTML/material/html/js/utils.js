@@ -268,8 +268,11 @@ function fixId(id, prefix) {
 function setBgndCover(elem, coverUrl, isDark) {
     if (elem) {
         elem.style.backgroundColor = isDark ? "#424242" : "#fff";
-        elem.style.backgroundImage = "url('"+(undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")
-                                              ? undefined : coverUrl)+"')";
+        if (undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")) {
+            elem.style.backgroundImage = "url()";
+        } else {
+            elem.style.backgroundImage = "url('"+coverUrl+"')";
+        }
         if (isDark) {
             //if (coverUrl) {
                 elem.style.boxShadow = "inset 0 0 120vw 120vh rgba(72,72,72,0.9)";

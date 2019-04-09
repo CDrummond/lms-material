@@ -19,7 +19,7 @@ Vue.component('lms-noconnection', {
 `,
     props: [],
     data () {
-        return { show:false, disableBtn:false }
+        return { status:false, show:false, disableBtn:false }
     },
     computed: {
         noNetwork () {
@@ -27,29 +27,32 @@ Vue.component('lms-noconnection', {
         }
     },
     mounted() {
-        this.pressTimer = undefined;
         bus.$on('networkStatus', function(connected) {
-            if (connected==this.show) { // Only act if state changed
+            if (connected!=this.status) { // Only act if state changed
                 this.disableBtn = true;
-                this.cancelPressTimer();
-                this.show = !connected;
+                this.cancelTimers();
+                this.status = connected;
+                this.show = false;
 
-                // Don't enable reconnect button until 30 seconds after
-                // initially showing
-                if (this.show) {
+                if (!this.status) {
+                    // Don't show dialog until 5 seconds after network disconnect, as
+                    // mihgt reconnect quickly
                     this.initialTimer = setTimeout(function () {
+                        this.show = true;
                         this.initialTimer = undefined;
-                        this.disableBtn = false;
-                    }.bind(this), 30000);
-                } else {
-                    this.cancelInitialTimer();
+                        // Don't enable reconnect button until 30 seconds after
+                        // initially showing
+                        this.btnControlTimer = setTimeout(function () {
+                            this.btnControlTimer = undefined;
+                            this.disableBtn = false;
+                        }.bind(this), 15000);
+                    }.bind(this), 5000);
                 }
             }
         }.bind(this));
     },
     beforeDestroy() {
-        this.cancelInitialTimer();
-        this.cancelPressTimer();
+        this.cancelTimers();
     },
     methods: {
         i18n(str) {
@@ -66,15 +69,17 @@ Vue.component('lms-noconnection', {
                 }.bind(this), 10000);
             }
         },
-        cancelInitialTimer() {
-             if (undefined!==this.initialTimer) {
+        cancelTimers() {
+            if (undefined!==this.initialTimer) {
                 clearTimeout(this.initialTimer);
                 this.initialTimer = undefined;
+            }
+            if (undefined!==this.btnControlTimer) {
+                clearTimeout(this.btnControlTimer);
+                this.btnControlTimer = undefined;
                 this.disableBtn = false;
             }
-        },
-        cancelPressTimer() {
-             if (undefined!==this.pressTimer) {
+            if (undefined!==this.pressTimer) {
                 clearTimeout(this.pressTimer);
                 this.pressTimer = undefined;
                 this.disableBtn = false;

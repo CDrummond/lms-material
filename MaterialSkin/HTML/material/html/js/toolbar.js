@@ -350,7 +350,7 @@ Vue.component('lms-toolbar', {
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start player")};
+                          startPlayer:i18n("Start Player")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

@@ -227,7 +227,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
-   <v-flex xs12 v-if="showRatings && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
+   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
     <v-rating v-else v-model="rating.value" hover clearable></v-rating>
    </v-flex>

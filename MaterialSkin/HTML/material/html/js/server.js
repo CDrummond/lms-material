@@ -121,6 +121,7 @@ var lmsServer = Vue.component('lms-server', {
             if (this.cometd) {
                 this.cometd.disconnect();
             }
+            this.cancelTimers();
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
             this.cometd.init({url: '/cometd', logLevel:'off'});
@@ -137,6 +138,11 @@ var lmsServer = Vue.component('lms-server', {
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
                     this.updateFavorites();
+                    // If we don't get a statu supdate within 5 seconds, assume something wrong and reconnect
+                    this.statusTimer = setTimeout(function () {
+                        this.statusTimer = undefined;
+                        this.connectToCometD();
+                    }.bind(this), 5000);
                 }
             });
         },
@@ -153,6 +159,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleServerStatus(data) {
+            this.cancelTimers();
             var players = [];
             if (lmsLastScan!=data.lastscan) {
                 lmsLastScan = data.lastscan;
@@ -295,6 +302,12 @@ var lmsServer = Vue.component('lms-server', {
             } else {
                 this.updateCurrentPlayer();
             }
+        },
+        cancelTimers() {
+            if (undefined!==this.statusTimer) {
+                clearTimeout(this.statusTimer);
+                this.statusTimer = undefined;
+            }
         }
     },
     created: function() {
@@ -352,6 +365,9 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
         }.bind(this));
+    },
+    beforeDestroy() {
+        this.cancelTimers();
     },
     watch: {
         '$store.state.player': function (newVal) {

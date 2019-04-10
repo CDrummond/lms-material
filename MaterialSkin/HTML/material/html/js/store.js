@@ -102,6 +102,11 @@ function updateUiSettings(state, val) {
         state.showPlayerMenuEntry = val.showPlayerMenuEntry;
         setLocalStorageVal('showPlayerMenuEntry', state.showPlayerMenuEntry);
     }
+    if (undefined!=val.lsAndNotif && state.lsAndNotif!=val.lsAndNotif) {
+        state.lsAndNotif = val.lsAndNotif;
+        setLocalStorageVal('lsAndNotif', state.lsAndNotif);
+        bus.$emit('lsAndNotifChanged');
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -143,7 +148,8 @@ const store = new Vuex.Store({
         nowPlayingTrackNum: false,
         ratingsSupport: false,
         maxRating: 5,
-        showPlayerMenuEntry: false
+        showPlayerMenuEntry: false,
+        lsAndNotif:'playing'
     },
     mutations: {
         setPlayers(state, players) {
@@ -255,6 +261,7 @@ const store = new Vuex.Store({
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
+            state.lsAndNotif = getLocalStorageBool('lsAndNotif', state.lsAndNotif);
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -289,7 +296,8 @@ const store = new Vuex.Store({
                                  queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
                                  nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
                                  volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
-                                 showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry)};
+                                 showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
+                                 lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif)};
                     updateUiSettings(state, opts);
                 }
             });

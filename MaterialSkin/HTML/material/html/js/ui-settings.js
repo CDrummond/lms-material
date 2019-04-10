@@ -52,9 +52,14 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="android">
      <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
       <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n('Lock screen and notification controls will be disabled whilst player is active.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <v-divider v-if="android"></v-divider>
+    <v-list-tile v-if="android">
+     <v-select :items="lsAndNotifItems" :label="i18n('Lock screen and notification controls')" v-model="lsAndNotif" item-text="label" item-value="key"></v-select>
     </v-list-tile>
 
     <div class="dialog-padding"></div>
@@ -243,6 +248,8 @@ Vue.component('lms-ui-settings', {
                          ],
             volumeStep: 5,
             showPlayerMenuEntry: false,
+            lsAndNotif: 'playing',
+            lsAndNotifItems: [],
             android: isAndroid()
         }
     },
@@ -267,6 +274,7 @@ Vue.component('lms-ui-settings', {
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
             this.useGrid=this.$store.state.useGrid;
+            this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.serverMenus = this.$store.state.serverMenus;
             this.showMenuAudio = this.$store.state.showMenuAudio;
@@ -333,6 +341,11 @@ Vue.component('lms-ui-settings', {
                 { key:"always", label:i18n("Whenever possible")},
                 { key:"albums", label:i18n("For local albums only")}
                 ];
+            this.lsAndNotifItems=[
+                { key:"never",  label:i18n("Never")},
+                { key:"always", label:i18n("Always")},
+                { key:"playing", label:i18n("When playing")}
+                ];
         },
         close() {
             this.show=false;
@@ -356,7 +369,8 @@ Vue.component('lms-ui-settings', {
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
                                                   volumeStep:this.volumeStep,
-                                                  showPlayerMenuEntry:this.showPlayerMenuEntry
+                                                  showPlayerMenuEntry:this.showPlayerMenuEntry,
+                                                  lsAndNotif:this.lsAndNotif
                                                 } );
             if (this.libraries.length>0) {
                 this.$store.commit('setLibrary', this.library);
@@ -395,7 +409,8 @@ Vue.component('lms-ui-settings', {
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
                                      volumeStep:this.volumeStep,
-                                     showPlayerMenuEntry:this.showPlayerMenuEntry
+                                     showPlayerMenuEntry:this.showPlayerMenuEntry,
+                                     lsAndNotif:this.lsAndNotif
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

@@ -313,6 +313,9 @@ Vue.component('lms-toolbar', {
             bus.$on('haveLocalAndroidPlayer', function(coverUrl) {
                 this.updateMediaSession(undefined, true);
             }.bind(this));
+            bus.$on('lsAndNotifChanged', function(coverUrl) {
+                this.updateMediaSession(this.media, true);
+            }.bind(this));
         }
         bus.$on('networkStatus', function(connected) {
             this.connected = connected;
@@ -324,8 +327,9 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if ('mediaSession' in navigator) {
-                if (undefined==track || haveLocalAndroidPlayer ||
-                   (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album))) {
+                if (haveLocalAndroidPlayer || 'never'==this.$store.state.lsAndNotif ||
+                    ('playing'==this.$store.state.lsAndNotif &&
+                              (undefined==track || (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album)) ) ) ) {
                     stopMediaSession();
                     this.media.title = undefined;
                     this.media.artist = undefined;

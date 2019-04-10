@@ -30,6 +30,8 @@
 18. For 1st 10 seconds when connection is lost; disable player menu, and show
     a spinner top right. After 10 seconds, full screen connection lost dialog is
     shown.
+19. Add setting for lock screen and notifications; never, always, or only whilst
+    playing.
 
 0.4.0
 -----

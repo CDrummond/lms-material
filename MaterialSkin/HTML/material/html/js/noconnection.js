@@ -35,18 +35,18 @@ Vue.component('lms-noconnection', {
                 this.show = false;
 
                 if (!this.status) {
-                    // Don't show dialog until 5 seconds after network disconnect, as
-                    // mihgt reconnect quickly
+                    // Don't show dialog until 10 seconds after network disconnect, as
+                    // might reconnect quickly
                     this.initialTimer = setTimeout(function () {
                         this.show = true;
                         this.initialTimer = undefined;
-                        // Don't enable reconnect button until 30 seconds after
+                        // Don't enable reconnect button until 15 seconds after
                         // initially showing
                         this.btnControlTimer = setTimeout(function () {
                             this.btnControlTimer = undefined;
                             this.disableBtn = false;
                         }.bind(this), 15000);
-                    }.bind(this), 5000);
+                    }.bind(this), 10000);
                 }
             }
         }.bind(this));

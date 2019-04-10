@@ -60,7 +60,7 @@ Vue.component('lms-toolbar', {
     template: `
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
- <v-menu bottom class="toolbar-menu">
+ <v-menu bottom class="toolbar-menu" :disabled="!connected">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed' : !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTimer" class="player-icon-pad">hotel</v-icon>
@@ -134,7 +134,7 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu bottom left>
+ <v-menu v-if="connected" bottom left>
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
@@ -148,6 +148,9 @@ Vue.component('lms-toolbar', {
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">{{trans.startPlayer}}</v-list-tile>
   </v-list>
  </v-menu>
+ <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
+  <v-progress-circular color="primary" size=22 width=3 indeterminate></v-progress-circular>
+ </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
@@ -158,12 +161,13 @@ Vue.component('lms-toolbar', {
                  playlist: { count: undefined, duration: undefined, timestamp: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
                  menuItems: [],
-                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined,
+                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
-                 snackbar:{ show: false, msg: undefined}
+                 snackbar:{ show: false, msg: undefined},
+                 connected: true
                }
     },
     mounted() {
@@ -310,6 +314,9 @@ Vue.component('lms-toolbar', {
                 this.updateMediaSession(undefined, true);
             }.bind(this));
         }
+        bus.$on('networkStatus', function(connected) {
+            this.connected = connected;
+        }.bind(this));
     },
     methods: {
         updateMediaSession(track, force) {
@@ -350,7 +357,7 @@ Vue.component('lms-toolbar', {
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start Player")};
+                          startPlayer:i18n("Start Player"), connectionLost:i18n('Server connection lost...')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

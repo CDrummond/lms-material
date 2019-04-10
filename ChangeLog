@@ -27,6 +27,9 @@
     the bar.
 17. Show "Remove from favourites" if item is in favourites, "Add to favourites"
     otherwise.
+18. For 1st 10 seconds when connection is lost; disable player menu, and show
+    a spinner top right. After 10 seconds, full screen connection lost dialog is
+    shown.
 
 0.4.0
 -----

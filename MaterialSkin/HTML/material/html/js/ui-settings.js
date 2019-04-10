@@ -48,6 +48,15 @@ Vue.component('lms-ui-settings', {
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
     </v-list-tile>
 
+    <v-divider v-if="android"></v-divider>
+    <v-list-tile v-if="android">
+     <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
+      <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Browse')}}</v-header>
     <v-list-tile>
@@ -192,16 +201,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <div v-if="showPlayerConfig" class="dialog-padding"></div>
-    <v-header v-if="showPlayerConfig">{{i18n('Player')}}</v-header>
 
-    <v-list-tile v-if="showPlayerConfig">
-     <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
-      <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
-    </v-list-tile>
     <div class="dialog-padding"></div>
    </v-list>
   </v-card-text>
@@ -243,7 +243,7 @@ Vue.component('lms-ui-settings', {
                          ],
             volumeStep: 5,
             showPlayerMenuEntry: false,
-            showPlayerConfig: isAndroid()
+            android: isAndroid()
         }
     },
     computed: {

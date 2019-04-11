@@ -36,7 +36,13 @@ if (RTCPeerConnection)(function() {
     }
 })();
 
-function lmsCommand(playerid, command) {
+const CancelToken = axios.CancelToken;
+var lmsListSource = undefined;
+
+function lmsCommand(playerid, command, isList) {
+    if (isList) {
+        lmsListSource = CancelToken.source();
+    }
     var args = {
             method: "post",
             url: "/jsonrpc.js",
@@ -45,7 +51,8 @@ function lmsCommand(playerid, command) {
                 id: 1,
                 method: "slim.request",
                 params: [playerid, command]
-           }};
+            },
+            cancelToken: isList ? lmsListSource.token : undefined };
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", args.data.params);
     }
@@ -68,7 +75,7 @@ async function lmsList(playerid, command, params, start, batchSize, cancache) {
             });
         });
     } else {
-        return lmsCommand(playerid, cmdParams);
+        return lmsCommand(playerid, cmdParams, true);
     }
 }
 

@@ -33,6 +33,7 @@
 19. Add setting for lock screen and notifications; never, always, or only whilst
     playing.
 20. Don't hide volume controls when player is off, just make disabled.
+21. Allow list requests to be cancelled, by pressing back (or home) button.
 
 0.4.0
 -----

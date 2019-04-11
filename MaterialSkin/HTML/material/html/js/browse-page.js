@@ -769,17 +769,16 @@ var lmsBrowse = Vue.component("lms-browse", {
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
-            if (isTextItem(item)) {
-                if (this.canClickText(item)) {
-                    this.doTextClick(item);
-                }
-                return;
-            }
-
             if ("audio"==item.type  || "track"==item.type /*|| "itemplay"==item.style || "item_play"==item.style*/ ||
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))) {
                 if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, index, event);
+                }
+                return;
+            }
+            if (isTextItem(item)) {
+                if (this.canClickText(item)) {
+                    this.doTextClick(item);
                 }
                 return;
             }

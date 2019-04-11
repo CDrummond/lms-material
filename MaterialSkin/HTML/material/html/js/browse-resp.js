@@ -13,7 +13,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     if (undefined==idStart) {
         idStart = 0;
     }
-    var firstId = idStart;
 
     try {
     if (data && data.result) {
@@ -436,11 +435,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
                 if (!i.id) {
                     if (parent.id.startsWith(TOP_ID_PREFIX)) {
-                        i.id="item_id:"+idStart;
+                        i.id="item_id:"+(resp.items.length+idStart);
                     } else {
-                        i.id=parent.id+"."+idStart;
+                        i.id=parent.id+"."+(resp.items.length+idStart);
                     }
-                    idStart++;
                 }
 
                 // TrackStat...
@@ -475,7 +473,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 resp.items.push(i);
             });
@@ -517,7 +515,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.artists_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
@@ -558,7 +556,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 var album = {
                               id: "album_id:"+i.id,
@@ -638,7 +636,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.genres_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 resp.items.push({
                               id: "genre_id:"+i.id,
@@ -703,7 +701,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.years_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 resp.items.push({
                               id: "year:"+i.year,
@@ -722,7 +720,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var isFolder = i.type==="folder";
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 resp.items.push({
                               id: (isFolder ? "folder_id:" : "track_id:") + i.id,

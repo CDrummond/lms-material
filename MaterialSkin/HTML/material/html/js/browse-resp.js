@@ -13,6 +13,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     if (undefined==idStart) {
         idStart = 0;
     }
+    var firstId = idStart;
 
     try {
     if (data && data.result) {
@@ -474,7 +475,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
                 }
                 resp.items.push(i);
             });
@@ -516,7 +517,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.artists_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
@@ -557,7 +558,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
                 }
                 var album = {
                               id: "album_id:"+i.id,
@@ -637,7 +638,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.genres_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
                 }
                 resp.items.push({
                               id: "genre_id:"+i.id,
@@ -702,7 +703,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             data.result.years_loop.forEach(i => {
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
                 }
                 resp.items.push({
                               id: "year:"+i.year,
@@ -721,7 +722,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var isFolder = i.type==="folder";
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length+firstId});
                 }
                 resp.items.push({
                               id: (isFolder ? "folder_id:" : "track_id:") + i.id,

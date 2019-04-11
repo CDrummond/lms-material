@@ -115,16 +115,16 @@ Vue.component('lms-toolbar', {
  <v-btn icon v-else-if="!desktop" @click.native="bus.$emit('playerCommand', ['play'])" class="toolbar-button">
   <v-icon>play_circle_outline</v-icon>
  </v-btn>
- <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-if="desktop && playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider"></v-slider>
- <v-btn v-if="desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop && playerStatus.ison" class="vol-label">{{playerVolume.val|displayVolume}}%</p>
- <v-btn v-else-if="!desktop && playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick">
+ <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-if="desktop" :disabled="!playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider"></v-slider>
+ <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-if="desktop" :disabled="!playerStatus.ison" class="vol-label">{{playerVolume.val|displayVolume}}%</p>
+ <v-btn v-else-if="!desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!desktop && playerStatus && playerStatus.ison">{{playerStatus.volume|displayVolume}}%</div>
+ <div class="vol-label" v-if="!desktop" :disabled="!playerStatus.ison">{{playerStatus.volume|displayVolume}}%</div>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>

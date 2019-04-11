@@ -1013,7 +1013,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logAndShowError(err, undefined, ["albums"], params, 0, 1);
                 });
             } else if (act===MORE_ACTION) {
-                this.fetchItems(this.buildCommand(item, act), item);
+                this.fetchItems(this.buildCommand(item, B_ACTIONS[act].cmd), item);
             } else if (act===MORE_LIB_ACTION) {
                 if (item.id) {
                     if (item.id.startsWith("artist_id:")) {

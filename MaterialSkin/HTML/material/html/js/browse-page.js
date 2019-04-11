@@ -1576,7 +1576,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              weight: c.weight ? parseFloat(c.weight) : 100,
                                              group: GROUP_MY_MUSIC,
                                              id: TOP_ID_PREFIX+c.id,
-                                             type: "group"
+                                             type: "group",
+                                             icon: "music_note"
                                             };
 
                                 if (c.id.startsWith("myMusicArtists")) {
@@ -1604,6 +1605,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "computer";
                                 } else if (c.id == "myMusicRandomAlbums") {
                                     item.svg = "dice-album";
+                                    item.icon = undefined;
                                     item.id = TOP_RANDOM_ALBUMS_ID;
                                 } else if (c.id.startsWith("myMusicTopTracks")) {
                                     item.icon = "arrow_upward";
@@ -1611,12 +1613,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "arrow_downward";
                                 } else if (c.id == "dynamicplaylist") {
                                     item.svg = "dice-list";
+                                    item.icon = undefined;
                                 } else if (c.id.startsWith("trackstat")) {
                                     item.icon = "bar_chart";
-                                } else if (c.id == "custombrowse") {
+                                } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                     item.icon = "library_music";
-                                } else {
-                                    item.icon = "music_note";
+                                } else if (c.icon) {
+                                    if (c.icon.endsWith("/albums.png")) {
+                                        item.icon = "album";
+                                    } else if (c.icon.endsWith("/artists.png")) {
+                                        item.icon = "group";
+                                    } else if (c.icon.endsWith("/genres.png")) {
+                                        item.icon = "label";
+                                    }
                                 }
                                 this.serverTop.push(item);
                             }

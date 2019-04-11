@@ -79,7 +79,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
    </v-flex>
   </v-layout>
-  <p v-if="showRatings && playerStatus.current.duration>0" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
+  <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
    <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
    <v-rating small v-else v-model="rating.value" hover clearable></v-rating>
   </p>
@@ -162,7 +162,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</div>
     <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div v-if="showRatings && playerStatus.current.duration>0" class="np-text-landscape">
+    <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id" class="np-text-landscape">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
      <v-rating v-else v-model="rating.value" hover clearable></v-rating>
     </div>
@@ -227,7 +227,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
-   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
+   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
     <v-rating v-else v-model="rating.value" hover clearable></v-rating>
    </v-flex>
@@ -417,7 +417,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
 
             if (this.rating.id!=playerStatus.current.id) {
-                this.rating.id = playerStatus.current.duration && playerStatus.current.duration>0 ? playerStatus.current.id : undefined;
+                this.rating.id = playerStatus.current.duration && playerStatus.current.duration>0 &&
+                                 (!playerStatus.current.type || playerStatus.current.type.toLowerCase().indexOf("radio")<0)
+                                    ? playerStatus.current.id : undefined;
                 if (this.$store.state.ratingsSupport) {
                     this.getRating();
                 }
@@ -734,7 +736,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.rating.setting = false;
                 }).catch(err => {
                     this.rating.setting = false;
-                    logError(err);
+                    //slogError(err);
                 });
             }
         }

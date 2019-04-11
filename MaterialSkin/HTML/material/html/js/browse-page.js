@@ -623,7 +623,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.getRatings();
             }).catch(err => {
                 this.fetchingItems = false;
-                logAndShowError(err, undefined, command.command, command.params, start, count);
+                if (!axios.isCancel(err)) {
+                    logAndShowError(err, undefined, command.command, command.params, start, count);
+                }
             });
         },
         handleListResponse(item, command, resp) {
@@ -1138,13 +1140,20 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 this.fetchingItems = false;
             }).catch(err => {
+                if (!axios.isCancel(err)) {
+                    logAndShowError(err, undefined, this.command.command, this.command.params);
+                }
                 this.fetchingItems = false;
-                logAndShowError(err, undefined, this.command.command, this.command.params);
             });
         },
         goHome() {
             if (this.fetchingItems) {
-                return;
+                if (lmsListSource) {
+                    this.fetchingItems = false;
+                    lmsListSource.cancel('Operation canceled by the user.');
+                } else {
+                    return;
+                }
             }
             var prev = this.history.length>0 ? this.history[0].pos : 0;
             this.items = this.getTop();
@@ -1183,6 +1192,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         goBack(refresh) {
             if (this.fetchingItems) {
+                if (lmsListSource) {
+                    this.fetchingItems = false;
+                    lmsListSource.cancel('Operation canceled by the user.');
+                }
                 return;
             }
             if (this.history.length<2) {

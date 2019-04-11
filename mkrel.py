@@ -52,7 +52,7 @@ COMMON_JS_FILES = [  # Order is important!
     "init.js"
 ]
 
-NON_MINIFIED_CSS = ["dark.css", "light.css", "blank.css", "mobile.css", "desktop.css"]
+NON_MINIFIED_CSS = ["dark.css", "light.css"]
 
 def info(s):
     print("INFO: %s" %s)

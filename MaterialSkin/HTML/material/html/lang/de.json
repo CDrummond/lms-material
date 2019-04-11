@@ -291,15 +291,15 @@
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
 "Album Mix":"",
-"Always":"",
+"Always":"Immer",
 "Audio":"",
 "CD Player":"",
 "Dynamic Playlists":"",
 "Firmware: %1":"",
 "IP: %1":"",
 "Information":"",
-"Lock screen and notification controls":"",
-"Lock screen and notification controls will be disabled whilst player is active.":"",
+"Lock screen and notification controls":"Sperrbildschirm und Benachrichtigungen",
+"Lock screen and notification controls will be disabled whilst player is active.":"Sperrbildschirm und Benachrichtigungen werden angezeigt, solange die Wiedergabe läuft.",
 "Logitech Media Server v%1":"",
 "Mon":"",
 "NOTE: 'Application layout' is not saved, as this is a per-device setting.":"",
@@ -311,5 +311,5 @@
 "Reconnect":"",
 "Start":"",
 "URL":"",
-"When playing":""
+"When playing":"Während der Wiedergabe"
 }

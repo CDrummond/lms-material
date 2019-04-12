@@ -289,7 +289,7 @@ var lmsServer = Vue.component('lms-server', {
         unsubscribe(id) {
             if (this.subscribedPlayers.has(id)) {
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, "subscribe:-"]]}});
                 this.subscribedPlayers.delete(id);
             }
         },

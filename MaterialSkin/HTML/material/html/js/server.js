@@ -234,7 +234,7 @@ var lmsServer = Vue.component('lms-server', {
                                 duration: undefined==data["playlist duration"] ? undefined : parseFloat(data["playlist duration"]),
                                 name: data.playlist_name,
                                 current: undefined==data.playlist_cur_index ? -1 : parseInt(data.playlist_cur_index),
-                                count: parseInt(data.playlist_tracks),
+                                count: undefined==data.playlist_tracks ? 0 : parseInt(data.playlist_tracks),
                                 timestamp: undefined===data.playlist_timestamp ? 0.0 : parseFloat(data.playlist_timestamp)
                               };
             if (data.playlist_loop && data.playlist_loop.length>0) {

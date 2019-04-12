@@ -275,11 +275,12 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.lastLoadedPlaylistName=playerStatus.playlist.name;
                 this.playlistName=playerStatus.playlist.name;
             }
-            if (playerStatus.playlist.timestamp!==this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1)) {
+            if (playerStatus.playlist.timestamp!=this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1) ||
+                (playerStatus.playlist.timestamp<=0 && this.items.length>0) || this.listSize!=playerStatus.playlist.count) {
                 this.currentIndex = playerStatus.playlist.current;
                 this.timestamp = playerStatus.playlist.timestamp;
                 this.updateItems();
-            } else if (playerStatus.playlist.current!==this.currentIndex) {
+            } else if (playerStatus.playlist.current!=this.currentIndex) {
                 this.currentIndex = playerStatus.playlist.current;
                 if (this.$store.state.autoScrollQueue) {
                     this.scrollToCurrent();

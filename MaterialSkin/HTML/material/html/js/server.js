@@ -210,6 +210,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handlePlayerStatus(playerId, data) {
+            var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
             var player = { ison: parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
@@ -224,9 +225,9 @@ var lmsServer = Vue.component('lms-server', {
                          };
 
             player.volume = undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
-            // Store volume, so that it can be accessed in 'adjustVolume' handler
 
-            if (player.current) {
+            // Store volume, so that it can be accessed in 'adjustVolume' handler
+            if (isCurrent) {
                 this.volume = player.volume;
             }
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
@@ -249,11 +250,7 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
 
-            if (player.current) {
-                bus.$emit('playerStatus', player);
-            } else {
-                bus.$emit('otherPlayerStatus', player);
-            }
+            bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
         },
         updateFavorites() { // Update set of favorites URLs
             lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {

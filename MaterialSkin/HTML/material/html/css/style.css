@@ -716,8 +716,12 @@ progress {
  max-width:200px !important;
 }
 
-.info-pad {
- padding-top:24px; /* add padding as not using v-card-text due to issues on older iOS?? */
+.ios-vcard-text-workaround {
+ position:fixed;
+ overflow-y:auto;
+ padding:16px;
+ width:100vw;
+ left:0px;
 }
 
 .pmgr-card-text {

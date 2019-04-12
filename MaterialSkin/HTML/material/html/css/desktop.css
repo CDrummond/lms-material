@@ -262,3 +262,7 @@ body {
  width: calc(1vw * var(--splitter-pc));
 }
 
+.ios-vcard-text-workaround {
+ top:48px;
+ height:calc((var(--vh, 1vh)*100) - 48px);
+}

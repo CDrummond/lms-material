@@ -196,3 +196,8 @@
  line-height: 160px;
  width: 100%;
 }
+
+.ios-vcard-text-workaround {
+ top:56px;
+ height:calc((var(--vh, 1vh)*100) - 56px);
+}

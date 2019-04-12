@@ -15,7 +15,7 @@ Vue.component('lms-information-dialog', {
     <v-toolbar-title>{{title}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
-  <div class="settings-list info-pad"> <!-- NOTE: NOT v-card-text as issues on older iOS?? -->
+  <div class="ios-vcard-text-workaround">
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>

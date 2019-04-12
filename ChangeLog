@@ -35,6 +35,8 @@
 20. Don't hide volume controls when player is off, just make disabled.
 21. Allow list requests to be cancelled, by pressing back (or home) button.
 22. Fix opening weblinks (text, pdf, etc).
+23. Fix scrollbar positioning in information and manage players dialog, due to
+    work-around for older iOS devices introduced in 0.3.0
 
 0.4.0
 -----

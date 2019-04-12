@@ -34,6 +34,7 @@
     playing.
 20. Don't hide volume controls when player is off, just make disabled.
 21. Allow list requests to be cancelled, by pressing back (or home) button.
+22. Fix opening weblinks (text, pdf, etc).
 
 0.4.0
 -----

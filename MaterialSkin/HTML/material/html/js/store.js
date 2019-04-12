@@ -207,15 +207,6 @@ const store = new Vuex.Store({
                         }
                     }
                 }
-                if (!state.player) { /* Choose first connected on player */
-                    for (var i=0; i<state.players.length; ++i) {
-                        if (state.players[i].isconnected) {
-                            state.player=state.players[i];
-                            setLocalStorageVal('player', state.player.id);
-                            break;
-                        }
-                    }
-                }
                 if (!state.player && state.players.length>0) { /* Choose first player */
                     state.player=state.players[0];
                     setLocalStorageVal('player', state.player.id);

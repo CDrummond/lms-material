@@ -162,10 +162,14 @@ var lmsServer = Vue.component('lms-server', {
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
                 this.handlePlayerStatus(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith("/slim/favorites")) {
+                logCometdMessage("favorites", msg.data);
                 this.updateFavorites();
+            } else {
+                logCometdDebug("unexpected channel:"+msg.channel);
             }
         },
         handleServerStatus(data) {
+            logCometdMessage("serverstatus", data);
             this.cancelTimers();
             var players = [];
             if (lmsLastScan!=data.lastscan) {
@@ -186,6 +190,7 @@ var lmsServer = Vue.component('lms-server', {
                         if (!localAndroidPlayer && currentIpAddress && 'SB Player' ===i.modelname && i.ip.split(':')[0] == currentIpAddress) {
                             localAndroidPlayer = true;
                         }
+                        logCometdDebug("serverstatus has "+i.playerid);
                     }
                 });
                 if (localAndroidPlayer != haveLocalAndroidPlayer) {
@@ -209,6 +214,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handlePlayerStatus(playerId, data) {
+            logCometdMessage("playerstatus", data);
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
             var player = { ison: parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
@@ -280,6 +286,7 @@ var lmsServer = Vue.component('lms-server', {
         },
         subscribe(id) {
             if (!this.subscribedPlayers.has(id)) {
+                logCometdDebug("subscribe "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:60"]]}});
                 this.subscribedPlayers.add(id);
@@ -287,6 +294,7 @@ var lmsServer = Vue.component('lms-server', {
         },
         unsubscribe(id) {
             if (this.subscribedPlayers.has(id)) {
+                logCometdDebug("unsubscribe "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, "subscribe:-"]]}});
                 this.subscribedPlayers.delete(id);

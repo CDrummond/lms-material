@@ -8,11 +8,23 @@
 const SEPARATOR = " \u2022 ";
 
 var bus = new Vue();
-var debug = false;
+var debug = undefined;
 
 function logJsonMessage(type, msg) {
-    if (debug) {
+    if (debug && debug.has("json")) {
         console.log("[" + new Date().toLocaleTimeString()+"] "+type+": "+JSON.stringify(msg));
+    }
+}
+
+function logCometdMessage(type, msg) {
+    if (debug && debug.has("cometd")) {
+        console.log("[" + new Date().toLocaleTimeString()+"] "+type+": "+JSON.stringify(msg));
+    }
+}
+
+function logCometdDebug(msg) {
+    if (debug && debug.has("cometd")) {
+        console.log("[" + new Date().toLocaleTimeString()+"] "+msg);
     }
 }
 
@@ -334,7 +346,16 @@ function parseQueryParams() {
         if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
         } else if ("debug"==kv[0]) {
-            debug = "true"==kv[1];
+            var parts = kv[1].split(",");
+            debug = new Set();
+            for (var j=0; j<parts.length; ++j) {
+                if ("true"==parts[j]) {
+                    debug.add("json");
+                    debug.add("cometd");
+                } else {
+                    debug.add(parts[j]);
+                }
+            }
         } else if ("clearcache"==kv[0] && "true"==kv[1]) {
             clearListCache(true);
         }

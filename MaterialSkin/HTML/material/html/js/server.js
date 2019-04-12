@@ -175,12 +175,11 @@ var lmsServer = Vue.component('lms-server', {
             if (data.players_loop) {
                 var localAndroidPlayer = false;
                 data.players_loop.forEach(i => {
-                    if (1==parseInt(i.connected)) {
+                    if (1==parseInt(i.connected)) { // Only list/use connected players...
                         players.push({ id: i.playerid,
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),
                                        ison: 1==parseInt(i.power),
-                                       isconnected: 1==parseInt(i.connected),
                                        isgroup: 'group'===i.model
                                       });
                         // Check if we have a local SB Player - if so, can't use MediaSession

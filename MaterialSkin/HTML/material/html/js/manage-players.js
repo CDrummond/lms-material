@@ -320,6 +320,7 @@ Vue.component('lms-manage-players', {
             for (var i=0; i<this.players.length; ++i) {
                 if (this.players[i].id==player.id) {
                     found=true;
+                    this.$set(this.players, i, player);
                     break;
                 }
             }

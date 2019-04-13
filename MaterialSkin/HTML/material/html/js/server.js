@@ -216,7 +216,7 @@ var lmsServer = Vue.component('lms-server', {
         handlePlayerStatus(playerId, data) {
             logCometdMessage("PLAYER ("+playerId+")", data);
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
-            var player = { ison: parseInt(data.power),
+            var player = { ison: 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},

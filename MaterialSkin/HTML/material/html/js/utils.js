@@ -11,20 +11,20 @@ var bus = new Vue();
 var debug = undefined;
 
 function logJsonMessage(type, msg) {
-    if (debug && debug.has("json")) {
-        console.log("[" + new Date().toLocaleTimeString()+"] "+type+": "+JSON.stringify(msg));
+    if (debug && (debug.has("json") || debug.has("true"))) {
+        console.log("[" + new Date().toLocaleTimeString()+"] JSON "+type+": "+JSON.stringify(msg));
     }
 }
 
 function logCometdMessage(type, msg) {
-    if (debug && debug.has("cometd")) {
-        console.log("[" + new Date().toLocaleTimeString()+"] "+type+": "+JSON.stringify(msg));
+    if (debug && (debug.has("cometd") || debug.has("true"))) {
+        console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+type+": "+JSON.stringify(msg));
     }
 }
 
 function logCometdDebug(msg) {
-    if (debug && debug.has("cometd")) {
-        console.log("[" + new Date().toLocaleTimeString()+"] "+msg);
+    if (debug && (debug.has("cometd") || debug.has("true"))) {
+        console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+msg);
     }
 }
 
@@ -349,12 +349,7 @@ function parseQueryParams() {
             var parts = kv[1].split(",");
             debug = new Set();
             for (var j=0; j<parts.length; ++j) {
-                if ("true"==parts[j]) {
-                    debug.add("json");
-                    debug.add("cometd");
-                } else {
-                    debug.add(parts[j]);
-                }
+                debug.add(parts[j]);
             }
         } else if ("clearcache"==kv[0] && "true"==kv[1]) {
             clearListCache(true);

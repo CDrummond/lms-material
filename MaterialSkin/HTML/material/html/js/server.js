@@ -56,6 +56,11 @@ function lmsCommand(playerid, command, isList) {
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", args.data.params);
     }
+    if (playerid && !isList && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
+        return axios(args).finally(() => {
+            bus.$emit("updatePlayer", playerid);
+        });
+    }
     return axios(args);
 }
 
@@ -274,14 +279,16 @@ var lmsServer = Vue.component('lms-server', {
                 } 
             });
         },
+        updatePlayer(id) {
+            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS]).then(({data}) => {
+                if (data && data.result) {
+                    this.handlePlayerStatus(id, data.result);
+                }
+            });
+        },
         updateCurrentPlayer() {
             if (this.$store.state.player) {
-                var id = this.$store.state.player.id;
-                lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS]).then(({data}) => {
-                    if (data && data.result) {
-                        this.handlePlayerStatus(id, data.result);
-                    }
-                });
+                this.updatePlayer(this.$store.state.player.id);
             }
         },
         subscribe(id) {
@@ -336,6 +343,9 @@ var lmsServer = Vue.component('lms-server', {
             if (this.$store.state.player) {
                 lmsCommand(this.$store.state.player.id, command);
             }
+        }.bind(this));
+        bus.$on('updatePlayer', function(id) {
+            this.updatePlayer(id);
         }.bind(this));
         bus.$on('removeFromQueue', function(indexes) {
             if (this.$store.state.player) {

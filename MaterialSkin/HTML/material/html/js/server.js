@@ -355,7 +355,7 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);
             if (player) {
-                this.updatePlayer(id);
+                this.updatePlayer(player);
             }
         }.bind(this));
         bus.$on('refreshServerStatus', function() {

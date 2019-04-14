@@ -830,7 +830,7 @@ div.v-subheader {
 .lms-jumplist {
  padding:8px 0px 8px 0px; /* t, r, b, l */
  margin:0px !important;
- width:24px;
+ width:32px;
  background-color:#444;
  float:left;
  display:grid;

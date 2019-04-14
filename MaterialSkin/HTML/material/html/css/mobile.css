@@ -95,8 +95,8 @@
 }
 
 .lms-list-jump {
- width:calc(100vw - 24px);
- left:24px;
+ width:calc(100vw - 32px);
+ left:32px;
 }
 
 .lms-jumplist {

@@ -142,7 +142,7 @@ var lmsServer = Vue.component('lms-server', {
             if (this.cometd) {
                 this.cometd.disconnect();
             }
-            this.cancelTimers();
+            this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
             this.cometd.init({url: '/cometd', logLevel:'off'});
@@ -160,8 +160,8 @@ var lmsServer = Vue.component('lms-server', {
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
                     this.updateFavorites();
                     // If we don't get a statu supdate within 5 seconds, assume something wrong and reconnect
-                    this.statusTimer = setTimeout(function () {
-                        this.statusTimer = undefined;
+                    this.serverStatusTimer = setTimeout(function () {
+                        this.serverStatusTimer = undefined;
                         this.connectToCometD();
                     }.bind(this), 5000);
                 }
@@ -184,7 +184,7 @@ var lmsServer = Vue.component('lms-server', {
         },
         handleServerStatus(data) {
             logCometdMessage("SERVER", data);
-            this.cancelTimers();
+            this.cancelServerStatusTimer();
             var players = [];
             if (lmsLastScan!=data.lastscan) {
                 lmsLastScan = data.lastscan;
@@ -337,10 +337,10 @@ var lmsServer = Vue.component('lms-server', {
                 }
             });
         },
-        cancelTimers() {
-            if (undefined!==this.statusTimer) {
-                clearTimeout(this.statusTimer);
-                this.statusTimer = undefined;
+        cancelServerStatusTimer() {
+            if (undefined!==this.serverStatusTimer) {
+                clearTimeout(this.serverStatusTimer);
+                this.serverStatusTimer = undefined;
             }
         }
     },
@@ -416,7 +416,7 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
     },
     beforeDestroy() {
-        this.cancelTimers();
+        this.cancelServerStatusTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

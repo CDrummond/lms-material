@@ -304,7 +304,7 @@ var lmsServer = Vue.component('lms-server', {
             if (!this.subscribedPlayers.has(id)) {
                 logCometdDebug("Subscribe: "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:60"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:30"]]}});
                 this.subscribedPlayers.add(id);
             }
         },

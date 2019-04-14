@@ -56,11 +56,16 @@ function lmsCommand(playerid, command, isList) {
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", args.data.params);
     }
+    /* CometD does not seem to sent status messages (at least not quickly) when updates are made via JSONRPC. So, to
+       work-around, we can manually update on each player message. */
+    /* NOTE: Disabled for now, and status requests are sent when required. This saves multiple status messages being
+             sent when a list of actions is performed. Left here in case needed later...
     if (playerid && !isList && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         return axios(args).finally(() => {
             bus.$emit("updatePlayer", playerid);
         });
     }
+    */
     return axios(args);
 }
 
@@ -99,6 +104,8 @@ var lmsServer = Vue.component('lms-server', {
                         this.removeFromQueue(indexes);
                     }
                 });
+            } else {
+                this.updateCurrentPlayer();
             }
         },
         moveQueueItems(indexes, to, movedBefore, movedAfter) {
@@ -111,6 +118,8 @@ var lmsServer = Vue.component('lms-server', {
                                                          index>to ? movedAfter+1 : movedAfter);
                     }
                 });
+            } else {
+                this.updateCurrentPlayer();
             }
         },
         doAllList(ids, command, section) {
@@ -321,6 +330,13 @@ var lmsServer = Vue.component('lms-server', {
                 this.updateCurrentPlayer();
             }
         },
+        refreshServerStatus() {
+            lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
+                if (data && data.result) {
+                    this.handleServerStatus(data.result);
+                }
+            });
+        },
         cancelTimers() {
             if (undefined!==this.statusTimer) {
                 clearTimeout(this.statusTimer);
@@ -336,12 +352,20 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('reconnect', function() {
             this.connectToCometD();
         }.bind(this));
-        bus.$on('refreshStatus', function() {
-            this.updateCurrentPlayer();
+        bus.$on('refreshStatus', function(id) {
+            var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);
+            if (player) {
+                this.updatePlayer(id);
+            }
+        }.bind(this));
+        bus.$on('refreshServerStatus', function() {
+            this.refreshServerStatus();
         }.bind(this));
         bus.$on('playerCommand', function(command) {
             if (this.$store.state.player) {
-                lmsCommand(this.$store.state.player.id, command);
+                lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                    this.updateCurrentPlayer();
+                });
             }
         }.bind(this));
         bus.$on('updatePlayer', function(id) {
@@ -363,11 +387,15 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
         bus.$on('power', function(state) {
-            lmsCommand(this.$store.state.player.id, ["power", state]);
+            lmsCommand(this.$store.state.player.id, ["power", state]).then(({data}) => {
+                this.updateCurrentPlayer();
+            });
         }.bind(this));
         bus.$on('adjustVolume', function(inc) {
             if (this.$store.state.player) {
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]);
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]).then(({data}) => {
+                    this.updateCurrentPlayer();
+                });
             }
         }.bind(this));
         bus.$on('subscribeAll', function(all) {

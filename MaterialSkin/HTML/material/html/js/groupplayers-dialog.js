@@ -141,6 +141,7 @@ Vue.component('lms-groupplayers-dialog', {
                 // Change name first
                 lmsCommand(this.player.id, ['name', name]).then(({data}) => {
                     lmsCommand("", cmd).then(({data}) => {
+                        bus.$emit('refreshServerStatus');
                         this.show=false;
                     });
                 });
@@ -157,6 +158,7 @@ Vue.component('lms-groupplayers-dialog', {
             }
             lmsCommand("", ['playergroups', 'add', 'name:'+name, 'members:'+this.chosenPlayers.join(','),
                             'powerMaster:'+(this.options.powerMaster ? 1 : 0), 'powerPlay:'+(this.options.powerPlay ? 1 : 0)]).then(({data}) => {
+                bus.$emit('refreshServerStatus');
                 this.show=false;
             });
         },

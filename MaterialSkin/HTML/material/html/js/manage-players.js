@@ -242,31 +242,41 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ["power", player.ison ? "0" : "1"]);
+            lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
+                bus.$emit('refreshStatus', player.id);
+            });
         },
         playPause(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']);
+            lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
+                bus.$emit('refreshStatus', player.id);
+            });
         },
         stop(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ['stop']);
+            lmsCommand(player.id, ['stop']).then(({data}) => {
+                bus.$emit('refreshStatus', player.id);
+            });
         },
         prevTrack(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ['button', 'jump_rew']);
+            lmsCommand(player.id, ['button', 'jump_rew']).then(({data}) => {
+                bus.$emit('refreshStatus', player.id);
+            });
         },
         nextTrack(player) {
             if (!this.show) {
                 return;
             }
-            lmsCommand(player.id, ['playlist', 'index', '+1']);
+            lmsCommand(player.id, ['playlist', 'index', '+1']).then(({data}) => {
+                bus.$emit('refreshStatus', player.id);
+            });
         },
         setActive(id) {
             if (id != this.$store.state.player.id) {
@@ -276,7 +286,9 @@ Vue.component('lms-manage-players', {
         deleteGroup(player) {
             this.$confirm(i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
-                    lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]);
+                    lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
+                        bus.$emit('refreshServerStatus');
+                    });
                 }
             });
         },

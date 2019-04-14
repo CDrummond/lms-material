@@ -444,7 +444,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.dialog.show = false;
 
                     if ('add'==this.dialog.action) {
-                        lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", str]);
+                        lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", str]).then(({data}) => {
+                            bus.$emit('refreshStatus');
+                        });
                     } else {
                         lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({datax}) => {
                             this.playlistName = str;

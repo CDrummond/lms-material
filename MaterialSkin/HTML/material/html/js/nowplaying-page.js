@@ -331,6 +331,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.current.time!=this.playerStatus.current.time) {
                 this.playerStatus.current.time = playerStatus.current.time;
+                this.playerStatus.current.updated = new Date();
+                this.playerStatus.current.origTime = playerStatus.current.time;
             }
             this.setPosition();
             if (playerStatus.current.id!=this.playerStatus.current.id) {
@@ -686,7 +688,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         startPositionInterval() {
             this.positionInterval = setInterval(function () {
                 if (undefined!=this.playerStatus.current.time && this.playerStatus.current.time>=0) {
-                    this.playerStatus.current.time += 1;
+                    var current = new Date();
+                    var diff = (current.getTime()-this.playerStatus.current.updated.getTime())/1000.0;
+                    this.playerStatus.current.time = this.playerStatus.current.origTime + diff;
                     this.setPosition();
                 }
             }.bind(this), 1000);

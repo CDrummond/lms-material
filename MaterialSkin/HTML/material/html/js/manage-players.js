@@ -325,7 +325,7 @@ Vue.component('lms-manage-players', {
             } else if (player.current.artist) {
                 player.track=player.current.artist;
             } else {
-                player.track=i18n("Unknown");
+                player.track="...";
             }
             
             var found = false;

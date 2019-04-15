@@ -135,14 +135,14 @@ function resolveImage(icon, image, size) {
 
 function removeImageSizing(path) {
     if (undefined!=path) {
-        if (path.endsWith(LMS_LIST_IMAGE_SIZE+".png")) {
-            return path.replace(LMS_LIST_IMAGE_SIZE+".png", ".png");
-        } else if (path.endsWith(LMS_GRID_IMAGE_SIZE+".png")) {
-            return path.replace(LMS_GRID_IMAGE_SIZE+".png", ".png");
-        } else if (path.endsWith(LMS_LIST_IMAGE_SIZE)) {
-            return path.substring(0, path.length - LMS_LIST_IMAGE_SIZE.length);
-        } else if (path.endsWith(LMS_GRID_IMAGE_SIZE)) {
-            return path.substring(0, path.length - LMS_GRID_IMAGE_SIZE.length);
+        var specs = [LMS_LIST_IMAGE_SIZE, LMS_GRID_IMAGE_SIZE, "_50x50_o"];
+        for (var s=0; s<specs.length; ++s) {
+            if (path.endsWith(specs[s]+".png")) {
+                return path.replace(specs[s]+".png", ".png");
+            }
+            if (path.endsWith(specs[s])) {
+                return path.substring(0, path.length - specs[s].length);
+            }
         }
     }
     return path;

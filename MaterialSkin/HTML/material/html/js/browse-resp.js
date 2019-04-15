@@ -459,14 +459,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
 
                 if (resp.useGrid && i.image) {
-                    if (i.image.endsWith("_50x50.png")) {
-                        i.image=i.image.replace("_50x50.png", LMS_GRID_IMAGE_SIZE);
-                    } else if (i.image.endsWith("50x50.png")) {
-                        i.image=i.image.replace("50x50.png", LMS_GRID_IMAGE_SIZE);
-                    } else if (i.image.endsWith("_50x50_o")) {
-                        i.image=i.image.replace("_50x50_o", LMS_GRID_IMAGE_SIZE);
-                    } else if (i.image.endsWith("50x50_o")) {
-                        i.image=i.image.replace("50x50_o", LMS_GRID_IMAGE_SIZE);
+                    var rep=["_100x100.png", "100x100.png", "_100x100_o", "100x100_o",
+                             "_50x50.png", "50x50.png", "_50x50_o", "50x50_o"];
+                    for (var r=0; r<rep.length; ++r) {
+                        if (i.image.endsWith(rep[r])) {
+                            i.image=i.image.replace(rep[r], LMS_GRID_IMAGE_SIZE);
+                            break;
+                        }
                     }
                 }
                 i.section = parent ? parent.section : undefined;

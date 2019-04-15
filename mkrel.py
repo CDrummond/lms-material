@@ -264,7 +264,7 @@ def createZip(version):
 
 
 def getSha1Sum(zipFile):
-    info("Generatin SHA1")
+    info("Generating SHA1")
     sha1 = hashlib.sha1()
     with open(zipFile, 'rb') as f:
         while True:

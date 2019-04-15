@@ -138,6 +138,16 @@ var lmsServer = Vue.component('lms-server', {
                 });
             }
         },
+        scheduleNextPlayerStatusUpdate: function(timeout) {
+            this.cancelPlayerStatusTimer();
+            if (timeout) {
+                // CometD updates can be delayed, so poll near end of song so that we notice changes
+                logCometdDebug("Schedule next player poll in: "+timeout+"ms");
+                this.playerStatusTimer = setTimeout(function () {
+                    this.updateCurrentPlayer();
+                }.bind(this), timeout);
+            }
+        },
         connectToCometD() {
             if (this.cometd) {
                 this.cometd.disconnect();
@@ -159,7 +169,7 @@ var lmsServer = Vue.component('lms-server', {
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
                     this.updateFavorites();
-                    // If we don't get a statu supdate within 5 seconds, assume something wrong and reconnect
+                    // If we don't get a status update within 5 seconds, assume something wrong and reconnect
                     this.serverStatusTimer = setTimeout(function () {
                         this.serverStatusTimer = undefined;
                         this.connectToCometD();
@@ -204,7 +214,6 @@ var lmsServer = Vue.component('lms-server', {
                         if (!localAndroidPlayer && currentIpAddress && 'SB Player' ===i.modelname && i.ip.split(':')[0] == currentIpAddress) {
                             localAndroidPlayer = true;
                         }
-                        logCometdDebug("Player: "+i.playerid+", Current: " + (this.$store.state.player ? this.$store.state.player.id : "<none>"));
                     }
                 });
                 if (localAndroidPlayer != haveLocalAndroidPlayer) {
@@ -227,8 +236,8 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
         },
-        handlePlayerStatus(playerId, data) {
-            logCometdMessage("PLAYER ("+playerId+")", data);
+        handlePlayerStatus(playerId, data, forced) {
+            logCometdMessage("PLAYER ("+playerId+(forced ? " [forced]" : "")+")", data);
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
             var player = { ison: 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
@@ -270,6 +279,13 @@ var lmsServer = Vue.component('lms-server', {
             }
 
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
+            if (isCurrent) {
+                this.scheduleNextPlayerStatusUpdate(player.isplaying && player.current && player.current.duration && undefined!=player.current.time
+                        ? (player.current.duration-player.current.time)<2.5
+                            ? 500
+                            : (player.current.duration-(player.current.time+2))*1000
+                        : undefined);
+            }
         },
         updateFavorites() { // Update set of favorites URLs
             lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
@@ -291,7 +307,7 @@ var lmsServer = Vue.component('lms-server', {
         updatePlayer(id) {
             lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS]).then(({data}) => {
                 if (data && data.result) {
-                    this.handlePlayerStatus(id, data.result);
+                    this.handlePlayerStatus(id, data.result, true);
                 }
             });
         },
@@ -341,6 +357,12 @@ var lmsServer = Vue.component('lms-server', {
             if (undefined!==this.serverStatusTimer) {
                 clearTimeout(this.serverStatusTimer);
                 this.serverStatusTimer = undefined;
+            }
+        },
+        cancelPlayerStatusTimer() {
+            if (undefined!==this.playerStatusTimer) {
+                clearTimeout(this.playerStatusTimer);
+                this.playerStatusTimer = undefined;
             }
         }
     },
@@ -417,6 +439,7 @@ var lmsServer = Vue.component('lms-server', {
     },
     beforeDestroy() {
         this.cancelServerStatusTimer();
+        this.cancelPlayerStatusTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

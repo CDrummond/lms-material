@@ -186,8 +186,7 @@ var lmsServer = Vue.component('lms-server', {
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
                 this.handlePlayerStatus(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith("/slim/favorites")) {
-                logCometdMessage("FAVORITES", msg.data);
-                this.updateFavorites();
+                this.handleFavoritesUpdate();
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }
@@ -287,6 +286,14 @@ var lmsServer = Vue.component('lms-server', {
                         : undefined);
             }
         },
+        handleFavoritesUpdate() {
+            logCometdMessage("FAVORITES", msg.data);
+            // 'Debounce' favorites updates...
+            this.cancelFavoritesTimer();
+            this.favoritesTimer = setTimeout(function () {
+                this.updateFavorites();
+            }.bind(this), 500);
+        },
         updateFavorites() { // Update set of favorites URLs
             lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
@@ -364,6 +371,12 @@ var lmsServer = Vue.component('lms-server', {
                 clearTimeout(this.playerStatusTimer);
                 this.playerStatusTimer = undefined;
             }
+        },
+        cancelFavoritesTimer() {
+            if (undefined!==this.favoritesTimer) {
+                clearTimeout(this.favoritesTimer);
+                this.favoritesTimer = undefined;
+            }
         }
     },
     created: function() {
@@ -440,6 +453,7 @@ var lmsServer = Vue.component('lms-server', {
     beforeDestroy() {
         this.cancelServerStatusTimer();
         this.cancelPlayerStatusTimer();
+        this.cancelFavoritesTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

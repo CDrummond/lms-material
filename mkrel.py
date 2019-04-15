@@ -178,7 +178,6 @@ def minifyCss():
                 if end<start:
                     break
                 cssStr=cssStr[:start]+cssStr[end+2:]
-            print cssStr
             minCss = origCss.replace(".css", ".min.css")
             with open(minCss, "w") as f:
                 f.write(cssStr)

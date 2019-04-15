@@ -37,6 +37,7 @@
 22. Fix opening weblinks (text, pdf, etc).
 23. Fix scrollbar positioning in information and manage players dialog, due to
     work-around for older iOS devices introduced in 0.3.0
+24. Do basic CSS minification for releases.
 
 0.4.0
 -----

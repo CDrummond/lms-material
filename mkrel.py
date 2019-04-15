@@ -21,9 +21,8 @@ PUBLIC_XML = "public.xml"
 BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
 MINIFY_JS = True
-MINIFY_CSS = False # Minifying CSS seems to break layout?
+MINIFY_CSS = True
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
-CSS_COMPRESSOR = "tools/yuicompressor/yuicompressor-2.4.8.jar"
 COMMON_JS_FILES = [  # Order is important!
     "constants.js",
     "currentcover.js",
@@ -164,8 +163,25 @@ def minifyCss():
     for css in os.listdir("%s/css" % HTML_FOLDER):
         if not css in NON_MINIFIED_CSS and css.endswith(".css"):
             origCss = "%s/css/%s" % ( HTML_FOLDER, css)
+            cssStr=""
+            with open(origCss, "r") as f:
+                for line in f.readlines():
+                    cssStr+=line.replace("\n", "").replace(" {", "{")
+            while ("  " in cssStr):
+                cssStr=cssStr.replace("  ", " ")
+            cssStr=cssStr.replace("} ", "}").replace("{ ", "{").replace("; ", ";");
+            while True:
+                start = cssStr.find("/*")
+                if start<0:
+                    break
+                end = cssStr.find("*/")
+                if end<start:
+                    break
+                cssStr=cssStr[:start]+cssStr[end+2:]
+            print cssStr
             minCss = origCss.replace(".css", ".min.css")
-            subprocess.call(["java", "-jar", CSS_COMPRESSOR, "-o", minCss, origCss], shell=False)
+            with open(minCss, "w") as f:
+                f.write(cssStr)
 
 
 def removeUnminified():
@@ -216,8 +232,8 @@ def fixHtml():
                     replacedJs = True
             elif MINIFY_CSS and matchedCss:
                 if not replacedCss:
-                    fixedLines.append('    <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
-                    fixedLines.append('    <link href="html/css/%s.min.css?r=[%% material_revision %%]" rel="stylesheet">\n' % html)
+                    fixedLines.append('  <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
+                    fixedLines.append('  <link href="html/css/%s.min.css?r=[%% material_revision %%]" rel="stylesheet">\n' % html)
                     replacedCss = True
             else:
                 fixedLines.append(line)

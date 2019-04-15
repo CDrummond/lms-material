@@ -113,9 +113,9 @@ function updateUiSettings(state, val) {
 }
 
 function convertGridConfigItem(val) {
-    if ('true'==val) {
+    if ('true'==val || true==val) {
         return 'always';
-    } else if ('false'==val) {
+    } else if ('false'==val || false==val) {
         return 'never';
     }
     return val;

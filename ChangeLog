@@ -1,3 +1,7 @@
+0.5.1
+-----
+1. Better display of time in now-playing.
+
 0.5.0
 -----
  1. When browsing, load all list items (max 25k) at once. Use view recycler

@@ -522,6 +522,11 @@ a {
  min-width:4.25em;
 }
 
+.np-pos-center {
+ text-align:center !important;
+ width:100%;
+}
+
 .np-tech {
  font-size:85%;
  font-weight:400;

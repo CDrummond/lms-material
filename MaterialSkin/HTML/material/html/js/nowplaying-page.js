@@ -170,12 +170,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <v-layout text-xs-center row wrap class="np-controls-wide">
       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
-      <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
+      <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
        <v-layout>
-        <p class="np-pos">{{playerStatus.current.time | displayTime}}</p>
-        <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+        <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
+        <progress v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
         <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
-        <p class="np-duration cursor" v-else @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
+        <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
        </v-layout>
       </v-flex>
       <v-flex xs4>
@@ -233,12 +233,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
 
-   <v-flex xs12 v-if="!info.show && playerStatus.current.duration>0">
+   <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
     <v-layout>
-     <p class="np-pos">{{playerStatus.current.time | displayTime}}</p>
-     <progress id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+     <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
+     <progress v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
      <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
-     <p class="np-duration cursor" v-else @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
+     <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
     </v-layout>
    </v-flex>
 
@@ -747,7 +747,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     filters: {
         displayTime: function (value) {
-            if (undefined==value || value<=0) {
+            if (undefined==value || value<0) {
                 return '';
             }
             return formatSeconds(Math.floor(value));
@@ -822,12 +822,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         formattedTime() {
             return this.playerStatus && this.playerStatus.current
-                        ? !this.showTotal && this.playerStatus.current.time && this.playerStatus.current.duration
+                        ? !this.showTotal && undefined!=this.playerStatus.current.time && this.playerStatus.current.duration>0
                             ? formatSeconds(Math.floor(this.playerStatus.current.time))+" / -"+
                               formatSeconds(Math.floor(this.playerStatus.current.duration-this.playerStatus.current.time))
-                            : (this.playerStatus.current.time ? formatSeconds(Math.floor(this.playerStatus.current.time)) : "") +
-                              (this.playerStatus.current.time && this.playerStatus.current.duration ? " / " : "") +
-                              (this.playerStatus.current.duration ? formatSeconds(Math.floor(this.playerStatus.current.duration)) : "")
+                            : (undefined!=this.playerStatus.current.time ? formatSeconds(Math.floor(this.playerStatus.current.time)) : "") +
+                              (undefined!=this.playerStatus.current.time && this.playerStatus.current.duration>0 ? " / " : "") +
+                              (this.playerStatus.current.duration>0 ? formatSeconds(Math.floor(this.playerStatus.current.duration)) : "")
                         : undefined;
         },
         darkUi () {

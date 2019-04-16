@@ -243,7 +243,7 @@ var lmsServer = Vue.component('lms-server', {
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
-                           current: { canseek: 0, time: 0, duration: 0 },
+                           current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,
                            synced: data.sync_master || data.sync_slaves,
                            issyncmaster: data.sync_master == playerId,

@@ -3124,6 +3124,10 @@
             _resetBackoff();
         };
 
+        this.setMaxBackoff = function(period) {
+            _config.maxBackoff = period;
+        };
+
         /**
          * Sets the log level for console logging.
          * Valid values are the strings 'error', 'warn', 'info' and 'debug', from

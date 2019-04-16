@@ -145,7 +145,7 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdDebug("Schedule next player poll in: "+timeout+"ms");
                 this.playerStatusTimer = setTimeout(function () {
                     this.updateCurrentPlayer();
-                }.bind(this), timeout);
+                }.bind(this), timeout<250 ? 250 : timeout);
             }
         },
         connectToCometD() {

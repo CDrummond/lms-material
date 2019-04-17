@@ -5,6 +5,7 @@
 3. Fix favourites update handling, due to error with logging.
 4. Tweak mobile now-playing progressbar position.
 5. Use dialog to set sleep.
+6. Fix 'Play album starting at track'
 
 0.5.0
 -----

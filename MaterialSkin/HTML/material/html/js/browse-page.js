@@ -1056,7 +1056,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);
             } else if (PLAY_ALBUM_ACTION==act) {
-                var command = this.buildFullCommand(this.current, B_ACTIONS[PLAY_ACTION].cmd, index);
+                var command = this.buildFullCommand(this.current, PLAY_ACTION, index);
                 command.command.push("play_index:"+index);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);

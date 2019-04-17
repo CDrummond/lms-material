@@ -509,7 +509,7 @@ a {
 }
 
 .np-slider-mobile {
- margin-top:7px;
+ margin-top:5px;
  height:5px !important;
  width:100%;
 }
@@ -519,6 +519,9 @@ a {
  font-weight:400;
  font-family:monospace, monospace;
  text-align:left;
+ vertical-align:middle !important;
+ line-height:15px;
+ height:15px;
  min-width:4.25em;
 }
 
@@ -539,6 +542,9 @@ a {
  font-weight:400;
  font-family:monospace, monospace;
  text-align:right;
+ vertical-align:middle !important;
+ line-height:15px;
+ height:15px;
  min-width:4.25em;
 }
 

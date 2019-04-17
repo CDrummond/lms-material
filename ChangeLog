@@ -4,6 +4,7 @@
 2. Fix updating time in now-playing.
 3. Fix favourites update handling, due to error with logging.
 4. Tweak mobile now-playing progressbar position.
+5. Use dialog to set sleep.
 
 0.5.0
 -----

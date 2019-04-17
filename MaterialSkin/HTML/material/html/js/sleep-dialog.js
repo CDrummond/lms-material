@@ -8,11 +8,12 @@
 Vue.component('lms-sleep-dialog', {
     template: `
 <v-dialog v-model="show" width="600" persistent class="lms-dialog">
- <v-card v-if="player">
+ <v-card>
   <v-card-text>
    <v-container grid-list-md>
     <v-layout wrap>
-     <v-flex xs12>{{i18n("Set sleep time for '%1'.", player.name)}}</v-flex>
+     <v-flex xs12 v-if="undefined==player">{{i18n("Set sleep time for all players.")}}</v-flex>
+     <v-flex xs12 v-else>{{i18n("Set sleep time for '%1'.", player.name)}}</v-flex>
      <v-flex xs12>
       <v-select :items="items" label="Sleep in" v-model="duration" item-text="label" item-value="duration"></v-select>
      </v-flex>
@@ -43,23 +44,25 @@ Vue.component('lms-sleep-dialog', {
             this.player = player;
             this.sleepTime = undefined;
             this.show = true;
-            lmsCommand(this.player.id, ["sleep", "?"]).then(({data}) => {
-                if (data && data.result && data.result._sleep) {
-                    this.sleepTime = parseInt(data.result._sleep);
-                    this.timeLeft = this.sleepTime;
-                    this.start = new Date();
+            if (undefined!=this.player) {
+                lmsCommand(this.player.id, ["sleep", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._sleep) {
+                        this.sleepTime = parseInt(data.result._sleep);
+                        this.timeLeft = this.sleepTime;
+                        this.start = new Date();
 
-                    this.timer = setInterval(function () {
-                        var current = new Date();
-                        var diff = (current.getTime()-this.start.getTime())/1000.0;
-                        this.sleepTime = this.timeLeft - diff;
-                        if (this.sleepTime<=0) {
-                            this.sleepTime = undefined;
-                            this.cancelTimer();
-                        }
-                    }.bind(this), 1000);
-                }
-            });
+                        this.timer = setInterval(function () {
+                            var current = new Date();
+                            var diff = (current.getTime()-this.start.getTime())/1000.0;
+                            this.sleepTime = this.timeLeft - diff;
+                            if (this.sleepTime<=0) {
+                                this.sleepTime = undefined;
+                                this.cancelTimer();
+                            }
+                        }.bind(this), 1000);
+                    }
+                });
+            }
         }.bind(this));
         bus.$on('langChanged', function() {
             this.initItems();
@@ -84,9 +87,17 @@ Vue.component('lms-sleep-dialog', {
             this.cancelTimer();
         },
         set() {
-            lmsCommand(this.player.id, -1==this.duration ? ["jiveendoftracksleep"] : ["sleep", this.duration]).then(({data}) => {
-                bus.$emit('updatePlayer', this.player.id);
-            });
+            if (undefined==this.player) {
+                this.$store.state.players.forEach(p => {
+                    lmsCommand(p.id, -1==this.duration ? ["jiveendoftracksleep"] : ["sleep", this.duration]).then(({data}) => {
+                        bus.$emit('updatePlayer', p.id);
+                    });
+                });
+            } else {
+                lmsCommand(this.player.id, -1==this.duration ? ["jiveendoftracksleep"] : ["sleep", this.duration]).then(({data}) => {
+                    bus.$emit('updatePlayer', this.player.id);
+                });
+            }
             this.show=false;
             this.cancelTimer();
         },

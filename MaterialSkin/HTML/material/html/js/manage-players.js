@@ -68,6 +68,9 @@ Vue.component('lms-manage-players', {
        </v-layout>
       </v-flex>
      </template>
+     <v-flex xs12 v-if="players.length>1">
+      <v-btn flat @click="bus.$emit('dlg.open', 'sleep')">{{i18n("Set sleep for all players")}}</v-btn>
+     </v-flex>
     </v-layout>
    </v-container>
   </div>

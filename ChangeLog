@@ -6,6 +6,7 @@
 4. Tweak mobile now-playing progressbar position.
 5. Use dialog to set sleep.
 6. Fix 'Play album starting at track'
+7. Fix sleep timer countdown display.
 
 0.5.0
 -----

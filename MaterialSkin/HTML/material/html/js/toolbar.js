@@ -63,7 +63,7 @@ Vue.component('lms-toolbar', {
  <v-menu bottom class="toolbar-menu" :disabled="!connected">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed' : !playerStatus.ison}">
-    <v-icon v-if="playerStatus.sleepTimer" class="player-icon-pad">hotel</v-icon>
+    <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
     <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
    <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && $route.path=='/nowplaying') ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
@@ -81,7 +81,7 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTimer"></v-divider>
+   <v-divider v-if="(player && player.canpoweroff) || (players && players.length>1) || playerStatus.sleepTime"></v-divider>
    <v-list-tile v-if="player && player.canpoweroff" @click="togglePower()">
     <v-list-tile-content v-if="playerStatus.ison">
      <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>1}"><v-icon>power_settings_new</v-icon>&nbsp;{{trans.switchoff}}</v-list-tile-title>
@@ -98,9 +98,9 @@ Vue.component('lms-toolbar', {
    <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
      <v-list-tile-title v-bind:class="{'pm-icon-indent' : players && players.length>0}"><v-icon>speaker_group</v-icon>&nbsp{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile v-if="playerStatus.sleepTimer">
+   <v-list-tile v-if="playerStatus.sleepTime">
     <v-list-tile-content>
-     <v-list-tile-title class="pm-icon-indent dimmed"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTimer | displayTime}}</v-list-tile-title>
+     <v-list-tile-title class="pm-icon-indent dimmed"><v-icon>hotel</v-icon>&nbsp;{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
   </v-list>
@@ -159,7 +159,7 @@ Vue.component('lms-toolbar', {
     data() {
         return { songInfo:undefined,
                  playlist: { count: undefined, duration: undefined, timestamp: undefined },
-                 playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTimer: undefined },
+                 playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTime: undefined },
                  menuItems: [],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined},
@@ -197,9 +197,7 @@ Vue.component('lms-toolbar', {
             if (playerStatus.volume!=this.playerStatus.volume) {
                 this.playerStatus.volume = playerStatus.volume;
             }
-            if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
-                this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
-            }
+            this.controlSleepTimer(playerStatus.will_sleep_in);
             if (playerStatus.synced!=this.playerStatus.synced) {
                 this.playerStatus.synced = playerStatus.synced;
             }
@@ -407,6 +405,35 @@ Vue.component('lms-toolbar', {
                 bus.$emit('playerCommand', ['mixer', 'muting', 0]);
             } else {
                 bus.$emit('dlg.open', 'volume');
+            }
+        },
+        cancelSleepTimer() {
+            this.playerStatus.sleepTime = undefined;
+            if (undefined!==this.playerStatus.sleepTimer) {
+                clearInterval(this.playerStatus.sleepTimer);
+                this.playerStatus.sleepTimer = undefined;
+            }
+        },
+        controlSleepTimer(timeLeft) {
+            if (undefined!=timeLeft && timeLeft>1) {
+                timeLeft = Math.floor(timeLeft);
+                if (this.playerStatus.sleepTimeLeft!=timeLeft) {
+                    this.playerStatus.sleepTime = timeLeft;
+                    this.playerStatus.sleepTimeLeft = this.playerStatus.sleepTime;
+                    this.playerStatus.sleepStart = new Date();
+
+                    this.playerStatus.sleepTimer = setInterval(function () {
+                        var current = new Date();
+                        var diff = (current.getTime()-this.playerStatus.sleepStart.getTime())/1000.0;
+                        this.playerStatus.sleepTime = this.playerStatus.sleepTimeLeft - diff;
+                        if (this.playerStatus.sleepTime<=0) {
+                            this.playerStatus.sleepTime = undefined;
+                                this.cancelSleepTimer();
+                        }
+                    }.bind(this), 1000);
+                }
+            } else {
+                this.cancelSleepTimer();
             }
         }
     },

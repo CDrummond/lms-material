@@ -206,11 +206,7 @@ Vue.component('lms-player-settings', {
     },
     methods: {
         handlePlayerStatus(playerStatus) {
-            if (undefined==playerStatus.will_sleep_in || playerStatus.will_sleep_in<=0) {
-                this.cancelSleepTimer();
-            } else {
-                this.controlSleepTimer(playerStatus.will_sleep_in);
-            }
+            this.controlSleepTimer(playerStatus.will_sleep_in);
         },
         playerSettings(player) {
             this.cancelSleepTimer();

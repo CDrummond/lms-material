@@ -32,12 +32,12 @@ function startMediaSession() {
         mediaAudio.currentTime = 0; // Go back to start
         mediaAudio.pause();
         toolbarComponent.updateMediaSession(toolbarComponent.media, true);
-        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+//        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
         mediaInterval = setInterval(function() {
             mediaAudio.play().then(_ => {
                 mediaAudio.currentTime = 0; // Go back to start
                 mediaAudio.pause();
-                navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+//                navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
             });
         }, 15*1000);
     });
@@ -291,11 +291,15 @@ Vue.component('lms-toolbar', {
             toolbarComponent = this;
             window.addEventListener('touchend', initMediaSessionAudio);
             this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
-            navigator.mediaSession.setActionHandler('play', function() {
-                bus.$emit('playerCommand', ['play']);
+            navigator.mediaSession.setActionHandler('play', () => {
+                if (this.playerStatus && this.playerStatus.isplaying) {
+                    bus.$emit('playerCommand', ['pause']);
+                } else {
+                    bus.$emit('playerCommand', ['play']);
+                }
             });
             navigator.mediaSession.setActionHandler('pause', function() {
-                bus.$emit('playerCommand', ['pause', '1']);
+                bus.$emit('playerCommand', ['pause']);
             });
             navigator.mediaSession.setActionHandler('previoustrack', function() {
                 bus.$emit('playerCommand', ['button', 'jump_rew']);
@@ -333,10 +337,11 @@ Vue.component('lms-toolbar', {
                     this.media.artist = undefined;
                     this.media.album = undefined;
                 } else if (startMediaSession()) {
-                    navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
+                    //navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
+                    var title = this.playerStatus && this.playerStatus.isplaying ? track.title : i18n("[PAUSED] %1", track.title);
                     var artist = track.trackartist ? track.trackartist : track.artist;
-                    if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
-                        this.media.title = track.title;
+                    if (force || title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
+                        this.media.title = title;
                         this.media.artist = artist;
                         this.media.album = track.album;
                         navigator.mediaSession.metadata = new MediaMetadata({

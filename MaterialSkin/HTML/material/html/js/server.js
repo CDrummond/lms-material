@@ -281,7 +281,7 @@ var lmsServer = Vue.component('lms-server', {
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             if (isCurrent) {
                 this.scheduleNextPlayerStatusUpdate(player.isplaying && player.current && player.current.duration && undefined!=player.current.time
-                        ? ((player.current.duration-player.current.time)<2.5) || (player.current.time<2.5)
+                        ? (player.current.duration-player.current.time)<2.5
                             ? 500
                             : (player.current.duration-(player.current.time+2))*1000
                         : undefined);

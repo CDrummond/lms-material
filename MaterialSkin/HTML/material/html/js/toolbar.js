@@ -338,7 +338,7 @@ Vue.component('lms-toolbar', {
                     this.media.album = undefined;
                 } else if (startMediaSession()) {
                     //navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
-                    var title = this.playerStatus && this.playerStatus.isplaying ? track.title : i18n("[PAUSED] %1", track.title);
+                    var title = this.playerStatus && this.playerStatus.isplaying ? track.title : ("\u23f8 "+track.title);
                     var artist = track.trackartist ? track.trackartist : track.artist;
                     if (force || title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
                         this.media.title = title;

@@ -8,7 +8,7 @@
 6. Fix 'Play album starting at track'
 7. Fix sleep timer countdown display.
 8. Hacky workaround for 'pause' not working in media controls. Always show
-   play button, but prefix title wth "[PAUSED]" when paused.
+   play button, but prefix title wth a pause character when paused.
 
 0.5.0
 -----

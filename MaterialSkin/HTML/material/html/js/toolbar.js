@@ -32,12 +32,12 @@ function startMediaSession() {
         mediaAudio.currentTime = 0; // Go back to start
         mediaAudio.pause();
         toolbarComponent.updateMediaSession(toolbarComponent.media, true);
-//        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+        navigator.mediaSession.playbackState = /*toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" :*/ "paused";
         mediaInterval = setInterval(function() {
             mediaAudio.play().then(_ => {
                 mediaAudio.currentTime = 0; // Go back to start
                 mediaAudio.pause();
-//                navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+                navigator.mediaSession.playbackState = /*toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" :*/ "paused";
             });
         }, 15*1000);
     });
@@ -337,7 +337,7 @@ Vue.component('lms-toolbar', {
                     this.media.artist = undefined;
                     this.media.album = undefined;
                 } else if (startMediaSession()) {
-                    //navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
+                    navigator.mediaSession.playbackState = /*this.playerStatus && this.playerStatus.isplaying ? "playing" :*/ "paused";
                     var title = this.playerStatus && this.playerStatus.isplaying ? track.title : ("\u23f8 "+track.title);
                     var artist = track.trackartist ? track.trackartist : track.artist;
                     if (force || title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {

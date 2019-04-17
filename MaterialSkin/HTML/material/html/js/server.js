@@ -288,7 +288,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleFavoritesUpdate() {
-            logCometdMessage("FAVORITES", msg.data);
+            logCometdDebug("FAVORITES");
             // 'Debounce' favorites updates...
             this.cancelFavoritesTimer();
             this.favoritesTimer = setTimeout(function () {

@@ -285,7 +285,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  playerStatus: {
                     isplaying: 1,
                     sleepTimer: false,
-                    current: { canseek:1, duration:0, time:0, title:undefined, artist:undefined, 
+                    current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined,
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
                     playlist: { shuffle:0, repeat: 0 },
                  },

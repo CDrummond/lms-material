@@ -37,8 +37,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
-   <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause"><v-icon large>pause</v-icon></v-btn>
-   <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause"><v-icon large>play_arrow</v-icon></v-btn>
+   <v-btn flat icon v-longpress="playPauseButton" id="playPause"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
    <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
@@ -52,8 +51,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])" class="np-std-button"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
-   <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-   <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+   <v-btn flat icon v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
@@ -191,15 +189,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs4>
        <v-layout v-if="stopButton" text-xs-center>
         <v-flex xs6>
-         <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause"><v-icon large>pause</v-icon></v-btn>
-         <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause"><v-icon large>play_arrow</v-icon></v-btn>
+         <v-btn flat icon v-longpress="playPauseButton" id="playPause"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
         </v-flex>
         <v-flex xs6>
          <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
         </v-flex>
        </v-layout>
-       <v-btn flat icon large v-else-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-       <v-btn flat icon large v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+       <v-btn flat icon large v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
       </v-flex>
       <v-flex xs4>
        <v-layout text-xs-center>
@@ -255,15 +251,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs4>
     <v-layout v-if="stopButton" text-xs-center>
      <v-flex xs6>
-      <v-btn flat icon v-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause"><v-icon large>pause</v-icon></v-btn>
-      <v-btn flat icon v-else v-longpress="playPauseButton" id="playPause"><v-icon large>play_arrow</v-icon></v-btn>
+      <v-btn flat icon v-longpress="playPauseButton" id="playPause"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
      </v-flex>
      <v-flex xs6>
       <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
      </v-flex>
     </v-layout>
-    <v-btn flat icon large v-else-if="playerStatus.isplaying" v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>pause_circle_outline</v-icon></v-btn>
-    <v-btn flat icon large v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large>play_circle_outline</v-icon></v-btn>
+    <v-btn flat icon large v-else v-longpress="playPauseButton" id="playPause" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
    </v-flex>
    <v-flex xs4>
     <v-layout text-xs-center>

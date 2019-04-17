@@ -46,6 +46,7 @@ COMMON_JS_FILES = [  # Order is important!
     "rating-dialog.js",
     "manage-players.js",
     "favorite-dialog.js",
+    "sleep-dialog.js",
     "i18n.js",
     "store.js",
     "init.js"

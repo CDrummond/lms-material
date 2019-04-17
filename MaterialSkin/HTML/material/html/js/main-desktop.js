@@ -11,7 +11,7 @@ var app = new Vue({
     el: '#app',
     data() {
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
-                            manage: false, rndmix: false, favorite: false, rating: false }}
+                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false }}
     },
     created() {
         parseQueryParams();

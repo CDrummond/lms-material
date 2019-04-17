@@ -11,6 +11,7 @@ var PMGR_SYNC_ACTION         = {cmd:"sync",     icon:"link"};
 var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"settings"};
 var PMGR_POWER_ON_ACTION     = {cmd:"on",       icon:"power_settings_new", dimmed:true};
 var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new"};
+var PMGR_SLEEP_ACTION        = {cmd:"sleep",    icon:"hotel"};
 
 var nameMap = {};
 
@@ -153,10 +154,11 @@ Vue.component('lms-manage-players', {
             PMGR_SETTINGS_ACTION.title=i18n("Settings");
             PMGR_POWER_ON_ACTION.title=i18n("Switch On");
             PMGR_POWER_OFF_ACTION.title=i18n("Switch Off");
+            PMGR_SLEEP_ACTION.title=i18n("Sleep");
         },
         playerMenu(player, event) {
             PMGR_SYNC_ACTION.icon = player.synced ? "link" : "link_off";
-            this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION];
+            this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
             this.menu.x=event.clientX;
             this.menu.y=event.clientY;
             this.menu.player=player;
@@ -182,6 +184,8 @@ Vue.component('lms-manage-players', {
                 bus.$emit('dlg.open', 'playersettings', player);
             } else if (PMGR_POWER_ON_ACTION.cmd==cmd || PMGR_POWER_OFF_ACTION.cmd==cmd) {
                 this.togglePower(player);
+            } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
+                bus.$emit('dlg.open', 'sleep', player);
             }
         },
         close() {

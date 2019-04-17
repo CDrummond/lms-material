@@ -38,24 +38,12 @@ Vue.component('lms-player-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Sleep')}} {{sleep.timeLeft | displayTime}}</v-header>
+    <v-header>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
 
-    <v-list-tile v-if="sleep.timeLeft">
-     <v-btn flat @click="cancelSleep()">{{i18n('Cancel Sleep')}}</v-btn>
+    <v-list-tile>
+     <v-btn @click="setSleep()" flat>{{i18n('Set sleep timer')}}</v-btn>
     </v-list-tile>
-    <v-list-tile v-else>
-     <v-menu bottom>
-      <v-btn slot="activator" flat>{{i18n('Sleep in...')}} <v-icon>arrow_drop_down</v-icon></v-btn>
-      <v-list>
-       <template v-for="(item, index) in sleep.items">
-        <v-list-tile @click="setSleepTimer(item.duration)"">
-         <v-list-tile-title>{{item.label}}</v-list-tile-title>
-        </v-list-tile>
-       </template>
-      </v-list>
-     </v-menu>
-    </v-list-tile>
-     <div class="dialog-padding"></div>
+    <div class="dialog-padding"></div>
     <v-header>{{i18n('Alarms')}}</v-header>
      <v-list-tile>
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
@@ -170,10 +158,7 @@ Vue.component('lms-player-settings', {
                 fade: true,
                 scheduled: []
             },
-            sleep: {
-                timeLeft:undefined,
-                items:[]
-            },
+            sleepTime: undefined,
             alarmShuffeItems:[],
             alarmSounds:[],
             alarmDialog: {
@@ -203,8 +188,11 @@ Vue.component('lms-player-settings', {
         this.initItems();
 
         bus.$on('playerStatus', function(playerStatus) {
-            if (playerStatus.will_sleep_in!=this.sleep.timeLeft) {
-                this.sleep.timeLeft = playerStatus.will_sleep_in;
+            this.handlePlayerStatus(playerStatus);
+        }.bind(this));
+        bus.$on('otherPlayerStatus', function(playerStatus) {
+            if (this.player.id == playerStatus.id) {
+                this.handlePlayerStatus(playerStatus);
             }
         }.bind(this));
 
@@ -217,16 +205,24 @@ Vue.component('lms-player-settings', {
         }.bind(this));
     },
     methods: {
+        handlePlayerStatus(playerStatus) {
+            if (undefined==playerStatus.will_sleep_in || playerStatus.will_sleep_in<=0) {
+                this.cancelSleepTimer();
+            } else {
+                this.controlSleepTimer(playerStatus.will_sleep_in);
+            }
+        },
         playerSettings(player) {
+            this.cancelSleepTimer();
             this.dstmItems=[];
             this.crossfade='0';
             this.replaygain='0';
-            this.playerId = player.id;
+            this.player = player;
             this.playerName = player.name;
             this.playerOrigName = player.name;
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
                 if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
-                    lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
+                    lmsCommand(this.player.id, ["dontstopthemusicsetting"]).then(({data}) => {
                         if (data.result && data.result.item_loop) {
                             data.result.item_loop.forEach(i => {
                                 if (i.actions && i.actions.do && i.actions.do.cmd) {
@@ -240,12 +236,12 @@ Vue.component('lms-player-settings', {
                     });
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "transitionType", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.crossfade=data.result._p2;
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.replaygain=data.result._p2;
                 }
@@ -256,34 +252,34 @@ Vue.component('lms-player-settings', {
             this.alarms.snooze=0;
             this.alarms.timeout=0;
             this.alarms.fade=true;
-            lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "alarmfadeseconds", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.alarms.fade=1==data.result._p2;
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "alarmTimeoutSeconds", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.alarms.timeout=Math.floor(parseInt(data.result._p2)/60);
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "alarmSnoozeSeconds", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.alarms.snooze=Math.floor(parseInt(data.result._p2)/60);
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "alarmsEnabled", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.alarms.on=1==data.result._p2;
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", "?"]).then(({data}) => {
+            lmsCommand(this.player.id, ["playerpref", "alarmDefaultVolume", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
                     this.alarms.volume=data.result._p2;
                 }
             });
             this.alarmSounds=[];
             this.alarms.scheduled=[];
-            lmsList(this.playerId, ["alarm", "playlists"], undefined, 0).then(({data}) => {
+            lmsList(this.player.id, ["alarm", "playlists"], undefined, 0).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
                     data.result.item_loop.forEach(i => {
                         if (!i.url) {
@@ -297,6 +293,11 @@ Vue.component('lms-player-settings', {
                     this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:i18n('Current play queue')});
                 }
                 this.loadAlarms();
+            });
+            lmsCommand(this.player.id, ["sleep", "?"]).then(({data}) => {
+                if (data && data.result && data.result._sleep) {
+                    this.controlSleepTimer(parseInt(data.result._sleep));
+                }
             });
             this.show=true;
             bus.$emit('dialogOpen', this.show);
@@ -321,38 +322,29 @@ Vue.component('lms-player-settings', {
                 { key:'2', label:i18n("Shuffle by album")},
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
-            this.sleep.items=[
-                { duration: 15*60, label:i18n("%1 minutes", 15)},
-                { duration: 30*60, label:i18n("%1 minutes", 30)},
-                { duration: 45*60, label:i18n("%1 minutes", 45)},
-                { duration: 60*60, label:i18n("%1 minutes", 60)},
-                { duration: 90*60, label:i18n("%1 minutes", 90)},
-                { duration: -1,    label:i18n("Remaining duration of current track")}/*,
-                { duration: -2,    label:xxx("Remaining duration of play queue")} */
-                ];
         },
         close() {
             this.show=false;
             bus.$emit('dialogOpen', this.show);
             if (this.dstmItems.length>1) {
-                lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
+                lmsCommand(this.player.id, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
             }
-            lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
-            lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
-            lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
-            lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
-            lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
-            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
-            lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
+            lmsCommand(this.player.id, ["playerpref", "transitionType", this.crossfade]);
+            lmsCommand(this.player.id, ["playerpref", "replayGainMode", this.replaygain]);
+            lmsCommand(this.player.id, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
+            lmsCommand(this.player.id, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
+            lmsCommand(this.player.id, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
+            lmsCommand(this.player.id, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
+            lmsCommand(this.player.id, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
             if (this.playerOrigName!=this.playerName) {
-                lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
+                lmsCommand(this.player.id, ['name', this.playerName]).then(({data}) => {
                     bus.$emit('refreshServerStatus');
                 });
             }
-            this.playerId = undefined;
+            this.player.id = undefined;
         },
         loadAlarms() {
-            lmsList(this.playerId, ["alarms"], ["filter:all"], 0).then(({data}) => {
+            lmsList(this.player.id, ["alarms"], ["filter:all"], 0).then(({data}) => {
                 this.alarms.scheduled = [];
                 if (data && data.result && data.result.alarms_loop) {
                     data.result.alarms_loop.forEach(i => {
@@ -364,7 +356,7 @@ Vue.component('lms-player-settings', {
            });
         },
         toggleAlarm(alarm) {
-             lmsCommand(this.playerId, ["alarm", "update", "enabled:"+(alarm.enabled ? 0 : 1), "id:"+alarm.id]).then(({data}) => {
+             lmsCommand(this.player.id, ["alarm", "update", "enabled:"+(alarm.enabled ? 0 : 1), "id:"+alarm.id]).then(({data}) => {
                 this.loadAlarms();
             });
         },
@@ -394,7 +386,7 @@ Vue.component('lms-player-settings', {
             cmd.push("url:"+this.alarmDialog.url); // TODO CHECK!!!
             cmd.push("repeat:"+(this.alarmDialog.repeat ? 1 : 0));
             // TODO: shuffle???
-            lmsCommand(this.playerId, cmd).then(({data}) => {
+            lmsCommand(this.player.id, cmd).then(({data}) => {
                 this.loadAlarms();
             });
             this.alarmDialog.show = false;
@@ -403,7 +395,7 @@ Vue.component('lms-player-settings', {
             this.$confirm(i18n("Delete alarm?"),
                           {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
-                    lmsCommand(this.playerId, ["alarm", "delete", "id:"+alarm.id]).then(({data}) => {
+                    lmsCommand(this.player.id, ["alarm", "delete", "id:"+alarm.id]).then(({data}) => {
                         this.loadAlarms();
                     });
                 }
@@ -416,15 +408,37 @@ Vue.component('lms-player-settings', {
                 return str;
             }
         },
-        setSleepTimer(duration) {
-            if (-1==duration) { // Current track
-                bus.$emit('playerCommand', ["jiveendoftracksleep"]);
-            } else {
-                bus.$emit('playerCommand', ["sleep", duration]);
+        setSleep(duration) {
+            bus.$emit('dlg.open', 'sleep', this.player);
+        },
+        cancelSleepTimer() {
+            this.sleepTime = undefined;
+            if (undefined!==this.sleepTimer) {
+                clearInterval(this.sleepTimer);
+                this.sleepTimer = undefined;
             }
         },
-        cancelSleep() {
-            bus.$emit('playerCommand', ["sleep", 0]);
+        controlSleepTimer(timeLeft) {
+            if (undefined!=timeLeft && timeLeft>1) {
+                timeLeft = Math.floor(timeLeft);
+                if (this.timeLeft!=timeLeft) {
+                    this.sleepTime = timeLeft;
+                    this.timeLeft = this.sleepTime;
+                    this.start = new Date();
+
+                    this.sleepTimer = setInterval(function () {
+                        var current = new Date();
+                        var diff = (current.getTime()-this.start.getTime())/1000.0;
+                        this.sleepTime = this.timeLeft - diff;
+                        if (this.sleepTime<=0) {
+                            this.sleepTime = undefined;
+                                this.cancelSleepTimer();
+                        }
+                    }.bind(this), 1000);
+                }
+            } else {
+                this.cancelSleepTimer();
+            }
         }
     },
     filters: {

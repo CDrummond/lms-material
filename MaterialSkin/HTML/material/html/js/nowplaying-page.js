@@ -12,15 +12,6 @@ const LYRICS_TAB = 2;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
- <v-menu offset-y v-model="sleep.show" :position-x="sleep.x" :position-y="sleep.y">
-  <v-list>
-   <template v-for="(item, index) in sleep.items">
-    <v-list-tile @click="setSleepTimer(item.duration)" v-if="item.duration>0 || playerStatus.sleepTimer">
-     <v-list-tile-title>{{item.label}}</v-list-tile-title>
-    </v-list-tile>
-   </template>
-  </v-list>
- </v-menu>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <v-list-tile @click="showPic()">
@@ -292,7 +283,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  landscape: false,
                  wide: false,
                  largeView: false,
-                 sleep: {show:false, items:[], x:0, y:0},
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, id:undefined, setting:false},
                 };
@@ -466,16 +456,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
-            this.sleep.items=[
-                { duration: 15*60, label:i18n("Sleep after %1 minutes", 15)},
-                { duration: 30*60, label:i18n("Sleep after %1 minutes", 30)},
-                { duration: 45*60, label:i18n("Sleep after %1 minutes", 45)},
-                { duration: 60*60, label:i18n("Sleep after %1 minutes", 60)},
-                { duration: 90*60, label:i18n("Sleep after %1 minutes", 90)},
-                { duration: -1,    label:i18n("Sleep after remaining duration of current track")},/*
-                { duration: -2     label:xxx("Remaining duration of play queue")} */
-                { duration: 0,     label:i18n("Cancel sleep")}
-                ];
             this.menu.text[0]=i18n("Show image");
             this.menu.text[1]=i18n("Show track information");
         },
@@ -706,22 +686,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         playPauseButton(showSleepMenu) {
             if (showSleepMenu) {
-                var btn = document.getElementById('playPause');
-                if (btn) {
-                    var rect = btn.getBoundingClientRect();
-                    this.sleep.x = rect.x;
-                    this.sleep.y = rect.y+rect.height;
-                    this.sleep.show = true;
-                }
+                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
             } else {
                 this.doAction([this.playerStatus.isplaying ? 'pause' : 'play']);
-            }
-        },
-        setSleepTimer(duration) {
-            if (-1==duration) { // Current track
-                bus.$emit('playerCommand', ["jiveendoftracksleep"]);
-            } else {
-                bus.$emit('playerCommand', ["sleep", duration]);
             }
         },
         getRating() {

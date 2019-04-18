@@ -10,10 +10,10 @@ var isMobileBrowser = false;
 var landscape = undefined;
 var wide = undefined;
 function checkLayout() {
-    if (autoLayout && !isMobileBrowser) {
+    if (autoLayout) {
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
             window.location.href = "mobile";
-        } else if (window.innerWidth>=600 && window.location.href.indexOf("/mobile")>1) {
+        } else if (window.innerWidth>=600 && (!isMobileBrowser || window.innerHeight>=600) && window.location.href.indexOf("/mobile")>1) {
             window.location.href = "desktop";
         }
     }

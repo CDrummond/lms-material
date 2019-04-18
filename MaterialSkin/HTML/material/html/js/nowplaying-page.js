@@ -390,15 +390,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
             if (playStateChanged) {
                 if (this.playerStatus.isplaying) {
-                    if (trackChanged) {
-                        this.stopPositionInterval();
-                    }
                     this.startPositionInterval();
                 } else {
                     this.stopPositionInterval();
                 }
             } else if (this.playerStatus.isplaying && trackChanged) {
-                this.stopPositionInterval();
                 this.startPositionInterval();
             }
 
@@ -660,6 +656,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         startPositionInterval() {
+            this.stopPositionInterval();
             this.positionInterval = setInterval(function () {
                 if (undefined!=this.playerStatus.current.time && this.playerStatus.current.time>=0) {
                     var current = new Date();

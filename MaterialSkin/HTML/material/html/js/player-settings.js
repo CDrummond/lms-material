@@ -418,6 +418,7 @@ Vue.component('lms-player-settings', {
             if (undefined!=timeLeft && timeLeft>1) {
                 timeLeft = Math.floor(timeLeft);
                 if (this.timeLeft!=timeLeft) {
+                    this.cancelSleepTimer();
                     this.sleepTime = timeLeft;
                     this.timeLeft = this.sleepTime;
                     this.start = new Date();

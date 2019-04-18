@@ -79,7 +79,6 @@ Vue.component('lms-information-dialog', {
                 this.update();
             }.bind(this), 2000);
             this.show = true;
-            bus.$emit('dialogOpen', this.show);
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
                 this.updates = eval(resp.data);
                 if (!this.updates || !this.updates.plugins) {
@@ -164,7 +163,6 @@ Vue.component('lms-information-dialog', {
         },
         close() {
             this.show = false;
-            bus.$emit('dialogOpen', this.show);
             if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = undefined;
@@ -189,6 +187,11 @@ Vue.component('lms-information-dialog', {
         if (undefined!==this.timer) {
             clearInterval(this.timer);
             this.timer = undefined;
+        }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'info', val);
         }
     }
 })

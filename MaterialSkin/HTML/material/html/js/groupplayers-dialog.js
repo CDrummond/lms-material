@@ -177,6 +177,11 @@ Vue.component('lms-groupplayers-dialog', {
                 return str;
             }
         }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'group', val);
+        }
     }
 })
 

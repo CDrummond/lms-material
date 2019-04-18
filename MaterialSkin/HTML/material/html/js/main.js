@@ -64,12 +64,6 @@ var app = new Vue({
         this.openDialogs = 0;
 
         bus.$on('dialogOpen', function(name, open) {
-            this.dialogs['name']=open;
-            if (open) {
-                this.$nextTick(function () {
-                    bus.$emit(name+".open");
-                });
-            }
             if (open) {
                 this.openDialogs++;
             } else if (this.openDialogs>0) {

@@ -130,6 +130,11 @@ Vue.component('lms-randommix', {
                 return str;
             }
         }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'rndmix', val);
+        }
     }
 })
 

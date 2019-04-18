@@ -103,8 +103,6 @@ Vue.component('lms-manage-players', {
         this.noImage = resolveImage("music/0/cover_50x50");
         bus.$on('manage.open', function(act) {
             this.show = true;
-            bus.$emit('dialogOpen', this.show);
-            bus.$emit('subscribeAll', true);
 
             // Check to see if we can manage groups...
             this.manageGroups = getLocalStorageBool('manageGroups', false);
@@ -192,9 +190,7 @@ Vue.component('lms-manage-players', {
             }
         },
         close() {
-            this.show=false;
-            bus.$emit('dialogOpen', this.show);
-            bus.$emit('subscribeAll', false);
+            this.show=false;s
         },
         i18n(str) {
             if (this.show) {
@@ -361,6 +357,12 @@ Vue.component('lms-manage-players', {
         name(id) {
             var n = nameMap[id];
             return n ? "("+n+")" : "";
+        }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'manage', val);
+            bus.$emit('subscribeAll', val);
         }
     }
 })

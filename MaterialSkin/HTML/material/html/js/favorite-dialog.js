@@ -107,6 +107,11 @@ Vue.component('lms-favorite', {
                 return str;
             }
         }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'favorite', val);
+        }
     }
 })
 

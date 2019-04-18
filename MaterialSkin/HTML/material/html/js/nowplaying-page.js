@@ -485,8 +485,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             });
             this.gallery.init();
-            bus.$emit('dialogOpen', true);
-            this.gallery.listen('close', function() { bus.$emit('dialogOpen', false); });
+            bus.$emit('dialogOpen', 'np-viewer', true);
+            this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
         },
         doAction(command) {
             bus.$emit('playerCommand', command);
@@ -720,7 +720,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     watch: {
         'info.show': function(val) {
             // Indicate that dialog is/isn't shown, so that swipe is controlled
-            bus.$emit('dialogOpen', val, 'info-dialog');
+            bus.$emit('dialogOpen', 'info-dialog', val);
             this.setInfoTrack();
             this.showInfo();
         },

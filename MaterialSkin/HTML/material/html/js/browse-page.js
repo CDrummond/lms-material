@@ -856,8 +856,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
             this.gallery.init();
-            bus.$emit('dialogOpen', true);
-            this.gallery.listen('close', function() { bus.$emit('dialogOpen', false); });
+            bus.$emit('dialogOpen', 'browse-viewer', true);
+            this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'browse-viewer', false); });
         },
         search(event, item) {
             if (this.fetchingItems) {

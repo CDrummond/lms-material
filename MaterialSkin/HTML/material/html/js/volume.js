@@ -101,6 +101,9 @@ Vue.component('lms-volume', {
                 this.lastUpdate = new Date();
                 bus.$emit('playerCommand', ["mixer", "volume", newVal]);
             }
+        },
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'volume', val);
         }
     }
 })

@@ -89,6 +89,11 @@ Vue.component('lms-rating-dialog', {
                 return str;
             }
         }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'rating', val);
+        }
     }
 })
 

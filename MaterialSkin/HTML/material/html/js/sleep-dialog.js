@@ -117,6 +117,11 @@ Vue.component('lms-sleep-dialog', {
     },
     beforeDestroy() {
         this.cancelTimer();
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'sleep', val);
+        }
     }
 })
 

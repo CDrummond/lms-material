@@ -111,6 +111,11 @@ Vue.component('lms-sync-dialog', {
                 return str;
             }
         }
+    },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'sync', val);
+        }
     }
 })
 

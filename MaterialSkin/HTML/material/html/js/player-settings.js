@@ -296,7 +296,6 @@ Vue.component('lms-player-settings', {
                 }
             });
             this.show=true;
-            bus.$emit('dialogOpen', this.show);
         },
         initItems() {
             this.crossfadeItems=[
@@ -321,7 +320,6 @@ Vue.component('lms-player-settings', {
         },
         close() {
             this.show=false;
-            bus.$emit('dialogOpen', this.show);
             if (this.dstmItems.length>1) {
                 lmsCommand(this.player.id, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
             }
@@ -462,5 +460,10 @@ Vue.component('lms-player-settings', {
             return '('+formatSeconds(Math.floor(value))+')';
         }
     },
+    watch: {
+        'show': function(val) {
+            bus.$emit('dialogOpen', 'playersettings', val);
+        }
+    }
 })
 

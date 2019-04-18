@@ -423,6 +423,7 @@ Vue.component('lms-toolbar', {
             if (undefined!=timeLeft && timeLeft>1) {
                 timeLeft = Math.floor(timeLeft);
                 if (this.playerStatus.sleepTimeLeft!=timeLeft) {
+                    this.cancelSleepTimer();
                     this.playerStatus.sleepTime = timeLeft;
                     this.playerStatus.sleepTimeLeft = this.playerStatus.sleepTime;
                     this.playerStatus.sleepStart = new Date();

@@ -9,7 +9,7 @@
 7. Fix sleep timer countdown display.
 8. Hacky workaround for 'pause' not working in media controls. Always show
    play button, but prefix title wth a pause character when paused.
-9. Add button to manager players dialog to set sleep time for all players.
+9. Add button to 'manage players' dialog to set sleep time for all players.
 
 0.5.0
 -----

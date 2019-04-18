@@ -15,7 +15,7 @@ Vue.component('lms-sleep-dialog', {
      <v-flex xs12 v-if="undefined==player">{{i18n("Set sleep time for all players.")}}</v-flex>
      <v-flex xs12 v-else>{{i18n("Set sleep time for '%1'.", player.name)}}</v-flex>
      <v-flex xs12>
-      <v-select :items="items" label="Sleep in" v-model="duration" item-text="label" item-value="duration"></v-select>
+      <v-select :items="items" :label="i18n('Sleep in')" v-model="duration" item-text="label" item-value="duration"></v-select>
      </v-flex>
      <v-flex xs12 v-if="undefined!=sleepTime">{{i18n("%1 until sleep", formatSeconds(sleepTime))}}</v-flex>
     </v-layout>

@@ -268,7 +268,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     data() {
         return { coverUrl:undefined,
                  playerStatus: {
-                    isplaying: 1,
+                    isplaying: false,
                     sleepTimer: false,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined,
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
@@ -313,7 +313,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.current.duration!=this.playerStatus.current.duration) {
                 this.playerStatus.current.duration = playerStatus.current.duration;
             }
-            if (playerStatus.current.time!=this.playerStatus.current.time) {
+            if (playerStatus.current.time!=this.playerStatus.current.time || playStateChanged) {
                 this.playerStatus.current.time = playerStatus.current.time;
                 this.playerStatus.current.updated = new Date();
                 this.playerStatus.current.origTime = playerStatus.current.time;

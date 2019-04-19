@@ -347,6 +347,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.history=[];
         this.fetchingItems = false;
         this.current = null;
+        this.curentLibId = null;
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.tbarActions=[];
@@ -596,6 +597,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.baseActions = this.baseActions;
             prev.listSize = this.listSize;
             prev.current = this.current;
+            prev.curentLibId = this.curentLibId;
             prev.currentBaseActions = this.currentBaseActions;
             prev.headerTitle = this.headerTitle;
             prev.headerSubTitle = this.headerSubTitle;
@@ -635,6 +637,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.currentBaseActions = this.baseActions;
                 this.headerTitle=item.title ? (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title) : "?";
                 this.current = item;
+                this.curentLibId = command.libraryId;
                 this.listSize = item.range ? item.range.count : resp.total;
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
@@ -1166,6 +1169,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.listSize = this.items.length;
             this.history=[];
             this.current = null;
+            this.curentLibId = null;
             this.headerTitle = null;
             this.headerSubTitle=null;
             this.tbarActions=[];
@@ -1446,16 +1450,21 @@ var lmsBrowse = Vue.component("lms-browse", {
             return command;
         },
         replaceCommandTerms(cmd) {
-            if (this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library && shouldAddLibraryId(cmd)) {
+            if (shouldAddLibraryId(cmd)) {
                 var haveLibId = false;
-                    cmd.params.forEach(p => {
+                cmd.params.forEach(p => {
                     if (p.startsWith("library_id:")) {
                         haveLibId = true;
+                        cmd.libraryId = p.split(":")[1];
                         return;
                     }
                 });
                 if (!haveLibId) {
-                    cmd.params.push("library_id:"+this.$store.state.library);
+                    var libId = this.curentLibId ? this.curentLibId : this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library ? this.$store.state.library : undefined;
+                    if (libId) {
+                        cmd.params.push("library_id:"+libId);
+                        cmd.libraryId = libId;
+                    }
                 }
             }
 

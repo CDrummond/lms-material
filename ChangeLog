@@ -1,6 +1,7 @@
 0.5.2
 -----
 1. Fix starting chrome media session.
+2. If now-playing timer is 2 seconds or more past duration, refresh status.
 
 0.5.1
 -----

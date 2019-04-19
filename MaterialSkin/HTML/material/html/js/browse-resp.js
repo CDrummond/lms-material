@@ -412,13 +412,16 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.id = fixId(i.params.item_id, undefined==menu ? "radio" : menu);
                         } else if (i.presetParams && i.presetParams.favorites_url) {
                             i.id = "radio:"+i.presetParams.favorites_url;
+                        } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                            i.id = "item_id:"+i.actions.go.params.item_id;
                         } else if (parent && parent.id && TOP_RADIO_ID!=parent.id) {
                             i.id = parent.id+"."+i.title;
                         } else {
                             i.id = "radio:"+i.title;
                         }
                     }
-                    if ((i.icon || i.image) && i.type!="entry") {
+                    if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry") {
+                        // Only allow to pin if we can play!
                         if (!addedDivider && i.menu.length>0) {
                             i.menu.push(DIVIDER);
                             addedDivider = true;

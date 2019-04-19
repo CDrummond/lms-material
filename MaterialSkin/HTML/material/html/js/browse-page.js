@@ -1174,7 +1174,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle=null;
             this.tbarActions=[];
             this.isTop = true;
-            var changedView = this.useGrid;
             this.useGrid = false;
             this.useScroller = false;
             this.command = undefined;

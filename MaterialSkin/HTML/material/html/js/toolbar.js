@@ -20,7 +20,7 @@ function initMediaSessionAudio() {
         mediaAudio = document.createElement('audio');
         window.removeEventListener('touchend', initMediaSessionAudio);
         setTimeout(function () {
-            toolbarComponent.updateMediaSession(toolbarComponent.media, true);
+            toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
         }, 500);
     }
 }
@@ -34,7 +34,7 @@ function startMediaSession() {
     mediaAudio.play().then(_ => {
         mediaAudio.currentTime = 0; // Go back to start
         mediaAudio.pause();
-        toolbarComponent.updateMediaSession(toolbarComponent.media, true);
+        toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
         navigator.mediaSession.playbackState = /*toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" :*/ "paused";
         mediaInterval = setInterval(function() {
             mediaAudio.play().then(_ => {
@@ -161,7 +161,7 @@ Vue.component('lms-toolbar', {
     data() {
         return { songInfo:undefined,
                  playlist: { count: undefined, duration: undefined, timestamp: undefined },
-                 playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined }, sleepTime: undefined },
+                 playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined},
@@ -227,6 +227,7 @@ Vue.component('lms-toolbar', {
                 (playerStatus.current.trackartist && playerStatus.current.trackartist!=this.playerStatus.current.artist) ) {
                 this.playerStatus.current.title=playerStatus.current.title;
                 this.playerStatus.current.artist=playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
+                this.playerStatus.current.album=playerStatus.current.album;
 
                 if (this.playerStatus.current.title) {
                     if (this.playerStatus.current.artist) {
@@ -311,14 +312,14 @@ Vue.component('lms-toolbar', {
             });
             bus.$on('currentCover', function(coverUrl) {
                 this.media.cover = coverUrl;
-                this.updateMediaSession(this.media, true);
+                this.updateMediaSession(this.playerStatus.current, true);
             }.bind(this));
             bus.$emit('getCurrentCover');
             bus.$on('haveLocalAndroidPlayer', function(coverUrl) {
                 this.updateMediaSession(undefined, true);
             }.bind(this));
             bus.$on('lsAndNotifChanged', function(coverUrl) {
-                this.updateMediaSession(this.media, true);
+                this.updateMediaSession(this.playerStatus.current, true);
             }.bind(this));
         }
         bus.$on('networkStatus', function(connected) {

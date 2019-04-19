@@ -19,6 +19,9 @@ function initMediaSessionAudio() {
     if (mediaAudio == undefined) {
         mediaAudio = document.createElement('audio');
         window.removeEventListener('touchend', initMediaSessionAudio);
+        setTimeout(function () {
+            toolbarComponent.updateMediaSession(toolbarComponent.media, true);
+        }, 500);
     }
 }
 

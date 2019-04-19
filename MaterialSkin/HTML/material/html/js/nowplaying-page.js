@@ -663,6 +663,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     var diff = (current.getTime()-this.playerStatus.current.updated.getTime())/1000.0;
                     this.playerStatus.current.time = this.playerStatus.current.origTime + diff;
                     this.setPosition();
+                    if (this.playerStatus.current.duration && this.playerStatus.current.duration>0 &&
+                        this.playerStatus.current.time>=(this.playerStatus.current.duration+2)) {
+                        bus.$emit('refreshStatus');
+                    }
                 }
             }.bind(this), 1000);
         },

@@ -190,7 +190,7 @@ Vue.component('lms-manage-players', {
             }
         },
         close() {
-            this.show=false;s
+            this.show=false;
         },
         i18n(str) {
             if (this.show) {

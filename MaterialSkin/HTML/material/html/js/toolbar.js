@@ -24,7 +24,7 @@ function initMediaSessionAudio() {
 
 function startMediaSession() {
     if (!mediaAudio || mediaInterval) {
-        return true;
+        return;
     }
     mediaAudio.src = "html/audio/silence.ogg";
     // Repeatedly play/pause so that sesssion persists
@@ -41,7 +41,6 @@ function startMediaSession() {
             });
         }, 15*1000);
     });
-    return false;
 }
 
 function stopMediaSession() {
@@ -336,7 +335,8 @@ Vue.component('lms-toolbar', {
                     this.media.title = undefined;
                     this.media.artist = undefined;
                     this.media.album = undefined;
-                } else if (startMediaSession()) {
+                } else {
+                    startMediaSession();
                     navigator.mediaSession.playbackState = /*this.playerStatus && this.playerStatus.isplaying ? "playing" :*/ "paused";
                     var title = this.playerStatus && this.playerStatus.isplaying ? track.title : ("\u23f8 "+track.title);
                     var artist = track.trackartist ? track.trackartist : track.artist;

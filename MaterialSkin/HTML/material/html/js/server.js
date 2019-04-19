@@ -7,6 +7,37 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdeloyrstAKNS";
 
+function getHiddenProp(){
+    var prefixes = ['webkit','moz','ms','o'];
+    
+    // if 'hidden' is natively supported just return it
+    if ('hidden' in document) {
+        return 'hidden';
+    }
+    
+    // otherwise loop over all the known prefixes until we find one
+    for (var i = 0; i < prefixes.length; i++) {
+        if ((prefixes[i] + 'Hidden') in document)  {
+            return prefixes[i] + 'Hidden';
+        }
+    }
+
+    // otherwise it's not supported
+    return null;
+}
+
+function isHidden() {
+    var prop = getHiddenProp();
+    return prop ? document[prop] : false;
+}
+
+/* If we become visibilty, refresh player status */
+function visibilityChanged() {
+    if (!isHidden()) {
+        bus.$emit('refreshStatus');
+    }
+}
+      
 var lmsFavorites = new Set();
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
@@ -454,6 +485,14 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
         }.bind(this));
+
+        /* Add an event handler to be called when visibiity changes - so that we can immediately refresh status */
+        if (isMobile()) {
+            var prop = getHiddenProp();
+            if (prop) {
+                document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);
+            }
+        }
     },
     beforeDestroy() {
         this.cancelServerStatusTimer();

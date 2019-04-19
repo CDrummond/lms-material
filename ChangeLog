@@ -12,6 +12,7 @@
  9. Add button to 'manage players' dialog to set sleep time for all players.
 10. Allow auto-layout for mobile browsers - but only allow desktop layout if
     both height and width are 600px or more.
+11. Fix radio search listings that have no favourite URL and duplicate titles.
 
 0.5.0
 -----

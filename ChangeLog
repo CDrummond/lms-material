@@ -5,6 +5,7 @@
 3. Refresh player status when app gets focus on mobile.
 4. If library_id is set, then pass down to all subsequent list commands.
 5. Fix update detection when rename favourite.
+6. If list is cancellable, reset token after call.
 
 0.5.1
 -----

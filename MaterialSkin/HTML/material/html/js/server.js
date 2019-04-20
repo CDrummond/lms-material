@@ -71,7 +71,9 @@ const CancelToken = axios.CancelToken;
 var lmsListSource = undefined;
 
 function lmsCommand(playerid, command, isList) {
-    if (isList) {
+    var canCancel = isList && !(command.length>2 && command[0]=='menu' || command[1]=='items');
+
+    if (canCancel) {
         lmsListSource = CancelToken.source();
     }
     var args = {
@@ -83,7 +85,7 @@ function lmsCommand(playerid, command, isList) {
                 method: "slim.request",
                 params: [playerid, command]
             },
-            cancelToken: isList ? lmsListSource.token : undefined };
+            cancelToken: canCancel ? lmsListSource.token : undefined };
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", args.data.params);
     }
@@ -97,7 +99,13 @@ function lmsCommand(playerid, command, isList) {
         });
     }
     */
-    return axios(args);
+    if (canCancel) {
+        return axios(args).finally(() => {
+            lmsListSource = undefined;
+        });
+    } else {
+        return axios(args);
+    }
 }
 
 async function lmsList(playerid, command, params, start, batchSize, cancache) {

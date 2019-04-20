@@ -1157,7 +1157,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.fetchingItems) {
                 if (lmsListSource) {
                     this.fetchingItems = false;
-                    lmsListSource.cancel('Operation canceled by the user.');
+                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
                 } else {
                     return;
                 }
@@ -1201,7 +1201,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.fetchingItems) {
                 if (lmsListSource) {
                     this.fetchingItems = false;
-                    lmsListSource.cancel('Operation canceled by the user.');
+                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
                 }
                 return;
             }

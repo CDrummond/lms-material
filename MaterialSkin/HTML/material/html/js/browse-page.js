@@ -980,7 +980,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logError(err, command);
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION) {
-                var id = SECTION_FAVORITES==this.current.section ? item.id : lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl];
+                var id = SECTION_FAVORITES==this.current.section ? item.id : lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl].id;
                 if (undefined==id) {
                     return;
                 }

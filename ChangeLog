@@ -4,6 +4,7 @@
 2. If now-playing timer is 2 seconds or more past duration, refresh status.
 3. Refresh player status when app gets focus on mobile.
 4. If library_id is set, then pass down to all subsequent list commands.
+5. Fix update detection when rename favourite.
 
 0.5.1
 -----

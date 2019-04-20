@@ -333,7 +333,7 @@ var lmsServer = Vue.component('lms-server', {
         updateFavorites() { // Update set of favorites URLs
             lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
-                    lmsFavorites = {};
+                    var favs = {};
                     for (var i=0; i<data.result.item_loop.length; ++i) {
                         if (data.result.item_loop[i].presetParams && data.result.item_loop[i].presetParams.favorites_url && data.result.item_loop[i].params) {
                             var url = data.result.item_loop[i].presetParams.favorites_url;
@@ -341,8 +341,13 @@ var lmsServer = Vue.component('lms-server', {
                             if (lib>0) {
                                 url=url.substring(0, lib-1);
                             }
-                            lmsFavorites[url]="item_id:"+data.result.item_loop[i].params.item_id;
+                            favs[url]= { id:"item_id:"+data.result.item_loop[i].params.item_id,
+                                         text:data.result.item_loop[i].text };
                         }
+                    }
+                    if (JSON.stringify(lmsFavorites) !== JSON.stringify(favs)) {
+                        lmsFavorites = favs;
+                        bus.$emit('refreshList', SECTION_FAVORITES);
                     }
                 } 
             });
@@ -431,6 +436,9 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
         bus.$on('refreshServerStatus', function() {
             this.refreshServerStatus();
+        }.bind(this));
+        bus.$on('refreshFavorites', function() {
+            this.updateFavorites();
         }.bind(this));
         bus.$on('playerCommand', function(command) {
             if (this.$store.state.player) {

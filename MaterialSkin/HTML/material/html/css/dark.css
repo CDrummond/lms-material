@@ -84,7 +84,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#e0e0e0 !important;
 }
 
-.vue-recycle-scroller__item-view {
+.vue-recycle-scroller__item-view, .lms-queue-item {
  border-bottom: 0.5px solid #5c5c5c;
 }
 

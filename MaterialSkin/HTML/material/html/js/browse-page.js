@@ -1450,6 +1450,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         replaceCommandTerms(cmd) {
             if (shouldAddLibraryId(cmd)) {
+                // Check if command already has library_id
                 var haveLibId = false;
                 cmd.params.forEach(p => {
                     if (p.startsWith("library_id:")) {
@@ -1458,7 +1459,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         return;
                     }
                 });
-                if (!haveLibId) {
+                if (!haveLibId) { // Command does not have libraey_id. Use lib from parent command (if set), or user's chosen library
                     var libId = this.curentLibId ? this.curentLibId : this.$store.state.library && LMS_DEFAULT_LIBRARY!=this.$store.state.library ? this.$store.state.library : undefined;
                     if (libId) {
                         cmd.params.push("library_id:"+libId);

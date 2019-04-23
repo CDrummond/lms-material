@@ -111,11 +111,9 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon v-else-if="!desktop && playerStatus.isplaying" @click.native="bus.$emit('playerCommand', ['pause', '1'])" class="toolbar-button">
-  <v-icon>pause_circle_outline</v-icon>
- </v-btn>
- <v-btn icon v-else-if="!desktop" @click.native="bus.$emit('playerCommand', ['play'])" class="toolbar-button">
-  <v-icon>play_circle_outline</v-icon>
+ <v-btn icon v-else-if="!desktop" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button">
+  <v-icon v-if="playerStatus.isplaying">pause_circle_outline</v-icon>
+  <v-icon v-else>play_circle_outline</v-icon>
  </v-btn>
  <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-if="desktop" :disabled="!playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
@@ -442,6 +440,16 @@ Vue.component('lms-toolbar', {
         },
         toggleMute() {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+        },
+        playPauseButton(showSleepMenu) {
+            if (showSleepMenu) {
+                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+            } else {
+                bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
+            }
+        },
+        showSleep() {
+            bus.$emit('dlg.open', 'sleep', this.$store.state.player);
         },
         cancelSleepTimer() {
             this.playerStatus.sleepTime = undefined;

@@ -308,11 +308,13 @@
 "Information":"",
 "Logitech Media Server v%1":"",
 "Mon":"",
+"Mute":"",
 "Name":"",
 "OK":"",
 "Operation cancelled by the user.":"",
 "Plugins":"",
 "Radio":"",
 "Start":"",
-"URL":""
+"URL":"",
+"Unmute":""
 }

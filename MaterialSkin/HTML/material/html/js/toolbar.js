@@ -117,11 +117,11 @@ Vue.component('lms-toolbar', {
  <v-btn icon v-else-if="!desktop" @click.native="bus.$emit('playerCommand', ['play'])" class="toolbar-button">
   <v-icon>play_circle_outline</v-icon>
  </v-btn>
- <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-if="desktop" :disabled="!playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider"></v-slider>
- <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-if="desktop" :disabled="!playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider" id="vol-slider"></v-slider>
+ <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-if="desktop" :disabled="!playerStatus.ison" class="vol-label">{{playerVolume.val|displayVolume}}%</p>
- <v-btn v-else-if="!desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick">
+ <v-btn v-else-if="!desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick" id="vol-btn">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
@@ -325,8 +325,32 @@ Vue.component('lms-toolbar', {
         bus.$on('networkStatus', function(connected) {
             this.connected = connected;
         }.bind(this));
+
+        if (!isMobile()) {
+            if (this.desktop) {
+                this.addMouseWheelhandler("vol-down-btn");
+                this.addMouseWheelhandler("vol-slider");
+                this.addMouseWheelhandler("vol-up-btn");
+            } else {
+                this.addMouseWheelhandler("vol-btn");
+            }
+        }
     },
     methods: {
+        addMouseWheelhandler(id) {
+            var elem = document.getElementById(id);
+            if (elem) {
+                elem.addEventListener('mousewheel', function(event) {
+                    event.preventDefault();
+                    if (event.wheelDeltaY<0) {
+                        this.volumeDown();
+                    } else if (event.wheelDeltaY>0) {
+                        this.volumeUp();
+                    }
+                    return false;
+                }.bind(this), false);
+            }
+        },
         updateMediaSession(track, force) {
             if (!mediaAudio) {
                 return;

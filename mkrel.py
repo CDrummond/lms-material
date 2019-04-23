@@ -20,8 +20,7 @@ INSTALL_XML = "MaterialSkin/install.xml"
 PUBLIC_XML = "public.xml"
 BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
-MINIFY_JS = True
-MINIFY_CSS = True
+MINIFY = True
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
 COMMON_JS_FILES = [  # Order is important!
     "constants.js",
@@ -51,8 +50,6 @@ COMMON_JS_FILES = [  # Order is important!
     "store.js",
     "init.js"
 ]
-
-NON_MINIFIED_CSS = ["dark.css", "light.css"]
 
 def info(s):
     print("INFO: %s" %s)
@@ -146,6 +143,15 @@ def cleanup():
         shutil.rmtree(BUILD_FOLDER)
 
 
+def fixUtils():
+    text=""
+    with open("%s/js/utils.js" % HTML_FOLDER, "r") as f:
+        for line in f.readlines():
+            text+=line.replace(".css?", ".min.css?")
+    with open("%s/js/utils.js" % HTML_FOLDER, "w") as f:
+         f.write(text)
+
+
 def minifyJs():
     info("...JS")
 
@@ -162,7 +168,7 @@ def minifyJs():
 def minifyCss():
     info("...CSS")
     for css in os.listdir("%s/css" % HTML_FOLDER):
-        if not css in NON_MINIFIED_CSS and css.endswith(".css"):
+        if css.endswith(".css"):
             origCss = "%s/css/%s" % ( HTML_FOLDER, css)
             cssStr=""
             with open(origCss, "r") as f:
@@ -186,13 +192,12 @@ def minifyCss():
 
 def removeUnminified():
     info("...removing non-minified files")
-    if MINIFY_JS:
+    if MINIFY:
         for entry in os.listdir("%s/js" % HTML_FOLDER):
             if entry.endswith(".js") and not entry.endswith(".min.js"):
                 os.remove("%s/js/%s" % (HTML_FOLDER, entry))
-    if MINIFY_CSS:
         for entry in os.listdir("%s/css" % HTML_FOLDER):
-            if not entry in NON_MINIFIED_CSS and entry.endswith(".css") and not entry.endswith(".min.css"):
+            if entry.endswith(".css") and not entry.endswith(".min.css"):
                 os.remove("%s/css/%s" % (HTML_FOLDER, entry))
 
 
@@ -208,6 +213,7 @@ def fixHtml():
         for line in lines:
             matchedJs = False
             matchedCss = False
+            line=line.replace("dark.css", "dark.min.css").replace("light.css", "light.min.css")
             matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js', line)
             if matches:
                 for match in matches:
@@ -219,7 +225,7 @@ def fixHtml():
                         for match in matches:
                             matchedCss = True
 
-            if MINIFY_JS and matchedJs:
+            if matchedJs:
                 if not replacedJs:
                     if "index"==html:
                         fixedLines.append('  <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
@@ -230,7 +236,7 @@ def fixHtml():
                         else:
                             fixedLines.append('  <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
                     replacedJs = True
-            elif MINIFY_CSS and matchedCss:
+            elif matchedCss:
                 if not replacedCss:
                     fixedLines.append('  <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
                     fixedLines.append('  <link href="html/css/%s.min.css?r=[%% material_revision %%]" rel="stylesheet">\n' % html)
@@ -245,10 +251,9 @@ def fixHtml():
 
 def minify():
     info("Minifying")
-    if MINIFY_JS:
-        minifyJs()
-    if MINIFY_CSS:
-        minifyCss()
+    fixUtils()
+    minifyJs()
+    minifyCss()
     removeUnminified()
     fixHtml()
 
@@ -319,7 +324,7 @@ checkVersion(version)
 checkVersionExists(version)
 updateInstallXml(version)
 prepare()
-if MINIFY_JS or MINIFY_CSS:
+if MINIFY:
     minify()
 
 zipFile = createZip(version)

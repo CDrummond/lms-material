@@ -63,7 +63,7 @@ Vue.directive('longpress', {
         }
 
 
-        el.addEventListener("touchstart", start);
+        el.addEventListener("touchstart", start, { passive: true });
         el.addEventListener("touchend", cancel);
         el.addEventListener("touchcancel", cancel);
         el.addEventListener("mousedown", start);

@@ -348,7 +348,7 @@ Vue.component('lms-toolbar', {
                         this.volumeUp();
                     }
                     return false;
-                }.bind(this), false);
+                }.bind(this), { passive: true });
             }
         },
         updateMediaSession(track, force) {

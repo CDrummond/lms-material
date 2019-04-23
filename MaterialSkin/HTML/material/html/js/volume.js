@@ -14,14 +14,15 @@ Vue.component('lms-volume', {
     <v-flex xs12 class="vol-text">{{playerVolume}}%</v-flex xs12>
     <v-flex xs12>
      <v-layout>
-      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>volume_down</v-icon></v-btn>
+      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
       <v-slider step="1" v-model="playerVolume" class="vol-slider"></v-slider>
-      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>volume_up</v-icon></v-btn>
+      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
      </v-layout>
     </v-flex>
    </v-layout>
   </v-container>
   <v-card-actions>
+   <v-btn flat @click.native="toggleMute()">{{muted ? i18n('Unmute') : i18n('Mute')}}</v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
   </v-card-actions>
@@ -32,7 +33,8 @@ Vue.component('lms-volume', {
     data() {
         return { 
                  show: false,
-                 playerVolume:-1,
+                 playerVolume:0,
+                 muted: false
                }
     },
     mounted() {
@@ -40,10 +42,13 @@ Vue.component('lms-volume', {
         this.playerVolumeCurrent = -1;
         this.playerVolumePrev = -1;
         bus.$on('playerStatus', function(playerStatus) {
-            if (this.show && playerStatus.volume!=this.playerVolume && playerStatus.volume!=this.playerVolumePrev &&
-                (!this.lastUpdate || ((new Date())-this.lastUpdate)>500)) {
-                this.playerVolume = playerStatus.volume;
-                this.lastUpdate = new Date();
+            if (this.show) {
+                this.muted = playerStatus.volume<0;
+                var vol = Math.abs(playerStatus.volume);
+                if (vol!=this.playerVolume && vol!=this.playerVolumePrev && (!this.lastUpdate || ((new Date())-this.lastUpdate)>500)) {
+                    this.playerVolume = vol;
+                    this.lastUpdate = new Date();
+                }
             }
         }.bind(this));
         
@@ -51,13 +56,13 @@ Vue.component('lms-volume', {
             lmsCommand(this.$store.state.player.id, ["mixer", "volume", "?"]).then(({data}) => {
                 if (data && data.result && data.result._volume) {
                     var vol = parseInt(data.result._volume);
-                    if (vol>=0) {
-                        this.playerVolumeCurrent = vol;
-                        this.playerVolumePrev = vol;
-                        this.playerVolume = vol;
-                        this.show = true;
-                        this.resetCloseTimer();
-                    }
+                    this.muted = vol<0;
+                    vol = Math.abs(vol);
+                    this.playerVolumeCurrent = vol;
+                    this.playerVolumePrev = vol;
+                    this.playerVolume = vol;
+                    this.show = true;
+                    this.resetCloseTimer();
                 }
             });
         }.bind(this));
@@ -67,10 +72,14 @@ Vue.component('lms-volume', {
     },
     methods: {
         volumeDown() {
-            this.playerVolume = adjustVolume(this.playerVolume, false);
+            this.playerVolume = adjustVolume(Math.abs(this.playerVolume), false);
         },
         volumeUp() {
-            this.playerVolume = adjustVolume(this.playerVolume, true);
+            this.playerVolume = adjustVolume(Math.abs(this.playerVolume), true);
+        },
+        toggleMute() {
+            bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+            this.resetCloseTimer();
         },
         i18n(str) {
             if (this.show) {

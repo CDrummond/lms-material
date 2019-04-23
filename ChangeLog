@@ -5,6 +5,8 @@
 3. Minify all CSS.
 4. Mark some event handlers as passive, to silence chrome warnings.
 5. Add mute/unmute to volume dialog.
+6. Use middle-click to mute/unmute and to show sleep settings, in addtion to
+   long press.
 
 0.5.2
 -----

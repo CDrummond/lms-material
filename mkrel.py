@@ -203,50 +203,43 @@ def removeUnminified():
 
 def fixHtml():
     info("...updating HTML files")
-    for html in ["index", "desktop", "mobile"]:
-        fixedLines = []
-        replacedJs = False
-        replacedCss = False
-        path = "%s/MaterialSkin/HTML/material/%s.html" % (BUILD_FOLDER, html)
-        with open(path, "r") as f:
-            lines=f.readlines()
-        for line in lines:
-            matchedJs = False
-            matchedCss = False
-            line=line.replace("dark.css", "dark.min.css").replace("light.css", "light.min.css")
-            matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js', line)
-            if matches:
-                for match in matches:
+    for entry in os.listdir("%s/../" % HTML_FOLDER):
+        if entry.endswith(".html"):
+            fixedLines = []
+            replacedJs = False
+            path = "%s/../%s" % (HTML_FOLDER, entry)
+            with open(path, "r") as f:
+                lines=f.readlines()
+            for line in lines:
+                matchedJs = False
+                matchedCss = False
+                matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js', line)
+                if matches and 1==len(matches):
                     matchedJs = True
-            else:
-                for css in ["style", html]:
-                    matches = re.findall('"html/css/%s.css' % css, line)
-                    if matches:
-                        for match in matches:
-                            matchedCss = True
+                else:
+                    matches = re.findall('href\\s*\\=\\"html/css/[^\\"]+\\.css', line)
+                    if matches and 1==len(matches):
+                        matchedCss = True
 
-            if matchedJs:
-                if not replacedJs:
-                    if "index"==html:
-                        fixedLines.append('  <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
-                    else:
-                        fixedLines.append('  <script src="html/js/common.min.js?r=[% material_revision %]"></script>\n')
-                        if "desktop" == html:
-                            fixedLines.append('  <script src="html/js/main-desktop.min.js?r=[% material_revision %]"></script>\n')
+                if matchedJs:
+                    if not replacedJs:
+                        if "index.html"==entry:
+                            fixedLines.append('  <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
                         else:
-                            fixedLines.append('  <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
-                    replacedJs = True
-            elif matchedCss:
-                if not replacedCss:
-                    fixedLines.append('  <link href="html/css/style.min.css?r=[% material_revision %]" rel="stylesheet">\n')
-                    fixedLines.append('  <link href="html/css/%s.min.css?r=[%% material_revision %%]" rel="stylesheet">\n' % html)
-                    replacedCss = True
-            else:
-                fixedLines.append(line)
+                            fixedLines.append('  <script src="html/js/common.min.js?r=[% material_revision %]"></script>\n')
+                            if "desktop.html"==entry:
+                                fixedLines.append('  <script src="html/js/main-desktop.min.js?r=[% material_revision %]"></script>\n')
+                            else:
+                                fixedLines.append('  <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
+                        replacedJs = True
+                elif matchedCss:
+                    fixedLines.append(line.replace(".css", ".min.css"))
+                else:
+                    fixedLines.append(line)
 
-        with open(path, "w") as f:
-            for line in fixedLines:
-                f.write(line)
+            with open(path, "w") as f:
+                for line in fixedLines:
+                    f.write(line)
 
 
 def minify():
@@ -320,8 +313,8 @@ def updatePublicXml(version, zipFile, sha1):
 if 1==len(sys.argv):
     usage()
 version=sys.argv[1]
-checkVersion(version)
-checkVersionExists(version)
+#checkVersion(version)
+#checkVersionExists(version)
 updateInstallXml(version)
 prepare()
 if MINIFY:

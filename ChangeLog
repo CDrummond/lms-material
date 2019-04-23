@@ -3,6 +3,7 @@
 1. Add mouse-wheel control of volume.
 2. Revert change for auto-layout on mobile browsers - seems broken on iPad.
 3. Minify all CSS.
+4. Mark some event handlers as passive, to silence chrome warnings.
 
 0.5.2
 -----

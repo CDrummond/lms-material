@@ -7,6 +7,7 @@
 5. Add mute/unmute to volume dialog.
 6. Use middle-click to mute/unmute and to show sleep settings, in addtion to
    long press.
+7. Use v-progress-linear for time progress display.
 
 0.5.2
 -----

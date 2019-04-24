@@ -65,7 +65,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <p class="np-text-sub-desktop subtext ellipsis" v-else></p>
    </v-flex>
    <v-flex xs12>
-    <progress id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+    <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
+    <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
    </v-flex>
   </v-layout>
   <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
@@ -160,9 +161,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-layout text-xs-center row wrap class="np-controls-wide">
       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
       <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
-       <v-layout>
+       <v-layout class="np-time-layout">
         <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-        <progress v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+        <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
         <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
         <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
        </v-layout>
@@ -223,7 +224,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
     <v-layout>
      <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-     <progress v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider-mobile" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></progress>
+     <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
      <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
      <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
     </v-layout>
@@ -489,7 +490,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         setPosition() {
             var pc = this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration &&
-                     this.playerStatus.current.duration>0 ? Math.floor(this.playerStatus.current.time*1000/this.playerStatus.current.duration)/1000 : 0.0;
+                     this.playerStatus.current.duration>0 ? 100*Math.floor(this.playerStatus.current.time*1000/this.playerStatus.current.duration)/1000 : 0.0;
 
             if (pc!=this.playerStatus.current.pospc) {
                 this.playerStatus.current.pospc = pc;
@@ -795,7 +796,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                               (this.playerStatus.current.duration>0 ? formatSeconds(Math.floor(this.playerStatus.current.duration)) : "")
                         : undefined;
         },
-        darkUi () {
+        darkUi() {
             return this.$store.state.darkUi
         },
         showRatings() {

@@ -171,9 +171,7 @@ body {
 }
 
 .np-slider-desktop {
- height:8px !important;
- width:100% !important;
- vertical-align:top !important;
+ margin:0 !important; /* v-progress-linear has margin: 1rem 0; */
 }
 
 .np-tech-desktop {

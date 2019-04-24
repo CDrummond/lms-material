@@ -347,7 +347,7 @@ a {
  margin-right:20px;
 }
 
-.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card {
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background {
  transition:none !important;
 }
 
@@ -508,10 +508,15 @@ a {
  }
 }
 
-.np-slider-mobile {
- margin-top:5px;
- height:5px !important;
- width:100%;
+.np-slider {
+ margin:5px 0 !important; /* v-progress-linear has margin: 1rem 0; */
+ height:10px !important;
+ border-top:0px solid transparent !important;
+ border-bottom:5px solid transparent !important;
+}
+
+.np-time-layout {
+ height:15px;
 }
 
 .np-pos {

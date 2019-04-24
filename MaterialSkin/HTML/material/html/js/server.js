@@ -319,16 +319,18 @@ var lmsServer = Vue.component('lms-server', {
 
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             if (isCurrent) {
-                this.scheduleNextPlayerStatusUpdate(player.isplaying
-                                                        ? undefined==player.current || data.waitingToPlay
+                this.scheduleNextPlayerStatusUpdate(data.mode === "play"
+                                                        ? data.waitingToPlay
                                                             ? 1000 // Just starting to play? Poll in 1 second
                                                             : undefined!=player.current.duration
-                                                                ? undefined!=player.current.time && (player.current.duration-player.current.time)<2.5
-                                                                    ? 500 // Near end, every 5 seconds
-                                                                    : (player.current.duration-(player.current.time+2))*1000 // 2 seconds before end
-                                                                : undefined!=player.current.time && player.current.time<5 // For streams, poll for the first 5 seconds
-                                                                    ? 1000
-                                                                    : undefined
+                                                                ? undefined!=player.current.time
+                                                                    ? (player.current.duration-player.current.time)<2.5
+                                                                        ? 500 // Near end, every 5 seconds
+                                                                        : (player.current.duration-(player.current.time+2))*1000 // 2 seconds before end
+                                                                    : player.current.time<5 // For streams, poll for the first 5 seconds
+                                                                        ? 1000
+                                                                        : undefined
+                                                                : undefined
                                                         : undefined); // Not playing?
             }
         },

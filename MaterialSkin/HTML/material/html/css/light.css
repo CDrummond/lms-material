@@ -37,36 +37,8 @@ html {
  background:rgba(255, 255, 255, 0.9) !important;
 }
 
-.np-slider {
- color:#346dd2;
- background-color:#ccc;
- border-top:2px solid #f5f5f5 !important;
- border-bottom:2px solid #f5f5f5 !important;
-}
-
-.np-slider-mobile {
- color:#346dd2;
- background-color:rgba(0, 0, 0, 0.1) !important;
-}
-
-progress::-webkit-progress-bar {
- background-color:#ccc;
-}
-
-.np-slider-mobile::-webkit-progress-bar {
- background-color:rgba(0, 0, 0, 0.1) !important;
-}
-
 .vue-recycle-scroller__item-view, .lms-queue-item {
  border-bottom: 0.5px solid #e0e0e0;
-}
-
-progress::-webkit-progress-value {
- background-color:#346dd2;
-}
-
-progress::-moz-progress-bar {
- background-color:#346dd2;
 }
 
 .subtoolbar {

@@ -1,15 +1,16 @@
 0.5.3
 -----
-1. Add mouse-wheel control of volume.
-2. Revert change for auto-layout on mobile browsers - seems broken on iPad.
-3. Minify all CSS.
-4. Mark some event handlers as passive, to silence chrome warnings.
-5. Add mute/unmute to volume dialog.
-6. Use middle-click to mute/unmute and to show sleep settings, in addtion to
-   long press.
-7. Use v-progress-linear for time progress display.
-8. Always pass library_id to browse commmands.
-9. Fix A..Z groups for AlbumArtists, etc.
+ 1. Add mouse-wheel control of volume.
+ 2. Revert change for auto-layout on mobile browsers - seems broken on iPad.
+ 3. Minify all CSS.
+ 4. Mark some event handlers as passive, to silence chrome warnings.
+ 5. Add mute/unmute to volume dialog.
+ 6. Use middle-click to mute/unmute and to show sleep settings, in addtion to
+    long press.
+ 7. Use v-progress-linear for time progress display.
+ 8. Always pass library_id to browse commmands.
+ 9. Fix A..Z groups for AlbumArtists, etc.
+10. Add 'Reconnect' button to connection lost dialog.
 
 0.5.2
 -----

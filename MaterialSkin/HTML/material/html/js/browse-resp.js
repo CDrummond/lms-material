@@ -96,9 +96,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     if (p.split(":")[1].indexOf('s')<0) {
                         p+='s';
                     }
-                    parentParams.push(p);
                     hasTags = true;
                 }
+                parentParams.push(p);
             });
             if (!hasTags) {
                 parentParams.push("tags:s");

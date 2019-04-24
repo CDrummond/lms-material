@@ -9,6 +9,7 @@
    long press.
 7. Use v-progress-linear for time progress display.
 8. Always pass library_id to browse commmands.
+9. Fix A..Z groups for AlbumArtists, etc.
 
 0.5.2
 -----

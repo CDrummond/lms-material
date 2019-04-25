@@ -347,7 +347,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.history=[];
         this.fetchingItems = false;
         this.current = null;
-        this.curentLibId = null;
+        this.currentLibId = null;
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.tbarActions=[];
@@ -597,7 +597,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.baseActions = this.baseActions;
             prev.listSize = this.listSize;
             prev.current = this.current;
-            prev.curentLibId = this.curentLibId;
+            prev.currentLibId = this.currentLibId;
             prev.currentBaseActions = this.currentBaseActions;
             prev.headerTitle = this.headerTitle;
             prev.headerSubTitle = this.headerSubTitle;
@@ -637,7 +637,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.currentBaseActions = this.baseActions;
                 this.headerTitle=item.title ? (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title) : "?";
                 this.current = item;
-                this.curentLibId = command.libraryId;
+                this.currentLibId = command.libraryId;
                 this.listSize = item.range ? item.range.count : resp.total;
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
@@ -1169,7 +1169,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.listSize = this.items.length;
             this.history=[];
             this.current = null;
-            this.curentLibId = null;
+            this.currentLibId = null;
             this.headerTitle = null;
             this.headerSubTitle=null;
             this.tbarActions=[];
@@ -1460,7 +1460,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
                 if (!haveLibId) { // Command does not have libraey_id. Use lib from parent command (if set), or user's chosen library
-                    var libId = this.curentLibId ? this.curentLibId : this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
+                    var libId = this.currentLibId ? this.currentLibId : this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                     if (libId) {
                         cmd.params.push("library_id:"+libId);
                         cmd.libraryId = libId;

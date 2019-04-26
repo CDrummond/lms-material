@@ -940,6 +940,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         resp = data;
     }
 
+    if (0==resp.items.length) {
+        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
+    }
+
     } catch(e) {
         resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e, type: 'text', id:'error'});
         logError(e);

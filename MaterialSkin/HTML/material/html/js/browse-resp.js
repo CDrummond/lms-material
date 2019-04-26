@@ -106,14 +106,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             // Look for first valid key? Looks like 'No Album' messes up album txtkeys? First 2 seem to be garbage...
             if (data.result.artists_loop) {
-                for (var i=0; i<data.result.artists_loop.length; ++i) {
+                for (var i=0, len=data.result.artists_loop.length; i<len; ++i) {
                     if (data.result.artists_loop[i].textkey!=null && data.result.artists_loop[i].textkey!=undefined && data.result.artists_loop[i].textkey.length>0) {
                         start = i;
                         break;
                     }
                 }
             } else if (data.result.albums_loop) {
-                for (var i=0; i<data.result.albums_loop.length; ++i) {
+                for (var i=0, len=data.result.albums_loop.length; i<len; ++i) {
                     if (data.result.albums_loop[i].textkey!=null && data.result.albums_loop[i].textkey!=undefined && data.result.albums_loop[i].textkey.length>0) {
                         start = i;
                         break;
@@ -123,7 +123,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             var prevItem = undefined;
 
-            for (var i=start; i<data.result.indexList.length; ++i) {
+            for (var i=start, len=data.result.indexList.length; i<len; ++i) {
                 var name = data.result.indexList[i][0];
                 if (name == null) {
                     name = "?";
@@ -374,13 +374,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
 
                 if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
-                    i.actions.go.cmd.forEach(a => {
-                        if ("search" == a) {
+                    for (var c=0, cmdlen=i.actions.go.cmd.length; c<cmdlen; ++c) {
+                        if ("search" == i.actions.go.cmd[c]) {
                             i.type = "search";
                             resp.useGrid = false;
-                            return;
+                            break;
                         }
-                    });
+                    }
                 }
 
                 if (!i.type && i.style && i.style=="itemNoAction") {
@@ -464,7 +464,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (resp.useGrid && i.image) {
                     var rep=["_100x100.png", "100x100.png", "_100x100_o", "100x100_o",
                              "_50x50.png", "50x50.png", "_50x50_o", "50x50_o"];
-                    for (var r=0; r<rep.length; ++r) {
+                    for (var r=0, len=rep.length; r<len; ++r) {
                         if (i.image.endsWith(rep[r])) {
                             i.image=i.image.replace(rep[r], LMS_GRID_IMAGE_SIZE);
                             break;
@@ -516,7 +516,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 });
             }
 
-            for (var i=3; i<data.params[1].length; ++i) {
+            for (var i=3, len=data.params[1].length; i<len; ++i) {
                 var lower = data.params[1][i].toLowerCase();
                 if (lower=="role_id:composer") {
                     isComposers = true;
@@ -611,12 +611,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
 
             if (!allowPlayAlbum && data.params[1].length>=4 && data.params[1][0]=="tracks") {
-                data.params[1].forEach(p => {
-                    if ((""+p).startsWith("album_id:")) {
+                for (var p=0, plen=data.params[1].length; p<plen; ++p) {
+                    if ((""+data.params[1][p]).startsWith("album_id:")) {
                         allowPlayAlbum = true;
-                        return;
+                        break;
                     }
-                });
+                }
             }
 
             var actions = [PLAY_ACTION];

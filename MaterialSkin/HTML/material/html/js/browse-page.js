@@ -1742,7 +1742,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         clearSelection() {
-            this.selection.forEach(index => {
+            for (var i=0, len=this.selection.length; i<len; ++i) {
+                var index = this.selection[i];
                 if (index>-1 && index<this.items.length) {
                     var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
                     if (idx>-1) {
@@ -1750,7 +1751,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.items[index].selected = false;
                     }
                 }
-            });
+            }
             this.selection = [];
         },
         select(item, index) {
@@ -1779,11 +1780,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         addSelectedItems() {
             var commands=[]
             this.selection.sort(function(a, b) { return a<b ? -1 : 1; });
-            this.selection.forEach(idx => {
+            for (var i=0, len=this.selection.length; i<len; ++i) {
+                var idx = this.selection[i];
                 if (idx>-1 && idx<this.items.length) {
                     commands.push({act:ADD_ACTION, item:this.items[idx], idx:idx});
                 }
-            });
+            }
             this.doCommands(commands);
             this.clearSelection();
         },

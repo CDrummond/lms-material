@@ -69,7 +69,8 @@ function parseResp(data, showTrackNum, index) {
         resp.size = data.result.playlist_tracks;
 
         if (data.result.playlist_loop) {
-            data.result.playlist_loop.forEach(i => {
+            for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var title = i.title;
                 if (showTrackNum && i.tracknum>0) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
@@ -102,7 +103,7 @@ function parseResp(data, showTrackNum, index) {
                               key: i.id+"."+index
                           });
                 index++;
-            });
+            }
         }
     }
     return resp;
@@ -529,7 +530,8 @@ var lmsQueue = Vue.component("lms-queue", {
             this.clearSelection();
         },
         clearSelection() {
-            this.selection.forEach(index => {
+            for (var i=0, len=this.selection.length; i<len; ++i) {
+                var index = this.selection[i];
                 if (index>-1 && index<this.items.length) {
                     var idx = this.items[index].actions.indexOf(PQ_UNSELECT_ACTION);
                     if (idx>-1) {
@@ -537,7 +539,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.items[index].selected = false;
                     }
                 }
-            });
+            }
 
             this.selection = [];
         },

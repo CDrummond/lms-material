@@ -500,7 +500,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   id: TOP_GENRES_ID },
                 { title: i18n("Playlists"),
                   command: ["playlists"],
-                  params: [],
+                  params: ["tags:s"],
                   icon: "list",
                   type: "group",
                   group: GROUP_MY_MUSIC,
@@ -1361,7 +1361,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 mode="musicfolder"
                                 p.push("type:audio");
                                 p.push("tags:ds");
-                            } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks" && mode!="playlists") {
+                            } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="vaalbums") {
                                 canReplace = false;
                                 return;
                             }
@@ -1399,7 +1399,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             if (!hasSort) {
                                 p.push(SORT_KEY+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));
                             }
-                        } else if (!hasTags && (mode=="artists" || mode=="years" || mode=="genres")) {
+                        } else if (!hasTags && (mode=="artists" || mode=="years" || mode=="genres" || mode=="playlists" || mode=="vaalbums")) {
                             p.push("tags:s");
                         }
                         cmd = {command: c, params: p};

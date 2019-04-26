@@ -16,7 +16,7 @@ function getHiddenProp(){
     }
     
     // otherwise loop over all the known prefixes until we find one
-    for (var i = 0; i < prefixes.length; i++) {
+    for (var i = 0, len=prefixes.length; i < len; i++) {
         if ((prefixes[i] + 'Hidden') in document)  {
             return prefixes[i] + 'Hidden';
         }
@@ -266,7 +266,7 @@ var lmsServer = Vue.component('lms-server', {
                 if (0==this.subscribedPlayers.size) {
                     // Upon reconnect, will will need to re-sub to current player...
                     if (this.subscribeAll) {
-                        for (var i=0; i<players.length; ++i) {
+                        for (var i=0, len=players.length; i<len; ++i) {
                             this.subscribe(players[i].id);
                         }
                     } else if (this.$store.state.player && this.$store.state.player.id) {
@@ -345,16 +345,17 @@ var lmsServer = Vue.component('lms-server', {
         updateFavorites() { // Update set of favorites URLs
             lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
+                    var loop = data.result.item_loop;
                     var favs = {};
-                    for (var i=0; i<data.result.item_loop.length; ++i) {
-                        if (data.result.item_loop[i].presetParams && data.result.item_loop[i].presetParams.favorites_url && data.result.item_loop[i].params) {
-                            var url = data.result.item_loop[i].presetParams.favorites_url;
+                    for (var i=0, len=loop.length; i<len; ++i) {
+                        if (loop[i].presetParams && loop[i].presetParams.favorites_url && loop[i].params) {
+                            var url = loop[i].presetParams.favorites_url;
                             var lib = url.indexOf("libraryTracks.library=");
                             if (lib>0) {
                                 url=url.substring(0, lib-1);
                             }
-                            favs[url]= { id:"item_id:"+data.result.item_loop[i].params.item_id,
-                                         text:data.result.item_loop[i].text };
+                            favs[url]= { id:"item_id:"+loop[i].params.item_id,
+                                         text:loop[i].text };
                         }
                     }
                     if (JSON.stringify(lmsFavorites) !== JSON.stringify(favs)) {
@@ -397,7 +398,7 @@ var lmsServer = Vue.component('lms-server', {
                 if (!this.subscribeAll) {
                     // If not subscribing to all, remove other subscriptions...
                     var subedPlayers = Array.from(this.subscribedPlayers);
-                    for (var i=0; i<subedPlayers.length; ++i) {
+                    for (var i=0, len=subedPlayers.length; i<len; ++i) {
                         this.unsubscribe(subedPlayers[i]);
                     }
                 }
@@ -497,7 +498,7 @@ var lmsServer = Vue.component('lms-server', {
             if (all) {
                 this.updateCurrentPlayer();
             }
-            for (var i=0; i<this.$store.state.players.length; ++i) {
+            for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
                 if (all && this.$store.state.players[i].id!=this.$store.state.player.id) {
                     this.subscribe(this.$store.state.players[i].id);
                 } else if (!all && this.$store.state.players[i].id!=this.$store.state.player.id) {

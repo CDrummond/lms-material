@@ -34,7 +34,7 @@ Vue.component('lms-bottomnav', {
         // browse and nowplaying tabs are shown as active. Also, when using back button previous tab can sometimes be shown
         // as active.
         bus.$on('routeChanged', function(from, to) {
-            for (var i=0; i<this.items.length; ++i) {
+            for (var i=0, len=this.items.length; i<len; ++i) {
                 if (this.items[i].route==to) {
                     this.route=i;
                 }

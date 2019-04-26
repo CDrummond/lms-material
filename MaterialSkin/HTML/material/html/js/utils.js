@@ -136,7 +136,7 @@ function resolveImage(icon, image, size) {
 function removeImageSizing(path) {
     if (undefined!=path) {
         var specs = [LMS_LIST_IMAGE_SIZE, LMS_GRID_IMAGE_SIZE, "_50x50_o"];
-        for (var s=0; s<specs.length; ++s) {
+        for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {
                 return path.replace(specs[s]+".png", ".png");
             }
@@ -150,7 +150,7 @@ function removeImageSizing(path) {
 
 function fixTitle(str) {
     var prefixes = ["the", "el", "la", "los", "las", "le", "les"];
-    for (var p=0; p<prefixes.length; ++p) {
+    for (var p=0, len=prefixes.length; p<len; ++p) {
         if (str.startsWith(prefixes[p]+" ")) {
             return str.substring(prefixes[p].length+1)+", "+prefixes[p];
         }
@@ -348,7 +348,7 @@ function parseQueryParams() {
         } else if ("debug"==kv[0]) {
             var parts = kv[1].split(",");
             debug = new Set();
-            for (var j=0; j<parts.length; ++j) {
+            for (var j=0, len=parts.length; j<len; ++j) {
                 debug.add(parts[j]);
             }
         } else if ("clearcache"==kv[0] && "true"==kv[1]) {
@@ -405,7 +405,7 @@ function clearListCache(force) {
     }
     // Delete IndexedDB cache
     idbKeyval.keys().then(keys => {
-        for (var i=0; i<keys.length; ++i) {
+        for (var i=0, len=keys.length; i<len; ++i) {
             if (keys[i].startsWith(LMS_LIST_CACHE_PREFIX) && (force || !keys[i].startsWith(LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
                 idbKeyval.del(keys[i]);
             }
@@ -476,7 +476,7 @@ function shouldAddLibraryId(command) {
             return true;
         }
         if (command.command[0]=="playlistcontrol") {
-            for (var i=1; i<command.command.length; ++i) {
+            for (var i=1, len=command.command.length; i<len; ++i) {
                 if (command.command[i].startsWith("artist_id:") || command.command[i].startsWith("album_id:") ||
                     command.command[i].startsWith("track_id:") || command.command[i].startsWith("genre_id:") || command.command[i].startsWith("year:")) {
                     return true;

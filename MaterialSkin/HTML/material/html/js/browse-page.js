@@ -354,7 +354,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerSubTitle=null;
         this.tbarActions=[];
         var col=getLocalStorageVal('collapsed', "").split(",");
-        for (var i=0; i<col.length && i<this.collapsed.length; ++i) {
+        for (var i=0, len=col.length, tlen=this.collapsed.length; i<len && i<tlen; ++i) {
            this.collapsed[i] = "true" == col[i];
         }
         this.options={artistImages: getLocalStorageBool('artistImages', false),
@@ -522,7 +522,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var otherPrev = [];
             if (this.other) {
                 if (this.other.length>6) {
-                    for (var i=0; i<this.other.length-7; ++i) {
+                    for (var i=0, len=this.other.length-7; i<len; ++i) {
                         otherPrev.unshift(this.other[i]);
                     }
                 }
@@ -652,12 +652,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.useScroller = resp.useScroller;
 
                 if (this.current && this.current.menu) {
-                    this.current.menu.forEach(i => {
-                        if (i==ADD_ACTION|| i==PLAY_ACTION) {
+                    for (var i=0, len=this.current.menu.length; i<len; ++i) {
+                        if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
                             this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                            return;
+                            break;
                         }
-                    });
+                    }
                 }
 
                 // Select track -> More -> Album:AlbumTitle -> Tracks
@@ -668,8 +668,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.tbarActions.length==0 && !item.range && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.items.length>0 && this.items[0].menu &&
                    !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
                                                        this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
-                    this.items[0].menu.forEach(i => {
-                        if (i==ADD_ACTION || i==PLAY_ACTION) {
+                    for (var i=0, len=this.items[0].menu.length; i<len; ++i) {
+                        if (this.items[0].menu[i]==ADD_ACTION || this.items[0].menu[i]==PLAY_ACTION) {
                             this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                             // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
                             if (this.items[0].params && this.items[0].params.item_id) {
@@ -679,9 +679,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     this.current.allid = "item_id:"+parts.join(".");
                                 }
                             }
-                            return;
+                            break;
                         }
-                    });
+                    }
                 }
                 if (this.tbarActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_ACTION];
@@ -1348,9 +1348,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var hasTags = false;
                     var hasArtistId = false;
 
-                    cmd.params.forEach(i => {
-                        if (i.startsWith("mode:")) {
-                            mode = i.split(":")[1];
+                    for (var i=0, params=cmd.params, len=params.length; i<len; ++i) {
+                        if (params[i].startsWith("mode:")) {
+                            mode = params[i].split(":")[1];
                             if (mode.startsWith("myMusicArtists")) {
                                 mode="artists";
                             } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums") {
@@ -1364,26 +1364,26 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 p.push("tags:ds");
                             } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="vaalbums") {
                                 canReplace = false;
-                                return;
+                                break;
                             }
                             c.push(mode);
-                        } else if (!i.startsWith("menu:")) {
-                            if (i.startsWith("tags:")) {
-                                if (i.split(":")[1].indexOf('s')<0) {
+                        } else if (!params[i].startsWith("menu:")) {
+                            if (params[i].startsWith("tags:")) {
+                                if (params[i].split(":")[1].indexOf('s')<0) {
                                     i+='s';
                                 }
-                                p.push(i);
+                                p.push(params[i]);
                                 hasTags = true;
                             } else {
-                                p.push(i);
-                                if (i.startsWith(SORT_KEY)) {
+                                p.push(params[i]);
+                                if (params[i].startsWith(SORT_KEY)) {
                                     hasSort = true;
-                                } else if (i.startsWith("artist_id:")) {
+                                } else if (params[i].startsWith("artist_id:")) {
                                     hasArtistId = true;
                                 }
                             }
                         }
-                    });
+                    }
 
                     if (canReplace && c.length==1 && mode) {
                         if (mode=="tracks") {
@@ -1475,13 +1475,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (shouldAddLibraryId(cmd)) {
                 // Check if command already has library_id
                 var haveLibId = false;
-                cmd.params.forEach(p => {
-                    if (p.startsWith("library_id:")) {
+                for (var i=0, len=cmd.params.length; i<len; ++i) {
+                    if (cmd.params[i].startsWith("library_id:")) {
                         haveLibId = true;
-                        cmd.libraryId = p.split(":")[1];
-                        return;
+                        cmd.libraryId = cmd.params[i].split(":")[1];
+                        break;
                     }
-                });
+                }
                 if (!haveLibId) { // Command does not have libraey_id. Use lib from parent command (if set), or user's chosen library
                     var libId = this.currentLibId ? this.currentLibId : this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                     if (libId) {
@@ -1509,14 +1509,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             lmsList("", ["libraries"]).then(({data}) => {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                    data.result.folder_loop.forEach(i => {
-                        if (i.id == this.$store.state.library) {
-                            if (i.id!=LMS_DEFAULT_LIBRARY) {
-                                this.libraryName=i.name;
+                    for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
+                        if (loop[i].id == this.$store.state.library) {
+                            if (loop[i].id!=LMS_DEFAULT_LIBRARY) {
+                                this.libraryName=loop[i].name;
                             }
-                            return;
+                            break;
                         }
-                    });
+                    }
                 }
             });
         },
@@ -1696,7 +1696,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         pin(item, add) {
             var index = -1;
-            for (var i=0; i<this.pinned.length; ++i) {
+            for (var i=0, len=this.pinned.length; i<len; ++i) {
                 if (this.pinned[i].id == item.id) {
                     index = i;
                     break;
@@ -1710,7 +1710,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
                 if (item.menu) {
-                    for (var i=0; i<item.menu.length; ++i) {
+                    for (var i=0, len=item.menu.length; i<len; ++i) {
                         if (item.menu[i] == PIN_ACTION) {
                             item.menu[i] = UNPIN_ACTION;
                             break;
@@ -1730,7 +1730,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.$forceUpdate();
 
                         if (item.menu) {
-                            for (var i=0; i<item.menu.length; ++i) {
+                            for (var i=0, len=item.menu.length; i<len; ++i) {
                                 if (item.menu[i] == UNPIN_ACTION) {
                                     item.menu[i] = PIN_ACTION;
                                     break;
@@ -1790,7 +1790,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         playSelectedItems() {
             var commands=[]
             this.selection.sort(function(a, b) { return a<b ? -1 : 1; });
-            for (var i=0; i<this.selection.length; ++i) {
+            for (var i=0, len=this.selection.length; i<len; ++i) {
                 var idx = this.selection[i];
                 if (idx>-1 && idx<this.items.length) {
                     commands.push({act:0==i ? PLAY_ACTION : ADD_ACTION, item:this.items[idx], idx:idx});
@@ -1913,12 +1913,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (can!=this[key]) {
                         this[key] = can;
                         setLocalStorageVal(key, this[key]);
-                        this.other.forEach(i => {
-                            if (i.id == id) {
-                                i.disabled = !this[key];
-                                return;
+                        for (var i=0, len=this.other.length; i<len; ++i) {
+                            if (this.other[i].id == id) {
+                                this.other[i].disabled = !this[key];
                             }
-                        });
+                        }
                     }
                 }
             });

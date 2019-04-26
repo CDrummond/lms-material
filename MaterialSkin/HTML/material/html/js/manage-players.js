@@ -332,7 +332,7 @@ Vue.component('lms-manage-players', {
             }
             
             var found = false;
-            for (var i=0; i<this.players.length; ++i) {
+            for (var i=0, len=this.players.length; i<len; ++i) {
                 if (this.players[i].id==player.id) {
                     found=true;
                     this.$set(this.players, i, player);

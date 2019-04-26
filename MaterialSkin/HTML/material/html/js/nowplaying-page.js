@@ -563,7 +563,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.tabs[BIO_TAB].first = true;
                     this.info.tabs[BIO_TAB].found = false;
                     this.info.tabs[BIO_TAB].count = ids.length;
-                    for (var i=0; i<ids.length; ++i) {
+                    for (var i=0, len=ids.length; i<len; ++i) {
                         lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"]).then(({data}) => {
                             if (data && data.result && (data.result.biography || data.result.error)) {
                                 if (data.result.artist) {

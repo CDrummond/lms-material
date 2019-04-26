@@ -10,6 +10,8 @@
    like vue gets confused when these are switched with no ID?
 6. Fix middle-click also firing left-click event when widget has a longpress
    handler.
+7. When current track's cover changes, update it's 'key' so that vue is forced
+   to refresh.
 
 0.5.3
 -----

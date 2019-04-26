@@ -505,6 +505,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
         } else if (data.result.artists_loop) {
             var params = [];
+            var isComposers = false;
+            var isConductors = false;
+            var isBands = false;
             if (parent && parent.params) {
                 parent.params.forEach(p => {
                     if (p.startsWith("role_id:") || (!options.noGenreFilter && p.startsWith("genre_id:"))) {
@@ -512,6 +515,18 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 });
             }
+
+            for (var i=3; i<data.params[1].length; ++i) {
+                var lower = data.params[1][i].toLowerCase();
+                if (lower=="role_id:composer") {
+                    isComposers = true;
+                } else if (lower=="role_id:conductor") {
+                    isConductors = true;
+                } else if (lower=="role_id:band") {
+                    isBands = true;
+                }
+            }
+
             var infoPlugin = getLocalStorageBool('infoPlugin');
             resp.useGrid = canUseGrid && options.useGrid=='always' && infoPlugin && options.artistImages;
             data.result.artists_loop.forEach(i => {
@@ -537,7 +552,15 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 resp.items.push(artist);
             });
-            resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : resp.total);
+            if (isComposers) {
+                resp.subtitle=i18np("1 Composer", "%1 Composers", parent && parent.range ? parent.range.count : resp.total);
+            } else if (isConductors) {
+                resp.subtitle=i18np("1 Conductor", "%1 Conductors", parent && parent.range ? parent.range.count : resp.total);
+            } else if (isBands) {
+                resp.subtitle=i18np("1 Band", "%1 Bands", parent && parent.range ? parent.range.count : resp.total);
+            } else {
+                resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : resp.total);
+            }
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             resp.useGrid = canUseGrid && options.useGrid!='never';

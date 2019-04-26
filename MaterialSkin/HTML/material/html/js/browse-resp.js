@@ -472,7 +472,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
                 i.section = parent ? parent.section : undefined;
-                
+
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
@@ -677,6 +677,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.total);
         } else if (data.result.playlists_loop) {
             data.result.playlists_loop.forEach(i => {
+                var key = i.textkey;
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
                               title: i.playlist,

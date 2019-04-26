@@ -83,6 +83,8 @@ const SECTION_PLAYLISTS = 4;
 const GROUP_PINNED = 0;
 const GROUP_MY_MUSIC = 1;
 const GROUP_OTHER_MUSIC = 2;
+const CONDUCTOR_GENRES = new Set(["Classical"]);
+const COMPOSER_GENRES = new Set(["Classical", "Jazz"]);
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -817,7 +819,27 @@ var lmsBrowse = Vue.component("lms-browse", {
                               type: "group",
                               id: item.id+"albums"}];
                 this.headerTitle = item.title;
-                this.headerSubTitle = i18n("Show artists or albums?");
+                if (CONDUCTOR_GENRES.has(item.title)) {
+                    this.items.splice(0, 0, { title: i18n("Conductors"),
+                                        command: ["artists"],
+                                        params: ["role_id:CONDUCTOR", item.params[0]],
+                                        cancache: true,
+                                        icon: "local_library",
+                                        type: "group",
+                                        group: GROUP_MY_MUSIC,
+                                        id: item.id+"conductors"});
+                }
+                if (COMPOSER_GENRES.has(item.title)) {
+                    this.items.splice(0, 0, { title: i18n("Composers"),
+                                        command: ["artists"],
+                                        params: ["role_id:COMPOSER", item.params[0]],
+                                        cancache: true,
+                                        icon: "edit",
+                                        type: "group",
+                                        group: GROUP_MY_MUSIC,
+                                        id: item.id+"composers"});
+                }
+                this.headerSubTitle = i18n("Select category")
                 this.listSize = this.items.length;
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;

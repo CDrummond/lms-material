@@ -1,3 +1,10 @@
+0.5.4
+-----
+1. When browsing Genres -> Classical, allow user to list composers, conductors,
+   artists, or albums.
+2. When browsing Genres -> Jazz, allow user to list composers, artists, or
+   albums.
+
 0.5.3
 -----
  1. Add mouse-wheel control of volume.

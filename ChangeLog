@@ -6,6 +6,8 @@
    albums.
 3. Add jumplist support to playlists listing.
 4. Context menu for dynamic playlists.
+5. Assign unique ID to play/pause and info buttons in mobile toolbar - seems
+   like vue gets confused when these are switched with no ID?
 
 0.5.3
 -----

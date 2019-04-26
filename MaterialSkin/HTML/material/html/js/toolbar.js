@@ -108,10 +108,10 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.native="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon v-else-if="!desktop" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button">
+ <v-btn icon v-else-if="!desktop" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp">
   <v-icon v-if="playerStatus.isplaying">pause_circle_outline</v-icon>
   <v-icon v-else>play_circle_outline</v-icon>
  </v-btn>

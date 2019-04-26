@@ -777,7 +777,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
-            if ("audio"==item.type  || "track"==item.type /*|| "itemplay"==item.style || "item_play"==item.style*/ ||
+            if ("audio"==item.type  || "track"==item.type ||
+                ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))) {
                 if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, index, event);

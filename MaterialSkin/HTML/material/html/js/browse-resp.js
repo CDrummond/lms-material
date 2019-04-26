@@ -25,7 +25,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 totalResults += data.result.contributors_count;
                 resp.items.push({header: i18np("1 Artist", "%1 Artists", data.result.contributors_count), id:"search.artists"});
-                data.result.contributors_loop.forEach(i => {
+                for (var idx=0, loop=data.result.contributors_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                    var i = loop[idx];
                     var infoPlugin = getLocalStorageBool('infoPlugin');
                     resp.items.push({
                                   id: "artist_id:"+i.contributor_id,
@@ -37,12 +38,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group"
                               });
-                });
+                }
             }
             if (data.result.albums_loop && data.result.albums_count>0) {
                 totalResults += data.result.albums_count;
                 resp.items.push({header: i18np("1 Album", "%1 Albums", data.result.albums_count), id:"search.albums"});
-                data.result.albums_loop.forEach(i => {
+                for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                    var i = loop[idx];
                     resp.items.push({
                                   id: "album_id:"+i.album_id,
                                   title: i.album,
@@ -52,12 +54,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group"
                               });
-                });
+                }
             }
             if (data.result.tracks_loop && data.result.tracks_count>0) {
                 totalResults += data.result.tracks_count;
                 resp.items.push({header: i18np("1 Track", "%1 Tracks", data.result.tracks_count), id:"search.tracks"});
-                data.result.tracks_loop.forEach(i => {
+                for (var idx=0, loop=data.result.tracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                    var i = loop[idx]
                     resp.items.push({
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
@@ -65,12 +68,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "track"
                               });
-                });
+                }
             }
             if (data.result.genres_loop && data.result.genres_count>0) {
                 totalResults += data.result.genres_count;
                 resp.items.push({header: i18np("1 Genre", "%1 Genres", data.result.genres_count), id:"search.genres"});
-                data.result.genres_loop.forEach(i => {
+                for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                    var i = loop[idx];
                     resp.items.push({
                                   id: "genre_id:"+i.genre_id,
                                   title: i.genre,
@@ -80,7 +84,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group"
                               });
-                });
+                }
             }
             resp.subtitle=i18np("1 Item", "%1 Items", totalResults);
             resp.total = resp.items.length;
@@ -91,7 +95,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             // Ensure we have at lest "tags:s" for textkey
             var parentParams = [];
             var hasTags = false;
-            parent.params.forEach(p=>{
+            for (var i=0, plen=parent.params.length; i<plen; ++i) {
+                var p=parent.params[i];
                 if (p.startsWith("tags:")) {
                     if (p.split(":")[1].indexOf('s')<0) {
                         p+='s';
@@ -99,7 +104,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     hasTags = true;
                 }
                 parentParams.push(p);
-            });
+            }
             if (!hasTags) {
                 parentParams.push("tags:s");
             }
@@ -254,15 +259,16 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
             }
 
-            data.result.item_loop.forEach(i => {
+            for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 if (!i.text || i.showBigArtwork==1) {
                     resp.total--;
-                    return;
+                    continue;
                 }
                 if (resp.items.length==resp.total-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png') {
                     // Remove 'All Songs' entry
                     resp.total--;
-                    return;
+                    continue;
                 }
                 var addedPlayAction = false;
 
@@ -270,7 +276,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     // Exclude 'More' Play,Insert,Fav commands
                     if (i.style && MORE_COMMANDS.has(i.style)) {
                         resp.total--;
-                        return;
+                        continue;
                     }
                     i.title = replaceNewLines(i.text);
                 } else {
@@ -478,7 +484,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
                 resp.items.push(i);
-            });
+            }
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
                 resp.items.push({
                                 title: replaceNewLines(data.result.window.textarea),
@@ -489,11 +495,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             } else if (haveWithoutIcons && haveWithIcons && resp.items.length == resp.total) {
                 var defCover = parent.image ? parent.image
                                             : resolveImage("music/0/cover" + (resp.useGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
-                resp.items.forEach(i => {
-                    if (!i.image) {
-                        i.image = defCover;
+                for (var i=0, len=resp.items.length; i<len; ++i) {
+                    if (!resp.items[i].image) {
+                        resp.items[i].image = defCover;
                     }
-                });
+                }
             }
 
             if (resp.total == resp.items.length) {
@@ -509,11 +515,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isConductors = false;
             var isBands = false;
             if (parent && parent.params) {
-                parent.params.forEach(p => {
+                for (var i=0, plen=parent.params.length; i<plen; ++i) {
+                    var p=parent.params[i];
                     if (p.startsWith("role_id:") || (!options.noGenreFilter && p.startsWith("genre_id:"))) {
                         params.push(p);
                     }
-                });
+                }
             }
 
             for (var i=3, len=data.params[1].length; i<len; ++i) {
@@ -529,7 +536,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             var infoPlugin = getLocalStorageBool('infoPlugin');
             resp.useGrid = canUseGrid && options.useGrid=='always' && infoPlugin && options.artistImages;
-            data.result.artists_loop.forEach(i => {
+            for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
@@ -545,13 +553,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "group",
                               textkey: key
                           };
-                if (params.length>0) {
-                    params.forEach(p => {
-                        artist.params.push(p);
-                    });
+                for (var p=0, plen=params.length; p<plen; ++p) {
+                    artist.params.push(params[p]);
                 }
                 resp.items.push(artist);
-            });
+            }
             if (isComposers) {
                 resp.subtitle=i18np("1 Composer", "%1 Composers", parent && parent.range ? parent.range.count : resp.total);
             } else if (isConductors) {
@@ -566,15 +572,17 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.useGrid = canUseGrid && options.useGrid!='never';
             var params = [];
             if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
-                parent.params.forEach(p => {
+                for (var i=0, plen=parent.params.length; i<plen; ++i) {
+                    var p=parent.params[i];
                     if ( (!options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
                          (!options.noGenreFilter && p.startsWith("genre_id:"))) {
                         params.push(p);
                     }
-                });
+                }
             }
 
-            data.result.albums_loop.forEach(i => {
+            for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var title = i.album;
                 if (i.year && i.year>0) {
                     title+=" (" + i.year + ")";
@@ -597,13 +605,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               disabled: undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist,
                               textkey: key
                           };
-                if (params.length>0) {
-                    params.forEach(p => {
-                        album.params.push(p);
-                    });
+                for (var p=0, plen=params.length; p<plen; ++p) {
+                    album.params.push(params[p]);
                 }
                 resp.items.push(album);
-            });
+            }
             resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : resp.total);
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
@@ -632,7 +638,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 actions.push(RATING_ACTION);
             }
             actions.push(MORE_LIB_ACTION);
-            data.result.titles_loop.forEach(i => {
+            for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var title = i.title;
                 if (i.tracknum>0) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
@@ -652,13 +659,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               menu: actions,
                               type: "track"
                           });
-            });
+            }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
             if (data.result.titles_loop.length===resp.total) {
                 resp.subtitle+=" ("+formatSeconds(duration)+")";
             }
         } else if (data.result.genres_loop) {
-            data.result.genres_loop.forEach(i => {
+            for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
@@ -673,10 +681,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "group",
                               textkey: key
                           });
-            });
+            }
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.total);
         } else if (data.result.playlists_loop) {
-            data.result.playlists_loop.forEach(i => {
+            for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
@@ -690,7 +699,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                               type: "group"
                           });
-            });
+            }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
@@ -699,7 +708,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 actions.push(DIVIDER);
                 actions.push(RATING_ACTION);
             }*/
-            data.result.playlisttracks_loop.forEach(i => {
+            for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var title = i.title;
                 if (i.artist) {
                     title+=SEPARATOR + i.artist;
@@ -724,10 +734,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               menu: actions,
                               type: "track"
                           });
-            });
+            }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
         } else if (data.result.years_loop) {
-            data.result.years_loop.forEach(i => {
+            for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
@@ -742,10 +753,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               type: "group",
                               textkey: key
                           });
-            });
+            }
             resp.subtitle=i18np("1 Year", "%1 Years", resp.total);
         } else if (data.result.folder_loop) {
-            data.result.folder_loop.forEach(i => {
+            for (var idx=0, loop=data.result.folder_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 var isFolder = i.type==="folder";
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
@@ -762,7 +774,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               icon: isFolder ? "folder" : undefined,
                               textkey: key
                           });
-            });
+            }
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
         } /*else if (data.result.radioss_loop) {
             data.result.radioss_loop.forEach(i => {
@@ -908,7 +920,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } */ else if (0===resp.total && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
-            data.result.data.forEach(i => {
+            for (var idx=0, loop=data.result.data, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
                 if (i.image) {
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
@@ -918,7 +931,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.h=0;
                     resp.items.push(i);
                 }
-            });
+            }
             if (resp.items.length>0) {
                 resp.title=data.result.title;
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);

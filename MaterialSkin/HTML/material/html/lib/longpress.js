@@ -27,7 +27,7 @@ Vue.directive('longpress', {
                 return;
             }
 
-            if (started || (e.type === 'click' && e.button !== 0)) {
+            if (started || ((e.type === 'click' || e.type === 'mousedown') && e.button !== 0)) {
                 return;
             }
             started = true;

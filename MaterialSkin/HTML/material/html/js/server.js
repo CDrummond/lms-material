@@ -26,6 +26,19 @@ function getHiddenProp(){
     return null;
 }
 
+// Attempt to detect when computer wakes from sleep.
+// Eveery 2 seconds check time, if gap is more than 4 seconds then we were probably
+// asleep - so refresh status.
+var lastTime = (new Date()).getTime();
+
+setInterval(function() {
+    var currentTime = (new Date()).getTime();
+    if (currentTime > (lastTime + (2000*2))) {
+        bus.$emit('refreshStatus');
+    }
+    lastTime = currentTime;
+}, 2000);
+
 function isHidden() {
     var prop = getHiddenProp();
     return prop ? document[prop] : false;

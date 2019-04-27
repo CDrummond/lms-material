@@ -12,6 +12,8 @@
    handler.
 7. When current track's cover changes, update it's 'key' so that vue is forced
    to refresh.
+8. Attempt to detect when computer has been asleep, and refresh status when
+   awoken.
 
 0.5.3
 -----

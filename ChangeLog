@@ -6,8 +6,9 @@
    albums.
 3. Add jumplist support to playlists listing.
 4. Context menu for dynamic playlists.
-5. Assign unique ID to play/pause and info buttons in mobile toolbar - seems
-   like vue gets confused when these are switched with no ID?
+5. Remove long-press/middle-click for sleep menu from play/pause button in
+   mobile toolbar when now-playing page shown. The long-press seems to get
+   confused and cause a play/pase to happen when the 'i' button is clicked.
 6. Fix middle-click also firing left-click event when widget has a longpress
    handler.
 7. When current track's cover changes, update it's 'key' so that vue is forced

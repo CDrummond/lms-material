@@ -17,7 +17,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-list-tile @click="showPic()">
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile @click="trackInfo()">
+   <v-list-tile @click="bus.$emit('info')">
     <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>

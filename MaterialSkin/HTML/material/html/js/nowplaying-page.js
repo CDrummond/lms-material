@@ -212,7 +212,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :src="coverUrl" class="np-image" @contextmenu="showMenu"></img>
+   <img v-if="!info.show" :src="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">

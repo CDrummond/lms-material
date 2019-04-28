@@ -230,7 +230,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-layout>
    </v-flex>
 
-   <v-flex xs4>
+   <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>
      <v-flex xs6>
       <v-btn :title="trans.repeatOne" flat icon v-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat_one</v-icon></v-btn>
@@ -240,7 +240,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs6><v-btn flat icon @click="doAction(['button', 'jump_rew'])" v-bind:class="{'np-std-button': !stopButton}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
     </v-layout>
    </v-flex>
-   <v-flex xs4>
+   <v-flex xs4 class="no-control-adjust">
     <v-layout v-if="stopButton" text-xs-center>
      <v-flex xs6>
       <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPause"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
@@ -251,7 +251,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-layout>
     <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPause" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
    </v-flex>
-   <v-flex xs4>
+   <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>
      <v-flex xs6><v-btn flat icon @click="doAction(['playlist', 'index', '+1'])" v-bind:class="{'np-std-button': !stopButton}"><v-icon large>skip_next</v-icon></v-btn></v-flex>
      <v-flex xs6>

@@ -143,6 +143,10 @@
  padding:8px 8px 232px 8px; /* t, r, b, l */
 }
 
+.np-image-large {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) - 68px));
+}
+
 .np-image-landscape {
  padding:16px 16px 0px 16px;
  object-fit:contain;

@@ -21,8 +21,9 @@ sub pluginVersion {
     my ($class) = @_;
     my $version = Slim::Utils::PluginManager->dataForPlugin($class)->{version};
     if ($version eq 'DEVELOPMENT') {
-        my $epoc = time();
-        $version = "${version}-${epoc}";
+        use POSIX qw(strftime);
+        $datestring = strftime("%Y-%m-%d-%H-%M-%S", gmtime);
+        $version = "${version}-${datestring}";
     }
     return $version;
 }

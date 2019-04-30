@@ -17,7 +17,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-list-tile @click="showPic()">
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile v-if="infoPlugin" @click="bus.$emit('info')">
+   <v-list-tile @click="trackInfo()">
     <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>
@@ -513,6 +513,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         trackInfo() {
             this.info.show=false;
+            this.largeView=false;
             if (this.desktop) {
                 bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl});
             } else {

@@ -12,7 +12,10 @@ Vue.component('lms-information-dialog', {
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">
     <v-btn flat icon @click.native="close()"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{title}}</v-toolbar-title>
+    <v-toolbar-title>
+     <div>{{title}}</div>
+     <div class="infotoolbar-subtitle subtext">{{subtitle}}</div>
+    </v-toolbar-title>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround">
@@ -37,7 +40,7 @@ Vue.component('lms-information-dialog', {
    <p v-else-if="undefined!=updates.error">{{updates.error}}</p>
    <p v-else>{{i18n('All plugins up to date.')}}</p>
    <ul v-if="updates.plugins.length>0">
-    <template v-for="(plug, index) in updates.plugins"><li>{{plug.title}}</li></template>
+    <template v-for="(plug, index) in updates.plugins"><li v-if="plug">{{plug.title}}</li></template>
    </ul>
    <v-btn v-if="updates.plugins.length>0" @click="serverSettings('SETUP_PLUGINS')" flat>{{i18n('Server Settings')}}</v-btn>
    <div class="dialog-padding"></div>
@@ -63,6 +66,7 @@ Vue.component('lms-information-dialog', {
         return {
             show: false,
             title: "Information", // i18n not rquired, as should not be seen
+            subtitle: undefined,
             library: [],
             players: [],
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
@@ -106,6 +110,7 @@ Vue.component('lms-information-dialog', {
             this.rescans[1].prompt=i18n("Look for new, and modified, files?");
             this.rescans[2].title=i18n("Update playlists");
             this.rescans[2].prompt=i18n("Rescan for playlist changes?");
+            this.subtitle=i18n('Material Skin v%1', LMS_MATERIAL_REVISION);
         },
         update() {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {

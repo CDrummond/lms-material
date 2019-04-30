@@ -1,22 +1,23 @@
 0.5.4
 -----
-1. When browsing Genres -> Classical, allow user to list composers, conductors,
-   artists, or albums.
-2. When browsing Genres -> Jazz, allow user to list composers, artists, or
-   albums.
-3. Add jumplist support to playlists listing.
-4. Context menu for dynamic playlists.
-5. Remove long-press/middle-click for sleep menu from play/pause button in
-   mobile toolbar when now-playing page shown. The long-press seems to get
-   confused and cause a play/pase to happen when the 'i' button is clicked.
-6. Fix middle-click also firing left-click event when widget has a longpress
-   handler.
-7. When current track's cover changes, update it's 'key' so that vue is forced
-   to refresh.
-8. Attempt to detect when computer has been asleep, and refresh status when
-   awoken.
-9. Scroll to current queue item when change to queue page if current was
-   changed whilst on other view.
+ 1. When browsing Genres -> Classical, allow user to list composers, conductors,
+    artists, or albums.
+ 2. When browsing Genres -> Jazz, allow user to list composers, artists, or
+    albums.
+ 3. Add jumplist support to playlists listing.
+ 4. Context menu for dynamic playlists.
+ 5. Remove long-press/middle-click for sleep menu from play/pause button in
+    mobile toolbar when now-playing page shown. The long-press seems to get
+    confused and cause a play/pase to happen when the 'i' button is clicked.
+ 6. Fix middle-click also firing left-click event when widget has a longpress
+    handler.
+ 7. When current track's cover changes, update it's 'key' so that vue is forced
+    to refresh.
+ 8. Attempt to detect when computer has been asleep, and refresh status when
+    awoken.
+ 9. Scroll to current queue item when change to queue page if current was
+    changed whilst on other view.
+10. Show Material version in Information dialog sub-title.
 
 0.5.3
 -----

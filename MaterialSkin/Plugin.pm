@@ -19,7 +19,12 @@ sub initPlugin {
 
 sub pluginVersion {
     my ($class) = @_;
-    return Slim::Utils::PluginManager->dataForPlugin($class)->{version};
+    my $version = Slim::Utils::PluginManager->dataForPlugin($class)->{version};
+    if ($version eq 'DEVELOPMENT') {
+        my $epoc = time();
+        $version = "${version}-${epoc}";
+    }
+    return $version;
 }
 
 1;

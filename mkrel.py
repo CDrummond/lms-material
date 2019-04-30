@@ -16,10 +16,10 @@ import subprocess
 import sys
 
 
-INSTALL_XML = "MaterialSkin/install.xml"
 PUBLIC_XML = "public.xml"
 BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
+INSTALL_XML = BUILD_FOLDER + "/MaterialSkin/install.xml"
 MINIFY = True
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
 COMMON_JS_FILES = [  # Order is important!
@@ -313,10 +313,10 @@ def updatePublicXml(version, zipFile, sha1):
 if 1==len(sys.argv):
     usage()
 version=sys.argv[1]
-#checkVersion(version)
-#checkVersionExists(version)
-updateInstallXml(version)
+checkVersion(version)
+checkVersionExists(version)
 prepare()
+updateInstallXml(version)
 if MINIFY:
     minify()
 

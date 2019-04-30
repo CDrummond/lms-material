@@ -291,6 +291,10 @@ a {
  font-size:85% !important;
 }
 
+.infotoolbar-subtitle {
+ font-size:55% !important;
+}
+
 .subtoolbar-title {
  margin-left:4px;
  margin-bottom:0px !important;

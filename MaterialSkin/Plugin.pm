@@ -33,8 +33,8 @@ sub pluginVersion {
 
     if ($version eq 'DEVELOPMENT') {
         use POSIX qw(strftime);
-        $datestring = strftime("%Y-%m-%d-%H-%M-%S", gmtime);
-        $version = "${version}-${datestring}";
+        $datestring = strftime("%Y-%m-%d-%H-%M-%S", localtime);
+        $version = "DEV-${datestring}";
     }
 
     return $version;

@@ -1,3 +1,8 @@
+0.5.5
+-----
+1. When showing brief popup due to action (e.g. Music Walk With Me), do not
+   show 'Empty'
+
 0.5.4
 -----
  1. When browsing Genres -> Classical, allow user to list composers, conductors,

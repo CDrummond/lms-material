@@ -720,7 +720,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     : undefined;
             if (nextWindow) {
                 nextWindow=nextWindow.toLowerCase();
-                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
+                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && resp.items[0].id!='empty'
                                 ? resp.items[0].title : item.title;
                 if (nextWindow=="refresh") {
                     bus.$emit('showMessage', message);

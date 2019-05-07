@@ -1844,7 +1844,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         setScrollElement() {
             this.scrollElement = document.getElementById(this.grid.use ? "browse-grid" : "browse-list");
             this.scrollElement.removeEventListener('scroll', this.handleScroll);
-            if (!this.grid.use && this.$store.state.letterOverlay) {
+            if (this.$store.state.letterOverlay) {
                 this.scrollElement.addEventListener('scroll', this.handleScroll);
             }
         },
@@ -1855,7 +1855,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (undefined!==this.letterTimeout) {
                         clearTimeout(this.letterTimeout);
                     }
-                    var index = Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                    var index = this.grid.use
+                                    ? Math.floor(this.scrollElement.scrollTop / (this.grid.itemHeight*this.grid.numColumns))
+                                    : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
                     if (index>=0 && index<this.items.length) {
                         var letter = this.items[index].textkey;
                         if (this.letter!=letter) {
@@ -1896,7 +1898,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     this.grid.rows.push({id:"row."+i+"."+numColumns, cols:cols});
                 }
-                this.grid.numColummns = numColumns;
+                this.grid.numColumns = numColumns;
             }
 
             this.grid.itemHeight = GRID_SIZES[size].ih
@@ -1960,7 +1962,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(item) {
             var pos = this.grid.use
-                        ? Math.floor((item.index*this.grid.itemHeight)/this.grid.numColummns)
+                        ? Math.floor((item.index*this.grid.itemHeight)/this.grid.numColumns)
                         : item.index*LMS_LIST_ELEMENT_SIZE;
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },

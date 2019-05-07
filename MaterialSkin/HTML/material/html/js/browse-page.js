@@ -1856,7 +1856,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         clearTimeout(this.letterTimeout);
                     }
                     var index = this.grid.use
-                                    ? Math.floor(this.scrollElement.scrollTop / (this.grid.itemHeight*this.grid.numColumns))
+                                    ? Math.floor(this.scrollElement.scrollTop / this.grid.itemHeight)*this.grid.numColumns
                                     : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
                     if (index>=0 && index<this.items.length) {
                         var letter = this.items[index].textkey;

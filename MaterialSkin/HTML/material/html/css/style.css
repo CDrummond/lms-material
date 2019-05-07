@@ -81,42 +81,11 @@ a {
  padding-bottom: 16px;
 }
 
+.lms-image-grid table td .v-card {
+ background-color:rgba(0,0,0,0) !important
+}
 .lms-image-grid .vue-recycle-scroller__item-view {
  border-bottom: 0px;
-}
-
-.lms-image-grid-row {
- overflow:hidden !important;
- display:grid;
- grid-template-columns:repeat(auto-fit, minmax(154px, 1fr));
- grid-auto-rows:min-content;
- grid-gap:0px;
- padding:2px !important;
- margin:0px !important;
- padding-right:8px !important;
- padding-right:8px !important;
- justify-items:center;
-}
-
-.lms-image-grid-row-few {
- grid-template-columns:repeat(auto-fit, minmax(154px, 166px)) !important;
-}
-
-.lms-image-grid-row .container {
- padding:0px 8px 8px 8px;
-}
-
-.lms-image-grid-row .container .layout div .v-card__text {
- padding:0px;
-}
-
-.lms-image-grid-row .container .layout div {
- padding:1px;
- margin:0px;
-}
-
-.lms-image-grid-row div div.v-card {
- background-color:transparent !important;
 }
 
 .image-grid-item img {
@@ -160,8 +129,9 @@ a {
  cursor:pointer;
 }
 
-.lms-image-grid-row div.theme--dark.v-card {
- background-color:rgba(0,0,0,0) !important;
+.image-grid-item-few {
+ margin-left:8px !important;
+ margin-right:8px !important;
 }
 
 .image-grid-select-btn, .image-grid-select-btn:hover {
@@ -187,14 +157,6 @@ a {
 }
 
 @media only screen and (max-width:600px) {
- .lms-image-grid-row {
-  grid-template-columns:repeat(auto-fit, minmax(134px, 1fr));
- }
-
- .lms-image-grid-row-few {
-  grid-template-columns:repeat(auto-fit, minmax(134px, 146px)) !important;
- }
-
  .image-grid-item {
   width:130px !important;
   height:170px !important;
@@ -216,14 +178,6 @@ a {
 }
 
 @media only screen and (max-width:450px) {
- .lms-image-grid-row {
-  grid-template-columns:repeat(auto-fit, minmax(119px, 1fr));
- }
-
- .lms-image-grid-row-few {
-  grid-template-columns:repeat(auto-fit, minmax(119px, 131px)) !important;
- }
-
  .image-grid-item {
   width:115px !important;
   height:155px !important;
@@ -245,14 +199,6 @@ a {
 }
 
 @media only screen and (max-width:350px) {
- .lms-image-grid-row {
-  grid-template-columns:repeat(auto-fit, minmax(104px, 1fr));
- }
-
- .lms-image-grid-few {
-  grid-template-columns:repeat(auto-fit, minmax(104, 116px)) !important;
- }
-
  .image-grid-item {
   width:100px !important;
   height:140px !important;
@@ -271,6 +217,10 @@ a {
   top:96px !important;
   left:76px !important;
  }
+}
+
+.full-width {
+ width: 100%;
 }
 
 .error-text {

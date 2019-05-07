@@ -147,8 +147,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
  <div v-if="grid.use" class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;">
   <RecycleScroller v-if="items.length>LMS_MIN_GRID_SCROLLER_ITEMS" :items="grid.rows" :item-size="grid.itemHeight" page-mode key-field="id">
-   <div slot-scope="{item, index}" class="lms-image-grid-row">
-    <v-card flat v-for="(col, cidx) in item.cols" :key="col.id">
+   <table slot-scope="{item, index}" class="full-width">
+    <td v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat>
      <div v-if="col.blank"></div>
      <div v-else class="image-grid-item" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
       <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
@@ -161,17 +161,17 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
-    </v-card>
-   </div>
+    </v-card></td>
+   </table>
   </RecycleScroller>
-  <div v-else v-for="(row, ridx) in grid.rows" :key="row.id" class="lms-image-grid-row" v-bind:style="{ height: grid.itemHeight + 'px' }" v-bind:class="{'lms-image-grid-row-few': 1==grid.few}">
-   <v-card flat v-for="(col, cidx) in row.cols" :key="col.id">
+  <table v-else v-for="(row, ridx) in grid.rows" :key="row.id" v-bind:class="{'full-width': !grid.few}">
+   <td v-for="(col, cidx) in row.cols" :key="col.id"><v-card flat>
     <div v-if="col.blank"></div>
-    <v-card-text v-else-if="items[col.id].type=='image'" class="image-grid-item" :title="items[col.id] | tooltip">
+    <div v-else-if="items[col.id].type=='image'" class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" :title="items[col.id] | tooltip">
      <v-img :src="items[col.id].thumb" :lazy-src="items[col.id].thumb" aspect-ratio="1" @click="showImage(col.id)"></v-img>
      {{items[col.id].caption}}
-    </v-card-text>
-    <v-card-text v-else class="image-grid-item" v-bind:class="{'radio-image': SECTION_RADIO==items[col.id].section}" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
+    </div>
+    <div v-else :class="['image-grid-item', SECTION_RADIO==items[col.id].section ? 'radio-image' : '', grid.few ? 'image-grid-item-few' : '']" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
      <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
       <v-icon>{{items[col.id].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
      </v-btn>
@@ -183,9 +183,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==B_ACTIONS[items[col.id].menu[0]].svg" :title="B_ACTIONS[items[col.id].menu[0]].title">{{B_ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
       <img v-else-if="items[col.id].menu && items[col.id].menu.length===1" :title="B_ACTIONS[items[col.id].menu[0]].title" class="svg-img" :src="B_ACTIONS[items[col.id].menu[0]].svg | svgIcon(darkUi)"></img>
      </v-btn>
-    </v-card-text>
-   </v-card>
-  </div>
+    </div>
+   </v-card></td>
+  </table>
  </div>
  <div v-else>
 
@@ -1893,7 +1893,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.grid.itemHeight = GRID_SIZES[size].ih
-            this.grid.few = 1==this.grid.rows.length && this.items.length<(numColumns-2);
+            this.grid.few = 1==this.grid.rows.length && this.items.length<(numColumns-1);
         },
         setBgndCover() {
             var url = this.$store.state.browseBackdrop && this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;

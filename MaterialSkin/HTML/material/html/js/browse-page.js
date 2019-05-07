@@ -672,7 +672,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions=[];
                 this.isTop = false;
                 var changedView = this.grid.use != resp.useGrid;
-                this.grid.use = resp.useGrid;
+                this.grid = {use: resp.useGrid, numColumns:0, itemHeight:0, rows:[], few:false};
 
                 if (this.current && this.current.menu) {
                     for (var i=0, len=this.current.menu.length; i<len; ++i) {

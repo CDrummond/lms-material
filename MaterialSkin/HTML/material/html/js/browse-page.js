@@ -145,7 +145,13 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
  <div v-show="letter" id="letterOverlay"></div>
 
- <div v-if="grid.use" class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;">
+ <div v-if="grid.use">
+  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1 && items.length>10">
+   <template v-for="(item) in filteredJumplist">
+    <div @click="jumpTo(item)">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+   </template>
+  </div>
+  <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1 && items.length>10}">
   <RecycleScroller v-if="items.length>LMS_MIN_GRID_SCROLLER_ITEMS" :items="grid.rows" :item-size="grid.itemHeight" page-mode key-field="id">
    <table slot-scope="{item, index}" class="full-width">
     <td v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat>
@@ -186,7 +192,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </div>
    </v-card></td>
   </table>
- </div>
+ </div></div>
  <div v-else>
 
  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1 && items.length>10">
@@ -1890,6 +1896,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     this.grid.rows.push({id:"row."+i+"."+numColumns, cols:cols});
                 }
+                this.grid.numColummns = numColumns;
             }
 
             this.grid.itemHeight = GRID_SIZES[size].ih
@@ -1952,12 +1959,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         jumpTo(item) {
-            if (this.grid.use) {
-                // TODO!!!
-            } else {
-                var pos = item.index*LMS_LIST_ELEMENT_SIZE;
-                setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-            }
+            var pos = this.grid.use
+                        ? Math.floor((item.index*this.grid.itemHeight)/this.grid.numColummns)
+                        : item.index*LMS_LIST_ELEMENT_SIZE;
+            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },
         filterJumplist() {
             if (this.jumplist.length<=1) {

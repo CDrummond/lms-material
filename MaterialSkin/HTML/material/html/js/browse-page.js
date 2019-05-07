@@ -28,7 +28,7 @@ const SELECT_ACTION           = 18;
 const UNSELECT_ACTION         = 19;
 const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
-const GRID_SIZES = [ {ww:350, iw:100, ih:140}, {ww:450, iw:115, ih:155}, {ww:600, iw:130, ih:170}, {ww:0, iw:150, ih:200} ];
+const GRID_SIZES = [ {ww:350, iw:100, ih:158}, {ww:450, iw:115, ih:173}, {ww:600, iw:130, ih:190}, {ww:0, iw:150, ih:212} ];
 
 var B_ACTIONS=[
     {cmd:"play",       icon:"play_circle_outline"},
@@ -1878,18 +1878,20 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
+            var changed = false;
             var windowWidth = window.innerWidth;
             var listWidth = this.scrollElement.scrollWidth-64; // TODO: scrollbar???
 
             // Calculate what  grid item size we should use...
-            var size = GRID_SIZES.length-1;
-            for (var i=0; i<GRID_SIZES-1 && windowWidth<=GRID_SIZES[i].ww; ++i) {
+            var size = 0;
+            for (var i=1; i<GRID_SIZES.length && windowWidth>GRID_SIZES[i-1].ww; ++i) {
                 size = i;
             }
 
             // How many columns?
             var numColumns = Math.floor(listWidth/GRID_SIZES[size].iw);
             if (numColumns!=this.grid.numColummns) { // Need to re-layout...
+                changed = true;
                 this.grid.rows=[];
                 for (var i=0; i<this.items.length; i+=numColumns) {
                     var cols=[]
@@ -1901,8 +1903,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.numColumns = numColumns;
             }
 
-            this.grid.itemHeight = GRID_SIZES[size].ih
-            this.grid.few = 1==this.grid.rows.length && this.items.length<(numColumns-1);
+            if (this.grid.itemHeight != GRID_SIZES[size].ih) {
+                this.grid.itemHeight = GRID_SIZES[size].ih;
+                changed = true;
+            }
+            var few = 1==this.grid.rows.length && this.items.length<(numColumns-1);
+            if (this.grid.few != few) {
+                this.grid.few = few;
+                changed = true;
+            }
+            if (changed) {
+                this.$forceUpdate();
+            }
         },
         setBgndCover() {
             var url = this.$store.state.browseBackdrop && this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;

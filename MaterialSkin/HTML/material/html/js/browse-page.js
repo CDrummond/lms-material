@@ -146,32 +146,26 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-show="letter" id="letterOverlay"></div>
 
  <div v-if="grid.use" class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;">
-  <RecycleScroller v-if="items.length>=LMS_MIN_GRID_SCROLLER_ITEMS" :items="grid.rows" :item-size="grid.itemHeight" page-mode key-field="id">
-   <div slot-scope="{item, index}" class="lms-image-grid-row" v-bind:style="{ height: grid.itemHeight + 'px' }">
-    <v-card flat v-for="(col, cidx) in item.cols" :key="col.id" style="float:right">
+  <RecycleScroller v-if="items.length>LMS_MIN_GRID_SCROLLER_ITEMS" :items="grid.rows" :item-size="grid.itemHeight" page-mode key-field="id">
+   <div slot-scope="{item, index}" class="lms-image-grid-row">
+    <v-card flat v-for="(col, cidx) in item.cols" :key="col.id">
      <div v-if="col.blank"></div>
-     <v-card-text v-else-if="items[col.id].type=='image'" class="image-grid-item" :title="items[col.id] | tooltip">
-      <v-img :src="items[col.id].thumb" :lazy-src="items[col.id].thumb" aspect-ratio="1" @click="showImage(col.id)"></v-img>
-      {{items[col.id].caption}}
-     </v-card-text>
-     <v-card-text v-else class="image-grid-item" v-bind:class="{'radio-image': SECTION_RADIO==items[col.id].section}" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
+     <div v-else class="image-grid-item" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
       <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
        <v-icon>{{items[col.id].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img v-lazy="items[col.id].image"></img>
+      <img :key="items[col.id].image" :src="items[col.id].image"></img>
       <div class="image-grid-text">{{items[col.id].title}}</div>
       <div class="image-grid-text subtext">{{items[col.id].subtitle}}</div>
-      <v-btn flat icon v-if="items[col.id].menu && items[col.id].menu.length>0" @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
-       <v-icon v-if="items[col.id].menu && items[col.id].menu.length>1">more_vert</v-icon>
-       <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==B_ACTIONS[items[col.id].menu[0]].svg" :title="B_ACTIONS[items[col.id].menu[0]].title">{{B_ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
-       <img v-else-if="items[col.id].menu && items[col.id].menu.length===1" :title="B_ACTIONS[items[col.id].menu[0]].title" class="svg-img" :src="B_ACTIONS[items[col.id].menu[0]].svg | svgI con(darkUi)"></img>
+      <v-btn flat icon @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
+       <v-icon>more_vert</v-icon>
       </v-btn>
-     </v-card-text>
+     </div>
     </v-card>
    </div>
   </RecycleScroller>
   <div v-else v-for="(row, ridx) in grid.rows" :key="row.id" class="lms-image-grid-row" v-bind:style="{ height: grid.itemHeight + 'px' }" v-bind:class="{'lms-image-grid-row-few': 1==grid.few}">
-   <v-card flat v-for="(col, cidx) in row.cols" :key="col.id" style="float:right">
+   <v-card flat v-for="(col, cidx) in row.cols" :key="col.id">
     <div v-if="col.blank"></div>
     <v-card-text v-else-if="items[col.id].type=='image'" class="image-grid-item" :title="items[col.id] | tooltip">
      <v-img :src="items[col.id].thumb" :lazy-src="items[col.id].thumb" aspect-ratio="1" @click="showImage(col.id)"></v-img>

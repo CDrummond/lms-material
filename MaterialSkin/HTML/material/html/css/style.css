@@ -111,7 +111,7 @@ a {
 
 .image-grid-item {
  padding:0px;
- margin:0px;
+ margin:0px 0px 0px 8px; /* t, r, b, l */
  background-color:rgba(0,0,0,0) !important;
  cursor:pointer;
 }

@@ -28,10 +28,10 @@ const SELECT_ACTION           = 18;
 const UNSELECT_ACTION         = 19;
 const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
-const GRID_SIZES = [ {vw:350, iw:100, ih:158, clz:"image-grid-350"},
-                     {vw:450, iw:115, ih:173, clz:"image-grid-450"},
-                     {vw:600, iw:130, ih:190, clz:"image-grid-600"},
-                     {vw:0,   iw:150, ih:212, clz:"image-grid-0"} ];
+const GRID_SIZES = [ {vw:350, iw:108, ih:158, clz:"image-grid-350"},
+                     {vw:450, iw:123, ih:173, clz:"image-grid-450"},
+                     {vw:600, iw:138, ih:190, clz:"image-grid-600"},
+                     {vw:0,   iw:158, ih:212, clz:"image-grid-0"} ];
 
 var B_ACTIONS=[
     {cmd:"play",       icon:"play_circle_outline"},

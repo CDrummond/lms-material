@@ -94,8 +94,6 @@ a {
  display:block;
  height:150px !important;
  width:150px !important;
- margin-left:auto;
- margin-right:auto;
  margin-bottom:4px;
 }
 
@@ -123,7 +121,7 @@ a {
 .image-grid-item {
  width:150px;
  height:200px;
- padding:4px;
+ padding:0px;
  margin:0px;
  background-color:rgba(0,0,0,0) !important;
  cursor:pointer;

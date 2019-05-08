@@ -81,20 +81,128 @@ a {
  padding-bottom: 16px;
 }
 
+.image-grid-item-few {
+ margin-left:8px !important;
+ margin-right:8px !important;
+}
+
 .lms-image-grid table td .v-card {
  background-color:rgba(0,0,0,0) !important
 }
+
 .lms-image-grid .vue-recycle-scroller__item-view {
  border-bottom: 0px;
 }
 
-.image-grid-item img {
+.image-grid-item-img {
  object-fit:cover;
  object-position:50% 0%;
  display:block;
+ margin-bottom:4px;
+}
+
+.image-grid-text {
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ padding-left:2px;
+ padding-left:2px;
+}
+
+.image-grid-item {
+ padding:0px;
+ margin:0px;
+ background-color:rgba(0,0,0,0) !important;
+ cursor:pointer;
+}
+
+.image-grid-btn {
+ position:absolute;
+ width:32px !important;
+ height:32px !important;
+}
+
+/* -- */
+.image-grid-0 td .image-grid-item-img {
  height:150px !important;
  width:150px !important;
- margin-bottom:4px;
+}
+
+.image-grid-0 td .image-grid-text {
+ width:134px;
+}
+
+.image-grid-0 td .image-grid-item {
+ width:150px;
+ height:200px;
+}
+
+.image-grid-0 td .image-grid-btn {
+ top:146px !important;
+ left:126px !important;
+}
+
+.image-grid-600 td .image-grid-item-img {
+ height:130px !important;
+ width:130px !important;
+}
+
+.image-grid-600 td .image-grid-text {
+ width:118px;
+}
+
+.image-grid-600 td .image-grid-item {
+ width:130px !important;
+ height:170px !important;
+}
+
+.image-grid-600 td .image-grid-btn {
+ top:128px !important;
+ left:104px !important;
+}
+
+.image-grid-450 td .image-grid-item-img {
+ height:115px !important;
+ width:115px !important;
+}
+
+.image-grid-450 td .image-grid-text {
+ width:102px;
+}
+
+.image-grid-450 td .image-grid-item {
+ width:115px !important;
+ height:155px !important;
+}
+
+.image-grid-450 td .image-grid-btn {
+ top:114px !important;
+ left:89px !important;
+}
+
+.image-grid-350 td .image-grid-item-img {
+ height:100px !important;
+ width:100px !important;
+}
+
+.image-grid-350 td .image-grid-text {
+ width:88px;
+}
+
+.image-grid-350 td .image-grid-item {
+ width:100px !important;
+ height:140px !important;
+}
+
+.image-grid-350 td .image-grid-btn {
+ top:114px !important;
+ left:89px !important;
+}
+/* -- */
+
+.image-grid-btn:hover {
+ position:absolute;
+ z-index:2;
 }
 
 .v-avatar img {
@@ -109,29 +217,6 @@ a {
  margin-bottom:auto !important;
 }
 
-.image-grid-text {
- width:134px;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
- padding-left:2px;
- padding-left:2px;
-}
-
-.image-grid-item {
- width:150px;
- height:200px;
- padding:0px;
- margin:0px;
- background-color:rgba(0,0,0,0) !important;
- cursor:pointer;
-}
-
-.image-grid-item-few {
- margin-left:8px !important;
- margin-right:8px !important;
-}
-
 .image-grid-select-btn, .image-grid-select-btn:hover {
  position:absolute;
  top:0px !important;
@@ -139,82 +224,6 @@ a {
  width:32px !important;
  height:32px !important;
  z-index:2;
-}
-
-.image-grid-btn {
- position:absolute;
- top:146px !important;
- left:126px !important;
- width:32px !important;
- height:32px !important;
-}
-
-.image-grid-btn:hover {
- position:absolute;
- z-index:2;
-}
-
-@media only screen and (max-width:600px) {
- .image-grid-item {
-  width:130px !important;
-  height:170px !important;
- }
-
- .image-grid-item img {
-  height:130px !important;
-  width:130px !important;
- }
-
- .image-grid-text {
-  width:118px;
- }
-
- .image-grid-btn {
-  top:128px !important;
-  left:104px !important;
- }
-}
-
-@media only screen and (max-width:450px) {
- .image-grid-item {
-  width:115px !important;
-  height:155px !important;
- }
-
- .image-grid-item img {
-  height:115px !important;
-  width:115px !important;
- }
-
- .image-grid-text {
-  width:102px;
- }
-
- .image-grid-btn {
-  top:114px !important;
-  left:89px !important;
- }
-}
-
-@media only screen and (max-width:350px) {
- .image-grid-item {
-  width:100px !important;
-  height:140px !important;
- }
-
- .image-grid-item img {
-  height:100px !important;
-  width:100px !important;
- }
-
- .image-grid-text {
-  width:88px;
- }
-
- .image-grid-btn {
-  top:96px !important;
-  left:76px !important;
- }
 }
 
 .full-width {
@@ -792,7 +801,7 @@ div.v-subheader {
 .lms-jumplist {
  padding:8px 0px 8px 0px; /* t, r, b, l */
  margin:0px !important;
- width:32px;
+ width:32px; /* must match that in browse-page.js */
  background-color:#444;
  float:left;
  display:grid;

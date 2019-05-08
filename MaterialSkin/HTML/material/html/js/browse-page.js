@@ -1882,9 +1882,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             var changed = false;
-            var listWidth = this.pageElement.scrollWidth-(/*scrollbar*/ this.mobileBrowser ? 0 : 22) - (/*jumplist*/ this.filteredJumplist.length>1 && this.items.length>10 ? 32 :0);
+            var listWidth = this.pageElement.scrollWidth-(/*scrollbar*/ this.mobileBrowser ? 0 : 20) - (/*jumplist*/ this.filteredJumplist.length>1 && this.items.length>10 ? 32 :0);
 
-            // Calculate what  grid item size we should use...
+            // Calculate what grid item size we should use...
             var size = 0;
             for (var i=1; i<GRID_SIZES.length && listWidth>GRID_SIZES[i-1].vw; ++i) {
                 size = i;

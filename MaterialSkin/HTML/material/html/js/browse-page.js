@@ -155,7 +155,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <RecycleScroller v-if="items.length>LMS_MIN_GRID_SCROLLER_ITEMS" :items="grid.rows" :item-size="grid.itemHeight" page-mode key-field="id">
    <table slot-scope="{item, index}" class="full-width">
     <td v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat>
-     <div v-if="col.blank"></div>
+     <div v-if="col.blank" class="image-grid-item"></div>
      <div v-else class="image-grid-item" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
       <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
        <v-icon>{{items[col.id].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
@@ -172,7 +172,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
   <table v-else v-for="(row, ridx) in grid.rows" :key="row.id" v-bind:class="{'full-width': !grid.few}">
    <td v-for="(col, cidx) in row.cols" :key="col.id"><v-card flat>
-    <div v-if="col.blank"></div>
+    <div v-if="col.blank" class="image-grid-item"></div>
     <div v-else-if="items[col.id].type=='image'" class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" :title="items[col.id] | tooltip">
      <v-img :src="items[col.id].thumb" :lazy-src="items[col.id].thumb" aspect-ratio="1" @click="showImage(col.id)"></v-img>
      {{items[col.id].caption}}

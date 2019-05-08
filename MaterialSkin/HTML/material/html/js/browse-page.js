@@ -726,10 +726,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (changedView) {
                         this.setScrollElement();
                     }
-                    this.layoutGrid();
                     this.setBgndCover();
-                    setScrollTop(this.scrollElement, 0);
                     this.filterJumplist();
+                    this.layoutGrid();
+                    setScrollTop(this.scrollElement, 0);
                 });
             }
         },
@@ -1279,10 +1279,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (changedView) {
                         this.setScrollElement();
                     }
-                    this.layoutGrid();
                     this.setBgndCover();
-                    setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
                     this.filterJumplist();
+                    this.layoutGrid();
+                    setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
                 });
             }
         },

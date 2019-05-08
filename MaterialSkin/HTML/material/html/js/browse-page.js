@@ -1859,7 +1859,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         clearTimeout(this.letterTimeout);
                     }
                     var index = this.grid.use
-                                    ? Math.floor(this.scrollElement.scrollTop / GRID_SIZES[this.grid.size].ih)*this.grid.numColumns
+                                    ? Math.floor((this.scrollElement.scrollTop / GRID_SIZES[this.grid.size].ih)*this.grid.numColumns)
                                     : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
                     if (index>=0 && index<this.items.length) {
                         var letter = this.items[index].textkey;
@@ -1976,7 +1976,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(item) {
             var pos = this.grid.use
-                        ? Math.floor((item.index*GRID_SIZES[this.grid.size].ih)/this.grid.numColumns)
+                        ? Math.floor(item.index/this.grid.numColumns)*GRID_SIZES[this.grid.size].ih
                         : item.index*LMS_LIST_ELEMENT_SIZE;
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },

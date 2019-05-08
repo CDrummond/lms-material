@@ -1852,7 +1852,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         handleScroll() {
-            if (this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
+            if (undefined!=this.jumplist && this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(() => { 
                     this.scrollAnimationFrameReq = undefined;
                     if (undefined!==this.letterTimeout) {

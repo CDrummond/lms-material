@@ -727,7 +727,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
                 resp.items.push({
-                              id: "track_id:"+i.id,
+                              id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,
                               subtitle: subtitle,
                               //icon: "music_note",

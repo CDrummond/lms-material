@@ -2,6 +2,7 @@
 -----
 1. When showing brief popup due to action (e.g. Music Walk With Me), do not
    show 'Empty'
+2. Fix large playlists with duplicate tracks.
 
 0.5.4
 -----

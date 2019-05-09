@@ -1454,7 +1454,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
 
-                    command.command.push(item.id);
+                    command.command.push(originalId(item.id));
                 }
                 command=this.replaceCommandTerms(command);
             }

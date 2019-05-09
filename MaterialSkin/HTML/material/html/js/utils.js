@@ -582,3 +582,11 @@ function isInFavorites(item) {
     return undefined!=lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl];
 }
 
+function uniqueId(id, listSize) {
+    return id+"@index:"+listSize;
+}
+
+function originalId(id) {
+    return id.split("@index:")[0];
+}
+

@@ -28,10 +28,12 @@ const SELECT_ACTION           = 18;
 const UNSELECT_ACTION         = 19;
 const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
-const GRID_SIZES = [ {vw:350, iw:108, ih:158, clz:"image-grid-350"},
-                     {vw:450, iw:123, ih:173, clz:"image-grid-450"},
-                     {vw:600, iw:138, ih:190, clz:"image-grid-600"},
-                     {vw:0,   iw:158, ih:212, clz:"image-grid-0"} ];
+const GRID_SIZES = [ //{vw:276, iw:133, ih:185, clz:"image-grid-276"},
+                     {vw:286, iw:138, ih:190, clz:"image-grid-286"},
+                     //{vw:296, iw:143, ih:195, clz:"image-grid-296"},
+                     {vw:306, iw:148, ih:200, clz:"image-grid-306"},
+                     //{vw:316, iw:153, ih:205, clz:"image-grid-316"},
+                     {vw:0,   iw:158, ih:210, clz:"image-grid-0"} ];
 
 var B_ACTIONS=[
     {cmd:"play",       icon:"play_circle_outline"},

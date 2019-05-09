@@ -87,6 +87,7 @@ function initApp(app) {
     // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
     let vh = window.innerHeight * 0.01;
     let lastWinHeight = window.innerHeight;
+    let lastWinWidth = window.innerWidth;
     let timeout = undefined;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
     window.addEventListener('resize', () => {
@@ -101,7 +102,11 @@ function initApp(app) {
                 lastWinHeight = window.innerHeight;
             }
             timeout = undefined;
-            checkLayout();
+            if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
+                lastWinWidth = window.innerWidth;
+                checkLayout();
+                bus.$emit('windowWidthChanged');
+            }
             checkEntryFocus();
         }, 50);
     }, false);

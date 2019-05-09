@@ -35,7 +35,7 @@
     <lms-server></lms-server>
     <lms-toolbar :desktop="true"></lms-toolbar>
     <div class="lms-desktop-toolbar-pad"></div>
-    <vue-splitter :margin="20" :percent="splitterPercent" class="lms-splitter" @resize="splitteResized">
+    <vue-splitter :margin="20" :percent="splitterPercent" class="lms-splitter" @resize="splitterResized">
      <div slot="left-pane"><lms-browse :desktop="true"></lms-browse></div>
      <div slot="right-pane"><lms-queue :desktop="true"></lms-queue></div>
     </vue-splitter>

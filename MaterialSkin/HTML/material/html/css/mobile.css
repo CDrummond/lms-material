@@ -116,6 +116,11 @@
  margin:0px;
 }
 
+.lms-image-grid-jump {
+ width:calc(100vw - 32px);
+ left:32px;
+}
+
 .browse-progress {
  z-index:2;
  position:absolute;

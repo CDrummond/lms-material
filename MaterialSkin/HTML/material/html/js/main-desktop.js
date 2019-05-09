@@ -39,13 +39,18 @@ var app = new Vue({
         VueSplitter
     },
     methods: {
-        splitteResized(val) {
+        splitterResized(val) {
             var f = Math.floor(val/2)*2;
             if (f!=this.splitter) {
                 setLocalStorageVal("splitter", f);
                 document.documentElement.style.setProperty('--splitter-pc', f);
                 this.splitter=f;
-                bus.$emit('splitterChanged');
+                if (!this.splitterChangedAnimationFrameReq) {
+                    this.scrollAnimationFrameReq = window.requestAnimationFrame(() => {
+                        bus.$emit('splitterChanged');
+                        this.scrollAnimationFrameReq = undefined;
+                    });
+                }
             }
         }
     },

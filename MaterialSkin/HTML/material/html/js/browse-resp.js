@@ -9,16 +9,14 @@ const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], baseActions:[], useGrid: false, total: 0, useScroller: false, jumplist:[] };
+    var resp = {items: [], baseActions:[], useGrid: false, total: 0, jumplist:[] };
     if (undefined==idStart) {
         idStart = 0;
     }
 
     try {
     if (data && data.result) {
-        resp.total = (parent && parent.range ? parent.range.count : data.result.count);
-        resp.useScroller = resp.total >= LMS_MIN_LIST_SCROLLER_ITEMS;
-        var canUseGrid = !resp.useScroller || resp.total<=LMS_MAX_GRID_ITEMS;
+        resp.total = parent && parent.range ? parent.range.count : data.result.count;
         logJsonMessage("RESP", data);
         if (parent.id && TOP_SEARCH_ID===parent.id) {
             var totalResults = 0;
@@ -223,7 +221,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.total=resp.items.length;
             resp.subtitle=i18np("1 Category", "%1 Categories", resp.total);
-            resp.useScroller = false;
         } else if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;
@@ -242,7 +239,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
 
-            resp.useGrid = canUseGrid && !isTrackStat && options.useGrid=='always' && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+            resp.useGrid = !isTrackStat && options.useGrid=='always' && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -535,7 +532,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
 
             var infoPlugin = getLocalStorageBool('infoPlugin');
-            resp.useGrid = canUseGrid && options.useGrid=='always' && infoPlugin && options.artistImages;
+            resp.useGrid = options.useGrid=='always' && infoPlugin && options.artistImages;
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
@@ -569,7 +566,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
-            resp.useGrid = canUseGrid && options.useGrid!='never';
+            resp.useGrid = options.useGrid!='never';
             var params = [];
             if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
                 for (var i=0, plen=parent.params.length; i<plen; ++i) {

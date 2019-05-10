@@ -1893,8 +1893,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             // How many columns?
-            var numColumns = Math.floor(listWidth/GRID_SIZES[size].iw);
-            if (numColumns != this.grid.numColummns) { // Need to re-layout...
+            var numColumns = Math.min(Math.floor(listWidth/GRID_SIZES[size].iw), this.items.length);
+            if (numColumns != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
                 for (var i=0; i<this.items.length; i+=numColumns) {
@@ -1911,7 +1911,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.size = size;
                 changed = true;
             }
-            var few = 1==this.grid.rows.length && this.items.length<(numColumns-1);
+            var few = 1==this.grid.rows.length && (1==this.items.length || ((this.items.length*GRID_SIZES[size].iw)*1.20)<listWidth);
             if (this.grid.few != few) {
                 this.grid.few = few;
                 changed = true;

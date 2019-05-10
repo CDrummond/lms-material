@@ -78,8 +78,7 @@ a {
 .lms-image-grid {
  overflow-x:hidden !important;
  overflow-y:auto !important;
- padding-bottom:16px;
- padding-right:4px; /* must match that in browse-page.js */
+ padding: 8px 4px 8px 0px;/* t, r, b, l */
 }
 
 .image-grid-item-few {

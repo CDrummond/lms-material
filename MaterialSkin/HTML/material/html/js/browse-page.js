@@ -1597,8 +1597,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.fetchingItems) {
                 if (this.playerMenuTimeout) {
                     clearTimeout(this.playerMenuTimeout);
+                    this.playerMenuTimeout = undefined;
                 }
                 this.playerMenuTimeout = setTimeout(function () {
+                    this.playerMenuTimeout = undefined;
                     this.playerMenu();
                 }.bind(this), 250);
                 return;
@@ -2073,4 +2075,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
         }
     },
+    beforeDestroy() {
+        if (this.playerMenuTimeout) {
+            clearTimeout(this.playerMenuTimeout);
+            this.playerMenuTimeout = undefined;
+        }
+    }
 });

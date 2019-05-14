@@ -813,7 +813,7 @@ div.v-subheader {
 }
 
 .lms-jumplist {
- padding:8px 0px 8px 0px; /* t, r, b, l */
+ padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;
  width:32px; /* must match that in browse-page.js */
  background-color:#444;

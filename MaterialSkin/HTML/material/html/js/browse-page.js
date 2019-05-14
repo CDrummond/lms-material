@@ -1974,8 +1974,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.jumplist.length<=1) {
                 return;
             }
-
-            var maxItems = Math.floor((this.scrollElement.clientHeight-(48+16))/24); // TODO: Size???
+            var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
         }
     },

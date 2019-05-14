@@ -341,25 +341,6 @@ var lmsQueue = Vue.component("lms-queue", {
             this.updateItems();
         }.bind(this));
 
-        if (!this.desktop) {
-            // As we scroll the whole page, we need to remember the current position when changing to (e.g.) browse
-            // page, so that it can be restored when going back here.
-            bus.$on('routeChange', function(from, to) {
-                this.isVisible = '/queue'==to;
-                if (this.isVisible) {
-                    if (this.$store.state.autoScrollQueue && this.autoScrollRequired==true) {
-                        this.updateItems();
-                    } else {
-                        setTimeout(function () {
-                            setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                        }.bind(this), 100);
-                    }
-                } else if (from=='/queue') {
-                    this.previousScrollPos = this.scrollElement.scrollTop;
-                }
-            }.bind(this));
-        }
-
         bus.$on('themeChanged', function() {
             this.setBgndCover();
         }.bind(this));
@@ -383,6 +364,24 @@ var lmsQueue = Vue.component("lms-queue", {
             bus.$emit('refreshStatus');
             this.setBgndCover();
         });
+
+        if (!this.desktop) {
+            this.isActive = this.$store.state.page=='queue';
+            bus.$on('nav', function(page) {
+                if ('queue'==page) {
+                    if (!this.isActive) {
+                        this.isActive = true;
+                        if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
+                            this.$nextTick(function () {
+                                this.scrollToCurrent();
+                            });
+                        }
+                    }
+                } else {
+                    this.isActive = false;
+                }
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {
@@ -494,7 +493,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.desktop) {
                     bus.$emit('trackInfo', item);
                 } else {
-                    this.$router.push('/browse');
+                    this.$store.commit('setPage', 'browse');
                     this.$nextTick(function () {
                         bus.$emit('trackInfo', item);
                     });
@@ -632,6 +631,11 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         scrollToCurrent(pulse) {
+            if (!this.isActive) {
+                this.autoScrollRequired = true;
+                return;
+            }
+
             this.autoScrollRequired = false;
             var scroll = this.items.length>5 && this.currentIndex>=0;
             if (scroll || (pulse && this.items.length>0)) {

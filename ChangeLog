@@ -2,6 +2,7 @@
 -----
 1. Use role/genre/artist filter when listing album tracks in more scenarios.
 2. Fix menu button position for grid items when there are only a few.
+3. Remove usage of vue-router.
 
 0.6.0
 -----

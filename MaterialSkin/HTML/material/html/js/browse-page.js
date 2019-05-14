@@ -414,29 +414,17 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.grid = {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
 
         if (!this.desktop) {
-            // Clicking on 'browse' nav button whilst in browse page goes back. But, when clicking from another
-            // page to browse, we get 'routeChange' then 'nav'. So, we need to ignore the 1st 'nav' afer a 'routeChange'
-            var ignoreClick = false;
-
-            // As we scroll the whole page, we need to remember the current position when changing to (e.g.) queue
-            // page, so that it can be restored when going back here.
-            bus.$on('routeChange', function(from, to) {
-                if (to=='/browse') {
-                    ignoreClick = true;
-                    setTimeout(function () {
-                        setScrollTop(this.scrollElement, this.previousScrollPos>0 ? this.previousScrollPos : 0);
-                    }.bind(this), 100);
-                } else if (from=='/browse') {
-                    this.previousScrollPos = this.scrollElement.scrollTop;
-                }
-            }.bind(this));
-            bus.$on('nav', function(route) {
-                if ('/browse'==route) {
-                    if (ignoreClick) {
-                        ignoreClick = false;
+            this.isActive = this.$store.state.page=='browse';
+            // Clicking on 'browse' nav button whilst in browse page goes back.
+            bus.$on('nav', function(page) {
+                if ('browse'==page) {
+                    if (!this.isActive) {
+                        this.isActive = true;
                     } else if (this.history.length>0) {
                         this.goBack();
                     }
+                } else {
+                    this.isActive = false;
                 }
             }.bind(this));
         }
@@ -1116,7 +1104,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
                     if (!this.desktop) {
-                        this.$router.push('/nowplaying');
+                        this.$store.commit('setPage', 'now-playing');
                     }
                 }).catch(err => {
                     logAndShowError(err, undefined, command.command);
@@ -1132,7 +1120,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('refreshStatus');
                     if (!this.desktop) {
                         if (act===PLAY_ACTION) {
-                            this.$router.push('/nowplaying');
+                            this.$store.commit('setPage', 'now-playing');
                         } else if (act===ADD_ACTION && (undefined==suppressNotification || !suppressNotification)) {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         } else if (act==="insert") {

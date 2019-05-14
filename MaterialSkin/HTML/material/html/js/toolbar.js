@@ -67,7 +67,7 @@ Vue.component('lms-toolbar', {
    <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed' : !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
     <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
-   <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && $route.path=='/nowplaying') ? playlist.count+playlist.duration : songInfo}}</div>
+   <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && isNowPlayingPage) ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list">
@@ -108,7 +108,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && !infoOpen && $route.path=='/nowplaying'" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+ <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && !infoOpen && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info</v-icon>
  </v-btn>
  <v-btn icon v-else-if="!desktop" @click.stop="playPauseButton" class="toolbar-button" id="pp">
@@ -487,6 +487,9 @@ Vue.component('lms-toolbar', {
         },
         showPlayerMenuEntry () {
             return isAndroid() && this.$store.state.showPlayerMenuEntry
+        },
+        isNowPlayingPage() {
+            return this.$store.state.page == 'now-playing'
         }
     },
     filters: {

@@ -8,9 +8,9 @@
 Vue.component('lms-bottomnav', {
     template: `
 <v-footer height="auto" class="lms-footer">
- <v-bottom-nav class="lms-bottom-nav" :active.sync="route">
+ <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
-   <v-btn flat :to="item.route" class="lms-bottom-nav-button" @click="bus.$emit('nav', item.route)">
+   <v-btn flat class="lms-bottom-nav-button" @click="setPage(item.page)">
     <span>{{item.text}}</span>
     <v-icon>{{item.icon}}</v-icon>
    </v-btn>
@@ -21,8 +21,7 @@ Vue.component('lms-bottomnav', {
     props: [],
     data() {
         return {
-            items: [],
-            route: undefined
+            items: []
         }
     },
     created() {
@@ -30,24 +29,29 @@ Vue.component('lms-bottomnav', {
             this.initItems();
         }.bind(this));
         this.initItems();
-        // Work-around: Sometmes when play a track and route is changed programatically from browse->now playing, both
-        // browse and nowplaying tabs are shown as active. Also, when using back button previous tab can sometimes be shown
-        // as active.
-        bus.$on('routeChanged', function(from, to) {
-            for (var i=0, len=this.items.length; i<len; ++i) {
-                if (this.items[i].route==to) {
-                    this.route=i;
-                }
-            }
-        }.bind(this));
     },
     methods: {
         initItems() {
             this.items = [
-                          { text: i18n('Browse'),  icon: 'music_note',          route: '/browse' },
-                          { text: i18n('Playing'), icon: 'play_circle_outline', route: '/nowplaying' },
-                          { text: i18n('Queue'),   icon: 'queue_music',         route: '/queue' },
+                          { text: i18n('Browse'),  icon: 'music_note',          page: 'browse' },
+                          { text: i18n('Playing'), icon: 'play_circle_outline', page: 'now-playing' },
+                          { text: i18n('Queue'),   icon: 'queue_music',         page: 'queue' },
                          ];
+        },
+        setPage(page) {
+            this.$store.commit('setPage', page);
+            bus.$emit('nav', page);
+        }
+    },
+    computed: {
+        activeBtn() {
+            if (this.items[0].page==this.$store.state.page) {
+                return 0;
+            }
+            if (this.items[1].page==this.$store.state.page) {
+                return 1;
+            }
+            return 2;
         }
     }
 })

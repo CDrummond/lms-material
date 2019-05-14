@@ -4,42 +4,6 @@
  * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
- 
-const routes = [
-    {
-      path: '/',
-      redirect: getLocalStorageVal('path', '/browse')
-    },
-    {
-        path: '/browse',
-        component: lmsBrowse
-    },
-    {
-        path: '/nowplaying',
-        component: lmsNowPlaying
-    },
-    {
-        path: '/queue',
-        component: lmsQueue
-    }
-]
-
-let router = new VueRouter({
-    routes // short for `routes: routes`
-})
-
-router.beforeEach((to, from, next) => {
-    // Inform that we are about to change page (from->to) and indicate current scroll position
-    // Position is required so that browse/queue can restore their current scroll on page change
-    bus.$emit('routeChange', from.path, to.path);
-    setLocalStorageVal('path', to.path);
-    next()
-})
-
-// Work-around for bottomnav issue - see bottomnav.js
-router.afterEach((to, from) => {
-    bus.$emit('routeChanged', from.path, to.path);
-})
 
 Vue.use(VueLazyload);
 
@@ -47,7 +11,7 @@ var app = new Vue({
     el: '#app',
     data() {
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
-                            volume: false, manage: false, rndmix: false, favorite: false, rating: false, sleep: false }}
+                            volume: false, manage: false, rndmix: false, favorite: false, rating: false, sleep: false } }
     },
     created() {
         parseQueryParams();
@@ -77,6 +41,9 @@ var app = new Vue({
         },
         lang() {
             return this.$store.state.lang;
+        },
+        page() {
+            return this.$store.state.page;
         }
     },
     methods: {
@@ -84,7 +51,7 @@ var app = new Vue({
             if (this.openDialogs>0) {
                 return;
             }
-            if (this.$route.path=='/nowplaying') {
+            if (this.$store.state.page=='now-playing') {
                 // Ignore swipes on position slider...
                 var elem = document.getElementById("pos-slider");
                 if (elem) {
@@ -96,26 +63,25 @@ var app = new Vue({
                 }
             }
             if ('l'==direction) {
-                if (this.$route.path=='/browse') {
-                    this.$router.push('/nowplaying');
-                } else if (this.$route.path=='/nowplaying') {
-                    this.$router.push('/queue');
-                } else if (this.$route.path=='/queue') {
-                    this.$router.push('/browse');
+                if (this.$store.state.page=='browse') {
+                    this.$store.commit('setPage', 'now-playing');
+                } else if (this.$store.state.page=='now-playing') {
+                    this.$store.commit('setPage', 'queue');
+                } else if (this.$store.state.page=='queue') {
+                    this.$store.commit('setPage', 'browse');
                 }
             } else if ('r'==direction) {
-                if (this.$route.path=='/browse') {
-                    this.$router.push('/queue');
-                } else if (this.$route.path=='/nowplaying') {
-                    this.$router.push('/browse');
-                } else if (this.$route.path=='/queue') {
-                    this.$router.push('/nowplaying');
+                if (this.$store.state.page=='browse') {
+                    this.$store.commit('setPage', 'queue');
+                } else if (this.$store.state.page=='now-playing') {
+                    this.$store.commit('setPage', 'browse');
+                } else if (this.$store.state.page=='queue') {
+                    this.$store.commit('setPage', 'now-playing');
                 }
             }
         }
     },
     store,
-    router,
     lmsServer
 })
 

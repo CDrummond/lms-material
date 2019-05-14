@@ -34,9 +34,9 @@
     <lms-toolbar></lms-toolbar>
     <lms-currentcover></lms-currentcover>
     <lms-server></lms-server>
-    <keep-alive>
-     <router-view></router-view>
-    </keep-alive>
+    <lms-browse v-bind:class="{'inactive-page': page!='browse'}"></lms-browse>
+    <lms-now-playing v-bind:class="{'inactive-page': page!='now-playing'}"></lms-now-playing>
+    <lms-queue v-bind:class="{'inactive-page': page!='queue'}"></lms-queue>
     <lms-bottomnav></lms-bottomnav>
     <lms-noplayer></lms-noplayer>
     <lms-noconnection></lms-noconnection>
@@ -91,7 +91,6 @@
   <script src="html/lib/libcometd.min.js?r=4.0.3mod"></script>
   <script src="html/lib/idb-keyval-iife.min.js?r=3.1.0p50"></script>
   <script src="html/lib/vue.min.js?r=2.6.10"></script>
-  <script src="html/lib/vue-router.min.js?r=3.0.2"></script>
   <script src="html/lib/vuetify.min.js?r=1.5.8"></script>
   <script src="html/lib/vuex.min.js?r=3.1.0"></script>
   <script src="html/lib/vue-lazyload.js?r=1.2.6"></script>

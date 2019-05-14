@@ -149,7 +149,8 @@ const store = new Vuex.Store({
         ratingsSupport: false,
         maxRating: 5,
         showPlayerMenuEntry: false,
-        lsAndNotif:'playing'
+        lsAndNotif:'playing',
+        page:'browse'
     },
     mutations: {
         setPlayers(state, players) {
@@ -228,6 +229,7 @@ const store = new Vuex.Store({
             updateUiSettings(state, val);
         },
         initUiSettings(state) {
+            state.page = getLocalStorageVal('page', state.page);
             state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
             state.artistAlbumSort = getLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
             state.albumSort = getLocalStorageVal('albumSort', state.albumSort);
@@ -318,6 +320,12 @@ const store = new Vuex.Store({
         setInfoPlugin(state, val) {
             state.infoPlugin = val;
             setLocalStorageVal('infoPlugin', val);
+        },
+        setPage(state, val) {
+            if (val!=state.page) {
+                state.page = val;
+                setLocalStorageVal('page', val);
+            }
         }
     }
 })

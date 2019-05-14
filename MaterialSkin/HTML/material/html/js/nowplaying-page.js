@@ -517,7 +517,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.desktop) {
                 bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl});
             } else {
-                this.$router.push('/browse');
+                this.$store.commit('setPage', 'browse');
                 this.$nextTick(function () {
                     bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title});
                 });

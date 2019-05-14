@@ -120,8 +120,16 @@ a {
  position:absolute;
  width:32px !important;
  height:32px !important;
- bottom:24px !important;;
+ bottom:24px !important;
  right:-14px !important;
+}
+
+.image-grid-item-few .image-grid-btn, .image-grid-item-few .image-grid-btn:hover {
+ position:absolute;
+ width:32px !important;
+ height:32px !important;
+ bottom:24px !important;
+ right:-22px !important;
 }
 
 /* -- */

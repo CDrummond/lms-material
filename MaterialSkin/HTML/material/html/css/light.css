@@ -61,3 +61,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .np-rating-shadow {
     text-shadow: 2px 2px 5px #ddd;
 }
+
+.lms-jumplist {
+ background-color:#fff;
+}

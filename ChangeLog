@@ -4,6 +4,7 @@
 2. Fix menu button position for grid items when there are only a few.
 3. Remove usage of vue-router.
 4. Allow jump-list to have more entries.
+5. Fix jumplist colours, especially for light variant.
 
 0.6.0
 -----

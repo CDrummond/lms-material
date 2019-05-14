@@ -214,3 +214,8 @@
  top:56px;
  height:calc((var(--vh, 1vh)*100) - 56px);
 }
+
+.inactive-page {
+ display:none;
+}
+

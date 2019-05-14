@@ -35,11 +35,6 @@ vue-lazyload
     URL: https://github.com/hilongjw/vue-lazyload
     License: MIT
 
-vue-router
-    Version: 3.0.2
-    URL: https://github.com/vuejs/vue-router
-    License: MIT
-
 vue-virtual-scroller:
     Version: 1.0.0-rc2
     URL: https://github.com/Akryum/vue-virtual-scroller

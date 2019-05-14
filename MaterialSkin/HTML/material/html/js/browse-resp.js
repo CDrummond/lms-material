@@ -511,23 +511,21 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isComposers = false;
             var isConductors = false;
             var isBands = false;
-            if (parent && parent.params) {
-                for (var i=0, plen=parent.params.length; i<plen; ++i) {
-                    var p=parent.params[i];
-                    if (p.startsWith("role_id:") || (!options.noGenreFilter && p.startsWith("genre_id:"))) {
-                        params.push(p);
-                    }
-                }
-            }
 
-            for (var i=3, len=data.params[1].length; i<len; ++i) {
-                var lower = data.params[1][i].toLowerCase();
-                if (lower=="role_id:composer") {
-                    isComposers = true;
-                } else if (lower=="role_id:conductor") {
-                    isConductors = true;
-                } else if (lower=="role_id:band") {
-                    isBands = true;
+            if (data.params && data.params.length>1) {
+                for (var i=3, len=data.params[1].length; i<len; ++i) {
+                    if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
+                        var lower = data.params[1][i].toLowerCase();
+                        if (lower=="role_id:composer") {
+                            isComposers = true;
+                        } else if (lower=="role_id:conductor") {
+                            isConductors = true;
+                        } else if (lower=="role_id:band") {
+                            isBands = true;
+                        } else if (lower.startsWith("role_id:") || (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
+                            params.push(data.params[1][i]);
+                        }
+                    }
                 }
             }
 
@@ -568,12 +566,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             resp.useGrid = options.useGrid!='never';
             var params = [];
-            if (parent && parent.params && (!options.noRoleFilter || !options.noGenreFilter)) {
-                for (var i=0, plen=parent.params.length; i<plen; ++i) {
-                    var p=parent.params[i];
-                    if ( (!options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
-                         (!options.noGenreFilter && p.startsWith("genre_id:"))) {
-                        params.push(p);
+            if (data.params && data.params.length>1 && (!options.noRoleFilter || !options.noGenreFilter)) {
+                for (var i=3, plen=data.params[1].length; i<plen; ++i) {
+                    if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
+                        var lower = data.params[1][i].toLowerCase();
+                        if ( (!options.noRoleFilter && (lower.startsWith("role_id:") || lower.startsWith("artist_id:"))) ||
+                             (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
+                            params.push(data.params[1][i]);
+                        }
                     }
                 }
             }

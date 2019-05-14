@@ -816,7 +816,6 @@ div.v-subheader {
  padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;
  width:32px; /* must match that in browse-page.js */
- background-color:#444;
  float:left;
  display:grid;
  grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));

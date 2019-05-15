@@ -318,7 +318,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     var i = playerStatus.current;
                     var title = i.title;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
-                        title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
+                        title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                     }
                     var subtitle = buildSubtitle(i);
                     var remoteTitle = checkRemoteTitle(i);

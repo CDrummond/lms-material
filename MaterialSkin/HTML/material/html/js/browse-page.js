@@ -871,15 +871,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     return;
                 }
 
-                if (this.$store.state.splitArtistsAndAlbums && canSplitIntoLetterGroups(item, command)) {
-                    var cmd = { command: command.command, params: ["tags:CCZs"]};
-                    if (command.params) {
-                        command.params.forEach(p => { if (!p.startsWith("tags:")) { cmd.params.push(p); } } );
-                    }
-                    this.fetchItems(cmd, item, 5);
-                } else {
-                    this.fetchItems(command, item);
-                }
+                this.fetchItems(command, item);
             }
         },
         showImage(index) {

@@ -9,6 +9,7 @@
    slow.
 6. Add more grid size increments.
 7. Make artist and album entries in queue clickable.
+8. Remove A..Z groups, no longer required.
 
 0.6.0
 -----

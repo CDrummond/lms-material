@@ -28,11 +28,11 @@ const SELECT_ACTION           = 18;
 const UNSELECT_ACTION         = 19;
 const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
-const GRID_SIZES = [ //{vw:276, iw:133, ih:185, clz:"image-grid-276"},
-                     {vw:286, iw:138, ih:190, clz:"image-grid-286"},
-                     //{vw:296, iw:143, ih:195, clz:"image-grid-296"},
-                     {vw:306, iw:148, ih:200, clz:"image-grid-306"},
-                     //{vw:316, iw:153, ih:205, clz:"image-grid-316"},
+const GRID_SIZES = [ {vw:284, iw:133, ih:185, clz:"image-grid-284"},
+                     {vw:294, iw:138, ih:190, clz:"image-grid-294"},
+                     {vw:304, iw:143, ih:195, clz:"image-grid-304"},
+                     {vw:314, iw:148, ih:200, clz:"image-grid-314"},
+                     {vw:324, iw:153, ih:205, clz:"image-grid-324"},
                      {vw:0,   iw:158, ih:210, clz:"image-grid-0"} ];
 
 var B_ACTIONS=[
@@ -1890,7 +1890,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 this.grid.numColumns = numColumns;
             }
-
+console.log(listWidth, this.pageElement.scrollWidth, size, GRID_SIZES[size].iw, numColumns);
             if (this.grid.size != size) {
                 this.grid.size = size;
                 changed = true;

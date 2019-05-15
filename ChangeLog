@@ -8,6 +8,7 @@
 6. Remove 'Music Folders' from non-server  categories listing, its just too
    slow.
 6. Add more grid size increments.
+7. Make artist and album entries in queue clickable.
 
 0.6.0
 -----

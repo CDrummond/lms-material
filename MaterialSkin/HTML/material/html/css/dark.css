@@ -26,6 +26,11 @@ html {
  color:#99ceff !important;
 }
 
+/* Clickable artist/album in queue */
+.v-list__tile__sub-title a {
+ color: hsla(0,0%,100%,.7) !important;
+}
+
 .vue-splitter .splitter {
  background-color:#333 !important;
 }

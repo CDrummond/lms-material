@@ -5,11 +5,10 @@
 3. Remove usage of vue-router.
 4. Allow jump-list to have more entries.
 5. Fix jumplist colours, especially for light variant.
-6. Remove 'Music Folders' from non-server  categories listing, its just too
-   slow.
-6. Add more grid size increments.
-7. Make artist and album entries in queue clickable.
-8. Remove A..Z groups, no longer required.
+6. Remove 'Music Folders' from non-server categories listing, its just too slow.
+7. Add more grid size increments.
+8. Make artist and album entries in queue clickable (desktop browsers only).
+9. Remove A..Z groups, no longer required.
 
 0.6.0
 -----

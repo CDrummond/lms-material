@@ -583,13 +583,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   params: [ALBUM_TAGS, SORT_KEY+"new"],
                   icon: "new_releases",
                   type: "group",
-                  id: TOP_NEW_MUSIC_ID },
-                { title: i18n("Music Folder"),
-                  command: ["musicfolder"],
-                  params: ["type:audio", "tags:ds"],
-                  icon: "folder",
-                  type: "group",
-                  id: TOP_ID_PREFIX+"f" }
+                  id: TOP_NEW_MUSIC_ID }
                 ];
             otherPrev.forEach(i=> {
                 this.other.unshift(i);

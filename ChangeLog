@@ -1,14 +1,16 @@
 0.6.1
 -----
-1. Use role/genre/artist filter when listing album tracks in more scenarios.
-2. Fix menu button position for grid items when there are only a few.
-3. Remove usage of vue-router.
-4. Allow jump-list to have more entries.
-5. Fix jumplist colours, especially for light variant.
-6. Remove 'Music Folders' from non-server categories listing, its just too slow.
-7. Add more grid size increments.
-8. Make artist and album entries in queue clickable (desktop browsers only).
-9. Remove A..Z groups, no longer required.
+ 1. Use role/genre/artist filter when listing album tracks in more scenarios.
+ 2. Fix menu button position for grid items when there are only a few.
+ 3. Remove usage of vue-router.
+ 4. Allow jump-list to have more entries.
+ 5. Fix jumplist colours, especially for light variant.
+ 6. Remove 'Music Folders' from non-server categories listing, its just too
+    slow.
+ 7. Add more grid size increments.
+ 8. Make artist and album entries in queue clickable (desktop browsers only).
+ 9. Remove A..Z groups, no longer required.
+10. Only perform IP detection if running under Android - to fix MS Edge issue.
 
 0.6.0
 -----

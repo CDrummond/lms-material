@@ -12,7 +12,7 @@ const PQ_MORE_ACTION =      3;
 const PQ_SELECT_ACTION =    4;
 const PQ_UNSELECT_ACTION =  5;
 
-const PQ_STATUS_TAGS = isMobile() ? "tags:cdltuyAKN" : "tags:cdeltuysAKN";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdltuyAKN" : "tags:cdeltuysAKN";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 var PQ_ACTIONS = [
@@ -77,7 +77,7 @@ function showAlbum(album, title) {
 function buildSubtitle(i) {
     var subtitle = i.artist ? i.artist : i.trackartist;
 
-    if (i.artist_id) {
+    if (i.artist_id && !IS_MOBILE) {
         subtitle="<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(subtitle)+"\')\">" + subtitle + "</a>";
     }
     var remoteTitle = checkRemoteTitle(i);
@@ -86,7 +86,7 @@ function buildSubtitle(i) {
         if (i.year && i.year>0) {
             album+=" (" + i.year + ")";
         }
-        if (i.album_id) {
+        if (i.album_id && !IS_MOBILE) {
             album="<a href=\"#\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\')\">" + album + "</a>";
         }
         if (subtitle) {

@@ -237,6 +237,7 @@ function removeLocalStorage(key) {
 function isMobile() {
     return /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
 }
+const IS_MOBILE = isMobile();
 
 function isAndroid() {
     return /Android/i.test(navigator.userAgent);

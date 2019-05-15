@@ -521,7 +521,7 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
 
         /* Add an event handler to be called when visibiity changes - so that we can immediately refresh status */
-        if (isMobile()) {
+        if (IS_MOBILE) {
             var prop = getHiddenProp();
             if (prop) {
                 document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);

@@ -12,7 +12,7 @@ const PQ_MORE_ACTION =      3;
 const PQ_SELECT_ACTION =    4;
 const PQ_UNSELECT_ACTION =  5;
 
-const PQ_STATUS_TAGS = "tags:dcltuyAKN";
+const PQ_STATUS_TAGS = isMobile() ? "tags:cdltuyAKN" : "tags:cdeltuysAKN";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 var PQ_ACTIONS = [
@@ -62,6 +62,48 @@ function animate(elem, from, to) {
     }
 }
 
+// Record time artist/album was clicked - to prevent context menu also showing.
+var lastQueueItemClick = undefined;
+function showArtist(id, title) {
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title);
+}
+
+function showAlbum(album, title) {
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], title);
+}
+
+function buildSubtitle(i) {
+    var subtitle = i.artist ? i.artist : i.trackartist;
+
+    if (i.artist_id) {
+        subtitle="<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(subtitle)+"\')\">" + subtitle + "</a>";
+    }
+    var remoteTitle = checkRemoteTitle(i);
+    if (i.album) {
+        var album = i.album;
+        if (i.year && i.year>0) {
+            album+=" (" + i.year + ")";
+        }
+        if (i.album_id) {
+            album="<a href=\"#\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\')\">" + album + "</a>";
+        }
+        if (subtitle) {
+            subtitle+=SEPARATOR + album;
+        } else {
+            subtitle=album;
+        }
+    } else if (remoteTitle && remoteTitle!=i.title) {
+        if (subtitle) {
+            subtitle+=SEPARATOR + remoteTitle;
+        } else {
+            subtitle=remoteTitle;
+        }
+    }
+    return subtitle;
+}
+
 function parseResp(data, showTrackNum, index) {
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
@@ -75,28 +117,11 @@ function parseResp(data, showTrackNum, index) {
                 if (showTrackNum && i.tracknum>0) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                 }
-                var subtitle = i.artist ? i.artist : i.trackartist;
-                var remoteTitle = checkRemoteTitle(i);
-                if (i.album) {
-                    if (subtitle) {
-                        subtitle+=SEPARATOR + i.album;
-                    } else {
-                        subtitle=i.album;
-                    }
-                    if (i.year && i.year>0) {
-                        subtitle+=" (" + i.year + ")";
-                    }
-                } else if (remoteTitle && remoteTitle!=i.title) {
-                    if (subtitle) {
-                        subtitle+=SEPARATOR + remoteTitle;
-                    } else {
-                        subtitle=remoteTitle;
-                    }
-                }
+
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              subtitle: subtitle,
+                              subtitle: buildSubtitle(i),
                               image: queueItemCover(i),
                               actions: PQ_STD_ACTIONS,
                               duration: i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
@@ -173,7 +198,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
     <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
@@ -189,7 +214,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
     <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
@@ -295,25 +320,10 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
                     }
-                    var subtitle = i.artist ? i.artist : i.trackartist;
+                    var subtitle = buildSubtitle(i);
                     var remoteTitle = checkRemoteTitle(i);
                     var duration = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
-                    if (i.album) {
-                        if (subtitle) {
-                            subtitle+=SEPARATOR + i.album;
-                        } else {
-                            subtitle=i.album;
-                        }
-                        if (i.year && i.year>0) {
-                            subtitle+=" (" + i.year + ")";
-                        }
-                    } else if (remoteTitle && remoteTitle!=i.title) {
-                        if (subtitle) {
-                            subtitle+=SEPARATOR + remoteTitle;
-                        } else {
-                            subtitle=remoteTitle;
-                        }
-                    }
+
                     if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
@@ -473,7 +483,8 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         singleClick(item, index, event) {
-            if (this.$store.state.showMenuAudioQueue) {
+            if (this.$store.state.showMenuAudioQueue && (!lastQueueItemClick || ((new Date())-lastQueueItemClick)>500)) {
+                lastQueueItemClick = undefined;
                 this.itemMenu(item, index, event);
             }
         },

@@ -446,6 +446,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.itemAction(MORE_LIB_ACTION, item);
         }.bind(this));
 
+        bus.$on('browse', function(cmd, params, title) {
+            this.goHome();
+            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:"<>", title:title});
+        }.bind(this));
+
         bus.$on('refreshList', function(section) {
             if (this.current && this.current.section==section) {
                 this.refreshList();

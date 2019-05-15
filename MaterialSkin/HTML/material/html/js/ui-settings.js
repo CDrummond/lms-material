@@ -85,15 +85,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="splitArtistsAndAlbums = !splitArtistsAndAlbums" class="switch-label">
-      <v-list-tile-title>{{i18n('Split artist (and album) lists into A..Z')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Useful when browsing a large list of artists, or albums.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="splitArtistsAndAlbums"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
       <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
@@ -220,7 +211,6 @@ Vue.component('lms-ui-settings', {
             darkUi: true,
             artistAlbumSort:'yearalbum',
             albumSort:'album',
-            splitArtistsAndAlbums: false,
             useGrid:'albums',
             gridItems: [],
             letterOverlay:false,
@@ -272,7 +262,6 @@ Vue.component('lms-ui-settings', {
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
-            this.splitArtistsAndAlbums = this.$store.state.splitArtistsAndAlbums;
             this.useGrid=this.$store.state.useGrid;
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
@@ -352,7 +341,6 @@ Vue.component('lms-ui-settings', {
                                                   artistAlbumSort:this.artistAlbumSort,
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
-                                                  splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                                   useGrid:this.useGrid,
                                                   letterOverlay:this.letterOverlay,
                                                   showMenuAudio:this.showMenuAudio,
@@ -392,7 +380,6 @@ Vue.component('lms-ui-settings', {
                                      artistAlbumSort:this.artistAlbumSort,
                                      albumSort:this.albumSort,
                                      autoScrollQueue:this.autoScrollQueue,
-                                     splitArtistsAndAlbums:this.splitArtistsAndAlbums,
                                      useGrid:this.useGrid,
                                      letterOverlay:this.letterOverlay,
                                      showMenuAudio:this.showMenuAudio,

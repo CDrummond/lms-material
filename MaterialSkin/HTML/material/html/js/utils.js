@@ -496,46 +496,6 @@ function isTextItem(item) {
               (!item.command || (item.command[0]!="browsejive" && (item.command.length<2 || item.command[1]!="browsejive")))));
 }
 
-function canSplitIntoLetterGroups(item, command) {
-    if  (!item || !command.command) {
-        return false;
-    }
-    if (item.id && item.id.startsWith(TOP_ID_PREFIX) && item.id!=TOP_RANDOM_ALBUMS_ID && item.id!=TOP_NEW_MUSIC_ID &&
-        (command.command[0]=="artists" || command.command[0]=="albums")) {
-        return true;
-    }
-    /*
-    This section detects CustomBrowse, but this does not return an indexLoop - so can't work :-(
-    if (command.command.length>=2 && command.command[0]=="custombrowse" && command.command[1]=="browsejive" && command.params && command.params.length>=2) {
-        var p0 = command.params[0].split(":");
-        var p1 = command.params[1].split(":");
-
-        // "hierarchy:artists","artists:artists" // "hierarchy:albums","albums:albums" (need to check :albums???)
-        if ( (p0[0]=="hierarchy" && (p0[1]=="artists" || p0[1]=="albums") && p1[0]==p0[1]) ||
-             (p1[0]=="hierarchy" && (p1[1]=="artists" || p1[1]=="albums") && p0[0]==p1[1])) { // p0 / p1 swapped
-            return true;
-        }
-
-        // Check groups
-        if (command.params.length>=3 && p0[0].startsWith("group_") && p0[1].startsWith("group_") && p0[0]==p0[1]) {
-            // "group_Wibble:group_Wibble","multilibrary_standard1_ml_artists:multilibrary_standard1_ml_artists","hierarchy:group_Wibble,multilibrary_standard1_ml_artists"]
-            var p2 = command.params[2].split(":");
-            if (p1[0].startsWith("multilibrary_") && p1[1].startsWith("multilibrary_") && p1[0]==p1[1] &&
-                p2[0]=="hierarchy" && p2[1].startsWith(p1[0]+",") && (p2[1].endsWith("_artists") || p2[1].endsWith("_albums"))) {
-                return true;
-            }
-            // 2nd and 3rd params can be swapped.
-            if (p2[0].startsWith("multilibrary_") && p2[1].startsWith("multilibrary_") && p2[0]==p2[1] &&
-                p1[0]=="hierarchy" && p1[1].startsWith(p2[0]+",") && (p1[1].endsWith("_artists") || p1[1].endsWith("_albums"))) {
-                return true;
-            }
-        }
-    }
-    */
-
-    return false;
-}
-
 function shrinkAray(array, limit) {
     if (array.length<=limit) {
         return array;

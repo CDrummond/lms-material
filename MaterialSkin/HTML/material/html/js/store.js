@@ -23,11 +23,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('albumSort', state.albumSort);
         browseDisplayChanged = true;
     }
-    if (undefined!=val.splitArtistsAndAlbums && state.splitArtistsAndAlbums!=val.splitArtistsAndAlbums) {
-        state.splitArtistsAndAlbums = val.splitArtistsAndAlbums;
-        setLocalStorageVal('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
-        browseDisplayChanged = true;
-    }
     if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
         state.sortFavorites = val.sortFavorites;
         setLocalStorageVal('sortFavorites', state.sortFavorites);
@@ -128,7 +123,6 @@ const store = new Vuex.Store({
         darkUi: true,
         artistAlbumSort:'yearalbum',
         albumSort:'album',
-        splitArtistsAndAlbums:false,
         useGrid:'albums',
         letterOverlay:false,
         sortFavorites:true,
@@ -235,7 +229,6 @@ const store = new Vuex.Store({
             state.albumSort = getLocalStorageVal('albumSort', state.albumSort);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
-            state.splitArtistsAndAlbums = getLocalStorageBool('splitArtistsAndAlbums', state.splitArtistsAndAlbums);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.useGrid = convertGridConfigItem(getLocalStorageVal('useGrid', state.useGrid));
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
@@ -273,7 +266,6 @@ const store = new Vuex.Store({
                                  artistAlbumSort: getLocalStorageVal('artistAlbumSort', undefined==prefs.artistAlbumSort ? state.artistAlbumSort : prefs.artistAlbumSort),
                                  albumSort: getLocalStorageVal('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
                                  autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
-                                 splitArtistsAndAlbums: getLocalStorageBool('splitArtistsAndAlbums', undefined==prefs.splitArtistsAndAlbums ? state.splitArtistsAndAlbums : prefs.splitArtistsAndAlbums),
                                  useGrid: convertGridConfigItem(getLocalStorageVal('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid)),
                                  letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),

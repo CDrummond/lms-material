@@ -86,6 +86,10 @@ a {
  margin-right:8px !important;
 }
 
+.lms-image-grid table {
+ border-spacing:0px !important;
+}
+
 .lms-image-grid table td .v-card {
  background-color:rgba(0,0,0,0) !important
 }
@@ -111,7 +115,7 @@ a {
 
 .image-grid-item {
  padding:0px;
- margin:0px 6px 0px 2px; /* t, r, b, l */
+ margin:0px 4px 0px 4px; /* t, r, b, l */
  background-color:rgba(0,0,0,0) !important;
  cursor:pointer;
 }

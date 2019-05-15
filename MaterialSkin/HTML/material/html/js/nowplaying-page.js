@@ -808,7 +808,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         title() {
             if (this.$store.state.nowPlayingTrackNum && this.playerStatus.current.tracknum) {
-                return (this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+" "+this.playerStatus.current.title;
+                return (this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
         }

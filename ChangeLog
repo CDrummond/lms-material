@@ -11,6 +11,7 @@
  8. Make artist and album entries in queue clickable (desktop browsers only).
  9. Remove A..Z groups, no longer required.
 10. Only perform IP detection if running under Android - to fix MS Edge issue.
+11. If showing track numbers, add small circle between number and title.
 
 0.6.0
 -----

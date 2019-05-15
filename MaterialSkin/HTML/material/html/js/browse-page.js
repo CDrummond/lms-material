@@ -1890,7 +1890,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 this.grid.numColumns = numColumns;
             }
-console.log(listWidth, this.pageElement.scrollWidth, size, GRID_SIZES[size].iw, numColumns);
+
             if (this.grid.size != size) {
                 this.grid.size = size;
                 changed = true;

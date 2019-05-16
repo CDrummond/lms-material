@@ -56,6 +56,9 @@ Vue.component('lms-favorite', {
                 this.show=true;
             }
         }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         cancel() {

@@ -201,7 +201,12 @@ Vue.component('lms-player-settings', {
                 this.playerSettings(this.$store.state.player);
             } else if (undefined!=player && !this.show) {
                 this.playerSettings(player);
+            } else if (!this.$store.state.player) {
+                bus.$emit('showError', undefined, i18n("No Player"));
             }
+        }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
         }.bind(this));
     },
     methods: {

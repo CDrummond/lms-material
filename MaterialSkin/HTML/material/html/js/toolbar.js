@@ -62,9 +62,12 @@ Vue.component('lms-toolbar', {
     template: `
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
+ <v-btn v-if="noPlayer" icon class="toolbar-button">
+  <v-progress-circular color="primary" size=22 width=3 indeterminate></v-progress-circular>
+ </v-btn>
  <v-menu bottom class="toolbar-menu" :disabled="!connected">
   <v-toolbar-title slot="activator">
-   <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed' : !playerStatus.ison}">
+   <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed': !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
     <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
    <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && isNowPlayingPage) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -115,16 +118,16 @@ Vue.component('lms-toolbar', {
   <v-icon v-if="playerStatus.isplaying">pause_circle_outline</v-icon>
   <v-icon v-else>play_circle_outline</v-icon>
  </v-btn>
- <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-if="desktop" :disabled="!playerStatus.ison" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
- <v-btn v-if="desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop" :disabled="!playerStatus.ison" class="vol-label" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
- <v-btn v-else-if="!desktop" :disabled="!playerStatus.ison" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
+ <v-btn v-if="desktop" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-if="desktop" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
+ <v-btn v-if="desktop" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-if="desktop" :disabled="!playerStatus.ison || noPlayer" class="vol-label" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
+ <v-btn v-else-if="!desktop" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!desktop" :disabled="!playerStatus.ison">{{playerStatus.volume|displayVolume}}%</div>
+ <div class="vol-label" v-if="!desktop" :disabled="!playerStatus.ison || noPlayer">{{playerStatus.volume|displayVolume}}%</div>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
@@ -490,6 +493,9 @@ Vue.component('lms-toolbar', {
         },
         isNowPlayingPage() {
             return this.$store.state.page == 'now-playing'
+        },
+        noPlayer () {
+            return !this.$store.state.players || this.$store.state.players.length<1
         }
     },
     filters: {

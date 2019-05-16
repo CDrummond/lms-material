@@ -26,7 +26,6 @@ COMMON_JS_FILES = [  # Order is important!
     "constants.js",
     "currentcover.js",
     "utils.js",
-    "noplayers.js",
     "noconnection.js",
     "toolbar.js",
     "bottomnav.js",

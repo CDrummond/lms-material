@@ -75,6 +75,9 @@ Vue.component('lms-sync-dialog', {
                 }
             });
         }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         close() {

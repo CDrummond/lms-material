@@ -381,14 +381,15 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 for (var i=3, len=data.params[1].length; i<len; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
-                        if (lower=="role_id:composer") {
-                            isComposers = true;
-                        } else if (lower=="role_id:conductor") {
-                            isConductors = true;
-                        } else if (lower=="role_id:band") {
-                            isBands = true;
-                        } else if (lower.startsWith("role_id:") || (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
+                        if (lower.startsWith("role_id:") || (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
                             params.push(data.params[1][i]);
+                            if (lower=="role_id:composer") {
+                                isComposers = true;
+                            } else if (lower=="role_id:conductor") {
+                                isConductors = true;
+                            } else if (lower=="role_id:band") {
+                                isBands = true;
+                            }
                         }
                     }
                 }

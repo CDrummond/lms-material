@@ -748,6 +748,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.history.pop();
                     this.goBack(true);
                 }
+            } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
+                bus.$emit('showMessage', item.title);
+                this.goBack(true);
             } else {
                 this.handleListResponse(item, command, resp);
             }
@@ -757,7 +760,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         doTextClick(item) {
             var command = this.buildCommand(item);
-            if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1])) {
+            if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1] || "jiveplaylistparameters"==command.command[1])) {
                 this.fetchingItems = true;
                 lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE).then(({data}) => {
                     this.fetchingItems = false;

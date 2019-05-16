@@ -14,6 +14,7 @@
 11. If showing track numbers, add small circle between number and title.
 12. Fix showing albums under Genres when filtered by Composer or Conductor.
 13. Show composer in queue and now playing for Classical and Jazz tracks.
+14. Better handling of dynamic playlists, not perfect, but better.
 
 0.6.0
 -----

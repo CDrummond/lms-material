@@ -12,6 +12,7 @@
  9. Remove A..Z groups, no longer required.
 10. Only perform IP detection if running under Android - to fix MS Edge issue.
 11. If showing track numbers, add small circle between number and title.
+12. Fix showing albums under Genres when filtered by Composer or Conductor.
 
 0.6.0
 -----

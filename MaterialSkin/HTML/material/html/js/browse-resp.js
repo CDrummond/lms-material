@@ -187,7 +187,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         var dot = i.title.indexOf('.');
                         var num = parseInt(i.title.substring(0, dot));
                         var text = i.title.substring(dot+2, i.title.length);
-                        i.title = (num>9 ? num : ("0" + num))+" "+text;
+                        i.title = (num>9 ? num : ("0" + num))+SEPARATOR+text;
                     }
                     if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
                         (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) ) {
@@ -505,7 +505,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var i = loop[idx];
                 var title = i.title;
                 if (i.tracknum>0) {
-                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+" "+title;
+                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                      //title = i.tracknum + ". " + title; // SlimBrowse format
                 }
                 if (i.trackartist && ( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {

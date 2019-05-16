@@ -12,7 +12,7 @@ const PQ_MORE_ACTION =      3;
 const PQ_SELECT_ACTION =    4;
 const PQ_UNSELECT_ACTION =  5;
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdltuyAKN" : "tags:cdeltuysAKN";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltuyAKNS" : "tags:cdegltuysAKNS";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 var PQ_ACTIONS = [
@@ -74,11 +74,24 @@ function showAlbum(album, title) {
     bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], title);
 }
 
+function showComposer(id, title) {
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title);
+}
+
 function buildSubtitle(i) {
     var subtitle = i.artist ? i.artist : i.trackartist;
 
-    if (i.artist_id && !IS_MOBILE) {
+    if (i.artist_id && !IS_MOBILE && subtitle) {
         subtitle="<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(subtitle)+"\')\">" + subtitle + "</a>";
+    }
+    if (i.composer && i.genre && COMPOSER_GENRES.has(i.genre)) {
+        var composer_ids = i.composer_ids ? i.composer_ids.split(",") : undefined;
+        if (composer_ids && 1==composer_ids.length) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.composer);
+        }
     }
     var remoteTitle = checkRemoteTitle(i);
     if (i.album) {
@@ -89,17 +102,9 @@ function buildSubtitle(i) {
         if (i.album_id && !IS_MOBILE) {
             album="<a href=\"#\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\')\">" + album + "</a>";
         }
-        if (subtitle) {
-            subtitle+=SEPARATOR + album;
-        } else {
-            subtitle=album;
-        }
+        subtitle=addPart(subtitle, album);
     } else if (remoteTitle && remoteTitle!=i.title) {
-        if (subtitle) {
-            subtitle+=SEPARATOR + remoteTitle;
-        } else {
-            subtitle=remoteTitle;
-        }
+        subtitle=addPart(subtitle, remoteTitle);
     }
     return subtitle;
 }

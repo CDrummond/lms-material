@@ -551,3 +551,7 @@ function originalId(id) {
     return id.split("@index:")[0];
 }
 
+function addPart(str, part) {
+    return str ? str+SEPARATOR+part : part;  
+}
+

@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const PLAYER_STATUS_TAGS = "tags:cdeloyrstAKNS";
+const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNS";
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];

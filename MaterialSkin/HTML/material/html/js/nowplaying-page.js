@@ -267,7 +267,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 `,
     props: [ 'desktop' ],
     data() {
-        return { coverUrl:undefined,
+        return { coverUrl:LMS_BLANK_COVER,
                  playerStatus: {
                     isplaying: false,
                     sleepTimer: false,
@@ -433,7 +433,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {
-            this.coverUrl = coverUrl;
+            this.coverUrl = undefined==coverUrl ? LMS_BLANK_COVER : coverUrl;
             this.setBgndCover();
         }.bind(this));
         bus.$emit('getCurrentCover');
@@ -467,7 +467,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showMenu(event) {
             event.preventDefault();
-            if (this.coverUrl) {
+            if (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER) {
                 this.menu.show = false;
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;
@@ -651,7 +651,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.$nextTick(function () {
                 var elem = document.getElementById("np-info");
                 if (elem) {
-                    elem.style.backgroundImage = "url('"+(this.$store.state.infoBackdrop ? this.coverUrl : "") +"')";
+                    elem.style.backgroundImage = "url('"+(this.$store.state.infoBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : "") +"')";
                 }
             });
             if (this.desktop && !this.showTabs) {
@@ -693,7 +693,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         setBgndCover() {
             if (this.page && (!this.desktop || this.largeView)) {
-                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
+                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined, this.$store.state.darkUi);
             }
         },
         playPauseButton(showSleepMenu) {

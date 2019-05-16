@@ -146,6 +146,10 @@ Vue.component('lms-manage-players', {
         bus.$on('otherPlayerStatus', function(player) {
             this.updatePlayer(player);
         }.bind(this));
+
+        bus.$on('noPlayers', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         initItems() {

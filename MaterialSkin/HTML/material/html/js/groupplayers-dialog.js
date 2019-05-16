@@ -105,6 +105,9 @@ Vue.component('lms-groupplayers-dialog', {
                 this.show = true;
             }
         }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         setDefaults() {

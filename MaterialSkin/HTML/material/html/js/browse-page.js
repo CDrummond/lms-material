@@ -596,7 +596,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined!=this.serverTop && this.serverTop.length>0) {
                 this.serverTop[0].title=this.top[0].title;
             } else {
-                this.serverTop=[this.top[0]];
+                this.serverTop=this.top;
             }
             if (this.history.length<1) {
                 this.items = this.getTop();
@@ -941,6 +941,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, suppressNotification) {
+            if (!this.playerId()) {
+                bus.$emit('showError', undefined, i18n("No Player"));
+                return;
+            }
+
             if (act===RENAME_PL_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename playlist"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};

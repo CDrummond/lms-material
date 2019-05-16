@@ -15,6 +15,9 @@
 12. Fix showing albums under Genres when filtered by Composer or Conductor.
 13. Show composer in queue and now playing for Classical and Jazz tracks.
 14. Better handling of dynamic playlists, not perfect, but better.
+15. Don't display fullscreen dialog when there are no players found, just show a
+    spinner next to player selection menu. This allows settings, and start
+    player menu item, to still be accessible.
 
 0.6.0
 -----

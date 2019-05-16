@@ -23,4 +23,4 @@ const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
 const LMS_CACHE_VERSION = 6;
 const LMS_LIST_ELEMENT_SIZE = 57;
-
+const LMS_BLANK_COVER = "/music/0/cover.jpg";

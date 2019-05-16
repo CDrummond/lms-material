@@ -207,6 +207,9 @@ const store = new Vuex.Store({
                     setLocalStorageVal('player', state.player.id);
                 }
             }
+            if (state.players.length<1) {
+                bus.$emit('noPlayers');
+            }
         },
         setPlayer(state, id) {
             if (state.players) {

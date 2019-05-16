@@ -66,6 +66,10 @@ Vue.component('lms-volume', {
                 }
             });
         }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
+            this.cancelCloseTimer();
+        }.bind(this));
     },
     beforeDestroy() {
         this.cancelCloseTimer();

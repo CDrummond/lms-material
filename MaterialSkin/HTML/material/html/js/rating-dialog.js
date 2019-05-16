@@ -52,6 +52,9 @@ Vue.component('lms-rating-dialog', {
             this.toSet = undefined;
             this.show = true;
         }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         cancel() {

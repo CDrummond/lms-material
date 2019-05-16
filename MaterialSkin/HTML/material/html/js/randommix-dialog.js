@@ -82,6 +82,9 @@ Vue.component('lms-randommix', {
                 });
             });
         }.bind(this));
+        bus.$on('noPlayers', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         close() {

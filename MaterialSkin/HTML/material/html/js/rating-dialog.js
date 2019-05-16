@@ -42,15 +42,17 @@ Vue.component('lms-rating-dialog', {
     },
     mounted() {
         bus.$on('rating.open', function(ids, current) {
-            this.ids = ids;
-            if (ids.length>1) {
-                this.title=i18n("Set rating for %1 tracks", ids.length);
-            } else {
-                this.title=i18n("Set rating");
+            if (this.$store.state.player.id) {
+                this.ids = ids;
+                if (ids.length>1) {
+                    this.title=i18n("Set rating for %1 tracks", ids.length);
+                } else {
+                    this.title=i18n("Set rating");
+                }
+                this.value = undefined==current ? 3 : current;
+                this.toSet = undefined;
+                this.show = true;
             }
-            this.value = undefined==current ? 3 : current;
-            this.toSet = undefined;
-            this.show = true;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=false;

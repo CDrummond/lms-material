@@ -21,6 +21,8 @@
 16. Minfiy each JS file, as opposed to combining into one, as otherwise the
     speed of scrolling large lists is affected.
 17. More grid sizes (every 5px from 125px to 175px)
+18. Set icon font to block instead of having browser use a fallback in case of
+    slow network.
 
 0.6.0
 -----

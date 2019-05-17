@@ -22,33 +22,6 @@ HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
 INSTALL_XML = BUILD_FOLDER + "/MaterialSkin/install.xml"
 MINIFY = True
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
-COMMON_JS_FILES = [  # Order is important!
-    "constants.js",
-    "currentcover.js",
-    "utils.js",
-    "noconnection.js",
-    "toolbar.js",
-    "bottomnav.js",
-    "browse-resp.js",
-    "browse-page.js",
-    "nowplaying-page.js",
-    "queue-page.js",
-    "sync-dialog.js",
-    "groupplayers-dialog.js",
-    "server.js",
-    "ui-settings.js",
-    "player-settings.js",
-    "volume.js",
-    "information.js",
-    "randommix-dialog.js",
-    "rating-dialog.js",
-    "manage-players.js",
-    "favorite-dialog.js",
-    "sleep-dialog.js",
-    "i18n.js",
-    "store.js",
-    "init.js"
-]
 
 def info(s):
     print("INFO: %s" %s)
@@ -153,20 +126,18 @@ def fixUtils():
 
 def minifyJs():
     info("...JS")
-    jsCommand = ["java", "-jar", JS_COMPILER, "--compilation_level=WHITESPACE_ONLY", "--js_output_file=%s/js/common.min.js" % HTML_FOLDER]
-    for entry in COMMON_JS_FILES:
-        jsCommand.append("%s/js/%s" % (HTML_FOLDER, entry))
-
-    subprocess.call(jsCommand, shell=False)
-    for other in ["utils", "main", "main-desktop"]:
-        jsCommand = ["java", "-jar", JS_COMPILER, "--compilation_level=WHITESPACE_ONLY", "--js_output_file=%s/js/%s.min.js" % (HTML_FOLDER, other), "%s/js/%s.js" % (HTML_FOLDER, other)]
-        subprocess.call(jsCommand, shell=False)
+    for js in os.listdir("%s/js" % HTML_FOLDER):
+        if js.endswith(".js"):
+            info("......%s" % js)
+            jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, js.replace(".js", ".min.js")), "%s/js/%s" % (HTML_FOLDER, js)]
+            subprocess.call(jsCommand, shell=False)
 
 
 def minifyCss():
     info("...CSS")
     for css in os.listdir("%s/css" % HTML_FOLDER):
         if css.endswith(".css"):
+            info("......%s" % css)
             origCss = "%s/css/%s" % ( HTML_FOLDER, css)
             cssStr=""
             with open(origCss, "r") as f:
@@ -204,7 +175,6 @@ def fixHtml():
     for entry in os.listdir("%s/../" % HTML_FOLDER):
         if entry.endswith(".html"):
             fixedLines = []
-            replacedJs = False
             path = "%s/../%s" % (HTML_FOLDER, entry)
             with open(path, "r") as f:
                 lines=f.readlines()
@@ -220,16 +190,7 @@ def fixHtml():
                         matchedCss = True
 
                 if matchedJs:
-                    if not replacedJs:
-                        if "index.html"==entry:
-                            fixedLines.append('  <script src="html/js/utils.min.js?r=[% material_revision %]"></script>\n')
-                        else:
-                            fixedLines.append('  <script src="html/js/common.min.js?r=[% material_revision %]"></script>\n')
-                            if "desktop.html"==entry:
-                                fixedLines.append('  <script src="html/js/main-desktop.min.js?r=[% material_revision %]"></script>\n')
-                            else:
-                                fixedLines.append('  <script src="html/js/main.min.js?r=[% material_revision %]"></script>\n')
-                        replacedJs = True
+                    fixedLines.append(line.replace(".js", ".min.js"))
                 elif matchedCss:
                     fixedLines.append(line.replace(".css", ".min.css"))
                 else:

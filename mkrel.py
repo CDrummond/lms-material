@@ -153,14 +153,13 @@ def fixUtils():
 
 def minifyJs():
     info("...JS")
-
-    jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/common.min.js" % HTML_FOLDER]
+    jsCommand = ["java", "-jar", JS_COMPILER, "--compilation_level=WHITESPACE_ONLY", "--js_output_file=%s/js/common.min.js" % HTML_FOLDER]
     for entry in COMMON_JS_FILES:
         jsCommand.append("%s/js/%s" % (HTML_FOLDER, entry))
 
     subprocess.call(jsCommand, shell=False)
     for other in ["utils", "main", "main-desktop"]:
-        jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s.min.js" % (HTML_FOLDER, other), "%s/js/%s.js" % (HTML_FOLDER, other)]
+        jsCommand = ["java", "-jar", JS_COMPILER, "--compilation_level=WHITESPACE_ONLY", "--js_output_file=%s/js/%s.min.js" % (HTML_FOLDER, other), "%s/js/%s.js" % (HTML_FOLDER, other)]
         subprocess.call(jsCommand, shell=False)
 
 

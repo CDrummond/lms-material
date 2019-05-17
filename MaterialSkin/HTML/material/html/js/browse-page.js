@@ -28,16 +28,16 @@ const SELECT_ACTION           = 18;
 const UNSELECT_ACTION         = 19;
 const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
-const GRID_SIZES = [ {vw:284, iw:133, ih:185, clz:"image-grid-a"},
-                     {vw:294, iw:138, ih:190, clz:"image-grid-b"},
-                     {vw:304, iw:143, ih:195, clz:"image-grid-c"},
-                     {vw:314, iw:148, ih:200, clz:"image-grid-d"},
-                     {vw:324, iw:153, ih:205, clz:"image-grid-e"},
-                     {vw:334, iw:158, ih:210, clz:"image-grid-f"},
-                     {vw:344, iw:163, ih:215, clz:"image-grid-g"},
-                     {vw:354, iw:168, ih:220, clz:"image-grid-h"},
-                     {vw:364, iw:173, ih:225, clz:"image-grid-i"},
-                     {vw:0,   iw:178, ih:230, clz:"image-grid-j"} ];
+const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
+                     {iw:138, ih:190, clz:"image-grid-b"},
+                     {iw:143, ih:195, clz:"image-grid-c"},
+                     {iw:148, ih:200, clz:"image-grid-d"},
+                     {iw:153, ih:205, clz:"image-grid-e"},
+                     {iw:158, ih:210, clz:"image-grid-f"},
+                     {iw:163, ih:215, clz:"image-grid-g"},
+                     {iw:168, ih:220, clz:"image-grid-h"},
+                     {iw:173, ih:225, clz:"image-grid-i"},
+                     {iw:178, ih:230, clz:"image-grid-j"} ];
 
 var B_ACTIONS=[
     {cmd:"play",       icon:"play_circle_outline"},
@@ -1881,7 +1881,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             // Calculate what grid item size we should use...
             var size = 0;
-            for (var i=1; i<GRID_SIZES.length && listWidth>GRID_SIZES[i-1].vw; ++i) {
+            for (var i=1; i<GRID_SIZES.length && listWidth>((GRID_SIZES[i].iw*2)+8); ++i) {
                 size = i;
             }
 

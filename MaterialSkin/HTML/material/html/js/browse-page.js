@@ -93,8 +93,10 @@ const SECTION_PLAYLISTS = 4;
 const GROUP_PINNED = 0;
 const GROUP_MY_MUSIC = 1;
 const GROUP_OTHER_MUSIC = 2;
-const CONDUCTOR_GENRES = new Set(["Classical"]);
-const COMPOSER_GENRES = new Set(["Classical", "Jazz"]);
+const CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
+                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
+const COMPOSER_GENRES = new Set(["Jazz"]);
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -852,7 +854,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         group: GROUP_MY_MUSIC,
                                         id: item.id+"conductors"});
                 }
-                if (COMPOSER_GENRES.has(item.title)) {
+                if (COMPOSER_GENRES.has(item.title) || CONDUCTOR_GENRES.has(item.title)) {
                     this.items.splice(0, 0, { title: i18n("Composers"),
                                         command: ["artists"],
                                         params: ["role_id:COMPOSER", item.params[0]],

@@ -23,6 +23,7 @@
 17. More grid sizes (every 5px from 125px to 175px)
 18. Set icon font to block instead of having browser use a fallback in case of
     slow network.
+19. Expand the list of genres that will prompt for composer or conductor.
 
 0.6.0
 -----

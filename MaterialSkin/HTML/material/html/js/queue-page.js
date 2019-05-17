@@ -120,7 +120,7 @@ function parseResp(data, showTrackNum, index) {
                 var i = loop[idx];
                 var title = i.title;
                 if (showTrackNum && i.tracknum>0) {
-                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
+                    title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                 }
 
                 resp.items.push({

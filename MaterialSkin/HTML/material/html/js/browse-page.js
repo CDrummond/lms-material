@@ -83,7 +83,7 @@ const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
-const ALBUM_TAGS = "tags:jlyas";
+const ALBUM_TAGS = "tags:jlyasS";
 const TRACK_TAGS = "tags:ACdts";
 const SORT_KEY = "sort:";
 const SECTION_APPS = 1;
@@ -173,7 +173,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-btn>
       <img :key="items[col.id].image" :src="items[col.id].image" class="image-grid-item-img"></img>
       <div class="image-grid-text">{{items[col.id].title}}</div>
-      <div class="image-grid-text subtext">{{items[col.id].subtitle}}</div>
+      <div class="image-grid-text subtext" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
       <v-btn flat icon @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
@@ -194,7 +194,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
      <img v-lazy="items[col.id].image" class="image-grid-item-img"></img>
      <div class="image-grid-text">{{items[col.id].title}}</div>
-     <div class="image-grid-text subtext">{{items[col.id].subtitle}}</div>
+     <div class="image-grid-text subtext" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
      <v-btn flat icon v-if="items[col.id].menu && items[col.id].menu.length>0" @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
       <v-icon v-if="items[col.id].menu && items[col.id].menu.length>1">more_vert</v-icon>
       <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==B_ACTIONS[items[col.id].menu[0]].svg" :title="B_ACTIONS[items[col.id].menu[0]].title">{{B_ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
@@ -252,7 +252,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-subheader v-if="item.header">{{item.header}}</v-subheader>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-html="item.subtitle" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menu" @click.stop="itemMenu(item, index, $event)">
@@ -305,7 +305,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
     <v-list-tile-content v-else>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
-     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menu && item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
@@ -1149,6 +1149,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.itemAction(MORE_LIB_ACTION, item);
             } else {
                 this.menu={show:true, item:item, x:event.clientX, y:event.clientY, index:index};
+            }
+        },
+        clickSubtitle(item, index, event) {
+            if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+                this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
+                                {cancache:false, id:item.id, title:item.subtitle});
+            } else {
+                this.click(item, index, event);
             }
         },
         showHistory(event) {

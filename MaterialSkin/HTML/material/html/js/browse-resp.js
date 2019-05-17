@@ -45,6 +45,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     var i = loop[idx];
                     resp.items.push({
                                   id: "album_id:"+i.album_id,
+                                  artist_id: i.artist_id,
                                   title: i.album,
                                   command: ["tracks"],
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, SORT_KEY+"tracknum"],
@@ -456,6 +457,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 var album = {
                               id: "album_id:"+i.id,
+                              artist_id: i.artist_id,
                               title: title,
                               subtitle: i.artist ? i.artist : undefined,
                               command: ["tracks"],

@@ -43,6 +43,7 @@ function startMediaSession() {
                 navigator.mediaSession.playbackState = /*toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" :*/ "paused";
             });
         }, 15*1000);
+    }).catch(err => {
     });
 }
 

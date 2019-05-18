@@ -735,6 +735,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         toggleGroup(group) {
+            // When clicking back button, seems click somtimes falls through to collapse a group
+            if (undefined!=this.lastBackBtnPress && ((new Date())-this.lastBackBtnPress)<250) {
+                return;
+            }
+            this.lastBackBtnPress = undefined;
             this.$set(this.collapsed, group, !this.collapsed[group]);
             setLocalStorageVal('collapsed', this.collapsed.join(","));
         },
@@ -1282,6 +1287,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         backBtnPressed(home) {
+            this.lastBackBtnPress = new Date();
             if (home) {
                 this.goHome();
             } else {

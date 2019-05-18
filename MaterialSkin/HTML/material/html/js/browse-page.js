@@ -1926,17 +1926,20 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
+            const ITEM_BORDER = 8;
+            const JUMP_LIST_WIDTH = 32;
+            const VIEW_RIGHT_PADDING = 4;
             var changed = false;
-            var listWidth = this.pageElement.scrollWidth- ((/*scrollbar*/ this.mobileBrowser ? 0 : 20) + (/*jumplist*/ this.filteredJumplist.length>1 && this.items.length>10 ? 32 :0) + /*padding-right*/16);
+            var listWidth = this.pageElement.scrollWidth- ((/*scrollbar*/ this.mobileBrowser ? 0 : 20) + (this.filteredJumplist.length>1 && this.items.length>10 ? JUMP_LIST_WIDTH :0) + VIEW_RIGHT_PADDING);
 
             // Calculate what grid item size we should use...
             var size = 0;
-            for (var i=1; i<GRID_SIZES.length && listWidth>((GRID_SIZES[i].iw*2)+8); ++i) {
+            for (var i=1; i<GRID_SIZES.length && listWidth>((GRID_SIZES[i].iw+ITEM_BORDER)*2); ++i) {
                 size = i;
             }
 
             // How many columns?
-            var numColumns = Math.min(Math.floor(listWidth/GRID_SIZES[size].iw), this.items.length);
+            var numColumns = Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length);
             if (numColumns != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];

@@ -31,6 +31,7 @@
 22. Use view-recycler for all lists of more than 200 items.
 23. When fullscreen connection lost dialog is shown, immediately try a
     reconnect, and enable 'Reconnect' button 2 seconds after this.
+24. Ignore swipes of less than 75px.
 
 0.6.0
 -----

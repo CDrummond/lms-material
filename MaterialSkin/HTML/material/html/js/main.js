@@ -62,6 +62,9 @@ var app = new Vue({
                     }
                 }
             }
+            if (Math.abs(ev.touchstartX-ev.touchendX)<75) {
+                return;
+            }
             if ('l'==direction) {
                 if (this.$store.state.page=='browse') {
                     this.$store.commit('setPage', 'now-playing');

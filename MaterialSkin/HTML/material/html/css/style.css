@@ -888,3 +888,7 @@ div.v-subheader {
  cursor:pointer;
  opacity:0.5;
 }
+
+@media screen and (max-width: 550px) {
+    #home-button{display:none;}
+}

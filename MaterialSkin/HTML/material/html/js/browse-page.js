@@ -140,6 +140,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
+   <v-btn flat icon @click="goHome()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{headerTitle}}</v-flex>

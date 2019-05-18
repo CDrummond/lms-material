@@ -25,8 +25,9 @@
     slow network.
 19. Expand the list of genres that will prompt for composer or conductor.
 20. Add grid/list toggle button.
-21. Because of added grid/list toggle, remove 'Home' button - this can still be
-    accessed via menu. Alternatively, longpress on back button goes home.
+21. Because of added grid/list toggle, remove 'Home' button if screen width is
+    less than 550px - 'go home' can still be accessed via menu. Alternatively,
+    longpress on back button goes home.
 22. Use view-recycler for all lists of more than 200 items.
 23. When fullscreen connection lost dialog is shown, immediately try a
     reconnect, and enable 'Reconnect' button 2 seconds after this.

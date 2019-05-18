@@ -80,11 +80,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="libraries.length>0"></v-divider>
 
     <v-list-tile>
-     <v-select :items="gridItems" :label="i18n('Display items in a grid')" v-model="useGrid" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
       <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
@@ -211,7 +206,6 @@ Vue.component('lms-ui-settings', {
             darkUi: true,
             artistAlbumSort:'yearalbum',
             albumSort:'album',
-            useGrid:'albums',
             gridItems: [],
             letterOverlay:false,
             showMenuAudio:false,
@@ -262,7 +256,6 @@ Vue.component('lms-ui-settings', {
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
-            this.useGrid=this.$store.state.useGrid;
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.serverMenus = this.$store.state.serverMenus;
@@ -341,7 +334,6 @@ Vue.component('lms-ui-settings', {
                                                   artistAlbumSort:this.artistAlbumSort,
                                                   albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
-                                                  useGrid:this.useGrid,
                                                   letterOverlay:this.letterOverlay,
                                                   showMenuAudio:this.showMenuAudio,
                                                   serverMenus:this.serverMenus,
@@ -380,7 +372,6 @@ Vue.component('lms-ui-settings', {
                                      artistAlbumSort:this.artistAlbumSort,
                                      albumSort:this.albumSort,
                                      autoScrollQueue:this.autoScrollQueue,
-                                     useGrid:this.useGrid,
                                      letterOverlay:this.letterOverlay,
                                      showMenuAudio:this.showMenuAudio,
                                      serverMenus:this.serverMenus,

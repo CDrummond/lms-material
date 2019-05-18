@@ -28,13 +28,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('sortFavorites', state.sortFavorites);
         browseDisplayChanged = true;
     }
-    if (undefined!=val.useGrid && state.useGrid!=val.useGrid) {
-        state.useGrid = val.useGrid;
-        setLocalStorageVal('useGrid', state.useGrid);
-        browseDisplayChanged = true;
-        // Clear lsit cache, as this has iamge URLs which contain different size for list/grid
-        clearListCache(true);
-    }
     if (undefined!=val.letterOverlay && state.letterOverlay!=val.letterOverlay) {
         state.letterOverlay = val.letterOverlay;
         setLocalStorageVal('letterOverlay', state.letterOverlay);
@@ -107,15 +100,6 @@ function updateUiSettings(state, val) {
     }
 }
 
-function convertGridConfigItem(val) {
-    if ('true'==val || true==val) {
-        return 'always';
-    } else if ('false'==val || false==val) {
-        return 'never';
-    }
-    return val;
-}
-
 const store = new Vuex.Store({
     state: {
         players: null, // List of players
@@ -123,7 +107,6 @@ const store = new Vuex.Store({
         darkUi: true,
         artistAlbumSort:'yearalbum',
         albumSort:'album',
-        useGrid:'albums',
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
@@ -233,7 +216,6 @@ const store = new Vuex.Store({
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
-            state.useGrid = convertGridConfigItem(getLocalStorageVal('useGrid', state.useGrid));
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
@@ -269,7 +251,6 @@ const store = new Vuex.Store({
                                  artistAlbumSort: getLocalStorageVal('artistAlbumSort', undefined==prefs.artistAlbumSort ? state.artistAlbumSort : prefs.artistAlbumSort),
                                  albumSort: getLocalStorageVal('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
                                  autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
-                                 useGrid: convertGridConfigItem(getLocalStorageVal('useGrid', undefined==prefs.useGrid ? state.useGrid : prefs.useGrid)),
                                  letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                  showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),

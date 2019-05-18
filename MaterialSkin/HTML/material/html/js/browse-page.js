@@ -28,6 +28,8 @@ const SELECT_ACTION           = 18;
 const UNSELECT_ACTION         = 19;
 const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
+const USE_GRID_ACTION         = 22;
+const USE_LIST_ACTION         = 23;
 const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:138, ih:190, clz:"image-grid-b"},
                      {iw:143, ih:195, clz:"image-grid-c"},
@@ -61,7 +63,9 @@ var B_ACTIONS=[
     {cmd:"select",     icon:"check_box_outline_blank"},
     {cmd:"unselect",   icon:"check_box"},
     {cmd:"rating",     icon:"stars"},
-    {cmd:"search-lib", icon:"search"}
+    {cmd:"search-lib", icon:"search"},
+    {cmd:"use-grid",   icon:"grid_on"},
+    {cmd:"use-list",   icon:"grid_off"}
 ];
 
 const MAX_GRID_TEXT_LEN = 80;
@@ -136,8 +140,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
-   <v-btn flat icon @click="goHome()" class="toolbar-button"><v-icon>home</v-icon></v-btn>
-   <v-btn flat icon @click="goBack()" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
@@ -397,8 +400,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
-                      pinned: new Set(),
-                      useGrid: this.$store.state.useGrid};
+                      pinned: new Set()};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
@@ -497,6 +499,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             B_ACTIONS[UNSELECT_ACTION].title=i18n("Un-select");
             B_ACTIONS[RATING_ACTION].title=i18n("Set rating");
             B_ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
+            B_ACTIONS[USE_GRID_ACTION].title=B_ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
@@ -670,7 +673,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions=[];
                 this.isTop = false;
                 var changedView = this.grid.use != resp.useGrid;
-                this.grid = {use: resp.useGrid, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
+                this.grid = {use: resp.canUseGrid && isSetToUseGrid(command), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
 
                 if (this.current && this.current.menu) {
                     for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -706,6 +709,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 if (this.tbarActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_ACTION];
+                }
+                if (resp.canUseGrid) {
+                    this.tbarActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
                 }
                 if (this.listSize<0) {
                     this.listSize=this.items.length;
@@ -1169,7 +1175,34 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         headerAction(act) {
-            this.itemAction(act, this.current);
+            if (USE_LIST_ACTION==act) {
+                this.changeLayout(true);
+            } else if (USE_GRID_ACTION==act) {
+                this.changeLayout(false);
+            } else {
+                this.itemAction(act, this.current);
+            }
+        },
+        changeLayout(useGrid) {
+            if (this.grid.use!=useGrid) {
+                this.grid.use=useGrid;
+                this.$nextTick(function () {
+                    this.setScrollElement();
+                    this.setBgndCover();
+                    this.layoutGrid();
+                    changeImageUrls(this.items, this.grid.use);
+                    setUseGrid(this.command, this.grid.use);
+                    var af = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
+                    var at = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
+                    for (var i=0, len=this.tbarActions.length; i<len; ++i) {
+                        if (this.tbarActions[i] == af) {
+                            this.tbarActions[i] = at;
+                            break;
+                        }
+                    }
+                    this.$forceUpdate(); // Otherwise tbarActions update is not always noticed
+                });
+            }
         },
         refreshList() {
             this.clearSelection();
@@ -1245,6 +1278,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 while (index<this.history.length-1) {
                     this.history.pop();
                 }
+                this.goBack();
+            }
+        },
+        backBtnPressed(home) {
+            if (home) {
+                this.goHome();
+            } else {
                 this.goBack();
             }
         },
@@ -2035,7 +2075,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.checkFeature(["can", "cdplayer", "items", "?"], "cdPlayer", TOP_CDPLAYER_ID);
 
         bus.$on('browseDisplayChanged', function(act) {
-            this.options.useGrid=this.$store.state.useGrid;
             if (this.playerId() && this.$store.state.serverMenus) {
                 this.playerMenu();
             }

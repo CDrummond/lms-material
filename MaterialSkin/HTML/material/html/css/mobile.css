@@ -219,3 +219,7 @@
  display:none;
 }
 
+.inactive-nav {
+ opacity:0.75;
+}
+

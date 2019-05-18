@@ -28,6 +28,8 @@
 21. Because of added grid/list toggle, remove 'Home' button - this can still be
     accessed via menu. Alternatively, longpress on back button goes home.
 22. Use view-recycler for all lists of more than 200 items.
+23. When fullscreen connection lost dialog is shown, immediately try a
+    reconnect, and enable 'Reconnect' button 2 seconds after this.
 
 0.6.0
 -----

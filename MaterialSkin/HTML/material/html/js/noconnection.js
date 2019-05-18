@@ -42,6 +42,7 @@ Vue.component('lms-noconnection', {
                         this.show = true;
                         this.initialTimer = undefined;
                         this.disableBtn = false;
+                        this.reconnect(true);
                     }.bind(this), 10000);
                 }
             }
@@ -54,15 +55,16 @@ Vue.component('lms-noconnection', {
         i18n(str) {
             return this.show ? i18n(str) : str;
         },
-        reconnect() {
+        reconnect(first) {
             if (!this.disableBtn) {
                 bus.$emit("reconnect");
-                // Disable reconnect button for 10 seconds after pressed
+                // Disable reconnect button for 5 seconds after pressed, or 2 seconds
+                // if this was called after 1st 10 seconds of network disconnect
                 this.disableBtn = true;
                 this.pressTimer = setTimeout(function () {
                     this.pressTimer = undefined;
                     this.disableBtn = false;
-                }.bind(this), 10000);
+                }.bind(this), first ? 2000 : 5000);
             }
         },
         cancelTimers() {

@@ -27,6 +27,7 @@
 20. Add grid/list toggle button.
 21. Because of added grid/list toggle, remove 'Home' button - this can still be
     accessed via menu. Alternatively, longpress on back button goes home.
+22. Use view-recycler for all lists of more than 200 items.
 
 0.6.0
 -----

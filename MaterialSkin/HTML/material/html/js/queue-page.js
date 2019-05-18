@@ -195,7 +195,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
-  <RecycleScroller v-if="items.length>LMS_MAX_QUEUE_NON_RECYLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key">
+  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key">
    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
     <v-list-tile-avatar :tile="true" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
@@ -657,7 +657,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (scroll || (pulse && this.items.length>0)) {
                 if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the browse/nowplaying page!
                     if (this.currentIndex<this.items.length) {
-                        if (this.items.length<=LMS_MAX_QUEUE_NON_RECYLER_ITEMS) {
+                        if (this.items.length<=LMS_MAX_NON_SCROLLER_ITEMS) {
                             var elem=document.getElementById('track'+this.currentIndex);
                             if (elem) {
                                 if (scroll) {

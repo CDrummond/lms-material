@@ -166,7 +166,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1 && items.length>10}">
-  <RecycleScroller v-if="items.length>LMS_MIN_GRID_SCROLLER_ITEMS" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih" page-mode key-field="id">
+  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih" page-mode key-field="id">
    <table slot-scope="{item, index}" :class="['full-width', GRID_SIZES[grid.size].clz]">
     <td align="center" style="vertical-align: top" v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat align="left" class="image-grid-item">
      <div v-if="col.blank" class="image-grid-item"></div>
@@ -244,7 +244,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <RecycleScroller v-if="items.length>=LMS_MIN_LIST_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
+  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}">
     <v-list-tile-avatar v-if="item.selected || item.image" :tile="true" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
@@ -2041,7 +2041,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.pageElement = document.getElementById("browse-view");
         let timeout = undefined;
         window.addEventListener('resize', () => {
-            if (this.items.length>=(this.grid.use ? LMS_MIN_GRID_SCROLLER_ITEMS : LMS_MIN_LIST_SCROLLER_ITEMS)) {
+            if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
                 if (timeout) {
                     clearTimeout(timeout);
                 }

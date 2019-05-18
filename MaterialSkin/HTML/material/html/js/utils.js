@@ -555,3 +555,32 @@ function addPart(str, part) {
     return str ? str+SEPARATOR+part : part;
 }
 
+function commandGridKey(command) {
+    return command.command[0]+"-grid";
+}
+
+function isSetToUseGrid(command) {
+    return getLocalStorageBool(commandGridKey(command), true);
+}
+
+function setUseGrid(command, use) {
+    setLocalStorageVal(commandGridKey(command), use);
+}
+
+function changeImageUrls(items, grid) {
+    if (undefined==items || items.length<1) {
+        return;
+    }
+    var f = grid ? LMS_LIST_IMAGE_SIZE : LMS_GRID_IMAGE_SIZE;
+    var t = grid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE;
+    if (!items[0].image || !items[0].image.includes(f)) {
+        return;
+    }
+
+    for (var i=0, len=items.length; i<len; ++i) {
+        if (items[i].image) {
+            items[i].image=items[i].image.replace(f, t);
+        }
+    }
+}
+

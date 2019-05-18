@@ -64,6 +64,12 @@ Vue.component('lms-ui-settings', {
 
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Browse')}}</v-header>
+
+    <v-list-tile v-if="libraries.length>0">
+     <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+    </v-list-tile>
+    <v-divider v-if="libraries.length>0"></v-divider>
+
     <v-list-tile>
      <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -73,11 +79,6 @@ Vue.component('lms-ui-settings', {
      <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
-
-    <v-list-tile v-if="libraries.length>0">
-     <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
-    </v-list-tile>
-    <v-divider v-if="libraries.length>0"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">

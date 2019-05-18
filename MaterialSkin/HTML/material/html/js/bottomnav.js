@@ -10,7 +10,7 @@ Vue.component('lms-bottomnav', {
 <v-footer height="auto" class="lms-footer">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
-   <v-btn flat class="lms-bottom-nav-button" @click="setPage(item.page)">
+   <v-btn flat class="lms-bottom-nav-button" @click="setPage(item.page)" v-bind:class="{'inactive-nav': activeBtn!=index}">
     <span>{{item.text}}</span>
     <v-icon>{{item.icon}}</v-icon>
    </v-btn>

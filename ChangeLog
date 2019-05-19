@@ -32,6 +32,7 @@
 23. When fullscreen connection lost dialog is shown, immediately try a
     reconnect, and enable 'Reconnect' button 2 seconds after this.
 24. Ignore swipes of less than 75px.
+25. Make web-app open fullscreen.
 
 0.6.0
 -----

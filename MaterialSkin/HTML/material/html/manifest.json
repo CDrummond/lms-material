@@ -3,7 +3,7 @@
   "short_name": "LMS",
   "theme_color": "#424242",
   "background_color": "#424242",
-  "display": "standalone",
+  "display": "fullscreen",
   "scope": "/material",
   "start_url": "/material",
   "icons": [

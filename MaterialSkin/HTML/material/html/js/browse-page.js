@@ -959,20 +959,35 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, suppressNotification) {
-            if (!this.playerId()) {
+            if (act==SEARCH_LIB_ACTION) {
+                this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
+                                command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
+            } else if (act===MORE_ACTION) {
+                this.fetchItems(this.buildCommand(item, B_ACTIONS[act].cmd), item);
+            } else if (act===MORE_LIB_ACTION) {
+                if (item.id) {
+                    if (item.id.startsWith("artist_id:")) {
+                        this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                    } else if (item.id.startsWith("album_id:")) {
+                        this.fetchItems({command: ["albuminfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                    } else if (item.id.startsWith("track_id:")) {
+                        this.fetchItems({command: ["trackinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                    } else if (item.id.startsWith("genre_id:")) {
+                        this.fetchItems({command: ["genreinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                    }
+                }
+            } else if (act===PIN_ACTION) {
+                this.pin(item, true);
+            } else if (act===UNPIN_ACTION) {
+                this.pin(item, false);
+            } else if (!this.playerId()) {  // *************** NO PLAYER ***************
                 bus.$emit('showError', undefined, i18n("No Player"));
-                return;
-            }
-
-            if (act===RENAME_PL_ACTION) {
+            } else if (act===RENAME_PL_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename playlist"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};
             } else if (act==RENAME_FAV_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
-            } else if (act==SEARCH_LIB_ACTION) {
-                this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
-                                command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
             } else if (act==ADD_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add');
             } else if (act==EDIT_FAV_ACTION) {
@@ -1074,24 +1089,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }).catch(err => {
                     logAndShowError(err, undefined, ["albums"], params, 0, 1);
                 });
-            } else if (act===MORE_ACTION) {
-                this.fetchItems(this.buildCommand(item, B_ACTIONS[act].cmd), item);
-            } else if (act===MORE_LIB_ACTION) {
-                if (item.id) {
-                    if (item.id.startsWith("artist_id:")) {
-                        this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
-                    } else if (item.id.startsWith("album_id:")) {
-                        this.fetchItems({command: ["albuminfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
-                    } else if (item.id.startsWith("track_id:")) {
-                        this.fetchItems({command: ["trackinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
-                    } else if (item.id.startsWith("genre_id:")) {
-                        this.fetchItems({command: ["genreinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
-                    }
-                }
-            } else if (act===PIN_ACTION) {
-                this.pin(item, true);
-            } else if (act===UNPIN_ACTION) {
-                this.pin(item, false);
             } else if (SELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
                 if (idx<0) {

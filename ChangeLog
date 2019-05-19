@@ -1,3 +1,7 @@
+0.7.1
+-----
+1. Fix clearing selection when adding, inserting, or playing tracks.
+
 0.7.0
 -----
  1. Use role/genre/artist filter when listing album tracks in more scenarios.

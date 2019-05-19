@@ -1132,6 +1132,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
+                    this.clearSelection();
                     if (!this.desktop) {
                         if (act===PLAY_ACTION) {
                             this.$store.commit('setPage', 'now-playing');
@@ -1821,8 +1822,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
                     if (idx>-1) {
                         this.items[index].menu[idx]=SELECT_ACTION;
-                        this.items[index].selected = false;
                     }
+                    this.items[index].selected = false;
                 }
             }
             this.selection = [];

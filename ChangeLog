@@ -2,6 +2,7 @@
 -----
 1. Fix clearing selection when adding, inserting, or playing tracks.
 2. Fix composers not showing in now playing and queue.
+3. Fix scrolling to current queue item for desktop layout.
 
 0.7.0
 -----

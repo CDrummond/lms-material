@@ -21,7 +21,20 @@ var app = new Vue({
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         initApp(this);
         bus.$on('dlg.open', function(name, a, b) {
-            this.dialogs[name] = true; // Mount
+            if (!this.dialogs[name]) {
+                var script = loadScript(name);
+                if (script) {
+                    script.onload = (() => {
+                        this.dialogs[name] = true; // Mount
+                        this.$forceUpdate();
+                        this.$nextTick(function () {
+                            bus.$emit(name+".open", a, b);
+                        });
+                    });
+                    return;
+                }
+                this.dialogs[name] = true; // Mount
+            }
             this.$nextTick(function () {
                 bus.$emit(name+".open", a, b);
             });

@@ -584,3 +584,26 @@ function changeImageUrls(items, grid) {
     }
 }
 
+function loadJavaScript(js) {
+    var id = js.split('?')[0].split('/').join('_');
+    if (undefined!=document.getElementById(id)) {
+        return undefined;
+    }
+    var script = document.createElement('script');
+    script.src = js;
+    script.id = id
+    document.body.appendChild(script);
+    return script;
+}
+
+const SCRIPT_MAP = { uisettings: "ui-settings", playersettings: "player-settings", info: "information", sync: "sync-dialog",
+                     group: "groupplayers-dialog", manage: "manage-players", rndmix: "randommix-dialog",
+                     favorite: "favorite-dialog", rating: "rating-dialog", sleep: "sleep-dialog" };
+function loadScript(name) {
+    var realname = SCRIPT_MAP[name];
+    if (undefined==realname) {
+        realname = name;
+    }
+    return loadJavaScript("html/js/"+realname+".js?r="+LMS_MATERIAL_REVISION);
+}
+

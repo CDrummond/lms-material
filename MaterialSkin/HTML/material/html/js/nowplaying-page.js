@@ -477,6 +477,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showPic() {
+            var script = loadJavaScript("html/lib/photoswipe/photoswipe.min.js?r=4.1.2");
+            if (script) { // It is being loaded
+                script.onload = (() => {
+                    script = loadJavaScript("html/lib/photoswipe/photoswipe-ui-default.min.js?r=4.1.2");
+                    script.onload = (() => {
+                        this.$forceUpdate();
+                        this.$nextTick(function () {
+                            this.showPic();
+                        });
+                    });
+                });
+                return;
+            }
             var npPage = this;
             this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, [{src:this.coverUrl, w:0, h:0}], {index: 0});
             this.gallery.listen('gettingData', function (index, item) {

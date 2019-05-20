@@ -100,7 +100,7 @@ const GROUP_OTHER_MUSIC = 2;
 const CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
                                   "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
-const COMPOSER_GENRES = new Set(["Jazz"]);
+const COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...CONDUCTOR_GENRES]);
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `

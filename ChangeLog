@@ -1,6 +1,7 @@
 0.7.1
 -----
 1. Fix clearing selection when adding, inserting, or playing tracks.
+2. Fix composers not showing in now playing and queue.
 
 0.7.0
 -----

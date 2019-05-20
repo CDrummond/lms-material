@@ -88,9 +88,11 @@ function buildSubtitle(i) {
     if (i.composer && i.genre && COMPOSER_GENRES.has(i.genre)) {
         var composer_ids = i.composer_ids ? i.composer_ids.split(",") : undefined;
         if (composer_ids && 1==composer_ids.length) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
-        } else {
-            subtitle=addPart(subtitle, i.composer);
+            if (IS_MOBILE) {
+                subtitle=addPart(subtitle, i.composer);
+            } else {
+                subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+            }
         }
     }
     var remoteTitle = checkRemoteTitle(i);

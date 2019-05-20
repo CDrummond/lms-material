@@ -386,18 +386,18 @@ var lmsQueue = Vue.component("lms-queue", {
             this.isActive = this.$store.state.page=='queue';
             bus.$on('nav', function(page) {
                 if ('queue'==page) {
-                    if (!this.isActive) {
-                        this.isActive = true;
-                        if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
-                            this.$nextTick(function () {
-                                this.scrollToCurrent();
-                            });
-                        }
+                    this.isActive = true;
+                    if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
+                        this.$nextTick(function () {
+                            this.scrollToCurrent();
+                        });
                     }
                 } else {
                     this.isActive = false;
                 }
             }.bind(this));
+        } else {
+            this.isActive;
         }
     },
     methods: {

@@ -397,7 +397,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }.bind(this));
         } else {
-            this.isActive;
+            this.isActive = true;
         }
     },
     methods: {

@@ -272,8 +272,9 @@ def updatePublicXml(version, zipFile, sha1):
 if 1==len(sys.argv):
     usage()
 version=sys.argv[1]
-checkVersion(version)
-checkVersionExists(version)
+if version!="test":
+    checkVersion(version)
+    checkVersionExists(version)
 prepare()
 updateInstallXml(version)
 if MINIFY:
@@ -281,6 +282,7 @@ if MINIFY:
 
 zipFile = createZip(version)
 sha1 = getSha1Sum(zipFile)
-updatePublicXml(version, zipFile, sha1)
+if version!="test":
+    updatePublicXml(version, zipFile, sha1)
 cleanup()
 

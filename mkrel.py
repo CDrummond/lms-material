@@ -119,7 +119,7 @@ def fixUtils():
     text=""
     with open("%s/js/utils.js" % HTML_FOLDER, "r") as f:
         for line in f.readlines():
-            text+=line.replace(".css?", ".min.css?")
+            text+=line.replace(".css?", ".min.css?").replace(".js?", ".min.js?").replace(".min.min.js?", ".min.js?")
     with open("%s/js/utils.js" % HTML_FOLDER, "w") as f:
          f.write(text)
 

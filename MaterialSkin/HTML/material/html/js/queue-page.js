@@ -275,7 +275,6 @@ var lmsQueue = Vue.component("lms-queue", {
         this.timestamp = 0;
         this.currentIndex = -1;
         this.items = [];
-        this.isVisible = true;
         this.autoScrollRequired = false;
         this.previousScrollPos = 0;
     },
@@ -383,21 +382,15 @@ var lmsQueue = Vue.component("lms-queue", {
         });
 
         if (!this.desktop) {
-            this.isActive = this.$store.state.page=='queue';
             bus.$on('nav', function(page) {
                 if ('queue'==page) {
-                    this.isActive = true;
                     if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
                         this.$nextTick(function () {
                             this.scrollToCurrent();
                         });
                     }
-                } else {
-                    this.isActive = false;
                 }
             }.bind(this));
-        } else {
-            this.isActive;
         }
     },
     methods: {
@@ -649,7 +642,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         scrollToCurrent(pulse) {
-            if (!this.isActive) {
+            if (!this.desktop && this.$store.state.page!='queue') {
                 this.autoScrollRequired = true;
                 return;
             }
@@ -657,31 +650,27 @@ var lmsQueue = Vue.component("lms-queue", {
             this.autoScrollRequired = false;
             var scroll = this.items.length>5 && this.currentIndex>=0;
             if (scroll || (pulse && this.items.length>0)) {
-                if (this.isVisible) { // Only scroll page if visible - otherwise we'd scroll the browse/nowplaying page!
-                    if (this.currentIndex<this.items.length) {
-                        if (this.items.length<=LMS_MAX_NON_SCROLLER_ITEMS) {
-                            var elem=document.getElementById('track'+this.currentIndex);
-                            if (elem) {
-                                if (scroll) {
-                                    setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
-                                }
-                                if (pulse) {
-                                    animate(elem, 1.0, 0.2);
-                                }
+                if (this.currentIndex<this.items.length) {
+                    if (this.items.length<=LMS_MAX_NON_SCROLLER_ITEMS) {
+                        var elem=document.getElementById('track'+this.currentIndex);
+                        if (elem) {
+                            if (scroll) {
+                                setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
                             }
-                        } else if (scroll) { // TODO: pulse not implemented!
-                            var pos = this.currentIndex>3 ? (this.currentIndex-3)*LMS_LIST_ELEMENT_SIZE : 0;
-                            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-                            setTimeout(function () {
-                                setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-                            }.bind(this), 100);
+                            if (pulse) {
+                                animate(elem, 1.0, 0.2);
+                            }
                         }
-                    } else if (scroll) {
-                        this.autoScrollRequired = true;
-                        this.fetchItems();
+                    } else if (scroll) { // TODO: pulse not implemented!
+                        var pos = this.currentIndex>3 ? (this.currentIndex-3)*LMS_LIST_ELEMENT_SIZE : 0;
+                        setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                        setTimeout(function () {
+                            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                        }.bind(this), 100);
                     }
                 } else if (scroll) {
                     this.autoScrollRequired = true;
+                    this.fetchItems();
                 }
             }
         },

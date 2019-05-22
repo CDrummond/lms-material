@@ -382,7 +382,7 @@ var lmsQueue = Vue.component("lms-queue", {
         });
 
         if (!this.desktop) {
-            bus.$on('nav', function(page) {
+            bus.$on('pageChanged', function(page) {
                 if ('queue'==page) {
                     if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
                         this.$nextTick(function () {

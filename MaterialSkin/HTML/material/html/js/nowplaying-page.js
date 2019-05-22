@@ -558,6 +558,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (data && data.result && (data.result.lyrics || data.result.error)) {
                         this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
                     }
+                }).catch(error => {
+                    this.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
                 });
             }
         },
@@ -605,6 +607,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         if (data && data.result && (data.result.biography || data.result.error)) {
                             this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
                         }
+                    }).catch(error => {
+                        this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
                     });
                 }
             }
@@ -641,6 +645,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (data && data.result && (data.result.albumreview || data.result.error)) {
                         this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
                     }
+                }).catch(error => {
+                    this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
                 });
             }
         },

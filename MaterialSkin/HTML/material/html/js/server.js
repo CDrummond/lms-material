@@ -103,7 +103,8 @@ function lmsCommand(playerid, command, isList) {
                 method: "slim.request",
                 params: [playerid, command]
             },
-            cancelToken: canCancel ? lmsListSource.token : undefined };
+            cancelToken: canCancel ? lmsListSource.token : undefined,
+            timeout: isList ? LMS_LIST_COMMAND_TIMEOUT : LMS_COMMAND_TIMEOUT };
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", args.data.params);
     }

@@ -1,7 +1,9 @@
 0.7.2
 -----
-1. Fix clicking on 'Browse' bottom nnavigation button in mobile view causing
+1. Fix clicking on 'Browse' bottom navigation button in mobile view causing
    browse view to navigate back when changing from 'Now Playing'/'Queue'
+2. Set timeout of 15 seconds for browsing commands, and 2 seconds for control
+   commands.
 
 0.7.1
 -----

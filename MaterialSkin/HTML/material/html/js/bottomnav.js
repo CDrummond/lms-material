@@ -39,8 +39,11 @@ Vue.component('lms-bottomnav', {
                          ];
         },
         setPage(page) {
-            this.$store.commit('setPage', page);
-            bus.$emit('nav', page);
+            if (page!=this.$store.state.page) {
+                this.$store.commit('setPage', page);
+            } else {
+                bus.$emit('nav', page);
+            }
         }
     },
     computed: {

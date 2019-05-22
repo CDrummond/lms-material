@@ -423,17 +423,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.grid = {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
 
         if (!this.desktop) {
-            this.isActive = this.$store.state.page=='browse';
             // Clicking on 'browse' nav button whilst in browse page goes back.
             bus.$on('nav', function(page) {
-                if ('browse'==page) {
-                    if (!this.isActive) {
-                        this.isActive = true;
-                    } else if (this.history.length>0) {
-                        this.goBack();
-                    }
-                } else {
-                    this.isActive = false;
+                if ('browse'==page && this.history.length>0) {
+                    this.goBack();
                 }
             }.bind(this));
         }

@@ -301,6 +301,7 @@ const store = new Vuex.Store({
             if (val!=state.page) {
                 state.page = val;
                 setLocalStorageVal('page', val);
+                bus.$emit('pageChanged', val);
             }
         }
     }

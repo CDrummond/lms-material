@@ -1,3 +1,8 @@
+0.7.2
+-----
+1. Fix clicking on 'Browse' bottom nnavigation button in mobile view causing
+   browse view to navigate back when changing from 'Now Playing'/'Queue'
+
 0.7.1
 -----
 1. Fix clearing selection when adding, inserting, or playing tracks.

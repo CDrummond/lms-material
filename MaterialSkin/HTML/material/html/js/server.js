@@ -104,7 +104,7 @@ function lmsCommand(playerid, command, isList) {
                 params: [playerid, command]
             },
             cancelToken: canCancel ? lmsListSource.token : undefined,
-            timeout: isList ? LMS_LIST_COMMAND_TIMEOUT : LMS_COMMAND_TIMEOUT };
+            timeout: isList ? LMS_LIST_COMMAND_TIMEOUT : command.length>0 && command[0]=="musicartistinfo" ? LMS_MAI_TIMEOUT : LMS_COMMAND_TIMEOUT };
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", args.data.params);
     }

@@ -2,8 +2,8 @@
 -----
 1. Fix clicking on 'Browse' bottom navigation button in mobile view causing
    browse view to navigate back when changing from 'Now Playing'/'Queue'
-2. Set timeout of 15 seconds for browsing commands, and 2 seconds for control
-   commands.
+2. Set timeout of 20 seconds for browsing commands, 5 seconds for control
+   commands, and 30 seconds for MAI commands.
 
 0.7.1
 -----

@@ -1720,6 +1720,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id.startsWith("trackstat")) {
                                     item.icon = "bar_chart";
                                 } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
+                                    if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
+                                        item.range={count: 300};
+                                    }
                                     item.icon = "library_music";
                                 } else if (c.icon) {
                                     if (c.icon.endsWith("/albums.png")) {

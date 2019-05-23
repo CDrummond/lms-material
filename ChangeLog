@@ -9,6 +9,8 @@
    button (which replaces 'i') for 1/4 second.
 5. In sleep dialog, show all options in a clickable list.
 6. Disable "Show track information" from now-playing context menu if no track_id
+7. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
+   of 300 items.
 
 0.7.1
 -----

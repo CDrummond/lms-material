@@ -7,7 +7,7 @@
 
 Vue.component('lms-sleep-dialog', {
     template: `
-<v-dialog v-model="show" width="600" persistent class="lms-dialog">
+<v-dialog v-model="show" width="450" persistent class="lms-dialog">
  <v-card>
   <v-card-text>
    <v-container grid-list-md>
@@ -15,16 +15,22 @@ Vue.component('lms-sleep-dialog', {
      <v-flex xs12 v-if="undefined==player">{{i18n("Set sleep time for all players.")}}</v-flex>
      <v-flex xs12 v-else>{{i18n("Set sleep time for '%1'.", player.name)}}</v-flex>
      <v-flex xs12>
-      <v-select :items="items" :label="i18n('Sleep in')" v-model="duration" item-text="label" item-value="duration"></v-select>
+      <v-list>
+       <template v-for="(item, index) in items">
+        <v-list-tile @click="setSleep(item.duration)">
+         <v-list-tile-title class="sleep-item">{{item.label}}</v-list-tile-title>
+        </v-list-tile>
+        <v-divider></v-divider>
+        </template>
+      </v-list>
      </v-flex>
-     <v-flex xs12 v-if="undefined!=sleepTime">{{i18n("%1 until sleep", formatSeconds(sleepTime))}}</v-flex>
     </v-layout>
    </v-container>
   </v-card-text>
   <v-card-actions>
+   <p v-if="undefined!=sleepTime">{{i18n("%1 until sleep", formatSeconds(sleepTime))}}</p>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="set()">{{i18n('Set')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -35,7 +41,6 @@ Vue.component('lms-sleep-dialog', {
             show: false,
             player: undefined,
             items: [],
-            duration: 0,
             sleepTime :undefined
         }
     },
@@ -89,15 +94,15 @@ Vue.component('lms-sleep-dialog', {
             this.show=false;
             this.cancelTimer();
         },
-        set() {
+        setSleep(duration) {
             if (undefined==this.player) {
                 this.$store.state.players.forEach(p => {
-                    lmsCommand(p.id, -1==this.duration ? ["jiveendoftracksleep"] : ["sleep", this.duration]).then(({data}) => {
+                    lmsCommand(p.id, -1==duration ? ["jiveendoftracksleep"] : ["sleep", duration]).then(({data}) => {
                         bus.$emit('updatePlayer', p.id);
                     });
                 });
             } else {
-                lmsCommand(this.player.id, -1==this.duration ? ["jiveendoftracksleep"] : ["sleep", this.duration]).then(({data}) => {
+                lmsCommand(this.player.id, -1==duration ? ["jiveendoftracksleep"] : ["sleep", duration]).then(({data}) => {
                     bus.$emit('updatePlayer', this.player.id);
                 });
             }

@@ -58,3 +58,9 @@ force one or the other.
 
 1. `http://<yourserver>:9000/material/mobile` will force mobile layout
 2. `http://<yourserver>:9000/material/desktop` will force desktop layout
+
+## Donations
+
+I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url)

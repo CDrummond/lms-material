@@ -4,6 +4,7 @@
    browse view to navigate back when changing from 'Now Playing'/'Queue'
 2. Set timeout of 20 seconds for browsing commands, 5 seconds for control
    commands, and 30 seconds for MAI commands.
+3. Better positioning of song details in portrait mobile now-playing.
 
 0.7.1
 -----

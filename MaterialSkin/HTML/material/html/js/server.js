@@ -89,7 +89,7 @@ const CancelToken = axios.CancelToken;
 var lmsListSource = undefined;
 
 function lmsCommand(playerid, command, isList) {
-    var canCancel = isList && !(command.length>2 && command[0]=='menu' || command[1]=='items');
+    var canCancel = isList || (command.length>2 && (command[0]=='menu' || command[1]=='items'));
 
     if (canCancel) {
         lmsListSource = CancelToken.source();

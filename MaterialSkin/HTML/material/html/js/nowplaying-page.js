@@ -205,6 +205,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
   </div>
   <div v-else>
+   <div v-bind:style="{height: portraitPad+'px'}"></div>
    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
@@ -212,7 +213,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :src="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu"></img>
+   <img v-if="!info.show" :src="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
@@ -281,6 +282,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true,
+                 portraitPad: 0,
                  landscape: false,
                  wide: false,
                  largeView: false,
@@ -297,6 +299,32 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 this.largeView = val;
             }.bind(this));
+        } else {
+            this.portraitElem = document.getElementById("np-page");
+            this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
+            this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+            this.calcPortraitPad();
+            var npView = this;
+            window.addEventListener('resize', () => {
+                if (npView.resizeTimeout) {
+                    clearTimeout(npView.resizeTimeout);
+                }
+                npView.resizeTimeout = setTimeout(function () {
+                    // Only update if changed
+                    if (!npView.landscape && !npView.portraitElem) {
+                        npView.portraitElem = document.getElementById("np-page");
+                        npView.lastWidth = npView.portraitElem ? npView.portraitElem.offsetWidth : 0;
+                        npView.lastHeight = npView.portraitElem ? npView.portraitElem.offsetHeight : 0;
+                    }
+                    if (npView.portraitElem &&
+                        (Math.abs(npView.lastWidth-npView.portraitElem.offsetWidth)>4 || Math.abs(npView.lastHeight-npView.portraitElem.offsetHeight))) {
+                        npView.lastWidth = npView.portraitElem.offsetWidth;
+                        npView.lastHeight = npView.portraitElem.offsetHeight;
+                        npView.calcPortraitPad();
+                    }
+                    npView.resizeTimeout = undefined;
+                }, 50);
+            }, false);
         }
         this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {
@@ -464,6 +492,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
             this.menu.text[0]=i18n("Show image");
             this.menu.text[1]=i18n("Show track information");
+        },
+        calcPortraitPad() {
+            // Calculate padding, so that (in portrait mode) text is not too far from cover
+            if (!this.portraitElem || this.landscape) {
+                this.portraitPad = 0;
+            } else {
+                var coverMax = this.portraitElem.offsetWidth-/*pad*/32;
+                var topAndBotSpace = (this.portraitElem.offsetHeight - (coverMax + /*bottom*/120 + /*text*/80))/2;
+                var portraitPad = Math.max(0, Math.floor(topAndBotSpace/2)-8);
+                if (portraitPad!=this.portraitPad) {
+                    this.portraitPad = portraitPad;
+                }
+            }
         },
         showMenu(event) {
             event.preventDefault();
@@ -788,6 +829,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.$store.state.ratingsSupport && !this.rating.setting && undefined!=this.rating.id) {
                 lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.rating.id, adjustRatingToServer(newVal)]).then(({data}) => {
                     this.getRating();
+                });
+            }
+        },
+        'landscape': function(val) {
+            if (!val) {
+                this.$nextTick(() => {
+                    this.portraitElem = document.getElementById("np-page");
+                    this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
+                    this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+                    this.calcPortraitPad();
                 });
             }
         }

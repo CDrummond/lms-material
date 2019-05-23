@@ -7,6 +7,7 @@
 3. Better positioning of song details in portrait mobile now-playing.
 4. When clicking 'i' button in mobile layout, ingore clicks on play/pause
    button (which replaces 'i') for 1/4 second.
+5. In sleep dialog, show all options in a clickable list.
 
 0.7.1
 -----

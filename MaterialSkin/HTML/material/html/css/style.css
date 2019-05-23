@@ -759,6 +759,14 @@ progress {
  max-width:200px !important;
 }
 
+.sleep-item {
+ white-space: normal !important;
+ overflow: auto !important;
+ text-overflow: initial !important;
+ height: auto;
+ max-height: 48px;
+}
+
 .ios-vcard-text-workaround {
  position:fixed;
  overflow-y:auto;

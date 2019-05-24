@@ -270,7 +270,6 @@ Vue.component('lms-toolbar', {
         bus.$on('dialogOpen', function(name, val) {
             if (name=='info-dialog') {
                 this.infoOpen = val;
-                this.infoOpenTime = val ? new Date() : undefined;
             }
             this.initItems();
         }.bind(this));
@@ -447,12 +446,6 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
         },
         playPauseButton() {
-            // In mobile layout, if channig frmo 'i' -> play/pause, then ignore click on play/pause for
-            // first 1/4 second.
-            if (!this.desktop && this.infoOpen && this.infoOpenTime && ((new Date())-this.infoOpenTime)<250) {
-                return;
-            }
-            this.infoOpenTime = undefined;
             bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
         },
         cancelSleepTimer() {

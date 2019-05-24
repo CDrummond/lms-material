@@ -1721,7 +1721,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = "bar_chart";
                                 } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                     if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                        item.range={count: 300};
+                                        item.range={count: undefined==this.newMusicLimit ? 100 :this.newMusicLimit};
                                     }
                                     item.icon = "library_music";
                                 } else if (c.icon) {
@@ -2055,7 +2055,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?
         //   Filter album/tracks on role?
-        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter"]).then(({data}) => {
+        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit"]).then(({data}) => {
             if (data && data.result) {
                 this.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
                 setLocalStorageVal('separateArtists', this.separateArtists);
@@ -2063,6 +2063,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
                 this.options.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
                 setLocalStorageVal('noRoleFilter', this.options.noRoleFilter);
+                if (undefined!=data.result.browseagelimit) {
+                    this.newMusicLimit = parseInt(data.result.browseagelimit);
+                }
             }
         });
         // Artist images?

@@ -201,7 +201,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
     <v-list-tile-avatar :tile="true" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
-     <img v-else :key="item.image" :src="item.image">
+     <img v-else :key="item.image" :src="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -217,7 +217,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-queue-item">
     <v-list-tile-avatar :tile="true" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
-     <img v-else v-lazy="item.image">
+     <img v-else :key="item.image" v-lazy="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>

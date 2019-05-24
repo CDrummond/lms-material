@@ -1723,7 +1723,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
                                         item.range={count: undefined==this.newMusicLimit ? 100 :this.newMusicLimit};
                                     }
-                                    item.icon = "library_music";
+                                    item.icon = c.id.startsWith("new") ? "new_releases" :
+                                                c.id.startsWith("album") ? "album" :
+                                                c.id.startsWith("artist") ? "group" :
+                                                c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
+                                                c.id.startsWith("genre") ? "label" :
+                                                c.id.startsWith("playlist") ? "list" :
+                                                c.id.startsWith("ratedmysql") ? "star" :
+                                                "library_music";
                                 } else if (c.icon) {
                                     if (c.icon.endsWith("/albums.png")) {
                                         item.icon = "album";

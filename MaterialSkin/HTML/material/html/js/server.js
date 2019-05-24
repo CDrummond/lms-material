@@ -94,7 +94,6 @@ function lmsCommand(playerid, command, isList) {
 
     const URL = "/jsonrpc.js"
     var data = { id: 1, method: "slim.request", params: [playerid, command]};
-    var timeout = isList ? LMS_LIST_COMMAND_TIMEOUT : command.length>0 && command[0]=="musicartistinfo" ? LMS_MAI_TIMEOUT : LMS_COMMAND_TIMEOUT;
 
     if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
         logJsonMessage("REQ", data.params);
@@ -102,11 +101,11 @@ function lmsCommand(playerid, command, isList) {
 
     if (canCancel) {
         lmsListSource = CancelToken.source();
-        return axios.post(URL, data, {cancelToken: lmsListSource.token, timeout: timeout}).finally(() => {
+        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
             lmsListSource = undefined;
         });
     } else {
-        return axios.post(URL, data, {timeout: timeout});
+        return axios.post(URL, data);
     }
 }
 

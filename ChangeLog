@@ -2,20 +2,18 @@
 -----
  1. Fix clicking on 'Browse' bottom navigation button in mobile view causing
     browse view to navigate back when changing from 'Now Playing' / 'Queue'
- 2. Set timeout of 20 seconds for browsing commands, 5 seconds for control
-    commands, and 30 seconds for MAI commands.
- 3. Better positioning of song details in portrait mobile now-playing.
- 4. In sleep dialog, show all options in a clickable list.
- 5. Disable "Show track information" from now-playing context menu if no
+ 2. Better positioning of song details in portrait mobile now-playing.
+ 3. In sleep dialog, show all options in a clickable list.
+ 4. Disable "Show track information" from now-playing context menu if no
     track_id
- 6. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
+ 5. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
     of either the configuired "New Music Limit" or 100 items.
- 7. Indent "Information" dialog contents, to be consistent with settings dialogs.
- 8. Attempt to match Custom Browse categories with icons.
- 9. Add search categories: All, Artists, Albums, Tracks, or Playlists
-10. If coverid/arwork is empty in search results, use default image.
-11. Un-escape title's when clicking on artist/album in queue.
-12. Give lazy-loaded images a key, so that they update correctly.
+ 6. Indent "Information" dialog contents, to be consistent with settings dialogs.
+ 7. Attempt to match Custom Browse categories with icons.
+ 8. Add search categories: All, Artists, Albums, Tracks, or Playlists
+ 9. If coverid/arwork is empty in search results, use default image.
+10. Un-escape title's when clicking on artist/album in queue.
+11. Give lazy-loaded images a key, so that they update correctly.
 
 0.7.1
 -----

@@ -89,41 +89,24 @@ const CancelToken = axios.CancelToken;
 var lmsListSource = undefined;
 
 function lmsCommand(playerid, command, isList) {
-    var canCancel = isList || (command.length>2 && (command[0]=='menu' || command[1]=='items'));
+    var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
+                    (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
+
+    const URL = "/jsonrpc.js"
+    var data = { id: 1, method: "slim.request", params: [playerid, command]};
+    var timeout = isList ? LMS_LIST_COMMAND_TIMEOUT : command.length>0 && command[0]=="musicartistinfo" ? LMS_MAI_TIMEOUT : LMS_COMMAND_TIMEOUT;
+
+    if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
+        logJsonMessage("REQ", data.params);
+    }
 
     if (canCancel) {
         lmsListSource = CancelToken.source();
-    }
-    var args = {
-            method: "post",
-            url: "/jsonrpc.js",
-            headers: {'Content-Type': 'text/plain'},
-            data: {
-                id: 1,
-                method: "slim.request",
-                params: [playerid, command]
-            },
-            cancelToken: canCancel ? lmsListSource.token : undefined,
-            timeout: isList ? LMS_LIST_COMMAND_TIMEOUT : command.length>0 && command[0]=="musicartistinfo" ? LMS_MAI_TIMEOUT : LMS_COMMAND_TIMEOUT };
-    if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
-        logJsonMessage("REQ", args.data.params);
-    }
-    /* CometD does not seem to sent status messages (at least not quickly) when updates are made via JSONRPC. So, to
-       work-around, we can manually update on each player message. */
-    /* NOTE: Disabled for now, and status requests are sent when required. This saves multiple status messages being
-             sent when a list of actions is performed. Left here in case needed later...
-    if (playerid && !isList && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
-        return axios(args).finally(() => {
-            bus.$emit("updatePlayer", playerid);
-        });
-    }
-    */
-    if (canCancel) {
-        return axios(args).finally(() => {
+        return axios.post(URL, data, {cancelToken: lmsListSource.token, timeout: timeout}).finally(() => {
             lmsListSource = undefined;
         });
     } else {
-        return axios(args);
+        return axios.post(URL, data, {timeout: timeout});
     }
 }
 
@@ -382,6 +365,7 @@ var lmsServer = Vue.component('lms-server', {
                         bus.$emit('refreshList', SECTION_FAVORITES);
                     }
                 } 
+            }).catch(err => {
             });
         },
         updatePlayer(id) {

@@ -188,7 +188,6 @@
 "Selected Genres":"Gewählte Stilrichtungen",
 "Server Settings":"Server-Einstellungen",
 "Server connection lost...":"Verbindung zum Server unterbrochen...",
-"Set":"Speichern",
 "Set Defaults":"Speichern",
 "Set rating":"Bewerten",
 "Set rating for %1 tracks":"Bewertung für %1 Titel",
@@ -216,7 +215,6 @@
 "Shuffle tracks":"Zufällige Titelreihenfolge",
 "Signal Strength: %1%":"Signalstärke: %1%",
 "Sleep":"Schlummern",
-"Sleep in":"Schlafmodus in",
 "Smart gain":"'Intelligente' Normalisierung",
 "Snooze (minutes)":"Weckwiederholung",
 "Something went wrong!":"Da ist was schief gelaufen!",
@@ -306,6 +304,7 @@
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
 "Album Mix":"",
+"All":"",
 "Audio":"",
 "CD Player":"",
 "Dynamic Playlists":"",
@@ -320,7 +319,9 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
+"Search:":"Suche:",
 "Start":"",
 "Toggle view":"",
+"Tracks":"Titel",
 "URL":""
 }

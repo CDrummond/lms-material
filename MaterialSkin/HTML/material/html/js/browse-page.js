@@ -470,6 +470,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         }.bind(this));
+        bus.$on('searchLib', function(command, params, term) {
+            this.fetchItems({command: command, params: params}, {cancache:false, id:"<>", title:term, id:"search"==command[0] ? TOP_SEARCH_ID : "search:"+command[0]});
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -953,8 +956,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemAction(act, item, index, suppressNotification) {
             if (act==SEARCH_LIB_ACTION) {
-                this.dialog = { show:true, title:i18n("Search library"), ok: i18n("Search"), cancel:undefined,
-                                command:["search"], params:["tags:jlyAdt", "extended:1", "term:"+TERM_PLACEHOLDER], item:{title:i18n("Search"), id:TOP_SEARCH_ID}};
+                bus.$emit('dlg.open', 'search');
             } else if (act===MORE_ACTION) {
                 this.fetchItems(this.buildCommand(item, B_ACTIONS[act].cmd), item);
             } else if (act===MORE_LIB_ACTION) {

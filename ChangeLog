@@ -11,6 +11,7 @@
    of either the configuired "New Music Limit" or 100 items.
 7. Indent "Information" dialog contents, to be consistent with settings dialogs.
 8. Attempt to match Custom Browse categories with icons.
+9. Add search categories: All, Artists, Albums, Tracks, or Playlists
 
 0.7.1
 -----

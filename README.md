@@ -1,11 +1,11 @@
 # Material skin for SlimServer (Logitech Media Server)
 
-NOTE: The following screenshots are from the 0.0.1 release, and there have been
+NOTE: The following screenshot is from the 0.0.1 release, and there have been
 a few changes since.
 
-![Browse](screenshots/browse.png)
 ![Now Playing](screenshots/now-playing.png)
-![Queue](screenshots/queue.png)
+
+See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screenshots.
 
 
 ## Features
@@ -31,25 +31,16 @@ a few changes since.
 
 ## Installation
 
-Using LMS GUI:
-
 1. Open the LMS web page (e.g. `http://localhost:9000`)
 2. Click on Settings
 3. Select the Plugins tab
 4. At bottom of the page add the repo URL: `https://raw.githubusercontent.com/CDrummond/lms-material/master/public.xml`
 5. Install the plugin and enable as usual
 
-Manually:
-
-Copy (or symlink) the ```MaterialSkin``` directory into the server's `Plugin`
-directory.
-
-
 ## Usage
 
 1. Access the skin through `http://<yourserver>:9000/material/`
 2. Select "Add to Home screen" on your device, if supported.
-
 
 ### Selecting mobile or desktop
 

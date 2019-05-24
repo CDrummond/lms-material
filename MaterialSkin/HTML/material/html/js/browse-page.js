@@ -1242,8 +1242,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (lmsListSource) {
                     this.fetchingItems = false;
                     lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                } else {
-                    return;
                 }
             }
             var prev = this.history.length>0 ? this.history[0].pos : 0;

@@ -499,7 +499,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.portraitPad = 0;
             } else {
                 var coverMax = this.portraitElem.offsetWidth-/*pad*/32;
-                var topAndBotSpace = (this.portraitElem.offsetHeight - (coverMax + /*bottom*/120 + /*text*/80))/2;
+                var topAndBotSpace = (this.portraitElem.offsetHeight -
+                                        (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + /*text*/80))/2;
                 var portraitPad = Math.max(0, Math.floor(topAndBotSpace/2)-8);
                 if (portraitPad!=this.portraitPad) {
                     this.portraitPad = portraitPad;

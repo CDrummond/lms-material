@@ -10,6 +10,7 @@
 6. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
    of either the configuired "New Music Limit" or 100 items.
 7. Indent "Innformation" dialog contents, to be consisten with settings dialogs.
+8. Attempt to match CustomBrowse categories with icons.
 
 0.7.1
 -----

@@ -5,13 +5,11 @@
 2. Set timeout of 20 seconds for browsing commands, 5 seconds for control
    commands, and 30 seconds for MAI commands.
 3. Better positioning of song details in portrait mobile now-playing.
-4. When clicking 'i' button in mobile layout, ingore clicks on play/pause
-   button (which replaces 'i') for 1/4 second.
-5. In sleep dialog, show all options in a clickable list.
-6. Disable "Show track information" from now-playing context menu if no track_id
-7. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
+4. In sleep dialog, show all options in a clickable list.
+5. Disable "Show track information" from now-playing context menu if no track_id
+6. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
    of 300 items.
-8. Indent "Innformation" dialog contents, to be consisten with settings dialogs.
+7. Indent "Innformation" dialog contents, to be consisten with settings dialogs.
 
 0.7.1
 -----

@@ -18,7 +18,7 @@ Vue.component('lms-information-dialog', {
     </v-toolbar-title>
    </v-toolbar>
   </v-card-title>
-  <div class="ios-vcard-text-workaround">
+  <div class="ios-vcard-text-workaround"><div class="infodetails">
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
@@ -57,7 +57,7 @@ Vue.component('lms-information-dialog', {
    </ul>
    <div class="dialog-padding"></div>
 
-  </div>
+  </div></div>
  </v-card>
 </v-dialog>
 `,

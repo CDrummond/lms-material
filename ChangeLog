@@ -11,6 +11,7 @@
 6. Disable "Show track information" from now-playing context menu if no track_id
 7. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
    of 300 items.
+8. Indent "Innformation" dialog contents, to be consisten with settings dialogs.
 
 0.7.1
 -----

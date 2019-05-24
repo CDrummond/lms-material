@@ -66,17 +66,17 @@ function animate(elem, from, to) {
 var lastQueueItemClick = undefined;
 function showArtist(id, title) {
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
 }
 
 function showAlbum(album, title) {
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], title);
+    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title));
 }
 
 function showComposer(id, title) {
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
 }
 
 function buildSubtitle(i) {

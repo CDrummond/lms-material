@@ -49,7 +49,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                   title: i.album,
                                   command: ["tracks"],
                                   params: ["album_id:"+ i.album_id, TRACK_TAGS, SORT_KEY+"tracknum"],
-                                  image: "/music/" + i.artwork + "/cover" + LMS_LIST_IMAGE_SIZE,
+                                  image: "/music/" + (""==i.artwork || undefined==i.artwork ? "0" : i.artwork) + "/cover" + LMS_LIST_IMAGE_SIZE,
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "group"
                               });
@@ -63,7 +63,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     resp.items.push({
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
-                                  image: "/music/" + i.coverid + "/cover" +LMS_LIST_IMAGE_SIZE,
+                                  image: "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_LIST_IMAGE_SIZE,
                                   menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
                                   type: "track"
                               });

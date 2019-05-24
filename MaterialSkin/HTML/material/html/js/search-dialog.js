@@ -10,12 +10,12 @@ Vue.component('lms-search-dialog', {
 <v-dialog scrollable v-model="show" persistent width="600">
  <v-card>
   <v-card-title>{{i18n("Search library")}}</v-card-title>
-  <v-list>
+  <v-list two-line>
    <v-list-tile>
-    <v-text-field clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
+    <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
    </v-list-tile>
    <v-list-tile>
-    <v-select :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
+    <v-select :label="i18n('Category')" :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
    </v-list-tile>
   </v-list>
   <v-card-actions>

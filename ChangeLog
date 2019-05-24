@@ -8,7 +8,7 @@
 4. In sleep dialog, show all options in a clickable list.
 5. Disable "Show track information" from now-playing context menu if no track_id
 6. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
-   of 300 items.
+   of either the configuired "New Music Limit" or 100 items.
 7. Indent "Innformation" dialog contents, to be consisten with settings dialogs.
 
 0.7.1

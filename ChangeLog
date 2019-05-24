@@ -15,6 +15,7 @@
  9. Add search categories: All, Artists, Albums, Tracks, or Playlists
 10. If coverid/arwork is empty in search results, use default image.
 11. Un-escape title's when clicking on artist/album in queue.
+12. Give lazy-loaded images a key, so that they update correctly.
 
 0.7.1
 -----

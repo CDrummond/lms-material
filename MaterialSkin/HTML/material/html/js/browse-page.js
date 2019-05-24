@@ -450,7 +450,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browse', function(cmd, params, title) {
             this.goHome();
-            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:"<>", title:unescape(title)});
+            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:"<>", title:title});
         }.bind(this));
 
         bus.$on('refreshList', function(section) {

@@ -242,9 +242,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.menu.push(DELETE_ACTION);
                 }
 
-                if (!i.type && i.actions && i.actions.go && i.actions.go.cmd) {
-                    for (var c=0, cmdlen=i.actions.go.cmd.length; c<cmdlen; ++c) {
-                        if ("search" == i.actions.go.cmd[c]) {
+                if (!i.type && i.actions && i.actions.go && i.actions.go.params) {
+                    for (var p=0, plen=i.actions.go.params.length; p<plen; ++p) {
+                        if (TERM_PLACEHOLDER == i.actions.go.params[p]) {
                             i.type = "search";
                             resp.canUseGrid = false;
                             break;

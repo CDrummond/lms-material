@@ -145,12 +145,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="landscape">
    <img v-if="!info.show" :src="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}" @contextmenu="showMenu"></img>
    <div class="np-details-landscape">
-    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title}}</div>
+    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</div>
+    <div class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album}}</div>
-    <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</div>
+    <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id" class="np-text-landscape">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
@@ -778,6 +778,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         svgIcon: function (name, dark) {
             return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
+        },
+        limitStr: function(str) {
+            if (undefined==str || str.length<80) {
+                return str;
+            }
+            return str.substring(0, 80) + "...";
         }
     },
     watch: {

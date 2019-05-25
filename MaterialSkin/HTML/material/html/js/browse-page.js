@@ -471,7 +471,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
-            this.fetchItems({command: command, params: params}, {cancache:false, id:"<>", title:term, id:"search"==command[0] ? TOP_SEARCH_ID : "search:"+command[0]});
+            this.fetchItems({command: command, params: params}, {cancache:false, title:term, id:"search"==command[0] ? TOP_SEARCH_ID : "search:"+command[0]});
         }.bind(this));
     },
     methods: {

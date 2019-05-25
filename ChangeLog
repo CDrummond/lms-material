@@ -14,6 +14,7 @@
  9. If coverid/arwork is empty in search results, use default image.
 10. Un-escape title's when clicking on artist/album in queue.
 11. Give lazy-loaded images a key, so that they update correctly.
+12. Add support links, etc. to Information dialog.
 
 0.7.1
 -----

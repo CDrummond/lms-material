@@ -55,8 +55,21 @@ Vue.component('lms-information-dialog', {
      </li>
     </template>
    </ul>
+
    <div class="dialog-padding"></div>
 
+   <p class="about-header">{{i18n('About')}}</p>
+   <p>{{i18n('Material Skin is a HTML5 WebApp for LMS. For support, to report bugs, or ask for new features, please visit one of the following links:')}}
+    <ul>
+     <li><a class="lms-link" href="https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('LMS support forums')}}</a></li>
+     <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
+    </ul>
+   </p>
+
+   <p>{{i18n('Material Skin is developed purely for fun, and no donations are required. However, if you wish to make a donation, please use the button below:')}}</p>
+   <v-btn @click="openWindow('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url')" flat><img class="svg-img" :src="'paypal' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Donate')}}</v-btn>
+
+   <div class="dialog-padding"></div>
   </div></div>
  </v-card>
 </v-dialog>
@@ -197,6 +210,16 @@ Vue.component('lms-information-dialog', {
     watch: {
         'show': function(val) {
             bus.$emit('dialogOpen', 'info', val);
+        }
+    },
+    computed: {
+            darkUi () {
+            return this.$store.state.darkUi
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
         }
     }
 })

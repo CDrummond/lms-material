@@ -22,7 +22,7 @@ html {
 }
 
 .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
-.primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text {
+.primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link {
  color:#99ceff !important;
 }
 

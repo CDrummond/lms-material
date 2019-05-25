@@ -265,8 +265,12 @@ function setTheme(dark) {
     }
 }
 
+function openWindow(page) {
+    window.open(page, '_blank');
+}
+
 function serverSettings(page) {
-    window.open('../Default/settings/index.html' + (page ? '?activePage='+page : ''), '_blank');
+    openWindow('../Default/settings/index.html' + (page ? '?activePage='+page : ''));
 }
 
 function fixId(id, prefix) {

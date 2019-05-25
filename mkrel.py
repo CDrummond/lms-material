@@ -126,7 +126,7 @@ def fixUtils():
 
 def minifyJs():
     info("...JS")
-    for js in os.listdir("%s/js" % HTML_FOLDER):
+    for js in sorted(os.listdir("%s/js" % HTML_FOLDER)):
         if js.endswith(".js"):
             info("......%s" % js)
             jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, js.replace(".js", ".min.js")), "%s/js/%s" % (HTML_FOLDER, js)]
@@ -135,7 +135,7 @@ def minifyJs():
 
 def minifyCss():
     info("...CSS")
-    for css in os.listdir("%s/css" % HTML_FOLDER):
+    for css in sorted(os.listdir("%s/css" % HTML_FOLDER)):
         if css.endswith(".css"):
             info("......%s" % css)
             origCss = "%s/css/%s" % ( HTML_FOLDER, css)

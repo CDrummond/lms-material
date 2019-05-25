@@ -1,6 +1,8 @@
 0.7.3
 -----
 1. Limit strings in landscape now-playing to 80 characters.
+2. Fix detection of search fields - command params needs __TAGGEDINPUT__. Fixes
+   some radio search listing entries.
 
 0.7.2
 -----

@@ -83,6 +83,7 @@ const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
 const TOP_DYNAMIC_PLAYLISTS_ID = TOP_ID_PREFIX+"dpl";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
+const TOP_MUSIC_FOLDER_ID = TOP_ID_PREFIX+"mf";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
@@ -235,7 +236,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>
-
+itemAc
     <v-list-tile-action :title="B_ACTIONS[UNPIN_ACTION].title" @click.stop="itemAction(UNPIN_ACTION, item, index)">
      <v-btn icon>
       <img class="svg-img" :src="B_ACTIONS[UNPIN_ACTION].svg | svgIcon(darkUi)"></img>
@@ -247,9 +248,14 @@ var lmsBrowse = Vue.component("lms-browse", {
 
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}">
-    <v-list-tile-avatar v-if="item.selected || item.image" :tile="true" class="lms-avatar">
-     <v-icon v-if="item.selected">check_box</v-icon>
-     <img v-else :key="item.image" :src="item.image"></img>
+    <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
+     <v-icon>check_box</v-icon>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" class="lms-avatar">
+     <img :key="item.image" :src="item.image"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
+     <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
@@ -394,6 +400,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.tbarActions=[];
+        this.mediaDirs=[];
         var col=getLocalStorageVal('collapsed', "").split(",");
         for (var i=0, len=col.length, tlen=this.collapsed.length; i<len && i<tlen; ++i) {
            this.collapsed[i] = "true" == col[i];
@@ -594,7 +601,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                   params: [ALBUM_TAGS, SORT_KEY+"new"],
                   icon: "new_releases",
                   type: "group",
-                  id: TOP_NEW_MUSIC_ID }
+                  id: TOP_NEW_MUSIC_ID },
+                { title: i18n("Music Folder"),
+                  command: ["readdirectory"],
+                  params: [],
+                  icon: "folder",
+                  type: "group",
+                  id: TOP_MUSIC_FOLDER_ID }
                 ];
             otherPrev.forEach(i=> {
                 this.other.unshift(i);
@@ -851,7 +864,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "album",
                               type: "group",
                               id: item.id+"albums"}];
-                this.headerTitle = item.title;
                 if (CONDUCTOR_GENRES.has(item.title)) {
                     this.items.splice(0, 0, { title: i18n("Conductors"),
                                         command: ["artists"],
@@ -872,12 +884,35 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         group: GROUP_MY_MUSIC,
                                         id: item.id+"composers"});
                 }
-                this.headerSubTitle = i18n("Select category")
+                this.headerTitle = item.title;
+                this.headerSubTitle = i18n("Select category");
                 this.listSize = this.items.length;
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;
             } else if (item.weblink) {
                 window.open(item.weblink);
+            } else if (TOP_MUSIC_FOLDER_ID==item.id) {
+                if (this.mediaDirs.length<1) {
+                    return;
+                } else if (1==this.mediaDirs.length) {
+                    this.fetchItems({command:item.command, params:["folder:"+this.mediaDirs[0].replace("\\", "\\\\")]}, item);
+                } else {
+                    this.addHistory();
+                    this.items=[];
+                    for (var i=0; i<this.mediaDirs.length; ++i) {
+                        this.items.push( { title: this.mediaDirs[i],
+                              command: ["readdirectory"],
+                              params: ["folder:"+this.mediaDirs[i].replace("\\", "\\\\")],
+                              icon: "folder",
+                              type: "group",
+                              id: this.mediaDirs+"::"+this.items.length });
+                    }
+                    this.headerTitle = item.title;
+                    this.headerSubTitle = i18np("1 Item", "%1 Items", this.items.length);
+                    this.listSize = this.items.length;
+                    setScrollTop(this.scrollElement, 0);
+                    this.isTop = false;
+                }
             } else {
                 var command = this.buildCommand(item);
                 if (command.command.length>2 && command.command[1]=="playlist") {
@@ -1120,6 +1155,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             } else {
                 var command = this.buildFullCommand(item, act, index);
+                console.log(command);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;
@@ -1505,6 +1541,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : B_ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :B_ACTIONS[act].cmd, item.id];
+                } else if (item.isFolderItem) {
+                    command.command = ["playlist", INSERT_ACTION==act ? "insert" : B_ACTIONS[act].cmd, item.id];
                 } else if (item.id) {
                     command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :B_ACTIONS[act].cmd)];
 
@@ -2062,7 +2100,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?
         //   Filter album/tracks on role?
-        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit"]).then(({data}) => {
+        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,mediadirs"]).then(({data}) => {
             if (data && data.result) {
                 this.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
                 setLocalStorageVal('separateArtists', this.separateArtists);
@@ -2073,6 +2111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined!=data.result.browseagelimit) {
                     this.newMusicLimit = parseInt(data.result.browseagelimit);
                 }
+                this.mediaDirs=data.result.mediadirs;
             }
         });
         // Artist images?

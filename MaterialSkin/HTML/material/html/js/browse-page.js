@@ -162,12 +162,12 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-show="letter" id="letterOverlay"></div>
 
  <div v-if="grid.use">
-  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1 && items.length>10">
+  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
    <template v-for="(item) in filteredJumplist">
     <div @click="jumpTo(item)">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
-  <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1 && items.length>10}">
+  <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih" page-mode key-field="id">
    <table slot-scope="{item, index}" :class="['full-width', GRID_SIZES[grid.size].clz]">
     <td align="center" style="vertical-align: top" v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat align="left" class="image-grid-item">
@@ -211,13 +211,13 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div></div>
  <div v-else>
 
- <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1 && items.length>10">
+ <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
   <template v-for="(item) in filteredJumplist">
    <div @click="jumpTo(item)">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
   </template>
  </div>
 
- <v-list class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1 && items.length>10}" id="browse-list">
+ <v-list class="noselect bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0" @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
@@ -2075,7 +2075,7 @@ itemAc
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (this.jumplist.length<=1) {
+            if (undefined==this.jumplist || this.jumplist.length<=1 || this.items.length<=25) {
                 return;
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);

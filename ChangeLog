@@ -3,6 +3,9 @@
 1. Limit strings in landscape now-playing to 80 characters.
 2. Fix detection of search fields - command params needs __TAGGEDINPUT__. Fixes
    some radio search listing entries.
+3. For non-server side categories, use "readdirectory" command to list music
+   folders. This is *much* faster, but does not provide meta-data, and file
+   types are manually filtered based upon extension.
 
 0.7.2
 -----

@@ -6,6 +6,7 @@
  */
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
+const MUSIC_FILE_EXTENSIONS = new Set(["mp3", "m4a", "mp4", "wav", "aiff", "flac", "ogg", "wma", "opus", "aac", "ape", "mpc", "oga", "webm"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
@@ -640,6 +641,42 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               textkey: key
                           });
             }
+            resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
+        } else if (data.result.fsitems_loop) {
+            for (var idx=0, loop=data.result.fsitems_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                var isFolder = parseInt(i.isfolder)==1;
+                var name = i.name;
+                if (isFolder) {
+                    var parts = i.path.split("/");
+                    if (1==parts) {
+                        parts = i.path.split("\\"); // Windows?
+                    }
+                    name = parts[parts.length-1];
+                } else {
+                    if (!i.name || i.name.length<1) {
+                        continue;
+                    }
+                    var parts = i.name.split(".");
+                    var ext = parts[parts.length-1].toLowerCase();
+                    if (!MUSIC_FILE_EXTENSIONS.has(ext)) {
+                        continue;
+                    }
+                }
+                var fixedPath = i.path.replace("\\", "\\\\");
+                resp.items.push({
+                              id: fixedPath,
+                              title: name,
+                              subtitle: undefined,
+                              command: isFolder ? ["readdirectory"] : [],
+                              params: isFolder ? ["folder:"+fixedPath] : [],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              type: isFolder ? "group" : "track",
+                              icon: isFolder ? "folder" : undefined,
+                              isFolderItem: true
+                          });
+            }
+            resp.total = resp.items.length;
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
         } /*else if (data.result.radioss_loop) {
             data.result.radioss_loop.forEach(i => {

@@ -588,3 +588,11 @@ function changeImageUrls(items, grid) {
     }
 }
 
+function folderName(path) {
+    var parts = path.split("/");
+    if (1==parts) {
+        parts = i.path.split("\\"); // Windows?
+    }
+    return parts[parts.length-1];
+}
+

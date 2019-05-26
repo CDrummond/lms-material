@@ -648,11 +648,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var isFolder = parseInt(i.isfolder)==1;
                 var name = i.name;
                 if (isFolder) {
-                    var parts = i.path.split("/");
-                    if (1==parts) {
-                        parts = i.path.split("\\"); // Windows?
-                    }
-                    name = parts[parts.length-1];
+                    name = folderName(i.path);
                 } else {
                     if (!i.name || i.name.length<1) {
                         continue;

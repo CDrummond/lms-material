@@ -900,7 +900,7 @@ itemAc
                     this.addHistory();
                     this.items=[];
                     for (var i=0; i<this.mediaDirs.length; ++i) {
-                        this.items.push( { title: this.mediaDirs[i],
+                        this.items.push( { title: folderName(this.mediaDirs[i]),
                               command: ["readdirectory"],
                               params: ["folder:"+this.mediaDirs[i].replace("\\", "\\\\")],
                               icon: "folder",

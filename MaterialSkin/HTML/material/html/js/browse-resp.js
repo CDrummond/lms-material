@@ -664,6 +664,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
                 var fixedPath = i.path.replace("\\", "\\\\");
+                var key = name.charAt(0);
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                }
                 resp.items.push({
                               id: fixedPath,
                               title: name,

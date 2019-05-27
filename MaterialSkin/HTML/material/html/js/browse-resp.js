@@ -520,10 +520,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              subtitle: formatSeconds(i.duration),
+                              subtitle: undefined!=i.rating ? ratingString(formatSeconds(i.duration), i.rating) : formatSeconds(i.duration),
                               //icon: "music_note",
                               menu: actions,
-                              type: "track"
+                              type: "track",
+                              rating: i.rating
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
@@ -561,7 +562,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: i.playlist,
                               command: ["playlists", "tracks"],
                               //icon: "list",
-                              params: ["playlist_id:"+ i.id],
+                              params: ["playlist_id:"+ i.id], // "tags:IRad"] -> Will show rating, not album???
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                               type: "group"
                           });
@@ -570,10 +571,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION];
-            /*if (options.ratingsSupport) {
-                actions.push(DIVIDER);
-                actions.push(RATING_ACTION);
-            }*/
+            //if (options.ratingsSupport) {
+            //    actions.push(DIVIDER);
+            //    actions.push(RATING_ACTION);
+            //}
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -592,6 +593,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         subtitle=i.album;
                     }
                 }
+                //if (options.ratingsSupport && undefined!=i.rating) {
+                //    subtitle = ratingString(subtitle, i.rating);
+                //}
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,

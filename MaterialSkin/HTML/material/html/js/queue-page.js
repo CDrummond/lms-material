@@ -12,7 +12,7 @@ const PQ_MORE_ACTION =      3;
 const PQ_SELECT_ACTION =    4;
 const PQ_UNSELECT_ACTION =  5;
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltuyAKNS" : "tags:cdegltuysAKNS";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltuyAKNS" : "tags:cdegltuysAKNRS";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 var PQ_ACTIONS = [
@@ -79,7 +79,7 @@ function showComposer(id, title) {
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
 }
 
-function buildSubtitle(i) {
+function buildSubtitle(i, showRatings) {
     var subtitle = i.artist ? i.artist : i.trackartist;
 
     if (i.artist_id && !IS_MOBILE && subtitle) {
@@ -108,10 +108,10 @@ function buildSubtitle(i) {
     } else if (remoteTitle && remoteTitle!=i.title) {
         subtitle=addPart(subtitle, remoteTitle);
     }
-    return subtitle;
+    return !showRatings || undefined==i.rating ? subtitle : ratingString(subtitle, i.rating);
 }
 
-function parseResp(data, showTrackNum, index) {
+function parseResp(data, showTrackNum, index, showRatings) {
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;
@@ -128,7 +128,7 @@ function parseResp(data, showTrackNum, index) {
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              subtitle: buildSubtitle(i),
+                              subtitle: buildSubtitle(i, showRatings),
                               image: queueItemCover(i),
                               actions: PQ_STD_ACTIONS,
                               duration: i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
@@ -326,7 +326,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                     }
-                    var subtitle = buildSubtitle(i);
+                    var subtitle = buildSubtitle(i, this.desktop && this.$store.state.ratingsSupport);
                     var remoteTitle = checkRemoteTitle(i);
                     var duration = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
 
@@ -576,7 +576,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.desktop && this.$store.state.ratingsSupport);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -615,7 +615,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.desktop && this.$store.state.ratingsSupport);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;

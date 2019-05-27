@@ -49,7 +49,8 @@ Vue.component('lms-rating-dialog', {
                 } else {
                     this.title=i18n("Set rating");
                 }
-                this.value = undefined==current ? 3 : current;
+                console.log("CURRENT:"+current);
+                this.value = undefined==current ? 3 : current/20.0;;
                 this.toSet = undefined;
                 this.show = true;
             }
@@ -81,7 +82,8 @@ Vue.component('lms-rating-dialog', {
                 this.show=false;
                 bus.$emit('ratingsSet', this.ids, this.value);
             } else {
-                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.toSet[0], adjustRatingToServer(this.value)]).then(({data}) => {
+            console.log(this.value);
+                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.toSet[0], this.value]).then(({data}) => {
                     this.toSet.shift();
                     this.setRating();
                 });

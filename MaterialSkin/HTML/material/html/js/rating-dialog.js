@@ -49,8 +49,7 @@ Vue.component('lms-rating-dialog', {
                 } else {
                     this.title=i18n("Set rating");
                 }
-                console.log("CURRENT:"+current);
-                this.value = undefined==current ? 3 : current/20.0;;
+                this.value = undefined==current ? 3 : (current/20.0);
                 this.toSet = undefined;
                 this.show = true;
             }

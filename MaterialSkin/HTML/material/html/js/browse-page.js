@@ -89,7 +89,7 @@ const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const ALBUM_TAGS = "tags:jlyasS";
-const TRACK_TAGS = "tags:ACdts";
+const TRACK_TAGS = "tags:ACRdts";
 const SORT_KEY = "sort:";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
@@ -466,15 +466,11 @@ itemAc
             }
         }.bind(this));
         bus.$on('ratingsSet', function(ids, value) {
-            if (ids.length>1) {
-                this.getRatings();
-            } else {
-                this.items.forEach(i=>{
-                    if (i.id==ids[0]) {
-                        i.rating = value;
-                        i.subtitle = ratingString(i.subtitle, i.rating);
-                    }
-                });
+            this.refreshList();
+        }.bind(this));
+        bus.$on('ratingChanged', function(track, album) {
+            if (this.current && this.current.id==("album_id:"+album)) {
+                this.refreshList();
             }
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
@@ -659,7 +655,7 @@ itemAc
                 var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
                 this.handleListResponse(item, command, resp);
                 this.fetchingItems = false;
-                this.getRatings();
+                this.enableRatings();
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
@@ -2019,24 +2015,13 @@ itemAc
             }
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
         },
-        getRatings() {
-            this.showRatingButton = false;
-            if (this.$store.state.ratingsSupport && this.listSize<=100 && this.items.length>1 && this.items.length==this.listSize &&
+        enableRatings() {
+            this.showRatingButton = (this.$store.state.ratingsSupport &&
                 !(this.current && this.current.id && this.current.id.startsWith("playlist_id:")) &&
                 !(this.current && this.current.actions && this.current.actions.go && this.current.actions.go.cmd &&
                   this.current.actions.go.cmd.length>1 && this.current.actions.go.cmd[0]=="trackstat") &&
                 this.items[0].id && this.items[0].id.startsWith("track_id:") &&
-                this.items[this.items.length-1].id && this.items[this.items.length-1].id.startsWith("track_id:")) {
-                this.showRatingButton = true;
-                this.items.forEach(i => {
-                    lmsCommand("", ["trackstat", "getrating", i.id.split(":")[1]]).then(({data}) => {
-                        if (data && data.result && undefined!=data.result.ratingpercentage) {
-                            i.rating = adjustRatingFromServer(data.result.ratingpercentage);
-                            i.subtitle = ratingString(i.subtitle, i.rating);
-                        }
-                    });
-                });
-            }
+                this.items[this.items.length-1].id && this.items[this.items.length-1].id.startsWith("track_id:"));
         },
         setAlbumRating() {
             var ids = [];

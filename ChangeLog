@@ -6,6 +6,9 @@
 3. For non-server side categories, use "readdirectory" command to list music
    folders. This is *much* faster, but does not provide meta-data, and file
    types are manually filtered based upon extension.
+4. Get ratings from status messages, but still only show if trackstat
+   installed.
+5. Show ratings in queue - desktop layout only.
 
 0.7.2
 -----

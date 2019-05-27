@@ -69,7 +69,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
    </v-flex>
   </v-layout>
-  <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
+  <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
    <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
    <v-rating small v-else v-model="rating.value" hover clearable></v-rating>
   </p>
@@ -152,7 +152,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
     <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id" class="np-text-landscape">
+    <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
      <v-rating v-else v-model="rating.value" hover clearable></v-rating>
     </div>
@@ -216,7 +216,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <img v-if="!info.show" :src="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
-   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.id && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
+   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
     <v-rating v-else v-model="rating.value" hover clearable></v-rating>
    </v-flex>
@@ -287,7 +287,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: false,
                  largeView: false,
                  menu: { show: false, x:0, y:0, text: ["", ""] },
-                 rating: {value:0, id:undefined, setting:false},
+                 rating: {value:0, setting:false},
                 };
     },
     mounted() {
@@ -393,6 +393,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.remote_title = playerStatus.current.remote_title;
                 trackChanged = true;
             }
+            if (playerStatus.current.rating!=this.rating.setting) {
+                this.rating.setting = playerStatus.current.rating;
+                this.rating.value = undefined==this.rating.setting ? undefined : (Math.ceil(this.rating.setting/10.0)/2.0);
+                trackChanged = true;
+            }
             var artistAndComposer;
             if (playerStatus.current.composer && playerStatus.current.genre && COMPOSER_GENRES.has(playerStatus.current.genre)) {
                 artistAndComposer = addPart(this.playerStatus.current.artist, playerStatus.current.composer);
@@ -434,15 +439,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             } else if (this.playerStatus.isplaying && trackChanged) {
                 this.startPositionInterval();
-            }
-
-            if (this.rating.id!=playerStatus.current.id) {
-                this.rating.id = playerStatus.current.duration && playerStatus.current.duration>0 &&
-                                 (!playerStatus.current.type || playerStatus.current.type.toLowerCase().indexOf("radio")<0)
-                                    ? playerStatus.current.id : undefined;
-                if (this.$store.state.ratingsSupport) {
-                    this.getRating();
-                }
             }
         }.bind(this));
         // Refresh status now, in case we were mounted after initial status call
@@ -753,20 +749,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showSleep() {
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
-        },
-        getRating() {
-            if (undefined!=this.rating.id) {
-                this.rating.setting = true;
-                lmsCommand("", ["trackstat", "getrating", this.rating.id]).then(({data}) => {
-                    if (data && data.result && undefined!=data.result.ratingpercentage) {
-                        this.rating.value = adjustRatingFromServer(data.result.ratingpercentage);
-                    }
-                    this.rating.setting = false;
-                }).catch(err => {
-                    this.rating.setting = false;
-                    //slogError(err);
-                });
-            }
         }
     },
     filters: {
@@ -833,9 +815,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('largeViewVisible', val);
         },
         'rating.value': function(newVal) {
-            if (this.$store.state.ratingsSupport && !this.rating.setting && undefined!=this.rating.id) {
-                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.rating.id, adjustRatingToServer(newVal)]).then(({data}) => {
-                    this.getRating();
+            if (this.$store.state.ratingsSupport && newVal!=undefined && (Math.ceil(this.rating.setting/10.0)/2.0)!=newVal) {
+                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, newVal]).then(({data}) => {
+                    bus.$emit('refreshStatus');
+                    bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
                 });
             }
         },

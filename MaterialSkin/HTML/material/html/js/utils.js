@@ -442,22 +442,8 @@ function ratingString(current, val) {
             str += current;
         }
     }
-    var index=Math.ceil(val*2.0);
-    return str+"  "+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)];
-}
-
-function adjustRatingFromServer(val) {
-    var rating = parseInt(val);
-    if (rating<0) {
-        rating=0;
-    } else if (rating>100) {
-        rating=100;
-    }
-    return Math.round(rating/10.0)/2.0;  // Round to nearest 5%
-}
-
-function adjustRatingToServer(val) {
-    return (val*20)+"%";
+    var index=Math.ceil(val/10.0);
+    return index<=0 ? str : (str+SEPARATOR+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]);
 }
 
 function isEmpty(str) {

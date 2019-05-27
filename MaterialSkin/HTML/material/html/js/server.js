@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNS";
+const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNRS";
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];
@@ -315,6 +315,14 @@ var lmsServer = Vue.component('lms-server', {
                 // get updated. So, if there is a duration there, use that as the current tracks duration.
                 if (data.duration) {
                     player.current.duration = parseFloat(data.duration);
+                }
+                if (undefined!=player.current.rating) {
+                    player.current.rating=parseInt(player.current.rating);
+                    if (player.current.rating<0) {
+                        player.current.rating = 0;
+                    } else if (player.current.rating>100) {
+                        player.current.rating = 100;
+                    }
                 }
             }
 

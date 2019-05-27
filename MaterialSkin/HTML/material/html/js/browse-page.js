@@ -1155,7 +1155,6 @@ itemAc
                 });
             } else {
                 var command = this.buildFullCommand(item, act, index);
-                console.log(command);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;

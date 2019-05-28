@@ -142,7 +142,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else>
    <v-btn flat icon @click="goHome()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
-   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
@@ -151,7 +151,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="B_ACTIONS[action].title">
+    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
     </v-btn>

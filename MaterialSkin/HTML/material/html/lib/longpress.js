@@ -17,10 +17,14 @@ Vue.directive('longpress', {
         let started = false
         let timedout = false
         let touchOnly = false;
+        let elemId = undefined;
 
         // Define funtion handlers
         // Create timeout ( run function after 1s )
         let start = (e) => {
+            if (undefined==el.id) {
+                return;
+            }
             if (e.type=="touchstart") {
                 touchOnly = true;
             } else if (touchOnly && !e.type.startsWith("touch")) {
@@ -30,6 +34,7 @@ Vue.directive('longpress', {
             if (started || ((e.type === 'click' || e.type === 'mousedown') && e.button !== 0)) {
                 return;
             }
+            elemId = el.id;
             started = true;
             timedout = false;
             if (pressTimer === null) {
@@ -48,20 +53,24 @@ Vue.directive('longpress', {
 
         // Cancel Timeout
         let cancel = (e) => {
-            if (started && !timedout) {
-                if (undefined==binding.value.method) {
-                    binding.value(false)
-                } else {
-                    binding.value.method(binding.value.item, false)
+            if (el.id==elemId) {
+               if (started && !timedout) {
+                    if (undefined==binding.value.method) {
+                        binding.value(false)
+                    } else {
+                        binding.value.method(binding.value.item, false)
+                    }
+                    started = false
                 }
-                started = false
             }
+            started = false;
+            timedout = false;
+            elemId = undefined;
             if (pressTimer !== null) {
                 clearTimeout(pressTimer)
                 pressTimer = null
             }
         }
-
 
         el.addEventListener("touchstart", start, { passive: true });
         el.addEventListener("touchend", cancel);

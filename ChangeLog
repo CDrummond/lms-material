@@ -9,7 +9,8 @@
 4. Get ratings from status messages, but still only show if trackstat
    installed.
 5. Show ratings in queue - desktop layout only.
-6. Work-around longpress issues, by checking element ID of events.
+6. Remove long-press on back button to go home, as this seems to be causing
+   conflicts with selecting multiple items and playing.
 
 0.7.2
 -----

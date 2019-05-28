@@ -369,7 +369,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (resp.total == resp.items.length) {
                 if (isApps) {
                     resp.items.sort(titleSort);
-                } else if (isFavorites) {
+                } else if (isFavorites && options.sortFavorites) {
                     resp.items.sort(favSort);
                 }
             }

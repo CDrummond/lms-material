@@ -408,7 +408,8 @@ itemAc
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
-                      pinned: new Set()};
+                      pinned: new Set(),
+                      sortFavorites: this.$store.state.sortFavorites};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
@@ -2107,13 +2108,14 @@ itemAc
         this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], "remoteLibraries", TOP_REMOTE_ID);
         this.checkFeature(["can", "cdplayer", "items", "?"], "cdPlayer", TOP_CDPLAYER_ID);
 
-        bus.$on('browseDisplayChanged', function(act) {
+        bus.$on('browseDisplayChanged', function() {
+            this.options.sortFavorites=this.$store.state.sortFavorites;
             if (this.playerId() && this.$store.state.serverMenus) {
                 this.playerMenu();
             }
             this.goHome();
         }.bind(this));
-        bus.$on('libraryChanged', function(act) {
+        bus.$on('libraryChanged', function() {
             this.goHome();
             this.setLibrary();
         }.bind(this));

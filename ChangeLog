@@ -11,6 +11,7 @@
 5. Show ratings in queue - desktop layout only.
 6. Remove long-press on back button to go home, as this seems to be causing
    conflicts with selecting multiple items and playing.
+7. Re-add option to control whether to sort favourites.
 
 0.7.2
 -----

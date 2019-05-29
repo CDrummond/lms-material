@@ -284,17 +284,7 @@ Vue.component('lms-ui-settings', {
                     data.result.folder_loop.forEach(i => {
                         this.libraries.push(i);
                     });
-                    this.libraries.sort(function(a, b) {
-                                                            var nameA = a.name.toUpperCase();
-                                                            var nameB = b.name.toUpperCase();
-                                                            if (nameA < nameB) {
-                                                                return -1;
-                                                            }
-                                                            if (nameA > nameB) {
-                                                                return 1;
-                                                            }
-                                                            return 0;
-                                                        });
+                    this.libraries.sort(nameSort);
                     this.libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
                     this.library = this.$store.state.library;
                     if (!this.library) {

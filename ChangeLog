@@ -1,6 +1,8 @@
 0.7.4
 -----
 1. Remove 'itemAc' string next to pinned items.
+2. Add menu button next to "My Music . LibraryName", allowing user to quickly
+   change library.
 
 0.7.3
 -----

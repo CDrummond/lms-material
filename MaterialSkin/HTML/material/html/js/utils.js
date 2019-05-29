@@ -158,6 +158,18 @@ function fixTitle(str) {
     return str;
 }
 
+function nameSort(a, b) {
+    var nameA = a.name.toLowerCase();
+    var nameB = b.name.toLowerCase();
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+    return 0;
+}
+
 function titleSort(a, b) {
     var titleA = fixTitle(a.title.toLowerCase());
     var titleB = fixTitle(b.title.toLowerCase());

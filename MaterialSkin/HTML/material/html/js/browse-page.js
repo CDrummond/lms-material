@@ -1893,7 +1893,7 @@ itemAc
                     commands.push({act:ADD_ACTION, item:this.items[idx], idx:idx});
                 }
             }
-            this.doCommands(commands);
+            this.doCommands(commands, false);
             this.clearSelection();
         },
         playSelectedItems() {
@@ -1905,10 +1905,10 @@ itemAc
                     commands.push({act:0==i ? PLAY_ACTION : ADD_ACTION, item:this.items[idx], idx:idx});
                 }
             }
-            this.doCommands(commands);
+            this.doCommands(commands, true);
             this.clearSelection();
         },
-        doCommands(commands) {
+        doCommands(commands, npAfterLast) {
             if (commands.length>0) {
                 var cmd = commands.shift();
                 var command = this.buildFullCommand(cmd.item, cmd.act, cmd.idx);
@@ -1919,7 +1919,10 @@ itemAc
 
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
-                    this.doCommands(commands);
+                    if (npAfterLast && 0==commands.length && !this.desktop) {
+                        this.$store.commit('setPage', 'now-playing');
+                    }
+                    this.doCommands(commands, npAfterLast);
                 }).catch(err => {
                     logError(err, command.command);
                 });

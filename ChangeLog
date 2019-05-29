@@ -12,6 +12,7 @@
 6. Remove long-press on back button to go home, as this seems to be causing
    conflicts with selecting multiple items and playing.
 7. Re-add option to control whether to sort favourites.
+8. In mobile layout, switch to now-playing after playing a selection of items.
 
 0.7.2
 -----

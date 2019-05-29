@@ -1626,7 +1626,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.items[0].header=this.top[0].header;
             }
             lmsList("", ["libraries"]).then(({data}) => {
-                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>1) {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
                         if (loop[i].id == this.$store.state.library) {
                             this.libraryName=loop[i].id!=LMS_DEFAULT_LIBRARY ? loop[i].name : i18n("Default");

@@ -236,7 +236,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>
-itemAc
     <v-list-tile-action :title="B_ACTIONS[UNPIN_ACTION].title" @click.stop="itemAction(UNPIN_ACTION, item, index)">
      <v-btn icon>
       <img class="svg-img" :src="B_ACTIONS[UNPIN_ACTION].svg | svgIcon(darkUi)"></img>

@@ -1,3 +1,7 @@
+0.7.4
+-----
+1. Remove 'itemAc' string next to pinned items.
+
 0.7.3
 -----
 1. Limit strings in landscape now-playing to 80 characters.

@@ -905,5 +905,10 @@ div.v-subheader {
 }
 
 @media screen and (max-width: 550px) {
-    #home-button{display:none;}
+ #home-button{display:none;}
+}
+
+.lib-select-btn {
+ margin-left:-4px;
+ opacity:0.6;
 }

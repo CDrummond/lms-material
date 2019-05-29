@@ -273,7 +273,8 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ libraryName && item.id==TOP_MMHDR_ID ? item.header +" ("+libraryName+")" : item.header }}
+   <v-subheader v-if="item.header" @click="toggleGroup(item.group)" style="width:100%"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ item.id==TOP_MMHDR_ID && libraryName ? item.header + SEPARATOR + libraryName : item.header }}
+    <v-btn icon small v-if="item.id==TOP_MMHDR_ID && libraryName" @click.stop="showLibMenu($event)" class="lib-select-btn"><v-icon size="14">more_vert</v-icon></v-btn>
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action, item, index)">
      <v-btn icon><v-icon>{{B_ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>
@@ -354,10 +355,17 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list v-if="menu.history">
+  <v-list v-else-if="menu.history">
    <template v-for="(item, index) in menu.history">
     <v-list-tile @click="goTo(index)">
      <v-list-tile-title>{{item}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
+  <v-list v-else-if="menu.libraries">
+   <template v-for="(item, index) in menu.libraries">
+    <v-list-tile @click="selectLibrary(item.id)">
+     <v-list-tile-title>{{item.name}}</v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>
@@ -1204,6 +1212,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.menu={show:true, x:event.clientX, y:event.clientY, history:history};
             }
         },
+        showLibMenu(event) {
+            lmsList("", ["libraries"]).then(({data}) => {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                    var libraries = [];
+                    data.result.folder_loop.forEach(i => {
+                        libraries.push(i);
+                    });
+                    libraries.sort(nameSort);
+                    libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
+                    this.menu={show:true, x:event.clientX, y:event.clientY, libraries:libraries};
+                }
+            });
+        },
+        selectLibrary(id) {
+            this.$store.commit('setLibrary', id);
+        },
         headerAction(act) {
             if (USE_LIST_ACTION==act) {
                 this.changeLayout(true);
@@ -1602,14 +1626,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.items[0].header=this.top[0].header;
             }
             lmsList("", ["libraries"]).then(({data}) => {
-                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>1) {
                     for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
                         if (loop[i].id == this.$store.state.library) {
-                            if (loop[i].id!=LMS_DEFAULT_LIBRARY) {
-                                this.libraryName=loop[i].name;
-                            }
+                            this.libraryName=loop[i].id!=LMS_DEFAULT_LIBRARY ? loop[i].name : i18n("Default");
                             break;
                         }
+                    }
+                    if (undefined==this.libraryName) {
+                        this.libraryName=i18n("Default");
                     }
                 }
             });

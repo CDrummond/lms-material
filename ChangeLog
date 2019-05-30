@@ -3,6 +3,7 @@
 1. Remove 'itemAc' string next to pinned items.
 2. Add menu button next to "My Music . LibraryName", allowing user to quickly
    change library.
+3. Only collpase/expand section if click on arrow or title - not whole width.
 
 0.7.3
 -----

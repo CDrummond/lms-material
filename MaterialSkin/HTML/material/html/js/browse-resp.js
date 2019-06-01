@@ -570,7 +570,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
-            var actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION];
+            var actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION];
             //if (options.ratingsSupport) {
             //    actions.push(DIVIDER);
             //    actions.push(RATING_ACTION);

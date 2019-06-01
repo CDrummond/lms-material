@@ -632,6 +632,16 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.fetchingItems = false;
                     this.listSize = resp.size;
                     this.getDuration();
+                    if (this.selection.length>0) {
+                        var sel = [];
+                        for (var i=0, len=this.selection.length; i<len; ++i) {
+                            if (this.selection[i]<this.items.length) {
+                                sel.push(this.selection[i]);
+                                this.items[this.selection[i]].selected = true;
+                            }
+                        }
+                        this.selection = sel;
+                    }
                     this.$nextTick(function () {
                         setScrollTop(this.scrollElement, currentPos>0 ? currentPos : 0);
                     });

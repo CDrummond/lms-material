@@ -909,6 +909,7 @@ div.v-subheader {
 }
 
 .lib-select-btn {
+ margin-top: 10px;
  margin-left:-4px;
  opacity:0.6;
 }

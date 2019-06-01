@@ -395,7 +395,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.current.rating!=this.rating.setting) {
                 this.rating.setting = undefined==playerStatus.current.rating && playerStatus.current.id>=0 ? 0 : playerStatus.current.rating;
-                this.rating.value = undefined==this.rating.setting ? undefined : (Math.ceil(this.rating.setting/10.0)/2.0);
+                this.rating.value = undefined==this.rating.setting ? 0 : (Math.ceil(this.rating.setting/10.0)/2.0);
                 trackChanged = true;
             }
             var artistAndComposer;

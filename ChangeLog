@@ -1,3 +1,8 @@
+0.7.5
+-----
+1. If rating from server is undefined, but TrackStat is installed, then show
+   rating as 0.
+
 0.7.4
 -----
 1. Remove 'itemAc' string next to pinned items.

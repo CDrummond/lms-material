@@ -10,7 +10,11 @@ Vue.component('lms-bottomnav', {
 <v-footer height="auto" class="lms-footer">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
-   <v-btn flat class="lms-bottom-nav-button" @click="setPage(item.page)" v-bind:class="{'inactive-nav': activeBtn!=index}">
+   <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress="browsePressed" v-bind:class="{'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
+    <span>{{item.text}}</span>
+    <v-icon>{{item.icon}}</v-icon>
+   </v-btn>
+   <v-btn v-else flat class="lms-bottom-nav-button" @click="setPage(item.page)" v-bind:class="{'inactive-nav': activeBtn!=index}">
     <span>{{item.text}}</span>
     <v-icon>{{item.icon}}</v-icon>
    </v-btn>
@@ -38,12 +42,15 @@ Vue.component('lms-bottomnav', {
                           { text: i18n('Queue'),   icon: 'queue_music',         page: 'queue' },
                          ];
         },
-        setPage(page) {
+        setPage(page, longPress) {
             if (page!=this.$store.state.page) {
                 this.$store.commit('setPage', page);
             } else {
-                bus.$emit('nav', page);
+                bus.$emit('nav', page, longPress);
             }
+        },
+        browsePressed(longPress) {
+            this.setPage(this.items[0].page, longPress);
         }
     },
     computed: {

@@ -2,6 +2,8 @@
 -----
 1. If rating from server is undefined, but TrackStat is installed, then show
    rating as 0.
+2. Longpress on 'Browse' navigation button (whilst on 'Browse' view) will
+   navigate to top (home).
 
 0.7.4
 -----

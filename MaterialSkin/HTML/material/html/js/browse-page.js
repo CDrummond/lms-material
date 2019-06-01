@@ -439,9 +439,13 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         if (!this.desktop) {
             // Clicking on 'browse' nav button whilst in browse page goes back.
-            bus.$on('nav', function(page) {
+            bus.$on('nav', function(page, longPress) {
                 if ('browse'==page && this.history.length>0) {
-                    this.goBack();
+                    if (longPress) {
+                        this.goHome();
+                    } else {
+                        this.goBack();
+                    }
                 }
             }.bind(this));
         }

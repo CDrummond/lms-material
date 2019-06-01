@@ -4,6 +4,7 @@
    rating as 0.
 2. Longpress on 'Browse' navigation button (whilst on 'Browse' view) will
    navigate to top (home).
+3. Clear selection when go back/home.
 
 0.7.4
 -----

@@ -1303,6 +1303,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     lmsListSource.cancel(i18n('Operation cancelled by the user.'));
                 }
             }
+            this.clearSelection();
             var prev = this.history.length>0 ? this.history[0].pos : 0;
             this.items = this.getTop();
             this.jumplist = [];
@@ -1353,6 +1354,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goHome();
                 return;
             }
+            this.clearSelection();
             var prev = this.history.pop();
             var changedView = this.grid.use != prev.grid.use;
             this.items = prev.items;

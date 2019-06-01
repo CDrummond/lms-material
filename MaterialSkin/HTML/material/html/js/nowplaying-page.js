@@ -394,7 +394,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 trackChanged = true;
             }
             if (playerStatus.current.rating!=this.rating.setting) {
-                this.rating.setting = undefined==playerStatus.current.rating && playerStatus.current.id>=0 ? 0 : playerStatus.current.rating;
+                this.rating.setting = playerStatus.current.rating;
                 this.rating.value = undefined==this.rating.setting ? 0 : (Math.ceil(this.rating.setting/10.0)/2.0);
                 trackChanged = true;
             }
@@ -815,7 +815,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('largeViewVisible', val);
         },
         'rating.value': function(newVal) {
-            if (this.$store.state.ratingsSupport && newVal!=undefined && (Math.ceil(this.rating.setting/10.0)/2.0)!=newVal) {
+            if (this.$store.state.ratingsSupport && newVal!=undefined && (this.rating.setting==undefined || (Math.ceil(this.rating.setting/10.0)/2.0)!=newVal)) {
                 lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, newVal]).then(({data}) => {
                     bus.$emit('refreshStatus');
                     bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);

@@ -5,6 +5,7 @@
 2. Longpress on 'Browse' navigation button (whilst on 'Browse' view) will
    navigate to top (home).
 3. Clear selection when go back/home.
+4. Work-around item selection not updating until redraw if using large lists.
 
 0.7.4
 -----

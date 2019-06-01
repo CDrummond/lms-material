@@ -1136,6 +1136,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (idx>-1) {
                         item.menu[idx]=UNSELECT_ACTION;
                     }
+                    if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                        forceItemUpdate(this, this.items, item, index);
+                    }
                 }
             } else if (UNSELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
@@ -1145,6 +1148,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     idx = item.menu.indexOf(UNSELECT_ACTION);
                     if (idx>-1) {
                         item.menu[idx]=SELECT_ACTION;
+                    }
+                    if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                        forceItemUpdate(this, this.items, item, index);
                     }
                 }
             } else if (RATING_ACTION==act) {
@@ -1879,17 +1885,22 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         clearSelection() {
-            for (var i=0, len=this.selection.length; i<len; ++i) {
-                var index = this.selection[i];
-                if (index>-1 && index<this.items.length) {
-                    var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
-                    if (idx>-1) {
-                        this.items[index].menu[idx]=SELECT_ACTION;
+            if (this.selection.length>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                this.selection = [];
+                this.refreshList();
+            } else {
+                for (var i=0, len=this.selection.length; i<len; ++i) {
+                    var index = this.selection[i];
+                    if (index>-1 && index<this.items.length) {
+                        var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
+                        if (idx>-1) {
+                            this.items[index].menu[idx]=SELECT_ACTION;
+                        }
+                        this.items[index].selected = false;
                     }
-                    this.items[index].selected = false;
                 }
+                this.selection = [];
             }
-            this.selection = [];
         },
         select(item, index) {
             if (this.selection.length>0) {

@@ -1885,22 +1885,22 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         clearSelection() {
-            if (this.selection.length>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
-                this.selection = [];
-                this.refreshList();
-            } else {
-                for (var i=0, len=this.selection.length; i<len; ++i) {
-                    var index = this.selection[i];
-                    if (index>-1 && index<this.items.length) {
-                        var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
-                        if (idx>-1) {
-                            this.items[index].menu[idx]=SELECT_ACTION;
-                        }
-                        this.items[index].selected = false;
+            for (var i=0, len=this.selection.length; i<len; ++i) {
+                var index = this.selection[i];
+                if (index>-1 && index<this.items.length) {
+                    var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
+                    if (idx>-1) {
+                        this.items[index].menu[idx]=SELECT_ACTION;
                     }
+                    this.items[index].selected = false;
                 }
-                this.selection = [];
             }
+            if (this.selection.length>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                this.$nextTick(function () {
+                    this.items = JSON.parse(JSON.stringify(this.items));
+                });
+            }
+            this.selection = [];
         },
         select(item, index) {
             if (this.selection.length>0) {

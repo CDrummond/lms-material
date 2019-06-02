@@ -11,6 +11,7 @@
 7. Playlist editing; moving and removing of tracks.
 8. Allow drag'n'drop re-ordering of favourites if not set to sort. Can only move
    a single favourite at a time, not a selection.
+9. Calculate mobile/portrait padding when now-playing is initially shown.
 
 0.7.4
 -----

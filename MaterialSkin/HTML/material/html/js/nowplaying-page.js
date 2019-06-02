@@ -300,6 +300,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.largeView = val;
             }.bind(this));
         } else {
+            bus.$on('pageChanged', function(val) {
+                if (0==this.lastWidth && val=='now-playing') {
+                    this.$nextTick(() => {
+                        this.portraitElem = document.getElementById("np-page");
+                        this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
+                         this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+                        this.calcPortraitPad();
+                    });
+                }
+            }.bind(this));
             this.portraitElem = document.getElementById("np-page");
             this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
             this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;

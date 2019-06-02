@@ -249,7 +249,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </template>
 
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
-   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}">
+   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable="item.draggable">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -291,7 +291,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index">
+   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable="item.draggable">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -2127,7 +2127,64 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
-        }
+        },
+        dragStart(which, ev) {
+            ev.dataTransfer.dropEffect = 'move';
+            ev.dataTransfer.setData('Text', this.id);
+            this.dragIndex = which;
+            this.stopScrolling = false;
+            if (this.selection.length>0 && this.selection.indexOf(which)<0) {
+                this.clearSelection();
+            }
+        },
+        dragEnd() {
+            this.stopScrolling = true;
+            this.dragIndex = undefined;
+        },
+        dragOver(ev) {
+            // Drag over item at top/bottom of list to start scrolling
+            this.stopScrolling = true;
+            if (ev.clientY < 110) {
+                this.stopScrolling = false;
+                this.scrollList(-5)
+            }
+
+            if (ev.clientY > (window.innerHeight - 70)) {
+                this.stopScrolling = false;
+                this.scrollList(5)
+            }
+            ev.preventDefault(); // Otherwise drop is never called!
+        },
+        scrollList(step) {
+            var pos = this.scrollElement.scrollTop + step;
+            setScrollTop(this.scrollElement, pos);
+            if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
+                this.stopScrolling = true;
+            }
+            if (!this.stopScrolling) {
+                setTimeout(function () {
+                    this.scrollList(step);
+                }.bind(this), 100);
+            }
+        },
+        drop(to, ev) {
+            this.stopScrolling = true;
+            ev.preventDefault();
+            if (this.dragIndex!=undefined && to!=this.dragIndex) {
+                var sel = this.selection.slice();
+                this.clearSelection();
+                if (sel.length>0) {
+                    if (sel.indexOf(to)<0) {
+                        bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                    }
+                } else {
+                    lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+(to>this.dragIndex ? to-1 : to)]).then(({datax}) => {
+                        this.refreshList();
+                    });
+                }
+            }
+            this.dragIndex = undefined;
+        },
     },
     mounted() {
         this.mobileBrowser = isMobile();

@@ -564,13 +564,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               //icon: "list",
                               params: ["playlist_id:"+ i.id], // "tags:IRad"] -> Will show rating, not album???
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
-                              type: "group"
+                              type: "group",
+                              section: SECTION_PLAYLISTS
                           });
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
-            var actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION];
             //if (options.ratingsSupport) {
             //    actions.push(DIVIDER);
             //    actions.push(RATING_ACTION);
@@ -601,7 +601,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: title,
                               subtitle: subtitle,
                               //icon: "music_note",
-                              menu: actions,
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, REMOVE_ACTION],
                               type: "track"
                           });
             }

@@ -602,7 +602,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               subtitle: subtitle,
                               //icon: "music_note",
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, REMOVE_ACTION],
-                              type: "track"
+                              type: "track",
+                              draggable: true
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);

@@ -151,15 +151,34 @@ var lmsServer = Vue.component('lms-server', {
         moveQueueItems(indexes, to, movedBefore, movedAfter) {
             if (indexes.length>0) {
                 var index = indexes.shift();
-                lmsCommand(this.$store.state.player.id, ["playlist", "move", index<to ? index-movedBefore : index,
-                                                         index>to ? to+movedAfter+(movedBefore>0 ? 1 : 0) : to]).then(({data}) => {
-                    if (indexes.length>0) {
-                        this.moveQueueItems(indexes, to, index<to ? movedBefore+1 : movedBefore,
-                                                         index>to ? movedAfter+1 : movedAfter);
-                    }
+                var command = ["playlist", "move", index<to ? index-movedBefore : index,
+                                                   index>to ? to+movedAfter+(movedBefore>0 ? 1 : 0) : to];
+                lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                    this.moveQueueItems(indexes, to, index<to ? movedBefore+1 : movedBefore,
+                                                     index>to ? movedAfter+1 : movedAfter);
+                }).catch(err => {
+                    logError(err, command);
+                    this.updateCurrentPlayer();
                 });
             } else {
                 this.updateCurrentPlayer();
+            }
+        },
+        movePlaylistItems(playlist, indexes, to, movedBefore, movedAfter) {
+            if (indexes.length>0) {
+                var index = indexes.shift();
+                var command = ["playlists", "edit", "cmd:move", playlist, "index:"+(index<to ? index-movedBefore : index),
+                               "toindex:"+(index>to ? to+movedAfter+(movedBefore>0 ? 1 : 0) : to)];
+                console.log(JSON.stringify(command));
+                lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                    this.movePlaylistItems(playlist, indexes, to, index<to ? movedBefore+1 : movedBefore,
+                                                                  index>to ? movedAfter+1 : movedAfter);
+                }).catch(err => {
+                    logError(err, command);
+                    bus.$emit('refreshList', SECTION_PLAYLISTS);
+                });
+            } else {
+                bus.$emit('refreshList', SECTION_PLAYLISTS);
             }
         },
         doAllList(ids, command, section) {
@@ -482,6 +501,9 @@ var lmsServer = Vue.component('lms-server', {
             if (this.$store.state.player) {
                 this.moveQueueItems(indexes, to, 0, 0);
             }
+        }.bind(this));
+        bus.$on('movePlaylistItems', function(playlist, indexes, to) {
+            this.movePlaylistItems(playlist, indexes, to, 0, 0);
         }.bind(this));
         bus.$on('doAllList', function(ids, command, section) {
             if (this.$store.state.player) {

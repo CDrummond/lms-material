@@ -249,7 +249,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </template>
 
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
-   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable="item.draggable">
+   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -291,7 +291,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable="item.draggable">
+   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -2174,11 +2174,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var sel = this.selection.slice();
                 this.clearSelection();
                 if (sel.length>0) {
-                    if (sel.indexOf(to)<0) {
+                    if (this.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
                         bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
                     }
                 } else {
-                    lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+(to>this.dragIndex ? to-1 : to)]).then(({datax}) => {
+                    var command = this.current.section==SECTION_FAVORITES
+                                    ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"), this.items[to].id.replace("item_id:", "to_id:")]
+                                    : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+(to>this.dragIndex ? to-1 : to)];
+                    lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();
                     });
                 }

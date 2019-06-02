@@ -6,8 +6,9 @@
    navigate to top (home).
 3. Clear selection when go back/home.
 4. Work-around item selection not updating until redraw if using large lists.
-5. Allow playlist tracks to be selected.
-6. Handle play queue updates whilst items are selected.
+5. Handle play queue updates whilst items are selected.
+6. Allow playlist tracks to be selected.
+7. Allow items to be removed from playlists.
 
 0.7.4
 -----

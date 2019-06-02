@@ -30,6 +30,7 @@ const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
 const USE_GRID_ACTION         = 22;
 const USE_LIST_ACTION         = 23;
+const REMOVE_ACTION           = 24;
 const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:138, ih:190, clz:"image-grid-b"},
                      {iw:143, ih:195, clz:"image-grid-c"},
@@ -65,7 +66,8 @@ var B_ACTIONS=[
     {cmd:"rating",     icon:"stars"},
     {cmd:"search-lib", icon:"search"},
     {cmd:"use-grid",   icon:"grid_on"},
-    {cmd:"use-list",   icon:"grid_off"}
+    {cmd:"use-list",   icon:"grid_off"},
+    {cmd:"remove",     icon:"remove_circle_outline"}
 ];
 
 const MAX_GRID_TEXT_LEN = 80;
@@ -132,8 +134,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
-   <v-btn v-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems()"><v-icon>delete</v-icon></v-btn>
-   <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems()"><v-icon>delete_outline</v-icon></v-btn>
+   <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{B_ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
+   <v-btn v-else-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems(DELETE_ACTION)"><v-icon>delete</v-icon></v-btn>
+   <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_FROM_FAV_ACTION)"><v-icon>delete_outline</v-icon></v-btn>
    <v-divider vertical v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="addSelectedItems()"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="playSelectedItems()"><v-icon>play_circle_outline</v-icon></v-btn>
@@ -505,6 +508,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             B_ACTIONS[DELETE_ACTION].title=i18n("Delete");
             B_ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
             B_ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
+            B_ACTIONS[REMOVE_ACTION].title=i18n("Remove");
             B_ACTIONS[PIN_ACTION].title=i18n("Pin to main page");
             B_ACTIONS[UNPIN_ACTION].title=i18n("Un-pin from main page");
             B_ACTIONS[SELECT_ACTION].title=i18n("Select");
@@ -1045,7 +1049,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                 });
-            } else if (act===ADD_TO_FAV_ACTION) {
+            } else if (act==REMOVE_ACTION) {
+                this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        this.clearSelection();
+                        lmsCommand(this.playerId(), ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({datax}) => {
+                            logJsonMessage("RESP", datax);
+                            this.refreshList();
+                        }).catch(err => {
+                            logAndShowError(err, i18n("Failed to remove '%1'!", item.title), command);
+                        });
+                    }
+                });
+            } else if (act==ADD_TO_FAV_ACTION) {
                 updateItemFavorites(item);
                 var favUrl = item.favUrl ? item.favUrl : item.url;
                 var favIcon = item.favIcon;
@@ -1762,6 +1778,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id == "myMusicPlaylists") {
                                     item.icon = "list";
                                     item.id = TOP_PLAYLISTS_ID;
+                                    item.section = SECTION_PLAYLISTS;
                                 } else if (c.id.startsWith("myMusicYears")) {
                                     item.icon = "date_range";
                                     item.cancache = true;
@@ -1907,19 +1924,24 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.itemAction(this.selection.indexOf(index)<0 ? SELECT_ACTION : UNSELECT_ACTION, item, index);
             }
         },
-        deleteSelectedItems() {
+        deleteSelectedItems(act) {
             if (1==this.selection.length) {
-                this.itemAction(SECTION_FAVORITES==this.current.section ? REMOVE_FROM_FAV_ACTION : DELETE_ACTION, this.items[this.selection[0]], this.selection[0]);
+                this.itemAction(act, this.items[this.selection[0]], this.selection[0]);
             } else {
-                this.$confirm(SECTION_FAVORITES==this.current.section ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
-                             {buttonTrueText: SECTION_FAVORITES==this.current.section ? i18n("Remove") : i18n("Delete"),
+                this.$confirm(REMOVE_ACTION==act || REMOVE_FROM_FAV_ACTION==act ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
+                             {buttonTrueText: REMOVE_ACTION==act || REMOVE_FROM_FAV_ACTION==act ? i18n("Remove") : i18n("Delete"),
                               buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         var ids=[];
-                        this.selection.forEach(idx => {ids.push(this.items[idx].id)});
-                        ids.sort(function(a, b) { return a<b ? 1 : -1; });
-                        bus.$emit('doAllList', ids, this.current.section==SECTION_PLAYLISTS ? ["playlists", "delete"] : ["favorites", "delete"],
-                                  this.current.section);
+                        this.selection.sort((a, b) => b - a);
+                        if (REMOVE_ACTION==act) {
+                            this.selection.forEach(idx => {ids.push("index:"+idx)});
+                            bus.$emit('doAllList', ids, ["playlists", "edit", "cmd:delete", this.current.id], this.current.section);
+                        } else {
+                            this.selection.forEach(idx => {ids.push(this.items[idx].id)});
+                            bus.$emit('doAllList', ids, this.current.section==SECTION_PLAYLISTS ? ["playlists", "delete"] : ["favorites", "delete"],
+                                      this.current.section);
+                        }
                         this.clearSelection();
                     }
                 });

@@ -311,6 +311,16 @@ var lmsServer = Vue.component('lms-server', {
                            name: data.player_name
                          };
 
+            if (isCurrent) {
+                player.isgroup = this.$store.state.player.isgroup;
+            } else {
+                for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
+                    if (this.$store.state.players[i].id == playerId) {
+                        player.isgroup = this.$store.state.players[i].isgroup;
+                    }
+                }
+            }
+
             player.volume = undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
 
             // Store volume, so that it can be accessed in 'adjustVolume' handler

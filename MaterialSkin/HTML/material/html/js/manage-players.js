@@ -162,7 +162,6 @@ Vue.component('lms-manage-players', {
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
         },
         playerMenu(player, event) {
-            PMGR_SYNC_ACTION.icon = player.synced ? "link" : "link_off";
             this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
             this.menu.x=event.clientX;
             this.menu.y=event.clientY;

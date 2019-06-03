@@ -323,7 +323,7 @@
 "Audio":"",
 "CD Player":"",
 "Dynamic Playlists":"",
-"Failed to remove '%1'!":"",
+"Failed to remove '%1'!":"Fehler beim Entfernen von '%1'!",
 "Firmware: %1":"",
 "IP: %1":"",
 "Information":"",
@@ -334,7 +334,7 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
-"Remove '%1'?":"",
+"Remove '%1'?":"'%1' entfernen?",
 "Start":"",
 "URL":""
 }

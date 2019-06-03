@@ -29,7 +29,7 @@ Vue.component('lms-manage-players', {
   <div class="ios-vcard-text-workaround">
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
-     <template v-for="(player, index) in players" :key="player.id">
+     <div v-for="(player, index) in players" :key="player.id" style="width:100%">
       <v-flex xs12 v-if="0==index && (manageGroups || player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat icon @click="createGroup" :title="i18n('Create group')"><v-icon>add_circle_outline</v-icon></v-btn></v-flex>
       <v-flex xs12 v-if="(manageGroups && 0==index && !player.isgroup) || (index>0 && players[index-1].isgroup && !player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
@@ -67,7 +67,7 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-     </template>
+     </div>
      <v-flex xs12 v-if="players.length>1">
       <v-btn flat @click="bus.$emit('dlg.open', 'sleep')">{{i18n("Set sleep for all players")}}</v-btn>
      </v-flex>
@@ -149,6 +149,23 @@ Vue.component('lms-manage-players', {
 
         bus.$on('noPlayers', function() {
             this.show=false;
+        }.bind(this));
+
+        bus.$on('playersRemoved', function(players) {
+            if (this.show) {
+                for (var i=0, len=players.length; i<len; ++i) {
+                    for (var j=0, jlen=this.players.length; j<jlen; ++j) {
+                        if (this.players[j].id==players[i]) {
+                            this.players.splice(j, 1);
+                            break;
+                        }
+                    }
+                }
+
+                if (this.players.length<1) {
+                    this.show = false;
+                }
+            }
         }.bind(this));
     },
     methods: {

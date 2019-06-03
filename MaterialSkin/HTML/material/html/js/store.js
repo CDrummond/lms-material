@@ -147,6 +147,28 @@ const store = new Vuex.Store({
                 return;
             }
 
+            var existing = new Set();
+            var update = new Set();
+
+            if (state.players) {
+                for (var i=0, len=state.players.length; i<len; ++i) {
+                    existing.add(state.players[i].id);
+                }
+            }
+            if (players) {
+                for (var i=0, len=players.length; i<len; ++i) {
+                    update.add(players[i].id);
+                }
+            }
+            var removed = new Set([...existing].filter(x => !update.has(x)));
+            var added = new Set([...update].filter(x => !existing.has(x)));
+            if (removed.size>0) {
+                bus.$emit("playersRemoved", [...removed]);
+            }
+            if (added.size>0) {
+                bus.$emit("playersAdded", [...added]);
+            }
+
             state.players=players;
             if (state.player) {
                 // Check current player is still valid

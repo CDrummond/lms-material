@@ -69,4 +69,5 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .lms-jumplist {
  background-color:#fff;
+ border-right: 1px solid #f0f0f0;
 }

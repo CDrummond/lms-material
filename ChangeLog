@@ -14,6 +14,7 @@
  9. Calculate mobile/portrait padding when now-playing is initially shown.
 10. Place on/off toggle button next to each player in menu.
 11. Indicate active player by blue speaker icon.
+12. Fix 'Set sleep for all players'
 
 0.7.4
 -----

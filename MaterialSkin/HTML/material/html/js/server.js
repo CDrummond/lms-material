@@ -297,6 +297,10 @@ var lmsServer = Vue.component('lms-server', {
         },
         handlePlayerStatus(playerId, data, forced) {
             logCometdMessage("PLAYER ("+playerId+(forced ? " [forced]" : "")+")", data);
+            // Get status message after unsubscribe!!!
+            if (!this.subscribedPlayers.has(playerId)) {
+                return;
+            }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
             var player = { ison: 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
@@ -556,6 +560,21 @@ var lmsServer = Vue.component('lms-server', {
                 document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);
             }
         }
+
+        bus.$on('playersRemoved', function(players) {
+            if (this.subscribeAll) {
+                for (var i=0, len=players.length; i<len; ++i) {
+                    this.unsubscribe(players[i]);
+                }
+            }
+        }.bind(this));
+        bus.$on('playersAdded', function(players) {
+            if (this.subscribeAll) {
+                for (var i=0, len=players.length; i<len; ++i) {
+                    this.subscribe(players[i]);
+                }
+            }
+        }.bind(this));
     },
     beforeDestroy() {
         this.cancelServerStatusTimer();

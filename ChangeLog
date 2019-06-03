@@ -17,6 +17,8 @@
 12. Fix 'Set sleep for all players'
 13. Fix detection of group players for 'Manage players' dialog.
 14. Fix divider in group players context menu in 'Manage players' dialog.
+15. Fix updating player list in 'Manager players' dialog - e.g. when a player
+    is added or removed.
 
 0.7.4
 -----

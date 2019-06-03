@@ -15,6 +15,7 @@
 10. Place on/off toggle button next to each player in menu.
 11. Indicate active player by blue speaker icon.
 12. Fix 'Set sleep for all players'
+13. Fix detection of group players for 'Manage players' dialog.
 
 0.7.4
 -----

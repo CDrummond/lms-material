@@ -1,17 +1,19 @@
-0.7.5
+0.8.0
 -----
-1. If rating from server is undefined, but TrackStat is installed, then show
-   rating as 0.
-2. Longpress on 'Browse' navigation button (whilst on 'Browse' view) will
-   navigate to top (home).
-3. Clear selection when go back/home.
-4. Work-around item selection not updating until redraw if using large lists.
-5. Handle play queue updates whilst items are selected.
-6. Allow playlist tracks to be selected.
-7. Playlist editing; moving and removing of tracks.
-8. Allow drag'n'drop re-ordering of favourites if not set to sort. Can only move
-   a single favourite at a time, not a selection.
-9. Calculate mobile/portrait padding when now-playing is initially shown.
+ 1. If rating from server is undefined, but TrackStat is installed, then show
+    rating as 0.
+ 2. Longpress on 'Browse' navigation button (whilst on 'Browse' view) will
+    navigate to top (home).
+ 3. Clear selection when go back/home.
+ 4. Work-around item selection not updating until redraw if using large lists.
+ 5. Handle play queue updates whilst items are selected.
+ 6. Allow playlist tracks to be selected.
+ 7. Playlist editing; moving and removing of tracks.
+ 8. Allow drag'n'drop re-ordering of favourites if not set to sort. Can only
+    move a single favourite at a time, not a selection.
+ 9. Calculate mobile/portrait padding when now-playing is initially shown.
+10. Place on/off toggle button next to each player in menu.
+11. Indicate active player by blue speaker icon.
 
 0.7.4
 -----

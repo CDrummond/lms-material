@@ -311,6 +311,12 @@ Vue.component('lms-manage-players', {
                 if (res) {
                     lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
                         bus.$emit('refreshServerStatus');
+                        // Group player seems to appear in server status update after its removed! Checking again, and its gone!
+                        if (player.isgroup) {
+                            setTimeout(function () {
+                                bus.$emit('refreshServerStatus');
+                            }.bind(this), 100);
+                        }
                     });
                 }
             });

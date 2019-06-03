@@ -912,3 +912,18 @@ div.v-subheader {
  margin-left:-4px;
  opacity:0.6;
 }
+
+.v-menu__content .v-list__tile .v-list__tile__title {
+ line-height:24px;
+ height:24px;
+ display: flex;
+ align-items: center;
+}
+
+.v-menu__content .v-list__tile .v-list__tile__title .v-icon,
+.v-menu__content .v-list__tile .v-list__tile__title img {
+ width:24px !important;
+ height:24px !important;
+ vertical-align:middle;
+ line-height:24px;
+}

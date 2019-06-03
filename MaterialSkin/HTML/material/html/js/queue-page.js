@@ -239,7 +239,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-title>
       <div v-if="undefined==PQ_ACTIONS[action].svg"><v-icon>{{PQ_ACTIONS[action].icon}}</v-icon>&nbsp;&nbsp;{{PQ_ACTIONS[action].title}}</div>
-      <div v-else><img style="vertical-align: middle" :src="PQ_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{PQ_ACTIONS[action].title}}</div>
+      <div v-else><img :src="PQ_ACTIONS[action].svg | svgIcon(darkUi)"></img>&nbsp;&nbsp;{{PQ_ACTIONS[action].title}}</div>
      </v-list-tile-title>
     </v-list-tile>
    </template>

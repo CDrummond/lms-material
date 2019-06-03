@@ -380,13 +380,9 @@ a {
  text-overflow:ellipsis;
 }
 
-.toolbar-player-list, .jumplist-menu {
+.toolbar-player-list {
  max-height:calc((var(--vh, 1vh)*100) - 16px);
  overflow-y:auto;
-}
-
-.toolbar-player-list .v-list__tile .v-list__tile__content .v-list__tile__title {
- margin-right:20px;
 }
 
 .v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
@@ -403,14 +399,6 @@ a {
  .v-toolbar__extension {
    padding:0 24px;
   }
-}
-
-.pm-noicon-indent {
- margin-left:44px;
-}
-
-.pm-icon-indent {
- margin-left:20px;
 }
 
 .slightly-dimmed {
@@ -920,10 +908,30 @@ div.v-subheader {
  align-items: center;
 }
 
+.toolbar-player-list .v-list__tile .v-list__tile__title {
+ display: flow-root; /* display:flex breaks ellipsis! But is required for other menus, so as to align icons */
+}
+
 .v-menu__content .v-list__tile .v-list__tile__title .v-icon,
 .v-menu__content .v-list__tile .v-list__tile__title img {
  width:24px !important;
  height:24px !important;
  vertical-align:middle;
  line-height:24px;
+}
+
+.v-menu__content .v-list__tile .v-list__tile__avatar {
+ min-width:38px !important;
+ width:38px !important;
+ margin-left:-12px;
+ padding:0px;
+}
+
+.v-menu__content .v-list__tile .v-list__tile__action {
+ min-width:38px !important;
+ width:38px !important;
+}
+
+.current-player {
+ font-weight:600;
 }

@@ -82,7 +82,10 @@ Vue.component('lms-manage-players', {
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
     <v-list-tile v-else @click="playerAction(menu.player, action.cmd)">
-     <v-list-tile-title><v-icon v-bind:class="{'dimmed': action.dimmed}">{{action.icon}}</v-icon>&nbsp;&nbsp;{{action.title}}</v-list-tile-title>
+     <v-list-tile-avatar>
+      <v-icon v-bind:class="{'dimmed': action.dimmed}">{{action.icon}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>

@@ -921,6 +921,10 @@ div.v-subheader {
  width:38px !important;
 }
 
+.v-menu__content .v-subheader {
+ height:24px;
+}
+
 .current-player {
  font-weight:600;
 }

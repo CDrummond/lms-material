@@ -313,7 +313,7 @@ Vue.component('lms-manage-players', {
             this.$confirm(i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
-                        // If server status is refreshed straigh away, group playe comes back (in listing). Delaying for 1/4 seems to
+                        // If server status is refreshed straight away, group player comes back (in listing). Delaying for 1/4 seems to
                         // work-around this. Perhaps deletion is slow?
                         setTimeout(function () {
                             bus.$emit('refreshServerStatus');

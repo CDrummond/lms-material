@@ -76,9 +76,11 @@ Vue.component('lms-toolbar', {
        
   <v-list class="toolbar-player-list">
    <template v-for="(item, index) in players">
+    <v-subheader v-if="0==index && item.isgroup">{{trans.groupPlayers}}</v-subheader>
+    <v-subheader v-else-if="index>0 && !item.isgroup && players[index-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
      <v-list-tile-avatar>
-      <v-icon v-bind:class="{'active': players && players.length>1 && player && item.id === player.id}">{{item.isgroup ? 'speaker_group' :'speaker'}}</v-icon>
+      <v-icon>{{players && players.length>1 && player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
@@ -164,7 +166,8 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
-                        switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined},
+                        switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined,
+                        groupPlayers:undefined, standardPlayers:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
@@ -392,7 +395,8 @@ Vue.component('lms-toolbar', {
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start Player"), connectionLost:i18n('Server connection lost...')};
+                          startPlayer:i18n("Start Player"), connectionLost:i18n('Server connection lost...'),
+                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

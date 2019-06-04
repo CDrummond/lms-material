@@ -383,6 +383,13 @@ a {
 .toolbar-player-list {
  max-height:calc((var(--vh, 1vh)*100) - 16px);
  overflow-y:auto;
+  min-width:300px;
+}
+
+@media screen and (max-width: 375px) {
+.toolbar-player-list {
+  min-width:calc(100vw - 75px);
+ }
 }
 
 .v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {

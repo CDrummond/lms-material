@@ -310,11 +310,15 @@ Vue.component('lms-manage-players', {
             this.$confirm(i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
-                        bus.$emit('refreshServerStatus');
-                        // Group player seems to appear in server status update after its removed! Checking again, and its gone!
+                        // If server status is refreshed straigh away, group playe comes back (in listing). Delaying for 1/4 seems to
+                        // work-around this. Perhaps deletion is slow?
                         setTimeout(function () {
                             bus.$emit('refreshServerStatus');
-                        }.bind(this), 100);
+                            // Just in case the 1/4 second was not enough, refresh agian in 100ms
+                            setTimeout(function () {
+                                bus.$emit('refreshServerStatus');
+                            }.bind(this), 100);
+                        }.bind(this), 250);
                     });
                 }
             });

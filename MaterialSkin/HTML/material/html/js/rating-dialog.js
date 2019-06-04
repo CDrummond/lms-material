@@ -7,7 +7,7 @@
 
 Vue.component('lms-rating-dialog', {
     template: `
-<v-dialog scrollable v-model="show" persistent width="350">
+<v-dialog scrollable v-model="show" v-if="show" persistent width="350">
  <v-card>
   <v-card-title>{{title}}</v-card-title>
   <v-card-text>

@@ -81,7 +81,6 @@ Vue.component('lms-rating-dialog', {
                 this.show=false;
                 bus.$emit('ratingsSet', this.ids, this.value);
             } else {
-            console.log(this.value);
                 lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.toSet[0], this.value]).then(({data}) => {
                     this.toSet.shift();
                     this.setRating();

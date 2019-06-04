@@ -21,6 +21,8 @@
 15. Fix updating player list in 'Manager players' dialog - e.g. when a player
     is added or removed.
 16. Add form validation to some dialogs.
+17. Clicking on player's sleep time in players menu will show sleep settings
+    dialog.
 
 0.7.4
 -----

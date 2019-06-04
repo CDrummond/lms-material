@@ -10,14 +10,16 @@ Vue.component('lms-search-dialog', {
 <v-dialog scrollable v-model="show" persistent width="600">
  <v-card>
   <v-card-title>{{i18n("Search library")}}</v-card-title>
-  <v-list two-line>
-   <v-list-tile>
-    <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
-   </v-list-tile>
-   <v-list-tile>
-    <v-select :label="i18n('Category')" :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
-   </v-list-tile>
-  </v-list>
+  <v-form ref="form" v-model="valid" lazy-validation>
+   <v-list two-line>
+    <v-list-tile>
+     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()" :rules="termRules" required></v-text-field>
+    </v-list-tile>
+    <v-list-tile>
+     <v-select :label="i18n('Category')" :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
+    </v-list-tile>
+   </v-list>
+  </v-form>
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
@@ -29,10 +31,15 @@ Vue.component('lms-search-dialog', {
     props: [],
     data() {
         return {
+            valid:false,
             categories: [],
             show: false,
             category: 0,
-            term: ""
+            term: "",
+            termRules: [
+                v => !!v || i18n('Term is required'),
+                v => (v && v.trim().length > 1) || i18n('Term must be more than 1 character')
+            ]
         }
     },
     mounted() {

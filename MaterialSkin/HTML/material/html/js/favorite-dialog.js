@@ -10,18 +10,20 @@ Vue.component('lms-favorite', {
 <v-dialog scrollable v-model="show" persistent width="600">
  <v-card>
   <v-card-title>{{item ? i18n("Edit Favorite") : i18n("Add Favorite")}}</v-card-title>
-  <v-list two-line>
-   <v-list-tile>
-    <v-list-tile-content>
-     <v-text-field clearable autofocus v-if="show" :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
-    </v-list-tile-content>
-   </v-list-tile>
-   <v-list-tile>
-    <v-list-tile-content>
-     <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
-    </v-list-tile-content>
-   </v-list-tile>
-  </v-list>
+  <v-form ref="form" v-model="valid" lazy-validation>
+   <v-list two-line>
+    <v-list-tile>
+     <v-list-tile-content>
+      <v-text-field clearable autofocus v-if="show" :label="i18n('Name')" v-model="name" class="lms-search" :rules="nameRules" required></v-text-field>
+     </v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile>
+     <v-list-tile-content>
+      <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search" :rules="urlRules" required></v-text-field>
+     </v-list-tile-content>
+    </v-list-tile>
+   </v-list>
+  </v-form>
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
@@ -34,10 +36,19 @@ Vue.component('lms-favorite', {
     props: [],
     data() {
         return {
+            valid: false,
             show: false,
             name: "",
             url: "",
-            item: undefined
+            item: undefined,
+            nameRules: [
+                v => !!v || i18n('Name is required'),
+                v => (v && v.trim().length > 0) || i18n('Name is required')
+            ],
+            urlRules: [
+                v => !!v || i18n('URL is required'),
+                v => (v && v.trim().length > 0) || i18n('URL is required')
+            ]
         }
     },
     mounted() {

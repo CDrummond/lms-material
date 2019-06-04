@@ -7,7 +7,7 @@
 
 Vue.component('lms-ui-settings', {
     template: `
-<v-dialog v-model="show" scrollable fullscreen>
+<v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">

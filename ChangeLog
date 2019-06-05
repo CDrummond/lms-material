@@ -24,6 +24,7 @@
 17. Clicking on player's sleep time in players menu will show sleep settings
     dialog.
 18. Add an album-sort menu to subtolbar when showing albums.
+19. Remove libraary setting from settings dialog, its available from main page.
 
 0.7.4
 -----

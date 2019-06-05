@@ -65,11 +65,6 @@ Vue.component('lms-ui-settings', {
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Browse')}}</v-header>
 
-    <v-list-tile v-if="libraries.length>0">
-     <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
-    </v-list-tile>
-    <v-divider v-if="libraries.length>0"></v-divider>
-
     <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
       <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
@@ -218,8 +213,6 @@ Vue.component('lms-ui-settings', {
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
-            library: null,
-            libraries: [],
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -262,20 +255,6 @@ Vue.component('lms-ui-settings', {
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.show = true;
-
-            lmsList("", ["libraries"]).then(({data}) => {
-                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                    data.result.folder_loop.forEach(i => {
-                        this.libraries.push(i);
-                    });
-                    this.libraries.sort(nameSort);
-                    this.libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
-                    this.library = this.$store.state.library;
-                    if (!this.library) {
-                        this.library=this.libraries[0].id;
-                    }
-                }
-            });
         }.bind(this));
 
         bus.$on('closeDialog', function(name) {
@@ -323,9 +302,6 @@ Vue.component('lms-ui-settings', {
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif
                                                 } );
-            if (this.libraries.length>0) {
-                this.$store.commit('setLibrary', this.library);
-            }
             if (this.layout != this.layoutOrig) {
                 setLocalStorageVal("layout", this.layout);
                 if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout) ) {

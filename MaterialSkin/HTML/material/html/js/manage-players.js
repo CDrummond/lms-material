@@ -177,8 +177,8 @@ Vue.component('lms-manage-players', {
             PMGR_DELETE_GROUP_ACTION.title=i18n("Delete");
             PMGR_SYNC_ACTION.title=i18n("Synchronise");
             PMGR_SETTINGS_ACTION.title=i18n("Settings");
-            PMGR_POWER_ON_ACTION.title=i18n("Switch On");
-            PMGR_POWER_OFF_ACTION.title=i18n("Switch Off");
+            PMGR_POWER_ON_ACTION.title=i18n("Switch on");
+            PMGR_POWER_OFF_ACTION.title=i18n("Switch off");
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
         },
         playerMenu(player, event) {

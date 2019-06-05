@@ -176,8 +176,7 @@ Vue.component('lms-toolbar', {
                  menuItems: [],
                  browseMenuItems:[],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
-                        switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined,
-                        groupPlayers:undefined, standardPlayers:undefined},
+                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
@@ -398,15 +397,15 @@ Vue.component('lms-toolbar', {
         },
         initItems() {
             TB_UI_SETTINGS.title=i18n('Settings');
-            TB_PLAYER_SETTINGS.title=i18n('Player Settings');
-            TB_SERVER_SETTINGS.title=i18n('Server Settings');
+            TB_PLAYER_SETTINGS.title=i18n('Player settings');
+            TB_SERVER_SETTINGS.title=i18n('Server settings');
             TB_INFO.title=i18n('Information');
-            TB_MANAGE_PLAYERS.title=i18n('Manage Players');
+            TB_MANAGE_PLAYERS.title=i18n('Manage players');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
-                          info:i18n("Show current track information"), switchoff:i18n('Switch Off'), switchon:i18n('Switch On'),
+                          info:i18n("Show current track information"),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start Player"), connectionLost:i18n('Server connection lost...'),
+                          startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players")};
         },
         setPlayer(id) {

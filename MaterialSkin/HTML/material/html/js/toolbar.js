@@ -193,14 +193,6 @@ Vue.component('lms-toolbar', {
                 }
             }
         }.bind(this));
-        bus.$on('removeToolbarActions', function(actions) {
-            actions.forEach(i => {
-                var index = this.menuItems.indexOf(i);
-                if (index > -1) {
-                    this.menuItems.splice(index, 1);
-                }
-            });
-        }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {

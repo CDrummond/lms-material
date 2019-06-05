@@ -898,7 +898,7 @@ div.v-subheader {
  align-items: center;
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 350px) {
  #home-button{display:none;}
 }
 

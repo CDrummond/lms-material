@@ -150,6 +150,15 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">{{trans.startPlayer}}</v-list-tile>
+   <v-divider v-if="!desktop && browseMenuItems && browseMenuItems.length>0 && isBrowsePage"></v-divider>
+   <template v-if="!desktop && browseMenuItems && browseMenuItems.length>0 && isBrowsePage" v-for="(action, index) in browseMenuItems">
+    <v-list-tile @click="bus.$emit('browseAction', action)">
+     <v-list-tile-avatar>
+      <v-icon>{{B_ACTIONS[action].icon}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{B_ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
   </v-list>
  </v-menu>
  <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
@@ -165,6 +174,7 @@ Vue.component('lms-toolbar', {
                  playlist: { count: undefined, duration: undefined, timestamp: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
+                 browseMenuItems:[],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         switchoff:undefined, switchon:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined,
                         groupPlayers:undefined, standardPlayers:undefined},
@@ -176,11 +186,13 @@ Vue.component('lms-toolbar', {
                }
     },
     mounted() {
-        /*
-        bus.$on('addToolbarActions', function(actions) {
-            actions.forEach(i => {
-                this.menuItems.push(i);
-            });
+        bus.$on('settingsMenuActions', function(actions, page) {
+            if ('browse'==page) {
+                this.browseMenuItems=[];
+                for (var i=0, len=actions.length; i<len; ++i) {
+                    this.$set(this.browseMenuItems, i, actions[i]);
+                }
+            }
         }.bind(this));
         bus.$on('removeToolbarActions', function(actions) {
             actions.forEach(i => {
@@ -190,7 +202,6 @@ Vue.component('lms-toolbar', {
                 }
             });
         }.bind(this));
-        */
 
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
@@ -498,6 +509,9 @@ Vue.component('lms-toolbar', {
         },
         isNowPlayingPage() {
             return this.$store.state.page == 'now-playing'
+        },
+        isBrowsePage() {
+            return this.$store.state.page == 'browse'
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1

@@ -155,6 +155,12 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
+   <template v-if="desktop" v-for="(action, index) in settingsMenuActions">
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
+      <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
+    </v-btn>
+   </template>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -411,7 +417,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             showRatingButton: false,
             section: undefined,
             letter: undefined,
-            filteredJumplist: []
+            filteredJumplist: [],
+            tbarActions: [],
+            settingsMenuActions: []
         }
     },
     computed: {
@@ -427,6 +435,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.tbarActions=[];
+        this.settingsMenuActions=[];
         this.mediaDirs=[];
         var col=getLocalStorageVal('collapsed', "").split(",");
         for (var i=0, len=col.length, tlen=this.collapsed.length; i<len && i<tlen; ++i) {
@@ -467,6 +476,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.goBack();
                     }
                 }
+            }.bind(this));
+            bus.$on('browseAction', function(action) {
+                this.headerAction(action);
             }.bind(this));
         }
 
@@ -675,6 +687,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.headerTitle = this.headerTitle;
             prev.headerSubTitle = this.headerSubTitle;
             prev.tbarActions = this.tbarActions;
+            prev.settingsMenuActions = this.settingsMenuActions;
             prev.pos = this.scrollElement.scrollTop;
             prev.grid = this.grid;
             prev.command = this.command;
@@ -716,6 +729,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.filteredJumplist = [];
                 this.baseActions=resp.baseActions;
                 this.tbarActions=[];
+                this.settingsMenuActions=[];
                 this.isTop = false;
                 var changedView = this.grid.use != resp.useGrid;
                 this.grid = {use: resp.canUseGrid && isSetToUseGrid(command), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
@@ -756,7 +770,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_FAV_ACTION];
                 }
                 if (resp.canUseGrid) {
-                    this.tbarActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
+                    this.settingsMenuActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
                 }
                 if (this.command.command.length>0 && this.command.command[0]=="albums") {
                     var addSort=true;
@@ -767,9 +781,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                     if (addSort) {
-                        this.tbarActions.unshift(ALBUM_SORTS_ACTION);
+                        this.settingsMenuActions.unshift(ALBUM_SORTS_ACTION);
                     }
                 }
+                bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
                 if (this.listSize<0) {
                     this.listSize=this.items.length;
                 }
@@ -1318,7 +1333,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
                     albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
                 }
-                this.menu={show:true, x:event.clientX, y:event.clientY, albumSorts:albumSorts};
+                this.menu={show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0, albumSorts:albumSorts};
             } else {
                 this.itemAction(act, this.current);
             }
@@ -1334,13 +1349,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     setUseGrid(this.command, this.grid.use);
                     var af = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
                     var at = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
-                    for (var i=0, len=this.tbarActions.length; i<len; ++i) {
-                        if (this.tbarActions[i] == af) {
-                            this.tbarActions[i] = at;
+                    for (var i=0, len=this.settingsMenuActions.length; i<len; ++i) {
+                        if (this.settingsMenuActions[i] == af) {
+                            this.settingsMenuActions[i] = at;
                             break;
                         }
                     }
-                    this.$forceUpdate(); // Otherwise tbarActions update is not always noticed
+                    bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
+                    this.$forceUpdate();
                 });
             }
         },
@@ -1406,6 +1422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.setBgndCover();
                 setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
             });
+            bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
         },
         goTo(index) {
             if (index>=this.history.length) {
@@ -1465,6 +1482,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
                 });
             }
+            bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
         },
         buildCommand(item, commandName, doReplacements) {
             var origCommand = undefined;

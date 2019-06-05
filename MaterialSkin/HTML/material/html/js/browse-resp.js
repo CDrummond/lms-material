@@ -858,6 +858,24 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         if (cacheKey && lmsLastScan && canUseCache) { // canUseCache defined in utils.js
             resp.iscache=true;
             idbKeyval.set(cacheKey, resp);
+
+            // Remove old album sorts
+            if (data.params && data.params.length>1 && data.params[1].length>0 && data.params[1][0]=="albums") {
+                var parts = cacheKey.split('-'+SORT_KEY);
+                if (2==parts.length) {
+                    parts = parts[1].split('-');
+                    if (parts.length>1) {
+                        var sort = parts[0];
+                        var sorts = ["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum"];
+                        for (var i=0, len=sorts.length; i<len; ++i) {
+                            if (sorts[i]!=sort) {
+                                var other = cacheKey.replace(SORT_KEY+sort, SORT_KEY+sorts[i]);
+                                idbKeyval.del(other);
+                            }
+                        }
+                    }
+                }
+            }
         }
     } else if (data && data.iscache) { // From cache
         resp = data;

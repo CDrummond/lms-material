@@ -573,12 +573,17 @@ const ALBUM_SORT_KEY = "albumSort";
 const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
 
 function commandAlbumSortKey(command) {
+    var isArtist = false;
+    var isCompilation = false;
     for (var i=0, len=command.params.length; i<len; ++i) {
         if (command.params[i].startsWith("artist_id:")) {
-            return ARTIST_ALBUM_SORT_KEY;
+            isArtist = true;
+        }
+        if (command.params[i]=="compilation:1") {
+            isCompilation = true;
         }
     }
-    return ALBUM_SORT_KEY;
+    return isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
 }
 
 function getAlbumSort(command) {

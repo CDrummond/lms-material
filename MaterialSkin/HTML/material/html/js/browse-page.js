@@ -776,7 +776,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var addSort=true;
                     for (var i=0, len=this.command.params.length; i<len; ++i) {
                         if (this.command.params[i].startsWith(SORT_KEY)) {
-                            addSort=this.command.params[i].split(":")[1]!="new";
+                            var sort=this.command.params[i].split(":")[1];
+                            addSort=sort!="new" && sort!="random";
                             break;
                         }
                     }

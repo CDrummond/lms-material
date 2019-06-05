@@ -380,7 +380,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(item, index) in menu.albumSorts">
     <v-list-tile @click="sortAlbums(item)">
      <v-list-tile-avatar>
-      <v-icon>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
+      <v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>

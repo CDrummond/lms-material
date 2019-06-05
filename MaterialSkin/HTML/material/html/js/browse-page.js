@@ -756,7 +756,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
                 }
                 if (this.command.command.length>0 && this.command.command[0]=="albums") {
-                    this.tbarActions.unshift(ALBUM_SORTS_ACTION);
+                    var addSort=true;
+                    for (var i=0, len=this.command.params.length; i<len; ++i) {
+                        if (this.command.params[i].startsWith(SORT_KEY)) {
+                            addSort=this.command.params[i].split(":")[1]!="new";
+                            break;
+                        }
+                    }
+                    if (addSort) {
+                        this.tbarActions.unshift(ALBUM_SORTS_ACTION);
+                    }
                 }
                 if (this.listSize<0) {
                     this.listSize=this.items.length;

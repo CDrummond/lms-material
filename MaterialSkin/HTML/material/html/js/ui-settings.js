@@ -71,16 +71,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="libraries.length>0"></v-divider>
 
     <v-list-tile>
-     <v-select :items="albumSorts" :label="i18n('Sort albums under artists by')" v-model="artistAlbumSort" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
-    <v-divider></v-divider>
- 
-    <v-list-tile>
-     <v-select :items="albumSorts" :label="i18n('Sort album list by')" v-model="albumSort" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
       <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
@@ -214,9 +204,6 @@ Vue.component('lms-ui-settings', {
         return {
             show: false,
             darkUi: true,
-            artistAlbumSort:'yearalbum',
-            albumSort:'album',
-            gridItems: [],
             letterOverlay:false,
             showMenuAudio:false,
             sortFavorites:true,
@@ -231,7 +218,6 @@ Vue.component('lms-ui-settings', {
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
-            albumSorts:[],
             library: null,
             libraries: [],
             layout: null,
@@ -256,8 +242,6 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('uisettings.open', function(act) {
             this.darkUi = this.$store.state.darkUi;
-            this.artistAlbumSort = this.$store.state.artistAlbumSort;
-            this.albumSort = this.$store.state.albumSort;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -307,22 +291,10 @@ Vue.component('lms-ui-settings', {
     },
     methods: {
         initItems() {
-            this.albumSorts=[
-                { key:"album",           label:i18n("Album")},
-                { key:"artistalbum",     label:i18n("Artist, Album")},
-                { key:"artflow",         label:i18n("Artist, Year, Album")},
-                { key:"yearalbum",       label:i18n("Year, Album")},
-                { key:"yearartistalbum", label:i18n("Year, Artist, Album")}
-                ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
-                ];
-            this.gridItems=[
-                { key:"never",  label:i18n("Never")},
-                { key:"always", label:i18n("Whenever possible")},
-                { key:"albums", label:i18n("For local albums only")}
                 ];
             this.lsAndNotifItems=[
                 { key:"never",  label:i18n("Never")},
@@ -333,8 +305,6 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
-                                                  artistAlbumSort:this.artistAlbumSort,
-                                                  albumSort:this.albumSort,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
@@ -372,8 +342,6 @@ Vue.component('lms-ui-settings', {
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     var settings = { darkUi:this.darkUi,
-                                     artistAlbumSort:this.artistAlbumSort,
-                                     albumSort:this.albumSort,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,

@@ -31,6 +31,7 @@ const SEARCH_LIB_ACTION       = 21;
 const USE_GRID_ACTION         = 22;
 const USE_LIST_ACTION         = 23;
 const REMOVE_ACTION           = 24;
+const ALBUM_SORTS_ACTION      = 25;
 const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:138, ih:190, clz:"image-grid-b"},
                      {iw:143, ih:195, clz:"image-grid-c"},
@@ -41,7 +42,7 @@ const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:168, ih:220, clz:"image-grid-h"},
                      {iw:173, ih:225, clz:"image-grid-i"},
                      {iw:178, ih:230, clz:"image-grid-j"} ];
-
+var B_ALBUM_SORTS=[ ];
 var B_ACTIONS=[
     {cmd:"play",       icon:"play_circle_outline"},
     {cmd:"play_album", icon:"album"},
@@ -55,10 +56,10 @@ var B_ACTIONS=[
     {cmd:"rename-pl",  icon:"edit"},
     {cmd:"rename-fav", icon:"edit"},
     {cmd:"edit-fav",   icon:"edit"},
-    {cmd:"add-fav",    svg:"add-favorite"},
+    {cmd:"add-fav",    svg: "add-favorite"},
     {cmd:"delete",     icon:"delete"},
-    {cmd:"addfav",     svg:"add-favorite"},
-    {cmd:"removefav",  svg:"remove-favorite"},
+    {cmd:"addfav",     svg: "add-favorite"},
+    {cmd:"removefav",  svg: "remove-favorite"},
     {cmd:"pin",        svg: "pin"},
     {cmd:"unpin",      svg: "unpin"},
     {cmd:"select",     icon:"check_box_outline_blank"},
@@ -67,7 +68,8 @@ var B_ACTIONS=[
     {cmd:"search-lib", icon:"search"},
     {cmd:"use-grid",   icon:"grid_on"},
     {cmd:"use-list",   icon:"grid_off"},
-    {cmd:"remove",     icon:"remove_circle_outline"}
+    {cmd:"remove",     icon:"remove_circle_outline"},
+    {cmd:"albsort",    icon:"sort_by_alpha"}
 ];
 
 const MAX_GRID_TEXT_LEN = 80;
@@ -154,7 +156,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
     </v-btn>
@@ -374,6 +376,16 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
+  <v-list v-else-if="menu.albumSorts">
+   <template v-for="(item, index) in menu.albumSorts">
+    <v-list-tile @click="sortAlbums(item)">
+     <v-list-tile-avatar>
+      <v-icon>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+  </v-list>
  </v-menu>
 </div>
       `,
@@ -518,6 +530,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             B_ACTIONS[RATING_ACTION].title=i18n("Set rating");
             B_ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
             B_ACTIONS[USE_GRID_ACTION].title=B_ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
+            B_ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
+            B_ALBUM_SORTS=[ { key:"album",           label:i18n("Album")},
+                            { key:"artistalbum",     label:i18n("Artist, Album")},
+                            { key:"artflow",         label:i18n("Artist, Year, Album")},
+                            { key:"yearalbum",       label:i18n("Year, Album")},
+                            { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
@@ -736,6 +754,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 if (resp.canUseGrid) {
                     this.tbarActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
+                }
+                if (this.command.command.length>0 && this.command.command[0]=="albums") {
+                    this.tbarActions.unshift(ALBUM_SORTS_ACTION);
                 }
                 if (this.listSize<0) {
                     this.listSize=this.items.length;
@@ -1256,11 +1277,36 @@ var lmsBrowse = Vue.component("lms-browse", {
         selectLibrary(id) {
             this.$store.commit('setLibrary', id);
         },
-        headerAction(act) {
+        sortAlbums(sort) {
+            if (!sort.selected) {
+                for (var i=0, len=this.command.params.length; i<len; ++i) {
+                    if (this.command.params[i].startsWith(SORT_KEY)) {
+                        this.command.params[i]=SORT_KEY+sort.key;
+                        break;
+                    }
+                }
+                setAlbumSort(this.command, sort.key);
+                this.refreshList(false);
+            }
+        },
+        headerAction(act, event) {
             if (USE_LIST_ACTION==act) {
                 this.changeLayout(true);
             } else if (USE_GRID_ACTION==act) {
                 this.changeLayout(false);
+            } else if (ALBUM_SORTS_ACTION==act) {
+                var sort="";
+                for (var i=0, len=this.command.params.length; i<len; ++i) {
+                    if (this.command.params[i].startsWith(SORT_KEY)) {
+                        sort=this.command.params[i].split(":")[1];
+                        break;
+                    }
+                }
+                var albumSorts=[];
+                for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
+                    albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
+                }
+                this.menu={show:true, x:event.clientX, y:event.clientY, albumSorts:albumSorts};
             } else {
                 this.itemAction(act, this.current);
             }
@@ -1286,9 +1332,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        refreshList() {
+        refreshList(restorePosition) {
             this.clearSelection();
-            var pos=this.scrollElement.scrollTop;
+            var pos=undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
             this.fetchingItems = true;
             lmsList(this.playerId(), this.command.command, this.command.params).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, 0);
@@ -1642,8 +1688,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             // Replace sort and search terms
             if (cmd.params.length>0) {
                 var modifiedParams = [];
-                cmd.params.forEach(p => { modifiedParams.push(p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+this.$store.state.albumSort)
-                                                               .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+this.$store.state.artistAlbumSort)
+                var albumSort=getAlbumSort(cmd);
+                cmd.params.forEach(p => { modifiedParams.push(p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                                                               .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                                                                .replace(TERM_PLACEHOLDER, this.enteredTerm)); });
                 cmd.params = modifiedParams;
             }

@@ -13,16 +13,6 @@ function updateUiSettings(state, val) {
         setTheme(state.darkUi);
         bus.$emit('themeChanged');
     }
-    if (undefined!=val.artistAlbumSort && state.artistAlbumSort!=val.artistAlbumSort) {
-        state.artistAlbumSort = val.artistAlbumSort;
-        setLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
-        browseDisplayChanged = true;
-    }
-    if (undefined!=val.albumSort && state.albumSort!=val.albumSort) {
-        state.albumSort = val.albumSort;
-        setLocalStorageVal('albumSort', state.albumSort);
-        browseDisplayChanged = true;
-    }
     if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
         state.sortFavorites = val.sortFavorites;
         setLocalStorageVal('sortFavorites', state.sortFavorites);
@@ -105,8 +95,6 @@ const store = new Vuex.Store({
         players: null, // List of players
         player: null, // Current player (from list)
         darkUi: true,
-        artistAlbumSort:'yearalbum',
-        albumSort:'album',
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
@@ -233,8 +221,6 @@ const store = new Vuex.Store({
         initUiSettings(state) {
             state.page = getLocalStorageVal('page', state.page);
             state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
-            state.artistAlbumSort = getLocalStorageVal('artistAlbumSort', state.artistAlbumSort);
-            state.albumSort = getLocalStorageVal('albumSort', state.albumSort);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
@@ -270,8 +256,6 @@ const store = new Vuex.Store({
                 if (data && data.result && data.result._p2) {
                     var prefs = JSON.parse(data.result._p2);
                     var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
-                                 artistAlbumSort: getLocalStorageVal('artistAlbumSort', undefined==prefs.artistAlbumSort ? state.artistAlbumSort : prefs.artistAlbumSort),
-                                 albumSort: getLocalStorageVal('albumSort', undefined==prefs.albumSort ? state.albumSort : prefs.albumSort),
                                  autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                  letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),

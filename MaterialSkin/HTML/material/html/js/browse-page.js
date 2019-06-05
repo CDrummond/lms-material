@@ -1413,6 +1413,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerTitle = null;
             this.headerSubTitle=null;
             this.tbarActions=[];
+            this.settingsMenuActions=[];
             this.isTop = true;
             this.grid = {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
             this.command = undefined;
@@ -1467,6 +1468,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerTitle = prev.headerTitle;
             this.headerSubTitle = prev.headerSubTitle;
             this.tbarActions = prev.tbarActions;
+            this.settingsMenuActions = prev.settingsMenuActions;
             this.command = prev.command;
             this.showRatingButton = prev.showRatingButton;
             if (refresh) {

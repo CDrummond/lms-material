@@ -421,7 +421,7 @@ a {
 }
 
 .toolbar-button {
- margin:4px;
+ margin:4px !important;
  min-height:36px !important;
  min-width:36px !important;
 }

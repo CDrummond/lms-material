@@ -23,8 +23,8 @@
 16. Add form validation to some dialogs.
 17. Clicking on player's sleep time in players menu will show sleep settings
     dialog.
-18. Add an album-sort menu to subtolbar when showing albums.
-19. Remove libraary setting from settings dialog, its available from main page.
+18. Add an album-sort menu to subtoolbar when showing albums.
+19. Remove library selection from settings dialog, its available from main page.
 
 0.7.4
 -----

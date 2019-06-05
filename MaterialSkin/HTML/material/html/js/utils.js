@@ -569,6 +569,27 @@ function setUseGrid(command, use) {
     setLocalStorageVal(commandGridKey(command), use);
 }
 
+const ALBUM_SORT_KEY = "albumSort";
+const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
+
+function commandAlbumSortKey(command) {
+    for (var i=0, len=command.params.length; i<len; ++i) {
+        if (command.params[i].startsWith("artist_id:")) {
+            return ARTIST_ALBUM_SORT_KEY;
+        }
+    }
+    return ALBUM_SORT_KEY;
+}
+
+function getAlbumSort(command) {
+    var key=commandAlbumSortKey(command);
+    return getLocalStorageVal(key, ALBUM_SORT_KEY==key ? "album" : "yearalbum");
+}
+
+function setAlbumSort(command, sort) {
+    setLocalStorageVal(commandAlbumSortKey(command), sort);
+}
+
 function changeImageUrls(items, grid) {
     if (undefined==items || items.length<1) {
         return;

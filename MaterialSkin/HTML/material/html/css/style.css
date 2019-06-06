@@ -932,3 +932,8 @@ div.v-subheader {
 .v-list__tile__title a:hover, .v-list__tile__sub-title a:hover, .clickable:hover {
  text-decoration:underline;
 }
+
+.lib-name {
+ margin-top:4px;
+ margin-left:4px;
+}

@@ -30,6 +30,7 @@
 21. Only show 'Synchronise' menu option if there is more than 1 non-group
     player.
 22. Use underline on hover for clickable links in queue and bowse views.
+23. In browse page, click library name to change library - remove menu button.
 
 0.7.4
 -----

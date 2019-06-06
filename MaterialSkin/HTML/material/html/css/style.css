@@ -928,3 +928,7 @@ div.v-subheader {
 .current-player {
  font-weight:600;
 }
+
+.v-list__tile__title a:hover, .v-list__tile__sub-title a:hover, .clickable:hover {
+ text-decoration:underline;
+}

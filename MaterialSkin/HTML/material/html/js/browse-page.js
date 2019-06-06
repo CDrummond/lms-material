@@ -189,7 +189,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-btn>
       <img :key="items[col.id].image" :src="items[col.id].image" class="image-grid-item-img"></img>
       <div class="image-grid-text">{{items[col.id].title}}</div>
-      <div class="image-grid-text subtext" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
+      <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
       <v-btn flat icon @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
@@ -210,7 +210,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
      <img :key="items[col.id].image" v-lazy="items[col.id].image" class="image-grid-item-img"></img>
      <div class="image-grid-text">{{items[col.id].title}}</div>
-     <div class="image-grid-text subtext" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
+     <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
      <v-btn flat icon v-if="items[col.id].menu && items[col.id].menu.length>0" @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
       <v-icon v-if="items[col.id].menu && items[col.id].menu.length>1">more_vert</v-icon>
       <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==B_ACTIONS[items[col.id].menu[0]].svg" :title="B_ACTIONS[items[col.id].menu[0]].title">{{B_ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
@@ -272,7 +272,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-subheader v-if="item.header">{{item.header}}</v-subheader>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-      <v-list-tile-sub-title v-html="item.subtitle" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menu" @click.stop="itemMenu(item, index, $event)">
@@ -326,7 +326,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
     <v-list-tile-content v-else>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
-     <v-list-tile-sub-title v-html="item.subtitle" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action v-if="item.menu && item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
@@ -419,7 +419,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             letter: undefined,
             filteredJumplist: [],
             tbarActions: [],
-            settingsMenuActions: []
+            settingsMenuActions: [],
+            subtitleClickable: false
         }
     },
     computed: {
@@ -692,6 +693,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.grid = this.grid;
             prev.command = this.command;
             prev.showRatingButton = this.showRatingButton;
+            prev.subtitleClickable = this.subtitleClickable;
             this.history.push(prev);
         },
         fetchItems(command, item, batchSize) {
@@ -731,6 +733,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions=[];
                 this.settingsMenuActions=[];
                 this.isTop = false;
+                this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var changedView = this.grid.use != resp.useGrid;
                 this.grid = {use: resp.canUseGrid && isSetToUseGrid(command), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
 
@@ -1419,6 +1422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.grid = {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false};
             this.command = undefined;
             this.showRatingButton = false;
+            this.subtitleClickable = false;
             this.$nextTick(function () {
                 this.setScrollElement();
                 this.setBgndCover();
@@ -1472,6 +1476,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.settingsMenuActions = prev.settingsMenuActions;
             this.command = prev.command;
             this.showRatingButton = prev.showRatingButton;
+            this.subtitleClickable = prev.subtitleClickable;
             if (refresh) {
                 this.refreshList();
             } else {

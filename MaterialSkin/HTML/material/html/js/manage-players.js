@@ -81,7 +81,7 @@ Vue.component('lms-manage-players', {
   <v-list>
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
-    <v-list-tile v-else @click="playerAction(menu.player, action.cmd)">
+    <v-list-tile v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
      <v-list-tile-avatar>
       <v-icon v-bind:class="{'dimmed': action.dimmed}">{{action.icon}}</v-icon>
      </v-list-tile-avatar>
@@ -382,6 +382,13 @@ Vue.component('lms-manage-players', {
         },
         stopButton() {
             return this.$store.state.stopButton
+        },
+        multipleStandardPlayers () {
+            if (this.$store.state.players) {
+                var len = this.$store.state.players.length;
+                return len>1 && !this.$store.state.players[len-1].isgroup && !this.$store.state.players[len-2].isgroup;
+            }
+            return false;
         }
     },
     filters: {

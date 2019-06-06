@@ -52,7 +52,7 @@ var B_ACTIONS=[
     {cmd:"add-hold",   icon:"format_indent_increase"},
     {cmd:"more",       svg: "more"},
     {cmd:"lib-more",   svg: "more"},
-    {cmd:"random",     icon:"album"},
+    {cmd:"random",     svg: "dice-album"},
     {cmd:"rename-pl",  icon:"edit"},
     {cmd:"rename-fav", icon:"edit"},
     {cmd:"edit-fav",   icon:"edit"},

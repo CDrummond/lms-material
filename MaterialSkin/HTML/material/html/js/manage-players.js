@@ -60,7 +60,7 @@ Vue.component('lms-manage-players', {
       </v-flex xs12>
        <v-flex xs12>
        <v-layout>
-        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn" style="margin-left:2px"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
         <v-slider @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider"></v-slider>
         <v-btn flat icon @click="volumeUp(player)" class="pmgr-btn"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
         <p class="pmgr-vol">{{player.volume}}%</p>

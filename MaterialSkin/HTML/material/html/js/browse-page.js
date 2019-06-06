@@ -284,8 +284,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-subheader v-if="item.header" style="width:100%"><div class="ellipsis" @click="toggleGroup(item.group)"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ item.id==TOP_MMHDR_ID && libraryName ? item.header + SEPARATOR + libraryName : item.header }}</div>
-    <v-btn icon small v-if="item.id==TOP_MMHDR_ID && libraryName" @click.stop="showLibMenu($event)" class="lib-select-btn"><v-icon size="14">more_vert</v-icon></v-btn>
+   <v-subheader v-if="item.header" style="width:100%"><div @click="toggleGroup(item.group)"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ item.header }}</div><div class="ellipsis lib-name" @click.stop="showLibMenu($event)" v-if="item.id==TOP_MMHDR_ID && libraryName">{{ SEPARATOR + libraryName }}</div>
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action, item, index)">
      <v-btn icon><v-icon>{{B_ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>

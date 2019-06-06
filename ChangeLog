@@ -27,6 +27,8 @@
 19. Remove library selection from settings dialog, its available from main page.
 20. For mobile layout, move grid/list toggle and album-sort action into main
     settings menu. For desktop, these are shown in the sub toolbar.
+21. Only show 'Synchronise' menu option if there is more than 1 non-group
+    player.
 
 0.7.4
 -----

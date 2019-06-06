@@ -93,7 +93,7 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="(players && players.length>1) || playerStatus.sleepTime"></v-divider>
 
-   <v-list-tile v-if="players && players.length>1" @click="bus.$emit('dlg.open', 'sync', player)">
+   <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
@@ -491,6 +491,13 @@ Vue.component('lms-toolbar', {
         },
         players () {
             return this.$store.state.players
+        },
+        multipleStandardPlayers () {
+            if (this.$store.state.players) {
+                var len = this.$store.state.players.length;
+                return len>1 && !this.$store.state.players[len-1].isgroup && !this.$store.state.players[len-2].isgroup;
+            }
+            return false;
         },
         infoPlugin () {
             return this.$store.state.infoPlugin

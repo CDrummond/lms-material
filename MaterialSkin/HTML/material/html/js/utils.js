@@ -628,3 +628,23 @@ function forceItemUpdate(vm, items, item, index) {
         });
     });
 }
+
+function mapIcon(params, item) {
+    item.icon=undefined;
+    if (params && params.length>0) {
+        for (var i=0, len=params.length; i<len; ++i) {
+            if (params[i]=="role_id:COMPOSER" || params[i]=="role_id:2") {
+                item.svg="composer";
+                return;
+            }
+            if (params[i]=="role_id:CONDUCTOR" || params[i]=="role_id:3") {
+                item.svg="conductor";
+                return;
+            }
+            if (params[i]=="role_id:ALBUMARTIST" || params[i]=="role_id:ARTIST" || params[i]=="role_id:PERFORMER") {
+                break;
+            }
+        }
+    }
+    item.icon="group";
+}

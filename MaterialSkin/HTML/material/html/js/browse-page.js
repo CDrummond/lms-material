@@ -1850,9 +1850,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              type: "group",
                                              icon: "music_note"
                                             };
-
                                 if (c.id.startsWith("myMusicArtists")) {
-                                    item.icon = "group";
+                                    mapIcon(command.params, item);
                                     item.cancache = true;
                                 } else if (c.id.startsWith("myMusicAlbums")) {
                                     item.icon = "album";

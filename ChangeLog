@@ -31,6 +31,8 @@
     player.
 22. Use underline on hover for clickable links in queue and bowse views.
 23. In browse page, click library name to change library - remove menu button.
+24. For consistency, when adding Composers or Conductors to Genre selection, add
+    after Artists and Albums.
 
 0.7.4
 -----

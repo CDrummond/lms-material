@@ -929,18 +929,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "album",
                               type: "group",
                               id: item.id+"albums"}];
-                if (CONDUCTOR_GENRES.has(item.title)) {
-                    this.items.splice(0, 0, { title: i18n("Conductors"),
-                                        command: ["artists"],
-                                        params: ["role_id:CONDUCTOR", item.params[0]],
-                                        cancache: true,
-                                        icon: "group",
-                                        type: "group",
-                                        group: GROUP_MY_MUSIC,
-                                        id: item.id+"conductors"});
-                }
                 if (COMPOSER_GENRES.has(item.title) || CONDUCTOR_GENRES.has(item.title)) {
-                    this.items.splice(0, 0, { title: i18n("Composers"),
+                    this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
                                         params: ["role_id:COMPOSER", item.params[0]],
                                         cancache: true,
@@ -948,6 +938,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         type: "group",
                                         group: GROUP_MY_MUSIC,
                                         id: item.id+"composers"});
+                }
+                if (CONDUCTOR_GENRES.has(item.title)) {
+                    this.items.push({ title: i18n("Conductors"),
+                                        command: ["artists"],
+                                        params: ["role_id:CONDUCTOR", item.params[0]],
+                                        cancache: true,
+                                        icon: "group",
+                                        type: "group",
+                                        group: GROUP_MY_MUSIC,
+                                        id: item.id+"conductors"});
                 }
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Select category");

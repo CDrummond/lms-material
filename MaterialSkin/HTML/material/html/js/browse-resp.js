@@ -680,7 +680,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               params: isFolder ? ["folder:"+fixedPath] : [],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
-                              icon: isFolder ? "folder" : undefined,
+                              icon: isFolder ? "folder" : "music_note",
                               isFolderItem: true
                           });
             }

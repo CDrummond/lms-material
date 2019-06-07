@@ -934,7 +934,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         command: ["artists"],
                                         params: ["role_id:COMPOSER", item.params[0]],
                                         cancache: true,
-                                        icon: "group",
+                                        svg: "composer",
                                         type: "group",
                                         group: GROUP_MY_MUSIC,
                                         id: item.id+"composers"});
@@ -944,7 +944,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         command: ["artists"],
                                         params: ["role_id:CONDUCTOR", item.params[0]],
                                         cancache: true,
-                                        icon: "group",
+                                        svg: "conductor",
                                         type: "group",
                                         group: GROUP_MY_MUSIC,
                                         id: item.id+"conductors"});

@@ -153,7 +153,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
-   <v-spacer></v-spacer>
+   <v-spacer style="flex-grow: 10!important"></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-if="desktop" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">

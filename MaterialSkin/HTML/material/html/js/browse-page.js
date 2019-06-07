@@ -132,7 +132,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-if="headerTitle" class="subtoolbar noselect">
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
-    <v-flex xs12 class="ellipsis subtoolbar-title">{{trans.selectMultiple}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
@@ -149,7 +149,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon @click="goHome()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
-    <v-flex xs12 class="ellipsis subtoolbar-title">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{headerSubTitle}}</v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>

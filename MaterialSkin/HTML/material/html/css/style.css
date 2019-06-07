@@ -344,6 +344,10 @@ a {
  line-height:var(--sub-toolbar-height) !important;
 }
 
+.subtoolbar-pad {
+ margin-top:4px;
+}
+
 .subtext {
  font-weight:400;
  opacity:0.7;

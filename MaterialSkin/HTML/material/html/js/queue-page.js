@@ -167,7 +167,7 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="subtoolbar pq-details noselect" >
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
-    <v-flex xs12 class="ellipsis subtoolbar-title">{{trans.selectMultiple}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
@@ -177,7 +177,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
   <v-layout v-else>
    <v-layout row wrap v-if="listSize>0 && playlistName">
-    <v-flex xs12 class="ellipsis subtoolbar-title">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
     <v-flex xs12 v-if="playlistName" class="ellipsis subtoolbar-subtitle subtext">{{playlistName}}</v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</div>

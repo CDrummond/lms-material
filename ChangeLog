@@ -14,7 +14,7 @@
  9. Calculate mobile/portrait padding when now-playing is initially shown.
 10. Place on/off toggle button next to each player in menu.
 11. Add 'Group Players' and 'Standard Players' headers to player selection menu,
-    where apropriate.
+    where appropriate.
 12. Fix 'Set sleep for all players'
 13. Fix detection of group players for 'Manage players' dialog.
 14. Fix divider in group players context menu in 'Manage players' dialog.
@@ -23,13 +23,13 @@
 16. Add form validation to some dialogs.
 17. Clicking on player's sleep time in players menu will show sleep settings
     dialog.
-18. Add action to change album sort (onnly shown when listing albums).
+18. Add action to change album sort (only shown when listing albums).
 19. Remove library selection from settings dialog, its available from main page.
 20. For mobile layout, move grid/list toggle and album-sort action into main
     settings menu. For desktop, these are shown in the sub toolbar.
 21. Only show 'Synchronise' menu option if there is more than 1 non-group
     player.
-22. Use underline on hover for clickable links in queue and bowse views.
+22. Use underline on hover for clickable links in queue and browse views.
 23. In browse page, click library name to change library - remove menu button.
 24. For consistency, when adding Composers or Conductors to Genre selection, add
     after Artists and Albums.

@@ -97,6 +97,7 @@ function formatDate(timestamp) {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 }
 
+var useMySqueezeboxImageProxy = false;
 function resolveImage(icon, image, size) {
     if (!icon && !image) {
         return null;
@@ -104,7 +105,12 @@ function resolveImage(icon, image, size) {
     if (image) {
         image=""+image; // Ensure its a string!
         if (image.includes("://") && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
-            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
+            if (useMySqueezeboxImageProxy) {
+                var s=size ? size.split('x')[0].replace('_', '') : 1024;
+                return "https://www.mysqueezebox.com/public/imageproxy?w="+s+"&h="+s+"&u="+encodeURIComponent(image);
+            } else {
+                return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
+            }
         }
         if (image.startsWith("/")) {
             return image+(size ? size : "");
@@ -113,7 +119,12 @@ function resolveImage(icon, image, size) {
     }
     icon=""+icon; // Ensure its a string!
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
-        return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
+        if (useMySqueezeboxImageProxy) {
+            var s=size ? size.split('x')[0].replace('_', '') : 1024;
+            return "https://www.mysqueezebox.com/public/imageproxy?w="+s+"&h="+s+"&u="+encodeURIComponent(icon);
+        } else {
+            return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
+        }
     }
     
     var idx = icon.lastIndexOf(".png");

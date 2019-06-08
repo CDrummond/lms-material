@@ -122,7 +122,7 @@ function resolveImage(icon, image, size) {
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
         if (useMySqueezeboxImageProxy) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
-            return MY_SQUEEZEBOX_IMAGE_PROXY+"w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(icon);
+            return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(icon);
         } else {
             return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
         }

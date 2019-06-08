@@ -755,12 +755,14 @@ var lmsQueue = Vue.component("lms-queue", {
         setBgndCover() {
             setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             // Check for cover changes in radio streams...
-            if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length &&
-                this.items[this.coverTrackIndex].image!=this.coverUrl) {
-                // Change item's key to force an update...
-                this.items[this.coverTrackIndex].key=this.items[this.coverTrackIndex].id+"."+this.coverTrackIndex+"."+(new Date().getTime().toString(16));
-                this.items[this.coverTrackIndex].image=this.coverUrl;
-                this.$forceUpdate();
+            if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length) {
+                var resizedUrl = changeImageSizing(this.coverUrl, LMS_LIST_IMAGE_SIZE);
+                if (this.items[this.coverTrackIndex].image!=resizedUrl) {
+                    // Change item's key to force an update...
+                    this.items[this.coverTrackIndex].key=this.items[this.coverTrackIndex].id+"."+this.coverTrackIndex+"."+(new Date().getTime().toString(16));
+                    this.items[this.coverTrackIndex].image=resizedUrl;
+                    this.$forceUpdate();
+                }
             }
         }
     },

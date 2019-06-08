@@ -151,7 +151,7 @@ function changeImageSizing(path, newSize) {
             var url = path.split("u=")[1];
             if (newSize) {
                 var s=newSize.split('x')[0].replace('_', '');
-                return MY_SQUEEZEBOX_IMAGE_PROXY+"w="+s+"&h="+s+"&u="+url;
+                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&u="+url;
             }
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?u="+url;
         }

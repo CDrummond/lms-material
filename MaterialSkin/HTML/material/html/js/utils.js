@@ -108,7 +108,7 @@ function resolveImage(icon, image, size) {
         if (image.includes("://") && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
             if (useMySqueezeboxImageProxy) {
                 var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
-                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&u="+encodeURIComponent(image);
+                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
             } else {
                 return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
             }
@@ -122,7 +122,7 @@ function resolveImage(icon, image, size) {
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
         if (useMySqueezeboxImageProxy) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
-            return MY_SQUEEZEBOX_IMAGE_PROXY+"w="+s+"&h="+s+"&u="+encodeURIComponent(icon);
+            return MY_SQUEEZEBOX_IMAGE_PROXY+"w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(icon);
         } else {
             return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
         }
@@ -151,7 +151,7 @@ function changeImageSizing(path, newSize) {
             var url = path.split("u=")[1];
             if (newSize) {
                 var s=newSize.split('x')[0].replace('_', '');
-                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&u="+url;
+                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+url;
             }
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?u="+url;
         }

@@ -104,7 +104,7 @@ function resolveImage(icon, image, size) {
     if (image) {
         image=""+image; // Ensure its a string!
         if (image.includes("://") && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
-            return image;
+            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
         }
         if (image.startsWith("/")) {
             return image+(size ? size : "");

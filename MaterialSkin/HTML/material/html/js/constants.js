@@ -12,6 +12,7 @@ const LMS_MAX_NON_SCROLLER_ITEMS = 200;
 const LMS_MAX_PLAYERS = 100;
 const LMS_LIST_IMAGE_SIZE = "_100x100_o";
 const LMS_GRID_IMAGE_SIZE = "_300x300_f";
+const LMS_CURRENT_IMAGE_SIZE = "_1024x1024_f";
 const LMS_DEFAULT_LIBRARY = "0";
 const LMS_SKIN_LANGUAGES = new Set(['de', 'en', 'en-gb', 'fr', 'nl']);
 const LMS_MATERIAL_UI_DEFAULT_PREF = "plugin.material-skin:defaults";

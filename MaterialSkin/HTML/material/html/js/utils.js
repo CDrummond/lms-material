@@ -133,15 +133,15 @@ function resolveImage(icon, image, size) {
     return "/"+icon;
 }
 
-function removeImageSizing(path) {
+function changeImageSizing(path, newSize) {
     if (undefined!=path) {
-        var specs = [LMS_LIST_IMAGE_SIZE, LMS_GRID_IMAGE_SIZE, "_50x50_o"];
+        var specs = [LMS_LIST_IMAGE_SIZE, LMS_GRID_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, "_50x50_o"];
         for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {
-                return path.replace(specs[s]+".png", ".png");
+                return path.replace(specs[s]+".png", (newSize ? newSize : "")+".png");
             }
             if (path.endsWith(specs[s])) {
-                return path.substring(0, path.length - specs[s].length);
+                return path.substring(0, path.length - specs[s].length)+(newSize ? newSize : "");
             }
         }
     }
@@ -525,10 +525,10 @@ function updateItemFavorites(item) {
         item.favIcon="html/images/genres.png";
     } else if (item.id.startsWith("artist_id:")) {
         item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
-        item.favIcon=removeImageSizing(item.image);
+        item.favIcon=changeImageSizing(item.image);
     } else if (item.id.startsWith("album_id:")) {
         favUrl="db:album.title="+encodeURIComponent(favTitle);
-        favIcon=removeImageSizing(item.image);
+        favIcon=changeImageSizing(item.image);
     } else if (item.id.startsWith("year:")) {
         item.favUrl="db:year.id="+encodeURIComponent(favTitle);
         item.favIcon="html/images/years.png";

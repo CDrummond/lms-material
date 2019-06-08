@@ -2306,7 +2306,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.mediaDirs=data.result.mediadirs;
                 // useMySqueezeboxImageProxy defined in utils.js
                 useMySqueezeboxImageProxy = undefined!=data.result.useLocalImageproxy && 0 == parseInt(data.result.useLocalImageproxy);
-                console.log("UMSBP", useMySqueezeboxImageProxy, data.result.useLocalImageproxy);
             }
         });
         // Artist images?

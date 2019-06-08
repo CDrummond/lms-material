@@ -2292,7 +2292,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?
         //   Filter album/tracks on role?
-        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,mediadirs"]).then(({data}) => {
+        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,mediadirs,useLocalImageproxy"]).then(({data}) => {
             if (data && data.result) {
                 this.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
                 setLocalStorageVal('separateArtists', this.separateArtists);
@@ -2304,6 +2304,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.newMusicLimit = parseInt(data.result.browseagelimit);
                 }
                 this.mediaDirs=data.result.mediadirs;
+                // useMySqueezeboxImageProxy defined in utils.js
+                useMySqueezeboxImageProxy = undefined!=data.result.useLocalImageproxy && 0 == parseInt(data.result.useLocalImageproxy);
+                console.log("UMSBP", useMySqueezeboxImageProxy, data.result.useLocalImageproxy);
             }
         });
         // Artist images?

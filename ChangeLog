@@ -37,6 +37,7 @@
 26. Slightly lighter icons for light theme.
 27. Use image proxy for remote image URLs.
 28. Restrict background images to 1024x1024
+29. Respect user image proxy setting - mysqueezebox.com or local.
 
 0.7.4
 -----

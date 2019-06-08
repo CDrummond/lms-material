@@ -35,6 +35,7 @@
     after Artists and Albums.
 25. Add custom composer and conductor icons.
 26. Slightly lighter icons for light theme.
+27. Use image proxy for remote image URLs.
 
 0.7.4
 -----

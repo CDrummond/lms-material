@@ -6,6 +6,7 @@
  */
 
 const SEPARATOR = " \u2022 ";
+const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
 
 var bus = new Vue();
 var debug = undefined;
@@ -107,7 +108,7 @@ function resolveImage(icon, image, size) {
         if (image.includes("://") && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
             if (useMySqueezeboxImageProxy) {
                 var s=size ? size.split('x')[0].replace('_', '') : 1024;
-                return "https://www.mysqueezebox.com/public/imageproxy?w="+s+"&h="+s+"&u="+encodeURIComponent(image);
+                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&u="+encodeURIComponent(image);
             } else {
                 return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
             }
@@ -121,7 +122,7 @@ function resolveImage(icon, image, size) {
     if (icon.includes("://") && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
         if (useMySqueezeboxImageProxy) {
             var s=size ? size.split('x')[0].replace('_', '') : 1024;
-            return "https://www.mysqueezebox.com/public/imageproxy?w="+s+"&h="+s+"&u="+encodeURIComponent(icon);
+            return MY_SQUEEZEBOX_IMAGE_PROXY+"w="+s+"&h="+s+"&u="+encodeURIComponent(icon);
         } else {
             return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
         }
@@ -146,6 +147,15 @@ function resolveImage(icon, image, size) {
 
 function changeImageSizing(path, newSize) {
     if (undefined!=path) {
+        if (path.startsWith(MY_SQUEEZEBOX_IMAGE_PROXY)) {
+            var url = path.split("u=")[1];
+            if (newSize) {
+                var s=newSize.split('x')[0].replace('_', '');
+                return MY_SQUEEZEBOX_IMAGE_PROXY+"w="+s+"&h="+s+"&u="+url;
+            }
+            return MY_SQUEEZEBOX_IMAGE_PROXY+"?u="+url;
+        }
+
         var specs = [LMS_LIST_IMAGE_SIZE, LMS_GRID_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, "_50x50_o"];
         for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {

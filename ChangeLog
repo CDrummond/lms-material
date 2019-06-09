@@ -38,6 +38,7 @@
 27. Use image proxy for remote image URLs.
 28. Restrict background images to 1024x1024
 29. Respect user image proxy setting - mysqueezebox.com or local.
+30. Show players connected to other servers, and allow to move to this server.
 
 0.7.4
 -----

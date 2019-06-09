@@ -236,6 +236,26 @@ function playerSort(a, b) {
     return 0;
 }
 
+function otherPlayerSort(a, b) {
+    var serverA = a.server.toLowerCase();
+    var serverB = b.server.toLowerCase();
+    if (serverA < serverB) {
+        return -1;
+    }
+    if (serverA > serverB) {
+        return 1;
+    }
+    var nameA = a.name.toLowerCase();
+    var nameB = b.name.toLowerCase();
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+    return 0;
+}
+
 function setScrollTop(el, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.

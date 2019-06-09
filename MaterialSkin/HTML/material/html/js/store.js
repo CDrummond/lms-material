@@ -94,6 +94,7 @@ const store = new Vuex.Store({
     state: {
         players: null, // List of players
         player: null, // Current player (from list)
+        otherPlayers: [], // Players on other servers
         darkUi: true,
         letterOverlay:false,
         sortFavorites:true,
@@ -214,6 +215,9 @@ const store = new Vuex.Store({
                     }
                 }
             }
+        },
+        setOtherPlayers(state, players) {
+            state.otherPlayers = players;
         },
         setUiSettings(state, val) {
             updateUiSettings(state, val);

@@ -50,7 +50,7 @@ function visibilityChanged() {
         bus.$emit('refreshStatus');
     }
 }
-      
+
 var lmsFavorites = new Set();
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
@@ -255,13 +255,16 @@ var lmsServer = Vue.component('lms-server', {
             logCometdMessage("SERVER", data);
             this.cancelServerStatusTimer();
             var players = [];
+            var otherPlayers = [];
             if (lmsLastScan!=data.lastscan) {
                 lmsLastScan = data.lastscan;
                 clearListCache();
             }
             if (data.players_loop) {
                 var localAndroidPlayer = false;
-                data.players_loop.forEach(i => {
+                var ids = new Set();
+                for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
+                    var i = data.players_loop[idx];
                     if (1==parseInt(i.connected)) { // Only list/use connected players...
                         players.push({ id: i.playerid,
                                        name: i.name,
@@ -273,8 +276,17 @@ var lmsServer = Vue.component('lms-server', {
                         if (!localAndroidPlayer && currentIpAddress && 'SB Player' ===i.modelname && i.ip.split(':')[0] == currentIpAddress) {
                             localAndroidPlayer = true;
                         }
+                        ids.add(i.playerid);
                     }
-                });
+                }
+                if (data.other_players_loop) {
+                    for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
+                        var i = data.other_players_loop[idx];
+                        if (!ids.has(i.playerid)) {
+                            otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
+                        }
+                    }
+                }
                 if (localAndroidPlayer != haveLocalAndroidPlayer) {
                     haveLocalAndroidPlayer = localAndroidPlayer;
                     if (haveLocalAndroidPlayer) {
@@ -282,6 +294,7 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
                 this.$store.commit('setPlayers', players.sort(playerSort));
+                this.$store.commit('setOtherPlayers', otherPlayers.sort(otherPlayerSort));
 
                 if (0==this.subscribedPlayers.size) {
                     // Upon reconnect, will will need to re-sub to current player...
@@ -294,6 +307,7 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
             }
+            return otherPlayers;
         },
         handlePlayerStatus(playerId, data, forced) {
             logCometdMessage("PLAYER ("+playerId+(forced ? " [forced]" : "")+")", data);
@@ -457,6 +471,27 @@ var lmsServer = Vue.component('lms-server', {
                 }
             });
         },
+        checkForMovedPlayer(id, attempts) {
+            lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
+                if (data && data.result) {
+                    var otherPlayers = this.handleServerStatus(data.result);
+                    var found = false;
+                    for (var i=0, len=otherPlayers.length; i<len && !found; ++i) {
+                        if (otherPlayers[i].id==id) {
+                            found = true;
+                        }
+                    }
+                    attempts--;
+                    if (!found) { // No longer in other players, so hopefully moved to this server. So, try an activate.
+                        this.$store.commit('setPlayer', id);
+                    } else if (attempts>=0) {
+                        this.moveTimer = setTimeout(function () {
+                            this.checkForMovedPlayer(id, attempts);
+                        }.bind(this), 500);
+                    }
+                }
+            });
+        },
         cancelServerStatusTimer() {
             if (undefined!==this.serverStatusTimer) {
                 clearTimeout(this.serverStatusTimer);
@@ -474,6 +509,12 @@ var lmsServer = Vue.component('lms-server', {
                 clearTimeout(this.favoritesTimer);
                 this.favoritesTimer = undefined;
             }
+        },
+        cancelMoveTimer() {
+            if (undefined!==this.moveTimer) {
+                clearTimeout(this.moveTimer);
+                this.moveTimer = undefined;
+            }
         }
     },
     created: function() {
@@ -481,6 +522,7 @@ var lmsServer = Vue.component('lms-server', {
         this.connectToCometD();
     },
     mounted: function() {
+        this.moving=[];
         bus.$on('reconnect', function() {
             this.connectToCometD();
         }.bind(this));
@@ -523,6 +565,13 @@ var lmsServer = Vue.component('lms-server', {
             if (this.$store.state.player) {
                 this.doAllList(ids, command, section);
             }
+        }.bind(this));
+        bus.$on('movePlayer', function(player) {
+            lmsCommand("", ["material-skin", "moveplayer", "id:"+player.id, "serverurl:"+player.serverurl]).then(({data}) => {
+                this.checkForMovedPlayer(player.id, 8);
+            }).catch(err => {
+                bus.$emit('showError', undefined, i18n("Failed to move '%1'", player.name));
+            });
         }.bind(this));
         bus.$on('power', function(state) {
             lmsCommand(this.$store.state.player.id, ["power", state]).then(({data}) => {
@@ -580,6 +629,7 @@ var lmsServer = Vue.component('lms-server', {
         this.cancelServerStatusTimer();
         this.cancelPlayerStatusTimer();
         this.cancelFavoritesTimer();
+        this.cancelMoveTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

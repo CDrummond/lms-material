@@ -77,7 +77,7 @@ Vue.component('lms-toolbar', {
   <v-list class="toolbar-player-list">
    <template v-for="(item, index) in players">
     <v-subheader v-if="0==index && item.isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-subheader v-else-if="index>0 && !item.isgroup && players[index-1].isgroup">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-else-if="(index>0 && !item.isgroup && players[index-1].isgroup) || (index==0 && otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
      <v-list-tile-avatar>
       <v-icon small v-if="players && players.length>1">{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
@@ -88,6 +88,17 @@ Vue.component('lms-toolbar', {
       <v-list-tile-action>
        <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': !item.ison}" @click.stop="togglePower(item)">power_settings_new</v-icon></
       </v-list-tile-action>
+    </v-list-tile>
+   </template>
+   <template v-for="(item, index) in otherPlayers">
+    <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
+    <v-list-tile @click="movePlayer(item)">
+     <v-list-tile-avatar>
+      <v-icon small v-if="players && players.length>1"></v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-content>
+      <v-list-tile-title>{{item.name}}</v-list-tile-title>
+     </v-list-tile-content>
     </v-list-tile>
    </template>
 
@@ -176,7 +187,7 @@ Vue.component('lms-toolbar', {
                  menuItems: [],
                  browseMenuItems:[],
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
-                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined},
+                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
@@ -483,6 +494,13 @@ Vue.component('lms-toolbar', {
             } else {
                 this.cancelSleepTimer();
             }
+        },
+        movePlayer(player) {
+            this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    bus.$emit('movePlayer', player);
+                }
+            });
         }
     },
     computed: {
@@ -491,6 +509,9 @@ Vue.component('lms-toolbar', {
         },
         players () {
             return this.$store.state.players
+        },
+        otherPlayers () {
+            return this.$store.state.otherPlayers
         },
         multipleStandardPlayers () {
             if (this.$store.state.players) {

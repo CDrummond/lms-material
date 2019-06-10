@@ -1,3 +1,8 @@
+0.8.1
+-----
+1. lazy-load now-playing images.
+2. Set lazy-load error image to default cover.
+
 0.8.0
 -----
  1. If rating from server is undefined, but TrackStat is installed, then show

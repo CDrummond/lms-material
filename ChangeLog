@@ -3,6 +3,7 @@
 1. lazy-load now-playing images.
 2. Set lazy-load error image to default cover.
 3. Always use lazy-load images, as can set error image easily.
+4. Set correct mouse-pointer for jumplist.
 
 0.8.0
 -----

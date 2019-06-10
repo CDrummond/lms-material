@@ -37,7 +37,7 @@ Vue.component('lms-manage-players', {
        <v-list class="pmgr-playerlist">
         <v-list-tile>
          <v-list-tile-avatar v-if="player.image" :tile="true" v-bind:class="{'dimmed': !player.ison}">
-          <img :src="player.image">
+          <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
           <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player.name}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>

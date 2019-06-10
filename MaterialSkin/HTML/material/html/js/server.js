@@ -310,7 +310,11 @@ var lmsServer = Vue.component('lms-server', {
             return otherPlayers;
         },
         handlePlayerStatus(playerId, data, forced) {
-            logCometdMessage("PLAYER ("+playerId+(forced ? " [forced]" : "")+")", data);
+            if (forced) {
+                logJsonMessage("PLAYER ("+playerId+")", data);
+            } else {
+                logCometdMessage("PLAYER ("+playerId+")", data);
+            }
             // Get status message after unsubscribe!!!
             if (!this.subscribedPlayers.has(playerId)) {
                 return;
@@ -423,6 +427,7 @@ var lmsServer = Vue.component('lms-server', {
             });
         },
         updatePlayer(id) {
+            logJsonMessage("UPDATING ("+id+")");
             lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS]).then(({data}) => {
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);

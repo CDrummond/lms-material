@@ -13,7 +13,7 @@ var debug = undefined;
 
 function logJsonMessage(type, msg) {
     if (debug && (debug.has("json") || debug.has("true"))) {
-        console.log("[" + new Date().toLocaleTimeString()+"] JSON "+type+": "+JSON.stringify(msg));
+        console.log("[" + new Date().toLocaleTimeString()+"] JSON "+type+(msg ? (": "+JSON.stringify(msg)) : ""));
     }
 }
 

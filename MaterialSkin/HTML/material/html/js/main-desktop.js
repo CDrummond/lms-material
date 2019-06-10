@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-Vue.use(VueLazyload);
+Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
 var app = new Vue({
     el: '#app',

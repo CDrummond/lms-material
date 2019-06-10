@@ -579,6 +579,18 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.duration = 0.0;
             }
         },
+        checkCover() {
+            if (this.currentIndex!=undefined && this.currentIndex>=0 && this.currentIndex<this.items.length) {
+                var indexUrl=changeImageSizing(this.items[this.currentIndex].image);
+                if (indexUrl) {
+                    var plainUrl=changeImageSizing(this.coverUrl);
+                    if (indexUrl!=plainUrl) {
+                        // Background image different to current queue item? Refresh player status...
+                        bus.$emit('refreshStatus');
+                    }
+                }
+            }
+        },
         fetchItems() {
             if (!this.$store.state.player) {
                 return
@@ -595,7 +607,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.timestamp = resp.timestamp;
                 this.fetchingItems = false;
                 this.listSize = resp.size;
-
+                this.checkCover();
                 this.getDuration();
                 if (needUpdate) {
                     this.$nextTick(function () {
@@ -632,6 +644,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.timestamp = resp.timestamp;
                     this.fetchingItems = false;
                     this.listSize = resp.size;
+                    this.checkCover();
                     this.getDuration();
                     if (this.selection.length>0) {
                         var sel = [];

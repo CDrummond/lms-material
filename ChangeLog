@@ -4,6 +4,8 @@
 2. Set lazy-load error image to default cover.
 3. Always use lazy-load images, as can set error image easily.
 4. Set correct mouse-pointer for jumplist.
+5. Default to using mysqueezebox to resize remote images.
+6. If config does not have useLocalImageproxy, then default to mysqueezebox.
 
 0.8.0
 -----

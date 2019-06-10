@@ -98,7 +98,7 @@ function formatDate(timestamp) {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 }
 
-var useMySqueezeboxImageProxy = false;
+var useMySqueezeboxImageProxy = true;
 
 function resolveImageUrl(image, size) {
     image=""+image; // Ensure its a string!

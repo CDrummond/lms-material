@@ -99,50 +99,38 @@ function formatDate(timestamp) {
 }
 
 var useMySqueezeboxImageProxy = false;
+
+function resolveImageUrl(image, size) {
+    image=""+image; // Ensure its a string!
+    if ((image.includes("http://") || image.includes("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
+        if (useMySqueezeboxImageProxy) {
+            var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
+            return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
+        } else {
+            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
+        }
+    }
+    
+    var idx = image.lastIndexOf(".png");
+    if (idx < 0) {
+        idx = image.lastIndexOf(".jpg");
+    }
+    if (idx<0 && /^[0-9a-fA-F]+$/.test(image)) {
+        image="music/"+image+"/cover"+(size ? size : LMS_LIST_IMAGE_SIZE);
+    } else if (idx>0) {
+        image = image.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+image.substring(idx);
+    }
+    return image.startsWith("/") ? image : ("/"+image);
+}
+
 function resolveImage(icon, image, size) {
     if (!icon && !image) {
         return null;
     }
     if (image) {
-        image=""+image; // Ensure its a string!
-        if ((image.includes("http://") || image.includes("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
-            if (useMySqueezeboxImageProxy) {
-                var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
-                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
-            } else {
-                return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
-            }
-        }
-        if (image.startsWith("/")) {
-            return image+(size ? size : "");
-        }
-        return "/"+image+(size ? size : "");
+        return resolveImageUrl(image, size);
     }
-    icon=""+icon; // Ensure its a string!
-    if ((icon.includes("http://") || icon.includes("https://")) && !(icon.startsWith('/imageproxy') || icon.startsWith('imageproxy'))) {
-        if (useMySqueezeboxImageProxy) {
-            var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
-            return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(icon);
-        } else {
-            return '/imageproxy/' + encodeURIComponent(icon) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
-        }
-    }
-    
-    var idx = icon.lastIndexOf(".png");
-    if (idx < 0) {
-        idx = icon.lastIndexOf(".jpg");
-    }
-
-    if (idx>0) {
-        icon = icon.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+icon.substring(idx);
-    }
-    if (icon.startsWith("/")) {
-        return icon;
-    }
-    if (idx<0 && /^[0-9a-fA-F]+$/.test(icon)) {
-        icon="music/"+icon+"/cover"+(size ? size : LMS_LIST_IMAGE_SIZE);
-    }
-    return "/"+icon;
+    return resolveImageUrl(icon , size);
 }
 
 function changeImageSizing(path, newSize) {

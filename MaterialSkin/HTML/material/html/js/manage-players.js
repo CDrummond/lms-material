@@ -103,7 +103,7 @@ Vue.component('lms-manage-players', {
         }
     },
     mounted() {
-        this.noImage = resolveImage("music/0/cover_50x50");
+        this.noImage = resolveImageUrl(LMS_BLANK_COVER);
         bus.$on('manage.open', function(act) {
             this.show = true;
 
@@ -335,13 +335,13 @@ Vue.component('lms-manage-players', {
             player.image = undefined;
             if (player.current) {
                 if (player.current.artwork_url) {
-                    player.image=resolveImage(null, player.current.artwork_url);
+                    player.image=resolveImageUrl(player.current.artwork_url);
                 }
                 if (undefined==player.image && player.current.coverid) {
-                    player.image="/music/"+player.current.coverid+"/cover.jpg";
+                    player.image=resolveImageUrl("/music/"+player.current.coverid+"/cover.jpg");
                 }
                 if (undefined==player.image) {
-                    player.image="/music/current/cover.jpg?player=" + player.id;
+                    player.image=resolveImageUrl("/music/current/cover.jpg?player=" + player.id);
                 }
             }
             if (undefined==player.image) {

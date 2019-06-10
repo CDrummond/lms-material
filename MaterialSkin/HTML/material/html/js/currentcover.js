@@ -14,6 +14,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
         };
     },
     mounted: function() {
+        this.coverUrl = LMS_BLANK_COVER;
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
             var coverUrl = this.coverUrl;
@@ -21,17 +22,17 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             if (playerStatus.playlist.count == 0) {
                 this.queueIndex = undefined;
                 if (undefined===this.coverFromInfo || this.coverFromInfo || undefined==this.cover) {
-                    coverUrl=resolveImage(DEFAULT_COVER, null, LMS_CURRENT_IMAGE_SIZE);
+                    coverUrl=resolveImageUrl(DEFAULT_COVER, LMS_CURRENT_IMAGE_SIZE);
                     this.coverFromInfo = false;
                 }
             } else {
                 this.queueIndex = playerStatus.current["playlist index"];
                 coverUrl = undefined;
                 if (playerStatus.current.artwork_url) {
-                    coverUrl=resolveImage(null, playerStatus.current.artwork_url, LMS_CURRENT_IMAGE_SIZE);
+                    coverUrl=resolveImageUrl(playerStatus.current.artwork_url, LMS_CURRENT_IMAGE_SIZE);
                 }
                 if (undefined==coverUrl && playerStatus.current.coverid) {
-                    coverUrl=resolveImage(null, "/music/"+playerStatus.current.coverid+"/cover.jpg", LMS_CURRENT_IMAGE_SIZE);
+                    coverUrl=resolveImageUrl("/music/"+playerStatus.current.coverid+"/cover.jpg", LMS_CURRENT_IMAGE_SIZE);
                 }
                 if (undefined==coverUrl) {
                     // Use players current cover as cover image. Need to add extra (coverid, etc) params so that
@@ -50,7 +51,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                             coverUrl+="&year="+playerStatus.current.year;
                         }
                     }
-                    coverUrl=resolveImage(null, coverUrl, LMS_CURRENT_IMAGE_SIZE);
+                    coverUrl=resolveImageUrl(coverUrl, LMS_CURRENT_IMAGE_SIZE);
                 }
                 this.coverFromInfo = true;
             }

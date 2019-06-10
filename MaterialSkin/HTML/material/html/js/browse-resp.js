@@ -840,8 +840,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (i.image) {
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
-                    i.thumb = resolveImage(null, i.image, LMS_GRID_IMAGE_SIZE);
-                    i.src = resolveImage(null, i.image);
+                    i.thumb = resolveImageUrl(i.image, LMS_GRID_IMAGE_SIZE);
+                    i.src = resolveImageUrl(i.image);
                     i.w=0;
                     i.h=0;
                     resp.items.push(i);

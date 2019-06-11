@@ -277,6 +277,10 @@ a {
 }
 /* -- */
 
+.grid-no-subtitle {
+ margin-bottom:-20px;
+}
+
 .v-avatar img {
  object-fit:cover;
  object-position:50% 0%;

@@ -8,6 +8,8 @@
 6. If config does not have useLocalImageproxy, then default to mysqueezebox.
 7. Reduce size of grid row if there are no sub-titles.
 8. Custom icons for artists, albumartists, and compilations.
+9. Clear cache if artist list is toggled between single list or separate artists
+   and album artists.
 
 0.8.0
 -----

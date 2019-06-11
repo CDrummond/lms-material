@@ -1,15 +1,16 @@
 0.8.1
 -----
-1. lazy-load now-playing images.
-2. Set lazy-load error image to default cover.
-3. Always use lazy-load images, as can set error image easily.
-4. Set correct mouse-pointer for jumplist.
-5. Default to using mysqueezebox to resize remote images.
-6. If config does not have useLocalImageproxy, then default to mysqueezebox.
-7. Reduce size of grid row if there are no sub-titles.
-8. Custom icons for artists, albumartists, and compilations.
-9. Clear cache if artist list is toggled between single list or separate artists
-   and album artists.
+ 1. lazy-load now-playing images.
+ 2. Set lazy-load error image to default cover.
+ 3. Always use lazy-load images, as can set error image easily.
+ 4. Set correct mouse-pointer for jumplist.
+ 5. Default to using mysqueezebox to resize remote images.
+ 6. If config does not have useLocalImageproxy, then default to mysqueezebox.
+ 7. Reduce size of grid row if there are no sub-titles.
+ 8. Custom icons for artists, albumartists, and compilations.
+ 9. Clear cache if artist list is toggled between single list or separate
+    artists and album artists.
+10. Only hide home button if screen is less than 290px wide.
 
 0.8.0
 -----

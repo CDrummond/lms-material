@@ -903,7 +903,7 @@ div.v-subheader {
  cursor:pointer;
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 289px) {
  #home-button{display:none;}
 }
 

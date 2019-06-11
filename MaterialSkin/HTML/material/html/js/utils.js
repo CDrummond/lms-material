@@ -670,10 +670,14 @@ function mapIcon(params, item) {
                 item.svg="conductor";
                 return;
             }
-            if (params[i]=="role_id:ALBUMARTIST" || params[i]=="role_id:ARTIST" || params[i]=="role_id:PERFORMER") {
+            if (params[i]=="role_id:ALBUMARTIST") {
+                item.svg="albumartist";
+                return;
+            }
+            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:PERFORMER") {
                 break;
             }
         }
     }
-    item.icon="group";
+    item.svg="artist";
 }

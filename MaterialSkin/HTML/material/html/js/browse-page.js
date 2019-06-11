@@ -562,7 +562,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   command: ["artists"],
                   params: ["tags:s"],
                   cancache: true,
-                  icon: "group",
+                  svg: "artist",
                   type: "group",
                   group: GROUP_MY_MUSIC,
                   id: TOP_ID_PREFIX+"ar" },
@@ -597,7 +597,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         command: ["artists"],
                                         params: ["role_id:ALBUMARTIST", "tags:s"],
                                         cancache: true,
-                                        icon: "group",
+                                        svg: "albumartist",
                                         type: "group",
                                         group: GROUP_MY_MUSIC,
                                         id: TOP_ID_PREFIX+"aar" });
@@ -616,7 +616,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   command: ["albums"],
                   params: ["compilation:1", ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
                   cancache: true,
-                  icon: "album",
+                  svg: "album-multi",
                   type: "group",
                   id: TOP_ID_PREFIX+"co" },
                 { title: i18n("Random Albums"),
@@ -920,7 +920,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],
                               params: [item.params[0]],
-                              icon: "group",
+                              svg: "artist",
                               type: "group",
                               id: item.id+"artists",
                               genreArtists:true },
@@ -1854,6 +1854,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 if (c.id.startsWith("myMusicArtists")) {
                                     mapIcon(command.params, item);
                                     item.cancache = true;
+                                } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
+                                    item.icon = undefined;
+                                    item.svg = "album-multi";
+                                    item.cancache = true;
                                 } else if (c.id.startsWith("myMusicAlbums")) {
                                     item.icon = "album";
                                     item.cancache = true;
@@ -1888,23 +1892,31 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = undefined;
                                 } else if (c.id.startsWith("trackstat")) {
                                     item.icon = "bar_chart";
+                                } else if (c.id.startsWith("artist")) {
+                                    item.svg = "artist";
+                                    item.icon = undefined;
                                 } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                     if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
                                         item.range={count: undefined==this.newMusicLimit ? 100 :this.newMusicLimit};
                                     }
-                                    item.icon = c.id.startsWith("new") ? "new_releases" :
-                                                c.id.startsWith("album") ? "album" :
-                                                c.id.startsWith("artist") ? "group" :
-                                                c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
-                                                c.id.startsWith("genre") ? "label" :
-                                                c.id.startsWith("playlist") ? "list" :
-                                                c.id.startsWith("ratedmysql") ? "star" :
-                                                "library_music";
+                                    if (c.id.startsWith("artist")) {
+                                        item.svg = "artist";
+                                        item.icon = undefined;
+                                    } else {
+                                        item.icon = c.id.startsWith("new") ? "new_releases" :
+                                                    c.id.startsWith("album") ? "album" :
+                                                    c.id.startsWith("artist") ? "group" :
+                                                    c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
+                                                    c.id.startsWith("genre") ? "label" :
+                                                    c.id.startsWith("playlist") ? "list" :
+                                                    c.id.startsWith("ratedmysql") ? "star" :
+                                                    "library_music";
+                                    }
                                 } else if (c.icon) {
                                     if (c.icon.endsWith("/albums.png")) {
                                         item.icon = "album";
                                     } else if (c.icon.endsWith("/artists.png")) {
-                                        item.icon = "group";
+                                        item.svg = "artist";
                                     } else if (c.icon.endsWith("/genres.png")) {
                                         item.icon = "label";
                                     }

@@ -2157,13 +2157,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.grid.rows.push({id:"row."+i+"."+numColumns, cols:cols});
                 }
                 this.grid.numColumns = numColumns;
+            } else { // Need to check if have subtitles...
+                for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
+                    if (this.items[i].subtitle) {
+                        haveSubtitle = true;
+                    }
+                }
             }
 
             if (this.grid.haveSubtitle != haveSubtitle) {
                 this.grid.haveSubtitle = haveSubtitle;
                 changed = true;
             }
-console.log(haveSubtitle, this.grid.haveSubtitle);
             if (this.grid.size != size) {
                 this.grid.size = size;
                 changed = true;

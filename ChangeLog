@@ -6,6 +6,7 @@
 4. Set correct mouse-pointer for jumplist.
 5. Default to using mysqueezebox to resize remote images.
 6. If config does not have useLocalImageproxy, then default to mysqueezebox.
+7. Reduce size of grid row if there are no sub-titles.
 
 0.8.0
 -----

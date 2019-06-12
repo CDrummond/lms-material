@@ -31,7 +31,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 if (playerStatus.current.artwork_url) {
                     coverUrl=resolveImageUrl(playerStatus.current.artwork_url, LMS_CURRENT_IMAGE_SIZE);
                 }
-                if (undefined==coverUrl && undefined!=playerStatus.current.coverid && parseInt(playerStatus.current.coverid)>=0) {
+                if (undefined==coverUrl && undefined!=playerStatus.current.coverid && !(""+playerStatus.current.coverid).startsWith("-")) {
                     coverUrl=resolveImageUrl("/music/"+playerStatus.current.coverid+"/cover.jpg", LMS_CURRENT_IMAGE_SIZE);
                 }
                 if (undefined==coverUrl) {

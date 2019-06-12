@@ -11,6 +11,7 @@
  9. Clear cache if artist list is toggled between single list or separate
     artists and album artists.
 10. Only hide home button if screen is less than 290px wide.
+11. Ignore negative coverid attributes.
 
 0.8.0
 -----

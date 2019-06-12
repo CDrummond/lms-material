@@ -28,7 +28,7 @@ function queueItemCover(item) {
     if (item.artwork_url) {
         return resolveImageUrl(item.artwork_url);
     }
-    if (item.coverid) {
+    if (undefined!=item.coverid && parseInt(item.coverid)>=0) {
         return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
     }
     return resolveImageUrl(LMS_BLANK_COVER);

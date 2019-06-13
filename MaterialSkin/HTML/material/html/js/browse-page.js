@@ -2229,7 +2229,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(item) {
             var pos = this.grid.use
-                        ? Math.floor(item.index/this.grid.numColumns)*GRID_SIZES[this.grid.size].ih
+                        ? Math.floor(item.index/this.grid.numColumns)*(GRID_SIZES[this.grid.size].ih-(this.grid.haveSubtitle ? 0 : 20))
                         : item.index*LMS_LIST_ELEMENT_SIZE;
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },

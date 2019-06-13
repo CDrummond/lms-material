@@ -41,7 +41,8 @@ const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:163, ih:215, clz:"image-grid-g"},
                      {iw:168, ih:220, clz:"image-grid-h"},
                      {iw:173, ih:225, clz:"image-grid-i"},
-                     {iw:178, ih:230, clz:"image-grid-j"} ];
+                     {iw:178, ih:230, clz:"image-grid-j"},
+                     {iw:183, ih:235, clz:"image-grid-k"} ];
 var B_ALBUM_SORTS=[ ];
 var B_ACTIONS=[
     {cmd:"play",       icon:"play_circle_outline"},
@@ -2231,6 +2232,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var pos = this.grid.use
                         ? Math.floor(item.index/this.grid.numColumns)*(GRID_SIZES[this.grid.size].ih-(this.grid.haveSubtitle ? 0 : 20))
                         : item.index*LMS_LIST_ELEMENT_SIZE;
+console.log(item.index, this.grid.numColumns, GRID_SIZES[this.grid.size].ih, pos);
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },
         filterJumplist() {

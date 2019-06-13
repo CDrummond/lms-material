@@ -2292,7 +2292,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     var command = this.current.section==SECTION_FAVORITES
                                     ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"), this.items[to].id.replace("item_id:", "to_id:")]
-                                    : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+(to>this.dragIndex ? to-1 : to)];
+                                    : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
                     lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();
                     });

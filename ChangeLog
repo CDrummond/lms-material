@@ -13,6 +13,7 @@
 10. Only hide home button if screen is less than 290px wide.
 11. Ignore negative coverid attributes.
 12. Fix moving items to lower position in list.
+13. Give shadow to letter-overlay.
 
 0.8.0
 -----

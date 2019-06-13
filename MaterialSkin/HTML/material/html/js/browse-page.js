@@ -161,7 +161,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-divider vertical v-if="(showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0)"></v-divider>
+   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>

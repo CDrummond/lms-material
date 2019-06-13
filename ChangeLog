@@ -1,6 +1,6 @@
 0.8.1
 -----
- 1. lazy-load now-playing images.
+ 1. Lazy-load now-playing images.
  2. Set lazy-load error image to default cover.
  3. Always use lazy-load images, as can set error image easily.
  4. Set correct mouse-pointer for jumplist.
@@ -12,6 +12,7 @@
     artists and album artists.
 10. Only hide home button if screen is less than 290px wide.
 11. Ignore negative coverid attributes.
+12. Fix moving items to lower position in list.
 
 0.8.0
 -----

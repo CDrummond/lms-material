@@ -106,8 +106,6 @@ function resolveImageUrl(image, size) {
         if (useMySqueezeboxImageProxy) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
-        } else if (image.startsWith("https://img.radioparadise.com/covers/")) {
-            return image; // Local resizing of RP iamges is *very* slow! And others?
         } else {
             return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
         }

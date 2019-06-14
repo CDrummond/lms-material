@@ -23,12 +23,13 @@
   <script src="html/lib/vue.min.js?r=2.5.17"></script>
   <script src="html/js/utils.js?r=[% material_revision %]"></script>
   <script>
-   var cfg = getLocalStorageVal("layout", "auto");
-   if (cfg == "desktop" || cfg == "mobile") {
-    window.location.href = cfg;
-   } else {
-    window.location.href = isMobile() ? "mobile" : "desktop";
+   var layout = getLocalStorageVal("layout", "auto");
+   if (layout != "desktop" && layout != "mobile") {
+     layout = isMobile() ? "mobile" : "desktop";
    }
+   var query = window.location.href.indexOf('?');
+   var queryString = query > 0 ? window.location.href.substring(window.location.href.indexOf('?')) : "";
+   window.location.href = "/material/" + layout + queryString;
   </script>
  </body>
 </html>

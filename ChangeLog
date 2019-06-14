@@ -15,8 +15,6 @@
 12. Fix moving items to lower position in list.
 13. Give shadow to letter-overlay.
 14. Fix cover grid sizing, and jump list activation.
-15. If not using mysqueezebox.com to resize images, just use raw image URL for
-    radioparadise images - as these are *very* slow to resize.
 
 0.8.0
 -----

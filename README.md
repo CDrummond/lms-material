@@ -7,7 +7,6 @@ a few changes since.
 
 See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screenshots.
 
-
 ## Features
 
 1. Mobile and desktop layouts
@@ -16,7 +15,7 @@ See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screensh
 3. Add random albums of artist, genre, or year
 4. Browse Radio, Favourites, and Apps
 5. Add, delete, and edit favourites
-6. Add, delete, and rename playlists
+6. Add, delete, rename, and edit playlists
 7. Now playing
 8. Play queue with drag'n'drop editing
 9. UI settings; dark theme, album sort, auto scroll play queue
@@ -25,9 +24,10 @@ See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screensh
 12. Info dialog to show stats, and re-scan music
 13. Manage players; control volume, play/pause, show current track
 14. Group player control; add, edit, delete
-15. Pin apps, etc, to main screen
+15. Pin apps, etc., to main screen
 16. Swipe left/right to change views with mobile layout
 17. Lock screen controls when used with Chrome on Android
+18. Integrated support for "Music and Artist Information" plugin
 
 ## Installation
 
@@ -37,6 +37,9 @@ See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screensh
 4. At bottom of the page add the repo URL: `https://raw.githubusercontent.com/CDrummond/lms-material/master/public.xml`
 5. Install the plugin and enable as usual
 
+NOTE: This should no longer be necessary, as Material is now an official
+3rd-party add-on.
+
 ## Usage
 
 1. Access the skin through `http://<yourserver>:9000/material/`
@@ -44,11 +47,32 @@ See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screensh
 
 ### Selecting mobile or desktop
 
-The skin should automatically choose mobile or desktop layouts, but you may also
+Material should automatically choose mobile or desktop layouts, but you may also
 force one or the other.
 
 1. `http://<yourserver>:9000/material/mobile` will force mobile layout
 2. `http://<yourserver>:9000/material/desktop` will force desktop layout
+
+### Selecting start-up player
+
+Material will restore the previously used player on start-up. To accomplish
+this, it stores the player's ID (its MAC address) in your browser's local
+storage. If you clean cookies, etc, then this setting will be cleared. As an
+alternative, you can specify the player's name (URL encoded) or its MAC address
+in Material's URL as follows:
+
+* `http://<yourserver>:9000/material/?player=Player%20Name`
+* `http://<yourserver>:9000/material/?player=01:02:03:04:05:06`
+
+### Debugging
+
+Material uses LMS's JSONRPC and Cometd interfaces to send commands and receive
+updates. To see (some) of the messages Material sends, and the messages
+received, start Material as follows:
+
+* `http://<yourserver>:9000/material/?debug=json` for JSONRPC
+* `http://<yourserver>:9000/material/?debug=cometd` for Cometd
+* `http://<yourserver>:9000/material/?debug=json,cometd` for both
 
 ## Donations
 

@@ -15,6 +15,7 @@
 12. Fix moving items to lower position in list.
 13. Give shadow to letter-overlay.
 14. Fix cover grid sizing, and jump list activation.
+15. Pass URL query params when index.html selects variant.
 
 0.8.0
 -----

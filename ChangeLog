@@ -64,7 +64,7 @@
 1. Remove 'itemAc' string next to pinned items.
 2. Add menu button next to "My Music . LibraryName", allowing user to quickly
    change library.
-3. Only collpase/expand section if click on arrow or title - not whole width.
+3. Only collapse/expand section if click on arrow or title - not whole width.
 
 0.7.3
 -----
@@ -159,7 +159,7 @@
  4. Context menu for dynamic playlists.
  5. Remove long-press/middle-click for sleep menu from play/pause button in
     mobile toolbar when now-playing page shown. The long-press seems to get
-    confused and cause a play/pase to happen when the 'i' button is clicked.
+    confused and cause a play/pause to happen when the 'i' button is clicked.
  6. Fix middle-click also firing left-click event when widget has a longpress
     handler.
  7. When current track's cover changes, update it's 'key' so that vue is forced
@@ -177,10 +177,10 @@
  3. Minify all CSS.
  4. Mark some event handlers as passive, to silence chrome warnings.
  5. Add mute/unmute to volume dialog.
- 6. Use middle-click to mute/unmute and to show sleep settings, in addtion to
+ 6. Use middle-click to mute/unmute and to show sleep settings, in addition to
     long press.
  7. Use v-progress-linear for time progress display.
- 8. Always pass library_id to browse commmands.
+ 8. Always pass library_id to browse commands.
  9. Fix A..Z groups for AlbumArtists, etc.
 10. Add 'Reconnect' button to connection lost dialog.
 
@@ -204,7 +204,7 @@
  6. Fix 'Play album starting at track'
  7. Fix sleep timer countdown display.
  8. Hacky workaround for 'pause' not working in media controls. Always show
-    play button, but prefix title wth a pause character when paused.
+    play button, but prefix title with a pause character when paused.
  9. Add button to 'manage players' dialog to set sleep time for all players.
 10. Allow auto-layout for mobile browsers - but only allow desktop layout if
     both height and width are 600px or more.
@@ -231,7 +231,7 @@
 10. Double-click queue item to play.
 11. Fix clicking on dynamic playlist item.
 12. Use cometd for status updates, instead of polling server.
-13. Remove drag'n'drop re-ordering of favorites.
+13. Remove drag'n'drop re-ordering of favourites.
 14. Always sort favourites.
 15. Ignore "The, El, La, Los, Las, Le, and Les" prefixes when sorting apps and
     favourites.
@@ -321,7 +321,7 @@
  4. Allow multiple favourites and playlists to be removed/deleted.
  5. When used on a mobile device, clicking on 'browse' bottom navigation button
     will go back in browse history.
- 6. Fix playing albums from favorite artists, etc.
+ 6. Fix playing albums from favourite artists, etc.
  7. Attempt to hide 'All Songs' item.
  8. Show 'remote_title' (usually station name) if there is no album and this
     title is different from track title.
@@ -337,7 +337,7 @@
 17. Don't load a translation if LMS set to English and browser locale is 'en-us'
 18. Fix changing from non-English translation to English.
 19. Use params.item_id for Radio id's and not favorites_url, as BBC iPlayer
-    plugin sometimes returns duplicate urls.
+    plugin sometimes returns duplicate URLs.
 20. When a command fails, log its details to the console.
 21. When showing errors, also show command that caused the error.
 22. Add "?debug=true" to URL to add request/response debug message to browser's
@@ -357,7 +357,7 @@
  8. Fix padding in manage players dialog.
  9. Show ellipsis in desktop bottom toolbar for empty sub text if have main
     text.
-10. When sorting favorites, don't sort genre, artist, album, or track lists.
+10. When sorting favourites, don't sort genre, artist, album, or track lists.
 11. Fix playing an album from favourites by using the subtoolbar actions.
 12. Add volume step setting; 1%, 2%, 5%, or 10%
 13. Make 'show track number' in queue a config option of material, and not from

@@ -182,7 +182,7 @@ Vue.component('lms-toolbar', {
     props: ['desktop'],
     data() {
         return { songInfo:undefined,
-                 playlist: { count: undefined, duration: undefined, timestamp: undefined },
+                 playlist: { count: undefined, duration: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  browseMenuItems:[],
@@ -205,6 +205,21 @@ Vue.component('lms-toolbar', {
             }
         }.bind(this));
 
+        if (!this.desktop) {
+            bus.$on('queueStatus', function(count, duration) {
+                if (count>0) {
+                    this.playlist.count = i18np("1 Track", "%1 Tracks", count);
+                } else {
+                    this.playlist.count = undefined;
+                }
+                if (duration>0) {
+                    this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";
+                } else {
+                    this.playlist.duration="";
+                }
+            }.bind(this));
+        }
+
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
@@ -218,25 +233,6 @@ Vue.component('lms-toolbar', {
             this.controlSleepTimer(playerStatus.will_sleep_in);
             if (playerStatus.synced!=this.playerStatus.synced) {
                 this.playerStatus.synced = playerStatus.synced;
-            }
-
-            if (!this.desktop) {
-                if (playerStatus.playlist && playerStatus.playlist.count) {
-                    this.playlist.count = i18np("1 Track", "%1 Tracks", playerStatus.playlist.count);
-                } else {
-                    this.playlist.count = undefined;
-                }
-                if (!this.playlist.timestamp || this.playlist.timestamp!=playerStatus.playlist.timestamp) {
-                    this.playlist.timestamp = playerStatus.playlist.timestamp;
-                    lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
-                        var duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
-                        if (duration>0) {
-                            this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";
-                        } else {
-                            this.playlist.duration="";
-                        }
-                    });
-                }
             }
             if (playerStatus.current.title!=this.playerStatus.current.title ||
                 (playerStatus.current.artist && playerStatus.current.artist!=this.playerStatus.current.artist) ||

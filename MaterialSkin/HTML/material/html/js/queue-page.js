@@ -335,7 +335,12 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
                         if (duration!=this.items[index].duration) {
-                            this.getDuration();
+                            if (1==this.items.length) {
+                                this.duration = duration;
+                                bus.$emit("queueStatus", 1, duration);
+                            } else {
+                                this.getDuration();
+                            }
                         }
                         this.items[index].duration = duration;
                         this.$forceUpdate();

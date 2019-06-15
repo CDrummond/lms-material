@@ -86,7 +86,7 @@ Vue.component('lms-toolbar', {
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
       <v-list-tile-action>
-       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': !item.ison}" @click.stop="togglePower(item)">power_settings_new</v-icon></
+       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}" @click.stop="togglePower(item)">power_settings_new</v-icon></
       </v-list-tile-action>
     </v-list-tile>
    </template>
@@ -432,7 +432,8 @@ Vue.component('lms-toolbar', {
             }
         },
         togglePower(player, state) {
-            lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
+            var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
+            lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
                 bus.$emit('refreshStatus', player.id);
             });
         },

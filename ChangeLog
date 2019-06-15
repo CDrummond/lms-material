@@ -1,3 +1,8 @@
+0.8.2
+-----
+1. If current queue track duration changes, and its the only track, then just
+   use its duration as queue duration.
+
 0.8.1
 -----
  1. Lazy-load now-playing images.

@@ -1,7 +1,7 @@
 0.8.2
 -----
-1. If current queue track duration changes, and its the only track, then just
-   use its duration as queue duration.
+1. If queue page contains all tracks, then iterate these to determine total
+   duration.
 
 0.8.1
 -----

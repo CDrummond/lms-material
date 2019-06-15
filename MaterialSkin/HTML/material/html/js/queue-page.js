@@ -574,9 +574,11 @@ var lmsQueue = Vue.component("lms-queue", {
                 // Get total duration of queue
                 lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
                     this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
+                    bus.$emit("queueStatus", this.listSize, this.duration);
                 });
             } else {
                 this.duration = 0.0;
+                bus.$emit("queueStatus", this.listSize, this.duration);
             }
         },
         checkCover() {

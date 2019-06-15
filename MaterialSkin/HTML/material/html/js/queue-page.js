@@ -131,7 +131,8 @@ function parseResp(data, showTrackNum, index, showRatings) {
                               subtitle: buildSubtitle(i, showRatings),
                               image: queueItemCover(i),
                               actions: PQ_STD_ACTIONS,
-                              duration: i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
+                              duration: i.duration,
+                              durationStr: undefined!=i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
                               key: i.id+"."+index
                           });
                 index++;
@@ -207,7 +208,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
+    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
@@ -223,7 +224,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action class="pq-time">{{item.duration}}</v-list-tile-action>
+    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
@@ -329,20 +330,16 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     var subtitle = buildSubtitle(i, this.desktop && this.$store.state.ratingsSupport);
                     var remoteTitle = checkRemoteTitle(i);
-                    var duration = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
 
-                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || duration!=this.items[index].duration) {
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
-                        if (duration!=this.items[index].duration) {
-                            if (1==this.items.length) {
-                                this.duration = duration;
-                                bus.$emit("queueStatus", 1, duration);
-                            } else {
-                                this.getDuration();
-                            }
+                        if (i.duration!=this.items[index].duration) {
+                            this.items[index].durationStr = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
+                            this.items[index].duration = i.duration;
+                            this.getDuration();
                         }
-                        this.items[index].duration = duration;
+
                         this.$forceUpdate();
                     }
                 }
@@ -576,11 +573,23 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         getDuration() {
             if (this.items.length>0) {
-                // Get total duration of queue
-                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
-                    this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
+                if (this.items.length==this.listSize) {
+                    // Have all tracks, so sum durations...
+                    var duration = 0;
+                    for (var i=0; i<this.listSize; ++i) {
+                        if (this.items[i].duration!=undefined && this.items[i].duration>0) {
+                            duration+=this.items[i].duration;
+                        }
+                    }
+                    this.duration = duration;
                     bus.$emit("queueStatus", this.listSize, this.duration);
-                });
+                } else {
+                    // Don't have all tracks, so ask LMS for total duration...
+                    lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
+                        this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
+                        bus.$emit("queueStatus", this.listSize, this.duration);
+                    });
+                }
             } else {
                 this.duration = 0.0;
                 bus.$emit("queueStatus", this.listSize, this.duration);

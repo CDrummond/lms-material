@@ -16,6 +16,8 @@
 13. Give shadow to letter-overlay.
 14. Fix cover grid sizing, and jump list activation.
 15. Pass URL query params when index.html selects variant.
+16. Now playing page should get track count and duration from queue page, as
+    queue page handles current track duration changing. (Mobile only)
 
 0.8.0
 -----

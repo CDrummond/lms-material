@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNRS";
+const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNS";
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];
@@ -425,7 +425,7 @@ var lmsServer = Vue.component('lms-server', {
         },
         updatePlayer(id) {
             logJsonMessage("UPDATING ("+id+")");
-            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS]).then(({data}) => {
+            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : "")]).then(({data}) => {
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
                 }
@@ -440,7 +440,7 @@ var lmsServer = Vue.component('lms-server', {
             if (!this.subscribedPlayers.has(id)) {
                 logCometdDebug("Subscribe: "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS, "subscribe:30"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : ""), "subscribe:30"]]}});
                 this.subscribedPlayers.add(id);
             }
         },

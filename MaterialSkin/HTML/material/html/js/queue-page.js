@@ -112,6 +112,7 @@ function buildSubtitle(i, showRatings) {
 }
 
 function parseResp(data, showTrackNum, index, showRatings) {
+    logJsonMessage("RESP", data);
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;

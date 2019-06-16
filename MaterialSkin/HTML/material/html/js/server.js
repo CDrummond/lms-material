@@ -95,10 +95,7 @@ function lmsCommand(playerid, command, isList) {
     const URL = "/jsonrpc.js"
     var data = { id: 1, method: "slim.request", params: [playerid, command]};
 
-    if (debug && command && command.length>0 && command[0]!="status" && command[0]!="serverstatus") {
-        logJsonMessage("REQ", data.params);
-    }
-
+    logJsonMessage("REQ", data.params);
     if (canCancel) {
         lmsListSource = CancelToken.source();
         return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {

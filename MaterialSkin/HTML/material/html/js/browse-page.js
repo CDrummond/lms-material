@@ -94,7 +94,7 @@ const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const ALBUM_TAGS = "tags:jlyasS";
-const TRACK_TAGS = "tags:ACRdts";
+const TRACK_TAGS = "tags:ACdts";
 const SORT_KEY = "sort:";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
@@ -1728,9 +1728,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (cmd.params.length>0) {
                 var modifiedParams = [];
                 var albumSort=getAlbumSort(cmd);
-                cmd.params.forEach(p => { modifiedParams.push(p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                                               .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                                               .replace(TERM_PLACEHOLDER, this.enteredTerm)); });
+                cmd.params.forEach(p => {
+                    r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                       .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                       .replace(TERM_PLACEHOLDER, this.enteredTerm)
+                    if (this.$store.state.ratingsSupport && p==TRACK_TAGS) {
+                        r=TRACK_TAGS+"R";
+                    }
+                    modifiedParams.push(r);
+                });
                 cmd.params = modifiedParams;
             }
             return cmd;

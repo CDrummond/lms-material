@@ -107,6 +107,7 @@ const CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chambe
                                   "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
 const COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...CONDUCTOR_GENRES]);
+const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -1298,10 +1299,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     var libraries = [];
                     data.result.folder_loop.forEach(i => {
+                        i.name = i.name.replace(SIMPLE_LIB_VIEWS, "");
                         libraries.push(i);
                     });
                     libraries.sort(nameSort);
-                    libraries.unshift({name: i18n("Default"), id:LMS_DEFAULT_LIBRARY});
+                    libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
                     this.menu={show:true, x:event.clientX, y:event.clientY, libraries:libraries};
                 }
             });
@@ -1751,12 +1753,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
                         if (loop[i].id == this.$store.state.library) {
-                            this.libraryName=loop[i].id!=LMS_DEFAULT_LIBRARY ? loop[i].name : i18n("Default");
+                            this.libraryName=loop[i].id!=LMS_DEFAULT_LIBRARY ? loop[i].name.replace(SIMPLE_LIB_VIEWS, "") : i18n("All");
                             break;
                         }
                     }
                     if (undefined==this.libraryName) {
-                        this.libraryName=i18n("Default");
+                        this.libraryName=i18n("All");
                     }
                 }
             });

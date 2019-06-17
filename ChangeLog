@@ -7,6 +7,8 @@
 3. When drawing letter overlay, need to reduce item height for position
    calculation by 20px if there is no sub-text.
 4. Fix error message, and list update, when toggling server categories on/off.
+5. Remove "SimpleLibraryViews " prefix from library names.
+6. Use "All" as name for default library.
 
 0.8.1
 -----

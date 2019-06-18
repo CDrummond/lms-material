@@ -108,6 +108,7 @@ const CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chambe
                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
 const COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...CONDUCTOR_GENRES]);
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
+const GRID_SINGLE_LINE_DIFF = 20;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -182,7 +183,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
-  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : 20)" page-mode key-field="id">
+  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
    <table slot-scope="{item, index}" :class="['full-width', GRID_SIZES[grid.size].clz]">
     <td align="center" style="vertical-align: top" v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat align="left" class="image-grid-item">
      <div v-if="col.blank" class="image-grid-item"></div>
@@ -2117,8 +2118,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (undefined!==this.letterTimeout) {
                         clearTimeout(this.letterTimeout);
                     }
+                    var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
                     var index = this.grid.use
-                                    ? Math.floor((this.scrollElement.scrollTop / (GRID_SIZES[this.grid.size].ih-(this.grid.haveSubtitle ? 0 : 20)))*this.grid.numColumns)
+                                                                               // Add 50 to take into accoutn text size
+                                    ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (GRID_SIZES[this.grid.size].ih-subMod))*this.grid.numColumns
                                     : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
                     if (index>=0 && index<this.items.length) {
                         var letter = this.items[index].textkey;
@@ -2241,9 +2244,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(item) {
             var pos = this.grid.use
-                        ? Math.floor(item.index/this.grid.numColumns)*(GRID_SIZES[this.grid.size].ih-(this.grid.haveSubtitle ? 0 : 20))
+                        ? Math.floor(item.index/this.grid.numColumns)*(GRID_SIZES[this.grid.size].ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
                         : item.index*LMS_LIST_ELEMENT_SIZE;
-console.log(item.index, this.grid.numColumns, GRID_SIZES[this.grid.size].ih, pos);
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },
         filterJumplist() {

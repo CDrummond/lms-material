@@ -12,7 +12,7 @@
  7. When auto-selecting a player at start-up (1st time, or no config) then
     choose in order of preference: first powered on standard player, or first
     powered off standard player, first powered on group, first powere off group.
- 8. Ensure all menus have scroolbars, if they are too tall.
+ 8. Ensure all menus have scrollbars, if they are too tall.
  9. Long press on now-playing nav-button (whilst showing now-playing) shows
     track info. (Mobile only)
 10. Long press on queue nav-button (whilst showing queue) scrolls to current

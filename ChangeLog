@@ -3,7 +3,7 @@
  1. If queue page contains all tracks, then iterate these to determine total
     duration.
  2. When getting track lists (for albums, or queue) only request rating if
-   rating support is enabled (via TrackStat).
+    rating support is enabled (via TrackStat).
  3. When drawing letter overlay, need to reduce item height for position
     calculation by 20px if there is no sub-text.
  4. Fix error message, and list update, when toggling server categories on/off.

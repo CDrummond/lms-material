@@ -187,18 +187,21 @@ const store = new Vuex.Store({
                         }
                     });
                 }
-                if (!state.player) { /* Choose first powered on player */
-                    for (var i=0, len=state.players.length; i<len; ++i) {
-                        if (state.players[i].ison) {
-                            state.player=state.players[i];
-                            setLocalStorageVal('player', state.player.id);
-                            break;
+                if (!state.player && state.players.length>0) {
+                    // Auto-select a player:
+                    //  1. First powered on standard player
+                    //  2. First powerer off standard player
+                    //  3. First powered on group
+                    //  4. First powerer off group
+                    for (var j=0; j<4 && !state.player; ++j) {
+                        for (var i=0, len=state.players.length; i<len; ++i) {
+                            if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
+                                state.player=state.players[i];
+                                setLocalStorageVal('player', state.player.id);
+                                break;
+                            }
                         }
                     }
-                }
-                if (!state.player && state.players.length>0) { /* Choose first player */
-                    state.player=state.players[0];
-                    setLocalStorageVal('player', state.player.id);
                 }
             }
             if (state.players.length<1) {

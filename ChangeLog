@@ -9,6 +9,9 @@
 4. Fix error message, and list update, when toggling server categories on/off.
 5. Remove "SimpleLibraryViews " prefix from library names.
 6. Use "All" as name for default library.
+7. When auto-selecting a player at start-up (1st time, or no config) then choose
+   in order of preference: first powered on standard player, or first powered
+   off standard player, first powered on group, first powere off group.
 
 0.8.1
 -----

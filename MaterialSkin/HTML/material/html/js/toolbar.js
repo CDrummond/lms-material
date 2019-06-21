@@ -66,7 +66,7 @@ Vue.component('lms-toolbar', {
  <v-btn v-if="noPlayer" icon class="toolbar-button">
   <v-progress-circular color="primary" size=22 width=3 indeterminate></v-progress-circular>
  </v-btn>
- <v-menu bottom class="toolbar-menu" :disabled="!connected">
+ <v-menu bottom :disabled="!connected">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed': !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>

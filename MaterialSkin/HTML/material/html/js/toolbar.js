@@ -93,8 +93,8 @@ Vue.component('lms-toolbar', {
    <template v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
-     <v-list-tile-avatar>
-      <v-icon small v-if="players && players.length>1"></v-icon>
+     <v-list-tile-avatar v-if="players && players.length>1">
+      <v-icon small></v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>

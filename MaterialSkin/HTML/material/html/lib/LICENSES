@@ -45,7 +45,7 @@ vuetify-confirm:
     URL: https://github.com/yariksav/vuetify-confirm
     License: MIT
     Notes: Swapped location of True/False buttons, remove default setting of
-           button colours.
+           button colours, and made dialogs persistent.
 
 vuetify
     Version: 1.5.8

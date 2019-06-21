@@ -396,16 +396,16 @@ a {
  height:32px;
 }
 
-.toolbar-menu {
+.v-menu__content {
+ max-height:calc((var(--vh, 1vh)*100) - 16px);
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
+ overflow-y:auto;
 }
 
 .toolbar-player-list {
- max-height:calc((var(--vh, 1vh)*100) - 16px);
- overflow-y:auto;
-  min-width:300px;
+ min-width:300px;
 }
 
 @media screen and (max-width: 375px) {

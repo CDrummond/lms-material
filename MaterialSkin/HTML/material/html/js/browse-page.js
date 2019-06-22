@@ -997,7 +997,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showImage(index) {
             var browsePage = this;
-            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, this.items, {index: index});
+            var images = [];
+            for (var i=0; i<this.items.length; ++i) {
+                images.push({src:changeImageSizing(this.items[i].src), w:0, h:0});
+            }
+            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, images, {index: index});
             this.gallery.listen('gettingData', function (index, item) {
                 if (item.w < 1 || item.h < 1) {
                     var img = new Image();

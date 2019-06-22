@@ -11,7 +11,8 @@
  6. Use "All" as name for default library.
  7. When auto-selecting a player at start-up (1st time, or no config) then
     choose in order of preference: first powered on standard player, or first
-    powered off standard player, first powered on group, first powere off group.
+    powered off standard player, first powered on group, first powered off
+    group.
  8. Ensure all menus have scrollbars, if they are too tall.
  9. Long press on now-playing nav-button (whilst showing now-playing) shows
     track info. (Mobile only)
@@ -19,7 +20,7 @@
     track. (Mobile only)
 11. Make confirmation dialogs persistent - need to press button to close.
 
- 0.8.1
+0.8.1
 -----
  1. Lazy-load now-playing images.
  2. Set lazy-load error image to default cover.

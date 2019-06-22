@@ -1,3 +1,7 @@
+0.8.3
+-----
+1. Fix parsing of queue items' durations - and showing of total duration.
+
 0.8.2
 -----
  1. If queue page contains all tracks, then iterate these to determine total

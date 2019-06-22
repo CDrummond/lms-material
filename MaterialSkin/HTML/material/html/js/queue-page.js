@@ -126,14 +126,15 @@ function parseResp(data, showTrackNum, index, showRatings) {
                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                 }
 
+                var duration = undefined==i.duration ? undefined : parseInt(i.duration);
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
                               subtitle: buildSubtitle(i, showRatings),
                               image: queueItemCover(i),
                               actions: PQ_STD_ACTIONS,
-                              duration: i.duration,
-                              durationStr: undefined!=i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined,
+                              duration: duration,
+                              durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index
                           });
                 index++;

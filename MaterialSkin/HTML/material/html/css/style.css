@@ -450,7 +450,7 @@ a {
  font-weight:200;
 }
 
-.browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img {
+.browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
  max-width:300px !important;
  max-height:300px !important;
  margin-left:auto;

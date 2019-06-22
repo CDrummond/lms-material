@@ -2,6 +2,7 @@
 -----
 1. Fix parsing of queue items' durations - and showing of total duration.
 2. Fix elliding of toolbar text.
+3. Fix zoomed image sizes when viewing artist pictures.
 
 0.8.2
 -----

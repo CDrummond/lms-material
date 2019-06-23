@@ -1,3 +1,7 @@
+0.8.4
+-----
+1. When creating jumplist for folders list, convert to uppercase.
+
 0.8.3
 -----
 1. Fix parsing of queue items' durations - and showing of total duration.

@@ -95,6 +95,7 @@ const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const ALBUM_TAGS = "tags:jlyasS";
 const TRACK_TAGS = "tags:ACdts";
+const PLAYLIST_TAGS = "tags:su";
 const SORT_KEY = "sort:";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
@@ -587,7 +588,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   id: TOP_GENRES_ID },
                 { title: i18n("Playlists"),
                   command: ["playlists"],
-                  params: ["tags:s"],
+                  params: [PLAYLIST_TAGS],
                   icon: "list",
                   type: "group",
                   group: GROUP_MY_MUSIC,
@@ -1127,7 +1128,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var favUrl = item.favUrl ? item.favUrl : item.url;
                 var favIcon = item.favIcon;
                 var favType = "audio";
-                var favTitle = item.favTitle;
+                var favTitle = item.origTitle ? item.origTitle : item.title;
 
                 if (item.presetParams && item.presetParams.favorites_url) {
                     favUrl = item.presetParams.favorites_url;
@@ -1638,7 +1639,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                             if (!hasSort) {
                                 p.push(SORT_KEY+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));
                             }
-                        } else if (!hasTags && (mode=="artists" || mode=="years" || mode=="genres" || mode=="playlists" || mode=="vaalbums")) {
+                        } else if (mode=="playlists") {
+                            if (!hasTags) {
+                                p.push(PLAYLIST_TAGS);
+                            }
+                        } else if (!hasTags && (mode=="artists" || mode=="years" || mode=="genres" || mode=="vaalbums")) {
                             p.push("tags:s");
                         }
                         cmd = {command: c, params: p};

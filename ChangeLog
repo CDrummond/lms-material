@@ -1,6 +1,7 @@
 0.8.4
 -----
 1. When creating jumplist for folders list, convert to uppercase.
+2. Remove list/grid toggle for image view.
 
 0.8.3
 -----

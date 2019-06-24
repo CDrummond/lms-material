@@ -738,7 +738,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var changedView = this.grid.use != resp.useGrid;
-                this.grid = {use: resp.canUseGrid && isSetToUseGrid(command), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+                this.grid = {use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
                 if (this.current && this.current.menu) {
                     for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -775,7 +775,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.tbarActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_ACTION];
                 }
-                if (resp.canUseGrid) {
+                if (resp.canUseGrid && !resp.forceGrid) {
                     this.settingsMenuActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
                 }
                 if (this.command.command.length>0 && this.command.command[0]=="albums") {

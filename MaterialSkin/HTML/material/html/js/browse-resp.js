@@ -850,7 +850,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (resp.items.length>0) {
                 resp.title=data.result.title;
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
-                resp.canUseGrid = true;
+                resp.canUseGrid = resp.forceGrid = true;
             }
             resp.total = resp.items.length;
         }

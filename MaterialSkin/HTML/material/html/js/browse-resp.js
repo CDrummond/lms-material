@@ -185,12 +185,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (i.type=="artist" || i.type=="album" || i.type=="year" || i.type=="genre" || // CustomBrowse
                     i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
                     // Convert NUM. TITLE into 0NUM TITLE - e.g 1. Wibble => 01 Wibble
+                    /* Removed, as converts titles "22. Acacia Avenue" to "22 <dot> Acacia Avenue"
                     if (/^[0-9]+\.\s.+/.test(i.title)) {
                         var dot = i.title.indexOf('.');
                         var num = parseInt(i.title.substring(0, dot));
                         var text = i.title.substring(dot+2, i.title.length);
                         i.title = (num>9 ? num : ("0" + num))+SEPARATOR+text;
                     }
+                    */
                     if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
                         (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) ) {
                         if (playAction) {

@@ -556,8 +556,8 @@ function updateItemFavorites(item) {
         item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
         item.favIcon=changeImageSizing(item.image);
     } else if (item.id.startsWith("album_id:")) {
-        favUrl="db:album.title="+encodeURIComponent(favTitle);
-        favIcon=changeImageSizing(item.image);
+        item.favUrl="db:album.title="+encodeURIComponent(favTitle);
+        item.favIcon=changeImageSizing(item.image);
     } else if (item.id.startsWith("year:")) {
         item.favUrl="db:year.id="+encodeURIComponent(favTitle);
         item.favIcon="html/images/years.png";

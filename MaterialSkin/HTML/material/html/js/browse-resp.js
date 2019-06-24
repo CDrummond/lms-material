@@ -573,7 +573,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               params: ["playlist_id:"+ i.id], // "tags:IRad"] -> Will show rating, not album???
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                               type: "group",
-                              section: SECTION_PLAYLISTS
+                              section: SECTION_PLAYLISTS,
+                              url:  i.url
                           });
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);

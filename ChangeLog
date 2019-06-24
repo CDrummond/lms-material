@@ -2,6 +2,7 @@
 -----
 1. When creating jumplist for folders list, convert to uppercase.
 2. Remove list/grid toggle for image view.
+3. Fix adding albums and playlists to favourites.
 
 0.8.3
 -----

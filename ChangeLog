@@ -9,6 +9,7 @@
 6. For mobile layout, place 'Random' and 'Shuffle' icons in queue toolbar if
    width is more than 320px.
 7. Add icons to standard settings menu entries, and now-playing context menu.
+8. Reduce margins in sleep dialog, to allow more space for text.
 
 0.8.3
 -----

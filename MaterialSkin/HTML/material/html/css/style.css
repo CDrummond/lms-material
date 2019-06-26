@@ -956,3 +956,7 @@ div.v-subheader {
  margin-top:4px;
  margin-left:4px;
 }
+
+.sleep-list .v-list__tile {
+ padding:0px;
+}

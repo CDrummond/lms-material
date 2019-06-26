@@ -4,6 +4,7 @@
 2. Remove list/grid toggle for image view.
 3. Fix adding albums and playlists to favourites.
 4. Remove parsing of title into tracknum+title.
+5. For mobile layout, place 'Add URL' and 'Scroll to current track' in menu.
 
 0.8.3
 -----

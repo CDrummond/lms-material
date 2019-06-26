@@ -110,16 +110,16 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
-                playAction = undefined != resp.baseActions[B_ACTIONS[PLAY_ACTION].cmd];
-                addAction = undefined != resp.baseActions[B_ACTIONS[ADD_ACTION].cmd];
-                insertAction = undefined != resp.baseActions[B_ACTIONS[INSERT_ACTION].cmd];
-                moreAction = undefined!=resp.baseActions[B_ACTIONS[MORE_ACTION].cmd];
+                playAction = undefined != resp.baseActions[ACTIONS[PLAY_ACTION].cmd];
+                addAction = undefined != resp.baseActions[ACTIONS[ADD_ACTION].cmd];
+                insertAction = undefined != resp.baseActions[ACTIONS[INSERT_ACTION].cmd];
+                moreAction = undefined!=resp.baseActions[ACTIONS[MORE_ACTION].cmd];
                 if (resp.canUseGrid && parent && parent.actions && parent.actions.go && parent.actions.go.cmd &&
                     parent.actions.go.cmd[0] == "playhistory") {
                     resp.canUseGrid = false;
                 }
-                if (resp.baseActions[B_ACTIONS[PLAY_ACTION].cmd] && resp.baseActions[B_ACTIONS[PLAY_ACTION].cmd].params && resp.baseActions[B_ACTIONS[PLAY_ACTION].cmd].params.menu) {
-                    menu = resp.baseActions[B_ACTIONS[PLAY_ACTION].cmd].params.menu;
+                if (resp.baseActions[ACTIONS[PLAY_ACTION].cmd] && resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params && resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params.menu) {
+                    menu = resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params.menu;
                 }
             }
 

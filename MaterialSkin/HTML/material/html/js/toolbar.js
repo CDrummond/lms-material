@@ -5,11 +5,11 @@
  * MIT license.
  */
 
-var TB_UI_SETTINGS     = {id:'tb:settings'       };
-var TB_PLAYER_SETTINGS = {id:"tb:playersettings" };
-var TB_SERVER_SETTINGS = {id:"tb:serversettings" };
-var TB_INFO            = {id:"tb:info"           };
-var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"  };
+var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
+var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
+var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
+var TB_INFO            = {id:"tb:info",           icon: "info_outline" };
+var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 
 var toolbarComponent;
 var mediaAudio = undefined;
@@ -110,8 +110,8 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
 
    <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
-    <v-list-tile-avatar><v-icon>speaker_group</v-icon></v-list-tile-avatar>
-     <v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
+    <v-list-tile-avatar><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
 
    <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
@@ -154,9 +154,11 @@ Vue.component('lms-toolbar', {
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-list-tile v-if="item.href" :href="item.href" target="_blank">
+     <v-list-tile-avatar><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="menuAction(item.id)">
+     <v-list-tile-avatar><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>

@@ -4,7 +4,10 @@
 2. Remove list/grid toggle for image view.
 3. Fix adding albums and playlists to favourites.
 4. Remove parsing of title into tracknum+title.
-5. For mobile layout, place 'Add URL' and 'Scroll to current track' in menu.
+5. For mobile layout, place 'Add URL' and 'Scroll to current track' in menu if
+   width is less than 500px.
+6. For mobile layout, place 'Random' and 'Shuffle' icons in queue toolbar if
+   width is more than 320px.
 
 0.8.3
 -----

@@ -169,15 +169,15 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
-   <v-btn :title="trans.repeatOne" flat icon v-if="desktop && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
-   <v-btn :title="trans.repeatAll" flat icon v-else-if="desktop && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
-   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></v-btn>
+   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
 
-   <v-btn :title="trans.shuffleAlbums" flat icon v-if="desktop && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-   <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
-   <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
-   <v-divider vertical v-if="desktop"></v-divider>
-   <template v-if="desktop" v-for="(action, index) in settingsMenuActions">
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktop || wide>0) && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
+   <v-divider vertical v-if="desktop || wide>0"></v-divider>
+   <template v-if="desktop || wide>1" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
@@ -255,7 +255,8 @@ var lmsQueue = Vue.component("lms-queue", {
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlistName: undefined,
             selection: [],
-            settingsMenuActions: [PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION]
+            settingsMenuActions: [PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
+            wide: 0
         }
     },
     computed: {
@@ -394,7 +395,16 @@ var lmsQueue = Vue.component("lms-queue", {
             bus.$on('settingsMenuAction:queue', function(action) {
                 this.headerAction(action);
             }.bind(this));
-            bus.$emit('settingsMenuActions', this.settingsMenuActions, 'queue');
+
+            bus.$on('windowWidthChanged', function() {
+                var wide = window.innerWidth >= 500 ? 2 : window.innerWidth>=340 ? 1 : 0;
+                if (wide!=this.wide) {
+                    this.wide = wide;
+                    bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+                }
+            }.bind(this));
+            this.wide = window.innerWidth >= 500 ? 2 : window.innerWidth>=340 ? 1 : 0;
+            bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
         }
     },
     methods: {

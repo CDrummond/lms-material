@@ -161,13 +161,14 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">{{trans.startPlayer}}</v-list-tile>
-   <v-divider v-if="!desktop && browseMenuItems && browseMenuItems.length>0 && isBrowsePage"></v-divider>
-   <template v-if="!desktop && browseMenuItems && browseMenuItems.length>0 && isBrowsePage" v-for="(action, index) in browseMenuItems">
-    <v-list-tile @click="bus.$emit('browseAction', action)">
+   <v-divider v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
+   <template v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
+    <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)">
      <v-list-tile-avatar>
-      <v-icon>{{B_ACTIONS[action].icon}}</v-icon>
+      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{B_ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
+     <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
   </v-list>
@@ -185,7 +186,7 @@ Vue.component('lms-toolbar', {
                  playlist: { count: undefined, duration: undefined },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
-                 browseMenuItems:[],
+                 otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
                  infoOpen: false,
@@ -197,12 +198,11 @@ Vue.component('lms-toolbar', {
     },
     mounted() {
         bus.$on('settingsMenuActions', function(actions, page) {
-            if ('browse'==page) {
-                this.browseMenuItems=[];
-                for (var i=0, len=actions.length; i<len; ++i) {
-                    this.$set(this.browseMenuItems, i, actions[i]);
-                }
+            this.otherMenuItems[page]=[];
+            for (var i=0, len=actions.length; i<len; ++i) {
+                this.$set(this.otherMenuItems[page], i, actions[i]);
             }
+            this.$forceUpdate();
         }.bind(this));
 
         if (!this.desktop) {
@@ -526,11 +526,14 @@ Vue.component('lms-toolbar', {
         isNowPlayingPage() {
             return this.$store.state.page == 'now-playing'
         },
-        isBrowsePage() {
-            return this.$store.state.page == 'browse'
+        currentPage() {
+            return this.$store.state.page
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1
+        },
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     filters: {
@@ -546,6 +549,9 @@ Vue.component('lms-toolbar', {
             }
             return value<0 ? -1*value : value;
         },
+        svgIcon: function (name, dark) {
+            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
+        }
     },
     watch: {
         'playerVolume.val': function(newVal) {

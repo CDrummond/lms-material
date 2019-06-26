@@ -5,33 +5,6 @@
  * MIT license.
  */
 
-const DIVIDER                 = -1;
-const PLAY_ACTION             = 0;
-const PLAY_ALBUM_ACTION       = 1;
-const PLAY_ALL_ACTION         = 2;
-const ADD_ACTION              = 3;
-const ADD_ALL_ACTION          = 4;
-const INSERT_ACTION           = 5;
-const MORE_ACTION             = 6;
-const MORE_LIB_ACTION         = 7;
-const ADD_RANDOM_ALBUM_ACTION = 8;
-const RENAME_PL_ACTION        = 9;
-const RENAME_FAV_ACTION       = 10;
-const EDIT_FAV_ACTION         = 11;
-const ADD_FAV_ACTION          = 12;
-const DELETE_ACTION           = 13;
-const ADD_TO_FAV_ACTION       = 14;
-const REMOVE_FROM_FAV_ACTION  = 15;
-const PIN_ACTION              = 16;
-const UNPIN_ACTION            = 17;
-const SELECT_ACTION           = 18;
-const UNSELECT_ACTION         = 19;
-const RATING_ACTION           = 20;
-const SEARCH_LIB_ACTION       = 21;
-const USE_GRID_ACTION         = 22;
-const USE_LIST_ACTION         = 23;
-const REMOVE_ACTION           = 24;
-const ALBUM_SORTS_ACTION      = 25;
 const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:138, ih:190, clz:"image-grid-b"},
                      {iw:143, ih:195, clz:"image-grid-c"},
@@ -44,34 +17,6 @@ const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
                      {iw:178, ih:230, clz:"image-grid-j"},
                      {iw:183, ih:235, clz:"image-grid-k"} ];
 var B_ALBUM_SORTS=[ ];
-var B_ACTIONS=[
-    {cmd:"play",       icon:"play_circle_outline"},
-    {cmd:"play_album", icon:"album"},
-    {cmd:"playall",    icon:"play_circle_outline"},
-    {cmd:"add",        icon:"add_circle_outline"},
-    {cmd:"addall",     icon:"add_circle_outline"},
-    {cmd:"add-hold",   icon:"format_indent_increase"},
-    {cmd:"more",       svg: "more"},
-    {cmd:"lib-more",   svg: "more"},
-    {cmd:"random",     svg: "dice-album"},
-    {cmd:"rename-pl",  icon:"edit"},
-    {cmd:"rename-fav", icon:"edit"},
-    {cmd:"edit-fav",   icon:"edit"},
-    {cmd:"add-fav",    svg: "add-favorite"},
-    {cmd:"delete",     icon:"delete"},
-    {cmd:"addfav",     svg: "add-favorite"},
-    {cmd:"removefav",  svg: "remove-favorite"},
-    {cmd:"pin",        svg: "pin"},
-    {cmd:"unpin",      svg: "unpin"},
-    {cmd:"select",     icon:"check_box_outline_blank"},
-    {cmd:"unselect",   icon:"check_box"},
-    {cmd:"rating",     icon:"stars"},
-    {cmd:"search-lib", icon:"search"},
-    {cmd:"use-grid",   icon:"grid_on"},
-    {cmd:"use-list",   icon:"grid_off"},
-    {cmd:"remove",     icon:"remove_circle_outline"},
-    {cmd:"albsort",    icon:"sort_by_alpha"}
-];
 
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";
@@ -140,7 +85,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.length | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
-   <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{B_ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
+   <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
    <v-btn v-else-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems(DELETE_ACTION)"><v-icon>delete</v-icon></v-btn>
    <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_FROM_FAV_ACTION)"><v-icon>delete_outline</v-icon></v-btn>
    <v-divider vertical v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
@@ -160,16 +105,16 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
    <template v-if="desktop" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
-      <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
+      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
    <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="B_ACTIONS[action].title" :id="'tbar'+index">
-      <img v-if="B_ACTIONS[action].svg" class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{B_ACTIONS[action].icon}}</v-icon>
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
+      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
   </v-layout>
@@ -218,8 +163,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
      <v-btn flat icon v-if="items[col.id].menu && items[col.id].menu.length>0" @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
       <v-icon v-if="items[col.id].menu && items[col.id].menu.length>1">more_vert</v-icon>
-      <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==B_ACTIONS[items[col.id].menu[0]].svg" :title="B_ACTIONS[items[col.id].menu[0]].title">{{B_ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
-      <img v-else-if="items[col.id].menu && items[col.id].menu.length===1" :title="B_ACTIONS[items[col.id].menu[0]].title" class="svg-img" :src="B_ACTIONS[items[col.id].menu[0]].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==ACTIONS[items[col.id].menu[0]].svg" :title="ACTIONS[items[col.id].menu[0]].title">{{ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
+      <img v-else-if="items[col.id].menu && items[col.id].menu.length===1" :title="ACTIONS[items[col.id].menu[0]].title" class="svg-img" :src="ACTIONS[items[col.id].menu[0]].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </div>
    </v-card></td>
@@ -252,9 +197,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>
-    <v-list-tile-action :title="B_ACTIONS[UNPIN_ACTION].title" @click.stop="itemAction(UNPIN_ACTION, item, index)">
+    <v-list-tile-action :title="ACTIONS[UNPIN_ACTION].title" @click.stop="itemAction(UNPIN_ACTION, item, index)">
      <v-btn icon>
-      <img class="svg-img" :src="B_ACTIONS[UNPIN_ACTION].svg | svgIcon(darkUi)"></img>
+      <img class="svg-img" :src="ACTIONS[UNPIN_ACTION].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
 
@@ -291,7 +236,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <template v-else v-for="(item, index) in items">
    <v-subheader v-if="item.header" style="width:100%"><div @click="toggleGroup(item.group)"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ item.header }}</div><div class="ellipsis lib-name" @click.stop="showLibMenu($event)" v-if="item.id==TOP_MMHDR_ID && libraryName">{{ SEPARATOR + libraryName }}</div>
     <div v-if="item.action" :title="item.action.title" style="margin-left:auto; margin-right:-16px" @click.stop="itemAction(item.action, item, index)">
-     <v-btn icon><v-icon>{{B_ACTIONS[item.action].icon}}</v-icon></v-btn>
+     <v-btn icon><v-icon>{{ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>
    </v-subheader>
 
@@ -338,10 +283,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.menu && item.menu.length===1" :title="B_ACTIONS[item.menu[0]].title" @click.stop="itemAction(item.menu[0], item, index)">
+    <v-list-tile-action v-else-if="item.menu && item.menu.length===1" :title="ACTIONS[item.menu[0]].title" @click.stop="itemAction(item.menu[0], item, index)">
      <v-btn icon>
-      <v-icon v-if="undefined==B_ACTIONS[item.menu[0]].svg">{{B_ACTIONS[item.menu[0]].icon}}</v-icon>
-      <img v-else class="svg-img" :title="B_ACTIONS[item.menu[0]].title" :src="B_ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
+      <v-icon v-if="undefined==ACTIONS[item.menu[0]].svg">{{ACTIONS[item.menu[0]].icon}}</v-icon>
+      <img v-else class="svg-img" :title="ACTIONS[item.menu[0]].title" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -358,17 +303,17 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-divider v-if="DIVIDER==action"></v-divider>
     <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index)">
      <v-list-tile-avatar>
-      <v-icon v-if="undefined==B_ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{B_ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
-      <img v-else class="svg-img" :src="B_ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
+      <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
+      <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-title>{{B_ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
+     <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-avatar>
-      <v-icon v-if="undefined==B_ACTIONS[action].svg">{{B_ACTIONS[action].icon}}</v-icon>
-      <img v-else class="svg-img" :src="B_ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
+      <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-title>{{B_ACTIONS[action].title}}</v-list-tile-title>
+     <v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>
@@ -482,7 +427,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             }.bind(this));
-            bus.$on('browseAction', function(action) {
+            bus.$on('settingsMenuAction:browse', function(action) {
                 this.headerAction(action);
             }.bind(this));
         }
@@ -528,29 +473,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     },
     methods: {
         initItems() {
-            B_ACTIONS[PLAY_ACTION].title=B_ACTIONS[PLAY_ALL_ACTION].title=i18n("Play now");
-            B_ACTIONS[PLAY_ALBUM_ACTION].title=i18n("Play album starting at track");
-            B_ACTIONS[ADD_ACTION].title=B_ACTIONS[ADD_ALL_ACTION].title=i18n("Append to queue");
-            B_ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
-            B_ACTIONS[INSERT_ACTION].title=i18n("Play next");
-            B_ACTIONS[MORE_ACTION].title=i18n("More");
-            B_ACTIONS[MORE_LIB_ACTION].title=i18n("More");
-            B_ACTIONS[RENAME_PL_ACTION].title=i18n("Rename");
-            B_ACTIONS[RENAME_FAV_ACTION].title=i18n("Rename");
-            B_ACTIONS[EDIT_FAV_ACTION].title=i18n("Edit");
-            B_ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
-            B_ACTIONS[DELETE_ACTION].title=i18n("Delete");
-            B_ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
-            B_ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
-            B_ACTIONS[REMOVE_ACTION].title=i18n("Remove");
-            B_ACTIONS[PIN_ACTION].title=i18n("Pin to main page");
-            B_ACTIONS[UNPIN_ACTION].title=i18n("Un-pin from main page");
-            B_ACTIONS[SELECT_ACTION].title=i18n("Select");
-            B_ACTIONS[UNSELECT_ACTION].title=i18n("Un-select");
-            B_ACTIONS[RATING_ACTION].title=i18n("Set rating");
-            B_ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
-            B_ACTIONS[USE_GRID_ACTION].title=B_ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
-            B_ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
+            updateActionStrings();
             B_ALBUM_SORTS=[ { key:"album",           label:i18n("Album")},
                             { key:"artistalbum",     label:i18n("Artist, Album")},
                             { key:"artflow",         label:i18n("Artist, Year, Album")},
@@ -1067,7 +990,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (act==SEARCH_LIB_ACTION) {
                 bus.$emit('dlg.open', 'search');
             } else if (act===MORE_ACTION) {
-                this.fetchItems(this.buildCommand(item, B_ACTIONS[act].cmd), item);
+                this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
             } else if (act===MORE_LIB_ACTION) {
                 if (item.id) {
                     if (item.id.startsWith("artist_id:")) {
@@ -1505,10 +1428,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             var origCommand = undefined;
 
             // Faking addall/playall, so build add/play command for first item...
-            if (B_ACTIONS[PLAY_ALL_ACTION].cmd==commandName || B_ACTIONS[ADD_ALL_ACTION].cmd==commandName) {
+            if (ACTIONS[PLAY_ALL_ACTION].cmd==commandName || ACTIONS[ADD_ALL_ACTION].cmd==commandName) {
                 item = this.items[0];
                 origCommand = commandName;
-                commandName = B_ACTIONS[PLAY_ALL_ACTION].cmd==commandName ? "play" : "add";
+                commandName = ACTIONS[PLAY_ALL_ACTION].cmd==commandName ? "play" : "add";
             }
 
             var cmd = {command: [], params: [] };
@@ -1656,7 +1579,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             // If this *was* playall/addall, then need to convert back and set ID to parent
-            if (origCommand && (B_ACTIONS[PLAY_ALL_ACTION].cmd==origCommand || B_ACTIONS[ADD_ALL_ACTION].cmd==origCommand)) {
+            if (origCommand && (ACTIONS[PLAY_ALL_ACTION].cmd==origCommand || ACTIONS[ADD_ALL_ACTION].cmd==origCommand)) {
                 var c={command:[], params:[]};
                 cmd.command.forEach(p=> {
                     if (p=="play" || p=="add") {
@@ -1677,16 +1600,16 @@ var lmsBrowse = Vue.component("lms-browse", {
             return cmd;
         },
         buildFullCommand(item, act, index) {
-            var command = this.buildCommand(item, B_ACTIONS[act].cmd);
+            var command = this.buildCommand(item, ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
                 if (item.url) {
-                    command.command = ["playlist", INSERT_ACTION==act ? "insert" : B_ACTIONS[act].cmd, item.url, item.title];
+                    command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
-                    command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :B_ACTIONS[act].cmd, item.id];
+                    command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
                 } else if (item.isFolderItem) {
-                    command.command = ["playlist", INSERT_ACTION==act ? "insert" : B_ACTIONS[act].cmd, item.id];
+                    command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
                 } else if (item.id) {
-                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :B_ACTIONS[act].cmd)];
+                    command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
 
                     if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
                         item.params.forEach(p => {

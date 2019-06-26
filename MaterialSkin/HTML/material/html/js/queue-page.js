@@ -5,24 +5,8 @@
  * MIT license.
  */
 
-const PQ_PLAY_NOW_ACTION =  0;
-const PQ_PLAY_NEXT_ACTION = 1;
-const PQ_REMOVE_ACTION =    2;
-const PQ_MORE_ACTION =      3;
-const PQ_SELECT_ACTION =    4;
-const PQ_UNSELECT_ACTION =  5;
-
 const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltuyAKNS" : "tags:cdegltuysAKNS";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
-
-var PQ_ACTIONS = [
-    { icon: 'play_circle_outline'     },
-    { icon: 'play_circle_filled'      },
-    { icon: 'remove_circle_outline'   },
-    { svg:  'more'                    },
-    { icon: 'check_box_outline_blank' },
-    { icon: 'check_box'               }
-];
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -193,8 +177,12 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="desktop && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktop"></v-divider>
-   <v-btn :title="trans.scrollToCurrent" flat icon @click="scrollToCurrent(true)" class="toolbar-button"><v-icon style="margin-right:4px; margin-top:-10px">arrow_right</v-icon><v-icon style="margin-left:-16px">music_note</v-icon></v-btn>
-   <v-btn :title="trans.addUrl" flat icon @click="addUrl()" class="toolbar-button"><v-icon>add</v-icon></v-btn>
+   <template v-if="desktop" v-for="(action, index) in settingsMenuActions">
+    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
+      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
+    </v-btn>
+   </template>
    <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
@@ -241,10 +229,10 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-divider v-if="DIVIDER==action"></v-divider>
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-avatar>
-      <v-icon v-if="undefined==PQ_ACTIONS[action].svg">{{PQ_ACTIONS[action].icon}}</v-icon>
-      <img v-else class="svg-img" :src="PQ_ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
+      <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-title>{{PQ_ACTIONS[action].title}}</v-list-tile-title>
+     <v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>
@@ -260,13 +248,14 @@ var lmsQueue = Vue.component("lms-queue", {
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
-            trans: { ok: undefined, cancel: undefined, scrollToCurrent:undefined, addUrl:undefined, saveAs:undefined, clear:undefined,
+            trans: { ok: undefined, cancel: undefined, saveAs:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                      shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                      selectMultiple:undefined, remove:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlistName: undefined,
-            selection: []
+            selection: [],
+            settingsMenuActions: [PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION]
         }
     },
     computed: {
@@ -402,19 +391,15 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.scrollToCurrent(true);
                 }
             }.bind(this));
+            bus.$on('settingsMenuAction:queue', function(action) {
+                this.headerAction(action);
+            }.bind(this));
+            bus.$emit('settingsMenuActions', this.settingsMenuActions, 'queue');
         }
     },
     methods: {
         initItems() {
-            PQ_ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n('Play now');
-            PQ_ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n('Move to next in queue');
-            PQ_ACTIONS[PQ_REMOVE_ACTION].title=i18n('Remove from queue');
-            PQ_ACTIONS[PQ_MORE_ACTION].title=i18n("More");
-            PQ_ACTIONS[PQ_SELECT_ACTION].title=i18n("Select");
-            PQ_ACTIONS[PQ_UNSELECT_ACTION].title=i18n("Un-select");
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), addUrl:i18n('Add URL'),
-                          scrollToCurrent:i18n("Scroll to current track"),
-                          save:i18n("Save"), clear:i18n("Clear"),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save"), clear:i18n("Clear"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};
@@ -441,9 +426,6 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
             this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save' };
-        },
-        addUrl() {
-            this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
         },
         clear() {
             if (this.items.length<1) {
@@ -546,6 +528,13 @@ var lmsQueue = Vue.component("lms-queue", {
                         forceItemUpdate(this, this.items, item, index);
                     }
                 }
+            }
+        },
+        headerAction(act) {
+            if (act==PQ_ADD_URL_ACTION) {
+                this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
+            } else if (act==PQ_SCROLL_ACTION) {
+                this.scrollToCurrent(true);
             }
         },
         itemMenu(item, index, event) {

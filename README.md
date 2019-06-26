@@ -74,6 +74,13 @@ received, start Material as follows:
 * `http://<yourserver>:9000/material/?debug=cometd` for Cometd
 * `http://<yourserver>:9000/material/?debug=json,cometd` for both
 
+### Cache
+
+Material cache's artist and album lists, to speed up subsequent listings. To
+clear this cache, start Material as follows:
+
+* `http://<yourserver>:9000/material/?clearcache=true`
+
 ## Donations
 
 I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...

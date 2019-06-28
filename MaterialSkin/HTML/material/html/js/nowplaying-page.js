@@ -15,11 +15,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <v-list-tile @click="showPic()">
-    <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
+    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
    </v-list-tile>
    <v-list-tile @click="trackInfo()" :disabled="undefined==playerStatus.current.id">
-    <v-list-tile-avatar :tile="true" class="lms-avatar" v-bind:class="{'slightly-dimmed': undefined==playerStatus.current.id}"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar" v-bind:class="{'slightly-dimmed': undefined==playerStatus.current.id}"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>
@@ -888,6 +888,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return (this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
+        },
+        menuIcons() {
+            return this.$store.state.menuIcons
         }
     },
     beforeDestroy() {

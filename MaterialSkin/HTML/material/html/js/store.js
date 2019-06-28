@@ -85,6 +85,10 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('lsAndNotif', state.lsAndNotif);
         bus.$emit('lsAndNotifChanged');
     }
+    if (undefined!=val.menuIcons && state.menuIcons!=val.menuIcons) {
+        state.menuIcons = val.menuIcons;
+        setLocalStorageVal('menuIcons', menuIcons);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -116,7 +120,8 @@ const store = new Vuex.Store({
         maxRating: 5,
         showPlayerMenuEntry: false,
         lsAndNotif:'playing',
-        page:'browse'
+        page:'browse',
+        menuIcons: true
     },
     mutations: {
         setPlayers(state, players) {
@@ -247,7 +252,8 @@ const store = new Vuex.Store({
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
-            state.lsAndNotif = getLocalStorageBool('lsAndNotif', state.lsAndNotif);
+            state.lsAndNotif = getLocalStorageVal('lsAndNotif', state.lsAndNotif);
+            state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -279,7 +285,8 @@ const store = new Vuex.Store({
                                  nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
                                  volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
                                  showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
-                                 lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif)};
+                                 lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
+                                 menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons)};
                     updateUiSettings(state, opts);
                 }
             });

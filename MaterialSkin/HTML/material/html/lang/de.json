@@ -57,7 +57,6 @@
 "Crossfade":"Überblenden",
 "Current play queue":"Aktuelle Wiedergabeliste",
 "Days":"Tage",
-"Default":"Standard",
 "Delete":"Löschen",
 "Delete '%1'?":"'%1' löschen?",
 "Delete alarm?":"Wecker löschen?",
@@ -331,8 +330,8 @@
 "Firmware: %1":"",
 "IP: %1":"",
 "Information":"",
-"Logitech Media Server v%1":"",
-"Material Skin v%1":"",
+"Material Skin":"",
+"Menu icons":"",
 "Mon":"",
 "Move":"",
 "Move '%1' from '%2' to this server?":"",
@@ -340,6 +339,8 @@
 "OK":"",
 "Plugins":"",
 "Radio":"",
+"Server":"",
+"Show icons next to popup menu entries.":"",
 "Start":"",
 "URL":""
 }

@@ -1,8 +1,11 @@
 package Plugins::MaterialSkin::Plugin;
 
+use Config;
 use Slim::Utils::Log;
 use Slim::Utils::Network;
+use Slim::Utils::Prefs;
 use JSON::XS::VersionOneAndTwo;
+use Slim::Utils::Strings qw(string cstring);
 
 my $log = Slim::Utils::Log->addLogCategory({
     'category' => 'plugin.material-skin',
@@ -74,8 +77,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    # command needs to be one of 4 different things
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -106,6 +108,25 @@ sub _cliCommand {
 
         main::INFOLOG && $log->is_info && $log->info(string('Connect player ${id} from ${serverurl} to this server'));
         $http->post( $serverurl . 'jsonrpc.js', $postdata);
+        $request->setStatusDone();
+    }
+
+    if ($cmd eq 'info') {
+        my $osDetails = Slim::Utils::OSDetect::details();
+        my $prefs = preferences('server');
+        $request->addResult('info', '{"server":'
+                                .'[ {"label":"' . cstring('', 'INFORMATION_VERSION') . '", "text":"' . $::VERSION . ' - ' . $::REVISION . ' @ ' . $::BUILDDATE . '"},'
+                                .  '{"label":"' . cstring('', 'INFORMATION_HOSTNAME') . '", "text":"' . Slim::Utils::Network::hostName() . '"},'
+                                .  '{"label":"' . cstring('', 'INFORMATION_SERVER_IP') . '", "text":"' . Slim::Utils::Network::serverAddr() . '"},'
+                                .  '{"label":"' . cstring('', 'INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $prefs->get('language') . ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
+                                .  '{"label":"' . cstring('', 'INFORMATION_ARCHITECTURE') . '", "text":"' . ($osDetails->{'osArch'} ? $osDetails->{'osArch'} : '?') . '"},'
+                                .  '{"label":"' . cstring('', 'PERL_VERSION') . '", "text":"' . $Config{'version'} . ' - ' . $Config{'archname'} . '"},'
+                                .  '{"label":"Audio::Scan", "text":"' . $Audio::Scan::VERSION . '"},'
+                                .  '{"label":"IO::Socket::SSL", "text":"' . (Slim::Networking::Async::HTTP->hasSSL() ? $IO::Socket::SSL::VERSION : cstring($client, 'BLANK')) . '"}'
+
+                                . ( Slim::Schema::hasLibrary() ? ', {"label":"' . cstring('', 'DATABASE_VERSION') . '", "text":"' . Slim::Utils::OSDetect->getOS->sqlHelperClass->sqlVersionLong( Slim::Schema->dbh ) . '"}' : '')
+
+                                .']}');
         $request->setStatusDone();
     }
 }

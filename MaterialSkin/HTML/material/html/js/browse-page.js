@@ -302,14 +302,14 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(action, index) in menu.item.menu">
     <v-divider v-if="DIVIDER==action"></v-divider>
     <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index)">
-     <v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
-     <v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -327,9 +327,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.libraries">
    <template v-for="(item, index) in menu.libraries">
     <v-list-tile @click="selectLibrary(item.id)">
-     <v-list-tile-avatar>
-      <v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
-     </v-list-tile-avatar>
+     <v-list-tile-avatar><v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
@@ -337,9 +335,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.albumSorts">
    <template v-for="(item, index) in menu.albumSorts">
     <v-list-tile @click="sortAlbums(item)">
-     <v-list-tile-avatar>
-      <v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
-     </v-list-tile-avatar>
+     <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
@@ -375,6 +371,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     computed: {
         darkUi () {
             return this.$store.state.darkUi
+        },
+        menuIcons() {
+            return this.$store.state.menuIcons
         }
     },
     created() {

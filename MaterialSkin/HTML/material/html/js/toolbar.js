@@ -93,9 +93,7 @@ Vue.component('lms-toolbar', {
    <template v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
-     <v-list-tile-avatar v-if="players && players.length>1">
-      <v-icon small></v-icon>
-     </v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons && players && players.length>1"><v-icon small></v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
@@ -105,12 +103,12 @@ Vue.component('lms-toolbar', {
    <v-divider v-if="(players && players.length>1) || playerStatus.sleepTime"></v-divider>
 
    <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
-    <v-list-tile-avatar><v-icon>link</v-icon></v-list-tile-avatar>
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
 
    <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
-    <v-list-tile-avatar><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
 
@@ -154,11 +152,11 @@ Vue.component('lms-toolbar', {
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-list-tile v-if="item.href" :href="item.href" target="_blank">
-     <v-list-tile-avatar><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="menuAction(item.id)">
-     <v-list-tile-avatar><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -166,7 +164,7 @@ Vue.component('lms-toolbar', {
    <v-divider v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
    <template v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
     <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)">
-     <v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
      </v-list-tile-avatar>
@@ -536,6 +534,9 @@ Vue.component('lms-toolbar', {
         },
         darkUi () {
             return this.$store.state.darkUi
+        },
+        menuIcons() {
+            return this.$store.state.menuIcons
         }
     },
     filters: {

@@ -228,7 +228,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <template v-for="(action, index) in menu.item.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
     <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
-     <v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -262,6 +262,9 @@ var lmsQueue = Vue.component("lms-queue", {
     computed: {
         darkUi () {
             return this.$store.state.darkUi
+        },
+        menuIcons() {
+            return this.$store.state.menuIcons
         }
     },
     created() {

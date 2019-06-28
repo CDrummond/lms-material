@@ -47,6 +47,15 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="menuIcons = !menuIcons" class="switch-label">
+      <v-list-tile-title>{{i18n('Menu icons')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show icons next to popup menu entries.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="menuIcons"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
     <v-divider v-if="android"></v-divider>
     <v-list-tile v-if="android">
@@ -224,7 +233,8 @@ Vue.component('lms-ui-settings', {
             showPlayerMenuEntry: false,
             lsAndNotif: 'playing',
             lsAndNotifItems: [],
-            android: isAndroid()
+            android: isAndroid(),
+            menuIcons: true
         }
     },
     computed: {
@@ -254,6 +264,7 @@ Vue.component('lms-ui-settings', {
             this.layoutOrig = this.layout;
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
+            this.menuIcons = this.$store.state.menuIcons;
             this.show = true;
         }.bind(this));
 
@@ -300,7 +311,8 @@ Vue.component('lms-ui-settings', {
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
-                                                  lsAndNotif:this.lsAndNotif
+                                                  lsAndNotif:this.lsAndNotif,
+                                                  menuIcons:this.menuIcons
                                                 } );
             if (this.layout != this.layoutOrig) {
                 setLocalStorageVal("layout", this.layout);
@@ -334,7 +346,8 @@ Vue.component('lms-ui-settings', {
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
-                                     lsAndNotif:this.lsAndNotif
+                                     lsAndNotif:this.lsAndNotif,
+                                     menuIcons:this.menuIcons
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

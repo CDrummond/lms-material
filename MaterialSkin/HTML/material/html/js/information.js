@@ -13,12 +13,20 @@ Vue.component('lms-information-dialog', {
    <v-toolbar color="primary" dark app class="lms-toolbar">
     <v-btn flat icon @click.native="close()"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
-     <div>{{title}}</div>
-     <div class="infotoolbar-subtitle subtext">{{subtitle}}</div>
+     <div>{{i18n('Information')}}</div>
     </v-toolbar-title>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails">
+
+   <div v-if="server.length>0">
+    <p class="about-header">{{i18n('Server')}}</p>
+    <ul>
+     <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
+    </ul>
+    <div class="dialog-padding"></div>
+   </div>
+
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
@@ -78,8 +86,7 @@ Vue.component('lms-information-dialog', {
     data() {
         return {
             show: false,
-            title: "Information", // i18n not rquired, as should not be seen
-            subtitle: undefined,
+            server: [],
             library: [],
             players: [],
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
@@ -91,6 +98,15 @@ Vue.component('lms-information-dialog', {
     },
     mounted() {
         bus.$on('info.open', function(act) {
+            lmsCommand("", ["material-skin", "info"]).then(({data}) => {
+                if (data && data.result && data.result.info) {
+                    var inf = JSON.parse(data.result.info);
+                    if (inf && inf.server) {
+                        this.server=inf.server;
+                        this.server.push({ label: i18n('Material Skin'), text:""+LMS_MATERIAL_REVISION});
+                    }
+                }
+            });
             this.update();
             this.timer = setInterval(function () {
                 this.update();
@@ -123,7 +139,6 @@ Vue.component('lms-information-dialog', {
             this.rescans[1].prompt=i18n("Look for new, and modified, files?");
             this.rescans[2].title=i18n("Update playlists");
             this.rescans[2].prompt=i18n("Rescan for playlist changes?");
-            this.subtitle=i18n('Material Skin v%1', LMS_MATERIAL_REVISION);
         },
         update() {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
@@ -174,8 +189,6 @@ Vue.component('lms-information-dialog', {
                     if (data.result.lastscanfailed) {
                         this.library.push("Last scan failure: %1", data.result.lastscanfailed);
                     }
-
-                    this.title=i18n("Logitech Media Server v%1", data.result.version);
                 }
             });
         },

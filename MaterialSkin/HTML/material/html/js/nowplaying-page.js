@@ -804,7 +804,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (IS_MOBILE) {
                         this.showMenu(event);
                     }
-                }.bind(this), 300);
+                }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {
                 this.clearClickTimeout(this.clickTimer);
                 this.showPic();

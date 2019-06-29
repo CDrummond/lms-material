@@ -481,7 +481,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.clickTimer = setTimeout(function () {
                     this.clickTimer = undefined;
                     this.singleClick(item, index, event);
-                }.bind(this), 300);
+                }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {
                 clearTimeout(this.clickTimer);
                 this.clickTimer = undefined;

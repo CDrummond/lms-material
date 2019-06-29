@@ -12,6 +12,7 @@
  8. Reduce margins in sleep dialog, to allow more space for text.
  9. Add option to show menu icons or not.
 10. Add more server information to "Information" dialog.
+11. Only update rating upon click.
 
 0.8.3
 -----

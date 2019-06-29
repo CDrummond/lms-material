@@ -72,8 +72,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
   </v-layout>
   <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
-   <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
-   <v-rating small v-else v-model="rating.value" hover clearable></v-rating>
+   <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+   <v-rating small v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
   </p>
   <p class="np-text-desktop np-tech-desktop ellipsis" v-else-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
   <p class="np-text-desktop np-time-desktop cursor" @click="toggleTime()">{{formattedTime}}</p>
@@ -155,8 +155,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
-     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
-     <v-rating v-else v-model="rating.value" hover clearable></v-rating>
+     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
     </div>
     <div v-if="wide">
 
@@ -219,8 +219,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
-    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable></v-rating>
-    <v-rating v-else v-model="rating.value" hover clearable></v-rating>
+    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+    <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
    </v-flex>
    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
 
@@ -770,6 +770,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showSleep() {
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+        },
+        setRating() {
+            // this.rating.value is updated *before* this setRating click handler is called, so we can use its model value to update LMS
+            lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, this.rating.value]).then(({data}) => {
+                bus.$emit('refreshStatus');
+                bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
+            });
         }
     },
     filters: {
@@ -834,14 +841,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.page = undefined;
             }
             bus.$emit('largeViewVisible', val);
-        },
-        'rating.value': function(newVal) {
-            if (this.$store.state.ratingsSupport && newVal!=undefined && (this.rating.setting==undefined || (Math.ceil(this.rating.setting/10.0)/2.0)!=newVal)) {
-                lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, newVal]).then(({data}) => {
-                    bus.$emit('refreshStatus');
-                    bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
-                });
-            }
         },
         'landscape': function(val) {
             if (!val) {

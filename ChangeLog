@@ -13,6 +13,7 @@
  9. Add option to show menu icons or not.
 10. Add more server information to "Information" dialog.
 11. Only update rating upon click.
+12. Show time in tooltip when hover over progressbar (desktop browsers only).
 
 0.8.3
 -----

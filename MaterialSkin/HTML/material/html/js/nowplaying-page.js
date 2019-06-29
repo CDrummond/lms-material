@@ -12,6 +12,7 @@ const LYRICS_TAB = 2;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
+ <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <v-list-tile @click="showPic()">
@@ -67,8 +68,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <p class="np-text-sub-desktop subtext ellipsis" v-else></p>
    </v-flex>
    <v-flex xs12>
-    <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
-    <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
+    <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+    <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
    </v-flex>
   </v-layout>
   <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
@@ -165,7 +166,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
        <v-layout class="np-time-layout">
         <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-        <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
+        <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
         <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
         <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
        </v-layout>
@@ -227,7 +228,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
     <v-layout>
      <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-     <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)"></v-progress-linear>
+     <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
      <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
      <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
     </v-layout>
@@ -290,6 +291,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  largeView: false,
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, setting:false},
+                 timeTooltip: {show: false, x:0, y:0, text:undefined}
                 };
     },
     mounted() {
@@ -570,6 +572,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 const pos = e.clientX - rect.x;
                 const width = rect.width;
                 this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
+            }
+        },
+        moveTimeTooltip(e) {
+            if (this.timeTooltip.show) {
+                if (this.playerStatus.current.duration<=1) {
+                    this.timeTooltip.show = false;
+                    return;
+                }
+                this.timeTooltip.x = e.x
+                const rect = document.getElementById("pos-slider").getBoundingClientRect();
+                this.timeTooltip.y = rect.y;
+                const pos = e.clientX - rect.x;
+                const width = rect.width;
+                this.timeTooltip.text=""+formatSeconds(Math.floor(this.playerStatus.current.duration * pos / rect.width));
             }
         },
         setInfoTrack() {

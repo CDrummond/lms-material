@@ -51,7 +51,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" @contextmenu="showMenu"></img>
+ <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage"></img>
  <div>
   <v-layout row wrap>
    <v-flex xs12>
@@ -146,7 +146,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
  <div v-else>
   <div v-if="landscape">
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}" @contextmenu="showMenu"></img>
+   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}" @contextmenu="showMenu" @click="clickImage"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -216,7 +216,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
+   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu" @click="clickImage" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
@@ -528,6 +528,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showMenu(event) {
             event.preventDefault();
+            this.clearClickTimeout();
             if (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER) {
                 this.menu.show = false;
                 this.menu.x = event.clientX;
@@ -793,6 +794,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 bus.$emit('refreshStatus');
                 bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
             });
+        },
+        clickImage() {
+            if (!this.clickTimer) {
+                this.clickTimer = setTimeout(function () {
+                    this.clearClickTimeout(this.clickTimer);
+                }.bind(this), 300);
+            } else {
+                this.clearClickTimeout(this.clickTimer);
+                this.showPic();
+            }
+        },
+        clearClickTimeout() {
+            if (this.clickTimer) {
+                clearTimeout(this.clickTimer);
+                this.clickTimer = undefined;
+            }
         }
     },
     filters: {
@@ -910,5 +927,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     beforeDestroy() {
         this.stopPositionInterval();
+        this.clearClickTimeout();
     }
 });

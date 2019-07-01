@@ -52,33 +52,27 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-flex>
  </v-layout>
  <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
- <div>
-  <v-layout row wrap>
-   <v-flex xs12>
-    <p class="np-text-desktop ellipsis" v-if="playerStatus.current.title">{{title}}</p>
-    <p class="np-text-desktop subtext ellipsis" v-else></p>
-   </v-flex>
-   <v-flex xs12>
-    <p class="np-text-sub-desktop subtext ellipsis" v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else-if="playerStatus.current.title">&#x22ef;</p>
-    <p class="np-text-sub-desktop subtext ellipsis" v-else></p>
-   </v-flex>
-   <v-flex xs12>
-    <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
-    <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
-   </v-flex>
-  </v-layout>
-  <p v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-desktop np-tech-desktop np-tech-desktop-rating">
-   <v-rating small v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
-   <v-rating small v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
-  </p>
-  <p class="np-text-desktop np-tech-desktop ellipsis" v-else-if="techInfo" :title="playerStatus.current.technicalInfo">{{playerStatus.current.technicalInfo}}</p>
-  <p class="np-text-desktop np-time-desktop cursor" @click="toggleTime()">{{formattedTime}}</p>
- </div>
+ <v-list two-line subheader class="np-details-desktop">
+  <v-list-tile style>
+   <v-list-tile-content>
+    <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
+    <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}<v-list-tile-sub-title/>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}<v-list-tile-sub-title/>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}<v-list-tile-sub-title/>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.album">{{playerStatus.current.album}}<v-list-tile-sub-title/>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}<v-list-tile-sub-title/>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;<v-list-tile-sub-title/>
+
+   </v-list-tile-content>
+   <v-list-tile-action>
+    <div><div class="np-tech-desktop" v-if="techInfo">{{playerStatus.current.technicalInfo}}</div><v-rating class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
+    <div class="np-time-desktop">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+   <v-list-tile-action>
+  </v-list-tile>
+ </v-list>
+ <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+ <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+
  <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
@@ -162,7 +156,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div v-if="wide">
 
      <v-layout text-xs-center row wrap class="np-controls-wide">
-      <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
+      <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
       <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
        <v-layout class="np-time-layout">
         <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
@@ -216,14 +210,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !techInfo && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
+   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
-   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo}">
+   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
    </v-flex>
-   <v-flex xs12 class="np-tech ellipsis" v-if="techInfo">{{playerStatus.current.technicalInfo}}</v-flex>
+   <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
    <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
     <v-layout>
@@ -277,7 +271,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     sleepTimer: false,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
-                    playlist: { shuffle:0, repeat: 0 },
+                    playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
@@ -435,6 +429,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.playlist.repeat!=this.playerStatus.playlist.repeat) {
                 this.playerStatus.playlist.repeat = playerStatus.playlist.repeat;
+            }
+            if (playerStatus.playlist.current!=this.playerStatus.playlist.current) {
+                this.playerStatus.playlist.current = playerStatus.playlist.current;
+            }
+            if (playerStatus.playlist.count!=this.playerStatus.playlist.count) {
+                this.playerStatus.playlist.count = playerStatus.playlist.count;
             }
             var technical = [];
             if (playerStatus.current.bitrate) {
@@ -832,6 +832,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return str;
             }
             return str.substring(0, 80) + "...";
+        },
+        trackCount(current, total, sep) {
+            if (undefined=current || undefined==total || total<2) {
+                return "";
+            }
+            return (undefined==sep ? "" : sep)+(current+1)+"/" + total;
         }
     },
     watch: {

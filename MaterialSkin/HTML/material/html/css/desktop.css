@@ -145,6 +145,63 @@ body {
  max-width:calc(100vw - 400px);
 }
 
+.np-details-desktop {
+ position:fixed;
+ left:238px;
+ bottom:20px;
+ width:calc(100vw - 238px);
+ height:54px;
+ padding:0px;
+ background:transparent!important;
+}
+
+.np-details-desktop div .v-list__tile {
+ height:54px;
+ margin:0px 8px 0px 0px; /* t, r, b, l */
+ padding:0px;
+}
+
+.np-details-desktop div .v-list__tile .v-list__tile__action {
+ min-width:unset;
+ font-family: monospace, monospace;
+ font-weight: 400;
+ font-size: 75%;
+ height:54px;
+ margin:0px;
+ padding:0px;
+}
+
+.np-tech-desktop {
+ margin-top:5px;
+ display:inline-block;
+ vertical-align:top;
+ height:27px;
+ line-height:27px;
+}
+
+.np-rating-desktop {
+ margin-top:2px;
+ display:inline-block;
+ height:27px;
+ margin-right:-6px
+}
+
+.np-time-desktop {
+ height:27px;
+ margin-top:-7px;
+ vertical-align:top;
+ height:27px;
+ line-height:27px;
+}
+
+.np-slider-desktop {
+ position:fixed;
+ left:238px;
+ bottom:6px;
+ width:calc(100vw - 246px);
+ margin:0 !important; /* v-progress-linear has margin: 1rem 0; */
+}
+
 .np-info-desktop {
  position:fixed;
  top:var(--main-toolbar-height);
@@ -168,38 +225,6 @@ body {
  overflow:auto;
  max-width:1000px;
  margin:auto;
-}
-
-.np-slider-desktop {
- margin:0 !important; /* v-progress-linear has margin: 1rem 0; */
-}
-
-.np-tech-desktop {
- position:fixed;
- bottom:44px;
- right:8px;
- font-size:85%;
- font-weight:400;
- width:16.5em;
- font-family:monospace, monospace;
- text-align:right;
- height:2em;
-}
-
-.np-tech-desktop-rating {
- right:2px;
-}
-
-.np-time-desktop {
- position:fixed;
- bottom:18px;
- right:8px;
- font-size:85%;
- font-weight:400;
- width:16em;
- font-family:monospace, monospace;
- text-align:right;
- height:2em;
 }
 
 .np-image {

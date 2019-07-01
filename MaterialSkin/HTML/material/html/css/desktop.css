@@ -187,11 +187,12 @@ body {
 }
 
 .np-time-desktop {
- height:27px;
  margin-top:-7px;
+ display:inline-block;
  vertical-align:top;
  height:27px;
  line-height:27px;
+ cursor:pointer;
 }
 
 .np-slider-desktop {

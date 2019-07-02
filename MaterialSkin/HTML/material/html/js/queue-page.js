@@ -164,10 +164,10 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
   <v-layout v-else>
    <v-layout row wrap v-if="listSize>0 && playlistName">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{listSize | displayCount}} {{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
     <v-flex xs12 v-if="playlistName" class="ellipsis subtoolbar-subtitle subtext">{{playlistName}}</v-flex>
    </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else-if="listSize>0">{{listSize | displayCount}} {{duration | displayTime(true)}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></img></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>

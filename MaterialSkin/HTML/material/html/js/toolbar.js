@@ -10,7 +10,7 @@ var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info_outline" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
-var TB_MINI            = {id:"tb:mini",           icon: "open_in_new" };
+var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
 var mediaAudio = undefined;
 var mediaInterval = undefined;
@@ -401,11 +401,11 @@ Vue.component('lms-toolbar', {
             TB_SERVER_SETTINGS.title=i18n('Server settings');
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
-            TB_MINI.title=i18n('Open mini-player');
+            TB_MINI_PLAYER.title=i18n('Open mini-player');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
             if (this.desktop && !this.mini & !IS_MOBILE) {
                 this.menuItems.push(DIVIDER);
-                this.menuItems.push(TB_MINI);
+                this.menuItems.push(TB_MINI_PLAYER);
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"),
@@ -429,8 +429,8 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'info');
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
-            } else if (TB_MINI.id==id) {
-                window.open("mini", "MiniPlayer", 'width=800,height=128,toolbar=0,menubar=0,location=0');
+            } else if (TB_MINI_PLAYER.id==id) {
+                window.open("mini", "MiniPlayer", 'width=800,height=136,toolbar=0,menubar=0,location=0');
             } else {
                 bus.$emit('toolbarAction', id);
             }

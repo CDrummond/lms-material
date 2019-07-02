@@ -22,6 +22,11 @@ sub initPlugin {
             $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('desktop.html', $params);
         } );
+        Slim::Web::Pages->addPageFunction( 'mini', sub {
+            my ($client, $params) = @_;
+            $params->{'material_revision'} = $class->pluginVersion();
+            return Slim::Web::HTTP::filltemplatefile('mini.html', $params);
+        } );
         Slim::Web::Pages->addPageFunction( 'mobile', sub {
             my ($client, $params) = @_;
             $params->{'material_revision'} = $class->pluginVersion();

@@ -13,7 +13,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
- <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
+ <v-menu v-if="!mini" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <v-list-tile @click="showPic()">
     <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
@@ -263,7 +263,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 </div></div>
 `,
-    props: [ 'desktop' ],
+    props: [ 'desktop', 'mini' ],
     data() {
         return { coverUrl:LMS_BLANK_COVER,
                  playerStatus: {

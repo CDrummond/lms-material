@@ -1,7 +1,8 @@
 0.8.5
 -----
 1. Fix missing repeat-single icon in desktop queue view.
-2. Display "current/total" in now-playing.
+2. Display "current / total" in now-playing.
+3. Add mini-player.
 
 0.8.4
 -----

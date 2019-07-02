@@ -10,7 +10,7 @@ var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info_outline" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
-
+var TB_MINI            = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
 var mediaAudio = undefined;
 var mediaInterval = undefined;
@@ -90,7 +90,7 @@ Vue.component('lms-toolbar', {
       </v-list-tile-action>
     </v-list-tile>
    </template>
-   <template v-for="(item, index) in otherPlayers">
+   <template v-if="!mini" v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
      <v-list-tile-avatar v-if="menuIcons && players && players.length>1"><v-icon small></v-icon></v-list-tile-avatar>
@@ -100,19 +100,19 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="(players && players.length>1) || playerStatus.sleepTime"></v-divider>
+   <v-divider v-if="!mini && ((players && players.length>1) || playerStatus.sleepTime)"></v-divider>
 
-   <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
+   <v-list-tile v-if="!mini && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
 
-   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
+   <v-list-tile v-if="!mini && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
 
-   <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
+   <v-list-tile v-if="!mini && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
@@ -138,20 +138,21 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!desktop" :disabled="!playerStatus.ison || noPlayer">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info" v-if="desktop && infoPlugin" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu v-if="connected" bottom left>
+ <v-menu v-if="connected && !mini" bottom left>
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
-    <v-list-tile v-if="item.href" :href="item.href" target="_blank">
+    <v-divider v-if="item===DIVIDER"></v-divider>
+    <v-list-tile v-else-if="item.href" :href="item.href" target="_blank">
      <v-list-tile-avatar v-if="menuIcons"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
@@ -173,14 +174,14 @@ Vue.component('lms-toolbar', {
    </template>
   </v-list>
  </v-menu>
- <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
+ <v-btn v-else-if="!mini" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
   <v-progress-circular color="primary" size=22 width=3 indeterminate></v-progress-circular>
  </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
     `,
-    props: ['desktop'],
+    props: ['desktop', 'mini'],
     data() {
         return { songInfo:undefined,
                  playlist: { count: undefined, duration: undefined },
@@ -400,7 +401,12 @@ Vue.component('lms-toolbar', {
             TB_SERVER_SETTINGS.title=i18n('Server settings');
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
+            TB_MINI.title=i18n('Open mini-player');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
+            if (this.desktop && !this.mini & !IS_MOBILE) {
+                this.menuItems.push(DIVIDER);
+                this.menuItems.push(TB_MINI);
+            }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
                           info:i18n("Show current track information"),
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
@@ -423,6 +429,8 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'info');
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
+            } else if (TB_MINI.id==id) {
+                window.open("mini", "MiniPlayer", 'width=800,height=128,toolbar=0,menubar=0,location=0');
             } else {
                 bus.$emit('toolbarAction', id);
             }

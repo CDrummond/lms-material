@@ -1,0 +1,30 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+body {
+ height:calc(var(--main-toolbar-height) + var(--bottom-toolbar-height)) !important;
+}
+
+.np-bar {
+ top:var(--main-toolbar-height) !important;
+}
+
+.np-details-desktop {
+ top:calc(var(--main-toolbar-height) + 4px) !important;
+}
+
+.np-slider-desktop {
+ position:fixed;
+ left:238px;
+ top:calc(var(--main-toolbar-height) + var(--bottom-toolbar-height) - 16px)!important;
+ width:calc(100vw - 246px);
+ margin:0 !important; /* v-progress-linear has margin: 1rem 0; */
+}
+
+.lms-toolbar > .v-toolbar__content {
+ margin-right:-28px !important;
+}

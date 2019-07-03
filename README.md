@@ -76,7 +76,7 @@ received, start Material as follows:
 
 ### Cache
 
-Material cache's artist and album lists, to speed up subsequent listings. To
+Material caches artist and album lists, to speed up subsequent listings. To
 clear this cache, start Material as follows:
 
 * `http://<yourserver>:9000/material/?clearcache=true`

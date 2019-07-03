@@ -78,48 +78,50 @@ function initApp(app) {
         }
     });
 
-    setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
+    if (window.location.href.indexOf('/mini')<0) {
+        setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
 
-    // Work-around 100vh behaviour in mobile chrome
-    // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-    let vh = window.innerHeight * 0.01;
-    let lastWinHeight = window.innerHeight;
-    let lastWinWidth = window.innerWidth;
-    let timeout = undefined;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    window.addEventListener('resize', () => {
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        timeout = setTimeout(function () {
-            // Only update if changed
-            if (Math.abs(lastWinHeight-window.innerHeight)!=0) {
-                let vh = window.innerHeight * 0.01;
-                document.documentElement.style.setProperty('--vh', `${vh}px`);
-                lastWinHeight = window.innerHeight;
+        // Work-around 100vh behaviour in mobile chrome
+        // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        let vh = window.innerHeight * 0.01;
+        let lastWinHeight = window.innerHeight;
+        let lastWinWidth = window.innerWidth;
+        let timeout = undefined;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        window.addEventListener('resize', () => {
+            if (timeout) {
+                clearTimeout(timeout);
             }
-            timeout = undefined;
-            if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
-                lastWinWidth = window.innerWidth;
-                checkLayout();
-                bus.$emit('windowWidthChanged');
+            timeout = setTimeout(function () {
+                // Only update if changed
+                if (Math.abs(lastWinHeight-window.innerHeight)!=0) {
+                    let vh = window.innerHeight * 0.01;
+                    document.documentElement.style.setProperty('--vh', `${vh}px`);
+                    lastWinHeight = window.innerHeight;
+                }
+                timeout = undefined;
+                if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
+                    lastWinWidth = window.innerWidth;
+                    checkLayout();
+                    bus.$emit('windowWidthChanged');
+                }
+                checkEntryFocus();
+            }, 50);
+        }, false);
+
+        // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-application-closes-de-app
+        window.addEventListener('load', function() {
+            window.history.pushState({ noBackExitsApp: true }, '')
+        }, false);
+
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.noBackExitsApp) {
+                window.history.pushState({ noBackExitsApp: true }, '');
             }
-            checkEntryFocus();
-        }, 50);
-    }, false);
+        }, false);
 
-    // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-application-closes-de-app
-    window.addEventListener('load', function() {
-        window.history.pushState({ noBackExitsApp: true }, '')
-    }, false);
-
-    window.addEventListener('popstate', function(event) {
-        if (event.state && event.state.noBackExitsApp) {
-            window.history.pushState({ noBackExitsApp: true }, '');
-        }
-    }, false);
-
-    // https://github.com/timruffles/mobile-drag-drop/issues/77
-    window.addEventListener( 'touchmove', function() {});
+        // https://github.com/timruffles/mobile-drag-drop/issues/77
+        window.addEventListener( 'touchmove', function() {});
+    }
 }
 

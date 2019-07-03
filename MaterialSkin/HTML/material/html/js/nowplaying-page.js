@@ -65,7 +65,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
    </v-list-tile-content>
    <v-list-tile-action>
-    <div><div class="np-tech-desktop">{{techInfo ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
+    <div><div class="np-tech-desktop">{{techInfo && (wide || !showRatings) ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
     <div class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
    <v-list-tile-action>
   </v-list-tile>

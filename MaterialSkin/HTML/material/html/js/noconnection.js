@@ -11,7 +11,7 @@ Vue.component('lms-noconnection', {
  <v-card style="width:100%; height:100%; display: flex; justify-content: center; align-items: center;">
   <table>
    <tr><td style="text-align: center; padding-bottom: 32px;"><h2>{{i18n('Server connection lost...')}}</h2></td></tr>
-   <tr><td style="text-align: center;"><v-progress-circular color="primary" size=72 width=6 indeterminate></v-progress-circular></td></tr>
+   <tr><td style="text-align: center;"><v-icon x-large color="red">error</v-icon></td></tr>
    <tr><td style="text-align: center;padding-top:16px"><v-btn @click="reconnect()" :disabled="disableBtn" flat>{{i18n('Reconnect')}}</v-btn></td></tr>
   </table>
  </v-card>

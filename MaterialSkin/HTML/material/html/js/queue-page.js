@@ -508,13 +508,9 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_MORE_ACTION===act) {
-                if (this.desktop) {
-                    bus.$emit('trackInfo', item);
-                } else {
+                bus.$emit('trackInfo', item);
+                if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
-                    this.$nextTick(function () {
-                        bus.$emit('trackInfo', item);
-                    });
                 }
             } else if (PQ_SELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);

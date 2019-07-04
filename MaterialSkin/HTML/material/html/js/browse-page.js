@@ -992,14 +992,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
             } else if (act===MORE_LIB_ACTION) {
                 if (item.id) {
+                    var params=["menu:1", item.id, "html:1"];
+                    if (item.url) {
+                        params.push("url:"+item.url);
+                    }
                     if (item.id.startsWith("artist_id:")) {
-                        this.fetchItems({command: ["artistinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                        this.fetchItems({command: ["artistinfo", "items"], params: params}, item);
                     } else if (item.id.startsWith("album_id:")) {
-                        this.fetchItems({command: ["albuminfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                        this.fetchItems({command: ["albuminfo", "items"], params: params}, item);
                     } else if (item.id.startsWith("track_id:")) {
-                        this.fetchItems({command: ["trackinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                        this.fetchItems({command: ["trackinfo", "items"], params: params}, item);
                     } else if (item.id.startsWith("genre_id:")) {
-                        this.fetchItems({command: ["genreinfo", "items"], params: ["menu:1", item.id, "html:1"]}, item);
+                        this.fetchItems({command: ["genreinfo", "items"], params: params}, item);
                     }
                 }
             } else if (act===PIN_ACTION) {

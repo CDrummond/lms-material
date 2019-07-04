@@ -428,7 +428,7 @@ Vue.component('lms-toolbar', {
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
             } else if (TB_MINI_PLAYER.id==id) {
-                window.open("mini", "MiniPlayer", 'width=800,height=136,toolbar=0,menubar=0,location=0');
+                window.open("mini", "MiniPlayer", 'width=700,height=128,status=no,menubar=no,toolbar=no,location=no');
             } else {
                 bus.$emit('toolbarAction', id);
             }

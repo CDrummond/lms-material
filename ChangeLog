@@ -8,6 +8,8 @@
 5. Reduce CPU load when the server connection is lost, or there are no players,
    by using icons and not a circular spinning progressbar.
 6. When getting track, artist, album, etc. info, also pass URL (if known).
+7. Don't repeatedly poll player status if song duration is 0 (as is for
+   streams).
 
 0.8.4
 -----

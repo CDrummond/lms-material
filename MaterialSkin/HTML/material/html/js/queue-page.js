@@ -119,7 +119,8 @@ function parseResp(data, showTrackNum, index, showRatings) {
                               actions: PQ_STD_ACTIONS,
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
-                              key: i.id+"."+index
+                              key: i.id+"."+index,
+                              url: i.url
                           });
                 index++;
             }

@@ -155,6 +155,11 @@ body {
  background:transparent!important;
 }
 
+.np-details-desktop-sb {
+ left:290px!important;
+ width:calc(100vw - 288px)!important;
+}
+
 .np-details-desktop div .v-list__tile {
  height:54px;
  margin:0px 8px 0px 0px; /* t, r, b, l */
@@ -201,6 +206,11 @@ body {
  bottom:6px;
  width:calc(100vw - 246px);
  margin:0 !important; /* v-progress-linear has margin: 1rem 0; */
+}
+
+.np-slider-desktop-sb {
+ left:290px!important;
+ width:calc(100vw - 296px)!important;
 }
 
 .np-info-desktop {

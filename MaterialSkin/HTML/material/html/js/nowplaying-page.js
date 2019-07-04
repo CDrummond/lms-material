@@ -48,11 +48,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
-   <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])"class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
+   <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])" class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
  <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
- <v-list two-line subheader class="np-details-desktop">
+ <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
   <v-list-tile style>
    <v-list-tile-content>
     <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
@@ -70,8 +70,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-list-tile-action>
   </v-list-tile>
  </v-list>
- <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
- <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+ <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+ <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
 
  <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">

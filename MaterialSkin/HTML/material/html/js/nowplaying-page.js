@@ -921,7 +921,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.darkUi
         },
         showRatings() {
-            return this.$store.state.ratingsSupport
+            return this.$store.state.ratingsSupport && this.playerStatus && this.playerStatus.current && this.playerStatus.current.duration && this.playerStatus.current.duration>0
         },
         maxRating() {
             return this.$store.state.maxRating

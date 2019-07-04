@@ -379,7 +379,7 @@ var lmsServer = Vue.component('lms-server', {
                 this.scheduleNextPlayerStatusUpdate(data.mode === "play"
                                                         ? data.waitingToPlay
                                                             ? 1000 // Just starting to play? Poll in 1 second
-                                                            : undefined!=player.current.duration
+                                                            : undefined!=player.current.duration && 0!=player.current.duration
                                                                 ? undefined!=player.current.time
                                                                     ? (player.current.duration-player.current.time)<2.5
                                                                         ? 500 // Near end, every 5 seconds

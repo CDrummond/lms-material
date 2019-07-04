@@ -443,9 +443,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
 
-        bus.$on('trackInfo', function(item) {
+        bus.$on('trackInfo', function(item, index) {
             this.goHome();
-            this.itemAction(MORE_LIB_ACTION, item);
+            this.itemMoreMenu(item, index);
         }.bind(this));
 
         bus.$on('browse', function(cmd, params, title) {
@@ -985,27 +985,29 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dialog = {};
             }
         },
+        itemMoreMenu(item, queueIndex) {
+            if (undefined!=queueIndex) {
+                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item);
+            } else if (item.id) {
+                var params=[item.id, "menu:1", "html:1"];
+                if (item.id.startsWith("artist_id:")) {
+                    this.fetchItems({command: ["artistinfo", "items"], params: params}, item);
+                } else if (item.id.startsWith("album_id:")) {
+                    this.fetchItems({command: ["albuminfo", "items"], params: params}, item);
+                } else if (item.id.startsWith("track_id:")) {
+                    this.fetchItems({command: ["trackinfo", "items"], params: params}, item);
+                } else if (item.id.startsWith("genre_id:")) {
+                    this.fetchItems({command: ["genreinfo", "items"], params: params}, item);
+                }
+            }
+        },
         itemAction(act, item, index, suppressNotification) {
             if (act==SEARCH_LIB_ACTION) {
                 bus.$emit('dlg.open', 'search');
             } else if (act===MORE_ACTION) {
                 this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
             } else if (act===MORE_LIB_ACTION) {
-                if (item.id) {
-                    var params=["menu:1", item.id, "html:1"];
-                    if (item.url) {
-                        params.push("url:"+item.url);
-                    }
-                    if (item.id.startsWith("artist_id:")) {
-                        this.fetchItems({command: ["artistinfo", "items"], params: params}, item);
-                    } else if (item.id.startsWith("album_id:")) {
-                        this.fetchItems({command: ["albuminfo", "items"], params: params}, item);
-                    } else if (item.id.startsWith("track_id:")) {
-                        this.fetchItems({command: ["trackinfo", "items"], params: params}, item);
-                    } else if (item.id.startsWith("genre_id:")) {
-                        this.fetchItems({command: ["genreinfo", "items"], params: params}, item);
-                    }
-                }
+                this.itemMoreMenu(item);
             } else if (act===PIN_ACTION) {
                 this.pin(item, true);
             } else if (act===UNPIN_ACTION) {

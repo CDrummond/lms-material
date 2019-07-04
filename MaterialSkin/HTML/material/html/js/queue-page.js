@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltuyAKNS" : "tags:cdegltuysAKNS";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltyAKNS" : "tags:cdegltysAKNS";
 const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 function queueItemCover(item) {
@@ -119,8 +119,7 @@ function parseResp(data, showTrackNum, index, showRatings) {
                               actions: PQ_STD_ACTIONS,
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
-                              key: i.id+"."+index,
-                              url: i.url
+                              key: i.id+"."+index
                           });
                 index++;
             }
@@ -508,7 +507,7 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_MORE_ACTION===act) {
-                bus.$emit('trackInfo', item);
+                bus.$emit('trackInfo', item, index);
                 if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
                 }

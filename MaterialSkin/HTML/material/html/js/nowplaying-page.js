@@ -56,12 +56,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-list-tile style>
    <v-list-tile-content>
     <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
-    <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}<v-list-tile-sub-title/>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}<v-list-tile-sub-title/>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}<v-list-tile-sub-title/>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.album">{{playerStatus.current.album}}<v-list-tile-sub-title/>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}<v-list-tile-sub-title/>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;<v-list-tile-sub-title/>
+    <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
 
    </v-list-tile-content>
    <v-list-tile-action>

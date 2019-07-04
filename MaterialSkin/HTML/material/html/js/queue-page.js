@@ -119,7 +119,8 @@ function parseResp(data, showTrackNum, index, showRatings) {
                               actions: PQ_STD_ACTIONS,
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
-                              key: i.id+"."+index
+                              key: i.id+"."+index,
+                              url: i.url
                           });
                 index++;
             }
@@ -507,13 +508,9 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_MORE_ACTION===act) {
-                if (this.desktop) {
-                    bus.$emit('trackInfo', item);
-                } else {
+                bus.$emit('trackInfo', item);
+                if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
-                    this.$nextTick(function () {
-                        bus.$emit('trackInfo', item);
-                    });
                 }
             } else if (PQ_SELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);

@@ -63,9 +63,7 @@ Vue.component('lms-toolbar', {
     template: `
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
- <v-btn v-if="noPlayer" icon class="toolbar-button">
-  <v-progress-circular color="primary" size=22 width=3 indeterminate></v-progress-circular>
- </v-btn>
+ <v-btn v-if="noPlayer" icon class="toolbar-button"><v-icon color="orange darken-2">warning</v-icon></v-btn>
  <v-menu bottom :disabled="!connected" class="ellipsis">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed': !playerStatus.ison}">
@@ -175,7 +173,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-btn v-else-if="!mini" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
-  <v-progress-circular color="primary" size=22 width=3 indeterminate></v-progress-circular>
+  <v-icon color="red">error</v-icon>
  </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
@@ -430,7 +428,7 @@ Vue.component('lms-toolbar', {
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
             } else if (TB_MINI_PLAYER.id==id) {
-                window.open("mini", "MiniPlayer", 'width=800,height=136,toolbar=0,menubar=0,location=0');
+                window.open("mini", "MiniPlayer", 'width=700,height=128,status=no,menubar=no,toolbar=no,location=no');
             } else {
                 bus.$emit('toolbarAction', id);
             }

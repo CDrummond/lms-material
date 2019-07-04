@@ -5,6 +5,9 @@
 3. Add mini-player.
 4. Only show technical if in desktop bottombar if not showing ratings, or screen
    width is 900px or higher.
+5. Reduce CPU load when the server connection is lost, or there are no players,
+   by using icons and not a circular spinning progressbar.
+6. When getting track, artist, album, etc. info, also pass URL (if known).
 
 0.8.4
 -----

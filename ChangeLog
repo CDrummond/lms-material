@@ -12,6 +12,10 @@
    where the URL in the queue can change.
 7. Don't repeatedly poll player status if song duration is 0 (as is for
    streams).
+8. When parsing SlimBrowse response, if we have a mixture of items with and
+   without images then only set image to default album or artist image for items
+   with the correspoonding type. Also, if find an item that is not an artist or
+   album, then disable grid.
 
 0.8.4
 -----

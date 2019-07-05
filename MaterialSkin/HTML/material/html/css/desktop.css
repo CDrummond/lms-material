@@ -157,7 +157,7 @@ body {
 
 .np-details-desktop-sb {
  left:290px!important;
- width:calc(100vw - 288px)!important;
+ width:calc(100vw - 290px)!important;
 }
 
 .np-details-desktop div .v-list__tile {
@@ -210,7 +210,7 @@ body {
 
 .np-slider-desktop-sb {
  left:290px!important;
- width:calc(100vw - 296px)!important;
+ width:calc(100vw - 298px)!important;
 }
 
 .np-info-desktop {

@@ -362,11 +362,21 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                });
                 resp.canUseGrid = false;
             } else if (haveWithoutIcons && haveWithIcons && resp.items.length == resp.total) {
-                var defCover = parent.image ? parent.image
-                                            : resolveImage("music/0/cover" + (resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
+                var defAlbumCover = resolveImage("music/0/cover" + (resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
+                var defArtistImage = resolveImage("html/images/artists" + (resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
+
                 for (var i=0, len=resp.items.length; i<len; ++i) {
                     if (!resp.items[i].image) {
-                        resp.items[i].image = defCover;
+                        if (resp.items[i].type=="album") {
+                            resp.items[i].image = defAlbumCover;
+                        } else if (resp.items[i].type=="artist") {
+                            resp.items[i].image = defArtistImage;
+                        } else {
+                            // Found an item withot and image and not marked as an artist or album, no
+                            // default iamge set - so disable grid usage.
+                            // See: https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=944597&viewfull=1#post944597
+                            resp.canUseGrid = false;
+                        }
                     }
                 }
             }

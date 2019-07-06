@@ -3,10 +3,10 @@
 1. Fix missing repeat-single icon in desktop queue view.
 2. Display "current / total" in now-playing.
 3. Add mini-player.
-4. Only show technical if in desktop bottombar if not showing ratings, or screen
-   width is 900px or higher.
+4. Only show technical info in desktop bottombar if not showing ratings, or
+   screen width is 900px or higher.
 5. Reduce CPU load when the server connection is lost, or there are no players,
-   by using icons and not a circular spinning progressbar.
+   by using icons and not a circular spinning progressbars.
 6. When getting track info for a queue item, pass its position in the queue to
    the trackinfo command and not its ID/URL. This helps with TuneIn stations,
    where the URL in the queue can change.

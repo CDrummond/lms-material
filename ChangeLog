@@ -1,24 +1,25 @@
-0.8.5
+0.9.0
 -----
-1. Fix missing repeat-single icon in desktop queue view.
-2. Display "current / total" in now-playing.
-3. Add mini-player.
-4. Only show technical info in desktop bottombar if not showing ratings, or
-   screen width is 900px or higher.
-5. Reduce CPU load when the server connection is lost, or there are no players,
-   by using icons and not a circular spinning progressbars.
-6. When getting track info for a queue item, pass its position in the queue to
-   the trackinfo command and not its ID/URL. This helps with TuneIn stations,
-   where the URL in the queue can change.
-7. Don't repeatedly poll player status if song duration is 0 (as is for
-   streams).
-8. When parsing SlimBrowse response, if we have a mixture of items with and
-   without images then only set image to default album or artist image for items
-   with the correspoonding type. Also, if find an item that is not an artist or
-   album, then disable grid.
-9. Remove "noselect" from browse-list, to allow text items (e.b. bandcamp URLs)
-   to be selected.
-   
+ 1. Fix missing repeat-single icon in desktop queue view.
+ 2. Display "current / total" in now-playing.
+ 3. Add mini-player.
+ 4. Only show technical info in desktop bottombar if not showing ratings, or
+    screen width is 900px or higher.
+ 5. Reduce CPU load when the server connection is lost, or there are no players,
+    by using icons and not a circular spinning progressbars.
+ 6. When getting track info for a queue item, pass its position in the queue to
+    the trackinfo command and not its ID/URL. This helps with TuneIn stations,
+    where the URL in the queue can change.
+ 7. Don't repeatedly poll player status if song duration is 0 (as is for
+    streams).
+ 8. When parsing SlimBrowse response, if we have a mixture of items with and
+    without images then only set image to default album or artist image for
+    items with the correspoonding type. Also, if find an item that is not an
+    artist or album, then disable grid.
+ 9. Remove "noselect" from browse-list, to allow text items (e.b. bandcamp URLs)
+    to be selected.
+10. Update axios, vuetify, and vuex libraries.
+
 0.8.4
 -----
  1. When creating jumplist for folders list, convert to uppercase.

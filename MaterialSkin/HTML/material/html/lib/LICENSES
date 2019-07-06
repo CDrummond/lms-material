@@ -1,5 +1,5 @@
 axios
-    Version: 0.18.0
+    Version: 0.19.0
     URL: https://github.com/axios/axios
     License: MIT
 
@@ -48,12 +48,12 @@ vuetify-confirm:
            button colours, and made dialogs persistent.
 
 vuetify
-    Version: 1.5.8
+    Version: 1.5.16
     URL: https://github.com/vuetifyjs/vuetify
     License: MIT
 
 vuex    
-    Version: 3.1.0
+    Version: 3.1.1
     URL: https://github.com/vuejs/vuex
     License: MIT
 

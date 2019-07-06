@@ -834,7 +834,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return str.substring(0, 80) + "...";
         },
         trackCount(current, total, sep) {
-            if (undefined=current || undefined==total || total<2) {
+            if (undefined==current || undefined==total || total<2) {
                 return "";
             }
             return (undefined==sep ? "" : sep)+(current+1)+" / " + total;

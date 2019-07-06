@@ -16,7 +16,9 @@
    without images then only set image to default album or artist image for items
    with the correspoonding type. Also, if find an item that is not an artist or
    album, then disable grid.
-
+9. Remove "noselect" from browse-list, to allow text items (e.b. bandcamp URLs)
+   to be selected.
+   
 0.8.4
 -----
  1. When creating jumplist for folders list, convert to uppercase.

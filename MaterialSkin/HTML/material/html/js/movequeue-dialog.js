@@ -17,6 +17,7 @@ Vue.component('lms-movequeue-dialog', {
       <v-list class="sleep-list">
        <template v-for="(p, index) in players" v-if="p.id!=src">
         <v-list-tile @click="moveTo(p)">
+         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.isgroup ? 'speaker_group' : 'speaker'}}</v-icon></v-list-tile-avatar>
          <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
         </v-list-tile>
         <v-divider></v-divider>

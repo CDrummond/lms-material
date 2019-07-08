@@ -19,6 +19,7 @@
  9. Remove "noselect" from browse-list, to allow text items (e.b. bandcamp URLs)
     to be selected.
 10. Update axios, vuetify, and vuex libraries.
+11. Add action to move queuefrom one player to another.
 
 0.8.4
 -----

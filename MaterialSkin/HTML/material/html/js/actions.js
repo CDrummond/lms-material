@@ -41,43 +41,45 @@ const PQ_SELECT_ACTION        = 30;
 const PQ_UNSELECT_ACTION      = 31;
 const PQ_SCROLL_ACTION        = 32;
 const PQ_ADD_URL_ACTION       = 33;
+const PQ_MOVE_QUEUE_ACTION    = 34;
 
 var ACTIONS=[
-    {cmd:"play",       icon:"play_circle_outline"},
-    {cmd:"play_album", icon:"album"},
-    {cmd:"playall",    icon:"play_circle_outline"},
-    {cmd:"add",        icon:"add_circle_outline"},
-    {cmd:"addall",     icon:"add_circle_outline"},
-    {cmd:"add-hold",   icon:"format_indent_increase"},
-    {cmd:"more",       svg: "more"},
-    {cmd:"lib-more",   svg: "more"},
-    {cmd:"random",     svg: "dice-album"},
-    {cmd:"rename-pl",  icon:"edit"},
-    {cmd:"rename-fav", icon:"edit"},
-    {cmd:"edit-fav",   icon:"edit"},
-    {cmd:"add-fav",    svg: "add-favorite"},
-    {cmd:"delete",     icon:"delete"},
-    {cmd:"addfav",     svg: "add-favorite"},
-    {cmd:"removefav",  svg: "remove-favorite"},
-    {cmd:"pin",        svg: "pin"},
-    {cmd:"unpin",      svg: "unpin"},
-    {cmd:"select",     icon:"check_box_outline_blank"},
-    {cmd:"unselect",   icon:"check_box"},
-    {cmd:"rating",     icon:"stars"},
-    {cmd:"search-lib", icon:"search"},
-    {cmd:"use-grid",   icon:"grid_on"},
-    {cmd:"use-list",   icon:"grid_off"},
-    {cmd:"remove",     icon:"remove_circle_outline"},
-    {cmd:"albsort",    icon:"sort_by_alpha"},
+    {cmd:"play",         icon:"play_circle_outline"},
+    {cmd:"play_album",   icon:"album"},
+    {cmd:"playall",      icon:"play_circle_outline"},
+    {cmd:"add",          icon:"add_circle_outline"},
+    {cmd:"addall",       icon:"add_circle_outline"},
+    {cmd:"add-hold",     icon:"format_indent_increase"},
+    {cmd:"more",         svg: "more"},
+    {cmd:"lib-more",     svg: "more"},
+    {cmd:"random",       svg: "dice-album"},
+    {cmd:"rename-pl",    icon:"edit"},
+    {cmd:"rename-fav",   icon:"edit"},
+    {cmd:"edit-fav",     icon:"edit"},
+    {cmd:"add-fav",      svg: "add-favorite"},
+    {cmd:"delete",       icon:"delete"},
+    {cmd:"addfav",       svg: "add-favorite"},
+    {cmd:"removefav",    svg: "remove-favorite"},
+    {cmd:"pin",          svg: "pin"},
+    {cmd:"unpin",        svg: "unpin"},
+    {cmd:"select",       icon:"check_box_outline_blank"},
+    {cmd:"unselect",     icon:"check_box"},
+    {cmd:"rating",       icon:"stars"},
+    {cmd:"search-lib",   icon:"search"},
+    {cmd:"use-grid",     icon:"grid_on"},
+    {cmd:"use-list",     icon:"grid_off"},
+    {cmd:"remove",       icon:"remove_circle_outline"},
+    {cmd:"albsort",      icon:"sort_by_alpha"},
 
-    {cmd:"pq-playnow", icon: "play_circle_outline"},
-    {cmd:"pq-playnxt", icon: "play_circle_filled"},
-    {cmd:"pq-remove",  icon: "remove_circle_outline"},
-    {cmd:"pq-more",    svg:  "more"},
-    {cmd:"pq-select",  icon: "check_box_outline_blank"},
-    {cmd:"pq-unselect",icon: "check_box"},
-    {cmd:"pq-scroll",  svg:  "current-track"},
-    {cmd:"pq-addurl",  icon: "add"}
+    {cmd:"pq-playnow",   icon: "play_circle_outline"},
+    {cmd:"pq-playnxt",   icon: "play_circle_filled"},
+    {cmd:"pq-remove",    icon: "remove_circle_outline"},
+    {cmd:"pq-more",      svg:  "more"},
+    {cmd:"pq-select",    icon: "check_box_outline_blank"},
+    {cmd:"pq-unselect",  icon: "check_box"},
+    {cmd:"pq-scroll",    svg:  "current-track"},
+    {cmd:"pq-addurl",    icon: "add"},
+    {cmd:"pq-movequeue", icon: "swap_horiz"}
 ];
 
 function updateActionStrings() {
@@ -110,5 +112,6 @@ function updateActionStrings() {
     ACTIONS[PQ_REMOVE_ACTION].title=i18n("Remove from queue");
     ACTIONS[PQ_SCROLL_ACTION].title=i18n("Scroll to current track");
     ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL");
+    ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Move queue to another player");
 }
 

@@ -409,6 +409,12 @@ var lmsQueue = Vue.component("lms-queue", {
             this.wide = window.innerWidth >= 520 ? 2 : window.innerWidth>=340 ? 1 : 0;
             bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
         }
+        bus.$on('noPlayers', function() {
+            this.updateSettingsMenu();
+        }.bind(this));
+        bus.$on('playerListChanged', function() {
+            this.updateSettingsMenu();
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -806,6 +812,16 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.items[this.coverTrackIndex].image=resizedUrl;
                     this.$forceUpdate();
                 }
+            }
+        },
+        updateSettingsMenu() {
+            var canMove = this.$store.state.players && this.$store.state.players.length>1;
+            if (canMove && this.settingsMenuActions[0]!=PQ_MOVE_QUEUE_ACTION) {
+                this.settingsMenuActions.unshift(PQ_MOVE_QUEUE_ACTION);
+                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+            } else if (!canMove && this.settingsMenuActions[0]==PQ_MOVE_QUEUE_ACTION) {
+                this.settingsMenuActions.splice(0, 1);
+                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
             }
         }
     },

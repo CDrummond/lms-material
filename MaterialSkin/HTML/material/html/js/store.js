@@ -211,6 +211,8 @@ const store = new Vuex.Store({
             }
             if (state.players.length<1) {
                 bus.$emit('noPlayers');
+            } else {
+                bus.$emit('playerListChanged');
             }
         },
         setPlayer(state, id) {

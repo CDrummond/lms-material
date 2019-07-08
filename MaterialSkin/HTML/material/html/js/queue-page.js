@@ -551,10 +551,8 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (act==PQ_SCROLL_ACTION) {
                 this.scrollToCurrent(true);
             } else if (act==PQ_MOVE_QUEUE_ACTION) {
-                if (this.items.length<1) {
+                if (this.items.length<1 || !this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
                     return;
-                } else if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
-                    bus.$emit('showMessage', i18n("No other players found"));
                 } else {
                     bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
                 }

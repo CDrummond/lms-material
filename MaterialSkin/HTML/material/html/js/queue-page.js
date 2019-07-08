@@ -255,7 +255,7 @@ var lmsQueue = Vue.component("lms-queue", {
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlistName: undefined,
             selection: [],
-            settingsMenuActions: [PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
+            settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0
         }
     },
@@ -400,13 +400,13 @@ var lmsQueue = Vue.component("lms-queue", {
             }.bind(this));
 
             bus.$on('windowWidthChanged', function() {
-                var wide = window.innerWidth >= 500 ? 2 : window.innerWidth>=340 ? 1 : 0;
+                var wide = window.innerWidth >= 520 ? 2 : window.innerWidth>=340 ? 1 : 0;
                 if (wide!=this.wide) {
                     this.wide = wide;
                     bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
                 }
             }.bind(this));
-            this.wide = window.innerWidth >= 500 ? 2 : window.innerWidth>=340 ? 1 : 0;
+            this.wide = window.innerWidth >= 520 ? 2 : window.innerWidth>=340 ? 1 : 0;
             bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
         }
     },
@@ -544,6 +544,14 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
             } else if (act==PQ_SCROLL_ACTION) {
                 this.scrollToCurrent(true);
+            } else if (act==PQ_MOVE_QUEUE_ACTION) {
+                if (this.items.length<1) {
+                    return;
+                } else if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
+                    bus.$emit('showMessage', i18n("No other players found"));
+                } else {
+                    bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
+                }
             }
         },
         itemMenu(item, index, event) {

@@ -82,7 +82,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -114,6 +114,7 @@ sub _cliCommand {
         main::INFOLOG && $log->is_info && $log->info(string('Connect player ${id} from ${serverurl} to this server'));
         $http->post( $serverurl . 'jsonrpc.js', $postdata);
         $request->setStatusDone();
+        return;
     }
 
     if ($cmd eq 'info') {
@@ -133,11 +134,40 @@ sub _cliCommand {
 
                                 .']}');
         $request->setStatusDone();
+        return;
     }
+
+    if ($cmd eq 'movequeue') {
+        my $fromId = $request->getParam('from');
+        my $toId = $request->getParam('to');
+        if (!$fromId || !$toId) {
+            $request->setStatusBadParams();
+            return;
+        }
+        my $from = Slim::Player::Client::getClient($fromId);
+        my $to = Slim::Player::Client::getClient($toId);
+        if (!$from || !$to) {
+            $request->setStatusBadParams();
+            return;
+        }
+
+        $to->execute(['power', 1]) unless $to->power;
+        $from->execute(['sync', $toId]);
+        if ( exists $INC{'Slim/Plugin/RandomPlay/Plugin.pm'} && (my $mix = Slim::Plugin::RandomPlay::Plugin::active($from)) ) {
+            $to->execute(['playlist', 'addtracks', 'listRef', ['randomplay://' . $mix] ]);
+        }
+        $from->execute(['sync', '-']);
+        $from->execute(['playlist', 'clear']);
+
+        $request->setStatusDone();
+        return;
+    }
+
+    $request->setStatusBadParams()
 }
 
 sub _connect_done {
-    main::DEBUGLOG && $log->is_info && $log->info(string('Connect response recieved player'));
+    main::INFOLOG && $log->is_info && $log->info(string('Connect response recieved player'));
     # curl 'http://localhost:9000/jsonrpc.js' --data-binary '{"id":1,"method":"slim.request","params":["aa:aa:b5:38:e2:d7",["disconnect","192.168.1.16"]]}'
     my $http   = shift;
     my $server = $http->params('server');

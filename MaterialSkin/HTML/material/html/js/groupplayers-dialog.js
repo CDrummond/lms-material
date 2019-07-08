@@ -168,7 +168,7 @@ Vue.component('lms-groupplayers-dialog', {
             }
             lmsCommand("", ['playergroups', 'add', 'name:'+name, 'members:'+this.chosenPlayers.join(','),
                             'powerMaster:'+(this.options.powerMaster ? 1 : 0), 'powerPlay:'+(this.options.powerPlay ? 1 : 0)]).then(({data}) => {
-                bus.$emit('refreshServerStatus');
+                bus.$emit('refreshServerStatus', 1000);
                 this.show=false;
             });
         },

@@ -534,8 +534,13 @@ var lmsServer = Vue.component('lms-server', {
                 this.updatePlayer(player);
             }
         }.bind(this));
-        bus.$on('refreshServerStatus', function() {
+        bus.$on('refreshServerStatus', function(delay) {
             this.refreshServerStatus();
+            if (undefined!=delay && delay>50 && delay<10000) {
+                setTimeout(function () {
+                    this.refreshServerStatus();
+                }.bind(this), delay);
+            }
         }.bind(this));
         bus.$on('refreshFavorites', function() {
             this.updateFavorites();

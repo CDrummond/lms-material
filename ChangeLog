@@ -20,6 +20,7 @@
     to be selected.
 10. Update axios, vuetify, and vuex libraries.
 11. Add action to move queuefrom one player to another.
+12. When creating a group player, also update server status 1 second later.
 
 0.8.4
 -----

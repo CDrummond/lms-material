@@ -428,7 +428,8 @@ Vue.component('lms-toolbar', {
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
             } else if (TB_MINI_PLAYER.id==id) {
-                window.open("mini", "MiniPlayer", 'width=700,height=128,status=no,menubar=no,toolbar=no,location=no');
+                var width = this.$store.state.ratingsSupport ? 700 : 650;
+                window.open("mini", "MiniPlayer", 'width='+width+',height=112,status=no,menubar=no,toolbar=no,location=no');
             } else {
                 bus.$emit('toolbarAction', id);
             }

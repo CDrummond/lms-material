@@ -415,6 +415,7 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('playerListChanged', function() {
             this.updateSettingsMenu();
         }.bind(this));
+        this.updateSettingsMenu();
     },
     methods: {
         initItems() {

@@ -17,8 +17,8 @@
  background:#ddd;
 }
 
-html {
- background-color:#f5f5f5;
+html, .mini-player {
+ background-color:#f5f5f5 !important;
 }
 
 /* Clickable artist/album in queue */

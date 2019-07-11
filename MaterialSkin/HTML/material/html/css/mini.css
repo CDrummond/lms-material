@@ -29,7 +29,7 @@ body {
  margin:0 !important; /* v-progress-linear has margin: 1rem 0; */
 }
 
-.lms-toolbar {
+.lms-toolbar, .np-bar {
  box-shadow:none!important;
 }
 

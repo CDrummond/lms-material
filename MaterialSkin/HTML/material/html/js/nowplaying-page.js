@@ -602,13 +602,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         trackInfo() {
             this.info.show=false;
             this.largeView=false;
-            if (this.desktop) {
-                bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl});
-            } else {
+            bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
+                      this.playerStatus.playlist.current);
+            if (!this.desktop) {
                 this.$store.commit('setPage', 'browse');
-                this.$nextTick(function () {
-                    bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title});
-                });
             }
         },
         fetchLyrics() {

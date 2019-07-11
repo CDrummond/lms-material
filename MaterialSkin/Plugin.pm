@@ -111,7 +111,7 @@ sub _cliCommand {
             params => [ $id, ['connect', Slim::Utils::Network::serverAddr()] ]
         });
 
-        main::INFOLOG && $log->is_info && $log->info(string('Connect player ${id} from ${serverurl} to this server'));
+        main::INFOLOG && $log->is_info && $log->info('Connect player ${id} from ${serverurl} to this server');
         $http->post( $serverurl . 'jsonrpc.js', $postdata);
         $request->setStatusDone();
         return;
@@ -167,7 +167,7 @@ sub _cliCommand {
 }
 
 sub _connect_done {
-    main::INFOLOG && $log->is_info && $log->info(string('Connect response recieved player'));
+    main::INFOLOG && $log->is_info && $log->info('Connect response recieved player');
     # curl 'http://localhost:9000/jsonrpc.js' --data-binary '{"id":1,"method":"slim.request","params":["aa:aa:b5:38:e2:d7",["disconnect","192.168.1.16"]]}'
     my $http   = shift;
     my $server = $http->params('server');
@@ -182,7 +182,7 @@ sub _connect_done {
     my $id = $params[0];
     my $buddy = Slim::Player::Client::getClient($id);
     if ($buddy) {
-        main::INFOLOG && $log->is_info && $log->info(string('Disconnect player ${id} from ${server}'));
+        main::INFOLOG && $log->is_info && $log->info('Disconnect player ' . $id . ' from ' . $server);
         $buddy->execute(["disconnect", $server]);
     }
 }

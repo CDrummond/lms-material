@@ -97,8 +97,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
-            var isTrackStat = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 &&
-                              data.params[1][0]=="trackstat";
+            var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -106,7 +105,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
 
-            resp.canUseGrid = !isTrackStat && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+            resp.canUseGrid = command!="trackstat" && command!="playhistory" &&
+                              data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -114,10 +114,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 addAction = undefined != resp.baseActions[ACTIONS[ADD_ACTION].cmd];
                 insertAction = undefined != resp.baseActions[ACTIONS[INSERT_ACTION].cmd];
                 moreAction = undefined!=resp.baseActions[ACTIONS[MORE_ACTION].cmd];
-                if (resp.canUseGrid && parent && parent.actions && parent.actions.go && parent.actions.go.cmd &&
-                    parent.actions.go.cmd[0] == "playhistory") {
-                    resp.canUseGrid = false;
-                }
                 if (resp.baseActions[ACTIONS[PLAY_ACTION].cmd] && resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params && resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params.menu) {
                     menu = resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params.menu;
                 }

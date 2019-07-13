@@ -154,7 +154,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     for (var key in i.actions.go.params) {
                         if (i.actions.go.params[key]==TERM_PLACEHOLDER) {
                             i.type = "entry";
-                            resp.canUseGrid = false;
                         }
                     }
                 }
@@ -246,7 +245,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     for (var p=0, plen=i.actions.go.params.length; p<plen; ++p) {
                         if (TERM_PLACEHOLDER == i.actions.go.params[p]) {
                             i.type = "search";
-                            resp.canUseGrid = false;
                             break;
                         }
                     }
@@ -254,7 +252,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
                 if (!i.type && i.style && i.style=="itemNoAction") {
                     i.type = "text";
-                    resp.canUseGrid = false;
                 }
 
                 if (isApps && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
@@ -353,8 +350,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             types.add(i.type);
 
-            if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size &&
-               (!types.has("text") && !types.has("search") && !types.has(undefined))) {
+            if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
+                resp.canUseGrid = false;
+            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size &&
+               (!types.has("text") && !types.has("search") && !types.has("entry") && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }
 

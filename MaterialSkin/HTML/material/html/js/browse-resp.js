@@ -105,7 +105,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
             var types = new Set();
-            var maybeAllowGrid = command!="trackstat" && command!="playhistory";
+            var maybeAllowGrid = command!="trackstat"; // && command!="playhistory";
 
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 

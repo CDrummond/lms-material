@@ -105,6 +105,11 @@ a {
  margin-bottom:4px;
 }
 
+.radio-img {
+ object-fit:contain !important;
+ object-position:50% 50% !important;
+}
+
 .image-grid-text {
  white-space:nowrap;
  overflow:hidden;

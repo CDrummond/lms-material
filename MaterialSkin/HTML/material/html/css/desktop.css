@@ -131,6 +131,11 @@ body {
  float:left;
 }
 
+.np-radio-image-desktop {
+ object-fit:contain !important;
+ object-position:50% 50% !important;
+}
+
 .np-text-desktop {
  font-weight:400;
  margin:12px 8px 0px 0px;

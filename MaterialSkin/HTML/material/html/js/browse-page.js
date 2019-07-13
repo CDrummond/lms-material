@@ -130,17 +130,17 @@ var lmsBrowse = Vue.component("lms-browse", {
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
   <RecycleScroller :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
-   <table slot-scope="{item, index}" :class="['full-width', GRID_SIZES[grid.size].clz]">
-    <td align="center" style="vertical-align: top" v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat align="left" class="image-grid-item">
-     <div v-if="col.blank" class="image-grid-item"></div>
-     <div v-else class="image-grid-item" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
-      <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
-       <v-icon>{{items[col.id].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
+   <table slot-scope="{item, index}" :class="[grid.few ? '' : 'full-width', GRID_SIZES[grid.size].clz]">
+    <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes"><v-card flat align="left" class="image-grid-item">
+     <div v-if="idx>=items.length" class="image-grid-item"></div>
+     <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | tooltip">
+      <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx)">
+       <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img :key="items[col.id].image" :src="items[col.id].image" v-bind:class="{'radio-img': SECTION_RADIO==items[col.id].section}" class="image-grid-item-img"></img>
-      <div class="image-grid-text">{{items[col.id].title}}</div>
-      <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
-      <v-btn flat icon @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
+      <img :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <div class="image-grid-text">{{items[idx].title}}</div>
+      <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
+      <v-btn flat icon @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
@@ -2077,14 +2077,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 changed = true;
                 this.grid.rows=[];
                 for (var i=0; i<this.items.length; i+=numColumns) {
-                    var cols=[]
+                    var indexes=[]
                     for (var j=0; j<numColumns; ++j) {
-                        cols.push({id:i+j, blank:(i+j)>=this.items.length});
+                        indexes.push(i+j);
                         if (!haveSubtitle && (i+j)<this.items.length && this.items[i+j].subtitle) {
                             haveSubtitle = true;
                         }
                     }
-                    this.grid.rows.push({id:"row."+i+"."+numColumns, cols:cols});
+                    this.grid.rows.push({id:"row."+i+"."+numColumns, indexes:indexes});
                 }
                 this.grid.numColumns = numColumns;
             } else { // Need to check if have subtitles...

@@ -137,7 +137,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
        <v-icon>{{items[col.id].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img :key="items[col.id].image" v-lazy="items[col.id].image" v-bind:class="{'radio-img': SECTION_RADIO==items[col.id].section}" class="image-grid-item-img"></img>
+      <img :key="items[col.id].image" :src="items[col.id].image" v-bind:class="{'radio-img': SECTION_RADIO==items[col.id].section}" class="image-grid-item-img"></img>
       <div class="image-grid-text">{{items[col.id].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
       <v-btn flat icon @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
@@ -190,7 +190,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
-     <img :key="item.image" v-lazy="item.image"></img>
+     <img :key="item.image" :src="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>

@@ -51,7 +51,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])" class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
+ <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'np-radio-image-desktop': 0==playerStatus.current.duration}" @contextmenu="showMenu" @click="clickImage(event)"></img>
  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
   <v-list-tile style>
    <v-list-tile-content>

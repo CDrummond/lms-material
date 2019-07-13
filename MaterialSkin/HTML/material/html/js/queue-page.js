@@ -190,7 +190,7 @@ var lmsQueue = Vue.component("lms-queue", {
  <v-list class="lms-list-sub bgnd-cover" id="queue-list">
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key">
    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
-    <v-list-tile-avatar :tile="true" class="lms-avatar">
+    <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" v-lazy="item.image"></img>
     </v-list-tile-avatar>
@@ -206,7 +206,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </RecycleScroller>
   <template v-else v-for="(item, index) in items">
    <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-queue-item">
-    <v-list-tile-avatar :tile="true" class="lms-avatar">
+    <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" v-lazy="item.image"></img>
     </v-list-tile-avatar>

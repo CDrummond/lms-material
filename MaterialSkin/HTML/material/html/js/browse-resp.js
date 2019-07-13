@@ -327,16 +327,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.menu.push(MORE_ACTION);
                 }
 
-                if (resp.canUseGrid && i.image) {
-                    var rep=["_100x100.png", "100x100.png", "_100x100_o", "100x100_o",
-                             "_50x50.png", "50x50.png", "_50x50_o", "50x50_o"];
-                    for (var r=0, len=rep.length; r<len; ++r) {
-                        if (i.image.endsWith(rep[r])) {
-                            i.image=i.image.replace(rep[r], LMS_GRID_IMAGE_SIZE);
-                            break;
-                        }
-                    }
-                }
                 i.section = parent ? parent.section : undefined;
 
                 var key = i.textkey;

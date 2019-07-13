@@ -653,8 +653,8 @@ function changeImageUrls(items, grid) {
     var t = grid ? LMS_GRID_IMAGE_SIZE.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SIZE.split('x')[0].replace('_', '');
     f="w="+f+"&h="+f;
     t="w="+t+"&h="+t;
-    console.log(new Date());
-    if (items[0].image && items[0].image.includes(f)) {
+
+    if (items[0].image && items[0].image.startsWith(MY_SQUEEZEBOX_IMAGE_PROXY) && items[0].image.includes(f)) {
         for (var i=0, len=items.length; i<len; ++i) {
             if (items[i].image) {
                 items[i].image=items[i].image.replace(f, t);

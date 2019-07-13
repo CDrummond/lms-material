@@ -590,12 +590,22 @@ function commandGridKey(command) {
     return command.command[0]+"-grid";
 }
 
+const USE_LIST_VIEW_BY_DEFAULT=new Set(["myapps-grid", "podcasts-grid", "youtube-grid"]);
+
 function isSetToUseGrid(command) {
-    return getLocalStorageBool(commandGridKey(command), true);
+    var key = commandGridKey(command);
+    return getLocalStorageBool(key, !USE_LIST_VIEW_BY_DEFAULT.has(key));
 }
 
 function setUseGrid(command, use) {
-    setLocalStorageVal(commandGridKey(command), use);
+    var key = commandGridKey(command)
+    var defList = USE_LIST_VIEW_BY_DEFAULT.has(key);
+    // Only store value if different from default
+    if ((defList && !use) || (!defList && use)) {
+        removeLocalStorage(key);
+    } else {
+        setLocalStorageVal(key, use);
+    }
 }
 
 const ALBUM_SORT_KEY = "albumSort";

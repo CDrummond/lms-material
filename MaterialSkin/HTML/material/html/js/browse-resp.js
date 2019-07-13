@@ -165,10 +165,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
 
                 i.text = undefined;
-                i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE);
+                i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, LMS_LIST_IMAGE_SIZE);
 
                 if (!i.image && i.commonParams && i.commonParams.album_id) {
-                    i.image = resolveImage("music/0/cover" + (resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
+                    i.image = resolveImage("music/0/cover" + LMS_LIST_IMAGE_SIZE);
                 }
 
                 if (i.image) {
@@ -365,8 +365,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                });
                 resp.canUseGrid = false;
             } else if (haveWithoutIcons && haveWithIcons && resp.items.length == resp.total) {
-                var defAlbumCover = resolveImage("music/0/cover" + (resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
-                var defArtistImage = resolveImage("html/images/artists" + (resp.canUseGrid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE));
+                var defAlbumCover = resolveImage("music/0/cover" + LMS_LIST_IMAGE_SIZE);
+                var defArtistImage = resolveImage("html/images/artists" + LMS_LIST_IMAGE_SIZE);
 
                 for (var i=0, len=resp.items.length; i<len; ++i) {
                     if (!resp.items[i].image) {
@@ -392,6 +392,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 } else if (isFavorites && options.sortFavorites) {
                     resp.items.sort(favSort);
                 }
+            }
+            if (resp.canUseGrid && command && isSetToUseGrid({command:[command]})) {
+                changeImageUrls(resp.items, true);
             }
         } else if (data.result.artists_loop) {
             var params = [];

@@ -110,7 +110,7 @@ function resolveImageUrl(image, size) {
             return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
         }
     }
-    
+
     var idx = image.lastIndexOf(".png");
     if (idx < 0) {
         idx = image.lastIndexOf(".jpg");
@@ -640,12 +640,16 @@ function changeImageUrls(items, grid) {
     }
     var f = grid ? LMS_LIST_IMAGE_SIZE : LMS_GRID_IMAGE_SIZE;
     var t = grid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE;
-    if (items[0].image && items[0].image.includes(f)) {
-        for (var i=0, len=items.length; i<len; ++i) {
-            if (items[i].image) {
-                items[i].image=items[i].image.replace(f, t);
-            }
+    var changed = false;
+    for (var i=0, len=items.length; i<len; ++i) {
+        if (items[i].image && (changed || items[i].image.includes(f))) {
+            items[i].image=items[i].image.replace(f, t);
+            changed = true;
         }
+    }
+
+    if (changed) {
+        return;
     }
 
     // And for remote URLs...
@@ -654,11 +658,10 @@ function changeImageUrls(items, grid) {
     f="w="+f+"&h="+f;
     t="w="+t+"&h="+t;
 
-    if (items[0].image && items[0].image.startsWith(MY_SQUEEZEBOX_IMAGE_PROXY) && items[0].image.includes(f)) {
-        for (var i=0, len=items.length; i<len; ++i) {
-            if (items[i].image) {
-                items[i].image=items[i].image.replace(f, t);
-            }
+    for (var i=0, len=items.length; i<len; ++i) {
+        if (items[i].image && (changed || (items[i].image.startsWith(MY_SQUEEZEBOX_IMAGE_PROXY) && items[i].image.includes(f)))) {
+            items[i].image=items[i].image.replace(f, t);
+            changed = true;
         }
     }
 }

@@ -7,6 +7,10 @@
    switch to grid. (Recycler is quicker to update when toggling).
 5. Fix toggling image sizes when 1st iamge does not have size parameters (e.g.
    radio search results).
+6. For mobile layout, show song details in toolbar of now-playing view if song
+   info is being displayed.
+7. For mobile layout, only toggle play/pause and info button if screen width is
+   less than 600px.
 
 0.9.0
 -----

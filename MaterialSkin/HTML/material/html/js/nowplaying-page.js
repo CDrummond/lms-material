@@ -45,7 +45,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])" class="np-std-button"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
-   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
+   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])" class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
@@ -187,7 +187,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
         </v-flex>
        </v-layout>
-       <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
+       <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
       </v-flex>
       <v-flex xs4>
        <v-layout text-xs-center>
@@ -250,7 +250,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
      </v-flex>
     </v-layout>
-    <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause"><v-icon x-large v-if="playerStatus.isplaying">pause_circle_outline</v-icon><v-icon x-large v-else>play_circle_outline</v-icon></v-btn>
+    <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
    </v-flex>
    <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>

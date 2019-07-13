@@ -590,7 +590,7 @@ function commandGridKey(command) {
     return command.command[0]+"-grid";
 }
 
-const USE_LIST_VIEW_BY_DEFAULT=new Set(["myapps-grid", "podcasts-grid", "youtube-grid"]);
+const USE_LIST_VIEW_BY_DEFAULT=new Set(["myapps-grid", "podcasts-grid", "youtube-grid", "playhistory-grid"]);
 
 function isSetToUseGrid(command) {
     var key = commandGridKey(command);

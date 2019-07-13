@@ -1,8 +1,7 @@
 0.9.1
 -----
 1. Fix "TuneIn Options" when "More" selected from now-playing.
-2. Disable grid for playhistory ("What was that tune?")
-3. Allow grid in more cases.
+2. Allow grid in more cases - e.g. "What was that tune?"
 
 0.9.0
 -----

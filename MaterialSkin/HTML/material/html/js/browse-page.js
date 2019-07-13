@@ -129,7 +129,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
-  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
+  <RecycleScroller  :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
    <table slot-scope="{item, index}" :class="['full-width', GRID_SIZES[grid.size].clz]">
     <td align="center" style="vertical-align: top" v-for="(col, cidx) in item.cols" :key="col.id"><v-card flat align="left" class="image-grid-item">
      <div v-if="col.blank" class="image-grid-item"></div>
@@ -147,28 +147,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-card></td>
    </table>
   </RecycleScroller>
-  <table v-else v-for="(row, ridx) in grid.rows" :key="row.id" :class="[grid.few ? '' : 'full-width', GRID_SIZES[grid.size].clz, grid.haveSubtitle ? '' : 'grid-no-subtitle']">
-   <td align="center" style="vertical-align: top" v-for="(col, cidx) in row.cols" :key="col.id"><v-card flat align="left" class="image-grid-item">
-    <div v-if="col.blank" class="image-grid-item"></div>
-    <div v-else-if="items[col.id].type=='image'" class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" :title="items[col.id] | tooltip">
-     <img :key="items[col.id].thumb" v-lazy="items[col.id].thumb" class="image-grid-item-img" @click="showImage(col.id)"></img>
-     {{items[col.id].caption}}
-    </div>
-    <div v-else :class="['image-grid-item', SECTION_RADIO==items[col.id].section ? 'radio-image' : '', grid.few ? 'image-grid-item-few' : '']" @click="click(items[col.id], col.id, $event)" :title="items[col.id] | tooltip">
-     <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[col.id], col.id)">
-      <v-icon>{{items[col.id].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
-     </v-btn>
-     <img :key="items[col.id].image" v-lazy="items[col.id].image" class="image-grid-item-img"></img>
-     <div class="image-grid-text">{{items[col.id].title}}</div>
-     <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[col.id], col.id, $event)">{{items[col.id].subtitle}}</div>
-     <v-btn flat icon v-if="items[col.id].menu && items[col.id].menu.length>0" @click.stop="itemMenu(items[col.id], col.id, $event)" class="image-grid-btn">
-      <v-icon v-if="items[col.id].menu && items[col.id].menu.length>1">more_vert</v-icon>
-      <v-icon v-else-if="items[col.id].menu && items[col.id].menu.length===1 && undefined==ACTIONS[items[col.id].menu[0]].svg" :title="ACTIONS[items[col.id].menu[0]].title">{{ACTIONS[items[col.id].menu[0]].icon}}</v-icon>
-      <img v-else-if="items[col.id].menu && items[col.id].menu.length===1" :title="ACTIONS[items[col.id].menu[0]].title" class="svg-img" :src="ACTIONS[items[col.id].menu[0]].svg | svgIcon(darkUi)"></img>
-     </v-btn>
-    </div>
-   </v-card></td>
-  </table>
  </div></div>
  <div v-else>
 
@@ -206,7 +184,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
+  <RecycleScroller v-if="grid.allowed || items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -348,7 +326,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         return {
             current: undefined,
             items: [],
-            grid: {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true},
+            grid: {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
@@ -413,7 +391,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         } else {
             this.addPinned();
         }
-        this.grid = {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+        this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
         if (!this.desktop) {
             // Clicking on 'browse' nav button whilst in browse page goes back.
@@ -661,7 +639,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var changedView = this.grid.use != resp.useGrid;
-                this.grid = {use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+                this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
                 if (this.current && this.current.menu) {
                     for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -1356,7 +1334,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;
-            this.grid = {use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+            this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
             this.command = undefined;
             this.showRatingButton = false;
             this.subtitleClickable = false;

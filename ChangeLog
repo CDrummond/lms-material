@@ -3,6 +3,8 @@
 1. Fix "TuneIn Options" when "More" selected from now-playing.
 2. Allow grid in more cases - e.g. "What was that tune?"
 3. Don't square off radio logos in queue and desktop bottom bar.
+4. Always use recycler view for grids, and for lists where its possible to
+   switch to grid. (Recycler is quicker to update when toggling).
 
 0.9.0
 -----

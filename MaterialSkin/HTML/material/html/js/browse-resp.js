@@ -104,9 +104,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             // need different IDs for the re-ordered items so that the correct cover is shown.
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
+            var types = new Set();
+            var maybeAllowGrid = command!="trackstat" && command!="playhistory";
 
-            resp.canUseGrid = command!="trackstat" && command!="playhistory" &&
-                              data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list";
+            resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -350,6 +351,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 resp.items.push(i);
             }
+            types.add(i.type);
+
+            if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size &&
+               (!types.has("text") && !types.has("search") && !types.has(undefined))) {
+                resp.canUseGrid = true;
+            }
+
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
                 resp.items.push({
                                 title: replaceNewLines(data.result.window.textarea),

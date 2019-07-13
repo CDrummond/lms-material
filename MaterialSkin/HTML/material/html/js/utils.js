@@ -640,13 +640,25 @@ function changeImageUrls(items, grid) {
     }
     var f = grid ? LMS_LIST_IMAGE_SIZE : LMS_GRID_IMAGE_SIZE;
     var t = grid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE;
-    if (!items[0].image || !items[0].image.includes(f)) {
-        return;
+    if (items[0].image && items[0].image.includes(f)) {
+        for (var i=0, len=items.length; i<len; ++i) {
+            if (items[i].image) {
+                items[i].image=items[i].image.replace(f, t);
+            }
+        }
     }
 
-    for (var i=0, len=items.length; i<len; ++i) {
-        if (items[i].image) {
-            items[i].image=items[i].image.replace(f, t);
+    // And for remote URLs...
+    var f = grid ? LMS_LIST_IMAGE_SIZE.split('x')[0].replace('_', '') : LMS_GRID_IMAGE_SIZE.split('x')[0].replace('_', '');
+    var t = grid ? LMS_GRID_IMAGE_SIZE.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SIZE.split('x')[0].replace('_', '');
+    f="w="+f+"&h="+f;
+    t="w="+t+"&h="+t;
+    console.log(new Date());
+    if (items[0].image && items[0].image.includes(f)) {
+        for (var i=0, len=items.length; i<len; ++i) {
+            if (items[i].image) {
+                items[i].image=items[i].image.replace(f, t);
+            }
         }
     }
 }

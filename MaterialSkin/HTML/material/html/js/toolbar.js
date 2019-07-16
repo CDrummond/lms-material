@@ -88,7 +88,7 @@ Vue.component('lms-toolbar', {
       </v-list-tile-action>
     </v-list-tile>
    </template>
-   <template v-if="!mini" v-for="(item, index) in otherPlayers">
+   <template v-if="!mini && !nowplaying" v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
      <v-list-tile-avatar v-if="menuIcons && players && players.length>1"><v-icon small></v-icon></v-list-tile-avatar>
@@ -98,19 +98,19 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="!mini && ((players && players.length>1) || playerStatus.sleepTime)"></v-divider>
+   <v-divider v-if="!mini && !nowplaying && ((players && players.length>1) || playerStatus.sleepTime)"></v-divider>
 
-   <v-list-tile v-if="!mini && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
+   <v-list-tile v-if="!mini && !nowplaying && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
 
-   <v-list-tile v-if="!mini && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
+   <v-list-tile v-if="!mini && !nowplaying && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
    </v-list-tile>
 
-   <v-list-tile v-if="!mini && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
+   <v-list-tile v-if="!mini && !nowplaying && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
@@ -135,16 +135,16 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!desktop" :disabled="!playerStatus.ison || noPlayer">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="bus.$emit('info')" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini && !nowplaying" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu v-if="connected && !mini" bottom left>
+ <v-menu v-if="connected && !mini && !nowplaying" bottom left>
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
@@ -171,14 +171,14 @@ Vue.component('lms-toolbar', {
    </template>
   </v-list>
  </v-menu>
- <v-btn v-else-if="!mini" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
+ <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
   <v-icon color="red">error</v-icon>
  </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
     `,
-    props: ['desktop', 'mini'],
+    props: ['desktop', 'nowplaying', 'mini'],
     data() {
         return { songInfo:undefined,
                  playlist: { count: undefined, duration: undefined },

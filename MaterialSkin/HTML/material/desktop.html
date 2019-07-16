@@ -40,14 +40,12 @@
      <div slot="right-pane"><lms-queue :desktop="true"></lms-queue></div>
     </vue-splitter>
     <lms-now-playing :desktop="true"></lms-now-playing>
-    <lms-noplayer></lms-noplayer>
     <lms-noconnection></lms-noconnection>
     <lms-ui-settings v-if="dialogs.uisettings" :desktop="true"></lms-ui-settings>
     <lms-player-settings v-if="dialogs.playersettings"></lms-player-settings>
     <lms-information-dialog v-if="dialogs.info"></lms-information-dialog>
     <lms-sync-dialog v-if="dialogs.sync"></lms-sync-dialog>
     <lms-groupplayers-dialog v-if="dialogs.group"></lms-groupplayers-dialog>
-    <lms-volume v-if="dialogs.volume"></lms-volume>
     <lms-manage-players v-if="dialogs.manage"></lms-manage-players>
     <lms-randommix v-if="dialogs.rndmix"></lms-randommix>
     <lms-favorite v-if="dialogs.favorite"></lms-favorite>

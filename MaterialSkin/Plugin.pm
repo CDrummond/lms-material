@@ -27,6 +27,11 @@ sub initPlugin {
             $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('mini.html', $params);
         } );
+        Slim::Web::Pages->addPageFunction( 'now-playing', sub {
+            my ($client, $params) = @_;
+            $params->{'material_revision'} = $class->pluginVersion();
+            return Slim::Web::HTTP::filltemplatefile('now-playing.html', $params);
+        } );
         Slim::Web::Pages->addPageFunction( 'mobile', sub {
             my ($client, $params) = @_;
             $params->{'material_revision'} = $class->pluginVersion();

@@ -50,8 +50,16 @@ NOTE: This should no longer be necessary, as Material is now an official
 Material should automatically choose mobile or desktop layouts, but you may also
 force one or the other.
 
-1. `http://<yourserver>:9000/material/mobile` will force mobile layout
-2. `http://<yourserver>:9000/material/desktop` will force desktop layout
+* `http://<yourserver>:9000/material/mobile` will force mobile layout
+* `http://<yourserver>:9000/material/desktop` will force desktop layout
+
+Material also has two other views; a mini-player and now-playing screen. The
+mini-player can be launched via the desktop view (and this is how it is intended
+to be used), or via the URL below. Now-playing can only be accessed via the URL
+below (it is in fact a trimmed down desktop view, that only shows now-playing).
+
+* `http://<yourserver>:9000/material/mini`
+* `http://<yourserver>:9000/material/now-playing`
 
 ### Selecting start-up player
 

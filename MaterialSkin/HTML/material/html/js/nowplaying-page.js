@@ -13,7 +13,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
- <v-menu v-if="!mini" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
+ <v-menu v-if="!mini && !nowplaying" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <v-list-tile @click="showPic()">
     <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
@@ -25,7 +25,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile>
   </v-list>
  </v-menu>
-<div v-if="desktop && !largeView" class="np-bar noselect" id="np-bar">
+<div v-if="desktop && !largeView && !nowplaying" class="np-bar noselect" id="np-bar">
  <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
    <v-btn flat icon @click="doAction(['button', 'jump_rew'])"><v-icon large>skip_previous</v-icon></v-btn>
@@ -266,7 +266,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 </div></div>
 `,
-    props: [ 'desktop', 'mini' ],
+    props: [ 'desktop', 'nowplaying', 'mini' ],
     data() {
         return { coverUrl:LMS_BLANK_COVER,
                  playerStatus: {
@@ -293,13 +293,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     mounted() {
         if (this.desktop) {
-            this.info.showTabs=getLocalStorageBool("showTabs", false);
-            bus.$on('largeView', function(val) {
-                if (val) {
-                    this.info.show = false;
-                }
-                this.largeView = val;
-            }.bind(this));
+            if (this.nowplaying) {
+                this.largeView = true;
+            } else {
+                this.info.showTabs=getLocalStorageBool("showTabs", false);
+                bus.$on('largeView', function(val) {
+                    if (val) {
+                        this.info.show = false;
+                    }
+                    c = val;
+                }.bind(this));
+            }
         } else {
             bus.$on('pageChanged', function(val) {
                 if (0==this.lastWidth && val=='now-playing') {

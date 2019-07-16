@@ -79,7 +79,9 @@ function initApp(app) {
     });
 
     if (window.location.href.indexOf('/mini')<0) {
-        setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
+        if (window.location.href.indexOf('/now-playing')<0) {
+            setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
+        }
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

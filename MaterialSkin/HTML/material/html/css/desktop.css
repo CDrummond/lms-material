@@ -89,9 +89,14 @@ body {
 
 .vol-label {
  padding-top:16px;
- width:3.25em;
+ width:3em;
  text-align:left;
  opacity:0.7;
+}
+
+.vol-label-np {
+ text-align:right !important;
+ padding-right:4px !important;
 }
 
 .np-bar {

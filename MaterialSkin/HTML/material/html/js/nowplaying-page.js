@@ -301,7 +301,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (val) {
                         this.info.show = false;
                     }
-                    c = val;
+                    this.largeView = val;
                 }.bind(this));
             }
         } else {

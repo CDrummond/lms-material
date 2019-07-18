@@ -12,7 +12,7 @@ Vue.component('lms-bottomnav', {
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress="browsePressed" v-bind:class="{'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <v-icon>{{item.icon}}</v-icon>
+    <img class="nav-svg-img" :src="item.svg | svgIcon(darkUi)"></img>
    </v-btn>
    <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" v-longpress="npPressed" v-bind:class="{'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
@@ -41,9 +41,9 @@ Vue.component('lms-bottomnav', {
     methods: {
         initItems() {
             this.items = [
-                          { text: i18n('Browse'),  icon: 'music_note',          page: 'browse' },
-                          { text: i18n('Playing'), icon: 'play_circle_outline', page: 'now-playing' },
-                          { text: i18n('Queue'),   icon: 'queue_music',         page: 'queue' },
+                          { text: i18n('Browse'),  svg:  'library-music-outline', page: 'browse' },
+                          { text: i18n('Playing'), icon: 'music_note',            page: 'now-playing' },
+                          { text: i18n('Queue'),   icon: 'queue_music',           page: 'queue' },
                          ];
         },
         setPage(page, longPress) {
@@ -72,7 +72,15 @@ Vue.component('lms-bottomnav', {
                 return 1;
             }
             return 2;
+        },
+        darkUi () {
+            return this.$store.state.darkUi
         }
-    }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
+        }
+    },
 })
 

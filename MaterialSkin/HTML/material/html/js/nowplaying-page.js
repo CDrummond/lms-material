@@ -704,21 +704,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[REVIEW_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[REVIEW_TAB].album_id=this.infoTrack.album_id;
                 var command = ["musicartistinfo", "albumreview", "html:1"];
-                if (this.infoTrack.albumartist_ids!=undefined) {
-                    command.push("artist_id:"+this.infoTrack.albumartist_ids.split(", ")[0]);
-                } else if (this.infoTrack.artist_id!=undefined) {
-                    command.push("artist_id:"+this.infoTrack.artist_id);
-                }
-                if (this.infoTrack.albumartist!=undefined) {
-                    command.push("artist:"+this.infoTrack.albumartist);
-                } else if (this.infoTrack.artist!=undefined) {
-                    command.push("artist:"+this.infoTrack.artist);
-                }
                 if (this.infoTrack.album_id!=undefined) {
                     command.push("album_id:"+this.infoTrack.album_id);
-                }
-                if (this.infoTrack.album!=undefined) {
-                    command.push("album:"+this.infoTrack.album);
+                } else {
+                    if (this.infoTrack.album!=undefined) {
+                        command.push("album:"+this.infoTrack.album);
+                    }
+                    if (this.infoTrack.albumartist_ids!=undefined) {
+                        command.push("artist_id:"+this.infoTrack.albumartist_ids.split(", ")[0]);
+                    } else if (this.infoTrack.artist_id!=undefined) {
+                        command.push("artist_id:"+this.infoTrack.artist_id);
+                    }
+                    if (this.infoTrack.albumartist!=undefined) {
+                        command.push("artist:"+this.infoTrack.albumartist);
+                    } else if (this.infoTrack.artist!=undefined) {
+                        command.push("artist:"+this.infoTrack.artist);
+                    }
                 }
 
                 lmsCommand("", command).then(({data}) => {

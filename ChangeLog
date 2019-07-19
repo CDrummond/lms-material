@@ -16,6 +16,8 @@
     designed to show only now playing info.
 10. New icon for 'Browse' tab, and use musci note for now-playing tab, in mobile
     layout.
+11. When getting album revie from MAI, if we have an album_id then just pass
+    that and not other details.
 
 0.9.0
 -----

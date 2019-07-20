@@ -299,6 +299,7 @@ body {
  font-size: 160px;
  line-height: 160px;
  width: calc(1vw * var(--splitter-pc));
+ pointer-events:none;
 }
 
 .ios-vcard-text-workaround {

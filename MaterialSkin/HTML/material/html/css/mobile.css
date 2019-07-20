@@ -208,6 +208,7 @@
  font-size: 160px;
  line-height: 160px;
  width: 100%;
+ pointer-events:none;
 }
 
 .ios-vcard-text-workaround {

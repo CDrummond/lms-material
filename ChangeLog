@@ -19,6 +19,8 @@
 11. When getting album review from MAI, if we have an album_id then just pass
     that and not other details.
 12. Move 'New Music' to top-level for non-server-categories.
+13. Fix technical info not showing n mini-player (this view also needs to listen
+    to resize events, so that info is shown if wide enough).
 
 0.9.0
 -----

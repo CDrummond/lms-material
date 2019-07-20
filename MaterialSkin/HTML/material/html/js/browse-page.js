@@ -493,7 +493,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                   type: "group",
                   group: GROUP_MY_MUSIC,
                   id: TOP_PLAYLISTS_ID,
-                  section: SECTION_PLAYLISTS }
+                  section: SECTION_PLAYLISTS },
+                { title: i18n("New Music"),
+                  command: ["albums"],
+                  params: [ALBUM_TAGS, SORT_KEY+"new"],
+                  icon: "new_releases",
+                  type: "group",
+                  id: TOP_NEW_MUSIC_ID }
                 ];
             this.addExtraItems(this.top, true);
             if (this.separateArtists) {
@@ -548,12 +554,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                   icon: "date_range",
                   type: "group",
                   id: TOP_ID_PREFIX+"yr" },
-                { title: i18n("New Music"),
-                  command: ["albums"],
-                  params: [ALBUM_TAGS, SORT_KEY+"new"],
-                  icon: "new_releases",
-                  type: "group",
-                  id: TOP_NEW_MUSIC_ID },
                 { title: i18n("Music Folder"),
                   command: ["readdirectory"],
                   params: [],

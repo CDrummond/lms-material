@@ -65,10 +65,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
    </v-list-tile-content>
    <v-list-tile-action>
-    <div v-if="techInfo || ratingsSupported"><div class="np-tech-desktop">{{techInfo && (wide || !showRatings) ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
+    <div v-if="(techInfo || ratingsSupported) && wide>0"><div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings && (landscape && wide>0)" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
     <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop" @click="toggleTime()">{{formattedTime}}</div>
     <div v-else class="np-tech-desktop">&nbsp;</div>
-    <div v-if="techInfo || ratingsSupported || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+    <div v-if="((techInfo || ratingsSupported) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
     <div v-else class="np-time-desktop" @click="toggleTime()">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
    <v-list-tile-action>
   </v-list-tile>
@@ -143,7 +143,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
  <div v-else>
   <div v-if="landscape">
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': wide}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -156,7 +156,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
     </div>
-    <div v-if="wide">
+    <div v-if="landscape && wide>1">
 
      <v-layout text-xs-center row wrap class="np-controls-wide">
       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
@@ -215,7 +215,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text" v-else>&nbsp;</p>
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
   </div>
-  <v-layout text-xs-center row wrap class="np-controls" v-if="!wide">
+  <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
@@ -284,7 +284,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  showTotal: true,
                  portraitPad: 0,
                  landscape: false,
-                 wide: false,
+                 wide: 0,
                  largeView: false,
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, setting:false},
@@ -480,10 +480,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.landscape = isLandscape();
-        this.wide = this.landscape && isWide();
-        bus.$on('screenLayoutChanged', function() {
+        this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        bus.$on('windowWidthChanged', function() {
             this.landscape = isLandscape();
-            this.wide = this.landscape && isWide();
+            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
         }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {

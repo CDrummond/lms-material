@@ -6,8 +6,6 @@
  */
 
 var autoLayout = false;
-var landscape = undefined;
-var wide = undefined;
 function checkLayout() {
     if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
@@ -15,12 +13,6 @@ function checkLayout() {
         } else if (window.innerWidth>=600 && /*(!IS_MOBILE || window.innerHeight>=600) &&*/ window.location.href.indexOf("/mobile")>1) {
             window.location.href = "desktop";
         }
-    }
-
-    if (undefined==landscape || undefined==wide || landscape!=isLandscape() || wide!=isWide()) {
-        landscape=isLandscape();
-        wide=isWide();
-        bus.$emit("screenLayoutChanged");
     }
 }
 

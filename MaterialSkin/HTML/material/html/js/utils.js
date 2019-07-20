@@ -407,10 +407,6 @@ function isLandscape() {
     return window.innerWidth > window.innerHeight;
 }
 
-function isWide() {
-    return window.innerWidth>=900;
-}
-
 function incrementVolume() {
     bus.$emit("adjustVolume", true);
 }

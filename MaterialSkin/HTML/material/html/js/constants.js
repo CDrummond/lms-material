@@ -24,3 +24,7 @@ const LMS_LIST_ELEMENT_SIZE = 57;
 const LMS_BLANK_COVER = "/music/0/cover.jpg";
 const LMS_BLANK_IMAGE = "html/images/blank.png";
 const LMS_DOUBLE_CLICK_TIMEOUT = 300;
+const LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
+                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
+const LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);

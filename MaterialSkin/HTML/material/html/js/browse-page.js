@@ -49,10 +49,6 @@ const SECTION_PLAYLISTS = 4;
 const GROUP_PINNED = 0;
 const GROUP_MY_MUSIC = 1;
 const GROUP_OTHER_MUSIC = 2;
-const CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
-                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
-                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
-const COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...CONDUCTOR_GENRES]);
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 
@@ -835,7 +831,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "album",
                               type: "group",
                               id: item.id+"albums"}];
-                if (COMPOSER_GENRES.has(item.title) || CONDUCTOR_GENRES.has(item.title)) {
+                if (LMS_COMPOSER_GENRES.has(item.title) || LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
                                         params: ["role_id:COMPOSER", item.params[0]],
@@ -845,7 +841,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         group: GROUP_MY_MUSIC,
                                         id: item.id+"composers"});
                 }
-                if (CONDUCTOR_GENRES.has(item.title)) {
+                if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
                                         command: ["artists"],
                                         params: ["role_id:CONDUCTOR", item.params[0]],

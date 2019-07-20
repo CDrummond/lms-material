@@ -23,6 +23,7 @@
     to resize events, so that info is shown if wide enough).
 14. Make letter-overlay ignore click events, and allow these to fall through to
     item below.
+15. Fix mini-player when playing tracks with a composer.
 
 0.9.0
 -----

@@ -499,6 +499,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   params: [ALBUM_TAGS, SORT_KEY+"new"],
                   icon: "new_releases",
                   type: "group",
+                  group: GROUP_MY_MUSIC,
                   id: TOP_NEW_MUSIC_ID }
                 ];
             this.addExtraItems(this.top, true);

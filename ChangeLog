@@ -12,15 +12,15 @@
  7. For mobile layout, only toggle play/pause and info button if screen width is
     less than 600px.
  8. No need for lazy-load of images with recycler.
- 9. Add a "now-playing" view. This is the same a the expanded desktop view, but
+ 9. Add a "now-playing" view. This is the same as the expanded desktop view, but
     designed to show only now playing info.
-10. New icon for 'Browse' tab, and use musci note for now-playing tab, in mobile
+10. New icon for 'Browse' tab, and use music note for now-playing tab, in mobile
     layout.
 11. When getting album review from MAI, if we have an album_id then just pass
     that and not other details.
 12. Move 'New Music' to top-level for non-server-categories.
-13. Fix technical info not showing n mini-player (this view also needs to listen
-    to resize events, so that info is shown if wide enough).
+13. Fix technical info not showing in mini-player (this view also needs to
+    listen to resize events, so that info is shown if wide enough).
 14. Make letter-overlay ignore click events, and allow these to fall through to
     item below.
 15. Fix mini-player when playing tracks with a composer.

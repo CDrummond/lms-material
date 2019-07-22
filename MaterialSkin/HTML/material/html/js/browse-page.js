@@ -789,6 +789,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
+            if ("image"==item.type) {
+                this.showImage(index);
+                return;
+            }
             if ("audio"==item.type  || "track"==item.type ||
                 ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))) {

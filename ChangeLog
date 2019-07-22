@@ -10,6 +10,7 @@
 5. Use plugin to recolour SVG images, as opposed to having dark and light
    variants.
 6. Colour active tab icon and label, as this matches material.
+7. Fix showing images.
 
 0.9.1
 -----

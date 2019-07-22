@@ -1,6 +1,8 @@
 0.9.2
 -----
 1. Fix Qobuz (and others?) search field.
+2. Use new CSS line-clamp property to limit each section of now-playing text
+   (e.g. title, artist, album) to 2 lines.
 
 0.9.1
 -----

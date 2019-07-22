@@ -55,7 +55,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
   <v-list-tile style>
    <v-list-tile-content>
-    <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
+    <v-list-tile-title v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-list-tile-title>
     <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</v-list-tile-sub-title>
     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</v-list-tile-sub-title>
@@ -145,7 +145,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="landscape">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
-    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{title | limitStr}}</div>
+    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -156,7 +156,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
     </div>
-    <div v-if="landscape && wide>1">
+    <div v-if="wide>1">
 
      <v-layout text-xs-center row wrap class="np-controls-wide">
       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
@@ -206,7 +206,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
   <div v-else>
    <div v-bind:style="{height: portraitPad+'px'}"></div>
-   <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{title}}</p>
+   <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
    <p class="np-text" v-else>&nbsp;</p>

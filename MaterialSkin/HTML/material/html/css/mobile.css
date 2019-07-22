@@ -167,7 +167,7 @@
 }
 
 .np-details-landscape {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 132px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 118px));
  width:50vw;
  display:flex;
  justify-content:center;

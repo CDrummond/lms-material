@@ -3,6 +3,10 @@
 1. Fix Qobuz (and others?) search field.
 2. Use new CSS line-clamp property to limit each section of now-playing text
    (e.g. title, artist, album) to 2 lines.
+3. When getting lyrics from MAI, if we have a track_id then just pass that and
+   not other details.
+4. When getting biography from MAI, if we have an artist_id then just pass that
+   and not artist name string.
 
 0.9.1
 -----

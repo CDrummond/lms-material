@@ -622,17 +622,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[LYRICS_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
                 var command = ["musicartistinfo", "lyrics", "html:1"];
-                if (this.infoTrack.title!=undefined) {
-                    command.push("title:"+this.infoTrack.title);
-                }
                 if (this.infoTrack.track_id!=undefined) {
                     command.push("track_id:"+this.infoTrack.track_id);
-                }
-                if (this.infoTrack.artist_id!=undefined) {
-                    command.push("artist_id:"+this.infoTrack.artist_id);
-                }
-                if (this.infoTrack.artist!=undefined && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1)) {
-                    command.push("artist:"+this.infoTrack.artist);
+                } else {
+                    if (this.infoTrack.title!=undefined) {
+                        command.push("title:"+this.infoTrack.title);
+                    }
+                    if (this.infoTrack.artist_id!=undefined) {
+                        command.push("artist_id:"+this.infoTrack.artist_id);
+                    }
+                    if (this.infoTrack.artist!=undefined && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1)) {
+                        command.push("artist:"+this.infoTrack.artist);
+                    }
                 }
                 lmsCommand("", command).then(({data}) => {
                     if (data && data.result && (data.result.lyrics || data.result.error)) {
@@ -679,8 +680,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     var command = ["musicartistinfo", "biography", "html:1"];
                     if (this.infoTrack.artist_id!=undefined) {
                         command.push("artist_id:"+this.infoTrack.artist_id);
-                    }
-                    if (this.infoTrack.artist!=undefined && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1)) {
+                    } else if (this.infoTrack.artist!=undefined && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(", ").length==1)) {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                     lmsCommand("", command).then(({data}) => {

@@ -7,6 +7,9 @@
    not other details.
 4. When getting biography from MAI, if we have an artist_id then just pass that
    and not artist name string.
+5. Use plugin to recolour SVG images, as opposed to having dark and light
+   variants.
+6. Colour active tab icon and label, as this matches material.
 
 0.9.1
 -----

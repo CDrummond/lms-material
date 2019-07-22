@@ -564,7 +564,7 @@ Vue.component('lms-toolbar', {
             return value<0 ? -1*value : value;
         },
         svgIcon: function (name, dark) {
-            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
+            return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

@@ -89,3 +89,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .nav-svg-img {
  opacity:0.85;
 }
+
+.active-nav div span, .active-nav div i {
+ color: #87a9ff !important
+}

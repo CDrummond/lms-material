@@ -2331,7 +2331,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return i18np("1 Selected Item", "%1 Selected Items", value);
         },
         svgIcon: function (name, dark) {
-            return "html/images/"+name+(dark ? "-dark" : "-light")+".svg?r=" + LMS_MATERIAL_REVISION;
+            return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     beforeDestroy() {

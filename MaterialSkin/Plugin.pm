@@ -6,12 +6,17 @@ use Slim::Utils::Network;
 use Slim::Utils::Prefs;
 use JSON::XS::VersionOneAndTwo;
 use Slim::Utils::Strings qw(string cstring);
+use HTTP::Status qw(RC_NOT_FOUND RC_OK);
+use File::Basename;
+use File::Slurp qw(read_file);
 
 my $log = Slim::Utils::Log->addLogCategory({
     'category' => 'plugin.material-skin',
     'defaultLevel' => 'ERROR',
     'description' => 'PLUGIN_MATERIAL_SKIN'
 });
+
+my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)};
 
 sub initPlugin {
     my $class = shift;
@@ -37,6 +42,7 @@ sub initPlugin {
             $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
         } );
+        Slim::Web::Pages->addRawFunction($URL_PARSER_RE, \&_svgHandler);
     }
 
     $class->initCLI();
@@ -102,8 +108,8 @@ sub _cliCommand {
 
         # curl 'http://192.168.1.16:9000/jsonrpc.js' --data-binary '{"id":1,"method":"slim.request","params":["aa:aa:b5:38:e2:d7",["connect","192.168.1.66"]]}'
         my $http = Slim::Networking::SimpleAsyncHTTP->new(
-            \&_connect_done,
-            \&_connect_error,
+            \&_connectDone,
+            \&_connectError,
             {
                 timeout => 10,
                 server  => $server,
@@ -171,7 +177,7 @@ sub _cliCommand {
     $request->setStatusBadParams()
 }
 
-sub _connect_done {
+sub _connectDone {
     main::INFOLOG && $log->is_info && $log->info('Connect response recieved player');
     # curl 'http://localhost:9000/jsonrpc.js' --data-binary '{"id":1,"method":"slim.request","params":["aa:aa:b5:38:e2:d7",["disconnect","192.168.1.16"]]}'
     my $http   = shift;
@@ -192,8 +198,31 @@ sub _connect_done {
     }
 }
 
-sub _connect_error {
+sub _connectError {
     # Ignore?
+}
+
+sub _svgHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $dir = dirname(__FILE__);
+    my $filePath = $dir . "/HTML/material/html/images/" . basename($request->uri->path) . ".svg";
+    my $colour = "#" . $request->uri->query_param('c');
+
+    if (-e $filePath) {
+        my $svg = read_file($filePath);
+        $svg =~ s/#000/$colour/g;
+        $response->code(RC_OK);
+        $response->content_type('image/svg+xml');
+        $response->header('Connection' => 'close');
+        $response->content($svg);
+    } else {
+        $response->code(RC_NOT_FOUND);
+    }
+    $httpClient->send_response($response);
+    Slim::Web::HTTP::closeHTTPSocket($httpClient);
 }
 
 1;

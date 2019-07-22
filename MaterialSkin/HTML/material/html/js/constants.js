@@ -28,3 +28,7 @@ const LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Ch
                                   "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
 const LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);
+const LMS_DARK_SVG = "fff";
+const LMS_LIGHT_SVG = "444";
+const LMS_DARK_ACTIVE_SVG ="87a9ff";
+const LMS_LIGHT_ACTIVE_SVG = "346dd2";

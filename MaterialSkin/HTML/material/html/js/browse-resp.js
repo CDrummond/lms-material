@@ -337,8 +337,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.draggable = true;
                 }
                 resp.items.push(i);
+                types.add(i.type);
             }
-            types.add(i.type);
 
             if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
                 resp.canUseGrid = false;

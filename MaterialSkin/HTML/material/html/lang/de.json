@@ -197,7 +197,6 @@
 "Scroll to current track":"Zum aktuellen Titel springen",
 "Search":"Suche",
 "Search library":"Sammlung durchsuchen",
-"Search:":"Suche:",
 "Select":"Auswählen",
 "Select All":"Alle wählen",
 "Select category":"Wähle Kategorie",
@@ -340,10 +339,12 @@
 "Move queue to another player":"",
 "Name":"",
 "OK":"",
+"On song change":"",
 "Plugins":"",
 "Radio":"",
 "Select the player you wish to move the queue to:":"",
 "Server":"",
 "Start":"",
-"URL":""
+"URL":"",
+"Volume gain":""
 }

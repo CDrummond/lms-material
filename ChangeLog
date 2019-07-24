@@ -1,15 +1,16 @@
 0.9.3
 -----
-1. Update Dutch translation - thanks to Blackfiction.
-2. Add searched terms to list title.
-3. Fix dimmer browse icon using dark theme mobile layout.
-4. Prevent queue flicker when toggle power state of player.
-5. When fetching lyrics, only use ID if its not negative.
-6. Update Frech translation - thaks to Franck@
-7. Swap when expand/collapse button is shown. Previously the icon/label was used
-   to indicate state.
-8. Mark "On song change" and "Volume gain" for translation.
-9. For consistency, use "Player settings" in manage players dialog.
+ 1. Update Dutch translation - thanks to Blackfiction.
+ 2. Add searched terms to list title.
+ 3. Fix dimmer browse icon using dark theme mobile layout.
+ 4. Prevent queue flicker when toggle power state of player.
+ 5. When fetching lyrics, only use ID if its not negative.
+ 6. Update Frech translation - thaks to Franck@
+ 7. Swap when expand/collapse button is shown. Previously the icon/label was
+    used to indicate state.
+ 8. Mark "On song change" and "Volume gain" for translation.
+ 9. For consistency, use "Player settings" in manage players dialog.
+10. Listen for 'click' and not 'touchend' to make media controls show.
 
 0.9.2
 -----

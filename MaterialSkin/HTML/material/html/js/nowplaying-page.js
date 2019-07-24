@@ -622,7 +622,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[LYRICS_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
                 var command = ["musicartistinfo", "lyrics", "html:1"];
-                if (this.infoTrack.track_id!=undefined) {
+                if (this.infoTrack.track_id!=undefined && !(""+this.infoTrack.track_id).startsWith("-")) {
                     command.push("track_id:"+this.infoTrack.track_id);
                 } else {
                     if (this.infoTrack.title!=undefined) {

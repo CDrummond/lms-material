@@ -18,7 +18,8 @@ var mediaInterval = undefined;
 function initMediaSessionAudio() {
     if (mediaAudio == undefined) {
         mediaAudio = document.createElement('audio');
-        window.removeEventListener('touchend', initMediaSessionAudio);
+        //window.removeEventListener('touchend', initMediaSessionAudio);
+        window.removeEventListener('click', initMediaSessionAudio);
         setTimeout(function () {
             toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
         }, 500);
@@ -307,7 +308,8 @@ Vue.component('lms-toolbar', {
 
         if ('mediaSession' in navigator) {
             toolbarComponent = this;
-            window.addEventListener('touchend', initMediaSessionAudio);
+            //window.addEventListener('touchend', initMediaSessionAudio);
+            window.addEventListener('click', initMediaSessionAudio);
             this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
             navigator.mediaSession.setActionHandler('play', () => {
                 if (this.playerStatus && this.playerStatus.isplaying) {

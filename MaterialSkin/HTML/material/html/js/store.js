@@ -130,7 +130,7 @@ const store = new Vuex.Store({
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     var a = state.players[i];
                     var b = players[i];
-                    if (a.id!=b.id || a.name!=b.name || a.canpoweroff!=b.canpoweroff || a.ison!=b.ison || a.isconnected!=b.isconnected || a.isgroup!=b.isgroup) {
+                    if (a.id!=b.id || a.name!=b.name) { // || a.canpoweroff!=b.canpoweroff || a.ison!=b.ison || a.isconnected!=b.isconnected || a.isgroup!=b.isgroup) {
                         changed = true;
                         break;
                     }
@@ -171,9 +171,6 @@ const store = new Vuex.Store({
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.player.id) {
                             found = true;
-                            if (changed) {
-                                state.player = state.players[i];
-                            }
                             break;
                         }
                     }
@@ -188,7 +185,7 @@ const store = new Vuex.Store({
                 if (config) {
                     state.players.forEach(p => {
                         if (p.id === config || p.name == config) {
-                            state.player = p;   
+                            state.player = {id:p.id, name:p.name};
                         }
                     });
                 }
@@ -201,7 +198,7 @@ const store = new Vuex.Store({
                     for (var j=0; j<4 && !state.player; ++j) {
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
-                                state.player=state.players[i];
+                                state.player = {id:state.players[i].id, name:state.players[i].name};
                                 setLocalStorageVal('player', state.player.id);
                                 break;
                             }
@@ -219,7 +216,7 @@ const store = new Vuex.Store({
             if (state.players) {
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === id) {
-                        state.player = state.players[i];
+                        state.player = {id:state.players[i].id, name:state.players[i].name};
                         setLocalStorageVal('player', id);
                         break;
                     }

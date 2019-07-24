@@ -182,7 +182,7 @@ Vue.component('lms-toolbar', {
     props: ['desktop', 'nowplaying', 'mini'],
     data() {
         return { songInfo:undefined,
-                 playlist: { count: undefined, duration: undefined },
+                 playlist: { count: "", duration: "" },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  otherMenuItems:{},
@@ -210,7 +210,7 @@ Vue.component('lms-toolbar', {
                 if (count>0) {
                     this.playlist.count = i18np("1 Track", "%1 Tracks", count);
                 } else {
-                    this.playlist.count = undefined;
+                    this.playlist.count = "";
                 }
                 if (duration>0) {
                     this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";

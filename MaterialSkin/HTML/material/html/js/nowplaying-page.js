@@ -808,7 +808,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout(this.clickTimer);
-                    if (IS_MOBILE) {
+                    if (isIOS()) {
                         this.showMenu(event);
                     }
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);

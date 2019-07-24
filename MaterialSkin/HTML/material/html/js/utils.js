@@ -284,6 +284,10 @@ function isAndroid() {
     return /Android/i.test(navigator.userAgent);
 }
 
+function isIOS() {
+    return /iPhone|iPad/i.test(navigator.userAgent);
+}
+
 function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }

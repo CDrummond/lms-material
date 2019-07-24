@@ -13,6 +13,8 @@
 10. Listen for 'click' and not 'touchend' to make media controls show.
 11. Click on 'No playing' tab whilst already on 'Now playing' will toggle song
     info.
+12. Click on cover in 'Now playing' only shows context menu for iOS, as other
+    OS's can use context menu event.
 
 0.9.2
 -----

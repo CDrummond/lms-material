@@ -43,6 +43,9 @@ sub initPlugin {
             return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
         } );
         Slim::Web::Pages->addRawFunction($URL_PARSER_RE, \&_svgHandler);
+
+        # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
+        Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
     }
 
     $class->initCLI();

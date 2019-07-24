@@ -441,7 +441,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
-            this.fetchItems({command: command, params: params}, {cancache:false, title:term, id:"search"==command[0] ? TOP_SEARCH_ID : "search:"+command[0]});
+            this.enteredTerm = term;
+            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? TOP_SEARCH_ID : "search:"+command[0], type:"search"});
         }.bind(this));
     },
     methods: {
@@ -623,7 +624,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.addHistory();
                 this.command = command;
                 this.currentBaseActions = this.baseActions;
-                this.headerTitle=item.title ? (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title) : "?";
+                this.headerTitle=item.title
+                                    ? (item.type=="search" || item.type=="entry") && undefined!=this.enteredTerm
+                                        ? item.title+SEPARATOR+this.enteredTerm
+                                        : (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title)
+                                    : "?";
                 this.current = item;
                 this.currentLibId = command.libraryId;
                 this.listSize = item.range ? item.range.count : resp.total;

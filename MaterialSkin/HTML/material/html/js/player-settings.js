@@ -28,10 +28,10 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Audio')}}</v-header>
     <v-list-tile>
-     <v-select :items="crossfadeItems" label="On song change" v-model="crossfade" item-text="label" item-value="key"></v-select>
+     <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-list-tile>
-     <v-select :items="replaygainItems" label="Volume gain" v-model="replaygain" item-text="label" item-value="key"></v-select>
+     <v-select :items="replaygainItems" :label="i18n('Volume gain')" v-model="replaygain" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-list-tile v-if="dstmItems && dstmItems.length>1">
      <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>

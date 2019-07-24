@@ -8,7 +8,7 @@
 var PMGR_EDIT_GROUP_ACTION   = {cmd:"edit",     icon:"edit"};
 var PMGR_DELETE_GROUP_ACTION = {cmd:"delete",   icon:"delete"};
 var PMGR_SYNC_ACTION         = {cmd:"sync",     icon:"link"};
-var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"settings"};
+var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"speaker"};
 var PMGR_POWER_ON_ACTION     = {cmd:"on",       icon:"power_settings_new", dimmed:true};
 var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new"};
 var PMGR_SLEEP_ACTION        = {cmd:"sleep",    icon:"hotel"};
@@ -174,7 +174,7 @@ Vue.component('lms-manage-players', {
             PMGR_EDIT_GROUP_ACTION.title=i18n("Edit");
             PMGR_DELETE_GROUP_ACTION.title=i18n("Delete");
             PMGR_SYNC_ACTION.title=i18n("Synchronise");
-            PMGR_SETTINGS_ACTION.title=i18n("Settings");
+            PMGR_SETTINGS_ACTION.title=i18n("Player settings");
             PMGR_POWER_ON_ACTION.title=i18n("Switch on");
             PMGR_POWER_OFF_ACTION.title=i18n("Switch off");
             PMGR_SLEEP_ACTION.title=i18n("Sleep");

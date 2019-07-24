@@ -4,6 +4,7 @@
 2. Add searched terms to list title.
 3. Fix dimmer browse icon using dark theme mobile layout.
 4. Prevent queue flicker when toggle power state of player.
+5. When fetching lyrics, only use ID if its not negative.
 
 0.9.2
 -----

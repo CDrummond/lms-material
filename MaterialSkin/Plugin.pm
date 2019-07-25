@@ -16,7 +16,7 @@ my $log = Slim::Utils::Log->addLogCategory({
     'description' => 'PLUGIN_MATERIAL_SKIN'
 });
 
-my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)};
+my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 
 sub initPlugin {
     my $class = shift;

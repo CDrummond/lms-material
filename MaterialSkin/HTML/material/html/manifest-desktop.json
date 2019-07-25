@@ -1,0 +1,17 @@
+{
+  "name": "LMS Desktop UI",
+  "short_name": "LMS",
+  "theme_color": "#424242",
+  "background_color": "#424242",
+  "display": "standalone",
+  "scope": "/material",
+  "start_url": "/material/desktop",
+  "icons": [
+    {
+      "src": "html/images/icon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}

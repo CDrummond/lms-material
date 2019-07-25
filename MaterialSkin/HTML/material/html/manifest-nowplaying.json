@@ -1,0 +1,17 @@
+{
+  "name": "LMS Now-Playing",
+  "short_name": "LMS",
+  "theme_color": "#424242",
+  "background_color": "#424242",
+  "display": "fullscreen",
+  "scope": "/material",
+  "start_url": "/material/now-playing",
+  "icons": [
+    {
+      "src": "html/images/icon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}

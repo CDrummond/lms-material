@@ -104,10 +104,10 @@ function resolveImageUrl(image, size) {
     image=""+image; // Ensure its a string!
     if ((image.includes("http://") || image.includes("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
         if (useMySqueezeboxImageProxy) {
-            var s=size ? size.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SZ;
+            var s=size ? size.split('x')[0].replace('_', '') : LMS_IMAGE_SZ;
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
         } else {
-            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_LIST_IMAGE_SIZE);
+            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_IMAGE_SIZE);
         }
     }
 
@@ -116,9 +116,9 @@ function resolveImageUrl(image, size) {
         idx = image.lastIndexOf(".jpg");
     }
     if (idx<0 && /^[0-9a-fA-F]+$/.test(image)) {
-        image="music/"+image+"/cover"+(size ? size : LMS_LIST_IMAGE_SIZE);
+        image="music/"+image+"/cover"+(size ? size : LMS_IMAGE_SIZE);
     } else if (idx>0) {
-        image = image.substring(0, idx)+(size ? size : LMS_LIST_IMAGE_SIZE)+image.substring(idx);
+        image = image.substring(0, idx)+(size ? size : LMS_IMAGE_SIZE)+image.substring(idx);
     }
     return image.startsWith("/") ? image : ("/"+image);
 }
@@ -144,7 +144,7 @@ function changeImageSizing(path, newSize) {
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?u="+url;
         }
 
-        var specs = [LMS_LIST_IMAGE_SIZE, LMS_GRID_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, "_50x50_o"];
+        var specs = [LMS_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, "_50x50_o"];
         for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {
                 return path.replace(specs[s]+".png", (newSize ? newSize : "")+".png");
@@ -632,38 +632,6 @@ function getAlbumSort(command) {
 
 function setAlbumSort(command, sort) {
     setLocalStorageVal(commandAlbumSortKey(command), sort);
-}
-
-function changeImageUrls(items, grid) {
-    if (undefined==items || items.length<1) {
-        return;
-    }
-    var f = grid ? LMS_LIST_IMAGE_SIZE : LMS_GRID_IMAGE_SIZE;
-    var t = grid ? LMS_GRID_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE;
-    var changed = false;
-    for (var i=0, len=items.length; i<len; ++i) {
-        if (items[i].image && (changed || items[i].image.includes(f))) {
-            items[i].image=items[i].image.replace(f, t);
-            changed = true;
-        }
-    }
-
-    if (changed) {
-        return;
-    }
-
-    // And for remote URLs...
-    var f = grid ? LMS_LIST_IMAGE_SIZE.split('x')[0].replace('_', '') : LMS_GRID_IMAGE_SIZE.split('x')[0].replace('_', '');
-    var t = grid ? LMS_GRID_IMAGE_SIZE.split('x')[0].replace('_', '') : LMS_LIST_IMAGE_SIZE.split('x')[0].replace('_', '');
-    f="w="+f+"&h="+f;
-    t="w="+t+"&h="+t;
-
-    for (var i=0, len=items.length; i<len; ++i) {
-        if (items[i].image && (changed || (items[i].image.startsWith(MY_SQUEEZEBOX_IMAGE_PROXY) && items[i].image.includes(f)))) {
-            items[i].image=items[i].image.replace(f, t);
-            changed = true;
-        }
-    }
 }
 
 function folderName(path) {

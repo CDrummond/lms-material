@@ -913,6 +913,12 @@ div.v-subheader {
  margin-left:-4px;
 }
 
+.lms-avatar-small .v-avatar {
+ width:32px !important;
+ height:32px !important;
+ margin-left:6px;
+}
+
 .lms-jumplist {
  padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;

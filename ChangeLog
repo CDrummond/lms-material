@@ -16,7 +16,7 @@
 12. Click on cover in 'Now playing' only shows context menu for iOS, as other
     OS's can use context menu event.
 13. Add pre-caching of 300x300 artwork - thanks to Michael Herger.
-14. Use smaller apps, etc, avatars in pinned list, main radio ans apps lists.
+14. Use smaller apps, etc, avatars in pinned list, main radio and apps lists.
 15. Work-around CustomBrowse 999 item limit, by asking for list of items in
     chunks.
 

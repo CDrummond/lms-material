@@ -13,7 +13,7 @@ function queueItemCover(item) {
         return resolveImageUrl(item.artwork_url);
     }
     if (item.coverid && !(""+item.coverid).startsWith("-")) {
-        return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
+        return "/music/"+item.coverid+"/cover"+LMS_IMAGE_SIZE;
     }
     return resolveImageUrl(LMS_BLANK_COVER);
 }
@@ -804,7 +804,7 @@ var lmsQueue = Vue.component("lms-queue", {
             setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length) {
-                var resizedUrl = changeImageSizing(this.coverUrl, LMS_LIST_IMAGE_SIZE);
+                var resizedUrl = changeImageSizing(this.coverUrl, LMS_IMAGE_SIZE);
                 if (this.items[this.coverTrackIndex].image!=resizedUrl) {
                     // Change item's key to force an update...
                     this.items[this.coverTrackIndex].key=this.items[this.coverTrackIndex].id+"."+this.coverTrackIndex+"."+(new Date().getTime().toString(16));

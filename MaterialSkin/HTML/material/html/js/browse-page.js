@@ -1270,7 +1270,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setScrollElement();
                     this.setBgndCover();
                     this.layoutGrid();
-                    changeImageUrls(this.items, this.grid.use);
                     setUseGrid(this.command, this.grid.use);
                     var af = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
                     var at = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;

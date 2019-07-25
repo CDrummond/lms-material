@@ -106,9 +106,40 @@ function lmsCommand(playerid, command, isList) {
     }
 }
 
-async function lmsList(playerid, command, params, start, batchSize, cancache) {
+async function lmsListFragment(playerid, command, params, start, fagmentSize, batchSize, accumulated) {
     var cmdParams = command.slice();
-    cmdParams = [].concat(cmdParams, [undefined==start ? 0 : start, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
+    cmdParams = [].concat(cmdParams, [start, fagmentSize]);
+    if (params && params.length>0) {
+        cmdParams = [].concat(cmdParams, params);
+    }
+    return lmsCommand(playerid, cmdParams).then(({data}) => {
+        logJsonMessage("RESP", data);
+        if (data && data.result && data.result.item_loop) {
+            if (undefined==accumulated) {
+                accumulated = data;
+            } else {
+                accumulated.result.item_loop.push.apply(accumulated.result.item_loop, data.result.item_loop);
+            }
+            if (accumulated.result.item_loop.length>=data.result.count) {
+                return new Promise(function(resolve, reject) {
+                    resolve({data:accumulated});
+                });
+            } else {
+                return lmsListFragment(playerid, command, params, start+fagmentSize, fagmentSize, batchSize, accumulated);
+            }
+        }
+    });
+}
+
+async function lmsList(playerid, command, params, start, batchSize, cancache) {
+    var count = undefined===batchSize ? LMS_BATCH_SIZE : batchSize;
+
+    if (command.length>1 && command[0]=="custombrowse" && (command[1]=="browsejive" || command[1]=="browse") && count>999) {
+        return lmsListFragment(playerid, command, params, 0, 999, count);
+    }
+
+    var cmdParams = command.slice();
+    cmdParams = [].concat(cmdParams, [undefined==start ? 0 : start, count]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }

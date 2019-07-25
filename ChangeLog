@@ -19,6 +19,7 @@
 14. Use smaller apps, etc, avatars in pinned list, main radio and apps lists.
 15. Work-around CustomBrowse 999 item limit, by asking for list of items in
     chunks.
+16. Darken mobile bottom-nav area, to give buttons more contrast.
 
 0.9.2
 -----

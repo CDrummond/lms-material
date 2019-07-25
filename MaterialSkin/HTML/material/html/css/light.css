@@ -51,10 +51,6 @@ html, .mini-player {
  border-bottom:1px solid #f0f0f0;
 }
 
-.lms-bottom-nav {
- border-top:1px solid #ddd;
-}
-
 div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#0e0e0e !important;
 }

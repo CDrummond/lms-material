@@ -271,9 +271,9 @@
 "Sync":"Syncr.",
 "Synchronise":"Synchroniser",
 "Synchronise players":"Synchroniser les platines",
-"Term":"Paramètre",
-"Term is required":"Un paramètre est requis",
-"Term must be more than 1 character":"Le paramètre doit avoir plus d'un caractère",
+"Term":"Critère de recherche",
+"Term is required":"Un critère de recherche est requis",
+"Term must be more than 1 character":"Le critère de recherche doit avoir plus d'un caractère",
 "The following plugins have updates available:":"Des mises à jour sont disponibles pour les plugins suivants :",
 "Thurs":"Je",
 "Thursday":"Jeudi",
@@ -345,6 +345,6 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"On song change":"",
-"Volume gain":""
+"On song change":"Transition entre morceaux",
+"Volume gain":"Ajustement du volume (replay gain)"
 }

@@ -158,7 +158,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
    <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
-    <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+    <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar-small">
      <img :key="item.image" v-lazy="item.image">
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
@@ -180,7 +180,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
   </template>
 
-  <RecycleScroller v-if="grid.allowed || items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
+  <RecycleScroller v-if="(grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_MORE_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -226,7 +226,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID, 'lms-avatar': current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
      <img :key="item.image" v-lazy="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">

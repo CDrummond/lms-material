@@ -5,6 +5,10 @@
  * MIT license.
  */
 
+:root {
+ scrollbar-color:#777 #3d3d3d;
+}
+
 ::-webkit-scrollbar {
  background:#3d3d3d;
 }

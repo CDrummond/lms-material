@@ -8,8 +8,8 @@
   "start_url": "/material/now-playing",
   "icons": [
     {
-      "src": "html/images/icon.png",
-      "sizes": "128x128",
+      "src": "images/icon.png",
+      "sizes": "144x144",
       "type": "image/png"
     }
   ],

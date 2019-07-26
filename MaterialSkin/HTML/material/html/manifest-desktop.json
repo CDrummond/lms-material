@@ -5,11 +5,11 @@
   "background_color": "#424242",
   "display": "standalone",
   "scope": "/material",
-  "start_url": "/material/desktop",
+  "start_url": "/material",
   "icons": [
     {
       "src": "html/images/icon.png",
-      "sizes": "128x128",
+      "sizes": "144x144",
       "type": "image/png"
     }
   ],

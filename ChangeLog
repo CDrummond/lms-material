@@ -20,6 +20,7 @@
 15. Work-around CustomBrowse 999 item limit, by asking for list of items in
     chunks.
 16. Darken mobile bottom-nav area, to give buttons more contrast.
+17. Set Firefox scrollbar colours.
 
 0.9.2
 -----

@@ -1,6 +1,7 @@
 0.9.4
 -----
 1. Fix detecing if item is in favorites if its within a favorites folder.
+2. Try to use material icons, and not LMS icons, for favourites entries.
 
 0.9.3
 -----

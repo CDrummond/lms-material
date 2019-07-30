@@ -1079,7 +1079,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logError(err, command);
                 });
             } else if (act===REMOVE_FROM_FAV_ACTION) {
-                var id = SECTION_FAVORITES==this.current.section ? item.id : lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl].id;
+                var id = SECTION_FAVORITES==this.current.section ? item.id : "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
                 if (undefined==id) {
                     return;
                 }
@@ -1089,7 +1089,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         var command = ["favorites", "delete", id];
                         lmsCommand(this.playerId(), command).then(({datax}) => {
                             logJsonMessage("RESP", datax);
-                            this.refreshList();
+                            if (SECTION_FAVORITES==this.current.section) {
+                                this.refreshList();
+                            }
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to remove favorite!"), command);
                         });

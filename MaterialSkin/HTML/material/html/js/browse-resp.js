@@ -219,12 +219,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
                         i.icon="folder";
                         i.image=undefined;
+                        resp.canUseGrid=false;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
                         var infoPlugin = undefined;
 
                         if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {
                             i.icon="album";
                             i.image=undefined;
+                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
                             if (undefined==infoPlugin) {
                                 infoPlugin=getLocalStorageBool('infoPlugin');
@@ -232,19 +234,24 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             if (i.presetParams.icon=="html/images/artists.png" || !(infoPlugin && options.artistImages)) {
                                 i.svg="artist";
                                 i.image=undefined;
+                                resp.canUseGrid=false;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
                             i.icon="label";
                             i.image=undefined;
+                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
                             i.icon="date_range";
                             i.image=undefined;
+                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             i.icon="list";
                             i.image=undefined;
+                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("dynamicplaylist://") && i.presetParams.icon=="plugins/DynamicPlayList/html/images/dynamicplaylist.png") {
                             i.svg="dice-list";
                             i.image=undefined;
+                            resp.canUseGrid=false;
                         }
                     }
                 } else if (i.presetParams) {
@@ -374,7 +381,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
                 resp.canUseGrid = false;
-            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size &&
+            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size && !isFavorites &&
                (!types.has("text") && !types.has("search") && !types.has("entry") && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }

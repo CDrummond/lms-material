@@ -360,6 +360,7 @@ a {
  margin-left:4px;
  margin-bottom:0px !important;
  padding-bottom:0px !important;
+ min-width:2em;
 }
 
 .subtoolbar-title-single {

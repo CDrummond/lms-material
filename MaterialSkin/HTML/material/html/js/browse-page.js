@@ -192,6 +192,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>
     </v-list-tile-avatar>
+    <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
+    </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
     <v-subheader v-if="item.header">{{item.header}}</v-subheader>

@@ -126,7 +126,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     resp.total--;
                     continue;
                 }
-                if (resp.items.length==resp.total-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png') {
+                if (resp.items.length==resp.total-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
                     // Remove 'All Songs' entry
                     resp.total--;
                     continue;

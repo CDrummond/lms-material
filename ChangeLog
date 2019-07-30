@@ -2,6 +2,7 @@
 -----
 1. Fix detecing if item is in favorites if its within a favorites folder.
 2. Try to use material icons, and not LMS icons, for favourites entries.
+3. Enable history menu even when there is only a single text item in list.
 
 0.9.3
 -----

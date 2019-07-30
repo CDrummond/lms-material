@@ -702,11 +702,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
         } else if (data.result.fsitems_loop) {
+            var haveFolders = false;
+            var haveFiles = false;
             for (var idx=0, loop=data.result.fsitems_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var isFolder = parseInt(i.isfolder)==1;
                 var name = i.name;
                 if (isFolder) {
+                    haveFolders = true;
                     name = folderName(i.path);
                 } else {
                     if (!i.name || i.name.length<1) {
@@ -717,11 +720,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     if (!MUSIC_FILE_EXTENSIONS.has(ext)) {
                         continue;
                     }
+                    haveFiles = true;
                 }
                 var fixedPath = i.path.replace("\\", "\\\\");
                 var key = name.charAt(0).toUpperCase();
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key || resp.jumplist[resp.jumplist.length-1].folder!=isFolder)) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, folder:isFolder});
                 }
                 resp.items.push({
                               id: fixedPath,
@@ -734,6 +738,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               icon: isFolder ? "folder" : "music_note",
                               isFolderItem: true
                           });
+            }
+            if (haveFolders && !haveFiles) { // Not mixed folder/file - so don't need to distinguish
+                for (var idx=0, loopLen=resp.jumplist.length; idx<loopLen; ++idx) {
+                    resp.jumplist[idx].folder=undefined;
+                }
             }
             resp.total = resp.items.length;
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);

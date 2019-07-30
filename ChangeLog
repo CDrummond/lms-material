@@ -6,6 +6,7 @@
 4. Enable 'More' for artists, or albums, within a favourite.
 5. If showing jumplist for mixed folders and files, draw jumplist items for
    folders slighttly dimmer than files.
+6. Fix album not appearing in favourites, if it is the last item.
 
 0.9.3
 -----

@@ -247,7 +247,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.image=undefined;
                         }
                     }
-                    console.log(JSON.stringify(i));
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);

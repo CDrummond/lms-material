@@ -1,6 +1,6 @@
 0.9.4
 -----
-1. Fix detecing if item is in favorites if its within a favorites folder.
+1. Fix detecting if item is in favorites if its within a favorites folder.
 2. Try to use material icons, and not LMS icons, for favourites entries.
 3. Enable history menu even when there is only a single text item in list.
 4. Enable 'More' for artists, or albums, within a favourite.

@@ -571,7 +571,7 @@ function updateItemFavorites(item) {
 
 function isInFavorites(item) {
     updateItemFavorites(item);
-    return undefined!=lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl];
+    return lmsFavorites.has(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
 }
 
 function uniqueId(id, listSize) {

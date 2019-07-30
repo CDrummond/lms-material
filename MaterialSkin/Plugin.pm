@@ -1,6 +1,7 @@
 package Plugins::MaterialSkin::Plugin;
 
 use Config;
+use Slim::Utils::Favorites;
 use Slim::Utils::Log;
 use Slim::Utils::Network;
 use Slim::Utils::Prefs;
@@ -96,7 +97,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -173,6 +174,18 @@ sub _cliCommand {
         $from->execute(['sync', '-']);
         $from->execute(['playlist', 'clear']);
 
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'favorites') {
+        my $cnt = 0;
+        if (my $favsObject = Slim::Utils::Favorites->new()) {
+            foreach my $fav (@{$favsObject->all}) {
+                $request->addResultLoop("favs_loop", $cnt, "url", $fav->{url});
+                $cnt++;
+            }
+        }
         $request->setStatusDone();
         return;
     }

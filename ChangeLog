@@ -1,3 +1,7 @@
+0.9.4
+-----
+1. Fix detecing if item is in favorites if its within a favorites folder.
+
 0.9.3
 -----
  1. Update Dutch translation - thanks to Blackfiction.

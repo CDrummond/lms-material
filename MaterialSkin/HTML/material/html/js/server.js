@@ -431,22 +431,25 @@ var lmsServer = Vue.component('lms-server', {
             }.bind(this), 500);
         },
         updateFavorites() { // Update set of favorites URLs
-            lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
-                if (data && data.result && data.result.item_loop) {
-                    var loop = data.result.item_loop;
-                    var favs = {};
+            lmsCommand("", ["material-skin", "favorites"]).then(({data}) => {
+                if (data && data.result && data.result.favs_loop) {
+                    var loop = data.result.favs_loop;
+                    var favs = new Set();
+                    var changed = false;
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        if (loop[i].presetParams && loop[i].presetParams.favorites_url && loop[i].params) {
-                            var url = loop[i].presetParams.favorites_url;
+                        if (loop[i].url) {
+                            var url = loop[i].url;
                             var lib = url.indexOf("libraryTracks.library=");
                             if (lib>0) {
                                 url=url.substring(0, lib-1);
                             }
-                            favs[url]= { id:"item_id:"+loop[i].params.item_id,
-                                         text:loop[i].text };
+                            favs.add(url);
+                            if (!changed && !lmsFavorites.has(url)) {
+                               changed = true;
+                            }
                         }
                     }
-                    if (JSON.stringify(lmsFavorites) !== JSON.stringify(favs)) {
+                    if (changed || lmsFavorites.size!=favs.size) {
                         lmsFavorites = favs;
                         bus.$emit('refreshList', SECTION_FAVORITES);
                     }

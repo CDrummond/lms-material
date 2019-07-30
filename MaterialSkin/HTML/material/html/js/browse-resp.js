@@ -24,9 +24,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 totalResults += data.result.contributors_count;
                 resp.items.push({header: i18np("1 Artist", "%1 Artists", data.result.contributors_count), id:"search.artists"});
+                var infoPlugin = getLocalStorageBool('infoPlugin');
                 for (var idx=0, loop=data.result.contributors_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                     var i = loop[idx];
-                    var infoPlugin = getLocalStorageBool('infoPlugin');
                     resp.items.push({
                                   id: "artist_id:"+i.contributor_id,
                                   title: i.contributor,
@@ -105,7 +105,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
             var types = new Set();
-            var maybeAllowGrid = command!="trackstat"; // && command!="playhistory";
+            var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
+            var infoPlugin = undefined;
 
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
@@ -219,14 +220,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
                         i.icon="folder";
                         i.image=undefined;
-                        resp.canUseGrid=false;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
-                        var infoPlugin = undefined;
-
                         if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {
                             i.icon="album";
                             i.image=undefined;
-                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
                             if (undefined==infoPlugin) {
                                 infoPlugin=getLocalStorageBool('infoPlugin');
@@ -234,24 +231,19 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             if (i.presetParams.icon=="html/images/artists.png" || !(infoPlugin && options.artistImages)) {
                                 i.svg="artist";
                                 i.image=undefined;
-                                resp.canUseGrid=false;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
                             i.icon="label";
                             i.image=undefined;
-                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
                             i.icon="date_range";
                             i.image=undefined;
-                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             i.icon="list";
                             i.image=undefined;
-                            resp.canUseGrid=false;
                         } else if (i.presetParams.favorites_url.startsWith("dynamicplaylist://") && i.presetParams.icon=="plugins/DynamicPlayList/html/images/dynamicplaylist.png") {
                             i.svg="dice-list";
                             i.image=undefined;
-                            resp.canUseGrid=false;
                         }
                     }
                 } else if (i.presetParams) {
@@ -381,7 +373,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
             if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
                 resp.canUseGrid = false;
-            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size && !isFavorites &&
+            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size &&
                (!types.has("text") && !types.has("search") && !types.has("entry") && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }

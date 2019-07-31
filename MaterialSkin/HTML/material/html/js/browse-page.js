@@ -683,7 +683,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_FAV_ACTION];
                 }
                 if (resp.canUseGrid && !resp.forceGrid) {
-                    this.settingsMenuActions.unshift(this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION);
+                    this.settingsMenuActions.unshift(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);
                 }
                 if (this.command.command.length>0 && this.command.command[0]=="albums") {
                     var addSort=true;
@@ -1249,9 +1249,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         headerAction(act, event) {
             if (USE_LIST_ACTION==act) {
-                this.changeLayout(true);
-            } else if (USE_GRID_ACTION==act) {
                 this.changeLayout(false);
+            } else if (USE_GRID_ACTION==act) {
+                this.changeLayout(true);
             } else if (ALBUM_SORTS_ACTION==act) {
                 var sort="";
                 for (var i=0, len=this.command.params.length; i<len; ++i) {
@@ -1277,8 +1277,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setBgndCover();
                     this.layoutGrid();
                     setUseGrid(this.command, this.grid.use);
-                    var af = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
-                    var at = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
+                    var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
+                    var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
                     for (var i=0, len=this.settingsMenuActions.length; i<len; ++i) {
                         if (this.settingsMenuActions[i] == af) {
                             this.settingsMenuActions[i] = at;

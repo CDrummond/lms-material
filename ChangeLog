@@ -10,6 +10,8 @@
 7. When building SlimBrowse commands, don't add 'null' or 'undefined' values.
 8. Don't hide 'Save to favourites' and 'Delete favourite' options from 'More'
    lists.
+9. As per expand/collapse button, the grid/lsit button icon should indicate the
+   state that will be, not what is.
 
 0.9.3
 -----

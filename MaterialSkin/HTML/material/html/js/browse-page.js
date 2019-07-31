@@ -1475,10 +1475,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     cmd.params = [];
                     var addedParams = new Set();
                     if (command.params) {
-                        for(var key in command.params) {
-                            var param = key+":"+command.params[key];
-                            cmd.params.push(param);
-                            addedParams.add(param);
+                        for (var key in command.params) {
+                            if (command.params[key]!=undefined && command.params[key]!=null) {
+                                var param = key+":"+command.params[key];
+                                cmd.params.push(param);
+                                addedParams.add(param);
+                             }
                         }
                     }
                     var isMore = "more" == commandName;

@@ -244,11 +244,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         } else if (i.presetParams.favorites_url.startsWith("dynamicplaylist://") && i.presetParams.icon=="plugins/DynamicPlayList/html/images/dynamicplaylist.png") {
                             i.svg="dice-list";
                             i.image=undefined;
+                        } else if (i.presetParams.icon=="html/images/radio.png") {
+                            i.svg="radio-tower";
+                            i.image=undefined;
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;
-                    }
+                    }   
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);

@@ -8,6 +8,8 @@
    folders slighttly dimmer than files.
 6. Fix album not appearing in favourites, if it is the last item.
 7. When building SlimBrowse commands, don't add 'null' or 'undefined' values.
+8. Don't hide 'Save to favourites' and 'Delete favourite' options from 'More'
+   lists.
 
 0.9.3
 -----

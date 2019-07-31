@@ -245,6 +245,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.svg="dice-list";
                             i.image=undefined;
                         }
+                    } else if (i['icon-id']=="html/images/favorites.png") {
+                        i.icon="favorite";
+                        i.image=undefined;
                     }
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {

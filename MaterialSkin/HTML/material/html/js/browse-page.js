@@ -795,6 +795,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index);
                 return;
             }
+            if (item.group == GROUP_PINNED && undefined!=item.url) {
+                lmsCommand(this.playerId(), ["playlist", "play", item.url]);
+                return;
+            }
             if ("search"==item.type || "entry"==item.type) {
                 return;
             }
@@ -1881,7 +1885,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         addPinned() {
             this.pinned.forEach( p => {
-                if (undefined==p.command && undefined==p.params) { // Previous pinned apps
+                if (undefined==p.command && undefined==p.params && undefined!=p.item) { // Previous pinned apps
                     var command = this.buildCommand(p.item);
                     p.params = command.params;
                     p.command = command.command;
@@ -1903,9 +1907,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (add && index==-1) {
-                var command = this.buildCommand(item);
-                this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon,
-                                  command: command.command, params: command.params, group: GROUP_PINNED});
+                if (item.isRadio) {
+                    this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon,
+                                      url: item.presetParams.favorites_url, group: GROUP_PINNED});
+                } else {
+                    var command = this.buildCommand(item);
+                    this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon, isRadio: item.isRadio,
+                                      command: command.command, params: command.params, group: GROUP_PINNED});
+                }
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
                 if (item.menu) {

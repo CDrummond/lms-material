@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
+const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
 const MUSIC_FILE_EXTENSIONS = new Set(["mp3", "m4a", "mp4", "wav", "aiff", "flac", "ogg", "wma", "opus", "aac", "ape", "mpc", "oga", "webm"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
@@ -135,7 +135,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var addedPlayAction = false;
 
                 if ("text"==i.type) {
-                    // Exclude 'More' Play,Insert,Fav commands
+                    // Exclude 'More' Play,Insert commands
                     if (i.style && MORE_COMMANDS.has(i.style)) {
                         resp.total--;
                         continue;

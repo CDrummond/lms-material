@@ -322,12 +322,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.id = "radio:"+i.title;
                         }
                     }
-                    if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry") {
+                    if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                         // Only allow to pin if we can play!
                         if (!addedDivider && i.menu.length>0) {
                             i.menu.push(DIVIDER);
                             addedDivider = true;
                         }
+                        i.isRadio = true;
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)

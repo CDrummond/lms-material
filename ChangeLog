@@ -1,17 +1,18 @@
 0.9.4
 -----
-1. Fix detecting if item is in favorites if its within a favorites folder.
-2. Try to use material icons, and not LMS icons, for favourites entries.
-3. Enable history menu even when there is only a single text item in list.
-4. Enable 'More' for artists, albums, or tracks within a favourite.
-5. If showing jumplist for mixed folders and files, draw jumplist items for
-   folders slighttly dimmer than files.
-6. Fix album not appearing in favourites, if it is the last item.
-7. When building SlimBrowse commands, don't add 'null' or 'undefined' values.
-8. Don't hide 'Save to favourites' and 'Delete favourite' options from 'More'
-   lists.
-9. As per expand/collapse button, the grid/lsit button icon should indicate the
-   state that will be, not what is.
+ 1. Fix detecting if item is in favorites if its within a favorites folder.
+ 2. Try to use material icons, and not LMS icons, for favourites entries.
+ 3. Enable history menu even when there is only a single text item in list.
+ 4. Enable 'More' for artists, albums, or tracks within a favourite.
+ 5. If showing jumplist for mixed folders and files, draw jumplist items for
+    folders slighttly dimmer than files.
+ 6. Fix album not appearing in favourites, if it is the last item.
+ 7. When building SlimBrowse commands, don't add 'null' or 'undefined' values.
+ 8. Don't hide 'Save to favourites' and 'Delete favourite' options from 'More'
+    lists.
+ 9. As per expand/collapse button, the grid/lsit button icon should indicate the
+    state that will be, not what is.
+10. When pinning radio stations, just save URL and title, etc, not command.
 
 0.9.3
 -----

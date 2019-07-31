@@ -1152,7 +1152,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);
             } else if (PLAY_ALBUM_ACTION==act) {
-                var command = this.buildFullCommand(this.current, PLAY_ACTION, index);
+                var command = this.buildFullCommand(this.current, PLAY_ACTION);
                 command.command.push("play_index:"+index);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
@@ -1164,7 +1164,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logAndShowError(err, undefined, command.command);
                 });
             } else {
-                var command = this.buildFullCommand(item, act, index);
+                var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;
@@ -1595,7 +1595,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return cmd;
         },
-        buildFullCommand(item, act, index) {
+        buildFullCommand(item, act) {
             var command = this.buildCommand(item, ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
                 if (item.url) {
@@ -2013,7 +2013,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         doCommands(commands, npAfterLast) {
             if (commands.length>0) {
                 var cmd = commands.shift();
-                var command = this.buildFullCommand(cmd.item, cmd.act, cmd.idx);
+                var command = this.buildFullCommand(cmd.item, cmd.act);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;

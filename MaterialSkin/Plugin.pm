@@ -225,7 +225,24 @@ sub _svgHandler {
     my $request = $response->request;
     my $dir = dirname(__FILE__);
     my $filePath = $dir . "/HTML/material/html/images/" . basename($request->uri->path) . ".svg";
-    my $colour = "#" . $request->uri->query_param('c');
+    my $colour = "#f00";
+
+    if ($request->uri->can('query_param')) {
+        $colour = "#" . $request->uri->query_param('c');
+    } else { # Manually extract "c=colour" query parameter...
+        my $uri = $request->uri->as_string;
+        my $start = index($uri, "c=");
+
+        if ($start > 0) {
+            $start += 2;
+            my $end = index($uri, "&", $start);
+            if ($end > $start) {
+                $colour = "#" . substr($uri, $start, $end-$start);
+            } else {
+                $colour = "#" . substr($uri, $start);
+            }
+        }
+    }
 
     if (-e $filePath) {
         my $svg = read_file($filePath);

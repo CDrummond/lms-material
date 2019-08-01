@@ -13,6 +13,7 @@
  9. As per expand/collapse button, the grid/lsit button icon should indicate the
     state that will be, not what is.
 10. When pinning radio stations, just save URL and title, etc, not command.
+11. Only use media session with mobile browsers.
 
 0.9.3
 -----

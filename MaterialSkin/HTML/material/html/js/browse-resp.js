@@ -709,7 +709,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var name = i.name;
                 if (isFolder) {
                     haveFolders = true;
-                    name = folderName(i.path);
+                    if (!i.name || i.name.length<1) {
+                        name = folderName(i.path);
+                    }
                 } else {
                     if (!i.name || i.name.length<1) {
                         continue;

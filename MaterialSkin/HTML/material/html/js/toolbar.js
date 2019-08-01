@@ -306,7 +306,7 @@ Vue.component('lms-toolbar', {
             this.snackbar = {msg: msg, show: true };
         }.bind(this));
 
-        if ('mediaSession' in navigator) {
+        if ('mediaSession' in navigator && IS_MOBILE) {
             toolbarComponent = this;
             //window.addEventListener('touchend', initMediaSessionAudio);
             window.addEventListener('click', initMediaSessionAudio);

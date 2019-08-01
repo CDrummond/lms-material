@@ -17,6 +17,7 @@
 12. Place pin, and unpin, actions into a menu, for consistency.
 13. Add play, play next, and insert to pinned radio items menu.
 14. Always show menu when clicking on pinned radio item.
+15. Only show dotted menu button if an item has a menu.
 
 0.9.3
 -----

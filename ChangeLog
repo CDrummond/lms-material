@@ -18,6 +18,8 @@
 13. Add play, play next, and insert to pinned radio items menu.
 14. Always show menu when clicking on pinned radio item.
 15. Only show dotted menu button if an item has a menu.
+16. Check whether "query_param" exists in "URI::http" before using. If not, then
+    manually parse URI string.
 
 0.9.3
 -----

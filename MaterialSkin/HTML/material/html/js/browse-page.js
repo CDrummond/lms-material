@@ -172,9 +172,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>
-    <v-list-tile-action :title="ACTIONS[UNPIN_ACTION].title" @click.stop="itemAction(UNPIN_ACTION, item, index)">
+    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
      <v-btn icon>
-      <img class="svg-img" :src="ACTIONS[UNPIN_ACTION].svg | svgIcon(darkUi)"></img>
+      <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
 
@@ -203,7 +203,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menu" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -256,17 +256,12 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menu && item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <v-list-tile-action v-else-if="item.menu && item.menu.length===1" :title="ACTIONS[item.menu[0]].title" @click.stop="itemAction(item.menu[0], item, index)">
-     <v-btn icon>
-      <v-icon v-if="undefined==ACTIONS[item.menu[0]].svg">{{ACTIONS[item.menu[0]].icon}}</v-icon>
-      <img v-else class="svg-img" :title="ACTIONS[item.menu[0]].title" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
-     </v-btn>
-    </v-list-tile-action>
+
    </v-list-tile>
    <v-divider v-if="current"></v-divider>
   </template>
@@ -795,8 +790,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index);
                 return;
             }
-            if (item.group == GROUP_PINNED && undefined!=item.url) {
-                lmsCommand(this.playerId(), ["playlist", "play", item.url]);
+            if (item.group == GROUP_PINNED && undefined!=item.url) { // Radio
+                this.itemMenu(item, index, event);
                 return;
             }
             if ("search"==item.type || "entry"==item.type) {
@@ -1346,6 +1341,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.currentLibId = null;
             this.headerTitle = null;
             this.headerSubTitle=null;
+            this.baseActions=[];
+            this.currentBaseActions=[];
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;
@@ -1893,6 +1890,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     p.icon = p.item.icon;
                     p.item = undefined;
                 }
+                p.menu = undefined == p.url ? [UNPIN_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, UNPIN_ACTION];
                 p.group = GROUP_PINNED;
                 this.options.pinned.add(p.id);
             });
@@ -1908,12 +1906,12 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             if (add && index==-1) {
                 if (item.isRadio) {
-                    this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon,
-                                      url: item.presetParams.favorites_url, group: GROUP_PINNED});
+                    this.pinned.push({id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, group: GROUP_PINNED,
+                                      url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, UNPIN_ACTION]});
                 } else {
                     var command = this.buildCommand(item);
                     this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon, isRadio: item.isRadio,
-                                      command: command.command, params: command.params, group: GROUP_PINNED});
+                                      command: command.command, params: command.params, group: GROUP_PINNED, menu: [UNPIN_ACTION]});
                 }
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));

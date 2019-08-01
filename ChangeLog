@@ -14,6 +14,9 @@
     state that will be, not what is.
 10. When pinning radio stations, just save URL and title, etc, not command.
 11. Only use media session with mobile browsers.
+12. Place pin, and unpin, actions into a menu, for consistency.
+13. Add play, play next, and insert to pinned radio items menu.
+14. Always show menu when clicking on pinned radio item.
 
 0.9.3
 -----

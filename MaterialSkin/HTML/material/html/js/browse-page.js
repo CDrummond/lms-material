@@ -160,7 +160,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
    <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar-small">
-     <img :key="item.image" v-lazy="item.image">
+     <img :key="item.image" v-lazy="item.image" v-bind:class="{'radio-img': undefined!=item.url}">
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>

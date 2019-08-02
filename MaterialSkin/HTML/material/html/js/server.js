@@ -274,7 +274,9 @@ var lmsServer = Vue.component('lms-server', {
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
                 this.handlePlayerStatus(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith("/slim/favorites")) {
-                this.handleFavoritesUpdate();
+                if (msg.data && msg.data.length>1 && msg.data[0]=="favorites" && msg.data[1]=="changed") {
+                   this.handleFavoritesUpdate();
+                }
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }

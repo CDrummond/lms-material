@@ -705,9 +705,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var haveFiles = false;
             for (var idx=0, loop=data.result.fsitems_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                var isFolder = parseInt(i.isfolder)==1 || i.isfolder==null;
+                var isFolder = parseInt(i.isfolder)==1;
                 var name = i.name;
-
                 if (isFolder) {
                     haveFolders = true;
                     if (!i.name || i.name.length<1) {
@@ -724,16 +723,17 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                     haveFiles = true;
                 }
+                var fixedPath = i.path.replace("\\", "\\\\");
                 var key = name.charAt(0).toUpperCase();
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key || resp.jumplist[resp.jumplist.length-1].folder!=isFolder)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart, folder:isFolder});
                 }
                 resp.items.push({
-                              id: i.path,
+                              id: fixedPath,
                               title: name,
                               subtitle: undefined,
                               command: isFolder ? ["readdirectory"] : [],
-                              params: isFolder ? [i.isfolder==null ? data.params[1][3]+"/"+name : ("folder:"+i.path.replace("\\", "\\\\"))] : [],
+                              params: isFolder ? ["folder:"+fixedPath] : [],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
                               icon: isFolder ? "folder" : "music_note",

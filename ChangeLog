@@ -20,8 +20,6 @@
 15. Only show dotted menu button if an item has a menu.
 16. Check whether "query_param" exists in "URI::http" before using. If not, then
     manually parse URI string.
-17. Work-around filesystem JSONRPC API returing "isfolder:null" for folders with
-    non-ascii characters.
 
 0.9.3
 -----

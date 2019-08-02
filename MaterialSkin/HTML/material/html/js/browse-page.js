@@ -613,9 +613,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.enableRatings();
             }).catch(err => {
                 this.fetchingItems = false;
-                if (!axios.isCancel(err)) {
+                //if (!axios.isCancel(err)) {
                     logAndShowError(err, undefined, command.command, command.params, start, count);
-                }
+                //}
             });
         },
         handleListResponse(item, command, resp) {
@@ -1317,18 +1317,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 this.fetchingItems = false;
             }).catch(err => {
-                if (!axios.isCancel(err)) {
+                //if (!axios.isCancel(err)) {
                     logAndShowError(err, undefined, this.command.command, this.command.params);
-                }
+                //}
                 this.fetchingItems = false;
             });
         },
         goHome() {
             if (this.fetchingItems) {
-                if (lmsListSource) {
-                    this.fetchingItems = false;
-                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                }
+                //if (lmsListSource) {
+                //    this.fetchingItems = false;
+                //    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
+                //}
+                return;
             }
             this.selection = [];
             var prev = this.history.length>0 ? this.history[0].pos : 0;
@@ -1376,10 +1377,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         goBack(refresh) {
             if (this.fetchingItems) {
-                if (lmsListSource) {
-                    this.fetchingItems = false;
-                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                }
+                //if (lmsListSource) {
+                //    this.fetchingItems = false;
+                //    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
+                //}
                 return;
             }
             if (this.history.length<2) {

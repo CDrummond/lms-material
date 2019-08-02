@@ -85,25 +85,25 @@ if (isAndroid()) { // currently only need to check current IP address to detect 
     }
 }
 
-const CancelToken = axios.CancelToken;
-var lmsListSource = undefined;
+//const CancelToken = axios.CancelToken;
+//var lmsListSource = undefined;
 
 function lmsCommand(playerid, command, isList) {
-    var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
-                    (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
+//    var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
+//                    (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
 
     const URL = "/jsonrpc.js"
     var data = { id: 1, method: "slim.request", params: [playerid, command]};
 
     logJsonMessage("REQ", data.params);
-    if (canCancel) {
-        lmsListSource = CancelToken.source();
-        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
-            lmsListSource = undefined;
-        });
-    } else {
+//    if (canCancel) {
+//        lmsListSource = CancelToken.source();
+//        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
+//            lmsListSource = undefined;
+//        });
+//    } else {
         return axios.post(URL, data);
-    }
+//    }
 }
 
 async function lmsListFragment(playerid, command, params, start, fagmentSize, batchSize, accumulated) {

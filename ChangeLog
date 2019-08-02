@@ -20,6 +20,8 @@
 15. Only show dotted menu button if an item has a menu.
 16. Check whether "query_param" exists in "URI::http" before using. If not, then
     manually parse URI string.
+17. Only update favourite's set if ["favorites", "changed"] is received from
+    CometD.
 
 0.9.3
 -----

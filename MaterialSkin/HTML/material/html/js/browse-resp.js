@@ -729,7 +729,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: i.name,
                               subtitle: undefined,
                               command: isFolder ? ["readdirectory"] : [],
-                              params: isFolder ? ["folder:"+i.path.replace("\\", "\\\\")] : [],
+                              params: isFolder ? ["folder:"+i.path] : [],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
                               icon: isFolder ? "folder" : "music_note",

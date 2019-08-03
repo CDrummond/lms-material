@@ -931,7 +931,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.ratingsSupport
         },
         showRatings() {
-            return this.$store.state.ratingsSupport && this.playerStatus && this.playerStatus.current && this.playerStatus.current.duration && this.playerStatus.current.duration>0
+            return this.$store.state.ratingsSupport && this.playerStatus && this.playerStatus.current && this.playerStatus.current.duration && this.playerStatus.current.duration>0 && undefined!=this.playerStatus.current.id && !(""+this.playerStatus.current.id).startsWith("-");
         },
         maxRating() {
             return this.$store.state.maxRating

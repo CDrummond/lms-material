@@ -1173,9 +1173,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('refreshStatus');
                     this.clearSelection();
                     if (!this.desktop) {
-                        if (act===PLAY_ACTION) {
+                        if (act===PLAY_ACTION || act===PLAY_ALL_ACTION) {
                             this.$store.commit('setPage', 'now-playing');
-                        } else if (act===ADD_ACTION && (undefined==suppressNotification || !suppressNotification)) {
+                        } else if ((act===ADD_ACTION || act===ADD_ALL_ACTION) && (undefined==suppressNotification || !suppressNotification)) {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         } else if (act==="insert") {
                             bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", item.title));

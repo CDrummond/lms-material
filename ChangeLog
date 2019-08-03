@@ -22,6 +22,8 @@
     manually parse URI string.
 17. Only update favourite's set if ["favorites", "changed"] is received from
     CometD.
+18. In Mobile layout, switch to now-playing when clicking play icon in
+    sub-toolbar.
 
 0.9.3
 -----

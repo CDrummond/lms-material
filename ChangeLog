@@ -24,6 +24,7 @@
     CometD.
 18. In Mobile layout, switch to now-playing when clicking play icon in
     sub-toolbar.
+19. Don't show ratings stars for streamed tracks (negative ID).
 
 0.9.3
 -----

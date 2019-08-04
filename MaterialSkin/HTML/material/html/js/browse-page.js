@@ -675,7 +675,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
                 if (this.tbarActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
-                    this.tbarActions=[ADD_FAV_ACTION];
+                    this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 }
                 if (resp.canUseGrid && !resp.forceGrid) {
                     this.settingsMenuActions.unshift(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);
@@ -1011,6 +1011,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('dlg.open', 'favorite', 'add');
             } else if (act==EDIT_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'edit', item);
+            } else if (act==ADD_FAV_FOLDER_ACTION) {
+                this.dialog = { show:true, title:ADD_FAV_FOLDER_ACTION.title, ok: i18n("Create"), cancel:undefined,
+                                command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {

@@ -1089,8 +1089,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined==id) {
                     return;
                 }
-                this.$confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title) 
-                                                           : i18n("Delete '%1' (and all its contents)?", item.title), 
+                this.$confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
+                                                           : i18n("Delete '%1' (and all its contents)?", item.title),
                               {buttonTrueText: act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();

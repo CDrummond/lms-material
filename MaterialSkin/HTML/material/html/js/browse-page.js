@@ -2305,10 +2305,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browseDisplayChanged', function() {
             this.options.sortFavorites=this.$store.state.sortFavorites;
+            this.goHome();
             if (this.playerId() && this.$store.state.serverMenus) {
                 this.playerMenu();
             }
-            this.goHome();
         }.bind(this));
         bus.$on('libraryChanged', function() {
             this.goHome();

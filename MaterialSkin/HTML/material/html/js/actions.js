@@ -33,16 +33,17 @@ const USE_LIST_ACTION         = 23;
 const REMOVE_ACTION           = 24;
 const ALBUM_SORTS_ACTION      = 25;
 const ADD_FAV_FOLDER_ACTION   = 26;
+const DELETE_FAV_FOLDER_ACTION= 27;
 
-const PQ_PLAY_NOW_ACTION      = 27;
-const PQ_PLAY_NEXT_ACTION     = 28
-const PQ_REMOVE_ACTION        = 29;
-const PQ_MORE_ACTION          = 30;
-const PQ_SELECT_ACTION        = 31;
-const PQ_UNSELECT_ACTION      = 32;
-const PQ_SCROLL_ACTION        = 33;
-const PQ_ADD_URL_ACTION       = 34;
-const PQ_MOVE_QUEUE_ACTION    = 35;
+const PQ_PLAY_NOW_ACTION      = 28;
+const PQ_PLAY_NEXT_ACTION     = 29
+const PQ_REMOVE_ACTION        = 30;
+const PQ_MORE_ACTION          = 31;
+const PQ_SELECT_ACTION        = 32;
+const PQ_UNSELECT_ACTION      = 33;
+const PQ_SCROLL_ACTION        = 34;
+const PQ_ADD_URL_ACTION       = 35;
+const PQ_MOVE_QUEUE_ACTION    = 36;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -72,6 +73,7 @@ var ACTIONS=[
     {cmd:"remove",       icon:"remove_circle_outline"},
     {cmd:"albsort",      icon:"sort_by_alpha"},
     {cmd:"add-favdir",   icon:"create_new_folder"},
+    {cmd:"del-favdir",   icon:"delete"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
@@ -96,7 +98,7 @@ function updateActionStrings() {
     ACTIONS[RENAME_FAV_ACTION].title=i18n("Rename");
     ACTIONS[EDIT_FAV_ACTION].title=i18n("Edit");
     ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
-    ACTIONS[DELETE_ACTION].title=i18n("Delete");
+    ACTIONS[DELETE_ACTION].title=ACTIONS[DELETE_FAV_FOLDER_ACTION].title=i18n("Delete");
     ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
     ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
     ACTIONS[REMOVE_ACTION].title=i18n("Remove");

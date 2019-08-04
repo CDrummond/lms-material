@@ -1012,7 +1012,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act==EDIT_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'edit', item);
             } else if (act==ADD_FAV_FOLDER_ACTION) {
-                this.dialog = { show:true, title:ADD_FAV_FOLDER_ACTION.title, ok: i18n("Create"), cancel:undefined,
+                this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {

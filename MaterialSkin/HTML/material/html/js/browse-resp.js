@@ -371,7 +371,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
-                if (isFavorites && !options.sortFavorites) {
+                if (isFavorites) {
                     i.draggable = true;
                 }
                 resp.items.push(i);

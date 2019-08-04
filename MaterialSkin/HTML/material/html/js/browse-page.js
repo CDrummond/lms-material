@@ -2199,7 +2199,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             ev.dataTransfer.setData('Text', this.id);
             this.dragIndex = which;
             this.stopScrolling = false;
-            if (this.selection.length>0 && this.selection.indexOf(which)<0) {
+            if (this.selection.length>0 && (this.selection.indexOf(which)<0 || this.current.isFavFolder)) {
                 this.clearSelection();
             }
         },
@@ -2245,7 +2245,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 } else {
                     var command = this.current.section==SECTION_FAVORITES
-                                    ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"), this.items[to].id.replace("item_id:", "to_id:")]
+                                    ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
+                                           this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
                                     : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
                     lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();

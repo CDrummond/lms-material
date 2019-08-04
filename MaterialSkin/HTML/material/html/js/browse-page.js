@@ -1084,12 +1084,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('showMessage', i18n("Failed to add to favorites!"));
                     logError(err, command);
                 });
-            } else if (act===REMOVE_FROM_FAV_ACTION) {
+            } else if (act===REMOVE_FROM_FAV_ACTION || act==DELETE_FAV_FOLDER_ACTION) {
                 var id = SECTION_FAVORITES==this.current.section ? item.id : "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
                 if (undefined==id) {
                     return;
                 }
-                this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
+                this.$confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title) 
+                                                           : i18n("Delete '%1' (and all its contents)?", item.title), 
+                              {buttonTrueText: act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
                         var command = ["favorites", "delete", id];

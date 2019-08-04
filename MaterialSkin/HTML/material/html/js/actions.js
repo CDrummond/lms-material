@@ -32,16 +32,17 @@ const USE_GRID_ACTION         = 22;
 const USE_LIST_ACTION         = 23;
 const REMOVE_ACTION           = 24;
 const ALBUM_SORTS_ACTION      = 25;
+const ADD_FAV_FOLDER_ACTION   = 26;
 
-const PQ_PLAY_NOW_ACTION      = 26;
-const PQ_PLAY_NEXT_ACTION     = 27;
-const PQ_REMOVE_ACTION        = 28;
-const PQ_MORE_ACTION          = 29;
-const PQ_SELECT_ACTION        = 30;
-const PQ_UNSELECT_ACTION      = 31;
-const PQ_SCROLL_ACTION        = 32;
-const PQ_ADD_URL_ACTION       = 33;
-const PQ_MOVE_QUEUE_ACTION    = 34;
+const PQ_PLAY_NOW_ACTION      = 27;
+const PQ_PLAY_NEXT_ACTION     = 28
+const PQ_REMOVE_ACTION        = 29;
+const PQ_MORE_ACTION          = 30;
+const PQ_SELECT_ACTION        = 31;
+const PQ_UNSELECT_ACTION      = 32;
+const PQ_SCROLL_ACTION        = 33;
+const PQ_ADD_URL_ACTION       = 34;
+const PQ_MOVE_QUEUE_ACTION    = 35;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -70,6 +71,7 @@ var ACTIONS=[
     {cmd:"use-list",     icon:"grid_off"},
     {cmd:"remove",       icon:"remove_circle_outline"},
     {cmd:"albsort",      icon:"sort_by_alpha"},
+    {cmd:"add-favdir",   icon:"create_new_folder"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
@@ -106,6 +108,7 @@ function updateActionStrings() {
     ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
     ACTIONS[USE_GRID_ACTION].title=ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
     ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
+    ACTIONS[ADD_FAV_FOLDER_ACTION].title=i18n("Create folder");
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");

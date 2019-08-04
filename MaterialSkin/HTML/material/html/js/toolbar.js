@@ -358,7 +358,6 @@ Vue.component('lms-toolbar', {
             var elem = document.getElementById(id);
             if (elem) {
                 elem.addEventListener('mousewheel', function(event) {
-                    event.preventDefault();
                     if (event.wheelDeltaY<0) {
                         this.volumeDown();
                     } else if (event.wheelDeltaY>0) {

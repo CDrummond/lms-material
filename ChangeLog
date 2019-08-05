@@ -1,3 +1,9 @@
+0.9.5
+-----
+1. When updating now-playing, prefer trackartist and trackartist_ids to artist
+   and artist_ids if these are set.
+2. Use first of trackartist_ids for artist_id, if this is set.
+
 0.9.4
 -----
  1. Fix detecting if an item is in favourites if its within a favorites folder.

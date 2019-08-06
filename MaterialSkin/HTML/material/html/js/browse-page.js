@@ -1131,7 +1131,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (idx>-1) {
                         item.menu[idx]=UNSELECT_ACTION;
                     }
-                    if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                    if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
                         forceItemUpdate(this, this.items, item, index);
                     }
                 }
@@ -1144,7 +1144,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (idx>-1) {
                         item.menu[idx]=SELECT_ACTION;
                     }
-                    if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                    if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
                         forceItemUpdate(this, this.items, item, index);
                     }
                 }
@@ -1959,7 +1959,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.items[index].selected = false;
                 }
             }
-            if (this.selection.length>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+            if (this.selection.length>0 && (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use)) {
                 this.$nextTick(function () {
                     this.items = JSON.parse(JSON.stringify(this.items));
                 });
@@ -2257,7 +2257,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.pageElement = document.getElementById("browse-view");
         let timeout = undefined;
         window.addEventListener('resize', () => {
-            if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+            if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
                 if (timeout) {
                     clearTimeout(timeout);
                 }

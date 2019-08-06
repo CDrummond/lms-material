@@ -1106,28 +1106,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             } else if (act===MOVE_FAV_TO_PARENT_ACTION) {
-                this.$confirm(i18n("Move '%1' to parent folder?", item.title), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
-                    if (res) {
-                        this.clearSelection();
-                        var parent = item.id.replace("item_id:", "").split(".");
-                        console.log(JSON.stringify(parent), parent.length);
-                        parent.pop();
-                        parent.pop();
-                        console.log(parent.length);
-                        if (parent.length>0) {
-                            parent=parent.join(".");
-                            parent+=".0";
-                        } else {
-                            parent="0";
-                        }
-                        var command = ["favorites", "move", item.id.replace("item_id:", "from_id:"), "to_id:"+parent];
-                        lmsCommand(this.playerId(), command).then(({data}) => {
-                            logJsonMessage("RESP", data);
-                            this.goBack(true);
-                        }).catch(err => {
-                            logAndShowError(err, i18n("Failed to remove favorite!"), command);
-                        });
-                    }
+                this.clearSelection();
+                var parent = item.id.replace("item_id:", "").split(".");
+                parent.pop();
+                parent.pop();
+                if (parent.length>0) {
+                    parent=parent.join(".");
+                    parent+=".0";
+                } else {
+                    parent="0";
+                }
+                var command = ["favorites", "move", item.id.replace("item_id:", "from_id:"), "to_id:"+parent];
+                lmsCommand(this.playerId(), command).then(({data}) => {
+                    logJsonMessage("RESP", data);
+                    this.goBack(true);
+                }).catch(err => {
+                    logAndShowError(err, i18n("Failed to move favorite!"), command);
                 });
             } else if (act===ADD_RANDOM_ALBUM_ACTION) {
                 var params = [];

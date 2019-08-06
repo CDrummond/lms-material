@@ -373,6 +373,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 if (isFavorites && !options.sortFavorites) {
                     i.draggable = true;
+                    i.realIndex = resp.items.length; // So items are deleted in correct order, even when lsit is sorted.
                 }
                 resp.items.push(i);
                 types.add(i.type);

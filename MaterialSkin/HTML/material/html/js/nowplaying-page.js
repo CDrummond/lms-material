@@ -388,13 +388,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
                 this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
             }
-            var artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
-            var artist_ids = playerStatus.current.artist_ids ? playerStatus.current.artist_ids : playerStatus.current.trackartist_ids;
+            var artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
+            var artist_id = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids.split(",")[0].trim() : playerStatus.current.artist_id;
+            var artist_ids = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids : playerStatus.current.artist_ids;
             if (this.playerStatus.current.artist!=artist ||
-                playerStatus.current.artist_id!=this.playerStatus.current.artist_id ||
-                playerStatus.current.artist_ids!=artist_ids) {
+                this.playerStatus.current.artist_id!=artist_id ||
+                this/playerStatus.current.artist_ids!=artist_ids) {
                 this.playerStatus.current.artist = artist;
-                this.playerStatus.current.artist_id = playerStatus.current.artist_id;
+                this.playerStatus.current.artist_id = artist_id;
                 this.playerStatus.current.artist_ids = artist_ids;
                 trackChanged = true;
             }

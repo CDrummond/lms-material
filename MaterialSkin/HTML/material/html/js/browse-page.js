@@ -274,14 +274,14 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.menu">
     <v-divider v-if="DIVIDER==action"></v-divider>
-    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index)" v-bind:class="{'dimmed': ACTIONS[REMOVE_FROM_FAV_ACTION].disabled}">
+    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)" v-bind:class="{'dimmed': ACTIONS[action].disabled}">
+    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -989,10 +989,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, suppressNotification) {
-        console.log(act, ACTIONS[act].disabled);
-            if (ACTIONS[act].disabled) {
-                return;
-            }
             if (act==SEARCH_LIB_ACTION) {
                 bus.$emit('dlg.open', 'search');
             } else if (act===MORE_ACTION) {
@@ -1143,8 +1139,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
                         forceItemUpdate(this, this.items, item, index);
                     }
-                    ACTIONS[RENAME_PL_ACTION].disabled=ACTIONS[RENAME_FAV_ACTION].disabled=ACTIONS[EDIT_FAV_ACTION].disabled=ACTIONS[ADD_FAV_ACTION].disabled=
-                    ACTIONS[DELETE_ACTION].disabled=ACTIONS[ADD_TO_FAV_ACTION].disabled=ACTIONS[REMOVE_FROM_FAV_ACTION].disabled=this.selection.length>1;
                 }
             } else if (UNSELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
@@ -1158,8 +1152,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
                         forceItemUpdate(this, this.items, item, index);
                     }
-                    ACTIONS[RENAME_PL_ACTION].disabled=ACTIONS[RENAME_FAV_ACTION].disabled=ACTIONS[EDIT_FAV_ACTION].disabled=ACTIONS[ADD_FAV_ACTION].disabled=
-                    ACTIONS[DELETE_ACTION].disabled=ACTIONS[ADD_TO_FAV_ACTION].disabled=ACTIONS[REMOVE_FROM_FAV_ACTION].disabled=this.selection.length>1;
                 }
             } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);
@@ -1978,8 +1970,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
             this.selection = [];
-            ACTIONS[RENAME_PL_ACTION].disabled=ACTIONS[RENAME_FAV_ACTION].disabled=ACTIONS[EDIT_FAV_ACTION].disabled=ACTIONS[ADD_FAV_ACTION].disabled=
-            ACTIONS[DELETE_ACTION].disabled=ACTIONS[ADD_TO_FAV_ACTION].disabled=ACTIONS[REMOVE_FROM_FAV_ACTION].disabled=false;
         },
         select(item, index) {
             if (this.selection.length>0) {

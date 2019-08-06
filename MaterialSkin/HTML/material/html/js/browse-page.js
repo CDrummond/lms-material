@@ -1978,6 +1978,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
             this.selection = [];
+            ACTIONS[RENAME_PL_ACTION].disabled=ACTIONS[RENAME_FAV_ACTION].disabled=ACTIONS[EDIT_FAV_ACTION].disabled=ACTIONS[ADD_FAV_ACTION].disabled=
+            ACTIONS[DELETE_ACTION].disabled=ACTIONS[ADD_TO_FAV_ACTION].disabled=ACTIONS[REMOVE_FROM_FAV_ACTION].disabled=false;
         },
         select(item, index) {
             if (this.selection.length>0) {

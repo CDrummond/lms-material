@@ -3,6 +3,9 @@
 1. When updating now-playing, prefer trackartist and trackartist_ids to artist
    and artist_ids if these are set.
 2. Use first of trackartist_ids for artist_id, if this is set.
+3. Fix remvoving a selection of favourites, when Material is set to oder the
+   favourites. Need to delete from the highest favourite ID to the lowest, but
+   sorting can corrupt this order.
 
 0.9.4
 -----

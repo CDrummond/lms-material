@@ -1980,7 +1980,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         var ids=[];
-                        this.selection.sort((a, b) => b - a);
+                        this.selection.sort((a, b) => (undefined!=this.items[b].realIndex ? this.items[b].realIndex : b) - (undefined!=this.items[b].realIndex ? this.items[a].realIndex : a));
                         if (REMOVE_ACTION==act) {
                             this.selection.forEach(idx => {ids.push("index:"+idx)});
                             bus.$emit('doAllList', ids, ["playlists", "edit", "cmd:delete", this.current.id], this.current.section);

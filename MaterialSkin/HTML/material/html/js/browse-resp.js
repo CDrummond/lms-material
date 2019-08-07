@@ -212,11 +212,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    i.menu.push(REMOVE_FROM_FAV_ACTION);
                     if (!i.type) {
                         i.isFavFolder = true;
                     }
+                    i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
                     i.menu.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_FAV_ACTION);
+                    if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
+                        i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
+                    }
                     if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
                         i.icon="folder";
                         i.image=undefined;
@@ -371,7 +374,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }
-                if (isFavorites && !options.sortFavorites) {
+                if (isFavorites) {
                     i.draggable = true;
                     i.realIndex = resp.items.length; // So items are deleted in correct order, even when lsit is sorted.
                 }

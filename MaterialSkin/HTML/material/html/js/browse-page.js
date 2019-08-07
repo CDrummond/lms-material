@@ -642,40 +642,41 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var changedView = this.grid.use != resp.useGrid;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
-                if (this.current && this.current.menu) {
-                    for (var i=0, len=this.current.menu.length; i<len; ++i) {
-                        if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                            this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                            break;
-                        }
-                    }
-                }
-
-                // Select track -> More -> Album:AlbumTitle -> Tracks
-                if (this.tbarActions.length==0 && this.current && this.current.actions && this.current.actions.play) {
-                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                }
-                // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                if (this.tbarActions.length==0 && !item.range && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.items.length>0 && this.items[0].menu &&
-                   !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
-                                                       this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
-                    for (var i=0, len=this.items[0].menu.length; i<len; ++i) {
-                        if (this.items[0].menu[i]==ADD_ACTION || this.items[0].menu[i]==PLAY_ACTION) {
-                            this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                            // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
-                            if (this.items[0].params && this.items[0].params.item_id) {
-                                var parts = this.items[0].params.item_id.split(".");
-                                if (parts.length>1) {
-                                    parts.pop();
-                                    this.current.allid = "item_id:"+parts.join(".");
-                                }
+                if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
+                    this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
+                } else {
+                    if (this.current && this.current.menu) {
+                        for (var i=0, len=this.current.menu.length; i<len; ++i) {
+                            if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
+                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                break;
                             }
-                            break;
                         }
                     }
-                }
-                if (this.tbarActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
-                    this.tbarActions=[ADD_FAV_ACTION];
+
+                    // Select track -> More -> Album:AlbumTitle -> Tracks
+                    if (this.tbarActions.length==0 && this.current && this.current.actions && this.current.actions.play) {
+                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                    }
+                    // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
+                    if (this.tbarActions.length==0 && !item.range && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.items.length>0 && this.items[0].menu &&
+                       !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
+                                                           this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
+                        for (var i=0, len=this.items[0].menu.length; i<len; ++i) {
+                            if (this.items[0].menu[i]==ADD_ACTION || this.items[0].menu[i]==PLAY_ACTION) {
+                                this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                                // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
+                                if (this.items[0].params && this.items[0].params.item_id) {
+                                    var parts = this.items[0].params.item_id.split(".");
+                                    if (parts.length>1) {
+                                        parts.pop();
+                                        this.current.allid = "item_id:"+parts.join(".");
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (resp.canUseGrid && !resp.forceGrid) {
                     this.settingsMenuActions.unshift(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);
@@ -725,7 +726,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setLocalStorageVal('collapsed', this.collapsed.join(","));
         },
         handleTextClickResponse(item, command, data) {
-            var resp = parseBrowseResp(data, this.current, this.options);
+            var resp = parseBrowseResp(data, item, this.options);
             var nextWindow = item.nextWindow
                                 ? item.nextWindow
                                 : item.actions && item.actions.go && item.actions.go.nextWindow
@@ -1011,6 +1012,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('dlg.open', 'favorite', 'add');
             } else if (act==EDIT_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'edit', item);
+            } else if (act==ADD_FAV_FOLDER_ACTION) {
+                this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
+                                command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER]};
             } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -1081,12 +1085,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('showMessage', i18n("Failed to add to favorites!"));
                     logError(err, command);
                 });
-            } else if (act===REMOVE_FROM_FAV_ACTION) {
+            } else if (act===REMOVE_FROM_FAV_ACTION || act==DELETE_FAV_FOLDER_ACTION) {
                 var id = SECTION_FAVORITES==this.current.section ? item.id : "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
                 if (undefined==id) {
                     return;
                 }
-                this.$confirm(i18n("Remove '%1' from favorites?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
+                this.$confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
+                                                           : i18n("Delete '%1' (and all its contents)?", item.title),
+                              {buttonTrueText: act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
                         var command = ["favorites", "delete", id];
@@ -1099,6 +1105,24 @@ var lmsBrowse = Vue.component("lms-browse", {
                             logAndShowError(err, i18n("Failed to remove favorite!"), command);
                         });
                     }
+                });
+            } else if (act===MOVE_FAV_TO_PARENT_ACTION) {
+                this.clearSelection();
+                var parent = item.id.replace("item_id:", "").split(".");
+                parent.pop();
+                parent.pop();
+                if (parent.length>0) {
+                    parent=parent.join(".");
+                    parent+=".0";
+                } else {
+                    parent="0";
+                }
+                var command = ["favorites", "move", item.id.replace("item_id:", "from_id:"), "to_id:"+parent];
+                lmsCommand(this.playerId(), command).then(({data}) => {
+                    logJsonMessage("RESP", data);
+                    this.goBack(true);
+                }).catch(err => {
+                    logAndShowError(err, i18n("Failed to move favorite!"), command);
                 });
             } else if (act===ADD_RANDOM_ALBUM_ACTION) {
                 var params = [];
@@ -2196,7 +2220,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             ev.dataTransfer.setData('Text', this.id);
             this.dragIndex = which;
             this.stopScrolling = false;
-            if (this.selection.length>0 && this.selection.indexOf(which)<0) {
+            if (this.selection.length>0 && (this.selection.indexOf(which)<0 || this.current.isFavFolder)) {
                 this.clearSelection();
             }
         },
@@ -2242,7 +2266,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 } else {
                     var command = this.current.section==SECTION_FAVORITES
-                                    ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"), this.items[to].id.replace("item_id:", "to_id:")]
+                                    ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
+                                           this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
                                     : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
                     lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();

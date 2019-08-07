@@ -642,40 +642,41 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var changedView = this.grid.use != resp.useGrid;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
-                if (this.current && this.current.menu) {
-                    for (var i=0, len=this.current.menu.length; i<len; ++i) {
-                        if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                            this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                            break;
-                        }
-                    }
-                }
-
-                // Select track -> More -> Album:AlbumTitle -> Tracks
-                if (this.tbarActions.length==0 && this.current && this.current.actions && this.current.actions.play) {
-                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                }
-                // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                if (this.tbarActions.length==0 && !item.range && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.items.length>0 && this.items[0].menu &&
-                   !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
-                                                       this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
-                    for (var i=0, len=this.items[0].menu.length; i<len; ++i) {
-                        if (this.items[0].menu[i]==ADD_ACTION || this.items[0].menu[i]==PLAY_ACTION) {
-                            this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                            // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
-                            if (this.items[0].params && this.items[0].params.item_id) {
-                                var parts = this.items[0].params.item_id.split(".");
-                                if (parts.length>1) {
-                                    parts.pop();
-                                    this.current.allid = "item_id:"+parts.join(".");
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-                if (this.tbarActions.length==0 && SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
+                if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
+                } else {
+                    if (this.current && this.current.menu) {
+                        for (var i=0, len=this.current.menu.length; i<len; ++i) {
+                            if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
+                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                break;
+                            }
+                        }
+                    }
+
+                    // Select track -> More -> Album:AlbumTitle -> Tracks
+                    if (this.tbarActions.length==0 && this.current && this.current.actions && this.current.actions.play) {
+                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                    }
+                    // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
+                    if (this.tbarActions.length==0 && !item.range && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.items.length>0 && this.items[0].menu &&
+                       !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
+                                                           this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
+                        for (var i=0, len=this.items[0].menu.length; i<len; ++i) {
+                            if (this.items[0].menu[i]==ADD_ACTION || this.items[0].menu[i]==PLAY_ACTION) {
+                                this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                                // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
+                                if (this.items[0].params && this.items[0].params.item_id) {
+                                    var parts = this.items[0].params.item_id.split(".");
+                                    if (parts.length>1) {
+                                        parts.pop();
+                                        this.current.allid = "item_id:"+parts.join(".");
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (resp.canUseGrid && !resp.forceGrid) {
                     this.settingsMenuActions.unshift(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);

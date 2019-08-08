@@ -168,6 +168,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
        </v-layout>
       </v-flex>
+   <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
       <v-flex xs4>
        <v-layout text-xs-center>
         <v-flex xs6>
@@ -230,6 +231,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
     </v-layout>
    </v-flex>
+   <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
 
    <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>

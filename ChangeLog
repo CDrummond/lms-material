@@ -6,6 +6,7 @@
 3. Fix removing a selection of favourites, when Material is set to order the
    favourites. Need to delete from the highest favourite ID to the lowest, but
    sorting can corrupt this order.
+4. Don't display loaded playlist name in queue.
 
 0.9.4
 -----

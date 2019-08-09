@@ -685,7 +685,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
                     if (needUpdate) {
                         this.$nextTick(function () {
-                            this.scheduleUpdate();
+                            this.updateItems();
                         });
                     } else if ((prevIndex!=this.currentIndex || this.autoScrollRequired) && this.$store.state.autoScrollQueue) {
                         this.$nextTick(function () {

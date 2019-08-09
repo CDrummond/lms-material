@@ -165,12 +165,12 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-layout v-else>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
-   <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></img></v-btn>
-   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon class="active-btn">repeat</v-icon></v-btn>
    <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
 
-   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktop || wide>0) && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktop || wide>0) && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums active-btn">shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktop || wide>0"></v-divider>
    <template v-if="desktop || wide>1" v-for="(action, index) in settingsMenuActions">

@@ -290,13 +290,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.listSize=0;
                 this.items=[];
                 this.timestamp=0;
-                this.lastLoadedPlaylistName=undefined;
-                this.playlistName=undefined;
             }
-            if (this.lastLoadedPlaylistName!=playerStatus.playlist.name) {
-                this.lastLoadedPlaylistName=playerStatus.playlist.name;
-                this.playlistName=playerStatus.playlist.name;
-            }
+            this.playlistName=playerStatus.playlist.name;
             if (playerStatus.playlist.timestamp!=this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1) ||
                 (playerStatus.playlist.timestamp<=0 && this.items.length>0) || this.listSize!=playerStatus.playlist.count) {
                 this.currentIndex = playerStatus.playlist.current;
@@ -464,9 +459,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             bus.$emit('refreshStatus');
                         });
                     } else {
-                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({datax}) => {
-                            this.playlistName = str;
-                        }).catch(err => {
+                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to save play queue!"));
                             logError(err);
                         });

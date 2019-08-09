@@ -72,10 +72,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#1976d2 !important;
 }
 
-.dimmed {
- opacity:0.35;
-}
-
 #app .v-icon {
  color:#444;
 }

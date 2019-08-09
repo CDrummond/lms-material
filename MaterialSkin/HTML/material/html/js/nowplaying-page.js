@@ -20,7 +20,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
    </v-list-tile>
    <v-list-tile @click="trackInfo()" :disabled="undefined==playerStatus.current.id">
-    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar" v-bind:class="{'slightly-dimmed': undefined==playerStatus.current.id}"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar" v-bind:class="{'dimmed': undefined==playerStatus.current.id}"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>

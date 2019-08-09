@@ -77,10 +77,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  border-right: 1px solid #333333;
 }
 
-.dimmed {
- opacity:0.3;
-}
-
 #app .v-icon {
  color: #fff;
 }

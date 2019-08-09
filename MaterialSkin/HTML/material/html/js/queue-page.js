@@ -195,7 +195,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -211,7 +211,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>

@@ -987,3 +987,6 @@ div.v-subheader {
  padding:0px;
 }
 
+.browse-action {
+ min-width:28px !important;
+}

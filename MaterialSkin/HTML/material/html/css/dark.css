@@ -89,6 +89,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  text-shadow: 0px 0px 8px #000;
 }
 
-.active-nav div span, .active-nav div i {
+.active-nav div span, .active-nav div i, .active-btn {
  color: #58b7ff !important
 }

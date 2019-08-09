@@ -8,6 +8,7 @@
    sorting can corrupt this order.
 4. Don't display loaded playlist name in queue.
 5. Use "playlistcontrol cmd:load" (etc) to load plylists.
+6. Colour repeat/shuffle icons when active.
 
 0.9.4
 -----

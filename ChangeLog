@@ -9,6 +9,7 @@
 4. Don't display loaded playlist name in queue.
 5. Use "playlistcontrol cmd:load" (etc) to load plylists.
 6. Colour repeat, shuffle, and power icons when active.
+7. Show cover-art in playlist listings.
 
 0.9.4
 -----

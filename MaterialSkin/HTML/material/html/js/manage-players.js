@@ -104,6 +104,7 @@ Vue.component('lms-manage-players', {
         this.noImage = resolveImageUrl(LMS_BLANK_COVER);
         bus.$on('manage.open', function(act) {
             this.show = true;
+            this.openDialogs = 0;
 
             // Check to see if we can manage groups...
             this.manageGroups = getLocalStorageBool('manageGroups', false);
@@ -139,10 +140,18 @@ Vue.component('lms-manage-players', {
         }.bind(this));
         this.initItems();
 
+        this.openDialogs = 0;
+        bus.$on('dialogOpen', function(name, open) {
+            if (open) {
+                this.openDialogs++;
+            } else if (this.openDialogs>0) {
+                this.openDialogs--;
+            }
+        }.bind(this));
         bus.$on('esc', function() {
             if (this.menu.show) {
                 this.menu.show = false;
-            } else {
+            } else if (1==this.openDialogs) {
                 this.close();
             }
         }.bind(this));

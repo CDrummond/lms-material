@@ -10,7 +10,7 @@ var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
 Vue.component('lms-player-settings', {
     template: `
 <div>
- <v-dialog v-model="show" v-if="show" scrollable fullscreen>
+ <v-dialog v-model="show" v-if="show" scrollable fullscreen persistent>
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar color="primary" dark app class="lms-toolbar">
@@ -208,7 +208,20 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=false;
+            this.show=this.alarmDialog.show=false;
+        }.bind(this));
+        this.sleepOpen = false;
+        bus.$on('dialogOpen', function(name, open) {
+            if (name=='sleep') {
+                this.sleepOpen = open;
+            }
+        }.bind(this));
+        bus.$on('esc', function() {
+            if (this.alarmDialog.show) {
+                this.alarmDialog.show=false;
+            } else if (!this.sleepOpen) {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {

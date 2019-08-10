@@ -137,8 +137,15 @@ Vue.component('lms-manage-players', {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
-
         this.initItems();
+
+        bus.$on('esc', function() {
+            if (this.menu.show) {
+                this.menu.show = false;
+            } else {
+                this.close();
+            }
+        }.bind(this));
 
         bus.$on('playerStatus', function(player) {
             this.updatePlayer(player);

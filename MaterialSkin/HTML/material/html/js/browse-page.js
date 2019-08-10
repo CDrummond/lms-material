@@ -407,8 +407,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
-
         this.initItems();
+
+        bus.$on('esc', function() {
+            this.menu.show = false;
+        }.bind(this));
 
         bus.$on('playerChanged', function() {
             if (this.$store.state.serverMenus) {

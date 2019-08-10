@@ -502,6 +502,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
         this.initItems();
 
+        bus.$on('esc', function() {
+            this.menu.show = false;
+        }.bind(this));
+
         bus.$on('info', function() {
             if (this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
                 this.largeView = false;

@@ -10,6 +10,7 @@
 5. Use "playlistcontrol cmd:load" (etc) to load plylists.
 6. Colour repeat, shuffle, and power icons when active.
 7. Show cover-art in playlist listings.
+8. Fix play/pause button in standalone now-playing view.
 
 0.9.4
 -----

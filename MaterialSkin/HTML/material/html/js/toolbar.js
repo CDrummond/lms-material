@@ -65,7 +65,7 @@ Vue.component('lms-toolbar', {
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
  <v-btn v-if="noPlayer" icon class="toolbar-button"><v-icon color="orange darken-2">warning</v-icon></v-btn>
- <v-menu bottom :disabled="!connected" class="ellipsis">
+ <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
@@ -185,6 +185,7 @@ Vue.component('lms-toolbar', {
                  playlist: { count: "", duration: "" },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
+                 showPlayerMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
@@ -280,6 +281,10 @@ Vue.component('lms-toolbar', {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        bus.$on('esc', function() {
+            this.showPlayerMenu = false;
+        }.bind(this));
 
         bus.$on('dialogOpen', function(name, val) {
             if (name=='info-dialog') {

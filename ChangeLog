@@ -11,6 +11,7 @@
 6. Colour repeat, shuffle, and power icons when active.
 7. Show cover-art in playlist listings.
 8. Fix play/pause button in standalone now-playing view.
+9. When updatnig player list, check if current player's name has changed.
 
 0.9.4
 -----

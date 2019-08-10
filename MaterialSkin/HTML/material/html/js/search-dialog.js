@@ -51,6 +51,9 @@ Vue.component('lms-search-dialog', {
             this.initItems();
         }.bind(this));
         this.initItems();
+        bus.$on('esc', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         initItems() {

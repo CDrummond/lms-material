@@ -14,6 +14,7 @@
  9. When updatnig player list, check if current player's name has changed.
 10. Take copy of player ID when updating settings, to prevent the real player
     object being modified.
+11. Close menus and dialogs with 'esc' key.
 
 0.9.4
 -----

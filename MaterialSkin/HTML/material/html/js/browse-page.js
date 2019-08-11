@@ -1488,10 +1488,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                              }
                         }
                     }
-                    var isMore = "more" == commandName;
                     if (command.itemsParams && item[command.itemsParams]) {
+                        /*var isMore = "more" == commandName;*/
                         for(var key in item[command.itemsParams]) {
-                            if (/*!isMore ||*/ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
+                            if (/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
                                 var param = key+":"+item[command.itemsParams][key];
                                 if (!addedParams.has(param)) {
                                     cmd.params.push(param);

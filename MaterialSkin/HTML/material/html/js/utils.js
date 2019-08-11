@@ -524,7 +524,7 @@ function isTextItem(item) {
     return !item.weblink &&
            ( "text"==item.type ||
              // if group is not undefined, its probably a pinned app
-             (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1) && /*!item.params && Dynamic playlists have params?*/
+             (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1) && /* !item.params && Dynamic playlists have params? */
               (!item.command || (item.command[0]!="browsejive" && (item.command.length<2 || item.command[1]!="browsejive")))));
 }
 

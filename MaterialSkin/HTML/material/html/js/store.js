@@ -138,6 +138,10 @@ const store = new Vuex.Store({
             }
 
             if (!changed) {
+                for (var i=0, len=state.players.length; i<len; ++i) {
+                    state.players[i].ison = players[i].ison;
+                    state.players[i].isconnected = players[i].isconnected;
+                }
                 return;
             }
 

@@ -6,14 +6,22 @@
 
 0.9.5
 -----
-1. When updating now-playing, prefer trackartist and trackartist_ids to artist
-   and artist_ids if these are set.
-2. Use first of trackartist_ids for artist_id, if this is set.
-3. Fix removing a selection of favourites, when Material is set to order the
-   favourites. Need to delete from the highest favourite ID to the lowest, but
-   sorting can corrupt this order.
-4. Don't display loaded playlist name in queue.
-5. Use "playlistcontrol cmd:load" (etc) to load plylists.
+ 1. When updating now-playing, prefer trackartist and trackartist_ids to artist
+    and artist_ids if these are set.
+ 2. Use first of trackartist_ids for artist_id, if this is set.
+ 3. Fix removing a selection of favourites, when Material is set to order the
+    favourites. Need to delete from the highest favourite ID to the lowest, but
+    sorting can corrupt this order.
+ 4. Don't display loaded playlist name in queue.
+ 5. Use "playlistcontrol cmd:load" (etc) to load playlists.
+ 6. Colour repeat, shuffle, and power icons when active.
+ 7. Show cover-art in playlist listings.
+ 8. Fix play/pause button in standalone now-playing view.
+ 9. When updating player list, check if current player's name has changed.
+10. Take copy of player ID when updating settings, to prevent the real player
+    object being modified.
+11. Close menus and dialogs with 'esc' key.
+12. Correctly update power state of other players.
 
 0.9.4
 -----

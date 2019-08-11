@@ -115,5 +115,11 @@ function initApp(app) {
 
     // https://github.com/timruffles/mobile-drag-drop/issues/77
     window.addEventListener( 'touchmove', function() {});
+
+    window.addEventListener('keyup', function(event) {
+        if (event.keyCode === 27) {
+            bus.$emit('esc');
+        }
+    });
 }
 

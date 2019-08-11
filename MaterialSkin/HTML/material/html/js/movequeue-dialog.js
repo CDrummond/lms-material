@@ -48,6 +48,9 @@ Vue.component('lms-movequeue-dialog', {
             this.src = player.id;
             this.show = true;
         }.bind(this));
+        bus.$on('esc', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         cancel() {

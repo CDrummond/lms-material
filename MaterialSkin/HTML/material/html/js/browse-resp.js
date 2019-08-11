@@ -618,7 +618,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: i.playlist,
                               command: ["playlists", "tracks"],
                               //icon: "list",
-                              params: ["playlist_id:"+ i.id], // "tags:IRad"] -> Will show rating, not album???
+                              params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                               type: "group",
                               section: SECTION_PLAYLISTS,
@@ -657,6 +657,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,
                               subtitle: subtitle,
+                              image: i.artwork_url
+                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
+                                        : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, REMOVE_ACTION],
                               type: "track",

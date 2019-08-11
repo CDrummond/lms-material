@@ -1,3 +1,10 @@
+0.9.6
+-----
+1. For MAI biography, use in order of preference; first of trackartist_ids,
+   first of artist_ids, trackartist_id, and finally artist_id.
+2. For MAI lyrics, pass track_id, or artist and title if no track_id (or this is
+   negative).
+
 0.9.5
 -----
  1. When updating now-playing, prefer trackartist and trackartist_ids to artist

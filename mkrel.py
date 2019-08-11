@@ -145,7 +145,7 @@ def minifyCss():
                     cssStr+=line.replace("\n", "").replace(" {", "{")
             while ("  " in cssStr):
                 cssStr=cssStr.replace("  ", " ")
-            cssStr=cssStr.replace("} ", "}").replace("{ ", "{").replace("; ", ";");
+            cssStr=cssStr.replace("} ", "}").replace("{ ", "{").replace("; ", ";").replace(": ", ":").replace(" :", ":").replace(" !", "!");
             while True:
                 start = cssStr.find("/*")
                 if start<0:

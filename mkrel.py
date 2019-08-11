@@ -3,7 +3,7 @@
 #
 # LMS-Material
 #
-# Copyright (c) 2018 Craig Drummond <craig.p.drummond@gmail.com>
+# Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
 # MIT license.
 #
 
@@ -98,7 +98,7 @@ def prepare():
     except Exception as e:
         error("Failed to copy files to %s folder - %s" % (BUILD_FOLDER, str(e)))
 
-    # Remove unminfied versions of JS files, if we have the minified version
+    # Remove unminified versions of JS files, if we have the minified version
     for js in os.listdir("%s/lib" % HTML_FOLDER):
         if js.endswith(".min.js"):
             orig = js.replace(".min.js", ".js")

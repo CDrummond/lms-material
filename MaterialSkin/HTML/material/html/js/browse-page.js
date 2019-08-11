@@ -203,7 +203,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -256,7 +256,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon>
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -407,8 +407,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
-
         this.initItems();
+
+        bus.$on('esc', function() {
+            this.menu.show = false;
+        }.bind(this));
 
         bus.$on('playerChanged', function() {
             if (this.$store.state.serverMenus) {
@@ -1509,10 +1512,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                              }
                         }
                     }
-                    var isMore = "more" == commandName;
                     if (command.itemsParams && item[command.itemsParams]) {
+                        /*var isMore = "more" == commandName;*/
                         for(var key in item[command.itemsParams]) {
-                            if (/*!isMore ||*/ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
+                            if (/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
                                 var param = key+":"+item[command.itemsParams][key];
                                 if (!addedParams.has(param)) {
                                     cmd.params.push(param);

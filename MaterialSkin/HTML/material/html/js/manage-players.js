@@ -10,7 +10,7 @@ var PMGR_DELETE_GROUP_ACTION = {cmd:"delete",   icon:"delete"};
 var PMGR_SYNC_ACTION         = {cmd:"sync",     icon:"link"};
 var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"speaker"};
 var PMGR_POWER_ON_ACTION     = {cmd:"on",       icon:"power_settings_new", dimmed:true};
-var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new"};
+var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new", active:true};
 var PMGR_SLEEP_ACTION        = {cmd:"sleep",    icon:"hotel"};
 
 var nameMap = {};
@@ -82,7 +82,7 @@ Vue.component('lms-manage-players', {
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
     <v-list-tile v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-bind:class="{'dimmed': action.dimmed}">{{action.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><v-icon v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -104,6 +104,7 @@ Vue.component('lms-manage-players', {
         this.noImage = resolveImageUrl(LMS_BLANK_COVER);
         bus.$on('manage.open', function(act) {
             this.show = true;
+            this.openDialogs = 0;
 
             // Check to see if we can manage groups...
             this.manageGroups = getLocalStorageBool('manageGroups', false);
@@ -137,8 +138,23 @@ Vue.component('lms-manage-players', {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
-
         this.initItems();
+
+        this.openDialogs = 0;
+        bus.$on('dialogOpen', function(name, open) {
+            if (open) {
+                this.openDialogs++;
+            } else if (this.openDialogs>0) {
+                this.openDialogs--;
+            }
+        }.bind(this));
+        bus.$on('esc', function() {
+            if (this.menu.show) {
+                this.menu.show = false;
+            } else if (1==this.openDialogs) {
+                this.close();
+            }
+        }.bind(this));
 
         bus.$on('playerStatus', function(player) {
             this.updatePlayer(player);

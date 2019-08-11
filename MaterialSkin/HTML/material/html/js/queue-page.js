@@ -165,12 +165,12 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-layout v-else>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
-   <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon>repeat_one</v-icon></img></v-btn>
-   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon class="active-btn">repeat</v-icon></v-btn>
    <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
 
-   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktop || wide>0) && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums">shuffle</v-icon></v-btn>
-   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon>shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktop || wide>0) && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums active-btn">shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktop || wide>0"></v-divider>
    <template v-if="desktop || wide>1" v-for="(action, index) in settingsMenuActions">
@@ -195,7 +195,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -211,7 +211,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-    <v-list-tile-action @click.stop="itemMenu(item, index, $event)">
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -290,13 +290,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.listSize=0;
                 this.items=[];
                 this.timestamp=0;
-                this.lastLoadedPlaylistName=undefined;
-                this.playlistName=undefined;
             }
-            if (this.lastLoadedPlaylistName!=playerStatus.playlist.name) {
-                this.lastLoadedPlaylistName=playerStatus.playlist.name;
-                this.playlistName=playerStatus.playlist.name;
-            }
+            this.playlistName=playerStatus.playlist.name;
             if (playerStatus.playlist.timestamp!=this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1) ||
                 (playerStatus.playlist.timestamp<=0 && this.items.length>0) || this.listSize!=playerStatus.playlist.count) {
                 this.currentIndex = playerStatus.playlist.current;
@@ -358,6 +353,10 @@ var lmsQueue = Vue.component("lms-queue", {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        bus.$on('esc', function() {
+            this.menu.show = false;
+        }.bind(this));
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
@@ -464,9 +463,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             bus.$emit('refreshStatus');
                         });
                     } else {
-                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({datax}) => {
-                            this.playlistName = str;
-                        }).catch(err => {
+                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to save play queue!"));
                             logError(err);
                         });
@@ -692,7 +689,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
                     if (needUpdate) {
                         this.$nextTick(function () {
-                            this.scheduleUpdate();
+                            this.updateItems();
                         });
                     } else if ((prevIndex!=this.currentIndex || this.autoScrollRequired) && this.$store.state.autoScrollQueue) {
                         this.$nextTick(function () {

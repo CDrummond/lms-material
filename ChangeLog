@@ -15,6 +15,7 @@
 10. Take copy of player ID when updating settings, to prevent the real player
     object being modified.
 11. Close menus and dialogs with 'esc' key.
+12. Correctly update power state of other players.
 
 0.9.4
 -----

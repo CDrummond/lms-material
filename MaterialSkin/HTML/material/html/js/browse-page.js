@@ -1135,7 +1135,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.menu[idx]=UNSELECT_ACTION;
                     }
                     if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
-                        forceItemUpdate(this, this.items, item, index, this.scrollElement);
+                        forceItemUpdate(this, item);
                     }
                 }
             } else if (UNSELECT_ACTION===act) {
@@ -1148,7 +1148,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.menu[idx]=SELECT_ACTION;
                     }
                     if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
-                        forceItemUpdate(this, this.items, item, index, this.scrollElement);
+                        forceItemUpdate(this, item);
                     }
                 }
             } else if (RATING_ACTION==act) {

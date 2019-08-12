@@ -519,7 +519,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         item.actions[idx]=PQ_UNSELECT_ACTION;
                     }
                     if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
-                        forceItemUpdate(this, this.items, item, index, this.scrollElement);
+                        forceItemUpdate(this, item);
                     }
                 }
             } else if (PQ_UNSELECT_ACTION===act) {
@@ -532,7 +532,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         item.actions[idx]=PQ_SELECT_ACTION;
                     }
                     if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
-                        forceItemUpdate(this, this.items, item, index, this.scrollElement);
+                        forceItemUpdate(this, item);
                     }
                 }
             }

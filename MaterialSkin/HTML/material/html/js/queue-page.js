@@ -6,7 +6,6 @@
  */
 
 const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltyAKNS" : "tags:cdegltysAKNS";
-const PQ_STD_ACTIONS = [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION];
 
 function queueItemCover(item) {
     if (item.artwork_url) {
@@ -116,7 +115,7 @@ function parseResp(data, showTrackNum, index, showRatings) {
                               title: title,
                               subtitle: buildSubtitle(i, showRatings),
                               image: queueItemCover(i),
-                              actions: PQ_STD_ACTIONS,
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index

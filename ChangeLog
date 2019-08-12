@@ -4,6 +4,8 @@
    first of artist_ids, trackartist_id, and finally artist_id.
 2. For MAI lyrics, pass track_id, or artist and title if no track_id (or this is
    negative).
+3. Only show info page when pressing now-playing nav button if have track
+   details.
 
 0.9.5
 -----

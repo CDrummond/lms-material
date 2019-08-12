@@ -642,11 +642,13 @@ function folderName(path) {
     return parts[parts.length-1];
 }
 
-function forceItemUpdate(vm, items, item, index) {
+function forceItemUpdate(vm, items, item, index, elem) {
+    var top = elem.scrollTop;
     vm.$nextTick(function () {
         items.splice(index, 1);
         vm.$nextTick(function () {
             items.splice(index, 0, item);
+            setScrollTop(elem, top);
         });
     });
 }

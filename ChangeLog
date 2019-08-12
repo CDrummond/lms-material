@@ -6,6 +6,7 @@
    negative).
 3. Only show info page when pressing now-playing nav button if have track
    details.
+4. Fix list moving when select item near bottom.
 
 0.9.5
 -----

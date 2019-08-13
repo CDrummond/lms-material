@@ -23,11 +23,13 @@ const LMS_LIST_ELEMENT_SIZE = 57;
 const LMS_BLANK_COVER = "/music/0/cover.jpg";
 const LMS_BLANK_IMAGE = "html/images/blank.png";
 const LMS_DOUBLE_CLICK_TIMEOUT = 300;
-const LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
-                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
-                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Wedding Music"]);
-const LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);
 const LMS_DARK_SVG = "fff";
 const LMS_LIGHT_SVG = "444";
 const LMS_DARK_ACTIVE_SVG ="58b7ff";
 const LMS_LIGHT_ACTIVE_SVG = "346dd2";
+
+// Semi-constant :-)
+var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
+                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
+var LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);

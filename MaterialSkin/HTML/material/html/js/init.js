@@ -70,6 +70,25 @@ function initApp(app) {
         }
     });
 
+    lmsCommand("", ["pref", "plugin.material-skin:composergenres", "?"]).then(({data}) => {
+        if (data && data.result && data.result._p2 != null) {
+            var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
+            if (genres.length>0) {
+                LMS_COMPOSER_GENRES = new Set(genres);
+                logJsonMessage("COMPOSER_GENRES", genres);
+            }
+        }
+    });
+    lmsCommand("", ["pref", "plugin.material-skin:conductorgenres", "?"]).then(({data}) => {
+        if (data && data.result && data.result._p2 != null) {
+            var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
+            if (genres.length>0) {
+                LMS_CONDUCTOR_GENRES = new Set(genres);
+                logJsonMessage("CONDUCTOR_GENRES", genres);
+            }
+        }
+    });
+
     if (window.location.href.indexOf('/mini')<0 && window.location.href.indexOf('/now-playing')<0) {
         setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
     }

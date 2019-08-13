@@ -642,12 +642,11 @@ function folderName(path) {
     return parts[parts.length-1];
 }
 
-function forceItemUpdate(vm, items, item, index) {
+function forceItemUpdate(vm, item) {
+    var prev = item.title;
+    item.title = "XX"+item.title;
     vm.$nextTick(function () {
-        items.splice(index, 1);
-        vm.$nextTick(function () {
-            items.splice(index, 0, item);
-        });
+        item.title = prev;
     });
 }
 

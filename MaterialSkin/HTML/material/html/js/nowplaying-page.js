@@ -346,9 +346,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // Long-press on 'now playing' nav button whilst in now-playing shows track info
             bus.$on('nav', function(page, longPress) {
                 if ('now-playing'==page) {
-                    if (longPress && undefined!=this.playerStatus.current.id) {
-                        this.trackInfo();
-                    } else if (!longPress && this.$store.state.infoPlugin) {
+                    if (longPress) {
+                        if (this.playerStatus && undefined!=this.playerStatus.current.id) {
+                            this.trackInfo();
+                        }
+                    } else if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                        this.largeView = false;
                         this.info.show = !this.info.show;
                     }
                 }
@@ -391,7 +394,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
             }
             var artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
-            var artist_id = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids.split(",")[0].trim() : playerStatus.current.artist_id;
+            var artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;
             var artist_ids = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids : playerStatus.current.artist_ids;
             if (this.playerStatus.current.artist!=artist ||
                 this.playerStatus.current.artist_id!=artist_id ||
@@ -607,9 +610,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         setInfoTrack() {
             this.infoTrack={ title: this.playerStatus.current.title, track_id: this.playerStatus.current.id,
-                             artist: this.playerStatus.current.artist, artist_id: this.playerStatus.current.artist_id,
-                             albumartist: this.playerStatus.current.albumartist, albumartist_ids: this.playerStatus.current.albumartist_ids,
+                             artist: this.playerStatus.current.artist,
+                             artist_id: this.playerStatus.current.artist_ids
+                                ? this.playerStatus.current.artist_ids.split(",")[0].trim()
+                                : this.playerStatus.current.artist_id,
                              artist_ids: this.playerStatus.current.artist_ids,
+                             albumartist: this.playerStatus.current.albumartist, albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
         },
         trackInfo() {
@@ -637,10 +643,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (this.infoTrack.title!=undefined) {
                         command.push("title:"+this.infoTrack.title);
                     }
-                    if (this.infoTrack.artist_id!=undefined) {
-                        command.push("artist_id:"+this.infoTrack.artist_id);
-                    }
-                    if (this.infoTrack.artist!=undefined && (!this.infoTrack.artist_ids || this.infoTrack.artist_ids.split(",").length==1)) {
+                    if (this.infoTrack.artist!=undefined) {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                 }
@@ -720,7 +723,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("album:"+this.infoTrack.album);
                     }
                     if (this.infoTrack.albumartist_ids!=undefined) {
-                        command.push("artist_id:"+this.infoTrack.albumartist_ids.split(", ")[0]);
+                        command.push("artist_id:"+this.infoTrack.albumartist_ids.split(", ")[0].trim());
                     } else if (this.infoTrack.artist_id!=undefined) {
                         command.push("artist_id:"+this.infoTrack.artist_id);
                     }

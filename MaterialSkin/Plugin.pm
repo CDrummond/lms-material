@@ -17,12 +17,33 @@ my $log = Slim::Utils::Log->addLogCategory({
     'description' => 'PLUGIN_MATERIAL_SKIN'
 });
 
+my $prefs = preferences('plugin.material-skin');
+
 my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
+
+my $DEFAULT_COMPOSER_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
+my $DEFAULT_CONDUCTOR_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
 
 sub initPlugin {
     my $class = shift;
 
+    if (my $composergenres = $prefs->get('composergenres')) {
+        $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
+    }
+
+    if (my $conductorgenres = $prefs->get('conductorgenres')) {
+        $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES) if $conductorgenres eq '';
+    }
+
+    $prefs->init({
+        composergenres => $DEFAULT_COMPOSER_GENRES,
+        conductorgenres => $DEFAULT_CONDUCTOR_GENRES
+    });
+
     if (main::WEBUI) {
+        require Plugins::MaterialSkin::Settings;
+		Plugins::MaterialSkin::Settings->new();
+
         Slim::Web::Pages->addPageFunction( 'desktop', sub {
             my ($client, $params) = @_;
             $params->{'material_revision'} = $class->pluginVersion();

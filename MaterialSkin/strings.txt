@@ -4,3 +4,15 @@ MATERIAL_SKIN
 PLUGIN_MATERIAL_SKIN
 	DE	Web Skin im Material Stil, für mobile Nutzung optimiert
 	EN	Material themed skin, suitable for mobile use.
+
+PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
+	EN	Composer genres
+
+PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
+	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
+
+PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
+	EN	Composer genres
+
+PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
+	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.

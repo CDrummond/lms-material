@@ -673,3 +673,15 @@ function mapIcon(params, item) {
     }
     item.svg="artist";
 }
+
+function splitString(str) {
+    var arr = [];
+    var s = str.split(",");
+    for (var i=0, len=s.length; i<len; ++i) {
+        var e = s[i].trim();
+        if (e.length>0) {
+            arr.push(e);
+        }
+    }
+    return arr;
+}

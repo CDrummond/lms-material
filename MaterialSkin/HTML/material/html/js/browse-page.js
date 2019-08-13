@@ -847,7 +847,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "album",
                               type: "group",
                               id: item.id+"albums"}];
-                if (LMS_COMPOSER_GENRES.has(item.title) || LMS_CONDUCTOR_GENRES.has(item.title)) {
+                if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
                                         params: ["role_id:COMPOSER", item.params[0]],

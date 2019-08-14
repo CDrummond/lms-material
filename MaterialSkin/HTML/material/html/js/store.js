@@ -138,6 +138,10 @@ const store = new Vuex.Store({
             }
 
             if (!changed) {
+                for (var i=0, len=state.players.length; i<len; ++i) {
+                    state.players[i].ison = players[i].ison;
+                    state.players[i].isconnected = players[i].isconnected;
+                }
                 return;
             }
 
@@ -170,6 +174,7 @@ const store = new Vuex.Store({
                 if (players) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.player.id) {
+                            state.player.name = state.players[i].name; // Just in case it was changed
                             found = true;
                             break;
                         }

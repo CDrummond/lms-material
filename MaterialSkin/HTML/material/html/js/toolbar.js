@@ -65,9 +65,9 @@ Vue.component('lms-toolbar', {
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
  <v-btn v-if="noPlayer" icon class="toolbar-button"><v-icon color="orange darken-2">warning</v-icon></v-btn>
- <v-menu bottom :disabled="!connected" class="ellipsis">
+ <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
-   <div class="maintoolbar-title ellipsis" v-bind:class="{'slightly-dimmed': !playerStatus.ison}">
+   <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
     <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
    <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -85,7 +85,7 @@ Vue.component('lms-toolbar', {
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
       <v-list-tile-action>
-       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}" @click.stop="togglePower(item)">power_settings_new</v-icon></
+       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)">power_settings_new</v-icon></
       </v-list-tile-action>
     </v-list-tile>
    </template>
@@ -185,6 +185,7 @@ Vue.component('lms-toolbar', {
                  playlist: { count: "", duration: "" },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
+                 showPlayerMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
@@ -281,6 +282,10 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         this.initItems();
 
+        bus.$on('esc', function() {
+            this.showPlayerMenu = false;
+        }.bind(this));
+
         bus.$on('dialogOpen', function(name, val) {
             if (name=='info-dialog') {
                 this.infoOpen = val;
@@ -306,7 +311,7 @@ Vue.component('lms-toolbar', {
             this.snackbar = {msg: msg, show: true };
         }.bind(this));
 
-        if ('mediaSession' in navigator) {
+        if ('mediaSession' in navigator && IS_MOBILE) {
             toolbarComponent = this;
             //window.addEventListener('touchend', initMediaSessionAudio);
             window.addEventListener('click', initMediaSessionAudio);
@@ -358,7 +363,6 @@ Vue.component('lms-toolbar', {
             var elem = document.getElementById(id);
             if (elem) {
                 elem.addEventListener('mousewheel', function(event) {
-                    event.preventDefault();
                     if (event.wheelDeltaY<0) {
                         this.volumeDown();
                     } else if (event.wheelDeltaY>0) {

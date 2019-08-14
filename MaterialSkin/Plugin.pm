@@ -1,6 +1,7 @@
 package Plugins::MaterialSkin::Plugin;
 
 use Config;
+use Slim::Utils::Favorites;
 use Slim::Utils::Log;
 use Slim::Utils::Network;
 use Slim::Utils::Prefs;
@@ -16,7 +17,7 @@ my $log = Slim::Utils::Log->addLogCategory({
     'description' => 'PLUGIN_MATERIAL_SKIN'
 });
 
-my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)};
+my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 
 sub initPlugin {
     my $class = shift;
@@ -96,7 +97,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -177,6 +178,18 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'favorites') {
+        my $cnt = 0;
+        if (my $favsObject = Slim::Utils::Favorites->new()) {
+            foreach my $fav (@{$favsObject->all}) {
+                $request->addResultLoop("favs_loop", $cnt, "url", $fav->{url});
+                $cnt++;
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
     $request->setStatusBadParams()
 }
 
@@ -212,7 +225,24 @@ sub _svgHandler {
     my $request = $response->request;
     my $dir = dirname(__FILE__);
     my $filePath = $dir . "/HTML/material/html/images/" . basename($request->uri->path) . ".svg";
-    my $colour = "#" . $request->uri->query_param('c');
+    my $colour = "#f00";
+
+    if ($request->uri->can('query_param')) {
+        $colour = "#" . $request->uri->query_param('c');
+    } else { # Manually extract "c=colour" query parameter...
+        my $uri = $request->uri->as_string;
+        my $start = index($uri, "c=");
+
+        if ($start > 0) {
+            $start += 2;
+            my $end = index($uri, "&", $start);
+            if ($end > $start) {
+                $colour = "#" . substr($uri, $start, $end-$start);
+            } else {
+                $colour = "#" . substr($uri, $start);
+            }
+        }
+    }
 
     if (-e $filePath) {
         my $svg = read_file($filePath);

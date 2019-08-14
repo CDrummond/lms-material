@@ -85,30 +85,61 @@ if (isAndroid()) { // currently only need to check current IP address to detect 
     }
 }
 
-const CancelToken = axios.CancelToken;
-var lmsListSource = undefined;
+//const CancelToken = axios.CancelToken;
+//var lmsListSource = undefined;
 
 function lmsCommand(playerid, command, isList) {
-    var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
-                    (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
+//    var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
+//                    (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
 
     const URL = "/jsonrpc.js"
     var data = { id: 1, method: "slim.request", params: [playerid, command]};
 
     logJsonMessage("REQ", data.params);
-    if (canCancel) {
-        lmsListSource = CancelToken.source();
-        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
-            lmsListSource = undefined;
-        });
-    } else {
+//    if (canCancel) {
+//        lmsListSource = CancelToken.source();
+//        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
+//            lmsListSource = undefined;
+//        });
+//    } else {
         return axios.post(URL, data);
+//    }
+}
+
+async function lmsListFragment(playerid, command, params, start, fagmentSize, batchSize, accumulated) {
+    var cmdParams = command.slice();
+    cmdParams = [].concat(cmdParams, [start, fagmentSize]);
+    if (params && params.length>0) {
+        cmdParams = [].concat(cmdParams, params);
     }
+    return lmsCommand(playerid, cmdParams).then(({data}) => {
+        logJsonMessage("RESP", data);
+        if (data && data.result && data.result.item_loop) {
+            if (undefined==accumulated) {
+                accumulated = data;
+            } else {
+                accumulated.result.item_loop.push.apply(accumulated.result.item_loop, data.result.item_loop);
+            }
+            if (accumulated.result.item_loop.length>=data.result.count) {
+                return new Promise(function(resolve, reject) {
+                    resolve({data:accumulated});
+                });
+            } else {
+                return lmsListFragment(playerid, command, params, start+fagmentSize, fagmentSize, batchSize, accumulated);
+            }
+        }
+    });
 }
 
 async function lmsList(playerid, command, params, start, batchSize, cancache) {
+    var count = undefined===batchSize ? LMS_BATCH_SIZE : batchSize;
+
+    if (command.length>1 && command[0]=="custombrowse" && (command[1]=="browsejive" || command[1]=="browse") && count>999) {
+        return lmsListFragment(playerid, command, params, 0, 999, count);
+    }
+
     var cmdParams = command.slice();
-    cmdParams = [].concat(cmdParams, [undefined==start ? 0 : start, undefined===batchSize ? LMS_BATCH_SIZE : batchSize]);
+    cmdParams = [].concat(cmdParams, [undefined==start ? 0 : start, count]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }
@@ -243,7 +274,9 @@ var lmsServer = Vue.component('lms-server', {
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
                 this.handlePlayerStatus(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith("/slim/favorites")) {
-                this.handleFavoritesUpdate();
+                if (msg.data && msg.data.length>1 && msg.data[0]=="favorites" && msg.data[1]=="changed") {
+                   this.handleFavoritesUpdate();
+                }
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }
@@ -400,22 +433,25 @@ var lmsServer = Vue.component('lms-server', {
             }.bind(this), 500);
         },
         updateFavorites() { // Update set of favorites URLs
-            lmsList("", ["favorites", "items"], ["menu:favorites", "menu:1"]).then(({data}) => {
-                if (data && data.result && data.result.item_loop) {
-                    var loop = data.result.item_loop;
-                    var favs = {};
+            lmsCommand("", ["material-skin", "favorites"]).then(({data}) => {
+                if (data && data.result && data.result.favs_loop) {
+                    var loop = data.result.favs_loop;
+                    var favs = new Set();
+                    var changed = false;
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        if (loop[i].presetParams && loop[i].presetParams.favorites_url && loop[i].params) {
-                            var url = loop[i].presetParams.favorites_url;
+                        if (loop[i].url) {
+                            var url = loop[i].url;
                             var lib = url.indexOf("libraryTracks.library=");
                             if (lib>0) {
                                 url=url.substring(0, lib-1);
                             }
-                            favs[url]= { id:"item_id:"+loop[i].params.item_id,
-                                         text:loop[i].text };
+                            favs.add(url);
+                            if (!changed && !lmsFavorites.has(url)) {
+                               changed = true;
+                            }
                         }
                     }
-                    if (JSON.stringify(lmsFavorites) !== JSON.stringify(favs)) {
+                    if (changed || lmsFavorites.size!=favs.size) {
                         lmsFavorites = favs;
                         bus.$emit('refreshList', SECTION_FAVORITES);
                     }

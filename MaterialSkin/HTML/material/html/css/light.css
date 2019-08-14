@@ -5,6 +5,10 @@
  * MIT license.
  */
 
+:root {
+ scrollbar-color:#888 #c0c0c0;
+}
+
 ::-webkit-scrollbar {
  background:#c0c0c0;
 }
@@ -51,10 +55,6 @@ html, .mini-player {
  border-bottom:1px solid #f0f0f0;
 }
 
-.lms-bottom-nav {
- border-top:1px solid #ddd;
-}
-
 div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#0e0e0e !important;
 }
@@ -72,10 +72,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#1976d2 !important;
 }
 
-.dimmed {
- opacity:0.35;
-}
-
 #app .v-icon {
  color:#444;
 }
@@ -88,6 +84,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  text-shadow: 0px 0px 8px #fff;
 }
 
-.active-nav div span, .active-nav div i {
+.active-nav div span, .active-nav div i, .active-btn {
  color: #346dd2 !important
+}
+
+.v-tabs__slider-wrapper .accent {
+ background-color: #346dd2 !important;
+ border-color: #346dd2 !important;
 }

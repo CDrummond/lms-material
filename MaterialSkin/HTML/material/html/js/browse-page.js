@@ -28,6 +28,7 @@ const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
 const TOP_GENRES_ID = TOP_ID_PREFIX+"genre";
 const TOP_PLAYLISTS_ID = TOP_ID_PREFIX+"pl";
 const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
+const TOP_PRESETS_ID = TOP_ID_PREFIX+"ps";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
@@ -46,6 +47,7 @@ const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;
 const SECTION_PLAYLISTS = 4;
+const SECTION_PRESETS = 5;
 const GROUP_PINNED = 0;
 const GROUP_MY_MUSIC = 1;
 const GROUP_OTHER_MUSIC = 2;
@@ -155,10 +157,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
  <v-list class="bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
   <v-subheader v-if="isTop && pinned.length>0"><div @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</div></v-subheader>
-  <template v-if="isTop" v-for="(item, index) in pinned">
-   <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
+  <template v-if="isTop && !collapsed[GROUP_PINNED]" v-for="(item, index) in pinned">
+   <v-divider v-if="index>0 && pinned.length>index"></v-divider>
 
-   <v-list-tile v-if="!collapsed[GROUP_PINNED]" avatar @click="click(item, index, $event)" :key="item.id">
+   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id">
     <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar-small">
      <img :key="item.image" v-lazy="item.image" v-bind:class="{'radio-img': undefined!=item.url}">
     </v-list-tile-avatar>
@@ -218,7 +220,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </div>
    </v-subheader>
 
-   <v-divider v-else-if="!current && !item.disabled && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
+   <v-divider v-else-if="!current && !(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && (undefined==item.group || !collapsed[item.group]) && index>0 && items.length>index && !items[index-1].header" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -226,7 +228,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!item.disabled && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
+   <v-list-tile v-else-if="!(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && (undefined==item.group || !collapsed[item.group]) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -271,7 +273,20 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
-  <v-list v-if="menu.item">
+  <v-list v-if="menu.presets">
+   <v-list-tile><v-list-tile-title><b>{{trans.choosepos}}</b></v-list-tile-title></v-list-tile>
+   <v-divider></v-divider>
+   <template v-for="(p, index) in menu.presets">
+    <v-list-tile @click="savePreset(menu.item, p)">
+     <v-list-tile-content><v-list-tile-title>{{p}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+   <v-divider></v-divider>
+   <v-list-tile @click="menu.show = false">
+     <v-list-tile-content><v-list-tile-title>{{trans.cancel}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+  </v-list>
+  <v-list v-else-if="menu.item">
    <template v-for="(action, index) in menu.item.menu">
     <v-divider v-if="DIVIDER==action"></v-divider>
     <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index)">
@@ -313,6 +328,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
+
  </v-menu>
 </div>
       `,
@@ -325,13 +341,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
-                     deleteall:undefined, removeall:undefined },
+                     deleteall:undefined, removeall:undefined, choosepos:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             pinned: [],
             libraryName: undefined,
             selection: [],
-            collapsed: [false, false, false],
+            collapsed: [false, false, false, true],
             showRatingButton: false,
             section: undefined,
             letter: undefined,
@@ -342,11 +358,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     computed: {
-        darkUi () {
+        darkUi() {
             return this.$store.state.darkUi
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        showPresets() {
+            return this.$store.state.showPresets
         }
     },
     created() {
@@ -361,13 +380,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.mediaDirs=[];
         var col=getLocalStorageVal('collapsed', "").split(",");
         for (var i=0, len=col.length, tlen=this.collapsed.length; i<len && i<tlen; ++i) {
-           this.collapsed[i] = "true" == col[i];
+            this.collapsed[i] = "true" == col[i];
         }
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
                       pinned: new Set(),
-                      sortFavorites: this.$store.state.sortFavorites};
+                      sortFavorites: this.$store.state.sortFavorites,
+                      showPresets: this.$store.state.showPresets};
         this.separateArtists=getLocalStorageBool('separateArtists', false);
         this.randomMix=getLocalStorageBool('randomMix', true);
         this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
@@ -414,6 +434,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('playerChanged', function() {
+            if (this.current && this.current.section == SECTION_PRESETS) {
+                this.goHome();
+            }
             if (this.$store.state.serverMenus) {
                 this.playerMenu();
             }
@@ -457,7 +480,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                             { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), pinned: i18n('Pinned Items'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
-                          deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
+                          deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items"),
+                          choosepos:i18n("Choose position") };
 
             this.top = [
                 { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
@@ -647,6 +671,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
+                } else if (SECTION_PRESETS==this.current.section) {
+                    this.tbarActions=[ADD_PRESET_ACTION];
                 } else {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -794,7 +820,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index);
                 return;
             }
-            if (item.group == GROUP_PINNED && undefined!=item.url) { // Radio
+            if ((item.section == SECTION_PRESETS && item.id!=TOP_PRESETS_ID) || (item.group == GROUP_PINNED && undefined!=item.url)) { // Radio
                 this.itemMenu(item, index, event);
                 return;
             }
@@ -1011,13 +1037,17 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act==RENAME_FAV_ACTION) {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
-            } else if (act==ADD_FAV_ACTION) {
-                bus.$emit('dlg.open', 'favorite', 'add');
-            } else if (act==EDIT_FAV_ACTION) {
-                bus.$emit('dlg.open', 'favorite', 'edit', item);
+            } else if (act==ADD_FAV_ACTION || act==ADD_PRESET_ACTION) {
+                bus.$emit('dlg.open', 'favorite', 'add', undefined, act==ADD_PRESET_ACTION);
+            } else if (act==EDIT_ACTION) { // NOTE: Also edits presets!
+                bus.$emit('dlg.open', 'favorite', 'edit', item, SECTION_PRESETS==item.section);
             } else if (act==ADD_FAV_FOLDER_ACTION) {
                 this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER]};
+            } else if (act==SAVE_PRESET_ACTION || act==MOVE_PRESET_ACTION) {
+                setTimeout(function () {
+                    this.menu = { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]};
+                }.bind(this), 100);
             } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -1037,7 +1067,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
-                        lmsCommand(this.playerId(), ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({datax}) => {
+                        lmsCommand(this.playerId(), SECTION_PRESETS==item.section
+                                                    ? ["material-skin-presets", "clear", "num:"+item.num]
+                                                    : ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({datax}) => {
                             logJsonMessage("RESP", datax);
                             this.refreshList();
                         }).catch(err => {
@@ -1226,6 +1258,24 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 this.menu={show:true, item:item, x:event.clientX, y:event.clientY, index:index};
             }
+        },
+        savePreset(item, pos) {
+            var url = item.url ? item.url : (item.favUrl ? item.favUrl : (item.presetParams ? item.presetParams.favorites_url : undefined));
+            var command = ["material-skin-presets", "set", "num:"+pos, "url:"+url, "text:"+(item.section==SECTION_PRESETS ? item.text : item.title)];
+            if (item.section==SECTION_PRESETS) {
+                if (pos==item.num) {
+                    return;
+                } else {
+                    command.push("prev:"+item.num);
+                }
+            }
+            lmsCommand(this.playerId(), command).then(({data}) => {
+                if (item.section==SECTION_PRESETS) {
+                    this.refreshList();
+                } else {
+                    bus.$emit('showMessage', i18n("Set preset"));
+                }
+            });
         },
         clickSubtitle(item, index, event) {
             if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
@@ -1627,7 +1677,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         buildFullCommand(item, act) {
             var command = this.buildCommand(item, ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
-                if (item.url && (!item.id || !item.id.startsWith("playlist_id:"))) {
+                if (item.url && ((item.section && item.section == SECTION_PRESETS) || !item.id || !item.id.startsWith("playlist_id:"))) {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
@@ -1751,6 +1801,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         id: TOP_FAVORITES_ID,
                         section: SECTION_FAVORITES,
                         isFavFolder: true });
+            list.push({ title: i18n("Presets"),
+                        command: ["material-skin-presets", "list"],
+                        svg: "radio-tower",
+                        type: "presets",
+                        app: "presets",
+                        group: GROUP_OTHER_MUSIC,
+                        id: TOP_PRESETS_ID,
+                        section: SECTION_PRESETS });
             list.push({ title: i18n("Apps"),
                         command: ["myapps", "items"],
                         params: ["menu:1"],
@@ -1801,7 +1859,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (data && data.result && data.result.item_loop) {
                     this.serverTop = [];
                     this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION} );
-                    data.result.item_loop.forEach(c => {
+                    for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                        var c = loop[idx];
                         if (c.node=="myMusic" && c.id) {
                             if (c.id=="randomplay") {
                                 this.serverTop.push({ title: i18n("Random Mix"),
@@ -1894,7 +1953,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 this.serverTop.push(item);
                             }
                         }
-                    });
+                    }
                     this.serverTop.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
                     this.addExtraItems(this.serverTop, false);
                     this.serverTop[0].player=this.playerId();
@@ -2333,6 +2392,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browseDisplayChanged', function() {
             this.options.sortFavorites=this.$store.state.sortFavorites;
+            this.options.showPresets=this.$store.state.showPresets;
             this.goHome();
             if (this.playerId() && this.$store.state.serverMenus) {
                 this.playerMenu();

@@ -9,7 +9,7 @@ Vue.component('lms-favorite', {
     template: `
 <v-dialog scrollable v-model="show" persistent width="600">
  <v-card>
-  <v-card-title>{{item ? i18n("Edit Favorite") : i18n("Add Favorite")}}</v-card-title>
+  <v-card-title>{{item ? (isPreset ? i18n("Edit Preset") : i18n("Edit Favorite")) : (isPreset ? i18n("Add Preset") : i18n("Add Favorite"))}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
@@ -20,6 +20,11 @@ Vue.component('lms-favorite', {
     <v-list-tile>
      <v-list-tile-content>
       <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search" :rules="urlRules" required></v-text-field>
+     </v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile v-if="isPreset && !item">
+     <v-list-tile-content>
+      <v-select :items="positions" label="Position" v-model="pos" item-text="label" item-value="key"></v-select>
      </v-list-tile-content>
     </v-list-tile>
    </v-list>
@@ -41,6 +46,9 @@ Vue.component('lms-favorite', {
             name: "",
             url: "",
             item: undefined,
+            isPreset: false,
+            pos: 1,
+            positions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             nameRules: [
                 v => !!v || i18n('Name is required'),
                 v => (v && v.trim().length > 0) || i18n('Name is required')
@@ -52,12 +60,23 @@ Vue.component('lms-favorite', {
         }
     },
     mounted() {
-        bus.$on('favorite.open', function(mode, item) {
+        bus.$on('favorite.open', function(mode, item, isPreset) {
+            this.isPreset = isPreset;
             if ('edit'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.item = item;
-                this.name = item.title;
-                this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
+                this.name = isPreset ? item.text : item.title;
+                this.url = isPreset 
+                            ? item.url
+                                ? item.url
+                                : item.favUrl 
+                                    ? item.favUrl
+                                    : item.presetParams
+                                        ? item.presetParams.favorites_url
+                                        : undefined
+                            : item.presetParams
+                                ? item.presetParams.favorites_url
+                                : undefined;
                 this.show = true;
             } else if ('add'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
@@ -84,19 +103,26 @@ Vue.component('lms-favorite', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-            if (url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) {
-                if (name == this.item.title) {
-                    return;
-                }
-                lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
-                    bus.$emit('refreshFavorites');
+
+            if (this.isPreset) {
+                lmsCommand(this.playerId, ["material-skin-presets", "set", "num:"+this.item.num, "url:"+url, "text:"+name]).then(({data})=> {
+                    bus.$emit('refreshList', SECTION_PRESETS);
                 });
             } else {
-                lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
-                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
+                if (url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) {
+                    if (name == this.item.title) {
+                        return;
+                    }
+                    lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
                         bus.$emit('refreshFavorites');
                     });
-                });
+                } else {
+                    lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
+                        lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
+                            bus.$emit('refreshFavorites');
+                        });
+                    });
+                }
             }
             this.show=false;
         },
@@ -106,15 +132,21 @@ Vue.component('lms-favorite', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-            lmsCommand(this.playerId, ["favorites", "exists", url]).then(({data})=> {
-                if (data && data.result && data.result.exists==1) {
-                    bus.$emit('showMessage', i18n("Already in favorites"));
-                } else {
-                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
-                        bus.$emit('refreshFavorites');
-                    });
-                }
-            });
+            if (this.isPreset) {
+                lmsCommand(this.playerId, ["material-skin-presets", "set", "num:"+this.pos, "url:"+url, "text:"+name]).then(({data})=> {
+                    bus.$emit('refreshList', SECTION_PRESETS);
+                });
+            } else {
+                lmsCommand(this.playerId, ["favorites", "exists", url]).then(({data})=> {
+                    if (data && data.result && data.result.exists==1) {
+                        bus.$emit('showMessage', i18n("Already in favorites"));
+                    } else {
+                        lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
+                            bus.$emit('refreshFavorites');
+                        });
+                    }
+                });
+            }
             this.show=false;
         },
         i18n(str) {

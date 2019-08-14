@@ -216,7 +216,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.isFavFolder = true;
                     }
                     i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
-                    i.menu.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_FAV_ACTION);
+                    i.menu.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_ACTION);
                     if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
@@ -254,6 +254,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;
+                    }
+                    if (options.showPresets) {
+                        i.menu.push(SAVE_PRESET_ACTION);
                     }   
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
@@ -261,6 +264,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         addedDivider = true;
                     }
                     i.menu.push(ADD_TO_FAV_ACTION);
+                    if (isRadios && options.showPresets) {
+                        i.menu.push(SAVE_PRESET_ACTION);
+                    }
                 }
 
                 if (addedPlayAction) {
@@ -891,7 +897,21 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
             });
-        } */ else if (0===resp.total && data.result.networkerror) {
+        } */ else if (data && data.result && data.result.presets_loop) {
+            for (var idx=0, loop=data.result.presets_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                var title = undefined!=i.text ? i.text.trim() : i.text;
+                resp.items.push({title: (parseInt(i.num)<10 ? "0" : "") + i.num + (undefined!=title && title.length>0 ? (SEPARATOR + title) : ""),
+                                 text: i.text,
+                                 url: i.url,
+                                 menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, EDIT_ACTION, MOVE_PRESET_ACTION],
+                                 section: SECTION_PRESETS,
+                                 num: i.num
+                                 });
+            }
+            resp.total = resp.items.length;
+            resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
+        } else if (0===resp.total && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
             for (var idx=0, loop=data.result.data, loopLen=loop.length; idx<loopLen; ++idx) {

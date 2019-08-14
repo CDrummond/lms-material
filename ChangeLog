@@ -4,6 +4,7 @@
 2. Allow moving favourites into folders.
 3. Add action to move favourite to parent folder.
 4. Make list of composer and condcutor genres configurable.
+5. Optionally suport listing and editing presets.
 
 0.9.6
 -----

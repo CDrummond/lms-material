@@ -87,7 +87,12 @@ function updateUiSettings(state, val) {
     }
     if (undefined!=val.menuIcons && state.menuIcons!=val.menuIcons) {
         state.menuIcons = val.menuIcons;
-        setLocalStorageVal('menuIcons', menuIcons);
+        setLocalStorageVal('menuIcons', state.menuIcons);
+    }
+    if (undefined!=val.showPresets && state.showPresets!=val.showPresets) {
+        state.showPresets = val.showPresets;
+        setLocalStorageVal('showPresets', state.showPresets);
+        browseDisplayChanged = true;
     }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
@@ -121,7 +126,8 @@ const store = new Vuex.Store({
         showPlayerMenuEntry: false,
         lsAndNotif:'playing',
         page:'browse',
-        menuIcons: true
+        menuIcons: true,
+        showPresets: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -258,6 +264,7 @@ const store = new Vuex.Store({
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             state.lsAndNotif = getLocalStorageVal('lsAndNotif', state.lsAndNotif);
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
+            state.showPresets = getLocalStorageBool('showPresets', state.showPresets);
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -290,7 +297,8 @@ const store = new Vuex.Store({
                                  volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
                                  showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                  lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
-                                 menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons)};
+                                 menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
+                                 showPresets: getLocalStorageBool('showPresets', undefined==prefs.showPresets ? state.showPresets : prefs.showPresets)};
                     updateUiSettings(state, opts);
                 }
             });

@@ -118,6 +118,14 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-list-tile>
+     <v-list-tile-content @click="showPresets = !showPresets" class="switch-label">
+      <v-list-tile-title>{{i18n('Show presets')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show player specific presets, and allow editing, etc.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showPresets"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Now Playing')}}</v-header>
 
@@ -234,7 +242,8 @@ Vue.component('lms-ui-settings', {
             lsAndNotif: 'playing',
             lsAndNotifItems: [],
             android: isAndroid(),
-            menuIcons: true
+            menuIcons: true,
+            showPresets: false
         }
     },
     computed: {
@@ -265,6 +274,7 @@ Vue.component('lms-ui-settings', {
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
+            this.showPresets = this.$store.state.showPresets;
             this.show = true;
         }.bind(this));
 
@@ -312,7 +322,8 @@ Vue.component('lms-ui-settings', {
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
-                                                  menuIcons:this.menuIcons
+                                                  menuIcons:this.menuIcons,
+                                                  showPresets:this.showPresets
                                                 } );
             if (this.layout != this.layoutOrig) {
                 setLocalStorageVal("layout", this.layout);
@@ -347,7 +358,8 @@ Vue.component('lms-ui-settings', {
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,
-                                     menuIcons:this.menuIcons
+                                     menuIcons:this.menuIcons,
+                                     showPresets:this.showPresets
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);

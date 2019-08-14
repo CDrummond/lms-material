@@ -17,7 +17,7 @@ const MORE_LIB_ACTION         = 7;
 const ADD_RANDOM_ALBUM_ACTION = 8;
 const RENAME_PL_ACTION        = 9;
 const RENAME_FAV_ACTION       = 10;
-const EDIT_FAV_ACTION         = 11;
+const EDIT_ACTION             = 11;
 const ADD_FAV_ACTION          = 12;
 const DELETE_ACTION           = 13;
 const ADD_TO_FAV_ACTION       = 14;
@@ -35,16 +35,19 @@ const ALBUM_SORTS_ACTION      = 25;
 const ADD_FAV_FOLDER_ACTION   = 26;
 const DELETE_FAV_FOLDER_ACTION= 27;
 const MOVE_FAV_TO_PARENT_ACTION= 28;
+const SAVE_PRESET_ACTION      = 29;
+const MOVE_PRESET_ACTION      = 30;
+const ADD_PRESET_ACTION       = 31;
 
-const PQ_PLAY_NOW_ACTION      = 29;
-const PQ_PLAY_NEXT_ACTION     = 30
-const PQ_REMOVE_ACTION        = 31;
-const PQ_MORE_ACTION          = 32;
-const PQ_SELECT_ACTION        = 33;
-const PQ_UNSELECT_ACTION      = 34;
-const PQ_SCROLL_ACTION        = 35;
-const PQ_ADD_URL_ACTION       = 36;
-const PQ_MOVE_QUEUE_ACTION    = 37;
+const PQ_PLAY_NOW_ACTION      = 32;
+const PQ_PLAY_NEXT_ACTION     = 33;
+const PQ_REMOVE_ACTION        = 34;
+const PQ_MORE_ACTION          = 35;
+const PQ_SELECT_ACTION        = 36;
+const PQ_UNSELECT_ACTION      = 37;
+const PQ_SCROLL_ACTION        = 38;
+const PQ_ADD_URL_ACTION       = 39;
+const PQ_MOVE_QUEUE_ACTION    = 40;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -76,6 +79,9 @@ var ACTIONS=[
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete"},
     {cmd:"move-fav-parent", svg:"folder-up"},
+    {cmd:"set-preset",   svg:"radio-tower"},
+    {cmd:"move-preset",  icon:"import_export"},
+    {cmd:"add-preset",   icon:"add_box"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
@@ -98,7 +104,7 @@ function updateActionStrings() {
     ACTIONS[MORE_LIB_ACTION].title=ACTIONS[PQ_MORE_ACTION].title=i18n("More");
     ACTIONS[RENAME_PL_ACTION].title=i18n("Rename");
     ACTIONS[RENAME_FAV_ACTION].title=i18n("Rename");
-    ACTIONS[EDIT_FAV_ACTION].title=i18n("Edit");
+    ACTIONS[EDIT_ACTION].title=i18n("Edit");
     ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
     ACTIONS[DELETE_ACTION].title=ACTIONS[DELETE_FAV_FOLDER_ACTION].title=i18n("Delete");
     ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
@@ -114,6 +120,9 @@ function updateActionStrings() {
     ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
     ACTIONS[ADD_FAV_FOLDER_ACTION].title=i18n("Create folder");
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");
+    ACTIONS[SAVE_PRESET_ACTION].title=i18n("Save as preset");
+    ACTIONS[MOVE_PRESET_ACTION].title=i18n("Move");
+    ACTIONS[ADD_PRESET_ACTION].title=i18n("Add preset");
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");

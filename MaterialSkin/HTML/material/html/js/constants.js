@@ -29,5 +29,5 @@ const LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Ch
 const LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);
 const LMS_DARK_SVG = "fff";
 const LMS_LIGHT_SVG = "444";
-const LMS_DARK_ACTIVE_SVG ="99ceff";
+const LMS_DARK_ACTIVE_SVG ="58b7ff";
 const LMS_LIGHT_ACTIVE_SVG = "346dd2";

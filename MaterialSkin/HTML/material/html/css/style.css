@@ -360,6 +360,7 @@ a {
  margin-left:4px;
  margin-bottom:0px !important;
  padding-bottom:0px !important;
+ min-width:2em;
 }
 
 .subtoolbar-title-single {
@@ -435,8 +436,8 @@ a {
   }
 }
 
-.slightly-dimmed {
- opacity:0.5;
+.dimmed {
+ opacity:0.4;
 }
 
 .pq-details {
@@ -696,6 +697,7 @@ progress {
  font-size:90%;
  margin-right:-16px;
  opacity:0.7;
+ min-width:44px;
 }
 
 .dialog--fullscreen > .card {
@@ -914,9 +916,9 @@ div.v-subheader {
 }
 
 .lms-avatar-small .v-avatar {
- width:32px !important;
- height:32px !important;
- margin-left:6px;
+ width:38px !important;
+ height:38px !important;
+ margin-left:2px;
 }
 
 .lms-jumplist {
@@ -936,6 +938,10 @@ div.v-subheader {
  justify-content: center;
  align-items: center;
  cursor:pointer;
+}
+
+.jumplist-folder {
+ opacity:0.65;
 }
 
 @media screen and (max-width: 289px) {
@@ -980,4 +986,12 @@ div.v-subheader {
 
 .sleep-list .v-list__tile {
  padding:0px;
+}
+
+.browse-action {
+ min-width:28px !important;
+}
+
+.queue-action {
+ min-width:44px !important;
 }

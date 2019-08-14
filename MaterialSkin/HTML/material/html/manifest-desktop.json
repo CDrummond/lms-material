@@ -1,9 +1,9 @@
 {
-  "name": "LMS Mobile UI",
+  "name": "LMS Desktop UI",
   "short_name": "LMS",
   "theme_color": "#424242",
   "background_color": "#424242",
-  "display": "fullscreen",
+  "display": "standalone",
   "scope": "/material",
   "start_url": "/material",
   "icons": [

@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay", "item_fav"]);
+const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
 const MUSIC_FILE_EXTENSIONS = new Set(["mp3", "m4a", "mp4", "wav", "aiff", "flac", "ogg", "wma", "opus", "aac", "ape", "mpc", "oga", "webm"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
@@ -24,9 +24,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 totalResults += data.result.contributors_count;
                 resp.items.push({header: i18np("1 Artist", "%1 Artists", data.result.contributors_count), id:"search.artists"});
+                var infoPlugin = getLocalStorageBool('infoPlugin');
                 for (var idx=0, loop=data.result.contributors_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                     var i = loop[idx];
-                    var infoPlugin = getLocalStorageBool('infoPlugin');
                     resp.items.push({
                                   id: "artist_id:"+i.contributor_id,
                                   title: i.contributor,
@@ -93,7 +93,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.isFavFolder;
+            var isFavorites = parent && parent.isFavFolder ? true : false;
             var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
@@ -105,7 +105,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
             var types = new Set();
-            var maybeAllowGrid = command!="trackstat"; // && command!="playhistory";
+            var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
+            var infoPlugin = undefined;
 
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
@@ -126,7 +127,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     resp.total--;
                     continue;
                 }
-                if (resp.items.length==resp.total-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png') {
+                if (resp.items.length==resp.total-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
                     // Remove 'All Songs' entry
                     resp.total--;
                     continue;
@@ -134,7 +135,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var addedPlayAction = false;
 
                 if ("text"==i.type) {
-                    // Exclude 'More' Play,Insert,Fav commands
+                    // Exclude 'More' Play,Insert commands
                     if (i.style && MORE_COMMANDS.has(i.style)) {
                         resp.total--;
                         continue;
@@ -216,6 +217,41 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.isFavFolder = true;
                     }
                     i.menu.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_FAV_ACTION);
+                    if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
+                        i.icon="folder";
+                        i.image=undefined;
+                    } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
+                        if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {
+                            i.icon="album";
+                            i.image=undefined;
+                        } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
+                            if (undefined==infoPlugin) {
+                                infoPlugin=getLocalStorageBool('infoPlugin');
+                            }
+                            if (i.presetParams.icon=="html/images/artists.png" || !(infoPlugin && options.artistImages)) {
+                                i.svg="artist";
+                                i.image=undefined;
+                            }
+                        } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
+                            i.icon="label";
+                            i.image=undefined;
+                        } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
+                            i.icon="date_range";
+                            i.image=undefined;
+                        } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
+                            i.icon="list";
+                            i.image=undefined;
+                        } else if (i.presetParams.favorites_url.startsWith("dynamicplaylist://") && i.presetParams.icon=="plugins/DynamicPlayList/html/images/dynamicplaylist.png") {
+                            i.svg="dice-list";
+                            i.image=undefined;
+                        } else if (i.presetParams.icon=="html/images/radio.png") {
+                            i.svg="radio-tower";
+                            i.image=undefined;
+                        }
+                    } else if (i['icon-id']=="html/images/favorites.png") {
+                        i.icon="favorite";
+                        i.image=undefined;
+                    }   
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);
@@ -286,12 +322,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.id = "radio:"+i.title;
                         }
                     }
-                    if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry") {
+                    if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                         // Only allow to pin if we can play!
                         if (!addedDivider && i.menu.length>0) {
                             i.menu.push(DIVIDER);
                             addedDivider = true;
                         }
+                        i.isRadio = true;
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
@@ -317,9 +354,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
                 // Only show 'More' action if ('more' is in baseActions and item as item_id) OR
                 // 'more' is in item's actions. #57
-                if ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) ||
-                     (i.actions && i.actions.more && i.actions.more.cmd)) &&
-                     !(i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.year)) {
+                if ( !isFavorites &&
+                     ( (i.commonParams && (i.commonParams.artist_id || i.commonParams.album_id || i.commonParams.track_id)) ||
+                       ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) || (i.actions && i.actions.more && i.actions.more.cmd)) &&
+                         !(i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.year))) ) {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
@@ -335,6 +373,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 if (isFavorites && !options.sortFavorites) {
                     i.draggable = true;
+                    i.realIndex = resp.items.length; // So items are deleted in correct order, even when lsit is sorted.
                 }
                 resp.items.push(i);
                 types.add(i.type);
@@ -576,7 +615,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               title: i.playlist,
                               command: ["playlists", "tracks"],
                               //icon: "list",
-                              params: ["playlist_id:"+ i.id], // "tags:IRad"] -> Will show rating, not album???
+                              params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
                               type: "group",
                               section: SECTION_PLAYLISTS,
@@ -615,6 +654,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,
                               subtitle: subtitle,
+                              image: i.artwork_url
+                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
+                                        : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, REMOVE_ACTION],
                               type: "track",
@@ -663,38 +705,45 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
         } else if (data.result.fsitems_loop) {
+            var haveFolders = false;
+            var haveFiles = false;
             for (var idx=0, loop=data.result.fsitems_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var isFolder = parseInt(i.isfolder)==1;
-                var name = i.name;
+                if (!i.name || i.name.length<1) {
+                    continue;
+                }
+
                 if (isFolder) {
-                    name = folderName(i.path);
+                    haveFolders = true;
                 } else {
-                    if (!i.name || i.name.length<1) {
-                        continue;
-                    }
                     var parts = i.name.split(".");
                     var ext = parts[parts.length-1].toLowerCase();
                     if (!MUSIC_FILE_EXTENSIONS.has(ext)) {
                         continue;
                     }
+                    haveFiles = true;
                 }
-                var fixedPath = i.path.replace("\\", "\\\\");
-                var key = name.charAt(0).toUpperCase();
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                var key = i.name.charAt(0).toUpperCase();
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key || resp.jumplist[resp.jumplist.length-1].folder!=isFolder)) {
+                    resp.jumplist.push({key: key, index: resp.items.length+idStart, folder:isFolder});
                 }
                 resp.items.push({
-                              id: fixedPath,
-                              title: name,
+                              id: i.path,
+                              title: i.name,
                               subtitle: undefined,
                               command: isFolder ? ["readdirectory"] : [],
-                              params: isFolder ? ["folder:"+fixedPath] : [],
+                              params: isFolder ? ["folder:"+i.path] : [],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
                               icon: isFolder ? "folder" : "music_note",
                               isFolderItem: true
                           });
+            }
+            if (haveFolders && !haveFiles) { // Not mixed folder/file - so don't need to distinguish
+                for (var idx=0, loopLen=resp.jumplist.length; idx<loopLen; ++idx) {
+                    resp.jumplist[idx].folder=undefined;
+                }
             }
             resp.total = resp.items.length;
             resp.subtitle=i18np("1 Item", "%1 Items", resp.total);

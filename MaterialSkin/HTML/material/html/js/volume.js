@@ -70,6 +70,10 @@ Vue.component('lms-volume', {
             this.show=false;
             this.cancelCloseTimer();
         }.bind(this));
+        bus.$on('esc', function() {
+            this.show=false;
+            this.cancelCloseTimer();
+        }.bind(this));
     },
     beforeDestroy() {
         this.cancelCloseTimer();

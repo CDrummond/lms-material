@@ -76,6 +76,9 @@ Vue.component('lms-sleep-dialog', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
+        bus.$on('esc', function() {
+            this.show=false;
+        }.bind(this));
     },
     methods: {
         initItems() {

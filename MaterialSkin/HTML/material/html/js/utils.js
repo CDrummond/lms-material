@@ -524,7 +524,7 @@ function isTextItem(item) {
     return !item.weblink &&
            ( "text"==item.type ||
              // if group is not undefined, its probably a pinned app
-             (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1) && /*!item.params && Dynamic playlists have params?*/
+             (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1) && /* !item.params && Dynamic playlists have params? */
               (!item.command || (item.command[0]!="browsejive" && (item.command.length<2 || item.command[1]!="browsejive")))));
 }
 
@@ -571,7 +571,7 @@ function updateItemFavorites(item) {
 
 function isInFavorites(item) {
     updateItemFavorites(item);
-    return undefined!=lmsFavorites[item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl];
+    return lmsFavorites.has(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
 }
 
 function uniqueId(id, listSize) {
@@ -642,12 +642,11 @@ function folderName(path) {
     return parts[parts.length-1];
 }
 
-function forceItemUpdate(vm, items, item, index) {
+function forceItemUpdate(vm, item) {
+    var prev = item.title;
+    item.title = "XX"+item.title;
     vm.$nextTick(function () {
-        items.splice(index, 1);
-        vm.$nextTick(function () {
-            items.splice(index, 0, item);
-        });
+        item.title = prev;
     });
 }
 

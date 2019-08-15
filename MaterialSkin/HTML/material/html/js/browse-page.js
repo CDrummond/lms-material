@@ -1148,9 +1148,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 parent.pop();
                 if (parent.length>0) {
                     parent=parent.join(".");
-                    parent+=".9999";
+                    parent+=".0";
                 } else {
-                    parent="9999";
+                    parent="0";
                 }
                 var command = ["favorites", "move", item.id.replace("item_id:", "from_id:"), "to_id:"+parent];
                 lmsCommand(this.playerId(), command).then(({data}) => {
@@ -2329,7 +2329,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     var command = this.current.section==SECTION_FAVORITES
                                     ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
-                                           this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".9999" : "")]
+                                           this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
                                     : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
                     lmsCommand(this.playerId(), command).then(({datax}) => {
                         this.refreshList();

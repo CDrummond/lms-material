@@ -30,10 +30,10 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="allowLayoutAdjust"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
@@ -243,7 +243,8 @@ Vue.component('lms-ui-settings', {
             lsAndNotifItems: [],
             android: isAndroid(),
             menuIcons: true,
-            showPresets: false
+            showPresets: false,
+            allowLayoutAdjust: window.location.href.indexOf('auto=false')<0
         }
     },
     computed: {
@@ -269,8 +270,10 @@ Vue.component('lms-ui-settings', {
             this.serverMenus = this.$store.state.serverMenus;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
-            this.layout = getLocalStorageVal("layout", "auto");
-            this.layoutOrig = this.layout;
+            if (this.allowLayoutAdjust) {
+                this.layout = getLocalStorageVal("layout", "auto");
+                this.layoutOrig = this.layout;
+            }
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
@@ -325,7 +328,7 @@ Vue.component('lms-ui-settings', {
                                                   menuIcons:this.menuIcons,
                                                   showPresets:this.showPresets
                                                 } );
-            if (this.layout != this.layoutOrig) {
+            if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
                 if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout) ) {
                     window.location.href = this.layout;

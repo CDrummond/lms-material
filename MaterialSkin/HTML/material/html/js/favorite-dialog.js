@@ -129,6 +129,14 @@ Vue.component('lms-favorite', {
                             if (this.item.presetParams.favorites_type) {
                                 command.push("type:"+this.item.presetParams.favorites_type);
                             }
+                            if ((this.item.presetParams.favorites_url &&
+                                 (this.item.presetParams.favorites_url.startsWith("db:contributor") ||
+                                  this.item.presetParams.favorites_url.startsWith("db:genre") ||
+                                  this.item.presetParams.favorites_url.startsWith("db:album") ||
+                                  this.item.presetParams.favorites_url.startsWith("db:year"))) ||
+                                (this.item['icon-id'] && this.item['icon-id']=="html/images/playlists.png")) {
+                                command.push("hasitems:1");
+                            }
                         }
                         lmsCommand(this.playerId, command).then(({datax})=> {
                             bus.$emit('refreshFavorites');

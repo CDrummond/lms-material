@@ -981,7 +981,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         dialogResponse(val) {
             if (val && this.dialog.value) {
                 var str = this.dialog.value.trim();
-                if (str.length>1 && str!==this.dialog.hint) {
+                if (str.length>0 && str!==this.dialog.hint) {
                     this.dialog.show = false;
                     var command = [];
                     this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
@@ -1038,12 +1038,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                 command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
             } else if (act==ADD_FAV_ACTION || act==ADD_PRESET_ACTION) {
-                bus.$emit('dlg.open', 'favorite', 'add', undefined, act==ADD_PRESET_ACTION);
+                bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+"9999"}, act==ADD_PRESET_ACTION);
             } else if (act==EDIT_ACTION) { // NOTE: Also edits presets!
                 bus.$emit('dlg.open', 'favorite', 'edit', item, SECTION_PRESETS==item.section);
             } else if (act==ADD_FAV_FOLDER_ACTION) {
                 this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
-                                command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER]};
+                                command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? "" : "item_id:")+".9999"] };
             } else if (act==SAVE_PRESET_ACTION || act==MOVE_PRESET_ACTION) {
                 setTimeout(function () {
                     this.menu = { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]};

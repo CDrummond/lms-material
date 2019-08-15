@@ -5,6 +5,8 @@
 3. Add action to move favourite to parent folder.
 4. Make list of composer and condcutor genres configurable.
 5. Optionally suport listing and editing presets.
+6. Support "auto=false" URL query paramter to disable automatic layout
+   switching.
 
 0.9.6
 -----

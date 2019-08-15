@@ -89,7 +89,7 @@ function initApp(app) {
         }
     });
 
-    if (window.location.href.indexOf('/mini')<0 && window.location.href.indexOf('/now-playing')<0) {
+    if (window.location.href.indexOf('/mini')<0 && window.location.href.indexOf('/now-playing')<0 && window.location.href.indexOf('auto=false')<0 ) {
         setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
     }
 

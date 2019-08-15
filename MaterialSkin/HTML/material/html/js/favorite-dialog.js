@@ -117,11 +117,22 @@ Vue.component('lms-favorite', {
                     }
                     lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
                         bus.$emit('refreshFavorites');
+                        bus.$emit('refreshList', SECTION_FAVORITES);
                     });
                 } else {
                     lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
-                        lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
+                        var command = ["favorites", "add", "url:"+url, "title:"+name, this.item.id];
+                        if (this.item.presetParams) {
+                            if (this.item.presetParams.icon) {
+                                command.push("icon:"+this.item.presetParams.icon);
+                            }
+                            if (this.item.presetParams.favorites_type) {
+                                command.push("type:"+this.item.presetParams.favorites_type);
+                            }
+                        }
+                        lmsCommand(this.playerId, command).then(({datax})=> {
                             bus.$emit('refreshFavorites');
+                            bus.$emit('refreshList', SECTION_FAVORITES);
                         });
                     });
                 }

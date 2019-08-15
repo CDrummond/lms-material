@@ -9,7 +9,7 @@ Vue.component('lms-favorite', {
     template: `
 <v-dialog scrollable v-model="show" persistent width="600">
  <v-card>
-  <v-card-title>{{item ? (isPreset ? i18n("Edit Preset") : i18n("Edit Favorite")) : (isPreset ? i18n("Add Preset") : i18n("Add Favorite"))}}</v-card-title>
+  <v-card-title>{{isAdd ? (isPreset ? i18n("Add Preset") : i18n("Add Favorite")) : (isPreset ? i18n("Edit Preset") : i18n("Edit Favorite"))}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
@@ -22,7 +22,7 @@ Vue.component('lms-favorite', {
       <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search" :rules="urlRules" required></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="isPreset && !item">
+    <v-list-tile v-if="isPreset && isAdd">
      <v-list-tile-content>
       <v-select :items="positions" label="Position" v-model="pos" item-text="label" item-value="key"></v-select>
      </v-list-tile-content>
@@ -32,8 +32,8 @@ Vue.component('lms-favorite', {
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="update()" v-if="item">{{i18n('Update')}}</v-btn>
-   <v-btn flat @click.native="add()" v-if="!item">{{i18n('Add')}}</v-btn>
+   <v-btn flat @click.native="update()" v-if="!isAdd">{{i18n('Update')}}</v-btn>
+   <v-btn flat @click.native="add()" v-if="isAdd">{{i18n('Add')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -47,6 +47,7 @@ Vue.component('lms-favorite', {
             url: "",
             item: undefined,
             isPreset: false,
+            isAdd: true,
             pos: 1,
             positions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             nameRules: [
@@ -62,9 +63,9 @@ Vue.component('lms-favorite', {
     mounted() {
         bus.$on('favorite.open', function(mode, item, isPreset) {
             this.isPreset = isPreset;
+            this.item = item;
             if ('edit'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
-                this.item = item;
                 this.name = isPreset ? item.text : item.title;
                 this.url = isPreset 
                             ? item.url
@@ -77,12 +78,13 @@ Vue.component('lms-favorite', {
                             : item.presetParams
                                 ? item.presetParams.favorites_url
                                 : undefined;
-                this.show = true;
+                this.isAdd=false;
+                this.show=true;
             } else if ('add'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
-                this.item = undefined;
                 this.name = "";
                 this.url = "";
+                this.isAdd=true;
                 this.show=true;
             }
         }.bind(this));
@@ -141,7 +143,7 @@ Vue.component('lms-favorite', {
                     if (data && data.result && data.result.exists==1) {
                         bus.$emit('showMessage', i18n("Already in favorites"));
                     } else {
-                        lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name]).then(({datax})=> {
+                        lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, this.item.id]).then(({datax})=> {
                             bus.$emit('refreshFavorites');
                         });
                     }

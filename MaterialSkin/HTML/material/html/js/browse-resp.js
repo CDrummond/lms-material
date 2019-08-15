@@ -250,6 +250,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         } else if (i.presetParams.icon=="html/images/radio.png") {
                             i.svg="radio-tower";
                             i.image=undefined;
+                        } else if (i['icon-id']=="html/images/favorites.png") {
+                            i.icon="favorite";
+                            i.image=undefined;
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";

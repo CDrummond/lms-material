@@ -132,7 +132,6 @@ Vue.component('lms-favorite', {
                         }
                         lmsCommand(this.playerId, command).then(({datax})=> {
                             bus.$emit('refreshFavorites');
-                            bus.$emit('refreshList', SECTION_FAVORITES);
                         });
                     });
                 }

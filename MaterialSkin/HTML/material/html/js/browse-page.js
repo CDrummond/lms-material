@@ -123,8 +123,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
  <div v-if="grid.use">
   <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
-   <template v-for="(item) in filteredJumplist">
-    <div @click="jumpTo(item)" v-bind:class="{'jumplist-folder' : item.folder}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+   <template v-for="(item, index) in filteredJumplist">
+    <div @click="jumpTo(item)" v-bind:class="{'jumplist-folder' : item.folder, 'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
@@ -150,8 +150,8 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-else>
 
  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
-  <template v-for="(item) in filteredJumplist">
-   <div @click="jumpTo(item)" v-bind:class="{'jumplist-folder' : item.folder}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+  <template v-for="(item, index) in filteredJumplist">
+   <div @click="jumpTo(item)" v-bind:class="{'jumplist-folder' : item.folder, 'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
   </template>
  </div>
 
@@ -352,6 +352,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             section: undefined,
             letter: undefined,
             filteredJumplist: [],
+            jumplistActive: 0,
             tbarActions: [],
             settingsMenuActions: [],
             subtitleClickable: false
@@ -668,6 +669,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var changedView = this.grid.use != resp.useGrid;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+                this.jumplistActive=0;
 
                 if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
@@ -2127,9 +2129,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         setScrollElement() {
             this.scrollElement = document.getElementById(this.grid.use ? "browse-grid" : "browse-list");
             this.scrollElement.removeEventListener('scroll', this.handleScroll);
-            if (this.$store.state.letterOverlay) {
-                this.scrollElement.addEventListener('scroll', this.handleScroll);
-            }
+            this.scrollElement.addEventListener('scroll', this.handleScroll);
         },
         handleScroll() {
             if (undefined!=this.jumplist && this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
@@ -2139,21 +2139,35 @@ var lmsBrowse = Vue.component("lms-browse", {
                         clearTimeout(this.letterTimeout);
                     }
                     var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
-                    var index = this.grid.use
-                                                                               // Add 50 to take into accoutn text size
+                    var index = this.grid.use                                // Add 50 to take into account text size
                                     ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (GRID_SIZES[this.grid.size].ih-subMod))*this.grid.numColumns
                                     : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
-                    if (index>=0 && index<this.items.length) {
-                        var letter = this.items[index].textkey;
-                        if (this.letter!=letter) {
-                            this.letter = letter;
-                            this.letterOverlay.innerHTML = letter;
+                    if (this.$store.state.letterOverlay) {
+                        if (index>=0 && index<this.items.length) {
+                            var letter = this.items[index].textkey;
+                            if (this.letter!=letter) {
+                                this.letter = letter;
+                                this.letterOverlay.innerHTML = letter;
+                            }
+                            this.letterTimeout = setTimeout(function () {
+                                this.letter = undefined;
+                            }.bind(this), 500);
+                        } else {
+                            this.letter = undefined;
                         }
                         this.letterTimeout = setTimeout(function () {
                             this.letter = undefined;
                         }.bind(this), 500);
                     } else {
                         this.letter = undefined;
+                    }
+                    this.jumplistActive = 0;
+                    for (var i=0, len=this.jumplist.length; i<len; ++i) {
+                        if (this.filteredJumplist[i].index<=index) {
+                            this.jumplistActive = i;
+                        } else {
+                            break;
+                        }
                     }
                 });
             }

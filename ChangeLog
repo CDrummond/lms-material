@@ -1,3 +1,8 @@
+0.9.7
+-----
+1. Refresh favourites list when rename a favourite.
+2. when changing a favourite's URL, (attempt to) set icon, type, and hasitems.
+
 0.9.6
 -----
 1. For MAI biography, use in order of preference; first of trackartist_ids,

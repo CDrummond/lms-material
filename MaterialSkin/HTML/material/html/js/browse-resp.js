@@ -273,14 +273,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
 
-                if (addedPlayAction) {
-                    if (!addedDivider) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
-                    i.menu.push(SELECT_ACTION);
-                }
-
                 if (isPlaylists) {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
@@ -363,6 +355,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 // TrackStat...
                 if (!i.type && i.params && i.params.track) {
                     i.type = "audio";
+                }
+
+                if (addedPlayAction) {
+                    if (!addedDivider) {
+                        i.menu.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menu.push(SELECT_ACTION);
                 }
 
                 // Only show 'More' action if ('more' is in baseActions and item as item_id) OR
@@ -561,14 +561,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (allowPlayAlbum && resp.total>1) {
                 actions.push(PLAY_ALBUM_ACTION);
             }
-
             actions.push(INSERT_ACTION);
             actions.push(ADD_ACTION);
             actions.push(DIVIDER);
-            actions.push(SELECT_ACTION);
             if (options.ratingsSupport) {
                 actions.push(RATING_ACTION);
             }
+            actions.push(SELECT_ACTION)
             actions.push(MORE_LIB_ACTION);
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -629,7 +628,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, RENAME_PL_ACTION, DELETE_ACTION],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION, SELECT_ACTION],
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url
@@ -671,7 +670,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, REMOVE_ACTION],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION],
                               type: "track",
                               draggable: true
                           });

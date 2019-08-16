@@ -105,7 +105,6 @@ Vue.component('lms-favorite', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-
             if (this.isPreset) {
                 lmsCommand(this.playerId, ["material-skin-presets", "set", "num:"+this.item.num, "url:"+url, "text:"+name]).then(({data})=> {
                     bus.$emit('refreshList', SECTION_PRESETS);

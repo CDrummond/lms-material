@@ -2283,8 +2283,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (undefined==this.jumplist || this.jumplist.length<=1 || this.items.length<=25) {
+            if (this.items.length<=25 || (undefined!=this.jumplist && this.jumplist.length<=1)) {
                 return;
+            }
+            if (IS_MOBILE && (undefined==this.jumplist || this.jumplist.length<1)) {
+                this.jumplist = [];
+                var jump = this.items.length/100.0;
+                for (var i=0; i<100; ++i) {
+                    this.jumplist.push({key:'\u2022', index: Math.round(i*jump)});
+                }
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);

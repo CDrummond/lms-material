@@ -1,16 +1,18 @@
 1.0.0
 -----
-1. Add action to create favourite folders.
-2. Allow moving favourites into folders.
-3. Add action to move favourite to parent folder.
-4. Make list of composer and condcutor genres configurable.
-5. Optionally support listing and editing presets.
-6. Support "auto=false" URL query parameter to disable automatic layout
-   switching.
-7. Always sort favourite folders, and place these first, even if sorting of
-   favourites is disabled.
-8. Fix showing a menu when another is already shown.
-9. Highlight active jumplist item.
+ 1. Add action to create favourite folders.
+ 2. Allow moving favourites into folders.
+ 3. Add action to move favourite to parent folder.
+ 4. Make list of composer and condcutor genres configurable.
+ 5. Optionally support listing and editing presets.
+ 6. Support "auto=false" URL query parameter to disable automatic layout
+    switching.
+ 7. Always sort favourite folders, and place these first, even if sorting of
+    favourites is disabled.
+ 8. Fix showing a menu when another is already shown.
+ 9. Highlight active jumplist item.
+10. For mobile browsers, if a list has more than 25 items and no jumplist, then
+    create a fake one with dots. Allows quickly jumping to middle, etc.
 
 0.9.6
 -----

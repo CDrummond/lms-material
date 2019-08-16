@@ -129,7 +129,7 @@ Vue.component('lms-toolbar', {
  <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
  <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop" :disabled="!playerStatus.ison || noPlayer" class="vol-label" v-bind:class="{'vol-label-np': nowplaying}" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
+ <p v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" class="vol-label" v-bind:class="{'vol-label-np': nowplaying}" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
  <v-btn v-else-if="!desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>

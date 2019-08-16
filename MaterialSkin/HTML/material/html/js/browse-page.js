@@ -1813,7 +1813,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         isFavFolder: true });
             list.push({ title: i18n("Presets"),
                         command: ["material-skin-presets", "list"],
-                        svg: "radio-tower",
+                        icon: "ballot",
                         type: "presets",
                         app: "presets",
                         group: GROUP_OTHER_MUSIC,

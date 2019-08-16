@@ -77,7 +77,7 @@ var ACTIONS=[
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete"},
     {cmd:"move-fav-parent", svg:"folder-up"},
-    {cmd:"set-preset",   svg:"radio-tower"},
+    {cmd:"set-preset",   icon:"ballot"},
     {cmd:"move-preset",  icon:"import_export"},
     {cmd:"add-preset",   icon:"add_box"},
 

@@ -1045,9 +1045,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length] };
             } else if (act==SAVE_PRESET_ACTION || act==MOVE_PRESET_ACTION) {
-                setTimeout(function () {
-                    this.menu = { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]};
-                }.bind(this), 100);
+                showMenu(this, { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
             } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -1256,7 +1254,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 // Only have 'More' - dont display menu, just activate action...
                 this.itemAction(MORE_LIB_ACTION, item);
             } else {
-                this.menu={show:true, item:item, x:event.clientX, y:event.clientY, index:index};
+                showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
             }
         },
         savePreset(item, pos) {
@@ -1291,7 +1289,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.history.forEach(h => {
                     history.push(h.headerTitle ? h.headerTitle : i18n("Home"));
                 });
-                this.menu={show:true, x:event.clientX, y:event.clientY, history:history};
+                showMenu(this, {show:true, x:event.clientX, y:event.clientY, history:history});
             }
         },
         showLibMenu(event) {
@@ -1304,7 +1302,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     });
                     libraries.sort(nameSort);
                     libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
-                    this.menu={show:true, x:event.clientX, y:event.clientY, libraries:libraries};
+                    showMenu(this, {show:true, x:event.clientX, y:event.clientY, libraries:libraries});
                 }
             });
         },
@@ -1340,7 +1338,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
                     albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
                 }
-                this.menu={show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0, albumSorts:albumSorts};
+                showMenu(this, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0, albumSorts:albumSorts});
             } else {
                 this.itemAction(act, this.current);
             }

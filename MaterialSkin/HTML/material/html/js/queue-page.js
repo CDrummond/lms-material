@@ -551,7 +551,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemMenu(item, index, event) {
-            this.menu={show:true, item:item, index:index, x:event.clientX, y:event.clientY};
+            showMenu(this, {show:true, item:item, index:index, x:event.clientX, y:event.clientY});
         },
         removeSelectedItems() {
             this.selection.sort(function(a, b) { return a<b ? 1 : -1; });

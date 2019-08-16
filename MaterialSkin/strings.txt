@@ -12,7 +12,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
-	EN	Composer genres
+	EN	Conductor genres
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.

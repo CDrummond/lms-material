@@ -13,6 +13,7 @@
  9. Highlight active jumplist item.
 10. For mobile browsers, if a list has more than 25 items and no jumplist, then
     create a fake one with dots. Allows quickly jumping to middle, etc.
+11. Allow renaming of pinned items.
 
 0.9.7
 -----

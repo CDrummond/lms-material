@@ -549,7 +549,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                   disabled: !this.dynamicPlaylists },
                 { title: i18n("Years"),
                   command: ["years"],
-                  params: [],
+                  params: ["hasAlbums:1"],
                   cancache: true,
                   icon: "date_range",
                   type: "group",
@@ -1525,7 +1525,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 mode="musicfolder"
                                 p.push("type:audio");
                                 p.push("tags:ds");
-                            } else if (mode!="artists" && mode!="albums" && mode!="years" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="vaalbums") {
+                            } else if (mode=="years") {
+                                p.push("hasAlbums:1");
+                            } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists") {
                                 canReplace = false;
                                 break;
                             }

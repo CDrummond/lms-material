@@ -4,6 +4,7 @@
 2. when changing a favourite's URL, (attempt to) set icon, type, and hasitems.
 3. If player does not have 'canpoweroff:1', then always assume its on.
 4. Only show volume control if player reports 'digital_volume_control:1'
+5. Add 'hasAlbums:1' to years query.
 
 0.9.6
 -----

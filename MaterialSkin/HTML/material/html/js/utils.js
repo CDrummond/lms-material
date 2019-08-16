@@ -209,6 +209,18 @@ function favSort(a, b) {
     return titleSort(a, b);
 }
 
+function partialFavSort(a, b) {
+    var at = a.isFavFolder ? 0 : 1;
+    var bt = b.isFavFolder ? 0 : 1;
+    if (at!=bt) {
+        return at<bt ? -1 : 1;
+    }
+    if (a.isFavFolder) {
+        return titleSort(a, b);
+    }
+    return a.pos<b.pos ? -1 : 1;
+}
+
 function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
         return a.isgroup ? -1 : 1;

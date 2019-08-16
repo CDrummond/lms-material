@@ -208,6 +208,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 var addedDivider = false;
                 if (isFavorites) {
+                    i.pos = resp.items.length;
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
@@ -430,8 +431,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (resp.total == resp.items.length) {
                 if (isApps) {
                     resp.items.sort(titleSort);
-                } else if (isFavorites && options.sortFavorites) {
-                    resp.items.sort(favSort);
+                } else if (isFavorites) {
+                    resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
                 }
             }
         } else if (data.result.artists_loop) {

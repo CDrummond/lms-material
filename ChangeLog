@@ -7,6 +7,8 @@
 5. Optionally suport listing and editing presets.
 6. Support "auto=false" URL query paramter to disable automatic layout
    switching.
+7. Always sort favourite folders, and place these first, even if sorting of
+   favourites is disabled.
 
 0.9.6
 -----

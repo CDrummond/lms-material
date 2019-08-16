@@ -697,3 +697,13 @@ function splitString(str) {
     }
     return arr;
 }
+
+function showMenu(obj, newMenu) {
+    if (obj.menu.show) {
+        setTimeout(function () {
+            obj.menu = newMenu;
+        }.bind(this), 100);
+    } else {
+        obj.menu = newMenu;
+    }
+}

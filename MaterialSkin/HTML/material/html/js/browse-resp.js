@@ -258,9 +258,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.icon="favorite";
                         i.image=undefined;
                     }
-                    if (options.showPresets) {
+                    if (!i.isFavFolder && options.showPresets) {
                         i.menu.push(SAVE_PRESET_ACTION);
-                    }   
+                    }
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);

@@ -217,7 +217,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.isFavFolder = true;
                     }
                     i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
-                    i.menu.push(i.isFavFolder ? RENAME_FAV_ACTION : EDIT_ACTION);
+                    i.menu.push(i.isFavFolder ? RENAME_ACTION : EDIT_ACTION);
                     if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
@@ -278,7 +278,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    i.menu.push(RENAME_PL_ACTION);
+                    i.menu.push(RENAME_ACTION);
                     i.menu.push(DELETE_ACTION);
                 }
 
@@ -628,7 +628,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_PL_ACTION, DELETE_ACTION, SELECT_ACTION],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION],
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url

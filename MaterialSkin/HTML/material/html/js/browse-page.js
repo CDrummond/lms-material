@@ -985,20 +985,26 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var str = this.dialog.value.trim();
                 if (str.length>0 && str!==this.dialog.hint) {
                     this.dialog.show = false;
-                    var command = [];
-                    this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
-
-                    if (this.dialog.params) {
-                        var params = [];
-                        this.dialog.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, str)); });
-                        this.fetchItems({command: command, params: params}, this.dialog.item);
+                    if (this.dialog.item && GROUP_PINNED==this.dialog.item.group) {
+                        this.dialog.item.title=str;
+                        this.pinned.sort(titleSort);
+                        setLocalStorageVal('pinned', JSON.stringify(this.pinned));
                     } else {
-                        lmsCommand(this.playerId(), command).then(({datax}) => {
-                            logJsonMessage("RESP", datax);
-                            this.refreshList();
-                        }).catch(err => {
-                            logAndShowError(err, this.dialog.command.length>2 && this.dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
-                        });
+                        var command = [];
+                        this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
+
+                        if (this.dialog.params) {
+                            var params = [];
+                            this.dialog.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, str)); });
+                            this.fetchItems({command: command, params: params}, this.dialog.item);
+                        } else {
+                            lmsCommand(this.playerId(), command).then(({datax}) => {
+                                logJsonMessage("RESP", datax);
+                                this.refreshList();
+                            }).catch(err => {
+                                logAndShowError(err, this.dialog.command.length>2 && this.dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
+                            });
+                        }
                     }
                 }
                 this.dialog = {};
@@ -1033,12 +1039,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.pin(item, false);
             } else if (!this.playerId()) {  // *************** NO PLAYER ***************
                 bus.$emit('showError', undefined, i18n("No Player"));
-            } else if (act===RENAME_PL_ACTION) {
-                this.dialog = { show:true, title:i18n("Rename playlist"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]};
-            } else if (act==RENAME_FAV_ACTION) {
-                this.dialog = { show:true, title:i18n("Rename favorite"), hint:item.value, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
+            } else if (act===RENAME_ACTION) {
+                this.dialog = item.group==GROUP_PINNED
+                                ? { show:true, title:i18n("Rename item"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item}
+                                : SECTION_PLAYLISTS==item.section
+                                    ? { show:true, title:i18n("Rename playlist"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
+                                        command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]}
+                                    : { show:true, title:i18n("Rename favorite"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
+                                        command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
             } else if (act==ADD_FAV_ACTION || act==ADD_PRESET_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length}, act==ADD_PRESET_ACTION);
             } else if (act==EDIT_ACTION) { // NOTE: Also edits presets!
@@ -1979,7 +1987,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     p.icon = p.item.icon;
                     p.item = undefined;
                 }
-                p.menu = undefined == p.url ? [UNPIN_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, UNPIN_ACTION];
+                p.menu = undefined == p.url ? [RENAME_ACTION, UNPIN_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION];
                 p.group = GROUP_PINNED;
                 this.options.pinned.add(p.id);
             });
@@ -1996,11 +2004,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (add && index==-1) {
                 if (item.isRadio) {
                     this.pinned.push({id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, group: GROUP_PINNED,
-                                      url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, UNPIN_ACTION]});
+                                      url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION]});
                 } else {
                     var command = this.buildCommand(item);
                     this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon, isRadio: item.isRadio,
-                                      command: command.command, params: command.params, group: GROUP_PINNED, menu: [UNPIN_ACTION]});
+                                      command: command.command, params: command.params, group: GROUP_PINNED, menu: [RENAME_ACTION, UNPIN_ACTION]});
                 }
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));

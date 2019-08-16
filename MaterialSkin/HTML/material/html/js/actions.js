@@ -15,8 +15,8 @@ const INSERT_ACTION           = 5;
 const MORE_ACTION             = 6;
 const MORE_LIB_ACTION         = 7;
 const ADD_RANDOM_ALBUM_ACTION = 8;
-const RENAME_PL_ACTION        = 9;
-const RENAME_FAV_ACTION       = 10;
+const RENAME_ACTION           = 9;
+const REMOVE_ACTION           = 10;
 const EDIT_ACTION             = 11;
 const ADD_FAV_ACTION          = 12;
 const DELETE_ACTION           = 13;
@@ -30,24 +30,23 @@ const RATING_ACTION           = 20;
 const SEARCH_LIB_ACTION       = 21;
 const USE_GRID_ACTION         = 22;
 const USE_LIST_ACTION         = 23;
-const REMOVE_ACTION           = 24;
-const ALBUM_SORTS_ACTION      = 25;
-const ADD_FAV_FOLDER_ACTION   = 26;
-const DELETE_FAV_FOLDER_ACTION= 27;
-const MOVE_FAV_TO_PARENT_ACTION= 28;
-const SAVE_PRESET_ACTION      = 29;
-const MOVE_PRESET_ACTION      = 30;
-const ADD_PRESET_ACTION       = 31;
+const ALBUM_SORTS_ACTION      = 24;
+const ADD_FAV_FOLDER_ACTION   = 25;
+const DELETE_FAV_FOLDER_ACTION= 26;
+const MOVE_FAV_TO_PARENT_ACTION=27;
+const SAVE_PRESET_ACTION      = 28;
+const MOVE_PRESET_ACTION      = 39;
+const ADD_PRESET_ACTION       = 30;
 
-const PQ_PLAY_NOW_ACTION      = 32;
-const PQ_PLAY_NEXT_ACTION     = 33;
-const PQ_REMOVE_ACTION        = 34;
-const PQ_MORE_ACTION          = 35;
-const PQ_SELECT_ACTION        = 36;
-const PQ_UNSELECT_ACTION      = 37;
-const PQ_SCROLL_ACTION        = 38;
-const PQ_ADD_URL_ACTION       = 39;
-const PQ_MOVE_QUEUE_ACTION    = 40;
+const PQ_PLAY_NOW_ACTION      = 31;
+const PQ_PLAY_NEXT_ACTION     = 32;
+const PQ_REMOVE_ACTION        = 33;
+const PQ_MORE_ACTION          = 34;
+const PQ_SELECT_ACTION        = 35;
+const PQ_UNSELECT_ACTION      = 36;
+const PQ_SCROLL_ACTION        = 37;
+const PQ_ADD_URL_ACTION       = 38;
+const PQ_MOVE_QUEUE_ACTION    = 39;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -59,8 +58,8 @@ var ACTIONS=[
     {cmd:"more",         svg: "more"},
     {cmd:"lib-more",     svg: "more"},
     {cmd:"random",       svg: "dice-album"},
-    {cmd:"rename-pl",    icon:"edit"},
-    {cmd:"rename-fav",   icon:"edit"},
+    {cmd:"rename",       icon:"edit"},
+    {cmd:"remove",       icon:"remove_circle_outline"},
     {cmd:"edit-fav",     icon:"edit"},
     {cmd:"add-fav",      svg: "add-favorite"},
     {cmd:"delete",       icon:"delete"},
@@ -74,7 +73,6 @@ var ACTIONS=[
     {cmd:"search-lib",   icon:"search"},
     {cmd:"use-grid",     icon:"grid_on"},
     {cmd:"use-list",     icon:"grid_off"},
-    {cmd:"remove",       icon:"remove_circle_outline"},
     {cmd:"albsort",      icon:"sort_by_alpha"},
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete"},
@@ -102,8 +100,7 @@ function updateActionStrings() {
     ACTIONS[INSERT_ACTION].title=i18n("Play next");
     ACTIONS[MORE_ACTION].title=i18n("More");
     ACTIONS[MORE_LIB_ACTION].title=ACTIONS[PQ_MORE_ACTION].title=i18n("More");
-    ACTIONS[RENAME_PL_ACTION].title=i18n("Rename");
-    ACTIONS[RENAME_FAV_ACTION].title=i18n("Rename");
+    ACTIONS[RENAME_ACTION].title=i18n("Rename");
     ACTIONS[EDIT_ACTION].title=i18n("Edit");
     ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
     ACTIONS[DELETE_ACTION].title=ACTIONS[DELETE_FAV_FOLDER_ACTION].title=i18n("Delete");

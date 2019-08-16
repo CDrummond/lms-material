@@ -2,6 +2,7 @@
 -----
 1. Refresh favourites list when rename a favourite.
 2. when changing a favourite's URL, (attempt to) set icon, type, and hasitems.
+3. If player does not have 'canpoweroff', then always assume its on.
 
 0.9.6
 -----

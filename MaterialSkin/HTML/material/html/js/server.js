@@ -351,9 +351,10 @@ var lmsServer = Vue.component('lms-server', {
                 return;
             }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
-            var player = { ison: 1==parseInt(data.power) || 1!=parseInt(.canpoweroff),
+            var player = { ison: 1==parseInt(data.power) || 1!=parseInt(data.canpoweroff),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
+                           digital_volume_control: 1==parseInt(data.digital_volume_control),
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                            current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,

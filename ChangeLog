@@ -10,6 +10,7 @@
 7. Always sort favourite folders, and place these first, even if sorting of
    favourites is disabled.
 8. Fix showing a menu when another is already shown.
+9. Highlight active jumplist item.
 
 0.9.6
 -----

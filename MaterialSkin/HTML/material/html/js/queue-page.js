@@ -475,6 +475,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.select(item, index);
                 return;
             }
+            if (this.menu.show) {
+                this.menu.show=false;
+                return;
+            }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clickTimer = undefined;

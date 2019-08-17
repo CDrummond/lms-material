@@ -818,6 +818,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.fetchingItems) {
                  return;
             }
+            if (this.menu.show) {
+                this.menu.show=false;
+                return;
+            }
             if (this.selection.length>0) {
                 this.select(item, index);
                 return;

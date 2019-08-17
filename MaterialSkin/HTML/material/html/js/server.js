@@ -296,11 +296,10 @@ var lmsServer = Vue.component('lms-server', {
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
                     if (1==parseInt(i.connected)) { // Only list/use connected players...
-                        var canpoweroff = 1==parseInt(i.canpoweroff);
                         players.push({ id: i.playerid,
                                        name: i.name,
-                                       canpoweroff: canpoweroff,
-                                       ison: !canpoweroff || 1==parseInt(i.power),
+                                       canpoweroff: 1==parseInt(i.canpoweroff),
+                                       ison: undefined==i.power || 1==parseInt(i.power),
                                        isgroup: 'group'===i.model
                                       });
                         // Check if we have a local SB Player - if so, can't use MediaSession
@@ -351,7 +350,7 @@ var lmsServer = Vue.component('lms-server', {
                 return;
             }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
-            var player = { ison: 1==parseInt(data.power) || 1!=parseInt(data.canpoweroff),
+            var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
                            digital_volume_control: 1==parseInt(data.digital_volume_control),

@@ -127,7 +127,8 @@ const store = new Vuex.Store({
         lsAndNotif:'playing',
         page:'browse',
         menuIcons: true,
-        showPresets: false
+        showPresets: false,
+        visibleMenus: new Set()
     },
     mutations: {
         setPlayers(state, players) {
@@ -334,6 +335,13 @@ const store = new Vuex.Store({
                 state.page = val;
                 setLocalStorageVal('page', val);
                 bus.$emit('pageChanged', val);
+            }
+        },
+        menuVisible(state, val) {
+            if (val.shown) {
+                state.visibleMenus.add(val.name);
+            } else {
+                state.visibleMenus.delete(val.name);
             }
         }
     }

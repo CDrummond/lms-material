@@ -136,16 +136,16 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="bus.$emit('info')" class="toolbar-button">
+ <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini && !nowplaying" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini && !nowplaying" @click.native="toggleLargeView(false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu v-if="connected && !mini && !nowplaying" bottom left>
+ <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
@@ -187,6 +187,7 @@ Vue.component('lms-toolbar', {
                                  current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  showPlayerMenu: false,
+                 showMainMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
@@ -207,7 +208,12 @@ Vue.component('lms-toolbar', {
             this.$forceUpdate();
         }.bind(this));
 
-        if (!this.desktop) {
+        if (this.desktop) {
+            bus.$on('resetToolbarVolume', function() {
+                this.playerStatus.volume = this.playerVolume.current;
+                this.playerVolume.val = this.playerVolume.current;
+            }.bind(this));
+        } else {
             bus.$on('queueStatus', function(count, duration) {
                 if (count>0) {
                     this.playlist.count = i18np("1 Track", "%1 Tracks", count);
@@ -448,6 +454,18 @@ Vue.component('lms-toolbar', {
                 bus.$emit('toolbarAction', id);
             }
         },
+        emitInfo() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('info');
+        },
+        toggleLargeView(on) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('largeView', on);
+        },
         togglePower(player, state) {
             var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
             lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
@@ -455,6 +473,9 @@ Vue.component('lms-toolbar', {
             });
         },
         volumeDown(toggleMute) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
@@ -462,6 +483,9 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeUp(toggleMute) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
@@ -469,6 +493,9 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeClick(toggleMute) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else if (this.playerStatus.volume<0) {
@@ -481,6 +508,9 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
         },
         playPauseButton() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
         },
         cancelSleepTimer() {
@@ -558,6 +588,9 @@ Vue.component('lms-toolbar', {
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        menuVisible() {
+            return this.$store.state.visibleMenus.size>0
         }
     },
     filters: {
@@ -580,11 +613,21 @@ Vue.component('lms-toolbar', {
     watch: {
         'playerVolume.val': function(newVal) {
             if (this.desktop && newVal>=0 && this.playerVolume.current !== newVal) {
-                this.playerVolume.prev = this.playerVolume.current;
-                this.playerVolume.current = newVal;
-                this.playerVolume.lastUpdate = new Date();
-                bus.$emit('playerCommand', ["mixer", "volume", newVal]);
+                if (this.$store.state.visibleMenus.size>0) {
+                    bus.$emit('resetToolbarVolume');
+                } else {
+                    this.playerVolume.prev = this.playerVolume.current;
+                    this.playerVolume.current = newVal;
+                    this.playerVolume.lastUpdate = new Date();
+                    bus.$emit('playerCommand', ["mixer", "volume", newVal]);
+                }
             }
+        },
+        'showPlayerMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'player', shown:newVal});
+        },
+        'showMainMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'main', shown:newVal});
         }
     }
 })

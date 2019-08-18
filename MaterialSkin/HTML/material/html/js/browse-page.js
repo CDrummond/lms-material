@@ -748,6 +748,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         toggleGroup(group) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             // When clicking back button, seems click somtimes falls through to collapse a group
             if (undefined!=this.lastBackBtnPress && ((new Date())-this.lastBackBtnPress)<250) {
                 return;
@@ -822,7 +825,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.menu.show=false;
                 return;
             }
-            if (this.selection.length>0) {
+            if (this.$store.state.visibleMenus.size>0 || this.selection.length>0) {
                 this.select(item, index);
                 return;
             }
@@ -1032,7 +1035,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemAction(act, item, index, suppressNotification) {
             if (act==SEARCH_LIB_ACTION) {
-                bus.$emit('dlg.open', 'search');
+                if (this.$store.state.visibleMenus.size<1) {
+                    bus.$emit('dlg.open', 'search');
+                }
             } else if (act===MORE_ACTION) {
                 this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
             } else if (act===MORE_LIB_ACTION) {
@@ -1336,6 +1341,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         headerAction(act, event) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (USE_LIST_ACTION==act) {
                 this.changeLayout(false);
             } else if (USE_GRID_ACTION==act) {
@@ -2476,6 +2484,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         svgIcon: function (name, dark) {
             return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        }
+    },
+    watch: {
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'browse', shown:newVal});
         }
     },
     beforeDestroy() {

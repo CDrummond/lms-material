@@ -48,16 +48,25 @@ function animate(elem, from, to) {
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
 function showArtist(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
 }
 
-function showAlbum(album, title) {
+function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0) {
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title));
 }
 
 function showComposer(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
 }

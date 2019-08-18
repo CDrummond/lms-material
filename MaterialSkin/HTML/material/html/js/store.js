@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+var lmsNumVisibleMenus = 0;
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
@@ -343,6 +344,7 @@ const store = new Vuex.Store({
             } else {
                 state.visibleMenus.delete(val.name);
             }
+            lmsNumVisibleMenus = state.visibleMenus.size;
         }
     }
 })

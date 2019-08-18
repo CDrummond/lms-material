@@ -9,12 +9,11 @@
     switching.
  7. Always sort favourite folders, and place these first, even if sorting of
     favourites is disabled.
- 8. Fix showing a menu when another is already shown.
- 9. Highlight active jumplist item.
-10. For mobile browsers, if a list has more than 25 items and no jumplist, then
+ 8. Highlight active jumplist item.
+ 9. For mobile browsers, if a list has more than 25 items and no jumplist, then
     create a fake one with dots. Allows quickly jumping to middle, etc.
-11. Allow renaming of pinned items.
-12. When a menu is open, try to ignore click events and jsut close menu. This is
+10. Allow renaming of pinned items.
+11. When a menu is open, try to ignore click events and just close menu. This is
     to work-around a VuetifyJS issue.
 
 0.9.7

@@ -14,6 +14,8 @@
 10. For mobile browsers, if a list has more than 25 items and no jumplist, then
     create a fake one with dots. Allows quickly jumping to middle, etc.
 11. Allow renaming of pinned items.
+12. When a menu is open, try to ignore click events and jsut close menu. This is
+    to work-around a VuetifyJS issue.
 
 0.9.7
 -----

@@ -479,6 +479,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.menu.show=false;
                 return;
             }
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clickTimer = undefined;
@@ -542,6 +545,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         headerAction(act) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (act==PQ_ADD_URL_ACTION) {
                 this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
             } else if (act==PQ_SCROLL_ACTION) {
@@ -846,6 +852,11 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         svgIcon: function (name, dark) {
             return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        }
+    },
+    watch: {
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'queue', shown:newVal});
         }
     },
     beforeDestroy() {

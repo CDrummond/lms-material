@@ -737,17 +737,11 @@ progress {
 
 .subheader-action {
  margin-left:auto;
- margin-right:-32px;
+ margin-right:-16px;
 }
 
 #browse-list .v-subheader {
- margin-left:-16px;
  cursor:pointer;
-}
-
-#browse-list .v-subheader i {
- margin-left:2px;
- margin-right:-2px;
 }
 
 .switch-label .v-list__tile__title {
@@ -987,7 +981,6 @@ div.v-subheader {
 }
 
 .lib-name {
- margin-top:4px;
  margin-left:4px;
 }
 

@@ -345,6 +345,10 @@ a {
  font-size:55% !important;
 }
 
+.noplayer-title {
+ font-weight:600;
+}
+
 .infodetails {
  width:100%;
  max-width:700px;

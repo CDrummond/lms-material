@@ -15,6 +15,7 @@
 10. Allow renaming of pinned items.
 11. When a menu is open, try to ignore click events and just close menu. This is
     to work-around a VuetifyJS issue.
+12. Remove arrows from browe headers, and elide titles to indicate collapsed.
 
 0.9.7
 -----

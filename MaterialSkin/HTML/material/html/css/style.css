@@ -345,6 +345,10 @@ a {
  font-size:55% !important;
 }
 
+.noplayer-title {
+ font-weight:600;
+}
+
 .infodetails {
  width:100%;
  max-width:700px;
@@ -742,6 +746,7 @@ progress {
 
 #browse-list .v-subheader {
  cursor:pointer;
+ padding-left:17px;
 }
 
 .switch-label .v-list__tile__title {

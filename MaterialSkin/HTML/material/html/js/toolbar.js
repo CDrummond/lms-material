@@ -183,7 +183,7 @@ Vue.component('lms-toolbar', {
     data() {
         return { songInfo:undefined,
                  playlist: { count: "", duration: "" },
-                 playerStatus: { ison: 1, isplaying: false, volume: 0, digital_volume_control: true,
+                 playerStatus: { ison: 1, isplaying: false, volume: 0, digital_volume_control: true, synced: false,
                                  current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  showPlayerMenu: false,

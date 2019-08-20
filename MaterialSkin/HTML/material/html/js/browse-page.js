@@ -154,7 +154,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
 
  <v-list class="bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
-  <v-subheader v-if="isTop && pinned.length>0"><div @click="toggleGroup(GROUP_PINNED)"><v-icon>{{collapsed[GROUP_PINNED] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ trans.pinned }}</div></v-subheader>
+  <v-subheader v-if="isTop && pinned.length>0"><div @click="toggleGroup(GROUP_PINNED)">{{ trans.pinned }}</div><div v-if="collapsed[GROUP_PINNED]">...</div></v-subheader>
   <template v-if="isTop" v-for="(item, index) in pinned">
    <v-divider v-if="index>0 && pinned.length>index && !collapsed[GROUP_PINNED]"></v-divider>
 
@@ -212,7 +212,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-subheader v-if="item.header" style="width:100%"><div @click="toggleGroup(item.group)"><v-icon v-if="undefined!=item.group">{{collapsed[item.group] ? 'arrow_right' : 'arrow_drop_down'}}</v-icon>{{ item.header }}</div><div class="ellipsis lib-name" @click.stop="showLibMenu($event)" v-if="item.id==TOP_MMHDR_ID && libraryName">{{ SEPARATOR + libraryName }}</div>
+   <v-subheader v-if="item.header" style="width:100%"><div @click="toggleGroup(item.group)">{{ item.header }}</div><div v-if="undefined!=item.group && collapsed[item.group]">...</div><div class="ellipsis lib-name" @click.stop="showLibMenu($event)" v-if="item.id==TOP_MMHDR_ID && libraryName">{{ SEPARATOR + libraryName }}</div>
     <div v-if="item.action" :title="item.action.title" class="subheader-action" @click.stop="itemAction(item.action, item, index)">
      <v-btn icon><v-icon>{{ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>

@@ -735,8 +735,19 @@ progress {
  margin-right:8px;
 }
 
+.subheader-action {
+ margin-left:auto;
+ margin-right:-32px;
+}
+
 #browse-list .v-subheader {
+ margin-left:-16px;
  cursor:pointer;
+}
+
+#browse-list .v-subheader i {
+ margin-left:2px;
+ margin-right:-2px;
 }
 
 .switch-label .v-list__tile__title {

@@ -459,7 +459,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 var bracket = playerStatus.current.type.indexOf(" (");
                 technical.push(bracket>0 ? playerStatus.current.type.substring(0, bracket) : playerStatus.current.type);
             }
-            technical=technical.join(", ");
+            technical=technical.join(SEPARATOR);
             if (technical!=this.playerStatus.current.technicalInfo) {
                 this.playerStatus.current.technicalInfo = technical;
             }

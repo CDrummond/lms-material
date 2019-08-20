@@ -65,11 +65,12 @@ Vue.component('lms-toolbar', {
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
  <v-btn v-if="noPlayer" icon class="toolbar-button"><v-icon color="orange darken-2">warning</v-icon></v-btn>
- <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
+ <div v-if="noPlayer" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
+ <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
-    <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
+    <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player.name}} <v-icon>arrow_drop_down</v-icon></div>
    <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
        

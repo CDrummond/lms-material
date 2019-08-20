@@ -15,7 +15,6 @@
 10. Allow renaming of pinned items.
 11. When a menu is open, try to ignore click events and just close menu. This is
     to work-around a VuetifyJS issue.
-12. Remove arrows from browe headers, and elide titles to indicate collapsed.
 
 0.9.7
 -----
@@ -27,6 +26,7 @@
 6. Reduce height of toolbar in mobile layout.
 7. Make 'synced' part of 'playerStatus' in toolbar, so that UI is updated
    correctly on change.
+8. Remove arrows from browe headers, and elide titles to indicate collapsed.
 
 0.9.6
 -----

@@ -23,6 +23,9 @@
 3. If a player does not have 'power' attribute, then always assume its on.
 4. Only show volume control if player reports 'digital_volume_control:1'
 5. Add 'hasAlbums:1' to years query.
+6. Reduce height of toolbar in mobile layout.
+7. Make 'synced' part of 'playerStatus' in toolbar, so that UI is updated
+   correctly on change.
 
 0.9.6
 -----

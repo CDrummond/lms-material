@@ -6,7 +6,7 @@
  */
 
 :root {
- --main-toolbar-height:56px;
+ --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
  --bottom-nav-height:58px;
 }
@@ -19,6 +19,15 @@
  height:var(--main-toolbar-height) !important;
  margin-left:-7px !important;
  margin-right:-8px !important;
+}
+
+.maintoolbar-title {
+ margin-top:-1px;
+}
+
+.maintoolbar-subtitle {
+ margin-top:-3px;
+ font-size:85% !important;
 }
 
 .subtoolbar {
@@ -180,12 +189,12 @@
 }
 
 .vol-label {
- margin:0px;
+ margin:-8px 0px 0px 0px;
  padding:0px;
- font-size:12px;
+ font-size:8px;
  font-family:monospace, monospace;
  text-align:center;
- vertical-align:middle;
+ vertical-align:bottom;
  position:fixed;
  white-space:nowrap;
  overflow-x:hidden;
@@ -196,7 +205,7 @@
  top:38px;
  right:56px;
  z-index:-1;
- opacity:0.4;
+ opacity:0.7;
 }
 
 #letterOverlay {

@@ -2048,12 +2048,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         setScrollElement() {
             this.scrollElement = document.getElementById(this.grid.use ? "browse-grid" : "browse-list");
             this.scrollElement.removeEventListener('scroll', this.handleScroll);
-            if (this.$store.state.letterOverlay) {
-                this.scrollElement.addEventListener('scroll', this.handleScroll);
-            }
+            this.scrollElement.addEventListener('scroll', this.handleScroll);
         },
         handleScroll() {
-            if (undefined!=this.jumplist && this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
+            this.menu.show = false;
+            if (this.$store.state.letterOverlay && undefined!=this.jumplist && this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(() => { 
                     this.scrollAnimationFrameReq = undefined;
                     if (undefined!==this.letterTimeout) {

@@ -1249,7 +1249,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         headerAction(act, event) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 && (this.desktop || this.settingsMenuActions.indexOf(act)<0)) {
                 return;
             }
             if (USE_LIST_ACTION==act) {

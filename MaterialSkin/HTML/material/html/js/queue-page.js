@@ -555,7 +555,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         headerAction(act) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 && (this.desktop || this.settingsMenuActions.indexOf(act)<0)) {
                 return;
             }
             if (act==PQ_ADD_URL_ACTION) {

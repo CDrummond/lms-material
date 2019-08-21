@@ -37,16 +37,17 @@ const MOVE_FAV_TO_PARENT_ACTION=27;
 const SAVE_PRESET_ACTION      = 28;
 const MOVE_PRESET_ACTION      = 29;
 const ADD_PRESET_ACTION       = 30;
+const VLIB_ACTION             = 31;
 
-const PQ_PLAY_NOW_ACTION      = 31;
-const PQ_PLAY_NEXT_ACTION     = 32;
-const PQ_REMOVE_ACTION        = 33;
-const PQ_MORE_ACTION          = 34;
-const PQ_SELECT_ACTION        = 35;
-const PQ_UNSELECT_ACTION      = 36;
-const PQ_SCROLL_ACTION        = 37;
-const PQ_ADD_URL_ACTION       = 38;
-const PQ_MOVE_QUEUE_ACTION    = 39;
+const PQ_PLAY_NOW_ACTION      = 32;
+const PQ_PLAY_NEXT_ACTION     = 33;
+const PQ_REMOVE_ACTION        = 34;
+const PQ_MORE_ACTION          = 35;
+const PQ_SELECT_ACTION        = 36;
+const PQ_UNSELECT_ACTION      = 37;
+const PQ_SCROLL_ACTION        = 38;
+const PQ_ADD_URL_ACTION       = 39;
+const PQ_MOVE_QUEUE_ACTION    = 40;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -80,6 +81,7 @@ var ACTIONS=[
     {cmd:"set-preset",   icon:"ballot"},
     {cmd:"move-preset",  icon:"import_export"},
     {cmd:"add-preset",   icon:"add_box"},
+    {cmd:"vlib",         icon:"library_music"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
@@ -120,6 +122,7 @@ function updateActionStrings() {
     ACTIONS[SAVE_PRESET_ACTION].title=i18n("Save as preset");
     ACTIONS[MOVE_PRESET_ACTION].title=i18n("Move");
     ACTIONS[ADD_PRESET_ACTION].title=i18n("Add preset");
+    ACTIONS[VLIB_ACTION].title=i18n("Change library");
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");

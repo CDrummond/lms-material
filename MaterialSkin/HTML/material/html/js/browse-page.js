@@ -364,7 +364,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     created() {
-        this.myMusic=[];
         this.serverMyMusic=[];
         this.history=[];
         this.fetchingItems = false;
@@ -528,95 +527,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                           id: TOP_REMOTE_ID,
                           disabled:!this.remoteLibraries }
                        ];
-
-            this.myMusic = [
-                { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
-                  command: ["artists"],
-                  params: ["tags:s"],
-                  cancache: true,
-                  svg: "artist",
-                  type: "group",
-                  id: TOP_ID_PREFIX+"ar" },
-                { title: i18n("Albums"),
-                  command: ["albums"],
-                  params: [ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-                  cancache: true,
-                  icon: "album",
-                  type: "group",
-                  id: TOP_ID_PREFIX+"al" },
-                { title: i18n("Genres"),
-                  command: ["genres"],
-                  params: ["tags:s"],
-                  cancache: true,
-                  icon: "label",
-                  type: "group",
-                  id: TOP_GENRES_ID },
-                { title: i18n("Playlists"),
-                  command: ["playlists"],
-                  params: [PLAYLIST_TAGS],
-                  icon: "list",
-                  type: "group",
-                  id: TOP_PLAYLISTS_ID,
-                  section: SECTION_PLAYLISTS },
-                { title: i18n("New Music"),
-                  command: ["albums"],
-                  params: [ALBUM_TAGS, SORT_KEY+"new"],
-                  icon: "new_releases",
-                  type: "group",
-                  id: TOP_NEW_MUSIC_ID },
-               { title: i18n("Compilations"),
-                  command: ["albums"],
-                  params: ["compilation:1", ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-                  cancache: true,
-                  svg: "album-multi",
-                  type: "group",
-                  id: TOP_ID_PREFIX+"co" },
-                { title: i18n("Random Albums"),
-                  command: ["albums"],
-                  params: [ALBUM_TAGS, SORT_KEY+"random"],
-                  svg: "dice-album",
-                  type: "group",
-                  id: TOP_RANDOM_ALBUMS_ID },
-                { title: i18n("Random Mix"),
-                  svg: "dice-multiple",
-                  id: TOP_RANDOM_MIX_ID,
-                  type: "app",
-                  disabled: !this.randomMix },
-                { title: i18n("Dynamic Playlists"),
-                  command: ["dynamicplaylist", "browsejive"],
-                  params: [],
-                  svg: "dice-list",
-                  type: "group",
-                  id: TOP_DYNAMIC_PLAYLISTS_ID,
-                  disabled: !this.dynamicPlaylists },
-                { title: i18n("Years"),
-                  command: ["years"],
-                  params: ["hasAlbums:1"],
-                  cancache: true,
-                  icon: "date_range",
-                  type: "group",
-                  id: TOP_ID_PREFIX+"yr" },
-                { title: i18n("Music Folder"),
-                  command: ["readdirectory"],
-                  params: [],
-                  icon: "folder",
-                  type: "group",
-                  id: TOP_MUSIC_FOLDER_ID }
-                ];
-            if (this.separateArtists) {
-                this.myMusic.splice(1, 0, { title: i18n("Album Artists"),
-                                        command: ["artists"],
-                                        params: ["role_id:ALBUMARTIST", "tags:s"],
-                                        cancache: true,
-                                        svg: "albumartist",
-                                        type: "group",
-                                        id: TOP_ID_PREFIX+"aar" });
-            }
-
-            for (var i=0, len=this.myMusic.length; i<len; ++i) {
-                this.myMusic[i].weight=i;
-                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-            }
 
             if (this.history.length<1) {
                 this.items = this.top;
@@ -860,10 +770,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             if (TOP_MYMUSIC_ID==item.id) {
                 this.addHistory();
-                this.items = this.$store.state.serverMenus ? this.serverMyMusic : this.myMusic;
-                if (this.$store.state.serverMenus) {
-                    this.serverMyMusicMenu();
-                }
+                this.items = this.serverMyMusic;
+                this.serverMyMusicMenu();
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Browse music library");
                 this.current = item;
@@ -1890,12 +1798,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
                         this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
-                    if (this.$store.state.serverMenus) {
-                        if (TOP_MYMUSIC_ID==this.current.id) {
-                            this.items = this.serverMyMusic;
-                        } else if (this.history.length>1 && this.history[1].id==TOP_MYMUSIC_ID) {
-                            this.history[1].items = this.serverMyMusic;
-                        }
+                    if (TOP_MYMUSIC_ID==this.current.id) {
+                        this.items = this.serverMyMusic;
+                    } else if (this.history.length>1 && this.history[1].id==TOP_MYMUSIC_ID) {
+                        this.history[1].items = this.serverMyMusic;
                     }
                 }
                 this.fetchingItems=false;
@@ -1921,9 +1827,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
             for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
                 this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-            }
-            for (var i=0, len=this.myMusic.length; i<len; ++i) {
-                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
             }
         },
         pin(item, add) {
@@ -1981,9 +1884,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (item.menu && item.id.startsWith(TOP_ID_PREFIX) && ((!add && index!=-1) || (add && index==-1))) {
                 for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
                     this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-                }
-                for (var i=0, len=this.myMusic.length; i<len; ++i) {
-                    this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                 }
             }
         },

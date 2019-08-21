@@ -102,15 +102,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
-      <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Obtain enabled categories (Artists, Albums, etc) from the server. This is required in order to use additional browse modes, or to control the selection of browse categories.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="serverMenus"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-title>
@@ -219,7 +210,6 @@ Vue.component('lms-ui-settings', {
             letterOverlay:false,
             showMenuAudio:false,
             sortFavorites:true,
-            serverMenus:false,
             autoScrollQueue:true,
             stopButton:false,
             browseBackdrop:true,
@@ -267,7 +257,6 @@ Vue.component('lms-ui-settings', {
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
-            this.serverMenus = this.$store.state.serverMenus;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
             if (this.allowLayoutAdjust) {
@@ -312,7 +301,6 @@ Vue.component('lms-ui-settings', {
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
                                                   showMenuAudio:this.showMenuAudio,
-                                                  serverMenus:this.serverMenus,
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
@@ -348,7 +336,6 @@ Vue.component('lms-ui-settings', {
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,
                                      showMenuAudio:this.showMenuAudio,
-                                     serverMenus:this.serverMenus,
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,

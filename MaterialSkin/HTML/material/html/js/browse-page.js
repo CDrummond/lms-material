@@ -212,7 +212,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-subheader v-if="item.header" style="width:100%"><div @click="toggleGroup(item.group)">{{ item.header }}</div><div v-if="undefined!=item.group && collapsed[item.group]">...</div><div class="ellipsis lib-name" @click.stop="showLibMenu($event)" v-if="item.id==TOP_MMHDR_ID && libraryName">{{ SEPARATOR + libraryName }}</div>
+   <v-subheader v-if="item.header" style="width:100%"><div @click="toggleGroup(item.group)" v-html="item.header"></div><div v-if="undefined!=item.group && collapsed[item.group]">...</div><div class="ellipsis lib-name" @click.stop="showLibMenu($event)" v-if="item.id==TOP_MMHDR_ID && libraryName">{{ SEPARATOR + libraryName }}</div>
     <div v-if="item.action" :title="item.action.title" class="subheader-action" @click.stop="itemAction(item.action, item, index)">
      <v-btn icon><v-icon>{{ACTIONS[item.action].icon}}</v-icon></v-btn>
     </div>
@@ -460,7 +460,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items") };
 
             this.top = [
-                { header: i18n("My Music"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
+                { header: i18n("My Music").replace(" ", "&nbsp;"), id: TOP_MMHDR_ID, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION },
                 { title: this.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: ["tags:s"],
@@ -1681,7 +1681,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         setLibrary() {
             this.libraryName = undefined;
-            this.top[0].header=i18n("My Music");
+            this.top[0].header=i18n("My Music").replace(" ", "&nbsp;");
             if (0==this.history.length) {
                 this.items[0].header=this.top[0].header;
             }
@@ -1778,7 +1778,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                 if (data && data.result && data.result.item_loop) {
                     this.serverTop = [];
-                    this.serverTop.push({ header: i18n("My Music"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION} );
+                    this.serverTop.push({ header: i18n("My Music").replace(" ", "&nbsp;"), id: TOP_MMHDR_ID, weight:0, group: GROUP_MY_MUSIC, action:SEARCH_LIB_ACTION} );
                     data.result.item_loop.forEach(c => {
                         if (c.node=="myMusic" && c.id) {
                             if (c.id=="randomplay") {

@@ -368,6 +368,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
+            this.menu.show = false;
             if (!this.scrollAnimationFrameReq) {
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
             }

@@ -26,7 +26,8 @@
 6. Reduce height of toolbar in mobile layout.
 7. Make 'synced' part of 'playerStatus' in toolbar, so that UI is updated
    correctly on change.
-8. Remove arrows from browe headers, and elide titles to indicate collapsed.
+8. Remove arrows from browse headers, and elide titles to indicate collapsed.
+9. Hide list menus when scroll.
 
 0.9.6
 -----

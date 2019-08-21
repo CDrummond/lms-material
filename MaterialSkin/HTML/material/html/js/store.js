@@ -32,11 +32,6 @@ function updateUiSettings(state, val) {
         state.showMenuAudio = val.showMenuAudio;
         setLocalStorageVal('showMenuAudio', state.showMenuAudio);
     }
-    if (undefined!=val.serverMenus && state.serverMenus!=val.serverMenus) {
-        state.serverMenus = val.serverMenus;
-        setLocalStorageVal('serverMenus', state.serverMenus);
-        browseDisplayChanged = true;
-    }
     if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
         state.stopButton = val.stopButton;
         setLocalStorageVal('stopButton', state.stopButton);
@@ -109,7 +104,6 @@ const store = new Vuex.Store({
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
-        serverMenus:false,
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
@@ -250,7 +244,6 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
-            state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
@@ -286,7 +279,6 @@ const store = new Vuex.Store({
                                  letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                  sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                  showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
-                                 serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus),
                                  stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
                                  browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                  queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),

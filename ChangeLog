@@ -18,6 +18,7 @@
 12. Remove section headers.
 13. Add a 'My Music' entrt, and place 'Artists', etc, within this.
 14. Allow pinning off items from 'My Music'
+15. Always user server prodived categories.
 
 0.9.7
 -----

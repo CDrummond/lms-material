@@ -55,7 +55,7 @@ def checkVersionExists(version):
     url = releaseUrl(version)
     info("Checking %s" % url)
     request = requests.head(url)
-    if request.status_code == 200:
+    if request.status_code == 200 or request.status_code == 302:
         error("Version already exists")
 
 

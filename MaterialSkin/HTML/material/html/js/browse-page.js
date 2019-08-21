@@ -429,9 +429,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && this.current.section == SECTION_PRESETS) {
                 this.goHome();
             }
-            //if (this.$store.state.serverMenus) {
-            //    TODO: ????
-            //}
+            this.serverMyMusicMenu();
         }.bind(this));
 
         bus.$on('trackInfo', function(item, index) {
@@ -1798,7 +1796,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
                         this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
-                    if (TOP_MYMUSIC_ID==this.current.id) {
+                    if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                         this.items = this.serverMyMusic;
                     } else if (this.history.length>1 && this.history[1].id==TOP_MYMUSIC_ID) {
                         this.history[1].items = this.serverMyMusic;

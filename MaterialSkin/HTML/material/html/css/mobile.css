@@ -8,7 +8,7 @@
 :root {
  --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
- --bottom-nav-height:58px;
+ --bottom-nav-height:56px;
 }
 
 .lms-toolbar {
@@ -28,6 +28,11 @@
 .maintoolbar-subtitle {
  margin-top:-3px;
  font-size:75% !important;
+}
+
+.settings-title {
+ height:var(--main-toolbar-height) !important;
+ max-height:var(--main-toolbar-height) !important;
 }
 
 .subtoolbar {
@@ -57,7 +62,7 @@
 .lms-bottom-nav {
  position:relative !important;
  height:var(--bottom-nav-height) !important;
- top:calc(-1 * (var(--bottom-nav-height) + 2px)) !important;
+ top:calc(-1 * (var(--bottom-nav-height) + 4px)) !important;
 }
 
 .lms-bottom-nav-button {
@@ -72,7 +77,7 @@
 }
 
 .lms-bottom-nav-button .v-btn__content {
- height:48px;
+ height:46px;
  margin:0px;
  padding:0px;
 }
@@ -222,8 +227,8 @@
 }
 
 .ios-vcard-text-workaround {
- top:56px;
- height:calc((var(--vh, 1vh)*100) - 56px);
+ top:var(--main-toolbar-height);
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
 .inactive-page {

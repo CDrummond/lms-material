@@ -32,7 +32,6 @@ const TOP_PRESETS_ID = TOP_ID_PREFIX+"ps";
 const TOP_MORE_ID = TOP_ID_PREFIX+"more";
 const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
 const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
-const TOP_DYNAMIC_PLAYLISTS_ID = TOP_ID_PREFIX+"dpl";
 const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
 const TOP_MUSIC_FOLDER_ID = TOP_ID_PREFIX+"mf";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
@@ -380,9 +379,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                       pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites,
                       showPresets: this.$store.state.showPresets};
-        this.separateArtists=getLocalStorageBool('separateArtists', false);
-        this.randomMix=getLocalStorageBool('randomMix', true);
-        this.dynamicPlaylists=getLocalStorageBool('dynamicPlaylists', false);
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.cdPlayer=getLocalStorageBool('cdPlayer', false);
         this.previousScrollPos=0;
@@ -2234,11 +2230,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,mediadirs,useLocalImageproxy"]).then(({data}) => {
             if (data && data.result) {
                 var separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
-                if (separateArtists!=this.separateArtists) {
-                    this.separateArtists = separateArtists;
+                if (separateArtists!=getLocalStorageBool('separateArtists', false)) {
+                    setLocalStorageVal('separateArtists', separateArtists);
                     clearListCache(true);
                 }
-                setLocalStorageVal('separateArtists', this.separateArtists);
+
                 this.options.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
                 setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
                 this.options.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
@@ -2259,8 +2255,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         });
 
-        this.checkFeature(["can", "randomplay", "?"], "randomMix", TOP_RANDOM_MIX_ID);
-        this.checkFeature(["can", "dynamicplaylist", "browsejive", "?"], "dynamicPlaylists", TOP_DYNAMIC_PLAYLISTS_ID);
         this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], "remoteLibraries", TOP_REMOTE_ID);
         this.checkFeature(["can", "cdplayer", "items", "?"], "cdPlayer", TOP_CDPLAYER_ID);
 

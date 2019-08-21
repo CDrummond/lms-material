@@ -1798,7 +1798,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                         this.items = this.serverMyMusic;
-                    } else if (this.history.length>1 && this.history[1].id==TOP_MYMUSIC_ID) {
+                    } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
                         this.history[1].items = this.serverMyMusic;
                     }
                 }

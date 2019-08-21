@@ -2145,6 +2145,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.jumplist.push({key:'\u2022', index: Math.round(i*jump)});
                 }
             }
+            if (undefined==this.jumplist) {
+                return;
+            }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
         },

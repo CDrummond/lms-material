@@ -33,8 +33,6 @@ body {
 .settings-title {
  height:var(--main-toolbar-height) !important;
  max-height:var(--main-toolbar-height) !important;
- margin:0px !important;
- padding:0px !important;
 }
 
 .pq-details {
@@ -303,6 +301,6 @@ body {
 }
 
 .ios-vcard-text-workaround {
- top:48px;
- height:calc((var(--vh, 1vh)*100) - 48px);
+ top:var(--main-toolbar-height);
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }

@@ -30,6 +30,11 @@
  font-size:75% !important;
 }
 
+.settings-title {
+ height:var(--main-toolbar-height) !important;
+ max-height:var(--main-toolbar-height) !important;
+}
+
 .subtoolbar {
  position:fixed;
  top:var(--main-toolbar-height);
@@ -222,8 +227,8 @@
 }
 
 .ios-vcard-text-workaround {
- top:56px;
- height:calc((var(--vh, 1vh)*100) - 56px);
+ top:var(--main-toolbar-height);
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
 .inactive-page {

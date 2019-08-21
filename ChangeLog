@@ -16,9 +16,9 @@
 11. When a menu is open, try to ignore click events and just close menu. This is
     to work-around a VuetifyJS issue.
 12. Remove section headers.
-13. Add a 'My Music' entrt, and place 'Artists', etc, within this.
-14. Allow pinning off items from 'My Music'
-15. Always user server prodived categories.
+13. Add a 'My Music' entry, and place 'Artists', etc, within this.
+14. Allow pinning of items from 'My Music.'
+15. Always use server provided categories.
 
 0.9.7
 -----

@@ -16,6 +16,7 @@ const LMS_CURRENT_IMAGE_SIZE = "_1024x1024_f";
 const LMS_DEFAULT_LIBRARY = "0";
 const LMS_SKIN_LANGUAGES = new Set(['de', 'en', 'en-gb', 'fr', 'nl']);
 const LMS_MATERIAL_UI_DEFAULT_PREF = "plugin.material-skin:defaults";
+const LMS_MATERIAL_DEFAULT_ITEMS_PREF = "plugin.material-skin:items";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
 const LMS_CACHE_VERSION = 10;

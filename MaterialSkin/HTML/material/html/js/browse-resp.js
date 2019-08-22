@@ -19,7 +19,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     if (data && data.result) {
         resp.total = parent && parent.range ? parent.range.count : data.result.count;
         logJsonMessage("RESP", data);
-        if (parent.id && TOP_SEARCH_ID===parent.id) {
+        if (parent.id && SEARCH_ID===parent.id) {
             var totalResults = 0;
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 totalResults += data.result.contributors_count;
@@ -94,7 +94,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var insertAction = false;
             var moreAction = false;
             var isFavorites = parent && parent.isFavFolder ? true : false;
-            var isPlaylists = parent && parent.id == TOP_PLAYLISTS_ID;
+            var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
             var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
@@ -273,7 +273,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
 
-                if (isPlaylists) {
+                if (i.type=="playlist") {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;

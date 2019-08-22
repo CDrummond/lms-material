@@ -109,8 +109,8 @@ function updateActionStrings() {
     ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
     ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
     ACTIONS[REMOVE_ACTION].title=i18n("Remove");
-    ACTIONS[PIN_ACTION].title=i18n("Pin to main page");
-    ACTIONS[UNPIN_ACTION].title=i18n("Un-pin from main page");
+    ACTIONS[PIN_ACTION].title=i18n("Pin to home screen");
+    ACTIONS[UNPIN_ACTION].title=i18n("Un-pin from home screen");
     ACTIONS[SELECT_ACTION].title=ACTIONS[PQ_SELECT_ACTION].title=i18n("Select");
     ACTIONS[UNSELECT_ACTION].title=ACTIONS[PQ_UNSELECT_ACTION].title=i18n("Un-select");
     ACTIONS[RATING_ACTION].title=i18n("Set rating");

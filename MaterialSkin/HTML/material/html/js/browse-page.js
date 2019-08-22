@@ -1852,7 +1852,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.options.pinned.add(item.id);
                 this.updateItemPinnedState(item);
                 this.saveTopList();
-                bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
+                bus.$emit('showMessage', i18n("Pinned '%1' to home screen.", item.title));
             } else if (!add && index!=-1) {
                 this.$confirm(i18n("Un-pin '%1'?", item.title), {buttonTrueText: i18n('Un-pin'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {

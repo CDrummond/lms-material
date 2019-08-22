@@ -86,8 +86,9 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('menuIcons', state.menuIcons);
     }
     if (undefined!=val.hidden) {
-        var diff = new Set([...val.hidden].filter(x => !state.hidden.has(x)))
-        if (diff.size>0) {
+        var diff = new Set([...val.hidden].filter(x => !state.hidden.has(x)));
+        var diff2 = new Set([...state.hidden].filter(x => !val.hidden.has(x)));
+        if (diff.size>0 || diff2.size>0) {
             state.hidden = val.hidden;
             setLocalStorageVal('hidden', JSON.stringify(Array.from(state.hidden)));
             browseDisplayChanged = true;

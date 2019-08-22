@@ -273,7 +273,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 }
 
-                if (i.type=="playlist") {
+                if (isPlaylists && i.type=="playlist") {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;

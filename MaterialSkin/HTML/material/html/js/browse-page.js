@@ -187,7 +187,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
+   <v-list-tile v-else-if="!(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -2171,7 +2171,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (this.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
                         bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
                     }
-                } else {
+                } else if (this.isTop) {
+                    this.items = arrayMove(this.top, this.dragIndex, to);
+                    this.saveTopList();
+                } else if (this.current && (this.current.section==SECTION_FAVORITES || this.current.section==SECTION_PLAYLISTS)) {
                     var command = this.current.section==SECTION_FAVORITES
                                     ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
                                            this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]

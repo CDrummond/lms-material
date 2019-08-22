@@ -868,9 +868,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.dialog.show = false;
                     if (this.dialog.item && this.dialog.item.isPinned) {
                         this.dialog.item.title=str;
-// TODO
-                        //this.pinned.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                        //setLocalStorageVal('pinned', JSON.stringify(this.pinned));
+                        this.saveTopList();
                     } else {
                         var command = [];
                         this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });

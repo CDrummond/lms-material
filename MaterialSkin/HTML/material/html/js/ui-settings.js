@@ -111,6 +111,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
+      <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="sortHome"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-title>
@@ -242,6 +251,7 @@ Vue.component('lms-ui-settings', {
             menuIcons: true,
             showPresets: false,
             allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
+            sortHome: isIPhone(),
             showItems: [ ]
         }
     },
@@ -265,6 +275,7 @@ Vue.component('lms-ui-settings', {
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
+            this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
             if (this.allowLayoutAdjust) {
@@ -322,6 +333,7 @@ Vue.component('lms-ui-settings', {
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
+                                                  sortHome:this.sortHome,
                                                   showMenuAudio:this.showMenuAudio,
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
@@ -357,6 +369,7 @@ Vue.component('lms-ui-settings', {
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,
+                                     sortHome:this.sortHome,
                                      showMenuAudio:this.showMenuAudio,
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,

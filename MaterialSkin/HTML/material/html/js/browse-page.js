@@ -187,7 +187,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id))) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
+   <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id))) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -329,6 +329,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         hidden() {
             return this.$store.state.hidden
+        },
+        sortHome() {
+            return this.$store.state.sortHome
         }
     },
     created() {
@@ -1787,12 +1790,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.options.pinned.add(this.top[i].id);
                 }
             }
-            if (isIPhone()) { // Issue #107
+            if (this.$store.state.sortHome) {
                 this.top.sort(homeScreenSort);
             }
         },
         saveTopList() {
-            if (isIPhone()) { // Issue #107
+            if (this.$store.state.sortHome) {
                 this.top.sort(homeScreenSort);
             }
             setLocalStorageVal("topItems", JSON.stringify(this.top));
@@ -2259,6 +2262,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('browseDisplayChanged', function() {
             this.options.sortFavorites=this.$store.state.sortFavorites;
             this.options.showPresets=this.$store.state.hidden.has(TOP_PRESETS_ID);
+            if (this.$store.state.sortHome) {
+                this.saveTopList();
+            }
             this.goHome();
         }.bind(this));
         bus.$on('libraryChanged', function() {

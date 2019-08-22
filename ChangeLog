@@ -19,9 +19,10 @@
 13. Add a 'My Music' entry, and place 'Artists', etc, within this.
 14. Allow pinning of items from 'My Music.'
 15. Always use server provided categories.
-16. Allow drag'n'drop re-ordering of top-level browse items. Items are
-    auto-sorted for iPhone due to #107
-17. Allow hiding 'My Music', etc, from home screen.
+16. Allow drag'n'drop re-ordering of top-level browse items.
+17. Add option to auto-sort home screen items, mainly for iPhone as this does
+    not support drag'n'drop.
+18. Allow hiding 'My Music', etc, from home screen.
 
 0.9.7
 -----

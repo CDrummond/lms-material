@@ -296,8 +296,8 @@ const store = new Vuex.Store({
                                  showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                  lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
                                  menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons)};
-                    if (undefined!=prefs.hidden && getLocalStorageVal('hidden', "[]")=="[]") {
-                        opts.hidden=new Set(JSON.parse(prefs.hidden));
+                    if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
+                        opts.hidden=new Set(prefs.hidden);
                     }
                     updateUiSettings(state, opts);
                 }

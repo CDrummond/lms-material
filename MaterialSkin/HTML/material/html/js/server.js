@@ -127,6 +127,10 @@ async function lmsListFragment(playerid, command, params, start, fagmentSize, ba
             } else {
                 return lmsListFragment(playerid, command, params, start+fagmentSize, fagmentSize, batchSize, accumulated);
             }
+        } else {
+            return new Promise(function(resolve, reject) {
+                resolve({data:accumulated});
+            });
         }
     });
 }

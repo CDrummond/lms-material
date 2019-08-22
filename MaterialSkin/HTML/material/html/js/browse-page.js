@@ -24,20 +24,16 @@ const ALBUM_SORT_PLACEHOLDER  = "AS";
 const ARTIST_ALBUM_SORT_PLACEHOLDER = "AAS";
 const TOP_ID_PREFIX = "top:/";
 const TOP_MYMUSIC_ID = TOP_ID_PREFIX+"mm";
-const TOP_SEARCH_ID = TOP_ID_PREFIX+"search";
-const TOP_GENRES_ID = TOP_ID_PREFIX+"genre";
-const TOP_PLAYLISTS_ID = TOP_ID_PREFIX+"pl";
 const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
-const TOP_PRESETS_ID = TOP_ID_PREFIX+"ps";
-const TOP_MORE_ID = TOP_ID_PREFIX+"more";
-const TOP_RANDOM_ALBUMS_ID = TOP_ID_PREFIX+"rnda";
-const TOP_RANDOM_MIX_ID = TOP_ID_PREFIX+"rndm";
-const TOP_NEW_MUSIC_ID = TOP_ID_PREFIX+"new";
-const TOP_MUSIC_FOLDER_ID = TOP_ID_PREFIX+"mf";
+const TOP_PRESETS_ID = TOP_ID_PREFIX+"ps"
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
+const MUSIC_ID_PREFIX = "mm:/";
+const SEARCH_ID = MUSIC_ID_PREFIX+"search";
+const GENRES_ID = MUSIC_ID_PREFIX+"genres";
+const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ALBUM_TAGS = "tags:jlyasS";
 const TRACK_TAGS = "tags:ACdts";
 const PLAYLIST_TAGS = "tags:su";
@@ -152,33 +148,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
 
  <v-list class="bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
-  <template v-if="isTop" v-for="(item, index) in pinned">
-   <v-divider v-if="index>0"></v-divider>
-
-   <v-list-tile avatar @click="click(item, index, $event)" :key="item.id">
-    <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar-small">
-     <img :key="item.image" v-lazy="item.image" v-bind:class="{'radio-img': undefined!=item.url}">
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
-     <v-icon>{{item.icon}}</v-icon>
-    </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
-    </v-list-tile-avatar>
-
-    <v-list-tile-content>
-     <v-list-tile-title v-html="item.title"></v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)" v-if="item.menu && item.menu.length>0">
-     <v-btn icon>
-      <v-icon>more_vert</v-icon>
-     </v-btn>
-    </v-list-tile-action>
-
-   </v-list-tile>
-  </template>
-
-  <RecycleScroller v-if="(grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_MORE_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
+  <RecycleScroller v-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -209,7 +179,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-divider v-if="!current && !(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && (index>0 || pinned.length>0) && items.length>index" :inset="item.inset"></v-divider>
+   <v-divider v-if="!current && !(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && index>0 && items.length>index" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -221,7 +191,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
-    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID, 'lms-avatar': current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
+    <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
      <img :key="item.image" v-lazy="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
@@ -338,7 +308,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                      deleteall:undefined, removeall:undefined, choosepos:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
-            pinned: [],
             libraryName: undefined,
             selection: [],
             showRatingButton: false,
@@ -382,18 +351,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.cdPlayer=getLocalStorageBool('cdPlayer', false);
         this.previousScrollPos=0;
-        this.pinned = JSON.parse(getLocalStorageVal("pinned", "[]"));
-
-        if (this.pinned.length==0) {
-            lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
-                if (data && data.result && data.result._p2) {
-                    this.pinned = JSON.parse(data.result._p2);
-                    this.addPinned();
-                }
-            });
-        } else {
-            this.addPinned();
-        }
         this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
         if (!this.desktop) {
@@ -416,6 +373,28 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        var savedItems = JSON.parse(getLocalStorageVal("topitems", "[]"));
+        if (savedItems.length==0) {
+            savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
+            if (savedItems.length==0) {
+                lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2) {
+                        this.updateTopList(JSON.parse(data.result._p2));
+                    } else {
+                        lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
+                            if (data && data.result && data.result._p2) {
+                                this.addPinned(JSON.parse(data.result._p2));
+                            }
+                        });
+                    }
+                });
+            } else {
+                this.addPinned(savedItems);
+            }
+        } else {
+            this.updateTopList(savedItems);
+        }
 
         bus.$on('esc', function() {
             this.menu.show = false;
@@ -453,7 +432,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
             this.enteredTerm = term;
-            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? TOP_SEARCH_ID : "search:"+command[0], type:"search"});
+            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
         }.bind(this));
     },
     methods: {
@@ -469,58 +448,70 @@ var lmsBrowse = Vue.component("lms-browse", {
                           deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items"),
                           choosepos:i18n("Choose position") };
 
-            this.top = [{ title: i18n("My Music"),
-                          command: [],
-                          params: [],
-                          icon: "library_music",
-                          type: "group",
-                          menu: [SEARCH_LIB_ACTION],
-                          id: TOP_MYMUSIC_ID },
-                        { title: i18n("Radio"),
-                          command: ["radios"],
-                          params: ["menu:radio"],
-                          icon: "radio",
-                          type: "group",
-                          id: TOP_RADIO_ID,
-                          section: SECTION_RADIO },
-                        { title: i18n("Favorites"),
-                          command: ["favorites", "items"],
-                          params: ["menu:favorites", "menu:1"],
-                          icon: "favorite",
-                          type: "favorites",
-                          app: "favorites",
-                          id: TOP_FAVORITES_ID,
-                          section: SECTION_FAVORITES,
-                          isFavFolder: true },
-                        { title: i18n("Presets"),
-                          command: ["material-skin-presets", "list"],
-                          icon: "ballot",
-                          type: "presets",
-                          app: "presets",
-                          id: TOP_PRESETS_ID,
-                          section: SECTION_PRESETS },
-                        { title: i18n("Apps"),
-                          command: ["myapps", "items"],
-                          params: ["menu:1"],
-                          icon: "apps",
-                          type: "group",
-                          id: TOP_APPS_ID,
-                          section: SECTION_APPS },
-                        { title: i18n("CD Player"),
-                          command: ["cdplayer", "items"],
-                          params: [],
-                          svg: "cd-player",
-                          type: "group",
-                          id: TOP_CDPLAYER_ID,
-                          disabled:!this.cdPlayer },
-                        { title: i18n("Remote Libraries"),
-                          command: ["selectRemoteLibrary", "items"],
-                          params: ["menu:selectRemoteLibrary", "menu:1"],
-                          icon: "cloud",
-                          type: "group",
-                          id: TOP_REMOTE_ID,
-                          disabled:!this.remoteLibraries }
-                       ];
+            if (undefined==this.top || this.top.length==0) {
+                this.top = [{ command: [],
+                              params: [],
+                              icon: "library_music",
+                              type: "group",
+                              menu: [SEARCH_LIB_ACTION],
+                              id: TOP_MYMUSIC_ID },
+                            { command: ["radios"],
+                              params: ["menu:radio"],
+                              icon: "radio",
+                              type: "group",
+                              id: TOP_RADIO_ID,
+                              section: SECTION_RADIO },
+                            { command: ["favorites", "items"],
+                              params: ["menu:favorites", "menu:1"],
+                              icon: "favorite",
+                              type: "favorites",
+                              app: "favorites",
+                              id: TOP_FAVORITES_ID,
+                              section: SECTION_FAVORITES,
+                              isFavFolder: true },
+                            { command: ["material-skin-presets", "list"],
+                              icon: "ballot",
+                              type: "presets",
+                              app: "presets",
+                              id: TOP_PRESETS_ID,
+                              section: SECTION_PRESETS },
+                            { command: ["myapps", "items"],
+                              params: ["menu:1"],
+                              icon: "apps",
+                              type: "group",
+                              id: TOP_APPS_ID,
+                              section: SECTION_APPS },
+                            { command: ["cdplayer", "items"],
+                              params: [],
+                              svg: "cd-player",
+                              type: "group",
+                              id: TOP_CDPLAYER_ID,
+                              disabled:!this.cdPlayer },
+                            { command: ["selectRemoteLibrary", "items"],
+                              params: ["menu:selectRemoteLibrary", "menu:1"],
+                              icon: "cloud",
+                              type: "group",
+                              id: TOP_REMOTE_ID,
+                              disabled:!this.remoteLibraries }
+                           ];
+            }
+            for (var i=0, len=this.top.length; i<len; ++i) {
+                this.top[i].title= this.top[i].id==TOP_MYMUSIC_ID
+                        ? i18n("My Music")
+                        : this.top[i].id==TOP_RADIO_ID
+                            ? i18n("Radio")
+                            : this.top[i].id==TOP_FAVORITES_ID
+                                ? i18n("Favorites")
+                                : this.top[i].id==TOP_PRESETS_ID
+                                    ? i18n("Presets")
+                                    : this.top[i].id==TOP_APPS_ID
+                                        ? i18n("Apps")
+                                        : this.top[i].id==TOP_CDPLAYER_ID
+                                            ? i18n("CD Player")
+                                            : this.top[i].id==TOP_REMOTE_ID
+                                                ? i18n("Remote Libraries")
+                                                : this.top[i].title;
+            }
 
             if (this.history.length<1) {
                 this.items = this.top;
@@ -772,11 +763,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;
                 this.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
-            } else if (TOP_RANDOM_MIX_ID==item.id) {
+            } else if (RANDOM_MIX_ID==item.id) {
                 bus.$emit('dlg.open', 'rndmix');
             } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
                        "artists"==item.command[0] && item.params[0].startsWith("genre_id:") &&
-                       this.current && this.current.id==TOP_GENRES_ID) {
+                       this.current && this.current.id==GENRES_ID) {
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],
@@ -815,27 +806,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
             } else if (item.weblink) {
                 window.open(item.weblink);
-            } else if (TOP_MUSIC_FOLDER_ID==item.id) {
-                if (this.mediaDirs.length<1) {
-                    return;
-                } else if (1==this.mediaDirs.length) {
-                    this.fetchItems({command:item.command, params:["folder:"+this.mediaDirs[0].replace("\\", "\\\\")]}, item);
-                } else {
-                    this.addHistory();
-                    this.items=[];
-                    for (var i=0; i<this.mediaDirs.length; ++i) {
-                        this.items.push( { title: folderName(this.mediaDirs[i]),
-                              command: ["readdirectory"],
-                              params: ["folder:"+this.mediaDirs[i].replace("\\", "\\\\")],
-                              icon: "folder",
-                              type: "group",
-                              id: this.mediaDirs+"::"+this.items.length });
-                    }
-                    this.headerTitle = item.title;
-                    this.headerSubTitle = i18np("1 Item", "%1 Items", this.items.length);
-                    setScrollTop(this.scrollElement, 0);
-                    this.isTop = false;
-                }
             } else {
                 var command = this.buildCommand(item);
                 if (command.command.length>2 && command.command[1]=="playlist") {
@@ -898,8 +868,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.dialog.show = false;
                     if (this.dialog.item && this.dialog.item.isPinned) {
                         this.dialog.item.title=str;
-                        this.pinned.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                        setLocalStorageVal('pinned', JSON.stringify(this.pinned));
+// TODO
+                        //this.pinned.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
+                        //setLocalStorageVal('pinned', JSON.stringify(this.pinned));
                     } else {
                         var command = [];
                         this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
@@ -1700,7 +1671,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             if (c.id=="randomplay") {
                                 this.serverMyMusic.push({ title: i18n("Random Mix"),
                                                       svg: "dice-multiple",
-                                                      id: TOP_RANDOM_MIX_ID,
+                                                      id: RANDOM_MIX_ID,
                                                       type: "app",
                                                       weight: c.weight ? parseFloat(c.weight) : 100 });
                             } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect")) {
@@ -1709,7 +1680,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              command: command.command ,
                                              params: command.params,
                                              weight: c.weight ? parseFloat(c.weight) : 100,
-                                             id: TOP_ID_PREFIX+c.id,
+                                             id: MUSIC_ID_PREFIX+c.id,
                                              type: "group",
                                              icon: "music_note"
                                             };
@@ -1726,17 +1697,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id.startsWith("myMusicGenres")) {
                                     item.icon = "label";
                                     item.cancache = true;
-                                    item.id = TOP_GENRES_ID;
-                                } else if (c.id == "myMusicPlaylists") {
+                                    item.id = GENRES_ID;
+                                } else if (c.id == "myMusicPlaylists" || c.id.startsWith("playlists")) {
                                     item.icon = "list";
-                                    item.id = TOP_PLAYLISTS_ID;
                                     item.section = SECTION_PLAYLISTS;
                                 } else if (c.id.startsWith("myMusicYears")) {
                                     item.icon = "date_range";
                                     item.cancache = true;
                                 } else if (c.id == "myMusicNewMusic") {
                                     item.icon = "new_releases";
-                                    item.id=TOP_NEW_MUSIC_ID;
                                 } else if (c.id.startsWith("myMusicMusicFolder")) {
                                     item.icon = "folder";
                                 } else if (c.id.startsWith("myMusicFileSystem")) {
@@ -1744,7 +1713,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 } else if (c.id == "myMusicRandomAlbums") {
                                     item.svg = "dice-album";
                                     item.icon = undefined;
-                                    item.id = TOP_RANDOM_ALBUMS_ID;
                                 } else if (c.id.startsWith("myMusicTopTracks")) {
                                     item.icon = "arrow_upward";
                                 } else if (c.id.startsWith("myMusicFlopTracks")) {
@@ -1804,80 +1772,87 @@ var lmsBrowse = Vue.component("lms-browse", {
                 logAndShowError(err);
             });
         },
-        addPinned() {
-            this.pinned.forEach( p => {
-                if (undefined==p.command && undefined==p.params && undefined!=p.item) { // Previous pinned apps
-                    var command = this.buildCommand(p.item);
-                    p.params = command.params;
-                    p.command = command.command;
-                    p.image = p.item.image;
-                    p.icon = p.item.icon;
-                    p.item = undefined;
+        updateTopList(items) {
+            this.top=items;
+            this.initItems();
+        },
+        saveTopList() {
+            setLocalStorageVal('topitems', JSON.stringify(this.top));
+            removeLocalStorage("pinned");
+        },
+        addPinned(pinned) {
+            for (var len=pinned.length, i=len-1; i>=0; --i) {
+                if (undefined==pinned[i].command && undefined==pinned[i].params && undefined!=pinned[i].item) { // Previous pinned apps
+                    var command = this.buildCommand(pinned[i].item);
+                    pinned[i].params = command.params;
+                    pinned[i].command = command.command;
+                    pinned[i].image = pinned[i].item.image;
+                    pinned[i].icon = pinned[i].item.icon;
+                    pinned[i].item = undefined;
                 }
-                p.menu = undefined == p.url ? [RENAME_ACTION, UNPIN_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION];
-                p.isPinned = true
-                p.weight = undefined==p.weight ? 100000 : p.weight;
-                this.options.pinned.add(p.id);
-            });
+                pinned[i].menu = undefined == pinned[i].url ? [RENAME_ACTION, UNPIN_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION];
+                this.options.pinned.add(pinned[i].id);
+                this.top.unshift(pinned[i]);
+            }
+            if (this.history.length<1) {
+                this.items = this.top;
+            }
             for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
                 this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
             }
+            this.saveTopList();
+            removeLocalStorage("pinned");
         },
         pin(item, add) {
             var index = -1;
-            for (var i=0, len=this.pinned.length; i<len; ++i) {
-                if (this.pinned[i].id == item.id) {
+            var lastPinnedIndex = -1;
+            for (var i=0, len=this.top.length; i<len; ++i) {
+                if (this.top[i].id == item.id) {
                     index = i;
                     break;
+                } else if (!this.top[i].id.startsWith(TOP_ID_PREFIX)) {
+                    lastPinnedIndex = i;
                 }
             }
 
             if (add && index==-1) {
                 if (item.isRadio) {
-                    this.pinned.push({id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true, weight: 100000,
-                                      url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION]});
+                    this.top.splice(lastPinnedIndex+1, 0,
+                                    {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,
+                                     url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION]});
                 } else {
                     var command = this.buildCommand(item, undefined, false);
-                    this.pinned.push({id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isRadio: item.isRadio,
-                                      weight: undefined==item.weight ? 100000 : item.weight,
-                                      command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION]});
+                    this.top.splice(lastPinnedIndex+1, 0,
+                                    {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isRadio: item.isRadio,
+                                     command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION]});
                 }
                 this.options.pinned.add(item.id);
                 bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
-                if (item.menu) {
-                    for (var i=0, len=item.menu.length; i<len; ++i) {
-                        if (item.menu[i] == PIN_ACTION) {
-                            item.menu[i] = UNPIN_ACTION;
-                            break;
-                        }
-                    }
-                }
-                this.pinned.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                setLocalStorageVal('pinned', JSON.stringify(this.pinned));
-                this.$forceUpdate();
+                this.updateItemPinnedState(item);
+                this.saveTopList();
             } else if (!add && index!=-1) {
                 this.$confirm(i18n("Un-pin '%1'?", item.title), {buttonTrueText: i18n('Un-pin'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        this.pinned.splice(index, 1);
+                        this.top.splice(index, 1);
                         this.options.pinned.delete(item.id);
-                        this.pinned.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                        setLocalStorageVal('pinned', JSON.stringify(this.pinned));
-                        this.$forceUpdate();
-
-                        if (item.menu) {
-                            for (var i=0, len=item.menu.length; i<len; ++i) {
-                                if (item.menu[i] == UNPIN_ACTION) {
-                                    item.menu[i] = PIN_ACTION;
-                                    break;
-                                }
-                            }
-                        }
+                        this.updateItemPinnedState(item);
+                        this.saveTopList();
                     }
                 });
             }
-            if (item.menu && item.id.startsWith(TOP_ID_PREFIX) && ((!add && index!=-1) || (add && index==-1))) {
-                for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                    this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+        },
+        updateItemPinnedState(item) {
+            if (item.menu) {
+                for (var i=0, len=item.menu.length; i<len; ++i) {
+                    if (item.menu[i] == PIN_ACTION || item.menu[i] == UNPIN_ACTION) {
+                        item.menu[i] = item.menu[i] == PIN_ACTION ? UNPIN_ACTION : PIN_ACTION;
+                        break;
+                    }
+                }
+                if (item.id.startsWith(TOP_ID_PREFIX)) {
+                    for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
+                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                    }
                 }
             }
         },
@@ -1980,7 +1955,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleScroll() {
             this.menu.show = false;
-            if (this.$store.state.letterOverlay && undefined!=this.jumplist && this.jumplist.length>1 && !this.scrollAnimationFrameReq) {
+            if (this.$store.state.letterOverlay && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 && !this.scrollAnimationFrameReq) {
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(() => { 
                     this.scrollAnimationFrameReq = undefined;
                     if (undefined!==this.letterTimeout) {
@@ -2010,7 +1985,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.letter = undefined;
                     }
                     this.jumplistActive = 0;
-                    for (var i=0, len=this.jumplist.length; i<len; ++i) {
+                    for (var i=0, len=this.filteredJumplist.length; i<len; ++i) {
                         if (this.filteredJumplist[i].index<=index) {
                             this.jumplistActive = i;
                         } else {

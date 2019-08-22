@@ -374,7 +374,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.initItems();
 
-        var savedItems = JSON.parse(getLocalStorageVal("topitems", "[]"));
+        var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
             if (savedItems.length==0) {
@@ -453,12 +453,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                               params: [],
                               icon: "library_music",
                               type: "group",
+                              weight: 0,
                               menu: [SEARCH_LIB_ACTION],
                               id: TOP_MYMUSIC_ID },
                             { command: ["radios"],
                               params: ["menu:radio"],
                               icon: "radio",
                               type: "group",
+                              weight: 1,
                               id: TOP_RADIO_ID,
                               section: SECTION_RADIO },
                             { command: ["favorites", "items"],
@@ -466,6 +468,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "favorite",
                               type: "favorites",
                               app: "favorites",
+                              weight: 2,
                               id: TOP_FAVORITES_ID,
                               section: SECTION_FAVORITES,
                               isFavFolder: true },
@@ -473,24 +476,28 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "ballot",
                               type: "presets",
                               app: "presets",
+                              weight: 3,
                               id: TOP_PRESETS_ID,
                               section: SECTION_PRESETS },
                             { command: ["myapps", "items"],
                               params: ["menu:1"],
                               icon: "apps",
                               type: "group",
+                              weight: 4,
                               id: TOP_APPS_ID,
                               section: SECTION_APPS },
                             { command: ["cdplayer", "items"],
                               params: [],
                               svg: "cd-player",
                               type: "group",
+                              weight: 5,
                               id: TOP_CDPLAYER_ID,
                               disabled:!this.cdPlayer },
                             { command: ["selectRemoteLibrary", "items"],
                               params: ["menu:selectRemoteLibrary", "menu:1"],
                               icon: "cloud",
                               type: "group",
+                              weight: 6,
                               id: TOP_REMOTE_ID,
                               disabled:!this.remoteLibraries }
                            ];
@@ -1778,9 +1785,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.options.pinned.add(this.top[i].id);
                 }
             }
+            if (isIPhone()) { // Issue #107
+                this.top.sort(homeScreenSort);
+            }
         },
         saveTopList() {
-            setLocalStorageVal('topitems', JSON.stringify(this.top));
+            if (isIPhone()) { // Issue #107
+                this.top.sort(homeScreenSort);
+            }
+            setLocalStorageVal("topItems", JSON.stringify(this.top));
             removeLocalStorage("pinned");
         },
         addPinned(pinned) {
@@ -1822,17 +1835,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (item.isRadio) {
                     this.top.splice(lastPinnedIndex+1, 0,
                                     {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,
-                                     url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION]});
+                                     url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION],
+                                     weight: undefined==item.weight ? 10000 : item.weight});
                 } else {
                     var command = this.buildCommand(item, undefined, false);
                     this.top.splice(lastPinnedIndex+1, 0,
                                     {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isRadio: item.isRadio,
-                                     command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION]});
+                                     command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
+                                     weight: undefined==item.weight ? 10000 : item.weight});
                 }
                 this.options.pinned.add(item.id);
-                bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
                 this.updateItemPinnedState(item);
                 this.saveTopList();
+                bus.$emit('showMessage', i18n("Pinned '%1' to the browse page.", item.title));
             } else if (!add && index!=-1) {
                 this.$confirm(i18n("Un-pin '%1'?", item.title), {buttonTrueText: i18n('Un-pin'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {

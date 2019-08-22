@@ -1773,6 +1773,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         updateTopList(items) {
             this.top=items;
             this.initItems();
+            for (var i=0, len=this.top.length; i<len; ++i) {
+                if (!this.top[i].id.startsWith(TOP_ID_PREFIX)) {
+                    this.options.pinned.add(this.top[i].id);
+                }
+            }
         },
         saveTopList() {
             setLocalStorageVal('topitems', JSON.stringify(this.top));

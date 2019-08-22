@@ -1750,7 +1750,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                     c.id.startsWith("genre") ? "label" :
                                                     c.id.startsWith("playlist") ? "list" :
                                                     c.id.startsWith("ratedmysql") ? "star" :
-                                                    "library_music";
+                                                    "music_note";
                                     }
                                 } else if (c.icon) {
                                     if (c.icon.endsWith("/albums.png")) {

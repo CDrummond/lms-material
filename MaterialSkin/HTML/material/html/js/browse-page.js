@@ -179,7 +179,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-divider v-if="!current && !(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && index>0 && items.length>index" :inset="item.inset"></v-divider>
+   <v-divider v-if="!(isTop && (item.disabled || hidden.has(item.id))) && index>0 && items.length>index" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -187,7 +187,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text" v-html="item.title"></p>
-   <v-list-tile v-else-if="!(item.disabled || (SECTION_PRESETS==item.section && !showPresets)) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
+   <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id))) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -327,8 +327,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         menuIcons() {
             return this.$store.state.menuIcons
         },
-        showPresets() {
-            return this.$store.state.showPresets
+        hidden() {
+            return this.$store.state.hidden
         }
     },
     created() {
@@ -347,7 +347,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       noRoleFilter: getLocalStorageBool('noRoleFilter', false),
                       pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites,
-                      showPresets: this.$store.state.showPresets};
+                      showPresets: !this.$store.state.hidden.has(TOP_PRESETS_ID)};
         this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
         this.cdPlayer=getLocalStorageBool('cdPlayer', false);
         this.previousScrollPos=0;
@@ -2236,7 +2236,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browseDisplayChanged', function() {
             this.options.sortFavorites=this.$store.state.sortFavorites;
-            this.options.showPresets=this.$store.state.showPresets;
+            this.options.showPresets=this.$store.state.hidden.has(TOP_PRESETS_ID);
             this.goHome();
         }.bind(this));
         bus.$on('libraryChanged', function() {

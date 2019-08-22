@@ -108,14 +108,21 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="showPresets = !showPresets" class="switch-label">
-      <v-list-tile-title>{{i18n('Show presets')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show player specific presets, and allow editing, etc.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showPresets"></v-switch></v-list-tile-action>
+     <v-list-tile-content class="switch-label">
+      <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-title>
+     <v-list-tile-content/>
     </v-list-tile>
+   
+    <template v-for="(item, index) in showItems">
+     <v-list-tile class="settings-very-compact-row">
+      <v-checkbox v-model="item.show" :label="item.name" style="margin-left:24px"></v-checkbox>
+     </v-list-tile>
+    </template>
+    <div class="dialog-padding"></div>
 
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Now Playing')}}</v-header>
@@ -234,7 +241,8 @@ Vue.component('lms-ui-settings', {
             android: isAndroid(),
             menuIcons: true,
             showPresets: false,
-            allowLayoutAdjust: window.location.href.indexOf('auto=false')<0
+            allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
+            showItems: [ ]
         }
     },
     computed: {
@@ -266,7 +274,21 @@ Vue.component('lms-ui-settings', {
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
-            this.showPresets = this.$store.state.showPresets;
+            this.hidden = this.$store.state.hidden;
+
+            this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
+                            {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
+                            {id: TOP_PRESETS_ID, name:i18n("Pesets"), show:!this.hidden.has(TOP_PRESETS_ID)},
+                            {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
+                            {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)}];
+
+            if (getLocalStorageBool('remoteLibraries', true)) {
+                this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
+            }
+            if (getLocalStorageBool('cdPlayer', false)) {
+                this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
+            }
+
             this.show = true;
         }.bind(this));
 
@@ -314,7 +336,7 @@ Vue.component('lms-ui-settings', {
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
                                                   menuIcons:this.menuIcons,
-                                                  showPresets:this.showPresets
+                                                  hidden:this.hiddenItems()
                                                 } );
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -349,12 +371,23 @@ Vue.component('lms-ui-settings', {
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,
                                      menuIcons:this.menuIcons,
-                                     showPresets:this.showPresets
+                                     hidden:Array.from(this.hiddenItems())
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topitems", "[]")]);
                 }
             });
+        },
+        hiddenItems() {
+            var hidden = new Set(Array.from(this.hidden));
+            for (var i=0, len=this.showItems.length; i<len; ++i) {
+                if (this.showItems[i].show && hidden.has(this.showItems[i].id)) {
+                    hidden.delete(this.showItems[i].id);
+                } else if (!this.showItems[i].show && !hidden.has(this.showItems[i].id)) {
+                    hidden.add(this.showItems[i].id);
+                }
+            }
+            return hidden;
         },
         i18n(str) {
             if (this.show) {

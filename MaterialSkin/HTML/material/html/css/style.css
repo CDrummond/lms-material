@@ -732,6 +732,10 @@ progress {
  height:48px !important;
 }
 
+.settings-very-compact-row {
+ height:24px !important;
+}
+
 .switch-label {
  cursor:pointer;
  margin-right:8px;

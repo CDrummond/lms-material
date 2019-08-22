@@ -85,6 +85,11 @@ function updateUiSettings(state, val) {
         state.menuIcons = val.menuIcons;
         setLocalStorageVal('menuIcons', state.menuIcons);
     }
+    if (undefined!=val.sortHome && state.sortHome!=val.sortHome) {
+        state.sortHome = val.sortHome;
+        setLocalStorageVal('sortHome', state.sortHome);
+        browseDisplayChanged = true;
+    }
     if (undefined!=val.hidden) {
         var diff = new Set([...val.hidden].filter(x => !state.hidden.has(x)));
         var diff2 = new Set([...state.hidden].filter(x => !val.hidden.has(x)));
@@ -126,6 +131,7 @@ const store = new Vuex.Store({
         lsAndNotif:'playing',
         page:'browse',
         menuIcons: true,
+        sortHome: isIPhone(),
         hidden: new Set(),
         visibleMenus: new Set()
     },
@@ -263,6 +269,7 @@ const store = new Vuex.Store({
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             state.lsAndNotif = getLocalStorageVal('lsAndNotif', state.lsAndNotif);
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
+            state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[]")));
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
@@ -296,7 +303,8 @@ const store = new Vuex.Store({
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                      lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
-                                     menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons)};
+                                     menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
+                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome)};
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

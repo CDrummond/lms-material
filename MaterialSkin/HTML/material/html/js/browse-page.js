@@ -695,12 +695,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);
+            } else if (1==resp.items.length && resp.items[0].id=="empty") {
+                bus.$emit('showMessage', item.title);
             } else {
                 this.handleListResponse(item, command, resp);
             }
         },
         canClickText(item) {
-            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && ( (item.actions && item.actions.go) || item.nextWindow || item.params /*CustomBrowse*/));
+            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && ( (item.actions && item.actions.go) || (item.actions && item.actions.do) ||item.nextWindow || item.params /*CustomBrowse*/));
         },
         doTextClick(item) {
             var command = this.buildCommand(item);

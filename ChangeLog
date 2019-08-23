@@ -3,7 +3,7 @@
  1. Add action to create favourite folders.
  2. Allow moving favourites into folders.
  3. Add action to move favourite to parent folder.
- 4. Make list of composer and condcutor genres configurable.
+ 4. Make list of composer and conductor genres configurable.
  5. Optionally support listing and editing presets.
  6. Support "auto=false" URL query parameter to disable automatic layout
     switching.
@@ -27,7 +27,7 @@
 20. When checking if can activate a text item, check for "do" command as well as
     "go" command.
 21. When checking text-click response, if an empty list is received
-    (or created), jsut show alert with activated text.
+    (or created), just show alert with activated text.
 
 0.9.7
 -----

@@ -270,7 +270,7 @@ const store = new Vuex.Store({
             state.lsAndNotif = getLocalStorageVal('lsAndNotif', state.lsAndNotif);
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
-            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[]")));
+            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {

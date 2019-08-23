@@ -712,6 +712,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               type: isFolder ? "group" : "track",
                               icon: isFolder ? "folder" : undefined,
+                              svg: isFolder ? undefined : "file-music",
                               textkey: key
                           });
             }

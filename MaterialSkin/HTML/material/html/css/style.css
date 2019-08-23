@@ -676,12 +676,6 @@ progress {
  padding:-2px;
 }
 
-.pq-current {
- border:1px solid rgb(25, 118, 210);
- border-radius:4px;
- background-color:rgba(25, 118, 210, 0.15);
-}
-
 .pq-current div.v-list__tile__title {
  font-weight:600;
 }

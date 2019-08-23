@@ -63,17 +63,20 @@
  position:relative !important;
  height:var(--bottom-nav-height) !important;
  top:calc(-1 * (var(--bottom-nav-height) + 8px)) !important;
+ transition:none !important;
 }
 
 .lms-bottom-nav-button {
  width:33.3333% !important;
  max-width:250px !important;
+ transition:none !important;
 }
 
 /* Work-around issue where when swiping to switch views, a previously active nav button would have a
    slightly lighter background than the others */
 .lms-bottom-nav-button:before, .lms-bottom-nav-button:focus:before, .lms-bottom-nav-button:hover:before {
  background-color:transparent !important;
+ transition:none !important;
 }
 
 .lms-bottom-nav-button .v-btn__content {

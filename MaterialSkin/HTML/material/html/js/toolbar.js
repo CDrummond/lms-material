@@ -124,7 +124,7 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || !infoOpen)" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || infoOpen)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
+ <v-btn icon v-if="!desktop && ( (infoPlugin && isNowPlayingPage && (wide || infoOpen)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
  <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
@@ -626,6 +626,9 @@ Vue.component('lms-toolbar', {
         },
         'showPlayerMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'player', shown:newVal});
+            if (newVal) {
+                bus.$emit('refreshServerStatus');
+            }
         },
         'showMainMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'main', shown:newVal});

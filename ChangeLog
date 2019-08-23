@@ -29,6 +29,8 @@
 21. When checking text-click response, if an empty list is received
     (or created), just show alert with activated text.
 22. Refresh player list each time 'Manage Players' is opened.
+23. For mobile layout, show play/pause button in main toolbar for browse and
+    queue pages.
 
 0.9.7
 -----

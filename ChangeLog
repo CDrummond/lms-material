@@ -28,6 +28,7 @@
     "go" command.
 21. When checking text-click response, if an empty list is received
     (or created), just show alert with activated text.
+22. Refresh player list each time 'Manage Players' is opened.
 
 0.9.7
 -----

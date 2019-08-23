@@ -116,7 +116,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-if="grid.use">
   <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item)" v-bind:class="{'jumplist-folder' : item.folder, 'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
@@ -143,7 +143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
   <template v-for="(item, index) in filteredJumplist">
-   <div @click="jumpTo(item)" v-bind:class="{'jumplist-folder' : item.folder, 'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+   <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
   </template>
  </div>
 

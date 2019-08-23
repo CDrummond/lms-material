@@ -948,10 +948,6 @@ div.v-subheader {
  cursor:pointer;
 }
 
-.jumplist-folder {
- opacity:0.65;
-}
-
 @media screen and (max-width: 289px) {
  #home-button{display:none;}
 }

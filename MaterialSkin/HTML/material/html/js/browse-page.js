@@ -68,7 +68,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-card-actions>
   </v-card>
  </v-dialog>
- <div v-if="headerTitle" class="subtoolbar noselect">
+ <div v-if="headerTitle" class="subtoolbar noselect" v-bind:class="{'list-details' : selection.length>0}">
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>

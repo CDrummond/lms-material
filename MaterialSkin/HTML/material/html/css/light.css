@@ -47,7 +47,7 @@ html, .mini-player {
 }
 
 .vue-recycle-scroller__item-view, .lms-list-item {
- border-bottom: 0.5px solid #e0e0e0;
+ border-bottom: 1px solid #e0e0e0;
 }
 
 .subtoolbar {

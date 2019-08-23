@@ -61,12 +61,12 @@ a {
  height:40px;
 }
 
-.lms-list {
+.lms-list, .lms-list-sub {
  padding:0px;
 }
 
-.lms-list-sub {
- padding:0px;
+.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+ height:52px !important;
 }
 
 /* Make action buttons in lists closer together */

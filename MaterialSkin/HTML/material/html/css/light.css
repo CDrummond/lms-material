@@ -31,7 +31,7 @@ html, .mini-player {
 }
 
 .vue-splitter .splitter {
- background-color:#f0f0f0 !important;
+ background-color:#e0e0e0 !important;
 }
 
 .np-bar {
@@ -51,8 +51,8 @@ html, .mini-player {
 }
 
 .subtoolbar {
- background-color:#fff !important;
- border-bottom:1px solid #f0f0f0;
+ background-color:#efefef !important;
+ border-bottom:1px solid #d8d8d8;
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {

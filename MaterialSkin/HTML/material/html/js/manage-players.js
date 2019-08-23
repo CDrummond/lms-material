@@ -103,6 +103,7 @@ Vue.component('lms-manage-players', {
     mounted() {
         this.noImage = resolveImageUrl(LMS_BLANK_COVER);
         bus.$on('manage.open', function(act) {
+            this.players = [];
             this.show = true;
             this.openDialogs = 0;
 

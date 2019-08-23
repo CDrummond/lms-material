@@ -31,6 +31,7 @@
 22. Refresh player list each time 'Manage Players' is opened.
 23. For mobile layout, show play/pause button in main toolbar for browse and
     queue pages.
+24. More subtle current track highlight.
 
 0.9.7
 -----

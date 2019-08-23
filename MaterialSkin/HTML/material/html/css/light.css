@@ -92,3 +92,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background-color: #346dd2 !important;
  border-color: #346dd2 !important;
 }
+
+.pq-current {
+ background-color:rgba(0, 0, 0, 0.05);
+}

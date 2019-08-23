@@ -935,7 +935,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (!this.playerId()) {  // *************** NO PLAYER ***************
                 bus.$emit('showError', undefined, i18n("No Player"));
             } else if (act===RENAME_ACTION) {
-                this.dialog = item.isPinned
+                this.dialog = this.isTop || item.isPinned
                                 ? { show:true, title:i18n("Rename item"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item}
                                 : SECTION_PLAYLISTS==item.section
                                     ? { show:true, title:i18n("Rename playlist"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,

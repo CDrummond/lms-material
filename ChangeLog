@@ -24,6 +24,10 @@
     not support drag'n'drop.
 18. Allow hiding 'My Music', etc, from home screen.
 19. Add music file icon to 'Music Folder' browsing.
+20. When checking if can activate a text item, check for "do" command as well as
+    "go" command.
+21. When checking text-click response, if an empty list is received
+    (or created), jsut show alert with activated text.
 
 0.9.7
 -----

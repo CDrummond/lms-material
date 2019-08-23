@@ -61,12 +61,12 @@ a {
  height:40px;
 }
 
-.lms-list {
+.lms-list, .lms-list-sub {
  padding:0px;
 }
 
-.lms-list-sub {
- padding:0px;
+.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+ height:52px !important;
 }
 
 /* Make action buttons in lists closer together */
@@ -440,7 +440,7 @@ a {
  opacity:0.4;
 }
 
-.pq-details {
+.list-details {
  padding-left:12px;
 }
 
@@ -676,12 +676,6 @@ progress {
  padding:-2px;
 }
 
-.pq-current {
- border:1px solid rgb(25, 118, 210);
- border-radius:4px;
- background-color:rgba(25, 118, 210, 0.15);
-}
-
 .pq-current div.v-list__tile__title {
  font-weight:600;
 }
@@ -730,6 +724,10 @@ progress {
 
 .settings-compact-row {
  height:48px !important;
+}
+
+.settings-very-compact-row {
+ height:24px !important;
 }
 
 .switch-label {
@@ -883,10 +881,6 @@ progress {
  vertical-align:middle;
 }
 
-.vue-splitter .splitter {
- margin-bottom:4px;
-}
-
 div.v-subheader {
  font-size:16px;
 }
@@ -920,9 +914,9 @@ div.v-subheader {
 }
 
 .lms-avatar-small .v-avatar {
- width:38px !important;
- height:38px !important;
- margin-left:2px;
+ width:32px !important;
+ height:32px !important;
+ margin-left:6px;
 }
 
 .lms-jumplist {
@@ -942,10 +936,6 @@ div.v-subheader {
  justify-content: center;
  align-items: center;
  cursor:pointer;
-}
-
-.jumplist-folder {
- opacity:0.65;
 }
 
 @media screen and (max-width: 289px) {

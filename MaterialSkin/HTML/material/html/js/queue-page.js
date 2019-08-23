@@ -48,16 +48,25 @@ function animate(elem, from, to) {
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
 function showArtist(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
 }
 
-function showAlbum(album, title) {
+function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0) {
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title));
 }
 
 function showComposer(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
 }
@@ -150,7 +159,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-card>
  </v-dialog>
 
- <div class="subtoolbar pq-details noselect" >
+ <div class="subtoolbar list-details noselect" >
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -200,7 +209,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile>
   </RecycleScroller>
   <template v-else v-for="(item, index) in items">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-queue-item">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item">
     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" :src="item.image"></img>
@@ -476,6 +485,13 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.select(item, index);
                 return;
             }
+            if (this.menu.show) {
+                this.menu.show=false;
+                return;
+            }
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clickTimer = undefined;
@@ -539,6 +555,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         headerAction(act) {
+            if (this.$store.state.visibleMenus.size>0 && (this.desktop || this.settingsMenuActions.indexOf(act)<0)) {
+                return;
+            }
             if (act==PQ_ADD_URL_ACTION) {
                 this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
             } else if (act==PQ_SCROLL_ACTION) {
@@ -552,7 +571,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemMenu(item, index, event) {
-            this.menu={show:true, item:item, index:index, x:event.clientX, y:event.clientY};
+            showMenu(this, {show:true, item:item, index:index, x:event.clientX, y:event.clientY});
         },
         removeSelectedItems() {
             this.selection.sort(function(a, b) { return a<b ? 1 : -1; });
@@ -843,6 +862,11 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         svgIcon: function (name, dark) {
             return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        }
+    },
+    watch: {
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'queue', shown:newVal});
         }
     },
     beforeDestroy() {

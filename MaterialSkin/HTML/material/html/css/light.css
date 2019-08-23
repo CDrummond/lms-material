@@ -31,7 +31,7 @@ html, .mini-player {
 }
 
 .vue-splitter .splitter {
- background-color:#f0f0f0 !important;
+ background-color:#e0e0e0 !important;
 }
 
 .np-bar {
@@ -46,13 +46,13 @@ html, .mini-player {
  background:rgba(255, 255, 255, 0.9) !important;
 }
 
-.vue-recycle-scroller__item-view, .lms-queue-item {
- border-bottom: 0.5px solid #e0e0e0;
+.vue-recycle-scroller__item-view, .lms-list-item {
+ border-bottom: 1px solid #e0e0e0;
 }
 
 .subtoolbar {
- background-color:#fff !important;
- border-bottom:1px solid #f0f0f0;
+ background-color:#efefef !important;
+ border-bottom:1px solid #d8d8d8;
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {
@@ -91,4 +91,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .v-tabs__slider-wrapper .accent {
  background-color: #346dd2 !important;
  border-color: #346dd2 !important;
+}
+
+.pq-current {
+ background-color:rgba(0, 0, 0, 0.05);
 }

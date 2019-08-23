@@ -26,13 +26,13 @@ var app = new Vue({
         }.bind(this));
 
         initApp(this);
-        this.openDialogs = 0;
+        this.openDialogs = new Set();
 
         bus.$on('dialogOpen', function(name, open) {
             if (open) {
-                this.openDialogs++;
-            } else if (this.openDialogs>0) {
-                this.openDialogs--;
+                this.openDialogs.add(name);
+            } else {
+                this.openDialogs.delete(name);
             }
         }.bind(this));
     },
@@ -49,7 +49,9 @@ var app = new Vue({
     },
     methods: {
         swipe(ev, direction) {
-            if (this.openDialogs>0) {
+            if (this.openDialogs.size>1 ||
+                (this.openDialogs.size==1 && (this.$store.state.page=='now-playing' ||
+                                              (!this.openDialogs.has('np-viewer') && !this.openDialogs.has('info-dialog'))))) {
                 return;
             }
             if (this.$store.state.page=='now-playing') {

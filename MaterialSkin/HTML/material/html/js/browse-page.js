@@ -568,7 +568,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 //if (!axios.isCancel(err)) {
-                    logAndShowError(err, undefined, command.command, command.params, start, count);
+                    this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    logError(err, command.command, command.params, start, count);
                 //}
             });
         },

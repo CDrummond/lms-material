@@ -66,7 +66,7 @@ a {
 }
 
 .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
- height:52px !important;
+ height:50px !important;
 }
 
 /* Make action buttons in lists closer together */

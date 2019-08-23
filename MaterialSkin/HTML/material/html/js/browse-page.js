@@ -179,7 +179,6 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <template v-else v-for="(item, index) in items">
-   <v-divider v-if="!(isTop && (item.disabled || hidden.has(item.id))) && index>0 && items.length>index" :inset="item.inset"></v-divider>
    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar">
     <v-list-tile-content>
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -229,7 +228,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-action>
 
    </v-list-tile>
-   <v-divider v-if="current"></v-divider>
+   <v-divider v-if="!isTop || !(item.disabled || hidden.has(item.id))" :inset="item.inset"></v-divider>
   </template>
 
   <v-list-tile class="lms-list-pad"></v-list-tile>

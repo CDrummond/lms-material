@@ -46,7 +46,7 @@ html, .mini-player {
  background:rgba(255, 255, 255, 0.9) !important;
 }
 
-.vue-recycle-scroller__item-view, .lms-queue-item {
+.vue-recycle-scroller__item-view, .lms-list-item {
  border-bottom: 0.5px solid #e0e0e0;
 }
 

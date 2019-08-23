@@ -51,7 +51,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])" class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+ <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
   <v-list-tile style>
    <v-list-tile-content>
@@ -545,6 +545,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         },
+        showContextMenu(event) {
+            if (this.$store.state.visibleMenus.size<1) {
+                this.showMenu(event);
+            } else {
+                event.preventDefault();
+            }
+        },
         showMenu(event) {
             event.preventDefault();
             this.clearClickTimeout();
@@ -576,6 +583,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
         },
         doAction(command) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             bus.$emit('playerCommand', command);
         },
         setPosition() {
@@ -787,6 +797,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         toggleTime() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             this.showTotal = !this.showTotal;
             setLocalStorageVal("showTotal", this.showTotal);
         },
@@ -796,6 +809,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         playPauseButton(showSleepMenu) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (showSleepMenu) {
                 bus.$emit('dlg.open', 'sleep', this.$store.state.player);
             } else {
@@ -803,6 +819,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showSleep() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
         },
         setRating() {
@@ -815,7 +834,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         clickImage(event) {
             if (this.menu.show) {
                 this.menu.show = false;
-            } else if (!this.clickTimer) {
+                return;
+            }
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout(this.clickTimer);
                     if (isIOS()) {
@@ -912,6 +936,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.calcPortraitPad();
                 });
             }
+        },
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
         }
     },
     computed: {

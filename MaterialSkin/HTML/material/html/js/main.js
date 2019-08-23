@@ -18,10 +18,10 @@ var app = new Vue({
         parseQueryParams();
         this.$store.commit('initUiSettings');
 
-        bus.$on('dlg.open', function(name, a, b) {
+        bus.$on('dlg.open', function(name, a, b, c) {
             this.dialogs[name] = true; // Mount
             this.$nextTick(function () {
-                bus.$emit(name+".open", a, b);
+                bus.$emit(name+".open", a, b, c);
             });
         }.bind(this));
 

@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+var lmsNumVisibleMenus = 0;
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
@@ -30,11 +31,6 @@ function updateUiSettings(state, val) {
     if (undefined!=val.showMenuAudio && state.showMenuAudio!=val.showMenuAudio) {
         state.showMenuAudio = val.showMenuAudio;
         setLocalStorageVal('showMenuAudio', state.showMenuAudio);
-    }
-    if (undefined!=val.serverMenus && state.serverMenus!=val.serverMenus) {
-        state.serverMenus = val.serverMenus;
-        setLocalStorageVal('serverMenus', state.serverMenus);
-        browseDisplayChanged = true;
     }
     if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
         state.stopButton = val.stopButton;
@@ -87,7 +83,21 @@ function updateUiSettings(state, val) {
     }
     if (undefined!=val.menuIcons && state.menuIcons!=val.menuIcons) {
         state.menuIcons = val.menuIcons;
-        setLocalStorageVal('menuIcons', menuIcons);
+        setLocalStorageVal('menuIcons', state.menuIcons);
+    }
+    if (undefined!=val.sortHome && state.sortHome!=val.sortHome) {
+        state.sortHome = val.sortHome;
+        setLocalStorageVal('sortHome', state.sortHome);
+        browseDisplayChanged = true;
+    }
+    if (undefined!=val.hidden) {
+        var diff = new Set([...val.hidden].filter(x => !state.hidden.has(x)));
+        var diff2 = new Set([...state.hidden].filter(x => !val.hidden.has(x)));
+        if (diff.size>0 || diff2.size>0) {
+            state.hidden = val.hidden;
+            setLocalStorageVal('hidden', JSON.stringify(Array.from(state.hidden)));
+            browseDisplayChanged = true;
+        }
     }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
@@ -103,7 +113,6 @@ const store = new Vuex.Store({
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
-        serverMenus:false,
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
@@ -121,7 +130,10 @@ const store = new Vuex.Store({
         showPlayerMenuEntry: false,
         lsAndNotif:'playing',
         page:'browse',
-        menuIcons: true
+        menuIcons: true,
+        sortHome: isIPhone(),
+        hidden: new Set(),
+        visibleMenus: new Set()
     },
     mutations: {
         setPlayers(state, players) {
@@ -242,7 +254,6 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
-            state.serverMenus = getLocalStorageBool('serverMenus', state.serverMenus);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
@@ -258,6 +269,8 @@ const store = new Vuex.Store({
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             state.lsAndNotif = getLocalStorageVal('lsAndNotif', state.lsAndNotif);
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
+            state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
+            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[]")));
             setTheme(state.darkUi);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -271,27 +284,33 @@ const store = new Vuex.Store({
             // Read defaults, stored on server
             lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
                 if (data && data.result && data.result._p2) {
-                    var prefs = JSON.parse(data.result._p2);
-                    var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
-                                 autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
-                                 letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
-                                 sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
-                                 showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
-                                 serverMenus: getLocalStorageBool('serverMenus', undefined==prefs.serverMenus ? state.serverMenus : prefs.serverMenus),
-                                 stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
-                                 browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
-                                 queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
-                                 showMenuAudioQueue: getLocalStorageBool('showMenuAudioQueue', undefined==prefs.showMenuAudioQueue ? state.showMenuAudioQueue : prefs.showMenuAudioQueue),
-                                 nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
-                                 infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
-                                 techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
-                                 queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
-                                 nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
-                                 volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
-                                 showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
-                                 lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
-                                 menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons)};
+                    try {
+                        var prefs = JSON.parse(data.result._p2);
+                        var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
+                                     autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
+                                     letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
+                                     sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
+                                     showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
+                                     stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
+                                     browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
+                                     queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
+                                     showMenuAudioQueue: getLocalStorageBool('showMenuAudioQueue', undefined==prefs.showMenuAudioQueue ? state.showMenuAudioQueue : prefs.showMenuAudioQueue),
+                                     nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
+                                     infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
+                                     techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
+                                     queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
+                                     nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
+                                     volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
+                                     showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
+                                     lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
+                                     menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
+                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome)};
+                        if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
+                            opts.hidden=new Set(prefs.hidden);
+                        }
                     updateUiSettings(state, opts);
+                    } catch(e) {
+                    }
                 }
             });
 
@@ -327,6 +346,14 @@ const store = new Vuex.Store({
                 setLocalStorageVal('page', val);
                 bus.$emit('pageChanged', val);
             }
+        },
+        menuVisible(state, val) {
+            if (val.shown) {
+                state.visibleMenus.add(val.name);
+            } else {
+                state.visibleMenus.delete(val.name);
+            }
+            lmsNumVisibleMenus = state.visibleMenus.size;
         }
     }
 })

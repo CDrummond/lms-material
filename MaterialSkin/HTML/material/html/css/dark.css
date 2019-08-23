@@ -64,8 +64,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#e0e0e0 !important;
 }
 
-.vue-recycle-scroller__item-view, .lms-queue-item {
- border-bottom: 0.5px solid #5c5c5c;
+.vue-recycle-scroller__item-view, .lms-list-item {
+ border-bottom: 1px solid #5c5c5c;
 }
 
 .np-rating-shadow {
@@ -92,4 +92,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .v-tabs__slider-wrapper .accent {
  background-color: #58b7ff !important;
  border-color: #58b7ff !important;
+}
+
+.pq-current {
+ background-color:rgba(255, 255, 255, 0.1);
 }

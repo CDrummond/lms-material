@@ -209,6 +209,18 @@ function favSort(a, b) {
     return titleSort(a, b);
 }
 
+function partialFavSort(a, b) {
+    var at = a.isFavFolder ? 0 : 1;
+    var bt = b.isFavFolder ? 0 : 1;
+    if (at!=bt) {
+        return at<bt ? -1 : 1;
+    }
+    if (a.isFavFolder) {
+        return titleSort(a, b);
+    }
+    return a.pos<b.pos ? -1 : 1;
+}
+
 function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
         return a.isgroup ? -1 : 1;
@@ -242,6 +254,15 @@ function otherPlayerSort(a, b) {
         return 1;
     }
     return 0;
+}
+
+function homeScreenSort(a, b) {
+    var at = a.id.startsWith(TOP_ID_PREFIX) ? 2 : a.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
+    var bt = b.id.startsWith(TOP_ID_PREFIX) ? 2 : b.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
+    if (at==bt) {
+        return at==0 || a.weight==b.weight ? titleSort(a, b) : a.weight<b.weight ? -1 : 1;
+    }
+    return at<bt ? -1 : 1;
 }
 
 function setScrollTop(el, val) {
@@ -286,6 +307,10 @@ function isAndroid() {
 
 function isIOS() {
     return /iPhone|iPad/i.test(navigator.userAgent);
+}
+
+function isIPhone() {
+    return /iPhone/i.test(navigator.userAgent);
 }
 
 function replaceNewLines(str) {
@@ -673,3 +698,36 @@ function mapIcon(params, item) {
     }
     item.svg="artist";
 }
+
+function splitString(str) {
+    var arr = [];
+    var s = str.split(",");
+    for (var i=0, len=s.length; i<len; ++i) {
+        var e = s[i].trim();
+        if (e.length>0) {
+            arr.push(e);
+        }
+    }
+    return arr;
+}
+
+function showMenu(obj, newMenu) {
+    if (obj.menu.show) {
+        setTimeout(function () {
+            obj.menu = newMenu;
+        }.bind(this), 100);
+    } else {
+        obj.menu = newMenu;
+    }
+}
+
+function arrayMove(arr, from, to) {
+    if (to >= arr.length) {
+        var k = to - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(to, 0, arr.splice(from, 1)[0]);
+    return arr;
+};

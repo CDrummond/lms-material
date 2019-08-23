@@ -35,8 +35,8 @@ body {
  max-height:var(--main-toolbar-height) !important;
 }
 
-.pq-details {
- margin-left:-16px !important;
+.list-details {
+ margin-left:-4px !important;
 }
 
 .subtoolbar {

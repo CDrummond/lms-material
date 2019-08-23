@@ -1151,15 +1151,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!item.menu) {
                 return;
             }
-            if (1==item.menu.length && item.menu[0]==MORE_ACTION) {
-                // Only have 'More' - dont display menu, just activate action...
-                this.itemAction(MORE_ACTION, item);
-            } else if (1==item.menu.length && item.menu[0]==MORE_LIB_ACTION) {
-                // Only have 'More' - dont display menu, just activate action...
-                this.itemAction(MORE_LIB_ACTION, item);
-            } else {
-                showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
-            }
+            showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
         },
         savePreset(item, pos) {
             var url = item.url ? item.url : (item.favUrl ? item.favUrl : (item.presetParams ? item.presetParams.favorites_url : undefined));

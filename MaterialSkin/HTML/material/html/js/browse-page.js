@@ -426,8 +426,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
         bus.$on('refreshPlaylist', function(name) {
-            if (this.current && this.current.section==SECTION_PLAYLISTS && (this.current.id.startsWith(MUSIC_ID_PREFIX) || this.current.title==name)) {
-                this.refreshList();
+            if (this.current && this.current.section==SECTION_PLAYLISTS) {
+                if (this.current.id.startsWith(MUSIC_ID_PREFIX) || this.current.title==name) {
+                    this.refreshList();
+                }
+                if (!this.current.id.startsWith(MUSIC_ID_PREFIX) && this.history.length>0) {
+                    this.history[this.history.length-1].needsRefresh = true;
+                }
             }
         }.bind(this));
         bus.$on('ratingsSet', function(ids, value) {
@@ -1377,7 +1382,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.command = prev.command;
             this.showRatingButton = prev.showRatingButton;
             this.subtitleClickable = prev.subtitleClickable;
-            if (refresh) {
+            if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {
                 this.$nextTick(function () {

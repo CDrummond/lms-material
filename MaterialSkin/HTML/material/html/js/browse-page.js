@@ -759,7 +759,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 return;
             }
-            if (isTextItem(item) && !item.id.startsWith(TOP_ID_PREFIX)) {
+            if (isTextItem(item) && !item.id.startsWith(TOP_ID_PREFIX) && !item.id.startsWith(MUSIC_ID_PREFIX)) {
                 if (this.canClickText(item)) {
                     this.doTextClick(item);
                 }

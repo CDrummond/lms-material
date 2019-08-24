@@ -425,6 +425,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             }
         }.bind(this));
+        bus.$on('refreshPlaylist', function(name) {
+            if (this.current && this.current.section==SECTION_PLAYLISTS && (this.current.id.startsWith(MUSIC_ID_PREFIX) || this.current.title==name)) {
+                this.refreshList();
+            }
+        }.bind(this));
         bus.$on('ratingsSet', function(ids, value) {
             this.refreshList();
         }.bind(this));
@@ -1840,7 +1845,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.top.splice(lastPinnedIndex+1, 0,
                                     {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isRadio: item.isRadio,
                                      command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
-                                     weight: undefined==item.weight ? 10000 : item.weight});
+                                     weight: undefined==item.weight ? 10000 : item.weight, section: item.section});
                 }
                 this.options.pinned.add(item.id);
                 this.updateItemPinnedState(item);

@@ -473,7 +473,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         });
                     } else {
                         lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({data})=>{
-                            bus.$emit('refreshList', SECTION_PLAYLISTS);
+                            bus.$emit('refreshPlaylist', str);
                         }).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to save play queue!"));
                             logError(err);

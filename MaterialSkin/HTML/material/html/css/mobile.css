@@ -17,8 +17,8 @@
 
 .lms-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
- margin-left:-14px !important;
- margin-right:-16px !important;
+ margin-left:-7px !important;
+ margin-right:-8px !important;
 }
 
 .maintoolbar-title {
@@ -43,7 +43,7 @@
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- padding:2px 0px 0px 4px;
+ padding:2px 8px 0px 0px;
  z-index:1;
  float:left;
 }
@@ -116,7 +116,7 @@
 }
 
 .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
- padding:0 8px !important;
+ padding:0 16px !important;
 }
 
 .lms-list-jump {
@@ -218,7 +218,7 @@
  height:18px !important;
  line-height:18px !important;
  top:38px;
- right:48px;
+ right:56px;
  z-index:-1;
  opacity:0.7;
 }
@@ -254,5 +254,25 @@
  height:22px !important;
  margin-bottom:4px;
  vertical-align:middle;
+}
+
+@media only screen and (max-width:800px) {
+ .lms-toolbar > .v-toolbar__content {
+  margin-left:-14px !important;
+  margin-right:-16px !important;
+ }
+
+ .subtoolbar {
+  padding:2px 8px 0px 0px;
+  padding:2px 0px 0px 4px;
+ }
+
+ .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+  padding:0 8px !important;
+ }
+
+ .vol-label {
+  right:48px;
+ }
 }
 

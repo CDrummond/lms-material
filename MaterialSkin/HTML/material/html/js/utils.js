@@ -104,7 +104,7 @@ function resolveImageUrl(image, size) {
     image=""+image; // Ensure its a string!
     if ((image.includes("http://") || image.includes("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
         var url = new URL(image);
-        if (url.hostname.startsWith("192.168.") || url.hostname.starsWith("127.") || url.hostname.endsWith(".local")) {
+        if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
             return image;
         }
         if (useMySqueezeboxImageProxy) {

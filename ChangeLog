@@ -32,6 +32,8 @@
 23. For mobile layout, show play/pause button in main toolbar for browse and
     queue pages.
 24. More subtle current track highlight.
+25. Don't use imageproxy for 192.168.*, 127.*, or *.local, HTTP/HTTPS image
+    URLs - fixes display of ShairTunes covers.
 
 0.9.7
 -----

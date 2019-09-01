@@ -103,6 +103,10 @@ var useMySqueezeboxImageProxy = true;
 function resolveImageUrl(image, size) {
     image=""+image; // Ensure its a string!
     if ((image.includes("http://") || image.includes("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
+        var url = new URL(image);
+        if (url.hostname.startsWith("192.168.") || url.hostname.starsWith("127.") || url.hostname.endsWith(".local")) {
+            return image;
+        }
         if (useMySqueezeboxImageProxy) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_IMAGE_SZ;
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);

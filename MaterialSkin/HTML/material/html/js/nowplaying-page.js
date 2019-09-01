@@ -432,7 +432,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             var artistAndComposer;
             if (playerStatus.current.composer && playerStatus.current.genre && LMS_COMPOSER_GENRES.has(playerStatus.current.genre)) {
-                artistAndComposer = addPart(this.playerStatus.current.artist, playerStatus.current.composer);
+                artistAndComposer = addPart(playerStatus.current.composer, this.playerStatus.current.artist);
             } else {
                 artistAndComposer = this.playerStatus.current.artist;
             }

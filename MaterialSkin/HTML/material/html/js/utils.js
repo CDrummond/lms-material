@@ -612,7 +612,7 @@ function originalId(id) {
 }
 
 function addPart(str, part) {
-    return str ? str+SEPARATOR+part : part;
+    return str ? (part ? str+SEPARATOR+part : str) : part;
 }
 
 function commandGridKey(command) {

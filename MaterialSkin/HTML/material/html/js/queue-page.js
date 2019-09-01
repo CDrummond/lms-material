@@ -72,21 +72,30 @@ function showComposer(id, title) {
 }
 
 function buildSubtitle(i, showRatings) {
-    var subtitle = i.artist ? i.artist : i.trackartist;
-
-    if (i.artist_id && !IS_MOBILE && subtitle) {
-        subtitle="<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(subtitle)+"\')\">" + subtitle + "</a>";
-    }
+    var subtitle = undefined;
     if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre)) {
-        var composer_ids = i.composer_ids ? i.composer_ids.split(",") : undefined;
+        var composer_ids = !IS_MOBILE && i.composer_ids ? i.composer_ids.split(",") : undefined;
         if (composer_ids && 1==composer_ids.length) {
-            if (IS_MOBILE) {
-                subtitle=addPart(subtitle, i.composer);
-            } else {
-                subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
-            }
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.composer);
         }
     }
+
+    if (i.artist) {
+        if (!IS_MOBILE && undefined!=i.artist_id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.artist);
+        }
+    } else if (i.trackartist) {
+        if (!IS_MOBILE && (undefined!=i.trackartist_id || undefined!=i.artist_id)) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+(undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id)+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.trackartist);
+        }
+    }
+
     var remoteTitle = checkRemoteTitle(i);
     if (i.album) {
         var album = i.album;

@@ -205,7 +205,7 @@ const store = new Vuex.Store({
                         if (state.players[i].id === config || state.players[i].name == config) {
                             state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
                         }
-                    });
+                    }
                 }
                 if (!state.player && state.players.length>0) {
                     // Auto-select a player:

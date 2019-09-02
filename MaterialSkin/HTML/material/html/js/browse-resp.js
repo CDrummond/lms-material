@@ -268,7 +268,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         addedDivider = true;
                     }
                     i.menu.push(ADD_TO_FAV_ACTION);
-                    if (isRadios && options.showPresets) {
+                    if (options.showPresets) {
                         i.menu.push(SAVE_PRESET_ACTION);
                     }
                 }
@@ -616,6 +616,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.total);
         } else if (data.result.playlists_loop) {
+            var menu = options.showPresets
+                        ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SAVE_PRESET_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION]
+                        : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION];
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
@@ -628,7 +631,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION],
+                              menu: menu,
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url

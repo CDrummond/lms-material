@@ -153,6 +153,7 @@ const store = new Vuex.Store({
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     state.players[i].ison = players[i].ison;
                     state.players[i].isconnected = players[i].isconnected;
+                    state.players[i].isgroup = players[i].isgroup;
                 }
                 return;
             }
@@ -200,9 +201,9 @@ const store = new Vuex.Store({
             if (players && !state.player) {
                 var config = getLocalStorageVal('player');
                 if (config) {
-                    state.players.forEach(p => {
-                        if (p.id === config || p.name == config) {
-                            state.player = {id:p.id, name:p.name};
+                    for (var i=0, len=state.players.length; i<len; ++i) {
+                        if (state.players[i].id === config || state.players[i].name == config) {
+                            state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
                         }
                     });
                 }
@@ -215,7 +216,7 @@ const store = new Vuex.Store({
                     for (var j=0; j<4 && !state.player; ++j) {
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
-                                state.player = {id:state.players[i].id, name:state.players[i].name};
+                                state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
                                 setLocalStorageVal('player', state.player.id);
                                 break;
                             }
@@ -233,7 +234,7 @@ const store = new Vuex.Store({
             if (state.players) {
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === id) {
-                        state.player = {id:state.players[i].id, name:state.players[i].name};
+                        state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
                         setLocalStorageVal('player', id);
                         break;
                     }

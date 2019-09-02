@@ -34,6 +34,8 @@
 24. More subtle current track highlight.
 25. Don't use imageproxy for 192.168.*, 127.*, or *.local, HTTP/HTTPS image
     URLs - fixes display of ShairTunes covers.
+26. Fix group player showing under 'Standard Players' in 'Manage Players' dialog
+    if its the currently active player and last group.
 
 0.9.7
 -----

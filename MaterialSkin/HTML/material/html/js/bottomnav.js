@@ -47,6 +47,9 @@ Vue.component('lms-bottomnav', {
                          ];
         },
         setPage(page, longPress) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (page!=this.$store.state.page) {
                 this.$store.commit('setPage', page);
             } else {

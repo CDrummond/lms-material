@@ -7,6 +7,7 @@
 
 :root {
  scrollbar-color:#888 #c0c0c0;
+ --active-color:#1976d2;
 }
 
 ::-webkit-scrollbar {
@@ -69,7 +70,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .active {
- color:#1976d2 !important;
+ color:var(--active-color) !important;
 }
 
 #app .v-icon {
@@ -85,7 +86,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .active-nav div span, .active-nav div i, .active-btn {
- color: #346dd2 !important
+ color: var(--active-color) !important
 }
 
 .inactive-nav div span, .inactive-nav div i {
@@ -93,8 +94,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .v-tabs__slider-wrapper .accent {
- background-color: #346dd2 !important;
- border-color: #346dd2 !important;
+ background-color: var(--active-color) !important;
+ border-color: var(--active-color) !important;
 }
 
 .pq-current {

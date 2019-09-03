@@ -7,6 +7,7 @@
 
 :root {
  scrollbar-color:#777 #3d3d3d;
+ --active-color:#82b1ff;
 }
 
 ::-webkit-scrollbar {
@@ -27,7 +28,7 @@ html, .mini-player {
 
 .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active {
- color:#99ceff !important;
+ color:var(--active-color) !important;
 }
 
 /* Clickable artist/album in queue */
@@ -86,7 +87,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .active-nav div span, .active-nav div i, .active-btn {
- color: #58b7ff !important;
+ color: var(--active-color) !important;
 }
 
 .inactive-nav div span, .inactive-nav div i {
@@ -94,8 +95,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .v-tabs__slider-wrapper .accent {
- background-color: #58b7ff !important;
- border-color: #58b7ff !important;
+ background-color: var(--active-color) !important;
+ border-color: var(--active-color) !important;
 }
 
 .pq-current {

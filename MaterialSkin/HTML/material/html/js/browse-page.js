@@ -1735,7 +1735,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.serverMyMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
                     this.serverMyMusic[0].player=this.playerId();
                     for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                        if (canPin(this.serverMyMusic[i])) {
+                            this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                        }
                     }
                     if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                         this.items = this.serverMyMusic;

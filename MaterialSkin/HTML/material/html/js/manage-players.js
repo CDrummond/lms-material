@@ -5,13 +5,15 @@
  * MIT license.
  */
 
-var PMGR_EDIT_GROUP_ACTION   = {cmd:"edit",     icon:"edit"};
-var PMGR_DELETE_GROUP_ACTION = {cmd:"delete",   icon:"delete"};
-var PMGR_SYNC_ACTION         = {cmd:"sync",     icon:"link"};
-var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"speaker"};
-var PMGR_POWER_ON_ACTION     = {cmd:"on",       icon:"power_settings_new", dimmed:true};
-var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new", active:true};
-var PMGR_SLEEP_ACTION        = {cmd:"sleep",    icon:"hotel"};
+var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
+var PMGR_DELETE_GROUP_ACTION     = {cmd:"delete",   icon:"delete"};
+var PMGR_SYNC_ACTION             = {cmd:"sync",     icon:"link"};
+var PMGR_SETTINGS_ACTION         = {cmd:"settings", icon:"speaker"};
+var PMGR_POWER_ON_ACTION         = {cmd:"on",       icon:"power_settings_new", dimmed:true};
+var PMGR_POWER_OFF_ACTION        = {cmd:"off",      icon:"power_settings_new", active:true};
+var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
+var PMGR_SET_DEF_PLAYER_ACTION   = {cmd:"sdp",      icon:"check_box_outline_blank"};
+var PMGR_UNSET_DEF_PLAYER_ACTION = {cmd:"usdp",     icon:"check_box", active:true};
 
 var nameMap = {};
 
@@ -40,7 +42,7 @@ Vue.component('lms-manage-players', {
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player.name}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player | name(defaultPlayer)}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(player)">
@@ -195,6 +197,7 @@ Vue.component('lms-manage-players', {
             PMGR_POWER_ON_ACTION.title=i18n("Switch on");
             PMGR_POWER_OFF_ACTION.title=i18n("Switch off");
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
+            PMGR_SET_DEF_PLAYER_ACTION.title=PMGR_UNSET_DEF_PLAYER_ACTION.title=i18n("Default player");
         },
         playerMenu(player, event) {
             this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
@@ -207,6 +210,8 @@ Vue.component('lms-manage-players', {
                 this.menu.actions.push(PMGR_EDIT_GROUP_ACTION);
                 this.menu.actions.push(PMGR_DELETE_GROUP_ACTION);
             }
+            this.menu.actions.push(DIVIDER);
+            this.menu.actions.push(player.id == this.$store.state.defaultPlayer ? PMGR_UNSET_DEF_PLAYER_ACTION : PMGR_SET_DEF_PLAYER_ACTION);
             this.menu.show = true;
         },
         createGroup() {
@@ -225,6 +230,10 @@ Vue.component('lms-manage-players', {
                 this.togglePower(player);
             } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'sleep', player);
+            } else if (PMGR_SET_DEF_PLAYER_ACTION.cmd==cmd) {
+                this.$store.commit('setDefaultPlayer', player.id);
+            } else if (PMGR_UNSET_DEF_PLAYER_ACTION.cmd==cmd) {
+                this.$store.commit('setDefaultPlayer', undefined);
             }
         },
         close() {
@@ -395,6 +404,9 @@ Vue.component('lms-manage-players', {
         currentPlayer() {
             return this.$store.state.player
         },
+        defaultPlayer() {
+            return this.$store.state.defaultPlayer
+        },
         stopButton() {
             return this.$store.state.stopButton
         },
@@ -410,9 +422,8 @@ Vue.component('lms-manage-players', {
         }
     },
     filters: {
-        name(id) {
-            var n = nameMap[id];
-            return n ? "("+n+")" : "";
+        name(player, def) {
+            return player.name + (player.id==def ? " "+i18n("(Default)") : "");
         }
     },
     watch: {

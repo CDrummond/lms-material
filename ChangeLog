@@ -36,6 +36,7 @@
     URLs - fixes display of ShairTunes covers.
 26. Fix group player showing under 'Standard Players' in 'Manage Players' dialog
     if its the currently active player and last group.
+27. Allow setting a default player in 'Manager players' dialog.
 
 0.9.7
 -----

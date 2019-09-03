@@ -108,6 +108,7 @@ const store = new Vuex.Store({
     state: {
         players: null, // List of players
         player: null, // Current player (from list)
+        defaultPlayer: null,
         otherPlayers: [], // Players on other servers
         darkUi: true,
         letterOverlay:false,
@@ -207,6 +208,13 @@ const store = new Vuex.Store({
                         }
                     }
                 }
+                if (!state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
+                    for (var i=0, len=state.players.length; i<len; ++i) {
+                        if (state.players[i].id === state.defaultPlayer) {
+                            state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                        }
+                    }
+                }
                 if (!state.player && state.players.length>0) {
                     // Auto-select a player:
                     //  1. First powered on standard player
@@ -241,6 +249,14 @@ const store = new Vuex.Store({
                 }
             }
         },
+        setDefaultPlayer(state, id) {
+            state.defaultPlayer = id;
+            if (undefined==id) {
+                removeLocalStorage('defaultPlayer');
+            } else {
+                setLocalStorageVal('defaultPlayer', id);
+            }
+        },
         setOtherPlayers(state, players) {
             state.otherPlayers = players;
         },
@@ -248,6 +264,7 @@ const store = new Vuex.Store({
             updateUiSettings(state, val);
         },
         initUiSettings(state) {
+            state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);

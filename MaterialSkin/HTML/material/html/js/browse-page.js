@@ -46,7 +46,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
-   <v-btn flat icon @click="goHome()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
+   <v-btn flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
@@ -1266,6 +1266,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
             });
         },
+        homeBtnPressed() {
+            if (this.$store.state.visibleMenus.size<1) {
+                this.goHome();
+            }
+        },
         goHome() {
             if (this.fetchingItems) {
                 //if (lmsListSource) {
@@ -1314,8 +1319,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         backBtnPressed() {
-            this.lastBackBtnPress = new Date();
-            this.goBack();
+            if (this.$store.state.visibleMenus.size<1) {
+                this.lastBackBtnPress = new Date();
+                this.goBack();
+            }
         },
         goBack(refresh) {
             if (this.fetchingItems) {

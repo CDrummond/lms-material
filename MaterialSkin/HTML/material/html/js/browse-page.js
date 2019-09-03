@@ -707,7 +707,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.menu.show=false;
                 return;
             }
-            if (this.$store.state.visibleMenus.size>0 || this.selection.length>0) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            if (this.selection.length>0) {
                 this.select(item, index);
                 return;
             }

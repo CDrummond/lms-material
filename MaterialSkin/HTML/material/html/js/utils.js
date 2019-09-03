@@ -734,4 +734,18 @@ function arrayMove(arr, from, to) {
     }
     arr.splice(to, 0, arr.splice(from, 1)[0]);
     return arr;
-};
+}
+
+function canPin(item) {
+    if (undefined==item.params || item.params.length<1) {
+        return true;
+    }
+    for (var i=0, len=item.params.length; i<len; ++i) {
+        // Can't pin an item with genre_id, as this can change on rescan
+        if (item.params[i].startsWith("genre_id:")) {
+            return false;
+        }
+    }
+    return true;
+}
+

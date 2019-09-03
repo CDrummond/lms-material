@@ -89,6 +89,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color: #58b7ff !important;
 }
 
+.inactive-nav div span, .inactive-nav div i {
+ color: #c7c7c7 !important;
+}
+
 .v-tabs__slider-wrapper .accent {
  background-color: #58b7ff !important;
  border-color: #58b7ff !important;

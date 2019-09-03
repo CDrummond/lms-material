@@ -49,6 +49,9 @@ var app = new Vue({
     },
     methods: {
         swipe(ev, direction) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (this.openDialogs.size>1 ||
                 (this.openDialogs.size==1 && (this.$store.state.page=='now-playing' ||
                                               (!this.openDialogs.has('np-viewer') && !this.openDialogs.has('info-dialog'))))) {

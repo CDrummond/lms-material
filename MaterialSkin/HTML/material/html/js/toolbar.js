@@ -8,7 +8,7 @@
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
-var TB_INFO            = {id:"tb:info",           icon: "info_outline" };
+var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
@@ -122,7 +122,7 @@ Vue.component('lms-toolbar', {
  </v-menu>
  <v-spacer></v-spacer>
  <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || !infoOpen)" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
-  <v-icon>info</v-icon>
+  <v-icon>info_outline</v-icon>
  </v-btn>
  <v-btn icon v-if="!desktop && ( (infoPlugin && isNowPlayingPage && (wide || infoOpen)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
@@ -138,7 +138,7 @@ Vue.component('lms-toolbar', {
  </v-btn>
  <div class="vol-label" v-if="!desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer">{{playerStatus.volume|displayVolume}}%</div>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
-  <v-icon>info</v-icon>
+  <v-icon>info_outline</v-icon>
  </v-btn>
  <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>

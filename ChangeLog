@@ -37,6 +37,8 @@
 26. Fix group player showing under 'Standard Players' in 'Manage Players' dialog
     if its the currently active player and last group.
 27. Allow setting a default player in 'Manager players' dialog.
+28. Add a 'page' URL query parameter allowing to set initial page for mobile
+    layout.
 
 0.9.7
 -----

@@ -72,6 +72,14 @@ in Material's URL as follows:
 * `http://<yourserver>:9000/material/?player=Player%20Name`
 * `http://<yourserver>:9000/material/?player=01:02:03:04:05:06`
 
+### Selecting start-up page
+
+Material will start on the last used page by default. For the mobile layout, you
+may specify the initial page in the URL query. Valied values are; `browse`,
+`now-playing`, and `queue`. e.g.:
+
+* `http://<yourserver>:9000/material/mobile?page=now-playing`
+
 ### Debugging
 
 Material uses LMS's JSONRPC and Cometd interfaces to send commands and receive

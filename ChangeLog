@@ -36,7 +36,8 @@
     URLs - fixes display of ShairTunes covers.
 26. Fix group player showing under 'Standard Players' in 'Manage Players' dialog
     if its the currently active player and last group.
-27. Allow setting a default player in 'Manager players' dialog.
+27. Allow setting a default player in 'Manager players' dialog. If set, then
+    this player will be selected at start-up.
 28. Add a 'page' URL query parameter allowing to set initial page for mobile
     layout.
 

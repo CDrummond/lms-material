@@ -200,18 +200,22 @@ const store = new Vuex.Store({
             }
 
             if (players && !state.player) {
-                var config = getLocalStorageVal('player');
-                if (config) {
-                    for (var i=0, len=state.players.length; i<len; ++i) {
-                        if (state.players[i].id === config || state.players[i].name == config) {
-                            state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
-                        }
-                    }
-                }
                 if (!state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
                             state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                            break;
+                        }
+                    }
+                }
+                if (!state.player && state.players.length>0) {
+                    var config = getLocalStorageVal('player');
+                    if (config) {
+                        for (var i=0, len=state.players.length; i<len; ++i) {
+                            if (state.players[i].id === config || state.players[i].name == config) {
+                                state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                                break;
+                            }
                         }
                     }
                 }

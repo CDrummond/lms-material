@@ -424,6 +424,10 @@ function parseQueryParams() {
         var kv = query[i].split('=');
         if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
+        } else if ("page"==kv[0]) {
+            if (kv[1]=="browse" || kv[1]=="now-playing" || kv[1]=="queue") {
+                setLocalStorageVal("page", kv[1]);
+            }
         } else if ("debug"==kv[0]) {
             var parts = kv[1].split(",");
             debug = new Set();

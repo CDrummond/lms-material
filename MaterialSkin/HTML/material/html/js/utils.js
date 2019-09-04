@@ -424,6 +424,7 @@ function parseQueryParams() {
         var kv = query[i].split('=');
         if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
+            removeLocalStorage("defaultPlayer");
         } else if ("debug"==kv[0]) {
             var parts = kv[1].split(",");
             debug = new Set();

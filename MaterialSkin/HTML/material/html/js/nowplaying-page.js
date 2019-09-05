@@ -312,7 +312,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.$nextTick(() => {
                         this.portraitElem = document.getElementById("np-page");
                         this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-                         this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+                        this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
                         this.calcPortraitPad();
                     });
                 }
@@ -353,6 +353,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     } else if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
                         this.largeView = false;
                         this.info.show = !this.info.show;
+                    } else if (this.info.show) {
+                        this.info.show = false;
                     }
                 }
             }.bind(this));
@@ -510,10 +512,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         bus.$on('info', function() {
-            if (this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
-                this.largeView = false;
-                this.info.show = !this.info.show;
-            }
+            this.largeView = false;
+            this.info.show = !this.info.show;
         }.bind(this));
 
         this.showTotal = getLocalStorageBool('showTotal', true);
@@ -657,13 +657,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                 }
-                lmsCommand("", command).then(({data}) => {
-                    if (data && data.result && (data.result.lyrics || data.result.error)) {
-                        this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
-                    }
-                }).catch(error => {
-                    this.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
-                });
+                if (3==command.length) { // No details?
+                    this.info.tabs[LYRICS_TAB].text="";
+                } else {
+                    lmsCommand("", command).then(({data}) => {
+                        if (data && data.result && (data.result.lyrics || data.result.error)) {
+                            this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
+                        }
+                    }).catch(error => {
+                        this.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
+                    });
+                }
             }
         },
         fetchBio() {
@@ -705,13 +709,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     } else {
                         command.push("artist:"+this.infoTrack.artist);
                     }
-                    lmsCommand("", command).then(({data}) => {
-                        if (data && data.result && (data.result.biography || data.result.error)) {
-                            this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
-                        }
-                    }).catch(error => {
-                        this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
-                    });
+                    if (3==command.length) { // No details?
+                        this.info.tabs[BIO_TAB].text="";
+                    } else {
+                        lmsCommand("", command).then(({data}) => {
+                            if (data && data.result && (data.result.biography || data.result.error)) {
+                                this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                            }
+                        }).catch(error => {
+                            this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
+                        });
+                    }
                 }
             }
         },
@@ -744,13 +752,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
 
-                lmsCommand("", command).then(({data}) => {
-                    if (data && data.result && (data.result.albumreview || data.result.error)) {
-                        this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
-                    }
-                }).catch(error => {
-                    this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
-                });
+                if (3==command.length) { // No details?
+                    this.info.tabs[REVIEW_TAB].text="";
+                } else {
+                    lmsCommand("", command).then(({data}) => {
+                        if (data && data.result && (data.result.albumreview || data.result.error)) {
+                            this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
+                        }
+                    }).catch(error => {
+                        this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
+                    });
+                }
             }
         },
         showInfo() {

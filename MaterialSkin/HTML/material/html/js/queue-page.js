@@ -571,7 +571,11 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add',
                              rules: [ v => !!v || i18n('URL is required'), v => (v && v.trim().length > 0) || i18n('URL is required') ] };
             } else if (act==PQ_SCROLL_ACTION) {
-                this.scrollToCurrent(true);
+                if (this.items.length<1) {
+                    bus.$emit('showMessage', i18n('Nothing playing'));
+                } else {
+                    this.scrollToCurrent(true);
+                }
             } else if (act==PQ_MOVE_QUEUE_ACTION) {
                 if (this.items.length<1 || !this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
                     return;

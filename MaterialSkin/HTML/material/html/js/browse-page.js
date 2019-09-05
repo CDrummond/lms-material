@@ -17,7 +17,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-container grid-list-md>
      <v-layout wrap>
       <v-flex xs12>
-       <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
+       <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);" :rules="dialog.rules" required></v-text-field>
       </v-flex>
      </v-layout>
     </v-container>
@@ -910,12 +910,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('showError', undefined, i18n("No Player"));
             } else if (act===RENAME_ACTION) {
                 this.dialog = this.isTop || item.isPinned
-                                ? { show:true, title:i18n("Rename item"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item}
+                                ? { show:true, title:i18n("Rename item"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item,}
                                 : SECTION_PLAYLISTS==item.section
                                     ? { show:true, title:i18n("Rename playlist"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                         command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]}
                                     : { show:true, title:i18n("Rename favorite"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                         command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
+                this.dialog.rules=[ v => !!v || i18n('Name is required'), v => (v && v.trim().length > 0) || i18n('Name is required') ];
             } else if (act==ADD_FAV_ACTION || act==ADD_PRESET_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length}, act==ADD_PRESET_ACTION);
             } else if (act==EDIT_ACTION) { // NOTE: Also edits presets!
@@ -923,6 +924,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act==ADD_FAV_FOLDER_ACTION) {
                 this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length] };
+                this.dialog.rules=[ v => !!v || i18n('Name is required'), v => (v && v.trim().length > 0) || i18n('Name is required') ];
             } else if (act==SAVE_PRESET_ACTION || act==MOVE_PRESET_ACTION) {
                 showMenu(this, { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
             } else if (act===DELETE_ACTION) {

@@ -40,6 +40,8 @@
     this player will be selected at start-up.
 28. Add a 'page' URL query parameter allowing to set initial page for mobile
     layout.
+29. As actions are not shown disabled, they should perform at least some
+    indicatative action.
 
 0.9.7
 -----

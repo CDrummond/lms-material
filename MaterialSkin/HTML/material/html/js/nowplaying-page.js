@@ -19,8 +19,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile @click="trackInfo()" :disabled="undefined==playerStatus.current.id">
-    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar" v-bind:class="{'dimmed': undefined==playerStatus.current.id}"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile @click="trackInfo()">
+    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>
@@ -629,6 +629,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                              album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
         },
         trackInfo() {
+            if (undefined==this.playerStatus.current.id) {
+                bus.$emit('showMessage', i18n('Nothing playing'));
+                return;
+            }
             this.info.show=false;
             this.largeView=false;
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},

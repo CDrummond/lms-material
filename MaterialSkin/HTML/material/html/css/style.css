@@ -437,7 +437,7 @@ a {
 }
 
 .dimmed {
- opacity:0.4;
+ opacity:0.4 !important;
 }
 
 .list-details {

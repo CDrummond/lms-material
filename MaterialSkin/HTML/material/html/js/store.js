@@ -5,6 +5,10 @@
  * MIT license.
  */
 var lmsNumVisibleMenus = 0;
+/* When setttnig a player from players list, should we use the last player, or the
+   user's configured default player? useLastPlayer should ONLY be set to true when
+   switching mobile/desktop or when mini-player is launched */
+var lmsUseLastPlayer = false;
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
@@ -200,10 +204,13 @@ const store = new Vuex.Store({
             }
 
             if (players && !state.player) {
-                if (!state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
+                // If 'lmsUseLastPlayer' is set then orde is last, default, first in list. Otherwise it is
+                // default, last, first in list
+                if (!lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
                             state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                            setLocalStorageVal('player', state.player.id);
                             break;
                         }
                     }
@@ -214,8 +221,18 @@ const store = new Vuex.Store({
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if (state.players[i].id === config || state.players[i].name == config) {
                                 state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                                setLocalStorageVal('player', state.player.id);
                                 break;
                             }
+                        }
+                    }
+                }
+                if (lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
+                    for (var i=0, len=state.players.length; i<len; ++i) {
+                        if (state.players[i].id === state.defaultPlayer) {
+                            state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                            setLocalStorageVal('player', state.player.id);
+                            break;
                         }
                     }
                 }

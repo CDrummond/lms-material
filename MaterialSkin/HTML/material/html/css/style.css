@@ -847,6 +847,10 @@ progress {
  height:32px;
 }
 
+.pmgr-btn-control {
+ margin-top:-20px;
+}
+
 .pmgr-vol {
  width:82px;
  padding-top:0px;

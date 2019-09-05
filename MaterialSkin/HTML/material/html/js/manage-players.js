@@ -45,16 +45,16 @@ Vue.component('lms-manage-players', {
           <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player | name(defaultPlayer)}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="playPause(player)">
+         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn pmgr-btn-control" @click="playPause(player)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn" @click="stop(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn pmgr-btn-control" @click="stop(player)">
            <v-btn icon><v-icon>stop</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="nextTrack(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>

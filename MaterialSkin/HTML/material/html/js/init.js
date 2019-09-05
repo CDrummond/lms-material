@@ -37,6 +37,8 @@ function initApp(app) {
     lmsUseLastPlayer = false;
     if (window.location.href.indexOf('/mini')>=0) {
         lmsUseLastPlayer = true;
+    } else if (window.performance && performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+        lmsUseLastPlayer = true;
     } else {
         lmsUseLastPlayer = getLocalStorageBool('useLastPlayer', lmsUseLastPlayer);
         removeLocalStorage('useLastPlayer');

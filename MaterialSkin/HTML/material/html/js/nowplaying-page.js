@@ -145,12 +145,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="landscape">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
-    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
+    <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
-    <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
@@ -287,6 +287,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  portraitPad: 0,
                  landscape: false,
                  wide: 0,
+                 lowHeight: false,
                  largeView: false,
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, setting:false},
@@ -320,6 +321,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.portraitElem = document.getElementById("np-page");
             this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
             this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+            this.lowHeight = window.innerHeight <= (this.desktop ? 400 : 450);
             this.calcPortraitPad();
             var npView = this;
             window.addEventListener('resize', () => {
@@ -339,6 +341,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         npView.lastHeight = npView.portraitElem.offsetHeight;
                         npView.calcPortraitPad();
                     }
+                    npView.lowHeight = window.innerHeight <= (npView.desktop ? 400 : 430);
                     npView.resizeTimeout = undefined;
                 }, 50);
             }, false);

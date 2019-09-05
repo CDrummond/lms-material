@@ -525,6 +525,10 @@ a {
  -webkit-line-clamp: 2;
 }
 
+.np-text-landscape-1 {
+ -webkit-line-clamp: 1;
+}
+
 @media only screen and (max-height:800px) {
  .np-text-landscape {
   margin:12px !important;

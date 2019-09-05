@@ -131,10 +131,10 @@ Vue.component('lms-manage-players', {
             this.updateAll();
         }.bind(this));
 
-        this.showAllButtons = window.innerWidth>=500;
+        this.showAllButtons = window.innerWidth>=400;
         this.$nextTick(() => {
             window.addEventListener('resize', () => {
-                this.showAllButtons = window.innerWidth>=500;
+                this.showAllButtons = window.innerWidth>=400;
             });
         });
 

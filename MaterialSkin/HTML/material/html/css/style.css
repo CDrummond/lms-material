@@ -996,3 +996,7 @@ div.v-subheader {
 .queue-action {
  min-width:44px !important;
 }
+
+.v-menu__content .v-subheader {
+ height: 48px;
+}

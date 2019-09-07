@@ -227,7 +227,7 @@ function partialFavSort(a, b) {
 
 function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
-        return a.isgroup ? -1 : 1;
+        return a.isgroup ? 1 : -1;
     }
     var nameA = a.name.toLowerCase();
     var nameB = b.name.toLowerCase();

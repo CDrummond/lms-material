@@ -76,8 +76,8 @@ Vue.component('lms-toolbar', {
        
   <v-list class="toolbar-player-list">
    <template v-for="(item, index) in players">
-    <v-subheader v-if="0==index && item.isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-subheader v-else-if="(index>0 && !item.isgroup && players[index-1].isgroup) || (index==0 && otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
      <v-list-tile-avatar v-if="players && players.length>1">
       <v-icon small>{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
@@ -565,7 +565,7 @@ Vue.component('lms-toolbar', {
         multipleStandardPlayers () {
             if (this.$store.state.players) {
                 var len = this.$store.state.players.length;
-                return len>1 && !this.$store.state.players[len-1].isgroup && !this.$store.state.players[len-2].isgroup;
+                return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
             }
             return false;
         },

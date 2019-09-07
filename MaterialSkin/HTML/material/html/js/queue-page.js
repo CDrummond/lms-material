@@ -453,6 +453,10 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         save() {
+            if (this.items.length<1) {
+                bus.$emit('showMessage', i18n('Queue is empty'));
+                return;
+            }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
             this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save',
                          rules: [ v => !!v || i18n('Name is required'), v => (v && v.trim().length > 0) || i18n('Name is required') ] };
@@ -577,8 +581,10 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.scrollToCurrent(true);
                 }
             } else if (act==PQ_MOVE_QUEUE_ACTION) {
-                if (this.items.length<1 || !this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
+                if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
                     return;
+                } else if (this.items.length<1) {
+                    bus.$emit('showMessage', i18n('Queue is empty'));
                 } else {
                     bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
                 }

@@ -8,10 +8,16 @@
 var autoLayout = false;
 function checkLayout() {
     if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109
+        var changeTo=undefined;
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
-            window.location.href = "mobile";
+            changeTo = "mobile";
         } else if (window.innerWidth>=600 && /*(!IS_MOBILE || window.innerHeight>=600) &&*/ window.location.href.indexOf("/mobile")>1) {
-            window.location.href = "desktop";
+            changeTo = "desktop";
+        }
+        if (undefined!=changeTo) {
+            // Auto-changing view, so don't see default player!
+            setLocalStorageVal("useLastPlayer", true);
+            window.location.href = changeTo;
         }
     }
 }
@@ -28,6 +34,16 @@ function checkEntryFocus() {
 }
 
 function initApp(app) {
+    lmsUseLastPlayer = false;
+    if (window.location.href.indexOf('/mini')>=0) {
+        lmsUseLastPlayer = true;
+    } else if (pageWasReloaded()) {
+        lmsUseLastPlayer = true;
+    } else {
+        lmsUseLastPlayer = getLocalStorageBool('useLastPlayer', lmsUseLastPlayer);
+        removeLocalStorage('useLastPlayer');
+    }
+
     var storedTrans = getLocalStorageVal('translation', undefined);
     if (storedTrans!=undefined) {
         setTranslation(JSON.parse(storedTrans));

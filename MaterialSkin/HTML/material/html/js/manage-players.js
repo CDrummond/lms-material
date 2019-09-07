@@ -32,9 +32,8 @@ Vue.component('lms-manage-players', {
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%">
-      <v-flex xs12 v-if="0==index && (manageGroups || player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat icon @click="createGroup" :title="i18n('Create group player')"><v-icon>add_circle_outline</v-icon></v-btn></v-flex>
-      <v-flex xs12 v-if="(manageGroups && 0==index && !player.isgroup) || (index>0 && players[index-1].isgroup && !player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="0==index && !player.isgroup && (manageGroups || players[players.length-1].isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
@@ -69,10 +68,10 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
+      <v-flex xs12 v-if="!player.isgroup && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat @click="bus.$emit('dlg.open', 'sleep')"><v-icon style="padding-right:8px">hotel</v-icon>&nbsp;{{i18n("Set sleep for all players")}}</v-btn></v-flex>
+      <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat @click="createGroup"><v-icon style="padding-right:8px">add_circle_outline</v-icon>{{i18n('Create group player')}}</v-btn></v-flex>
      </div>
-     <v-flex xs12 v-if="players.length>1">
-      <v-btn flat @click="bus.$emit('dlg.open', 'sleep')">{{i18n("Set sleep for all players")}}</v-btn>
-     </v-flex>
     </v-layout>
    </v-container>
   </div>

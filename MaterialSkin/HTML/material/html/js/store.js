@@ -204,7 +204,7 @@ const store = new Vuex.Store({
             }
 
             if (players && !state.player) {
-                // If 'lmsUseLastPlayer' is set then orde is last, default, first in list. Otherwise it is
+                // If 'lmsUseLastPlayer' is set then order is last, default, first in list. Otherwise it is
                 // default, last, first in list
                 if (!lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
@@ -236,6 +236,8 @@ const store = new Vuex.Store({
                         }
                     }
                 }
+                // Reset 'lmsUseLastPlayer' - after initial load/reload we can then use defualt (if set)
+                lmsUseLastPlayer = false;
                 if (!state.player && state.players.length>0) {
                     // Auto-select a player:
                     //  1. First powered on standard player

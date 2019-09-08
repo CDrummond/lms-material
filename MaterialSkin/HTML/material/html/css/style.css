@@ -1000,3 +1000,12 @@ div.v-subheader {
 .v-menu__content .v-subheader {
  height: 48px;
 }
+
+.v-card__title {
+ font-size:17px !important;
+}
+
+.dialog-section-header {
+ font-size:17px !important;
+ font-weight:600 !important;
+}

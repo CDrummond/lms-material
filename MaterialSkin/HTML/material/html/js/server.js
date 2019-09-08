@@ -246,7 +246,8 @@ var lmsServer = Vue.component('lms-server', {
             this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
-            this.cometd.setMaxBackoff(5000); // Max of 5 seconds between retries
+            this.cometd.setBackoffIncrement(250);
+            this.cometd.setMaxBackoff(2000); // Max seconds between retries
             this.cometd.init({url: '/cometd', logLevel:'off'});
 
             this.cometd.addListener('/meta/handshake', (message) => {

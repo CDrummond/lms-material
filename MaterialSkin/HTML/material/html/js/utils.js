@@ -771,3 +771,32 @@ function pageWasReloaded() {
     // Fallback to older (deprecated) API
     return performance.navigation.type == performance.navigation.TYPE_RELOAD;
 }
+
+function addAndPlayAllActions(cmd) {
+    if (cmd.command[0]=="albums") {
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i].startsWith("artist_id:") || cmd.params[i].startsWith("genre_id:")) {
+                return true;
+            }
+        }
+        return false;
+    } else if (cmd.command[0]=="artists" || cmd.command[0]=="genres" || cmd.command[0]=="years" || cmd.command[0]=="playlists" ||
+               cmd.command[0]=="musicfolder" || cmd.command[0]=="trackstat") {
+        return false;
+    } else if (cmd.command[0]=="browselibrary" && cmd.command[1]=="items") { // Browse filesystem and top/flop tracks
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i]=="mode:filesystem" || cmd.params[i].startsWith("search:sql=tracks_persistent.playcount")) {
+                return false;
+            }
+        }
+    } else if (cmd.command[0]=="custombrowse") {
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i].startsWith("artist:") || cmd.params[i].startsWith("variousartist:") || cmd.params[i].startsWith("album:")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    return true;
+}

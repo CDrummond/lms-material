@@ -152,13 +152,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-card>
    <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <v-container grid-list-md>
-     <v-layout wrap>
-      <v-flex xs12>
-       <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);" :rules="dialog.rules" required></v-text-field>
-      </v-flex>
-     </v-layout>
-    </v-container>
+    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);" :rules="dialog.rules" required></v-text-field>
    </v-card-text>
    <v-card-actions>
     <v-spacer></v-spacer>

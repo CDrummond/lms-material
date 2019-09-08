@@ -1005,6 +1005,10 @@ div.v-subheader {
  font-size:17px !important;
 }
 
+.v-card__text {
+ padding:0!important;
+}
+
 .dialog-section-header {
  font-size:17px !important;
  font-weight:600 !important;

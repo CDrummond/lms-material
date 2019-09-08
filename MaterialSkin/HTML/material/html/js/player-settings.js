@@ -21,12 +21,12 @@ Vue.component('lms-player-settings', {
 
   <v-card-text>
    <v-list two-line subheader class="settings-list">
-    <v-header>{{i18n('General')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
     <v-list-tile>
      <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
     </v-list-tile>
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Audio')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
     <v-list-tile>
      <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -38,13 +38,13 @@ Vue.component('lms-player-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
 
     <v-list-tile>
      <v-btn @click="setSleep()" flat>{{i18n('Set sleep timer')}}</v-btn>
     </v-list-tile>
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Alarms')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Alarms')}}</v-header>
      <v-list-tile>
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>

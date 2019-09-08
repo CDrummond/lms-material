@@ -150,8 +150,8 @@ var lmsQueue = Vue.component("lms-queue", {
 <div> 
  <v-dialog v-model="dialog.show" persistent max-width="500px">
   <v-card>
+   <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <span v-if="dialog.title">{{dialog.title}}</span>
     <v-container grid-list-md>
      <v-layout wrap>
       <v-flex xs12>

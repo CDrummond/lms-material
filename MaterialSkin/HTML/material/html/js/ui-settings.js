@@ -19,7 +19,7 @@ Vue.component('lms-ui-settings', {
   </v-card-title>
   <v-card-text>
    <v-list two-line subheader class="settings-list">
-    <v-header>{{i18n('General')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
@@ -72,7 +72,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Browse')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
@@ -134,7 +134,7 @@ Vue.component('lms-ui-settings', {
     <div class="dialog-padding"></div>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Now Playing')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Now Playing')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
@@ -164,7 +164,7 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Queue')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">

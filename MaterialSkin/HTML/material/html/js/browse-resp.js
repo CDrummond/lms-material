@@ -411,18 +411,19 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);
 
                 for (var i=0, len=resp.items.length; i<len; ++i) {
-                    if (!resp.items[i].image) {
-                        if (resp.items[i].type=="album") {
-                            resp.items[i].image = defAlbumCover;
-                        } else if (resp.items[i].type=="artist") {
-                            resp.items[i].image = defArtistImage;
+                    var item=resp.items[i];
+                    if (!item.image) {
+                        if (item.type=="album" || (item.window && (item.window.titleStyle=="album" && item.window.menuStyle=="album") && item.actions && item.actions.go)) {
+                            item.image = defAlbumCover;
+                        } else if (item.type=="artist") {
+                            item.image = defArtistImage;
                         } else {
                             // Found an item without and image and not marked as an artist or album, no
                             // default iamge set - so disable grid usage.
                             // See: https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=944597&viewfull=1#post944597
                             resp.canUseGrid = false;
                             // Set a blank image, so as to preserve indentation..
-                            resp.items[i].image = LMS_BLANK_IMAGE;
+                            item.image = LMS_BLANK_IMAGE;
                         }
                     }
                 }

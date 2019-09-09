@@ -47,6 +47,7 @@
 31. 'Set sleep for all players' only applies to non-group players.
 32. Attempt to restrict where add-all/play-all actions are shown.
 33. Reduce libcometd's max time between connection attempts to 2 seconds.
+34. Try immediate reconnect when page receives focus and not connected.
 
 0.9.7
 -----

@@ -80,36 +80,26 @@ function isHidden() {
 
 var lmsIsConnected = undefined;
 var lmsConnectionCheckDelay = undefined;
-var lmsLastVisibilityChange = undefined;
+var lmsLastFocusOrVisibilityChange = undefined;
 
-function delayedReconnect() {
-    lmsLastVisibilityChange = (new Date()).getTime();
-    // 250ms after we get visibility, check that we are connected, if not try to connect
-    if (undefined!=lmsConnectionCheckDelay) {
-        clearTimeout(lmsConnectionCheckDelay);
-    }
-    lmsConnectionCheckDelay = setTimeout(function () {
-        lmsConnectionCheckDelay = undefined;
-        if (false==lmsIsConnected) {
-            bus.$emit("reconnect");
-        }
-    }, 250);
-}
+function visibilityOrFocusChanged() {
+    lmsLastFocusOrVisibilityChange = (new Date()).getTime();
 
-function visibilityChanged() {
-    if (!isHidden()) {
-        if (false==lmsIsConnected) {
-            delayedReconnect();
+    if (document.hasFocus() || !isHidden()) {
+        // 250ms after we get focus, check that we are connected, if not try to connect
+        if (!lmsIsConnected) {
+            if (undefined!=lmsConnectionCheckDelay) {
+                clearTimeout(lmsConnectionCheckDelay);
+            }
+            lmsConnectionCheckDelay = setTimeout(function () {
+                lmsConnectionCheckDelay = undefined;
+                if (!lmsIsConnected) {
+                    bus.$emit("reconnect");
+                }
+            }, 250);
         } else if (lmsIsConnected && IS_MOBILE) { // If we become visibilty, refresh player status
             bus.$emit('refreshStatus');
         }
-    }
-}
-
-
-function focusChanged() {
-    if (document.hasFocus() && false==lmsIsConnected) {
-        delayedReconnect();
     }
 }
 
@@ -695,23 +685,25 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
 
+        // Add event listners for focus change, so that we can do an immediate reconect
         var prop = getHiddenProp();
         if (prop) {
-            document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);
+            document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityOrFocusChanged);
         }
+        window.addEventListener("focus", visibilityOrFocusChanged);
 
-        window.addEventListener("focus", focusChanged);
+        // Store connection state, so that focus handler can act accordingly
         bus.$on('networkStatus', function(connected) {
-            if (connected!=lmsIsConnected) {
-                // Store connection state, so that visibility handler can act accordingly
-                lmsIsConnected = connected;
-                // If receive a disconnect less than 1.5s after a visibility change, then
-                // immediately try a reconnect
-                if (!lmsIsConnected && undefined!=lmsLastVisibilityChange) {
-                    var currentTime = (new Date()).getTime();
-                    if (currentTime > (lmsLastVisibilityChange+250) && currentTime < (lmsLastVisibilityChange + 1500)) {
-                        this.connectToCometD();
-                    }
+            var statusChanged = lmsIsConnected!=connected;
+
+            // Store connection state, so that visibility handler can act accordingly
+            lmsIsConnected = connected;
+
+            // Force reconnect if disconnect received between .25 and 1.5s after visibility change
+            if (statusChanged && !lmsIsConnected && undefined!=lmsLastFocusOrVisibilityChange) {
+                var currentTime = (new Date()).getTime();
+                if (currentTime > (lmsLastFocusOrVisibilityChange+250) && currentTime < (lmsLastFocusOrVisibilityChange + 1500)) {
+                    this.connectToCometD();
                 }
             }
         }.bind(this));

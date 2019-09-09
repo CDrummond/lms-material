@@ -356,7 +356,15 @@ Vue.component('lms-toolbar', {
             }.bind(this));
         }
         bus.$on('networkStatus', function(connected) {
-            this.connected = connected;
+            if (connected) {
+                this.connected = true;
+                this.cancelDisconnectedTimer();
+            } else if (this.connected && !this.disconnectedTimer) {
+                // Delay showing wanring for 1.5s
+                this.disconnectedTimer = setInterval(function () {
+                    this.connected = false;
+                }.bind(this), 1500);
+            }
         }.bind(this));
 
         if (!isMobile()) {
@@ -544,6 +552,12 @@ Vue.component('lms-toolbar', {
                 this.cancelSleepTimer();
             }
         },
+        cancelDisconnectedTimer() {
+            if (undefined!==this.disconnectedTimer) {
+                clearInterval(this.disconnectedTimer);
+                this.disconnectedTimer = undefined;
+            }
+        },
         movePlayer(player) {
             this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
@@ -633,5 +647,9 @@ Vue.component('lms-toolbar', {
         'showMainMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'main', shown:newVal});
         }
+    },
+    beforeDestroy() {
+        this.cancelSleepTimer();
+        this.cancelDisconnectedTimer();
     }
 })

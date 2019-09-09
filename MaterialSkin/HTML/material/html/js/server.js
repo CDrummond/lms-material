@@ -97,7 +97,7 @@ function visibilityOrFocusChanged() {
                     bus.$emit("reconnect");
                 }
             }, 250);
-        } else if (lmsIsConnected && IS_MOBILE) { // If we become visibilty, refresh player status
+        } else if (IS_MOBILE) { // If we become visibilty, refresh player status
             bus.$emit('refreshStatus');
         }
     }

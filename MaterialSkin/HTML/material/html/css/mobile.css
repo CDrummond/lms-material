@@ -27,7 +27,7 @@
 
 .maintoolbar-subtitle {
  margin-top:-3px;
- font-size:75% !important;
+ font-size:16px;
 }
 
 .settings-title {
@@ -88,7 +88,7 @@
  text-overflow:ellipsis;
  max-width:100% !important;
  height:18px;
- font-size:14px !important;
+ font-size:16px !important;
 }
 
 .v-item-group.v-bottom-nav .v-btn--active, .v-item-group.v-bottom-nav .v-btn {

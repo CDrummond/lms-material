@@ -39,18 +39,6 @@ setInterval(function() {
     lastTime = currentTime;
 }, 2000);
 
-function isHidden() {
-    var prop = getHiddenProp();
-    return prop ? document[prop] : false;
-}
-
-/* If we become visibilty, refresh player status */
-function visibilityChanged() {
-    if (!isHidden()) {
-        bus.$emit('refreshStatus');
-    }
-}
-
 var lmsFavorites = new Set();
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
@@ -95,11 +83,24 @@ function reconnectOnFocus() {
         }
         lmsConnectionCheckDelay = setTimeout(function () {
             lmsConnectionCheckDelay = undefined;
-            if (false==lmsIsConnected)
+            if (false==lmsIsConnected) {
                 bus.$emit("reconnect");
             }
         }, 250);
     }
+}
+
+function isHidden() {
+    var prop = getHiddenProp();
+    return prop ? document[prop] : false;
+}
+
+/* If we become visibilty, refresh player status */
+function visibilityChanged() {
+    if (IS_MOBILE && !isHidden()) {
+        bus.$emit('refreshStatus');
+    }
+    reconnectOnFocus();
 }
 
 //const CancelToken = axios.CancelToken;
@@ -669,14 +670,6 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
 
-        /* Add an event handler to be called when visibiity changes - so that we can immediately refresh status */
-        if (IS_MOBILE) {
-            var prop = getHiddenProp();
-            if (prop) {
-                document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);
-            }
-        }
-
         bus.$on('playersRemoved', function(players) {
             if (this.subscribeAll) {
                 for (var i=0, len=players.length; i<len; ++i) {
@@ -693,17 +686,10 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
 
         // Add event listners for focus change, so that we can do an immediate reconect
-        var visibilityChange;
-        if (typeof document.hidden !== "undefined") {
-            visibilityChange = "visibilitychange";
-        } else if (typeof document.mozHidden !== "undefined") {
-            visibilityChange = "mozvisibilitychange";
-        } else if (typeof document.msHidden !== "undefined") {
-            visibilityChange = "msvisibilitychange";
-        } else if (typeof document.webkitHidden !== "undefined") {
-            visibilityChange = "webkitvisibilitychange";
+        var prop = getHiddenProp();
+        if (prop) {
+            document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);
         }
-        document.addEventListener(visibilityChange, reconnectOnFocus);
         window.addEventListener("focus", reconnectOnFocus);
 
         // Store connection state, so that focus handler can act accordingly

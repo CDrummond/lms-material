@@ -85,6 +85,23 @@ if (isAndroid()) { // currently only need to check current IP address to detect 
     }
 }
 
+// 250ms after we get focus, check that we are connected, if not try to connect
+var lmsIsConnected = undefined;
+var lmsConnectionCheckDelay = undefined;
+function reconnectOnFocus() {
+    if (document.hasFocus() && undefined!=lmsIsConnected) {
+        if (undefined!=lmsConnectionCheckDelay) {
+            clearTimeout(lmsConnectionCheckDelay);
+        }
+        lmsConnectionCheckDelay = setTimeout(function () {
+            lmsConnectionCheckDelay = undefined;
+            if (false==lmsIsConnected)
+                bus.$emit("reconnect");
+            }
+        }, 250);
+    }
+}
+
 //const CancelToken = axios.CancelToken;
 //var lmsListSource = undefined;
 
@@ -240,13 +257,14 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         connectToCometD() {
+            lmsIsConnected = undefined; // Not connected, or disconnected...
             if (this.cometd) {
                 this.cometd.disconnect();
             }
             this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
-            this.cometd.setBackoffIncrement(250);
+            this.cometd.setBackoffIncrement(500);
             this.cometd.setMaxBackoff(2000); // Max seconds between retries
             this.cometd.init({url: '/cometd', logLevel:'off'});
 
@@ -672,6 +690,25 @@ var lmsServer = Vue.component('lms-server', {
                     this.subscribe(players[i]);
                 }
             }
+        }.bind(this));
+
+        // Add event listners for focus change, so that we can do an immediate reconect
+        var visibilityChange;
+        if (typeof document.hidden !== "undefined") {
+            visibilityChange = "visibilitychange";
+        } else if (typeof document.mozHidden !== "undefined") {
+            visibilityChange = "mozvisibilitychange";
+        } else if (typeof document.msHidden !== "undefined") {
+            visibilityChange = "msvisibilitychange";
+        } else if (typeof document.webkitHidden !== "undefined") {
+            visibilityChange = "webkitvisibilitychange";
+        }
+        document.addEventListener(visibilityChange, reconnectOnFocus);
+        window.addEventListener("focus", reconnectOnFocus);
+
+        // Store connection state, so that focus handler can act accordingly
+        bus.$on('networkStatus', function(connected) {
+            lmsIsConnected = connected;
         }.bind(this));
     },
     beforeDestroy() {

@@ -26,7 +26,7 @@ const LMS_BLANK_IMAGE = "html/images/blank.png";
 const LMS_DOUBLE_CLICK_TIMEOUT = 300;
 const LMS_DARK_SVG = "fff";
 const LMS_LIGHT_SVG = "444";
-const LMS_DARK_ACTIVE_SVG ="58b7ff";
+const LMS_DARK_ACTIVE_SVG ="82b1ff";
 const LMS_LIGHT_ACTIVE_SVG = "346dd2";
 
 // Semi-constant :-)

@@ -339,6 +339,7 @@
 "Edit preset":"",
 "Failed to move favorite!":"",
 "Home screen items":"",
+"Larger fonts":"",
 "Move to parent folder":"",
 "Pin to home screen":"",
 "Pinned '%1' to home screen.":"",
@@ -348,5 +349,6 @@
 "Save as preset":"",
 "Set preset":"",
 "Sort home screen":"",
-"Un-pin from home screen":""
+"Un-pin from home screen":"",
+"Use larger font sizes.":""
 }

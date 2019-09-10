@@ -37,8 +37,8 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile>
      <v-list-tile-content @click="largeFonts = !largeFonts" class="switch-label">
-      <v-list-tile-title>{{i18n('Use larger fonts')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Slightly incease font size.')}}</v-list-tile-title>
+      <v-list-tile-title>{{i18n('Larger fonts')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use larger font sizes.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="largeFonts"></v-switch></v-list-tile-action>
     </v-list-tile>

@@ -48,7 +48,6 @@
 32. Attempt to restrict where add-all/play-all actions are shown.
 33. Reduce libcometd's max time between connection attempts to 3 seconds.
 34. Try immediate reconnect when page becomes visible and not connected.
-35. Increase some font sizes.
 
 0.9.7
 -----

@@ -370,11 +370,12 @@ a {
 }
 
 .subtoolbar-pad {
- margin-top:4px;
+ margin-top:2px;
 }
 
 .subtext {
- font-weight:500;
+ font-weight:400;
+ font-size:14px;
  opacity:0.7;
 }
 
@@ -693,6 +694,7 @@ progress {
 }
 
 .pq-time {
+ font-size:14px;
  margin-right:-16px;
  opacity:0.7;
  min-width:44px;

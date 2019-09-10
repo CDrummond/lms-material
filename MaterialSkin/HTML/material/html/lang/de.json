@@ -337,6 +337,7 @@
 "Firmware: %1":"",
 "IP: %1":"",
 "Information":"",
+"Larger fonts":"",
 "Material Skin":"",
 "Mon":"",
 "Name":"",
@@ -348,5 +349,6 @@
 "Server":"",
 "Start":"",
 "URL":"",
+"Use larger font sizes.":"",
 "Volume gain":""
 }

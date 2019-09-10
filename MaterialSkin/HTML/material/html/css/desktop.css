@@ -174,14 +174,14 @@ body {
  min-width:unset;
  font-family: monospace, monospace;
  font-weight: 400;
- font-size: 75%;
+ font-size:calc(var(--std-font-size) - 4px) !important;
  height:54px;
  margin:0px;
  padding:0px;
 }
 
 .np-tech-desktop {
- margin-top:5px;
+ margin-top:calc(21px - var(--std-font-size));
  display:inline-block;
  vertical-align:top;
  height:27px;
@@ -189,14 +189,14 @@ body {
 }
 
 .np-rating-desktop {
- margin-top:2px;
+ margin-top:calc(16px - var(--std-font-size));
  display:inline-block;
  height:27px;
  margin-right:-8px
 }
 
 .np-time-desktop {
- margin-top:-7px;
+ margin-top:calc(7px - var(--std-font-size));
  display:inline-block;
  vertical-align:top;
  height:27px;

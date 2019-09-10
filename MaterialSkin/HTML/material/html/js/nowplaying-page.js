@@ -214,7 +214,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
+   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': portraitImagePad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
@@ -285,6 +285,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true,
                  portraitPad: 0,
+                 portraitImagePad: 0,
                  landscape: false,
                  wide: 0,
                  lowHeight: false,
@@ -540,11 +541,26 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.portraitPad = 0;
             } else {
                 var coverMax = this.portraitElem.offsetWidth-/*pad*/32;
+                var spaceForText = this.$store.state.largeFonts ? 120 : 80;
                 var topAndBotSpace = (this.portraitElem.offsetHeight - 
-                                        (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + /*text*/80))/2;
+                                        (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + spaceForText))/2;
                 var portraitPad = Math.max(0, Math.floor(topAndBotSpace/2)-8);
                 if (portraitPad!=this.portraitPad) {
                     this.portraitPad = portraitPad;
+                    var largeFontAdjust = 0;
+                    if (this.$store.state.largeFonts && (this.portraitElem.offsetWidth/this.portraitElem.offsetHeight < 0.69)) {
+                        largeFontAdjust = 16;
+                    }
+                    this.portraitImagePad=(portraitPad*-1)-largeFontAdjust;  
+                } else if (this.$store.state.largeFonts) {
+                    var largeFontAdjust = 0;
+                    if (this.portraitElem.offsetWidth/this.portraitElem.offsetHeight < 0.69) {
+                        largeFontAdjust = 16;
+                    }
+                    var portraitImagePad=(this.portraitPad*-1)-largeFontAdjust; 
+                    if (portraitImagePad!=this.portraitImagePad) {
+                        this.portraitImagePad = portraitImagePad;
+                    }
                 }
             }
         },

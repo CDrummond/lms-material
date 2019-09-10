@@ -5,6 +5,34 @@
  * MIT license.
  */
 
+:root {
+ /* Also set setFontSize() (utils.js) */
+ --std-font-size: 16px;
+ --small-font-size: 14px;
+ --sub-opacity:0.7;
+}
+
+.v-list__tile__title, .v-select__selection, .v-select__selection--comma {
+ font-size:var(--std-font-size);
+}
+
+.v-list__tile__sub-title, .v-btn__content, .v-select__slot .v-label {
+ font-size:var(--small-font-size);
+}
+
+.v-text-field, .v-select__slot .v-label {
+ font-size:calc(var(--small-font-size) * 1.25);
+ min-height:calc((var(--small-font-size) * 1.25) + 12px);
+}
+
+.v-input {
+ font-size:var(--std-font-size);
+}
+
+.v-chip__content {
+ font-size:var(--small-font-size);
+}
+
 ::-webkit-scrollbar {
  max-height:10px;
  max-width:10px;
@@ -13,7 +41,7 @@
 html { 
  overflow-y:hidden;
  margin:0px;
- font-size:16px;
+ font-size:var(--std-font-size);
 }
 
 body {
@@ -116,7 +144,7 @@ a {
  overflow:hidden;
  text-overflow:ellipsis;
  padding-left:2px;
- padding-left:2px;
+ margin-top:-2px;
 }
 
 .image-grid-item {
@@ -339,11 +367,7 @@ a {
 }
 
 .maintoolbar-title {
- font-size:85% !important;
-}
-
-.infotoolbar-subtitle {
- font-size:55% !important;
+ font-size:var(--std-font-size) !important;
 }
 
 .noplayer-title {
@@ -358,6 +382,7 @@ a {
 }
 
 .subtoolbar-title {
+ margin-top:calc(16px - var(--std-font-size)) !important;
  margin-left:4px;
  margin-bottom:0px !important;
  padding-bottom:0px !important;
@@ -375,14 +400,14 @@ a {
 
 .subtext {
  font-weight:400;
- font-size:14px;
- opacity:0.7;
+ font-size:var(--small-font-size);
+ opacity:var(--sub-opacity);
 }
 
 .subtoolbar-subtitle {
  margin-left:4px;
  padding-top:0px;
- margin-top:-2px !important;
+ margin-top:calc(12px - var(--small-font-size)) !important;
 }
 
 .vol-text {
@@ -405,7 +430,7 @@ a {
 }
 
 .v-menu__content {
- max-height:calc((var(--vh, 1vh)*100) - 16px);
+ max-height:calc((var(--vh, 1vh)*100) - var(--std-font-size));
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
@@ -454,7 +479,7 @@ a {
 
 .browse-text {
  padding:11px;
- font-size:16px;
+ font-size:var(--std-font-size);
  font-weight:200;
 }
 
@@ -463,7 +488,7 @@ a {
  max-height:300px !important;
  margin-left:auto;
  margin-right:auto;
- margin-bottom:16px;
+ margin-bottom:var(--std-font-size);
  display:block;
 }
 
@@ -694,9 +719,9 @@ progress {
 }
 
 .pq-time {
- font-size:14px;
+ font-size:var(--small-font-size);
  margin-right:-16px;
- opacity:0.7;
+ opacity:var(--sub-opacity);
  min-width:44px;
 }
 
@@ -725,7 +750,7 @@ progress {
 }
 
 .settings-sub-pad {
- height:16px;
+ height:var(--std-font-size);
 }
 
 .settings-compact-row {
@@ -743,7 +768,7 @@ progress {
 
 .subheader-action {
  margin-left:auto;
- margin-right:-16px;
+ margin-right:-var(--std-font-size);
 }
 
 #browse-list .v-subheader {
@@ -778,7 +803,7 @@ progress {
 }
 
 .lms-dialog {
- padding:16px;
+ padding:var(--std-font-size);
 }
 
 .alarm-entry {
@@ -797,7 +822,7 @@ progress {
 }
 
 .alarm-add {
- margin-top:16px;
+ margin-top:var(--std-font-size);
 }
 
 .alarm-dialog {
@@ -815,7 +840,7 @@ progress {
 .ios-vcard-text-workaround {
  position:fixed;
  overflow-y:auto;
- padding:16px;
+ padding:var(--std-font-size);
  width:100vw;
  left:0px;
 }
@@ -875,9 +900,9 @@ progress {
 }
 
 .pmgr-master {
- opacity:0.7;
+ opacity:var(--sub-opacity);
  margin-left:8px;
- font-size:14px;
+ font-size:var(--small-font-size);
 }
 
 .svg-list-img {
@@ -893,11 +918,11 @@ progress {
 }
 
 div.v-subheader {
- font-size:16px;
+ font-size:var(--std-font-size);
 }
 
 .rstar {
- font-size:14px;
+ font-size:var(--small-font-size);
  font-family:'Material Icons';
  font-weight:normal;
  font-style:normal;
@@ -1005,10 +1030,10 @@ div.v-subheader {
 }
 
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {
- font-size:16px !important;
+ font-size:var(--std-font-size) !important;
 }
 
 .dialog-section-header {
- font-size:16px !important;
+ font-size:var(--std-font-size) !important;
  font-weight:600 !important;
 }

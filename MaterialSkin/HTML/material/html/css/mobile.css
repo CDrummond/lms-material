@@ -21,13 +21,9 @@
  margin-right:-8px !important;
 }
 
-.maintoolbar-title {
- margin-top:-1px;
-}
-
 .maintoolbar-subtitle {
  margin-top:-3px;
- font-size:14px;
+ font-size:var(--small-font-size);
 }
 
 .settings-title {
@@ -87,8 +83,8 @@
  overflow:hidden;
  text-overflow:ellipsis;
  max-width:100% !important;
- height:18px;
- font-size:14px !important;
+ height:calc(var(--small-font-size) + 4px);
+ font-size:var(--small-font-size) !important;
 }
 
 .v-item-group.v-bottom-nav .v-btn--active, .v-item-group.v-bottom-nav .v-btn {
@@ -206,7 +202,7 @@
 .vol-label {
  margin:-8px 0px 0px 0px;
  padding:0px;
- font-size:8px;
+ font-size:calc(var(--small-font-size)/1.75);
  font-family:monospace, monospace;
  text-align:center;
  vertical-align:bottom;
@@ -220,7 +216,7 @@
  top:38px;
  right:56px;
  z-index:-1;
- opacity:0.7;
+ opacity:var(--sub-opacity);
 }
 
 #letterOverlay {

@@ -36,6 +36,15 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="largeFonts = !largeFonts" class="switch-label">
+      <v-list-tile-title>{{i18n('Use larger fonts')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Slightly incease font size.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="largeFonts"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
       <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-title>
@@ -223,6 +232,7 @@ Vue.component('lms-ui-settings', {
         return {
             show: false,
             darkUi: true,
+            largeFonts: false,
             letterOverlay:false,
             showMenuAudio:false,
             sortFavorites:true,
@@ -263,6 +273,7 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('uisettings.open', function(act) {
             this.darkUi = this.$store.state.darkUi;
+            this.largeFonts = this.$store.state.largeFonts;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -329,6 +340,7 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
+                                                  largeFonts:this.largeFonts,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
@@ -365,6 +377,7 @@ Vue.component('lms-ui-settings', {
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     var settings = { darkUi:this.darkUi,
+                                     largeFonts:this.largeFonts,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,

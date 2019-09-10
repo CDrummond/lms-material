@@ -18,6 +18,11 @@ function updateUiSettings(state, val) {
         setTheme(state.darkUi);
         bus.$emit('themeChanged');
     }
+    if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
+        state.largeFonts = val.largeFonts;
+        setLocalStorageVal('largeFonts', state.largeFonts);
+        setFontSize(state.largeFonts);
+    }
     if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
         state.sortFavorites = val.sortFavorites;
         setLocalStorageVal('sortFavorites', state.sortFavorites);
@@ -115,6 +120,7 @@ const store = new Vuex.Store({
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
         darkUi: true,
+        largeFonts: false,
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
@@ -290,6 +296,7 @@ const store = new Vuex.Store({
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
+            state.largeFonts = getLocalStorageBool('largeFonts', state.largeFonts);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
@@ -313,6 +320,7 @@ const store = new Vuex.Store({
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
             setTheme(state.darkUi);
+            setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
                 state.infoPlugin = data && data.result && data.result._can ? true : false;
@@ -328,6 +336,7 @@ const store = new Vuex.Store({
                     try {
                         var prefs = JSON.parse(data.result._p2);
                         var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
+                                     largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),

@@ -89,7 +89,8 @@ body {
  padding-top:16px;
  width:3em;
  text-align:left;
- opacity:0.7;
+ opacity:var(--sub-opacity);
+ font-size:var(--std-font-size) !important;
 }
 
 .vol-label-np {

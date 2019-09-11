@@ -20,7 +20,7 @@
  font-size:var(--small-font-size);
 }
 
-.v-text-field, .v-select__slot .v-label {
+.v-text-field, .v-select__slot .v-label, .v-input .v-label {
  font-size:calc(var(--small-font-size) * 1.25);
  min-height:calc((var(--small-font-size) * 1.25) + 12px);
 }

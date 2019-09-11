@@ -97,19 +97,26 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Days')}}</v-subheader>
-   <v-list-tile class="settings-compact-row">
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
+   <v-list-tile class="settings-compact-row" v-if="wide">
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row">
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
+   <v-list-tile class="settings-compact-row" v-if="wide">
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row"><v-checkbox v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row">
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
+   <v-list-tile class="settings-compact-row"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide">
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
    </v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Options')}}</v-subheader>
    <v-list-tile>
@@ -169,7 +176,8 @@ Vue.component('lms-player-settings', {
                 repeat: false,
                 url: undefined,
                 shuffle: undefined
-            }
+            },
+            wide:true
         }
     },
     computed: {
@@ -229,6 +237,7 @@ Vue.component('lms-player-settings', {
             this.controlSleepTimer(playerStatus.will_sleep_in);
         },
         playerSettings(player) {
+            this.wide = window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370);
             this.cancelSleepTimer();
             this.dstmItems=[];
             this.crossfade='0';

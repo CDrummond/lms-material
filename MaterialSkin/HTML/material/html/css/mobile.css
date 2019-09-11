@@ -22,7 +22,7 @@
 }
 
 .maintoolbar-subtitle {
- margin-top:-3px;
+ margin-top:calc(14px - var(--small-font-size));
  font-size:var(--small-font-size);
 }
 

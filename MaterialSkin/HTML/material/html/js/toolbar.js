@@ -121,12 +121,6 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || !infoOpen)" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
-  <v-icon>info_outline</v-icon>
- </v-btn>
- <v-btn icon v-if="!desktop && ( (infoPlugin && isNowPlayingPage && (wide || infoOpen)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
-  <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
- </v-btn>
  <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
  <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
@@ -137,6 +131,12 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!desktop && playerStatus.digital_volume_control" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
+ <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || !infoOpen)" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+  <v-icon>info_outline</v-icon>
+ </v-btn>
+ <v-btn icon v-if="!desktop && ( (infoPlugin && isNowPlayingPage && (wide || infoOpen)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
+  <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
+ </v-btn>
  <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
   <v-icon>info_outline</v-icon>
  </v-btn>

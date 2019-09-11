@@ -214,7 +214,7 @@
  height:18px !important;
  line-height:18px !important;
  top:38px;
- right:56px;
+ right:100px;
  z-index:-1;
  opacity:var(--sub-opacity);
 }
@@ -295,7 +295,7 @@
  }
 
  .vol-label {
-  right:48px;
+  right:92px;
  }
 }
 

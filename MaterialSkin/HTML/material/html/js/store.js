@@ -400,6 +400,7 @@ const store = new Vuex.Store({
         menuVisible(state, val) {
             if (val.shown) {
                 state.visibleMenus.add(val.name);
+                bus.$emit('menuOpen');
             } else {
                 state.visibleMenus.delete(val.name);
             }

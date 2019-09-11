@@ -49,6 +49,7 @@
 33. Reduce libcometd's max time between connection attempts to 3 seconds.
 34. Try immediate reconnect when page becomes visible and not connected.
 35. Add option to use slightly larger fonts.
+36. Show mobile volume control in a sheet at top-right.
 
 0.9.7
 -----

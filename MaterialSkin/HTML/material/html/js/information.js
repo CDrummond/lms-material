@@ -75,7 +75,7 @@ Vue.component('lms-information-dialog', {
    </p>
 
    <p>{{i18n('Material Skin is developed purely for fun, and no donations are required. However, if you wish to make a donation, please use the button below:')}}</p>
-   <v-btn @click="openWindow('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url')" flat><img class="svg-img" :src="'paypal' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Donate')}}</v-btn>
+   <v-btn @click="openWindow('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url')" flat><img class="svg-img btn-icon" :src="'paypal' | svgIcon(darkUi)"></img>{{i18n('Donate')}}</v-btn>
 
    <div class="dialog-padding"></div>
   </div></div>

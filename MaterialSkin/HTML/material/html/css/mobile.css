@@ -219,13 +219,31 @@
  opacity:var(--sub-opacity);
 }
 
+.vol-text {
+ font-size:var(--small-font-size);
+}
+
+.vol-btn {
+ margin-top:-8px;
+}
+
+.vol-slider {
+ margin:-8px 0px 0px 0px;
+ height:8px;
+}
+
 .vol-sheet {
+ padding:0px;
  position:absolute;
  top:var(--main-toolbar-height);
  right:0px;
  width:100vw;
  max-width:450px;
- z-index:2
+ z-index:2;
+}
+
+.vol-sheet .v-card__actions {
+ margin-top:-22px;
 }
 
 #letterOverlay {

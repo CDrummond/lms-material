@@ -80,7 +80,7 @@ Vue.component('lms-player-settings', {
   </v-card>
  </v-dialog>
 
- <v-dialog v-model="alarmDialog.show" width="500">
+ <v-dialog v-model="alarmDialog.show" width="500" persistent>
   <v-card>
   <v-card-title>{{alarmDialog.id ? i18n("Edit alarm") : i18n("Create alarm")}}</v-card-title>
   <v-list two-line subheader class="settings-list">

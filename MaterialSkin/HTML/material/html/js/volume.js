@@ -7,7 +7,7 @@
 
 Vue.component('lms-volume', {
     template: `
-<v-dialog v-model="show" v-if="show" width=500>
+<v-dialog v-model="show" v-if="show" width=500 persistent>
  <v-card>
   <v-container grid-list-md text-xs-center>
    <v-layout row wrap>

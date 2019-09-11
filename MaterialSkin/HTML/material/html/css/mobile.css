@@ -219,6 +219,15 @@
  opacity:var(--sub-opacity);
 }
 
+.vol-sheet {
+ position:absolute;
+ top:var(--main-toolbar-height);
+ right:0px;
+ width:100vw;
+ max-width:450px;
+ z-index:2
+}
+
 #letterOverlay {
  z-index:2;
  position: fixed;

@@ -1041,3 +1041,7 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
  font-weight:600 !important;
 }
+
+.btn-icon {
+ margin-right:8px;
+}

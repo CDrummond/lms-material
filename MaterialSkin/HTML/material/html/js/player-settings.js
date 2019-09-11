@@ -41,7 +41,7 @@ Vue.component('lms-player-settings', {
     <v-header class="dialog-section-header">{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
 
     <v-list-tile>
-     <v-btn @click="setSleep()" flat>{{i18n('Set sleep timer')}}</v-btn>
+     <v-btn @click="setSleep()" flat style="margin-left:-8px"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn>
     </v-list-tile>
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Alarms')}}</v-header>
@@ -62,7 +62,7 @@ Vue.component('lms-player-settings', {
       </v-list-tile>
       <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
      </template>
-     <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
+     <v-btn flat @click.stop="addAlarm()" class="alarm-add"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
      <div class="settings-sub-pad"></div>
      <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
      <v-list-tile>
@@ -82,7 +82,7 @@ Vue.component('lms-player-settings', {
 
  <v-dialog v-model="alarmDialog.show" width="500" persistent>
   <v-card>
-  <v-card-title>{{alarmDialog.id ? i18n("Edit alarm") : i18n("Create alarm")}}</v-card-title>
+  <v-card-title>{{alarmDialog.id ? i18n("Edit alarm") : i18n("Add alarm")}}</v-card-title>
   <v-list two-line subheader class="settings-list">
    <v-list-tile class="settings-compact-row">
     <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"

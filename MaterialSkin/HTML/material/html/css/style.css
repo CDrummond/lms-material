@@ -737,6 +737,7 @@ progress {
 .settings-title .lms-toolbar .v-toolbar__title {
  font-size:110% !important;
  font-weight:600;
+ margin-left:8px;
 }
 
 .settings-title {

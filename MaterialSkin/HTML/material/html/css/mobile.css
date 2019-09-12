@@ -224,33 +224,30 @@
 }
 
 .vol-text {
- position:absolute;
- top:calc(14px - var(--small-font-size));
- right:0;
- width:100%;
  font-size:var(--small-font-size);
- opacity:var(--sub-opacity);
 }
 
 .vol-btn {
- margin-top:8px;
+ margin-top:-8px;
 }
 
 .vol-slider {
- margin:8px 0px 0px 0px;
+ margin:-8px 0px 0px 0px;
  height:8px;
 }
 
 .vol-sheet {
  padding:0px;
- margin:0px;
  position:absolute;
  top:var(--main-toolbar-height);
  right:0px;
  width:100vw;
  max-width:450px;
  z-index:2;
- height:var(--main-toolbar-height);
+}
+
+.vol-sheet .v-card__actions {
+ margin-top:-16px;
 }
 
 #letterOverlay {

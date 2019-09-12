@@ -98,10 +98,6 @@ a {
  height:50px !important;
 }
 
-.lms-list-item .v-list__tile__title {
- padding-top:calc(var(--std-font-size) - 16px) !important;
-}
-
 /* Make action buttons in lists closer together */
 .list__tile__action {
  min-width:48px !important;

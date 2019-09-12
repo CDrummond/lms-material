@@ -26,10 +26,6 @@ html, .mini-player {
  background-color:#f5f5f5 !important;
 }
 
-.lms-bottom-nav .v-ripple__animation {
- background-color:var(--active-color) !important;
-}
-
 /* Clickable artist/album in queue */
 .v-list__tile__sub-title, .v-list__tile__sub-title a {
  color: rgba(0,0,0,var(--sub-opacity)) !important;

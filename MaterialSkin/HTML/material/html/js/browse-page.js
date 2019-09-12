@@ -1122,6 +1122,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!item.menu) {
                 return;
             }
+            if (this.$store.state.visibleMenus.size>1 || (this.$store.state.visibleMenus.size==1 && !this.$store.state.visibleMenus.has('browse'))) {
+                return;
+            }
             showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
         },
         savePreset(item, pos) {

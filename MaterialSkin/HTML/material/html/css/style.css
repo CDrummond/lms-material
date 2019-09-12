@@ -451,7 +451,7 @@ a {
  }
 }
 
-.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content, .v-item-group.v-bottom-nav, .v-item-group.v-bottom-nav .v-btn .v-btn__content i.v-icon, .v-item-group.v-bottom-nav--shift .v-btn, .v-item-group, .v-ripple__animation, .v-ripple__animation--in, .v-ripple__animation--out, .v-btn, .v-btn:before, .v-btn-toggle {
  transition:none !important;
 }
 

@@ -585,9 +585,6 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemMenu(item, index, event) {
-            if (this.$store.state.visibleMenus.size>1 || (this.$store.state.visibleMenus.size==1 && !this.$store.state.visibleMenus.has('queue'))) {
-                return;
-            }
             showMenu(this, {show:true, item:item, index:index, x:event.clientX, y:event.clientY});
         },
         removeSelectedItems() {

@@ -73,6 +73,10 @@
  transition:none !important;
 }
 
+.lms-bottom-nav .v-ripple__animation {
+ background-color:transparent !important;
+}
+
 .lms-bottom-nav-button .v-btn__content {
  height:calc(var(--bottom-nav-height) - 2px);
  margin:0px;

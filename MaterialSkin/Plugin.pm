@@ -198,6 +198,7 @@ sub _cliCommand {
         }
         $from->execute(['sync', '-']);
         $from->execute(['playlist', 'clear']);
+        $from->execute(['power', 0]);
 
         $request->setStatusDone();
         return;

@@ -52,6 +52,7 @@
 36. Show mobile volume control in a sheet at top-right.
 37. Calling sleep dialog from player settings should only set sleep for that
     player.
+38. Switch source player off after moving queue.
 
 0.9.7
 -----

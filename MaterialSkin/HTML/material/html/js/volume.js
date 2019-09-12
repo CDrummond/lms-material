@@ -8,23 +8,16 @@
 Vue.component('lms-volume', {
     template: `
 <v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet">
- <v-container grid-list-md text-xs-center>
-  <v-layout row wrap>
-   <v-flex xs12 class="vol-text">{{playerVolume}}%</v-flex xs12>
-   <v-flex xs12>
-    <v-layout>
-     <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-     <v-slider step="1" v-model="playerVolume" class="vol-slider"></v-slider>
-     <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
-    </v-layout>
-   </v-flex>
-  </v-layout>
- </v-container>
- <v-card-actions>
-  <v-btn flat @click.native="toggleMute()">{{muted ? i18n('Unmute') : i18n('Mute')}}</v-btn>
-  <v-spacer></v-spacer>
-  <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
- </v-card-actions>
+ <v-layout row wrap>
+  <v-flex xs12 class="vol-text">{{playerVolume}}%</v-flex xs12>
+  <v-flex xs12>
+   <v-layout>
+    <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+    <v-slider step="1" v-model="playerVolume" class="vol-slider"></v-slider>
+    <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+   </v-layout>
+  </v-flex>
+ </v-layout>
 </v-sheet>
     `,
     props: [],
@@ -96,10 +89,6 @@ Vue.component('lms-volume', {
         },
         volumeUp() {
             this.playerVolume = adjustVolume(Math.abs(this.playerVolume), true);
-        },
-        toggleMute() {
-            bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
-            this.resetCloseTimer();
         },
         i18n(str) {
             if (this.show) {

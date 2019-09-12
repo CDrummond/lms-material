@@ -432,7 +432,7 @@ Vue.component('lms-player-settings', {
             }
         },
         setSleep(duration) {
-            bus.$emit('dlg.open', 'sleep', this.player);
+            bus.$emit('dlg.open', 'sleep', {id: this.playerId, name: this.playerName});
         },
         cancelSleepTimer() {
             this.sleepTime = undefined;

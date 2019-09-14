@@ -57,6 +57,9 @@
     'Manage players' dialog.
 40. List players a player is synced with, not just master, in 'Manage players'
     dialog.
+41. Default to showing context menu when click on a queue item, to be
+    consistet with defaulting to showing this menu when clicking on an audio
+    item in browse.
 
 0.9.7
 -----

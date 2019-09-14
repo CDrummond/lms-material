@@ -470,7 +470,10 @@ function ensureVisible(elem, attempt) {
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
 function cacheKey(command, params, start, batchSize) {
     return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
-           (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + ":"+start+":"+batchSize;
+           (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
+           (command && (command[0]=="artists" || command[0]=="albums") ? (lmsOptions.noGenreFilter ? ":1" : ":0") : "") +
+           (command && command[0]=="albums" ? (lmsOptions.noRoleFilter ? ":1" : ":0") : "") +
+           ":"+start+":"+batchSize;
 }
 
 var canUseCache = true;

@@ -893,12 +893,15 @@ progress {
  vertical-align:middle;
 }
 
-.pmgr-grp-title {
+.pmgr-title {
  font-weight:600;
  width:100%;
- text-transform:uppercase;
- margin-top:16px;
  margin-bottom:4px;
+}
+
+.pmgr-grp-title {
+ padding-top:32px !important;
+ margin-top:16px;
 }
 
 .pmgr-synced-players {

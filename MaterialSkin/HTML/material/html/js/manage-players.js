@@ -32,8 +32,8 @@ Vue.component('lms-manage-players', {
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%">
-      <v-flex xs12 v-if="0==index && !player.isgroup && (manageGroups || players[players.length-1].isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
-      <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="0==index && !player.isgroup && (manageGroups || players[players.length-1].isgroup)" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
@@ -69,7 +69,7 @@ Vue.component('lms-manage-players', {
        </v-layout>
       </v-flex>
       <v-flex xs12 v-if="!player.isgroup && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat @click="bus.$emit('dlg.open', 'sleep')"><v-icon class="btn-icon">hotel</v-icon>{{i18n("Set sleep for all players")}}</v-btn></v-flex>
-      <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon>{{i18n('Create group player')}}</v-btn></v-flex>
      </div>
     </v-layout>

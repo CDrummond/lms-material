@@ -6,6 +6,8 @@
  */
 
 const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNS";
+var lmsOptions = {noGenreFilter: getLocalStorageBool('noGenreFilter', false),
+                  noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];

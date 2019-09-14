@@ -446,7 +446,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 for (var i=3, len=data.params[1].length; i<len; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
-                        if (lower.startsWith("role_id:") || (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
+                        if (lower.startsWith("role_id:") || (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:"))) {
                             params.push(data.params[1][i]);
                             if (lower=="role_id:composer") {
                                 isComposers = true;
@@ -497,12 +497,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.canUseGrid = true;
             var jumpListYear = false;
             var params = [];
-            if (data.params && data.params.length>1 && (!options.noRoleFilter || !options.noGenreFilter)) {
+            if (data.params && data.params.length>1 && (!lmsOptions.noRoleFilter || !lmsOptions.noGenreFilter)) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
-                        if ( (!options.noRoleFilter && (lower.startsWith("role_id:"))) ||
-                             (!options.noGenreFilter && lower.startsWith("genre_id:")) ||
+                        if ( (!lmsOptions.noRoleFilter && (lower.startsWith("role_id:"))) ||
+                             (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) ||
                              lower.startsWith("artist_id:")) {
                             params.push(data.params[1][i]);
                         } else if (lower.startsWith("sort:year")) {

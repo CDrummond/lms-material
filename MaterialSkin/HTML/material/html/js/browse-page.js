@@ -300,8 +300,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.settingsMenuActions=[];
         this.mediaDirs=[];
         this.options={artistImages: getLocalStorageBool('artistImages', false),
-                      noGenreFilter: getLocalStorageBool('noGenreFilter', false),
-                      noRoleFilter: getLocalStorageBool('noRoleFilter', false),
                       pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites,
                       showPresets: !this.$store.state.hidden.has(TOP_PRESETS_ID)};
@@ -1558,8 +1556,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                     if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
                         item.params.forEach(p => {
-                            if ( (!this.options.noRoleFilter && (p.startsWith("role_id:") || p.startsWith("artist_id:"))) ||
-                                 (!this.options.noGenreFilter && p.startsWith("genre_id:"))) {
+                            if ( (!lmsOptions.noRoleFilter && (p.startsWith("role_id:"))) ||
+                                 (!lmsOptions.noGenreFilter && p.startsWith("genre_id:")) ||
+                                 p.startsWith("artist_id:")) {
                                 if (!item.id.startsWith("artist_id:") || !p.startsWith("artist_id:")) {
                                     command.command.push(p);
                                 }
@@ -2217,10 +2216,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     clearListCache(true);
                 }
 
-                this.options.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
-                setLocalStorageVal('noGenreFilter', this.options.noGenreFilter);
-                this.options.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
-                setLocalStorageVal('noRoleFilter', this.options.noRoleFilter);
+                lmsOptions.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
+                setLocalStorageVal('noGenreFilter', lmsOptions.noGenreFilter);
+                lmsOptions.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
+                setLocalStorageVal('noRoleFilter', lmsOptions.noRoleFilter);
                 if (undefined!=data.result.browseagelimit) {
                     this.newMusicLimit = parseInt(data.result.browseagelimit);
                 }

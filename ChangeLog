@@ -60,6 +60,7 @@
 41. Default to showing context menu when click on a queue item, to be
     consistet with defaulting to showing this menu when clicking on an audio
     item in browse.
+42. If sorting albums by year, use years as jumplist.
 
 0.9.7
 -----

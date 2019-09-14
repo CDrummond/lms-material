@@ -495,6 +495,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             resp.canUseGrid = true;
+            var jumpListYear = false;
             var params = [];
             if (data.params && data.params.length>1 && (!options.noRoleFilter || !options.noGenreFilter)) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
@@ -503,6 +504,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         if ( (!options.noRoleFilter && (lower.startsWith("role_id:") || lower.startsWith("artist_id:"))) ||
                              (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
                             params.push(data.params[1][i]);
+                        } else if (lower.startsWith("sort:year")) {
+                            jumpListYear = true;
                         }
                     }
                 }
@@ -523,7 +526,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 if (i.year && i.year>0) {
                     title+=" (" + i.year + ")";
                 }
-                var key = i.textkey;
+                var key = jumpListYear ? (""+i.year) : i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length+idStart});
                 }

@@ -69,7 +69,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-show="letter" id="letterOverlay"></div>
 
  <div v-if="grid.use">
-  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
+  <div class="noselect bgnd-cover lms-jumplist" v-bind:class="{'lms-jumplist-wide':jumplistWide}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
@@ -96,7 +96,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div></div>
  <div v-else>
 
- <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
+ <div class="noselect bgnd-cover lms-jumplist" v-bind:class="{'lms-jumplist-wide':jumplistWide}" v-if="filteredJumplist.length>1">
   <template v-for="(item, index) in filteredJumplist">
    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
   </template>
@@ -268,6 +268,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             letter: undefined,
             filteredJumplist: [],
             jumplistActive: 0,
+            jumplistWide: false,
             tbarActions: [],
             settingsMenuActions: [],
             subtitleClickable: false
@@ -2116,6 +2117,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
+            this.jumplistWide = this.filteredJumplist[this.filteredJumplist.length-1].key.length>1;
         },
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';

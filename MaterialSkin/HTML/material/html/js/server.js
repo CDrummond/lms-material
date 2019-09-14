@@ -262,13 +262,14 @@ var lmsServer = Vue.component('lms-server', {
         connectToCometD() {
             lmsIsConnected = undefined; // Not connected, or disconnected...
             if (this.cometd) {
+                this.cometd.clearSubscriptions();
                 this.cometd.disconnect();
+                delete this.cometd;
             }
             this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
-            this.cometd.setBackoffIncrement(500);
-            this.cometd.setMaxBackoff(3000); // Max seconds between retries
+            this.cometd.setMaxBackoff(5000); // Max seconds between retries
             this.cometd.init({url: '/cometd', logLevel:'off'});
 
             this.cometd.addListener('/meta/handshake', (message) => {

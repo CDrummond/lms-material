@@ -972,6 +972,7 @@ div.v-subheader {
  grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));
  grid-gap:0px;
  overflow-y:hidden !important;
+ font-size:var(--small-font-size);
 }
 
 .lms-jumplist div {
@@ -983,7 +984,7 @@ div.v-subheader {
 }
 
 .lms-jumplist-wide div {
- font-size:13px;
+ font-size:calc(var(--small-font-size) - 0.5px);
 }
 
 @media screen and (max-width: 289px) {

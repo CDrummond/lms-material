@@ -512,10 +512,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var i = loop[idx];
 
                 // Bug on my system? There is a 'No Album' entry with no tracks!
+                /*
                 if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
                     resp.total--;
                     continue;
                 }
+                */
 
                 var title = i.album;
                 if (i.year && i.year>0) {

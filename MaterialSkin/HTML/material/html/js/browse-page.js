@@ -2118,6 +2118,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
             this.jumplistWide = this.filteredJumplist[this.filteredJumplist.length-1].key.length>1;
+            if (this.$store.state.largeFonts && this.jumplistWide) {
+                for(var i=0, len=this.filteredJumplist.length; i<len; ++i) {
+                    if (this.filteredJumplist[i].key.length>=4) {
+                        this.filteredJumplist[i].key="\u2026"+this.filteredJumplist[i].key.slice(-2);
+                    }
+                }
+            }
         },
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';

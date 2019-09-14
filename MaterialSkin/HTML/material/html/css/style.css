@@ -81,8 +81,9 @@ a {
  overflow-x:hidden !important;
 }
 
-.lms-small-menu-icon {
- margin-bottom:1px;
+.pmgr-radio {
+ line-height:20px;
+ padding-right:8px;
 }
 
 /* Add a little padding at the bottom of lists */
@@ -900,10 +901,10 @@ progress {
  margin-bottom:4px;
 }
 
-.pmgr-master {
+.pmgr-synced-players {
  opacity:var(--sub-opacity);
- margin-left:8px;
  font-size:var(--small-font-size);
+ margin-left:4px;
 }
 
 .svg-list-img {
@@ -934,8 +935,11 @@ div.v-subheader {
  cursor:pointer;
 }
 
-.player-icon-pad {
- padding-right:8px;
+.player-status-icon {
+ font-size:16px;
+ line-height:22px;
+ vertical-align::middle;
+ padding-left:4px;
 }
 
 @media (hover:none) {

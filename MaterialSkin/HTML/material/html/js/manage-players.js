@@ -41,7 +41,7 @@ Vue.component('lms-manage-players', {
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad" style="height:22px">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player | name(defaultPlayer)}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | syncName}}</i></v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-status-icon" v-bind:class="{'active-btn': player.issyncmaster}">link</v-icon><i class="pmgr-synced-players" v-if="player.syncmaster">{{player | syncedPlayers}}</i></v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)">
@@ -421,12 +421,24 @@ Vue.component('lms-manage-players', {
         }
     },
     filters: {
-        name(player, def) {
-            return player.name + (player.id==def ? " "+i18n("(Default)") : "");
-        },
-        syncName(id) {
-            var n = nameMap[id];
-            return n ? " ~ " + n : "";
+        syncedPlayers(player) {
+            var names=[];
+            for (var i=0, len=player.syncslaves.length; i<len; ++i) {
+                if (player.syncslaves[i]!=player.id) {
+                    var name = nameMap[player.syncslaves[i]];
+                    if (name) {
+                        names.push(name);
+                    }
+                }
+            }
+            if (!player.issyncmaster) {
+                var name = nameMap[player.syncmaster];
+                if (name) {
+                    names.push(name);
+                }
+            }
+            names.sort();
+            return names.join(", ");
         }
     },
     watch: {

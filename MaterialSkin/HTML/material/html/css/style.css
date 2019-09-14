@@ -1064,4 +1064,5 @@ div.v-subheader {
  font-size:145px;
  line-height:145px;
  pointer-events:none;
+ opacity:0.5;
 }

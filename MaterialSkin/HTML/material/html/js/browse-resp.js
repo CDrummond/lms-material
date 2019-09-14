@@ -6,7 +6,6 @@
  */
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
-const MUSIC_FILE_EXTENSIONS = new Set(["mp3", "m4a", "mp4", "wav", "aiff", "flac", "ogg", "wma", "opus", "aac", "ape", "mpc", "oga", "webm"]);
 
 function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js

@@ -130,7 +130,7 @@ const store = new Vuex.Store({
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
-        showMenuAudioQueue: false,
+        showMenuAudioQueue: true,
         nowPlayingBackdrop: false,
         infoBackdrop: true,
         techInfo: false,

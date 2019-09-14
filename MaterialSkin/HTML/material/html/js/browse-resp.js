@@ -501,8 +501,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
-                        if ( (!options.noRoleFilter && (lower.startsWith("role_id:") || lower.startsWith("artist_id:"))) ||
-                             (!options.noGenreFilter && lower.startsWith("genre_id:"))) {
+                        if ( (!options.noRoleFilter && (lower.startsWith("role_id:"))) ||
+                             (!options.noGenreFilter && lower.startsWith("genre_id:")) ||
+                             lower.startsWith("artist_id:")) {
                             params.push(data.params[1][i]);
                         } else if (lower.startsWith("sort:year")) {
                             jumpListYear = true;

@@ -53,6 +53,10 @@
 37. Calling sleep dialog from player settings should only set sleep for that
     player.
 38. Switch source player off after moving queue.
+39. Use smaller icons to show player status (sync, sleep) in toolbar and in
+    'Manage players' dialog.
+40. List players a player is synced with, not just master, in 'Manage players'
+    dialog.
 
 0.9.7
 -----

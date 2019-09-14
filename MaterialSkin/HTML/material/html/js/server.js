@@ -384,6 +384,7 @@ var lmsServer = Vue.component('lms-server', {
                            synced: data.sync_master || data.sync_slaves,
                            issyncmaster: data.sync_master == playerId,
                            syncmaster: data.sync_master,
+                           syncslaves: data.sync_slaves ? data.sync_slaves.split(",") : [],
                            id: playerId,
                            name: data.player_name
                          };

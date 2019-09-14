@@ -61,6 +61,8 @@
     consistet with defaulting to showing this menu when clicking on an audio
     item in browse.
 42. If sorting albums by year, use years as jumplist.
+43. When listing album tracks, need to pass "artist_id:ID" regardless of the
+    role filter being set or not.
 
 0.9.7
 -----

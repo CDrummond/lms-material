@@ -1819,7 +1819,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.top.splice(lastPinnedIndex+1, 0,
                                     {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg,
                                      command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
-                                     weight: undefined==item.weight ? 10000 : item.weight, section: item.section});
+                                     weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
                 }
                 this.options.pinned.add(item.id);
                 this.updateItemPinnedState(item);

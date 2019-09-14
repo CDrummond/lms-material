@@ -1950,7 +1950,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleScroll() {
             this.menu.show = false;
-            if (this.$store.state.letterOverlay && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 && !this.scrollAnimationFrameReq) {
+            if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1 && !this.scrollAnimationFrameReq) {
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(() => { 
                     this.scrollAnimationFrameReq = undefined;
                     if (undefined!==this.letterTimeout) {

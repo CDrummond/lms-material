@@ -69,6 +69,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  border-bottom: 1px solid #5c5c5c;
 }
 
+.pmgr-grp-title {
+ border-top: 1px solid #5c5c5c;
+}
+
 .np-rating-shadow {
  text-shadow: 2px 2px 5px #222;
 }

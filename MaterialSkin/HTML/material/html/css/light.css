@@ -56,6 +56,10 @@ html, .mini-player {
  border-bottom:1px solid #e0e0e0;
 }
 
+.pmgr-grp-title {
+ border-top: 1px solid #e0e0e0;
+}
+
 div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#0e0e0e !important;
 }

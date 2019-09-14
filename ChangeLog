@@ -46,22 +46,21 @@
     players in toolbar and 'Manage players' dialog.
 31. 'Set sleep for all players' only applies to non-group players.
 32. Attempt to restrict where add-all/play-all actions are shown.
-33. Reduce libcometd's max time between connection attempts to 3 seconds.
-34. Try immediate reconnect when page becomes visible and not connected.
-35. Add option to use slightly larger fonts.
-36. Show mobile volume control in a sheet at top-right.
-37. Calling sleep dialog from player settings should only set sleep for that
+33. Try immediate reconnect when page becomes visible and not connected.
+34. Add option to use slightly larger fonts.
+35. Show mobile volume control in a sheet at top-right.
+36. Calling sleep dialog from player settings should only set sleep for that
     player.
-38. Switch source player off after moving queue.
-39. Use smaller icons to show player status (sync, sleep) in toolbar and in
+37. Switch source player off after moving queue.
+38. Use smaller icons to show player status (sync, sleep) in toolbar and in
     'Manage players' dialog.
-40. List players a player is synced with, not just master, in 'Manage players'
+39. List players a player is synced with, not just master, in 'Manage players'
     dialog.
-41. Default to showing context menu when click on a queue item, to be
+40. Default to showing context menu when click on a queue item, to be
     consistet with defaulting to showing this menu when clicking on an audio
     item in browse.
-42. If sorting albums by year, use years as jumplist.
-43. When listing album tracks, need to pass "artist_id:ID" regardless of the
+41. If sorting albums by year, use years as jumplist.
+42. When listing album tracks, need to pass "artist_id:ID" regardless of the
     role filter being set or not.
 
 0.9.7

@@ -2101,7 +2101,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (this.items.length<=25 || (undefined!=this.jumplist && this.jumplist.length<=1)) {
+            if (this.items.length<=25) {
                 return;
             }
             if (IS_MOBILE && (undefined==this.jumplist || this.jumplist.length<1)) {
@@ -2111,7 +2111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.jumplist.push({key:'\u2022', index: Math.round(i*jump)});
                 }
             }
-            if (undefined==this.jumplist) {
+            if (undefined==this.jumplist || this.jumplist.length<1) {
                 return;
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);

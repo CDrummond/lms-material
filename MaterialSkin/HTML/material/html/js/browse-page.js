@@ -2121,7 +2121,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.$store.state.largeFonts && this.jumplistWide) {
                 for(var i=0, len=this.filteredJumplist.length; i<len; ++i) {
                     if (this.filteredJumplist[i].key.length>=4) {
-                        this.filteredJumplist[i].key="\u2026"+this.filteredJumplist[i].key.slice(-2);
+                        this.filteredJumplist[i].key=this.filteredJumplist[i].key.slice(-2);
                     }
                 }
             }

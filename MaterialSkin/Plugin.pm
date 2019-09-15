@@ -1,5 +1,13 @@
 package Plugins::MaterialSkin::Plugin;
 
+#
+# LMS-Material
+#
+# Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
+#
+# MIT license.
+#
+
 use Config;
 use Slim::Utils::Favorites;
 use Slim::Utils::Log;

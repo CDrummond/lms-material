@@ -1,3 +1,7 @@
+1.0.1
+-----
+1. Allow items from within 'Radio' to be pinned to home screen.
+
 1.0.0
 -----
  1. Add action to create favourite folders.
@@ -57,7 +61,7 @@
 39. List players a player is synced with, not just master, in 'Manage players'
     dialog.
 40. Default to showing context menu when click on a queue item, to be
-    consistet with defaulting to showing this menu when clicking on an audio
+    consistent with defaulting to showing this menu when clicking on an audio
     item in browse.
 41. If sorting albums by year, use years as jumplist.
 42. When listing album tracks, need to pass "artist_id:ID" regardless of the

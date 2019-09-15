@@ -1,6 +1,9 @@
 1.0.1
 -----
 1. Allow items from within 'Radio' to be pinned to home screen.
+2. For screens up to 500px wide, allow volume control to be full width, for
+   others max width is 450px. This is to prevent scenario where there is a tiny
+   (e.g. 5px) gap on the side.
 
 1.0.0
 -----

@@ -334,6 +334,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         }
                         i.isRadio = true;
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                    } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                        i.id = 'radio:'+i.actions.go.params.menu;
+                        i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {

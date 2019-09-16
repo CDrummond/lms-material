@@ -130,7 +130,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -224,7 +224,50 @@ sub _cliCommand {
         return;
     }
 
-    $request->setStatusBadParams()
+    if ($cmd eq 'map') {
+        my $genre = $request->getParam('genre');
+        my $genre_id = $request->getParam('genre_id');
+        my @list;
+        my $sql;
+        my $resp = "";
+        my $resp_name;
+        my $count = 0;
+        my $dbh = Slim::Schema->dbh;
+        my $col;
+        if ($genre) {
+            @list = split(/,/, $genre);
+            $sql = $dbh->prepare_cached( qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1} );
+            $resp_name = "genre_id";
+            $col = 'id';
+        } elsif ($genre_id) {
+            @list = split(/,/, $genre_id);
+            $sql = $dbh->prepare_cached( qq{SELECT genres.name FROM genres WHERE id = ? LIMIT 1} );
+            $resp_name = "genre";
+            $col = 'name';
+        } else {
+            $request->setStatusBadParams();
+            return;
+        }
+
+        foreach my $g (@list) {
+            $sql->execute($g);
+            if ( my $result = $sql->fetchall_arrayref({}) ) {
+                my $val = $result->[0]->{$col} if ref $result && scalar @$result;
+                if ($val) {
+                    if ($count>0) {
+                        $resp = $resp . ",";
+                    }
+                    $resp=$resp . $val;
+                    $count++;
+                }
+            }
+        }
+        $request->addResult($resp_name, $resp);
+        $request->setStatusDone();
+        return;
+    }
+
+    $request->setStatusBadParams();
 }
 
 sub _cliPresetCommand {

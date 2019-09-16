@@ -795,6 +795,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     return;
                 }
+
+                if (item.mapgenre) {
+                    var field = getField(command, "genre:");
+                    if (field>=0) {
+                        lmsCommand("", ["material-skin", "map", command.params[field]]).then(({data}) => {
+                            if (data.result.genre_id) {
+                                command.params[field]="genre_id:"+data.result.genre_id;
+                                this.fetchItems(command, item);
+                            }
+                        });
+                        return;
+                    }
+                }
                 this.fetchItems(command, item);
             }
         },
@@ -1731,6 +1744,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         item.icon = "label";
                                     }
                                 }
+                                if (getField(item, "genre_id:")>=0) {
+                                    item['mapgenre']=true;
+                                }
                                 this.serverMyMusic.push(item);
                             }
                         }
@@ -1738,9 +1754,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.serverMyMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
                     this.serverMyMusic[0].player=this.playerId();
                     for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                        if (canPin(this.serverMyMusic[i])) {
-                            this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-                        }
+                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
                     if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                         this.items = this.serverMyMusic;
@@ -1796,7 +1810,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.saveTopList();
             removeLocalStorage("pinned");
         },
-        pin(item, add) {
+        pin(item, add, mapped) {
             var index = -1;
             var lastPinnedIndex = -1;
             for (var i=0, len=this.top.length; i<len; ++i) {
@@ -1809,6 +1823,18 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (add && index==-1) {
+                if (item.mapgenre && !mapped) {
+                    var field = getField(item, "genre_id:");
+                    if (field>=0) {
+                        lmsCommand("", ["material-skin", "map", item.params[field]]).then(({data}) => {
+                           if (data.result.genre) {
+                                item.params[field]="genre:"+data.result.genre;
+                                this.pin(item, add, true);
+                            }
+                        });
+                        return;
+                    }
+                }
                 if (item.isRadio) {
                     this.top.splice(lastPinnedIndex+1, 0,
                                     {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,
@@ -1817,7 +1843,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     var command = this.buildCommand(item, undefined, false);
                     this.top.splice(lastPinnedIndex+1, 0,
-                                    {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg,
+                                    {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
                                      command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
                                      weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
                 }

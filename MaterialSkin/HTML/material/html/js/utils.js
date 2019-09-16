@@ -743,17 +743,17 @@ function arrayMove(arr, from, to) {
     return arr;
 }
 
-function canPin(item) {
+function getField(item, field) {
     if (undefined==item.params || item.params.length<1) {
-        return true;
+        return -1;
     }
     for (var i=0, len=item.params.length; i<len; ++i) {
         // Can't pin an item with genre_id, as this can change on rescan
-        if (item.params[i].startsWith("genre_id:")) {
-            return false;
+        if (item.params[i].startsWith(field)) {
+            return i
         }
     }
-    return true;
+    return -1;
 }
 
 function pageWasReloaded() {

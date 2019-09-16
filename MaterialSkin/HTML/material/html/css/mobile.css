@@ -265,10 +265,6 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-.inactive-page {
- display:none;
-}
-
 .inactive-nav img {
  opacity:0.75;
 }

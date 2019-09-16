@@ -4,6 +4,7 @@
 2. For screens up to 500px wide, allow volume control to be full width, for
    others max width is 450px. This is to prevent scenario where there is a tiny
    (e.g. 5px) gap on the side.
+3. Sort players in 'Information' dialog.
 
 1.0.0
 -----

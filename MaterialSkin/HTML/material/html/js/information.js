@@ -78,6 +78,10 @@ Vue.component('lms-information-dialog', {
    <v-btn @click="openWindow('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url')" flat><img class="svg-img btn-icon" :src="'paypal' | svgIcon(darkUi)"></img>{{i18n('Donate')}}</v-btn>
 
    <div class="dialog-padding"></div>
+   <v-divider></v-divider>
+   <div class="dialog-padding"></div>
+   <p>© 2018-2019 Craig Drummond</p>
+   <div class="dialog-padding"></div>
   </div></div>
  </v-card>
 </v-dialog>

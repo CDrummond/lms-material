@@ -144,39 +144,44 @@ Vue.component('lms-information-dialog', {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var prevStrengths={};
-                    this.players.forEach(p=>{
+                    for (var j=0, plen=this.players.length; j<plen; ++j) {
+                        var p = this.players[j];
                         if (p.sigStrength>0) {
                             prevStrengths[p.id]=p.sigStrength;
                         }
-                    });
+                    }
                     this.players = [];
                     if (data.result.players_loop) {
-                         data.result.players_loop.forEach(i => {
-                            var info = [ i18n("Model: %1", i.modelname),
-                                         i18n("Type: %1", i.model),
-                                         i18n("Firmware: %1", i.firmware),
-                                         i18n("IP: %1", i.ip.split(':')[0]),
-                                         i18n("MAC Address: %1", i.playerid),
+                        for (var i=0, len=data.result.players_loop.length; i<len; ++i) {
+                            var player = data.result.players_loop[i];
+                            var isgroup = 'group'===player.model;
+                            var info = [ i18n("Model: %1", player.modelname),
+                                         i18n("Type: %1", player.model),
+                                         i18n("Firmware: %1", player.firmware),
+                                         i18n("IP: %1", player.ip.split(':')[0]),
+                                         i18n("MAC Address: %1", player.playerid),
                                          "" ];
-                            if (undefined!=prevStrengths[i.playerid]) {
-                                info[5]=i18n("Signal Strength: %1%", prevStrengths[i.playerid]);
+                            if (undefined!=prevStrengths[player.playerid]) {
+                                info[5]=i18n("Signal Strength: %1%", prevStrengths[player.playerid]);
                             }
 
-                            this.players.push({name: i.name, id: i.playerid, info: info});
-                            if ("group" != i.model) {
-                                lmsCommand(i.playerid, ["signalstrength" ,"?"]).then(({data}) => {
+                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup});
+                            if (!isgroup) {
+                                lmsCommand(player.playerid, ["signalstrength" ,"?"]).then(({data}) => {
                                     if (data && data.result && data.result._signalstrength>0) {
-                                        this.players.forEach(p=>{
+                                        for (var j=0, plen=this.players.length; j<plen; ++j) {
+                                            var p = this.players[j];
                                             if (p.id==data.params[0]) {
                                                 p.info[5]=i18n("Signal Strength: %1%", data.result._signalstrength);
                                                 p.sigStrength = data.result._signalstrength;
                                             }
-                                        });
+                                        }
                                     }
                                 });
                             }
-                        });
+                        }
                     }
+                    this.players.sort(playerSort);
 
                     this.scanning = undefined==data.result.lastscan || 1==data.result.scanning;
                     this.library=[ i18n("Total genres: %1", data.result["info total genres"]),

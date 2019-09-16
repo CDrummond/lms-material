@@ -5,6 +5,7 @@
    others max width is 450px. This is to prevent scenario where there is a tiny
    (e.g. 5px) gap on the side.
 3. Sort players in 'Information' dialog.
+4. Use "v-show" to control when to show mobile pages.
 
 1.0.0
 -----

@@ -136,9 +136,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
    
     <template v-for="(item, index) in showItems">
-     <v-list-tile class="settings-very-compact-row">
-      <v-checkbox v-model="item.show" :label="item.name" style="margin-left:24px"></v-checkbox>
-     </v-list-tile>
+     <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
     </template>
     <div class="dialog-padding"></div>
 

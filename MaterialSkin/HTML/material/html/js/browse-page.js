@@ -365,7 +365,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('trackInfo', function(item, index) {
-            this.goHome();
+            if (this.history.length>=50) {
+                this.goHome();
+            }
             this.itemMoreMenu(item, index);
         }.bind(this));
 

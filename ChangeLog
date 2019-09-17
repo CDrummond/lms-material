@@ -8,6 +8,8 @@
 4. Use "v-show" to control when to show mobile pages.
 5. Allow browse modes containing genre_id to be pinned to home screen.
 6. Fix 'clickability' of home screen item checkbox list.
+7. When using 'More'menu item or track information, only clear browse history
+   stack if it has 50 or more steps.
 
 1.0.0
 -----

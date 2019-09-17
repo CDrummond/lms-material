@@ -1,16 +1,16 @@
 1.0.1
 -----
-1. Allow items from within 'Radio' to be pinned to home screen.
+1. Allow items from within 'Radio', and browse modes containing genre_id to be
+   pinned to home screen.
 2. For screens up to 500px wide, allow volume control to be full width, for
    others max width is 450px. This is to prevent scenario where there is a tiny
    (e.g. 5px) gap on the side.
 3. Sort players in 'Information' dialog.
-4. Use "v-show" to control when to show mobile pages.
-5. Allow browse modes containing genre_id to be pinned to home screen.
-6. Fix 'clickability' of home screen item checkbox list.
-7. When using 'More'menu item or track information, only clear browse history
+4. Use 'v-show' to control when to show mobile pages.
+5. Fix 'clickability' of home screen item checkbox list.
+6. When using 'More' menu item for track information, only clear browse history
    stack if it has 50 or more steps.
-8. Add Russian translation - thanks to sky418.
+7. Add Russian translation - thanks to sky418.
 
 1.0.0
 -----

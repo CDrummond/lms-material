@@ -763,6 +763,11 @@ progress {
  height:24px !important;
 }
 
+.settings-list-checkbox {
+ margin-left:32px;
+ height:24px;
+}
+
 .switch-label {
  cursor:pointer;
  margin-right:8px;

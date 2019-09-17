@@ -7,6 +7,7 @@
 3. Sort players in 'Information' dialog.
 4. Use "v-show" to control when to show mobile pages.
 5. Allow browse modes containing genre_id to be pinned to home screen.
+6. Fix 'clickability' of home screen item checkbox list.
 
 1.0.0
 -----

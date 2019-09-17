@@ -16,10 +16,12 @@
 
 .v-list__tile__title, .v-select__selection, .v-select__selection--comma {
  font-size:var(--std-font-size);
+ font-weight:var(--std-weight);
 }
 
 .v-list__tile__sub-title, .v-btn__content, .v-select__slot .v-label {
  font-size:var(--small-font-size);
+ font-weight:var(--std-weight);
 }
 
 .v-text-field, .v-select__slot .v-label, .v-input .v-label {
@@ -44,6 +46,7 @@ html {
  overflow-y:hidden;
  margin:0px;
  font-size:var(--std-font-size);
+ font-weight:var(--std-weight);
 }
 
 body {
@@ -371,6 +374,7 @@ a {
 
 .maintoolbar-title {
  font-size:var(--std-font-size) !important;
+ font-weight:var(--bold-weight);
 }
 
 .noplayer-title {

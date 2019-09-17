@@ -10,6 +10,7 @@
 6. Fix 'clickability' of home screen item checkbox list.
 7. When using 'More'menu item or track information, only clear browse history
    stack if it has 50 or more steps.
+8. Add Russian translation - thanks to sky418.
 
 1.0.0
 -----

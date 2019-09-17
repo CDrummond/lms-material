@@ -136,14 +136,14 @@ body {
 }
 
 .np-text-desktop {
- font-weight:400;
+ font-weight:var(--std-weight);
  margin:12px 8px 0px 0px;
  height:2em;
  max-width:calc(100vw - 400px);
 }
 
 .np-text-sub-desktop {
- font-weight:400;
+ font-weight:var(--std-weight);
  margin:0px 8px -4px 0px;
  height:2em;
  max-width:calc(100vw - 400px);
@@ -173,7 +173,7 @@ body {
 .np-details-desktop div .v-list__tile .v-list__tile__action {
  min-width:unset;
  font-family: monospace, monospace;
- font-weight: 400;
+ font-weight: var(--std-weight);
  font-size:calc(var(--std-font-size) - 4px) !important;
  height:54px;
  margin:0px;

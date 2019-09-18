@@ -11,6 +11,8 @@
 6. When using 'More' menu item for track information, only clear browse history
    stack if it has 50 or more steps.
 7. Add Russian translation - thanks to sky418.
+8. Reduce list item height by 3px, so that it's the same as subtoolbar height.
+   This allows initial lists in desktop layout to be balanced.
 
 1.0.0
 -----

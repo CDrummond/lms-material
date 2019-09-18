@@ -12,6 +12,7 @@
  --sub-opacity:0.7;
  --bold-weight:500;
  --std-weight:400;
+ --list-elem-height:48px;
 }
 
 .v-list__tile__title, .v-select__selection, .v-select__selection--comma {
@@ -22,6 +23,10 @@
 .v-list__tile__sub-title, .v-btn__content, .v-select__slot .v-label {
  font-size:var(--small-font-size);
  font-weight:var(--std-weight);
+}
+
+.lms-list .v-list__tile__sub-title, .lms-list-sub .v-list__tile__sub-title {
+ margin-top:-2px;
 }
 
 .v-text-field, .v-select__slot .v-label, .v-input .v-label {
@@ -101,7 +106,7 @@ a {
 }
 
 .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
- height:50px !important;
+ height:calc(var(--list-elem-height) - 1px) !important;
 }
 
 /* Make action buttons in lists closer together */
@@ -963,8 +968,8 @@ div.v-subheader {
 }
 
 .lms-avatar .v-avatar {
- width:50px !important;
- height:50px !important;
+ width:calc(var(--list-elem-height) - 1px) !important;
+ height:calc(var(--list-elem-height) - 1px) !important;
  margin-left:-4px;
 }
 

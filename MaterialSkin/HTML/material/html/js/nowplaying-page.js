@@ -495,6 +495,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         this.landscape = isLandscape();
         this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        setInterval(function () {
+            this.landscape = isLandscape();
+            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;

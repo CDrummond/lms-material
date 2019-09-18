@@ -130,7 +130,7 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!desktop && playerStatus.digital_volume_control" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || !infoOpen)" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+ <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
  <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
@@ -198,8 +198,7 @@ Vue.component('lms-toolbar', {
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
                  snackbar:{ show: false, msg: undefined},
-                 connected: true,
-                 wide: false
+                 connected: true
                }
     },
     mounted() {
@@ -228,10 +227,6 @@ Vue.component('lms-toolbar', {
                 } else {
                     this.playlist.duration="";
                 }
-            }.bind(this));
-            this.wide = window.innerWidth >= 600;
-            bus.$on('windowWidthChanged', function() {
-                this.wide = window.innerWidth >= 600;
             }.bind(this));
         }
 

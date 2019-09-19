@@ -1,3 +1,8 @@
+1.1.0
+-----
+1. Swipe up/down in now-playing to change volume.
+
+
 1.0.1
 -----
  1. Allow items from within 'Radio', and browse modes containing genre_id to be

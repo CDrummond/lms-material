@@ -650,9 +650,16 @@ var lmsServer = Vue.component('lms-server', {
                 this.updateCurrentPlayer();
             });
         }.bind(this));
-        bus.$on('adjustVolume', function(inc) {
+        bus.$on('adjustVolume', function(inc, steps) {
             if (this.$store.state.player) {
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]).then(({data}) => {
+                if (undefined==steps) {
+                    steps = 1;
+                }
+                var val = this.volume;
+                for (var i=0; i<steps; ++i) {
+                    val = adjustVolume(val, inc);
+                }
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
                     this.updateCurrentPlayer();
                 });
             }

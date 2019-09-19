@@ -11,7 +11,7 @@ const LYRICS_TAB = 2;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
-<div>
+<div v-touch="{ up: (ev) => swipe(ev, 'u'), down: (ev) => swipe(ev, 'd')}">
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-if="!mini && !nowplaying" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
@@ -894,6 +894,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.clickTimer) {
                 clearTimeout(this.clickTimer);
                 this.clickTimer = undefined;
+            }
+        },
+        swipe(ev, direction) {
+            if ('u'==direction) {
+                incrementVolume();
+            } else {
+                decrementVolume();
             }
         }
     },

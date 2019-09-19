@@ -11,7 +11,7 @@ const LYRICS_TAB = 2;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
-<div v-touch="{ up: (ev) => swipe(ev, 'u'), down: (ev) => swipe(ev, 'd')}">
+<div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-if="!mini && !nowplaying" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
@@ -142,7 +142,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
  <div v-else>
-  <div v-if="landscape">
+  <div v-if="landscape" v-touch="{ up: (ev) => swipe(ev, 'u'), down: (ev) => swipe(ev, 'd')}">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
@@ -205,7 +205,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
   </div>
-  <div v-else>
+  <div v-else v-touch="{ up: (ev) => swipe(ev, 'u'), down: (ev) => swipe(ev, 'd')}">
    <div v-bind:style="{height: portraitPad+'px'}"></div>
    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
@@ -897,10 +897,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         swipe(ev, direction) {
-            if ('u'==direction) {
-                incrementVolume();
-            } else {
-                decrementVolume();
+            var steps = Math.round(Math.abs(ev.touchstartY-ev.touchendY) / 25);
+            if (0!=steps) {
+                bus.$emit("adjustVolume", 'u'==direction, steps);
             }
         }
     },

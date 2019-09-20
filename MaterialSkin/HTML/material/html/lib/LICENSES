@@ -35,6 +35,11 @@ vue-lazyload
     URL: https://github.com/hilongjw/vue-lazyload
     License: MIT
 
+vue-touch-events:
+    Version: 2.0.0
+    URL: https://github.com/jerrybendy/vue-touch-events
+    License: MIT
+
 vue-virtual-scroller:
     Version: 1.0.0-rc2
     URL: https://github.com/Akryum/vue-virtual-scroller

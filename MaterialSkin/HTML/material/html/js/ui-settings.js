@@ -168,6 +168,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="swipeVolume = !swipeVolume" class="switch-label">
+      <v-list-tile-title>{{i18n('Swipe to change volume')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="swipeVolume"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
@@ -243,6 +252,7 @@ Vue.component('lms-ui-settings', {
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
+            swipeVolume:true,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -280,6 +290,7 @@ Vue.component('lms-ui-settings', {
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
+            this.swipeVolume = this.$store.state.swipeVolume;
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
@@ -352,6 +363,7 @@ Vue.component('lms-ui-settings', {
                                                   techInfo:this.techInfo,
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
+                                                  swipeVolume:this.swipeVolume,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
@@ -389,6 +401,7 @@ Vue.component('lms-ui-settings', {
                                      techInfo:this.techInfo,
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
+                                     swipeVolume:this.swipeVolume,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,

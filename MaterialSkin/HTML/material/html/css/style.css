@@ -441,6 +441,23 @@ a {
  height:32px;
 }
 
+.vol-full-slider {
+ max-width:200px;
+}
+
+.vol-full-label {
+ padding-top:16px;
+ width:3em;
+ text-align:left;
+ opacity:var(--sub-opacity);
+ font-size:var(--std-font-size) !important;
+}
+
+.vol-full-label-np {
+ text-align:right !important;
+ padding-right:4px !important;
+}
+
 .v-menu__content {
  max-height:calc((var(--vh, 1vh)*100) - var(--std-font-size));
  white-space:nowrap;

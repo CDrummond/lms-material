@@ -1,7 +1,7 @@
 1.1.0
 -----
 1. Swipe up/down in now-playing to change volume.
-
+2. Show desktop style volume control in mobile view if width is 900px or more.
 
 1.0.1
 -----

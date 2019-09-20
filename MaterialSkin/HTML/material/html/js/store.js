@@ -108,6 +108,10 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
+    if (undefined!=val.swipeVolume && state.swipeVolume!=val.swipeVolume) {
+        state.swipeVolume = val.swipeVolume;
+        setLocalStorageVal('swipeVolume', state.swipeVolume);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -144,7 +148,8 @@ const store = new Vuex.Store({
         menuIcons: true,
         sortHome: isIPhone(),
         hidden: new Set(),
-        visibleMenus: new Set()
+        visibleMenus: new Set(),
+        swipeVolume: true
     },
     mutations: {
         setPlayers(state, players) {
@@ -319,6 +324,7 @@ const store = new Vuex.Store({
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
+            state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
@@ -354,7 +360,8 @@ const store = new Vuex.Store({
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                      lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
-                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome)};
+                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
+                                     swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume)};
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

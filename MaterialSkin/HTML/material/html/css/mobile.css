@@ -256,7 +256,7 @@
  margin-top:-16px;
 }
 
-#letterOverlay {
+#letterOverlay, #volumeOverlay {
  top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)))/2) - 60px));
  width:100%;
 }

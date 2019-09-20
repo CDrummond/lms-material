@@ -293,6 +293,11 @@ body {
  width:calc(1vw * var(--splitter-pc));
 }
 
+#volumeOverlay {
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
+ width:100%;
+}
+
 .ios-vcard-text-workaround {
  top:var(--main-toolbar-height);
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));

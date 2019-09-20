@@ -1071,7 +1071,7 @@ div.v-subheader {
  margin-right:8px;
 }
 
-#letterOverlay {
+#letterOverlay, #volumeOverlay {
  z-index:2;
  position:fixed;
  left:0;

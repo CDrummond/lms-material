@@ -565,6 +565,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 } else if (SECTION_PRESETS==this.current.section) {
                     this.tbarActions=[ADD_PRESET_ACTION];
+                } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
+                    this.tbarActions=[ADD_PODCAST_ACTION];
                 } else if (addAndPlayAllActions(command)) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -1108,6 +1110,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }).catch(err => {
                     logAndShowError(err, undefined, command.command);
                 });
+            } else if (ADD_PODCAST_ACTION==act) {
+                bus.$emit('dlg.open', 'podcasts');
+            } else if (REMOVE_PODCAST_ACTION==act) {
+                    this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n("Remove"), buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({datax}) => {
+                            this.refreshList();
+                        }).catch(err => {
+                            logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                        });
+                    }
+                });
             } else {
                 var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {
@@ -1262,7 +1276,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {
-                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.lengthe);
+                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.length);
                 }
                 this.$nextTick(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);

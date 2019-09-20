@@ -17,6 +17,7 @@
 10. Check landscape setting of now-playing 1 second after mounted.
 11. Fix toolbar layout when using mobile in landscape with song info showing on
     now playing page.
+12. Fix missing headers in search results.
 
 1.0.0
 -----

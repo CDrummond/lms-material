@@ -1260,7 +1260,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {
-                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.lengthe);
+                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.length);
                 }
                 this.$nextTick(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);

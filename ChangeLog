@@ -18,6 +18,7 @@
 11. Fix toolbar layout when using mobile in landscape with song info showing on
     now playing page.
 12. Fix missing headers in search results.
+13. Fix 'undefined Items' when refreshing some lists.
 
 1.0.0
 -----

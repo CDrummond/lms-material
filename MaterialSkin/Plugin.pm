@@ -33,6 +33,19 @@ my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $DEFAULT_COMPOSER_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
 my $DEFAULT_CONDUCTOR_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
 
+my @BROWSE_MODES = ( { id=>'myMusicArtists', name=>'BROWSE_BY_ARTIST', weight=>10},
+                     { id=>'myMusicArtistsAlbumArtists', name=>'BROWSE_BY_ALBUMARTIST', weight=>9},
+                     { id=>'myMusicArtistsAllArtists', name=>'BROWSE_BY_ALL_ARTISTS', weight=>11},
+                     { id=>'myMusicAlbums', name=>'BROWSE_BY_ALBUM', weight=>20},
+                     { id=>'myMusicGenres', name=>'BROWSE_BY_GENRE', weight=>30},
+                     { id=>'myMusicYears', name=>'BROWSE_BY_YEAR', weight=>40},
+                     { id=>'myMusicNewMusic', name=>'BROWSE_NEW_MUSIC', weight=>50},
+                     { id=>'myMusicMusicFolder', name=>'BROWSE_MUSIC_FOLDER', weight=>70},
+                     { id=>'myMusicPlaylists', name=>'SAVED_PLAYLISTS', weight=>80} );
+
+#my @BROWSE_MODES = ['myMusicAlbums', 'myMusicAlbumsVariousArtists', 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'myMusicArtistsAllArtists', 'myMusicFileSystem', 'myMusicFlopTracks',
+#                    'myMusicGenres', 'myMusicMusicFolder', 'myMusicNewMusic', 'myMusicPlaylists', 'myMusicRandomAlbums', 'myMusicTopTracks', 'myMusicYears'];
+
 sub initPlugin {
     my $class = shift;
 
@@ -116,6 +129,9 @@ sub initCLI {
     );
     Slim::Control::Request::addDispatch(['material-skin-presets', '_cmd'],
                                                                 [1, 0, 1, \&_cliPresetCommand]
+    );
+    Slim::Control::Request::addDispatch(['material-skin-modes', '_cmd'],
+                                                                [1, 0, 1, \&_cliModesCommand]
     );
 }
 
@@ -375,6 +391,77 @@ sub _cliPresetCommand {
         $serverprefs->client($client)->set('presets', $presets);
         $request->setStatusDone();
         return;
+    }
+
+    $request->setStatusBadParams()
+}
+
+sub _cliModesCommand {
+    my $request = shift;
+
+    # check this is the correct query.
+    if ($request->isNotCommand([['material-skin-modes']])) {
+        $request->setStatusBadDispatch();
+        return;
+    }
+
+    my $cmd = $request->getParam('_cmd');
+    my $client = $request->client();
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['get', 'set']) ) {
+        $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'get') {
+        my $cnt = 0;
+        my $clientPrefs = $serverprefs->client($client);
+        my $pluginPrefs = preferences('plugin.extendedbrowsemodes');
+        if ($pluginPrefs) {
+            my $additionalMenuItems = $pluginPrefs->get('additionalMenuItems');
+            if ($additionalMenuItems) {
+                foreach my $additionalMenuItem (@{$additionalMenuItems}) {
+                    $request->addResultLoop("modes_loop", $cnt, "id", $additionalMenuItem->{id});
+                    $request->addResultLoop("modes_loop", $cnt, "name", $additionalMenuItem->{name});
+                    $request->addResultLoop("modes_loop", $cnt, "weight", $additionalMenuItem->{weight});
+                    $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $additionalMenuItem->{id}) ? 0 : 1);
+                    $cnt++;
+                }
+            }
+        }
+
+        foreach my $mode (@BROWSE_MODES) {
+            $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
+            $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
+            $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
+            $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
+            $cnt++;
+        }
+
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'set') {
+        my $enabled = $request->getParam('enabled');
+        my $disabled = $request->getParam('disabled');
+        if ($enabled || $disabled) {
+            my $clientPrefs = $serverprefs->client($client);
+            if ($enabled) {
+                @list = split(/,/, $enabled);
+                foreach my $mode (@list) {
+                    $clientPrefs->set("disabled_" . $mode, 0);
+                }
+            }
+            if ($disabled) {
+                @list = split(/,/, $disabled);
+                foreach my $mode (@list) {
+                    $clientPrefs->set("disabled_" . $mode, 1);
+                }
+            }
+
+            $request->setStatusDone();
+            return;
+        }
     }
 
     $request->setStatusBadParams()

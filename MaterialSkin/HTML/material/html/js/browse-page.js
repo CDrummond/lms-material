@@ -408,6 +408,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.enteredTerm = term;
             this.fetchUrlItems(url, provider);
         }.bind(this));
+        bus.$on('playerMenuUpdated', function() {
+            this.goHome()
+            this.serverMyMusic=[];
+        }.bind(this));
     },
     methods: {
         initItems() {

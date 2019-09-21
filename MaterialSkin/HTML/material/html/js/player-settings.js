@@ -74,6 +74,12 @@ Vue.component('lms-player-settings', {
      <v-list-tile>
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
+
+     <div class="dialog-padding" v-if="browseModes.length>1"></div>
+     <v-header class="dialog-section-header" v-if="browseModes.length>1">{{i18n('Browse Modes')}}</v-header>
+     <template v-for="(item, index) in browseModes">
+      <v-checkbox v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+     </template>
      <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
@@ -177,7 +183,8 @@ Vue.component('lms-player-settings', {
                 url: undefined,
                 shuffle: undefined
             },
-            wide:true
+            wide:true,
+            browseModes:[]
         }
     },
     computed: {
@@ -324,6 +331,20 @@ Vue.component('lms-player-settings', {
                     this.controlSleepTimer(parseInt(data.result._sleep));
                 }
             });
+            this.browseModes = [];
+            this.prevEnabledModes = new Set();
+            lmsCommand(this.playerId, ["material-skin-modes", "get"]).then(({data}) => {
+                if (data.result && data.result.modes_loop) {
+                    for (var i=0, loop=data.result.modes_loop, len=loop.length; i<len; ++i) {
+                        loop[i].weight=parseInt(loop[i].weight);
+                        this.browseModes.push(loop[i]);
+                        if (loop[i].enabled) {
+                            this.prevEnabledModes.add(loop[i].id);
+                        }
+                    }
+                    this.browseModes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : nameSort(a, b); });
+                }
+            });
             this.show=true;
         },
         initItems() {
@@ -359,6 +380,37 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
             lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
+
+            var enabledModes = new Set();
+            var enabled = [];
+            var disabled = [];
+            for (var i=0, loop=this.browseModes, len=loop.length; i<len; ++i) {
+                var item = loop[i];
+                if (item.enabled) {
+                    enabledModes.add(item.id);
+                    enabled.push(item.id);
+                } else {
+                    disabled.push(item.id);
+                }
+            }
+            var removed = new Set([...enabledModes].filter(x => !this.prevEnabledModes.has(x)));
+            var added = new Set([...this.prevEnabledModes].filter(x => !enabledModes.has(x)));
+            if (removed.size>0 || added.size>0) {
+                var command = ["material-skin-modes", "set"];
+                if (enabled.length>0) {
+                    command.push("enabled:"+enabled.join(","));
+                }
+                if (disabled.length>0) {
+                    command.push("disabled:"+disabled.join(","));
+                }
+                var id = this.playerId;
+                lmsCommand(this.playerId, command).then(({data}) => {
+                    if (this.$store.state.player && id == this.$store.state.player.id) {
+                        bus.$emit('playerMenuUpdated');
+                    }
+                });
+            }
+
             if (this.playerOrigName!=this.playerName) {
                 lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
                     bus.$emit('refreshServerStatus');

@@ -7,6 +7,7 @@
 
 :root {
  scrollbar-color:#777 #3d3d3d;
+ --active-color:#82b1ff;
 }
 
 ::-webkit-scrollbar {
@@ -27,12 +28,12 @@ html, .mini-player {
 
 .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active {
- color:#99ceff !important;
+ color:var(--active-color) !important;
 }
 
 /* Clickable artist/album in queue */
-.v-list__tile__sub-title a {
- color: hsla(0,0%,100%,.7) !important;
+.v-list__tile__sub-title, .v-list__tile__sub-title a {
+ color: hsla(0,0%,100%,var(--sub-opacity)) !important;
 }
 
 .vue-splitter .splitter {
@@ -64,8 +65,12 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:#e0e0e0 !important;
 }
 
-.vue-recycle-scroller__item-view, .lms-queue-item {
- border-bottom: 0.5px solid #5c5c5c;
+.vue-recycle-scroller__item-view, .lms-list-item {
+ border-bottom: 1px solid #5c5c5c;
+}
+
+.pmgr-grp-title {
+ border-top: 1px solid #5c5c5c;
 }
 
 .np-rating-shadow {
@@ -86,10 +91,18 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .active-nav div span, .active-nav div i, .active-btn {
- color: #58b7ff !important;
+ color: var(--active-color) !important;
+}
+
+.inactive-nav div span, .inactive-nav div i {
+ color: #c7c7c7 !important;
 }
 
 .v-tabs__slider-wrapper .accent {
- background-color: #58b7ff !important;
- border-color: #58b7ff !important;
+ background-color: var(--active-color) !important;
+ border-color: var(--active-color) !important;
+}
+
+.pq-current {
+ background-color:rgba(255, 255, 255, 0.15);
 }

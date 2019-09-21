@@ -5,13 +5,15 @@
  * MIT license.
  */
 
-var PMGR_EDIT_GROUP_ACTION   = {cmd:"edit",     icon:"edit"};
-var PMGR_DELETE_GROUP_ACTION = {cmd:"delete",   icon:"delete"};
-var PMGR_SYNC_ACTION         = {cmd:"sync",     icon:"link"};
-var PMGR_SETTINGS_ACTION     = {cmd:"settings", icon:"speaker"};
-var PMGR_POWER_ON_ACTION     = {cmd:"on",       icon:"power_settings_new", dimmed:true};
-var PMGR_POWER_OFF_ACTION    = {cmd:"off",      icon:"power_settings_new", active:true};
-var PMGR_SLEEP_ACTION        = {cmd:"sleep",    icon:"hotel"};
+var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
+var PMGR_DELETE_GROUP_ACTION     = {cmd:"delete",   icon:"delete"};
+var PMGR_SYNC_ACTION             = {cmd:"sync",     icon:"link"};
+var PMGR_SETTINGS_ACTION         = {cmd:"settings", icon:"speaker"};
+var PMGR_POWER_ON_ACTION         = {cmd:"on",       icon:"power_settings_new", dimmed:true};
+var PMGR_POWER_OFF_ACTION        = {cmd:"off",      icon:"power_settings_new", active:true};
+var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
+var PMGR_SET_DEF_PLAYER_ACTION   = {cmd:"sdp",      icon:"check_box_outline_blank"};
+var PMGR_UNSET_DEF_PLAYER_ACTION = {cmd:"usdp",     icon:"check_box", active:true};
 
 var nameMap = {};
 
@@ -30,9 +32,8 @@ Vue.component('lms-manage-players', {
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%">
-      <v-flex xs12 v-if="0==index && (manageGroups || player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-if="manageGroups && !player.isgroup && (0==index || players[index-1].isgroup)"><v-btn flat icon @click="createGroup" :title="i18n('Create group')"><v-icon>add_circle_outline</v-icon></v-btn></v-flex>
-      <v-flex xs12 v-if="(manageGroups && 0==index && !player.isgroup) || (index>0 && players[index-1].isgroup && !player.isgroup)" class="pmgr-grp-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="0==index && !player.isgroup && (manageGroups || players[players.length-1].isgroup)" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
@@ -40,19 +41,19 @@ Vue.component('lms-manage-players', {
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="lms-small-menu-icon player-icon-pad"">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon><v-icon v-if="player.will_sleep_in" class="player-icon-pad">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-icon-pad">link</v-icon>{{player.name}}<i class="pmgr-master" v-if="player.syncmaster && !player.issyncmaster">{{player.syncmaster | name}}</i></v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-status-icon" v-bind:class="{'active-btn': player.issyncmaster}">link</v-icon><i class="pmgr-synced-players" v-if="player.syncmaster">{{player | syncedPlayers}}</i></v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="prevTrack(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn" @click="playPause(player)">
+         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn pmgr-btn-control" @click="playPause(player)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn" @click="stop(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn pmgr-btn-control" @click="stop(player)">
            <v-btn icon><v-icon>stop</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn" @click="nextTrack(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
@@ -67,10 +68,10 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
+      <v-flex xs12 v-if="!player.isgroup && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat @click="bus.$emit('dlg.open', 'sleep')"><v-icon class="btn-icon">hotel</v-icon>{{i18n("Set sleep for all players")}}</v-btn></v-flex>
+      <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon>{{i18n('Create group player')}}</v-btn></v-flex>
      </div>
-     <v-flex xs12 v-if="players.length>1">
-      <v-btn flat @click="bus.$emit('dlg.open', 'sleep')">{{i18n("Set sleep for all players")}}</v-btn>
-     </v-flex>
     </v-layout>
    </v-container>
   </div>
@@ -103,6 +104,7 @@ Vue.component('lms-manage-players', {
     mounted() {
         this.noImage = resolveImageUrl(LMS_BLANK_COVER);
         bus.$on('manage.open', function(act) {
+            this.players = [];
             this.show = true;
             this.openDialogs = 0;
 
@@ -128,10 +130,10 @@ Vue.component('lms-manage-players', {
             this.updateAll();
         }.bind(this));
 
-        this.showAllButtons = window.innerWidth>=500;
+        this.showAllButtons = window.innerWidth>=400;
         this.$nextTick(() => {
             window.addEventListener('resize', () => {
-                this.showAllButtons = window.innerWidth>=500;
+                this.showAllButtons = window.innerWidth>=400;
             });
         });
 
@@ -194,6 +196,7 @@ Vue.component('lms-manage-players', {
             PMGR_POWER_ON_ACTION.title=i18n("Switch on");
             PMGR_POWER_OFF_ACTION.title=i18n("Switch off");
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
+            PMGR_SET_DEF_PLAYER_ACTION.title=PMGR_UNSET_DEF_PLAYER_ACTION.title=i18n("Default player");
         },
         playerMenu(player, event) {
             this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
@@ -206,6 +209,8 @@ Vue.component('lms-manage-players', {
                 this.menu.actions.push(PMGR_EDIT_GROUP_ACTION);
                 this.menu.actions.push(PMGR_DELETE_GROUP_ACTION);
             }
+            this.menu.actions.push(DIVIDER);
+            this.menu.actions.push(player.id == this.$store.state.defaultPlayer ? PMGR_UNSET_DEF_PLAYER_ACTION : PMGR_SET_DEF_PLAYER_ACTION);
             this.menu.show = true;
         },
         createGroup() {
@@ -224,6 +229,10 @@ Vue.component('lms-manage-players', {
                 this.togglePower(player);
             } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'sleep', player);
+            } else if (PMGR_SET_DEF_PLAYER_ACTION.cmd==cmd) {
+                this.$store.commit('setDefaultPlayer', player.id);
+            } else if (PMGR_UNSET_DEF_PLAYER_ACTION.cmd==cmd) {
+                this.$store.commit('setDefaultPlayer', undefined);
             }
         },
         close() {
@@ -394,6 +403,9 @@ Vue.component('lms-manage-players', {
         currentPlayer() {
             return this.$store.state.player
         },
+        defaultPlayer() {
+            return this.$store.state.defaultPlayer
+        },
         stopButton() {
             return this.$store.state.stopButton
         },
@@ -409,9 +421,24 @@ Vue.component('lms-manage-players', {
         }
     },
     filters: {
-        name(id) {
-            var n = nameMap[id];
-            return n ? "("+n+")" : "";
+        syncedPlayers(player) {
+            var names=[];
+            for (var i=0, len=player.syncslaves.length; i<len; ++i) {
+                if (player.syncslaves[i]!=player.id) {
+                    var name = nameMap[player.syncslaves[i]];
+                    if (name) {
+                        names.push(name);
+                    }
+                }
+            }
+            if (!player.issyncmaster) {
+                var name = nameMap[player.syncmaster];
+                if (name) {
+                    names.push(name);
+                }
+            }
+            names.sort();
+            return names.join(", ");
         }
     },
     watch: {

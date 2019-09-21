@@ -1,5 +1,13 @@
 package Plugins::MaterialSkin::Plugin;
 
+#
+# LMS-Material
+#
+# Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
+#
+# MIT license.
+#
+
 use Config;
 use Slim::Utils::Favorites;
 use Slim::Utils::Log;
@@ -17,12 +25,34 @@ my $log = Slim::Utils::Log->addLogCategory({
     'description' => 'PLUGIN_MATERIAL_SKIN'
 });
 
+my $prefs = preferences('plugin.material-skin');
+my $serverprefs = preferences('server');
+
 my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
+
+my $DEFAULT_COMPOSER_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
+my $DEFAULT_CONDUCTOR_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
 
 sub initPlugin {
     my $class = shift;
 
+    if (my $composergenres = $prefs->get('composergenres')) {
+        $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
+    }
+
+    if (my $conductorgenres = $prefs->get('conductorgenres')) {
+        $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES) if $conductorgenres eq '';
+    }
+
+    $prefs->init({
+        composergenres => $DEFAULT_COMPOSER_GENRES,
+        conductorgenres => $DEFAULT_CONDUCTOR_GENRES
+    });
+
     if (main::WEBUI) {
+        require Plugins::MaterialSkin::Settings;
+		Plugins::MaterialSkin::Settings->new();
+
         Slim::Web::Pages->addPageFunction( 'desktop', sub {
             my ($client, $params) = @_;
             $params->{'material_revision'} = $class->pluginVersion();
@@ -84,6 +114,9 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin', '_cmd'],
                                                                 [0, 0, 1, \&_cliCommand]
     );
+    Slim::Control::Request::addDispatch(['material-skin-presets', '_cmd'],
+                                                                [1, 0, 1, \&_cliPresetCommand]
+    );
 }
 
 sub _cliCommand {
@@ -97,7 +130,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -173,6 +206,7 @@ sub _cliCommand {
         }
         $from->execute(['sync', '-']);
         $from->execute(['playlist', 'clear']);
+        $from->execute(['power', 0]);
 
         $request->setStatusDone();
         return;
@@ -186,6 +220,132 @@ sub _cliCommand {
                 $cnt++;
             }
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'map') {
+        my $genre = $request->getParam('genre');
+        my $genre_id = $request->getParam('genre_id');
+        my @list;
+        my $sql;
+        my $resp = "";
+        my $resp_name;
+        my $count = 0;
+        my $dbh = Slim::Schema->dbh;
+        my $col;
+        if ($genre) {
+            @list = split(/,/, $genre);
+            $sql = $dbh->prepare_cached( qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1} );
+            $resp_name = "genre_id";
+            $col = 'id';
+        } elsif ($genre_id) {
+            @list = split(/,/, $genre_id);
+            $sql = $dbh->prepare_cached( qq{SELECT genres.name FROM genres WHERE id = ? LIMIT 1} );
+            $resp_name = "genre";
+            $col = 'name';
+        } else {
+            $request->setStatusBadParams();
+            return;
+        }
+
+        foreach my $g (@list) {
+            $sql->execute($g);
+            if ( my $result = $sql->fetchall_arrayref({}) ) {
+                my $val = $result->[0]->{$col} if ref $result && scalar @$result;
+                if ($val) {
+                    if ($count>0) {
+                        $resp = $resp . ",";
+                    }
+                    $resp=$resp . $val;
+                    $count++;
+                }
+            }
+        }
+        $request->addResult($resp_name, $resp);
+        $request->setStatusDone();
+        return;
+    }
+
+    $request->setStatusBadParams();
+}
+
+sub _cliPresetCommand {
+    my $request = shift;
+
+    # check this is the correct query.
+    if ($request->isNotCommand([['material-skin-presets']])) {
+        $request->setStatusBadDispatch();
+        return;
+    }
+
+    my $cmd = $request->getParam('_cmd');
+    my $client = $request->client();
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['list', 'set', 'clear']) ) {
+        $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'list') {
+        my $presets = $serverprefs->client($client)->get('presets');
+        my $cnt = 0;
+        my $id = 1;
+        foreach my $preset (@{$presets}) {
+            if ($preset->{URL} && $preset->{type} eq 'audio') {
+               $request->addResultLoop("presets_loop", $cnt, "url", $preset->{URL});
+               $request->addResultLoop("presets_loop", $cnt, "text", $preset->{text});
+               $request->addResultLoop("presets_loop", $cnt, "id", $client->id . '-' . $id);
+               $request->addResultLoop("presets_loop", $cnt, "num", $id);
+               $cnt++;
+            }
+            $id++;
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'set') {
+        my $presets = $serverprefs->client($client)->get('presets');
+        my $num = $request->getParam('num');
+        my $prev = $request->getParam('prev');
+        my $text = $request->getParam('text');
+        my $url = $request->getParam('url');
+        if (!$num || !$url) {
+            $request->setStatusBadParams();
+            return;
+        }
+        my $val = int($num);
+        if ($val<1 || $val>10) {
+            $request->setStatusBadParams();
+            return;
+        }
+        if ($prev) {
+            # If this is a move, then copy contents at destination to source
+            my $prevval = int($prev);
+            if ($prevval>=1 && $prevval<=10) {
+                $presets->[$prevval-1] = $presets->[$val-1];
+            }
+        }
+        $presets->[$val-1] = { URL => $url, text => $text || '', type => 'audio'};
+        $serverprefs->client($client)->set('presets', $presets);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'clear') {
+        my $presets = $serverprefs->client($client)->get('presets');
+        my $num = $request->getParam('num');
+        if (!$num) {
+            $request->setStatusBadParams();
+            return;
+        }
+        my $val = int($num);
+        if ($val<1 || $val>10) {
+            $request->setStatusBadParams();
+            return;
+        }
+        $presets->[$val-1] = { };
+        $serverprefs->client($client)->set('presets', $presets);
         $request->setStatusDone();
         return;
     }

@@ -8,7 +8,7 @@
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
-var TB_INFO            = {id:"tb:info",           icon: "info_outline" };
+var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
@@ -65,21 +65,22 @@ Vue.component('lms-toolbar', {
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
  <v-btn v-if="noPlayer" icon class="toolbar-button"><v-icon color="orange darken-2">warning</v-icon></v-btn>
- <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
+ <div v-if="noPlayer" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
+ <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
-    <v-icon v-if="playerStatus.sleepTime" class="player-icon-pad">hotel</v-icon>
-    <v-icon v-if="playerStatus.synced" class="player-icon-pad">link</v-icon>{{player ? player.name : trans.noplayer}} <v-icon>arrow_drop_down</v-icon></div>
+    {{player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
    <div v-if="!desktop" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list">
    <template v-for="(item, index) in players">
-    <v-subheader v-if="0==index && item.isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-subheader v-else-if="(index>0 && !item.isgroup && players[index-1].isgroup) || (index==0 && otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
-     <v-list-tile-avatar v-if="players && players.length>1">
-      <v-icon small>{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
+     <v-list-tile-avatar v-if="players && players.length>1 || otherPlayers.length>0">
+      <v-icon small v-if="players && players.length>1">{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
+      <v-icon small v-else></v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
@@ -92,7 +93,7 @@ Vue.component('lms-toolbar', {
    <template v-if="!mini && !nowplaying" v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
-     <v-list-tile-avatar v-if="menuIcons && players && players.length>1"><v-icon small></v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar><v-icon small></v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
@@ -120,32 +121,32 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || !infoOpen)" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
-  <v-icon>info</v-icon>
- </v-btn>
- <v-btn icon v-if="!desktop && infoPlugin && isNowPlayingPage && (wide || infoOpen)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
-  <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
- </v-btn>
- <v-btn v-if="desktop" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-if="desktop" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
- <v-btn v-if="desktop" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop" :disabled="!playerStatus.ison || noPlayer" class="vol-label" v-bind:class="{'vol-label-np': nowplaying}" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
- <v-btn v-else-if="!desktop" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
+ <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
+ <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-if="desktop && playerStatus.digital_volume_control" class="vol-label" v-bind:class="{'vol-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
+ <v-btn v-else-if="!desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!desktop" :disabled="!playerStatus.ison || noPlayer">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="bus.$emit('info')" class="toolbar-button">
-  <v-icon>info</v-icon>
+ <div class="vol-label" v-if="!desktop && playerStatus.digital_volume_control" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
+ <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+  <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="bus.$emit('largeView', true)" class="toolbar-button">
+ <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
+  <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
+ </v-btn>
+ <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
+  <v-icon>info_outline</v-icon>
+ </v-btn>
+ <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini && !nowplaying" @click.native="bus.$emit('largeView', false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini && !nowplaying" @click.native="toggleLargeView(false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu v-if="connected && !mini && !nowplaying" bottom left>
+ <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
@@ -159,7 +160,10 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
-   <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">{{trans.startPlayer}}</v-list-tile>
+   <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-tile-avatar>
+    <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
+   </v-list-tile>
    <v-divider v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
    <template v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
     <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)">
@@ -172,7 +176,7 @@ Vue.component('lms-toolbar', {
    </template>
   </v-list>
  </v-menu>
- <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
+ <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);">
   <v-icon color="red">error</v-icon>
  </v-btn>
 </v-toolbar>
@@ -183,9 +187,11 @@ Vue.component('lms-toolbar', {
     data() {
         return { songInfo:undefined,
                  playlist: { count: "", duration: "" },
-                 playerStatus: { ison: 1, isplaying: false, volume: 0, current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
+                 playerStatus: { ison: 1, isplaying: false, volume: 0, digital_volume_control: true, synced: false,
+                                 current: { title:undefined, artist:undefined, album:undefined }, sleepTime: undefined },
                  menuItems: [],
                  showPlayerMenu: false,
+                 showMainMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
@@ -193,8 +199,7 @@ Vue.component('lms-toolbar', {
                  largeView: false,
                  playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
                  snackbar:{ show: false, msg: undefined},
-                 connected: true,
-                 wide: false
+                 connected: true
                }
     },
     mounted() {
@@ -206,7 +211,12 @@ Vue.component('lms-toolbar', {
             this.$forceUpdate();
         }.bind(this));
 
-        if (!this.desktop) {
+        if (this.desktop) {
+            bus.$on('resetToolbarVolume', function() {
+                this.playerStatus.volume = this.playerVolume.current;
+                this.playerVolume.val = this.playerVolume.current;
+            }.bind(this));
+        } else {
             bus.$on('queueStatus', function(count, duration) {
                 if (count>0) {
                     this.playlist.count = i18np("1 Track", "%1 Tracks", count);
@@ -219,10 +229,6 @@ Vue.component('lms-toolbar', {
                     this.playlist.duration="";
                 }
             }.bind(this));
-            this.wide = window.innerWidth >= 600;
-            bus.$on('windowWidthChanged', function() {
-                this.wide = window.innerWidth >= 600;
-            }.bind(this));
         }
 
         bus.$on('playerStatus', function(playerStatus) {
@@ -234,6 +240,9 @@ Vue.component('lms-toolbar', {
             }
             if (playerStatus.volume!=this.playerStatus.volume) {
                 this.playerStatus.volume = playerStatus.volume;
+            }
+            if (playerStatus.digital_volume_control!=this.playerStatus.digital_volume_control) {
+                this.playerStatus.digital_volume_control = playerStatus.digital_volume_control;
             }
             this.controlSleepTimer(playerStatus.will_sleep_in);
             if (playerStatus.synced!=this.playerStatus.synced) {
@@ -345,7 +354,15 @@ Vue.component('lms-toolbar', {
             }.bind(this));
         }
         bus.$on('networkStatus', function(connected) {
-            this.connected = connected;
+            if (connected) {
+                this.connected = true;
+                this.cancelDisconnectedTimer();
+            } else if (this.connected && !this.disconnectedTimer) {
+                // Delay showing wanring for 1.5s
+                this.disconnectedTimer = setInterval(function () {
+                    this.connected = false;
+                }.bind(this), 1500);
+            }
         }.bind(this));
 
         if (!isMobile()) {
@@ -444,6 +461,18 @@ Vue.component('lms-toolbar', {
                 bus.$emit('toolbarAction', id);
             }
         },
+        emitInfo() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('info');
+        },
+        toggleLargeView(on) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('largeView', on);
+        },
         togglePower(player, state) {
             var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
             lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
@@ -451,6 +480,9 @@ Vue.component('lms-toolbar', {
             });
         },
         volumeDown(toggleMute) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
@@ -458,6 +490,9 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeUp(toggleMute) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
@@ -465,6 +500,9 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeClick(toggleMute) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (toggleMute) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else if (this.playerStatus.volume<0) {
@@ -477,6 +515,9 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
         },
         playPauseButton() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
         },
         cancelSleepTimer() {
@@ -509,6 +550,12 @@ Vue.component('lms-toolbar', {
                 this.cancelSleepTimer();
             }
         },
+        cancelDisconnectedTimer() {
+            if (undefined!==this.disconnectedTimer) {
+                clearInterval(this.disconnectedTimer);
+                this.disconnectedTimer = undefined;
+            }
+        },
         movePlayer(player) {
             this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
@@ -530,7 +577,7 @@ Vue.component('lms-toolbar', {
         multipleStandardPlayers () {
             if (this.$store.state.players) {
                 var len = this.$store.state.players.length;
-                return len>1 && !this.$store.state.players[len-1].isgroup && !this.$store.state.players[len-2].isgroup;
+                return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
             }
             return false;
         },
@@ -554,6 +601,9 @@ Vue.component('lms-toolbar', {
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        menuVisible() {
+            return this.$store.state.visibleMenus.size>0
         }
     },
     filters: {
@@ -576,11 +626,28 @@ Vue.component('lms-toolbar', {
     watch: {
         'playerVolume.val': function(newVal) {
             if (this.desktop && newVal>=0 && this.playerVolume.current !== newVal) {
-                this.playerVolume.prev = this.playerVolume.current;
-                this.playerVolume.current = newVal;
-                this.playerVolume.lastUpdate = new Date();
-                bus.$emit('playerCommand', ["mixer", "volume", newVal]);
+                if (this.$store.state.visibleMenus.size>0) {
+                    bus.$emit('resetToolbarVolume');
+                } else {
+                    this.playerVolume.prev = this.playerVolume.current;
+                    this.playerVolume.current = newVal;
+                    this.playerVolume.lastUpdate = new Date();
+                    bus.$emit('playerCommand', ["mixer", "volume", newVal]);
+                }
             }
+        },
+        'showPlayerMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'player', shown:newVal});
+            if (newVal) {
+                bus.$emit('refreshServerStatus');
+            }
+        },
+        'showMainMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'main', shown:newVal});
         }
+    },
+    beforeDestroy() {
+        this.cancelSleepTimer();
+        this.cancelDisconnectedTimer();
     }
 })

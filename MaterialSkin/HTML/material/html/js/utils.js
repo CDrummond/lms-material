@@ -103,6 +103,10 @@ var useMySqueezeboxImageProxy = true;
 function resolveImageUrl(image, size) {
     image=""+image; // Ensure its a string!
     if ((image.includes("http://") || image.includes("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
+        var url = new URL(image);
+        if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
+            return image;
+        }
         if (useMySqueezeboxImageProxy) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_IMAGE_SZ;
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
@@ -209,9 +213,21 @@ function favSort(a, b) {
     return titleSort(a, b);
 }
 
+function partialFavSort(a, b) {
+    var at = a.isFavFolder ? 0 : 1;
+    var bt = b.isFavFolder ? 0 : 1;
+    if (at!=bt) {
+        return at<bt ? -1 : 1;
+    }
+    if (a.isFavFolder) {
+        return titleSort(a, b);
+    }
+    return a.pos<b.pos ? -1 : 1;
+}
+
 function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
-        return a.isgroup ? -1 : 1;
+        return a.isgroup ? 1 : -1;
     }
     var nameA = a.name.toLowerCase();
     var nameB = b.name.toLowerCase();
@@ -242,6 +258,15 @@ function otherPlayerSort(a, b) {
         return 1;
     }
     return 0;
+}
+
+function homeScreenSort(a, b) {
+    var at = a.id.startsWith(TOP_ID_PREFIX) ? 2 : a.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
+    var bt = b.id.startsWith(TOP_ID_PREFIX) ? 2 : b.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
+    if (at==bt) {
+        return at==0 || a.weight==b.weight ? titleSort(a, b) : a.weight<b.weight ? -1 : 1;
+    }
+    return at<bt ? -1 : 1;
 }
 
 function setScrollTop(el, val) {
@@ -286,6 +311,10 @@ function isAndroid() {
 
 function isIOS() {
     return /iPhone|iPad/i.test(navigator.userAgent);
+}
+
+function isIPhone() {
+    return /iPhone/i.test(navigator.userAgent);
 }
 
 function replaceNewLines(str) {
@@ -390,11 +419,15 @@ function parseQueryParams() {
     }
     var query = queryString.split('&');
 
-
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
         if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
+            removeLocalStorage("defaultPlayer");
+        } else if ("page"==kv[0]) {
+            if (kv[1]=="browse" || kv[1]=="now-playing" || kv[1]=="queue") {
+                setLocalStorageVal("page", kv[1]);
+            }
         } else if ("debug"==kv[0]) {
             var parts = kv[1].split(",");
             debug = new Set();
@@ -408,7 +441,7 @@ function parseQueryParams() {
 }
 
 function isLandscape() {
-    return window.innerWidth > window.innerHeight;
+    return window.innerWidth > (window.innerHeight*1.25);
 }
 
 function incrementVolume() {
@@ -437,7 +470,10 @@ function ensureVisible(elem, attempt) {
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
 function cacheKey(command, params, start, batchSize) {
     return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
-           (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + ":"+start+":"+batchSize;
+           (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
+           (command && (command[0]=="artists" || command[0]=="albums") ? (lmsOptions.noGenreFilter ? ":1" : ":0") : "") +
+           (command && command[0]=="albums" ? (lmsOptions.noRoleFilter ? ":1" : ":0") : "") +
+           ":"+start+":"+batchSize;
 }
 
 var canUseCache = true;
@@ -583,7 +619,7 @@ function originalId(id) {
 }
 
 function addPart(str, part) {
-    return str ? str+SEPARATOR+part : part;
+    return str ? (part ? str+SEPARATOR+part : str) : part;
 }
 
 function commandGridKey(command) {
@@ -672,4 +708,103 @@ function mapIcon(params, item) {
         }
     }
     item.svg="artist";
+}
+
+function splitString(str) {
+    var arr = [];
+    var s = str.split(",");
+    for (var i=0, len=s.length; i<len; ++i) {
+        var e = s[i].trim();
+        if (e.length>0) {
+            arr.push(e);
+        }
+    }
+    return arr;
+}
+
+function showMenu(obj, newMenu) {
+    if (obj.menu.show) {
+        setTimeout(function () {
+            obj.menu = newMenu;
+        }.bind(this), 100);
+    } else {
+        obj.menu = newMenu;
+    }
+}
+
+function arrayMove(arr, from, to) {
+    if (to >= arr.length) {
+        var k = to - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(to, 0, arr.splice(from, 1)[0]);
+    return arr;
+}
+
+function getField(item, field) {
+    if (undefined==item.params || item.params.length<1) {
+        return -1;
+    }
+    for (var i=0, len=item.params.length; i<len; ++i) {
+        // Can't pin an item with genre_id, as this can change on rescan
+        if (item.params[i].startsWith(field)) {
+            return i
+        }
+    }
+    return -1;
+}
+
+function pageWasReloaded() {
+    if (!window.performance) {
+        return false;
+    }
+
+    // Attempt to user newer API (https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type)
+    if ('getEntriesByType' in performance) {
+        var entries = performance.getEntriesByType("navigation");
+        for (var i=0, len=entries.length; i < len; i++) {
+            if ("reload"==entries[i].type) {
+                return true;
+            }
+        }
+    }
+
+    // Fallback to older (deprecated) API
+    return performance.navigation.type == performance.navigation.TYPE_RELOAD;
+}
+
+function addAndPlayAllActions(cmd) {
+    if (cmd.command[0]=="albums") {
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i].startsWith("artist_id:") || cmd.params[i].startsWith("genre_id:")) {
+                return true;
+            }
+        }
+        return false;
+    } else if (cmd.command[0]=="artists" || cmd.command[0]=="genres" || cmd.command[0]=="years" || cmd.command[0]=="playlists" ||
+               cmd.command[0]=="musicfolder" || cmd.command[0]=="trackstat") {
+        return false;
+    } else if (cmd.command[0]=="browselibrary" && cmd.command[1]=="items") { // Browse filesystem and top/flop tracks
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i]=="mode:filesystem" || cmd.params[i].startsWith("search:sql=tracks_persistent.playcount")) {
+                return false;
+            }
+        }
+    } else if (cmd.command[0]=="custombrowse") {
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i].startsWith("artist:") || cmd.params[i].startsWith("variousartist:") || cmd.params[i].startsWith("album:")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    return true;
+}
+
+function setFontSize(large) {
+    document.documentElement.style.setProperty('--std-font-size', large ? '19px' : '16px');
+    document.documentElement.style.setProperty('--small-font-size', large ? '18px' : '14px');
 }

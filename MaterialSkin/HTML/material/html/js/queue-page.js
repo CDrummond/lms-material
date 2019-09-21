@@ -48,36 +48,54 @@ function animate(elem, from, to) {
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
 function showArtist(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
 }
 
-function showAlbum(album, title) {
+function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0) {
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title));
 }
 
 function showComposer(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
 }
 
 function buildSubtitle(i, showRatings) {
-    var subtitle = i.artist ? i.artist : i.trackartist;
-
-    if (i.artist_id && !IS_MOBILE && subtitle) {
-        subtitle="<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(subtitle)+"\')\">" + subtitle + "</a>";
-    }
+    var subtitle = undefined;
     if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre)) {
-        var composer_ids = i.composer_ids ? i.composer_ids.split(",") : undefined;
+        var composer_ids = !IS_MOBILE && i.composer_ids ? i.composer_ids.split(",") : undefined;
         if (composer_ids && 1==composer_ids.length) {
-            if (IS_MOBILE) {
-                subtitle=addPart(subtitle, i.composer);
-            } else {
-                subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
-            }
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.composer);
         }
     }
+
+    if (i.artist) {
+        if (!IS_MOBILE && undefined!=i.artist_id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.artist);
+        }
+    } else if (i.trackartist) {
+        if (!IS_MOBILE && (undefined!=i.trackartist_id || undefined!=i.artist_id)) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+(undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id)+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.trackartist);
+        }
+    }
+
     var remoteTitle = checkRemoteTitle(i);
     if (i.album) {
         var album = i.album;
@@ -132,15 +150,9 @@ var lmsQueue = Vue.component("lms-queue", {
 <div> 
  <v-dialog v-model="dialog.show" persistent max-width="500px">
   <v-card>
+   <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <span v-if="dialog.title">{{dialog.title}}</span>
-    <v-container grid-list-md>
-     <v-layout wrap>
-      <v-flex xs12>
-       <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
-      </v-flex>
-     </v-layout>
-    </v-container>
+    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);" :rules="dialog.rules" required></v-text-field>
    </v-card-text>
    <v-card-actions>
     <v-spacer></v-spacer>
@@ -150,7 +162,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-card>
  </v-dialog>
 
- <div class="subtoolbar pq-details noselect" >
+ <div class="subtoolbar list-details noselect" >
   <v-layout v-if="selection.length>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -200,7 +212,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile>
   </RecycleScroller>
   <template v-else v-for="(item, index) in items">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-queue-item">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item">
     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" :src="item.image"></img>
@@ -239,7 +251,7 @@ var lmsQueue = Vue.component("lms-queue", {
         return {
             items: [],
             currentIndex: -1,
-            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
+            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, rules:undefined},
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
@@ -359,6 +371,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', () => {
+            this.menu.show = false;
             if (!this.scrollAnimationFrameReq) {
                 this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
             }
@@ -435,10 +448,12 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         save() {
             if (this.items.length<1) {
+                bus.$emit('showMessage', i18n('Queue is empty'));
                 return;
             }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
-            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save' };
+            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save',
+                         rules: [ v => !!v || i18n('Name is required'), v => (v && v.trim().length > 0) || i18n('Name is required') ] };
         },
         clear() {
             if (this.items.length<1) {
@@ -462,7 +477,9 @@ var lmsQueue = Vue.component("lms-queue", {
                             bus.$emit('refreshStatus');
                         });
                     } else {
-                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).catch(err => {
+                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({data})=>{
+                            bus.$emit('refreshPlaylist', str);
+                        }).catch(err => {
                             bus.$emit('showError', err, i18n("Failed to save play queue!"));
                             logError(err);
                         });
@@ -473,6 +490,13 @@ var lmsQueue = Vue.component("lms-queue", {
         click(item, index, event) {
             if (this.selection.length>0) {
                 this.select(item, index);
+                return;
+            }
+            if (this.menu.show) {
+                this.menu.show=false;
+                return;
+            }
+            if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
             if (!this.clickTimer) {
@@ -538,20 +562,30 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         headerAction(act) {
+            if (this.$store.state.visibleMenus.size>0 && (this.desktop || this.settingsMenuActions.indexOf(act)<0)) {
+                return;
+            }
             if (act==PQ_ADD_URL_ACTION) {
-                this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add' };
+                this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add',
+                             rules: [ v => !!v || i18n('URL is required'), v => (v && v.trim().length > 0) || i18n('URL is required') ] };
             } else if (act==PQ_SCROLL_ACTION) {
-                this.scrollToCurrent(true);
+                if (this.items.length<1) {
+                    bus.$emit('showMessage', i18n('Nothing playing'));
+                } else {
+                    this.scrollToCurrent(true);
+                }
             } else if (act==PQ_MOVE_QUEUE_ACTION) {
-                if (this.items.length<1 || !this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
+                if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
                     return;
+                } else if (this.items.length<1) {
+                    bus.$emit('showMessage', i18n('Queue is empty'));
                 } else {
                     bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
                 }
             }
         },
         itemMenu(item, index, event) {
-            this.menu={show:true, item:item, index:index, x:event.clientX, y:event.clientY};
+            showMenu(this, {show:true, item:item, index:index, x:event.clientX, y:event.clientY});
         },
         removeSelectedItems() {
             this.selection.sort(function(a, b) { return a<b ? 1 : -1; });
@@ -842,6 +876,11 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         svgIcon: function (name, dark) {
             return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        }
+    },
+    watch: {
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'queue', shown:newVal});
         }
     },
     beforeDestroy() {

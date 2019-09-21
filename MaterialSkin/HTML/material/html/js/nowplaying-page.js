@@ -19,8 +19,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile @click="trackInfo()" :disabled="undefined==playerStatus.current.id">
-    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar" v-bind:class="{'dimmed': undefined==playerStatus.current.id}"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile @click="trackInfo()">
+    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
    </v-list-tile>
   </v-list>
@@ -51,7 +51,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon @click="doAction(['playlist', 'index', '+1'])" class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
- <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+ <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
   <v-list-tile style>
    <v-list-tile-content>
@@ -145,12 +145,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="landscape">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
-    <div class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
+    <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
-    <div class="np-text-landscape subtext" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
+    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
     <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
@@ -214,7 +214,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': -portraitPad+'px'}"></img>
+   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': portraitImagePad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
@@ -285,8 +285,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true,
                  portraitPad: 0,
+                 portraitImagePad: 0,
                  landscape: false,
                  wide: 0,
+                 lowHeight: false,
                  largeView: false,
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, setting:false},
@@ -312,7 +314,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.$nextTick(() => {
                         this.portraitElem = document.getElementById("np-page");
                         this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-                         this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+                        this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
                         this.calcPortraitPad();
                     });
                 }
@@ -320,6 +322,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.portraitElem = document.getElementById("np-page");
             this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
             this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+            this.lowHeight = window.innerHeight <= (this.desktop ? 400 : 450);
             this.calcPortraitPad();
             var npView = this;
             window.addEventListener('resize', () => {
@@ -339,6 +342,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         npView.lastHeight = npView.portraitElem.offsetHeight;
                         npView.calcPortraitPad();
                     }
+                    npView.lowHeight = window.innerHeight <= (npView.desktop ? 400 : 430);
                     npView.resizeTimeout = undefined;
                 }, 50);
             }, false);
@@ -353,6 +357,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     } else if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
                         this.largeView = false;
                         this.info.show = !this.info.show;
+                    } else if (this.info.show) {
+                        this.info.show = false;
                     }
                 }
             }.bind(this));
@@ -432,7 +438,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             var artistAndComposer;
             if (playerStatus.current.composer && playerStatus.current.genre && LMS_COMPOSER_GENRES.has(playerStatus.current.genre)) {
-                artistAndComposer = addPart(this.playerStatus.current.artist, playerStatus.current.composer);
+                artistAndComposer = addPart(playerStatus.current.composer, this.playerStatus.current.artist);
             } else {
                 artistAndComposer = this.playerStatus.current.artist;
             }
@@ -459,7 +465,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 var bracket = playerStatus.current.type.indexOf(" (");
                 technical.push(bracket>0 ? playerStatus.current.type.substring(0, bracket) : playerStatus.current.type);
             }
-            technical=technical.join(", ");
+            technical=technical.join(SEPARATOR);
             if (technical!=this.playerStatus.current.technicalInfo) {
                 this.playerStatus.current.technicalInfo = technical;
             }
@@ -489,6 +495,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         this.landscape = isLandscape();
         this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        setInterval(function () {
+            this.landscape = isLandscape();
+            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
@@ -510,10 +520,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         bus.$on('info', function() {
-            if (this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
-                this.largeView = false;
-                this.info.show = !this.info.show;
-            }
+            this.largeView = false;
+            this.info.show = !this.info.show;
         }.bind(this));
 
         this.showTotal = getLocalStorageBool('showTotal', true);
@@ -537,12 +545,34 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.portraitPad = 0;
             } else {
                 var coverMax = this.portraitElem.offsetWidth-/*pad*/32;
+                var spaceForText = this.$store.state.largeFonts ? 120 : 80;
                 var topAndBotSpace = (this.portraitElem.offsetHeight - 
-                                        (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + /*text*/80))/2;
+                                        (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + spaceForText))/2;
                 var portraitPad = Math.max(0, Math.floor(topAndBotSpace/2)-8);
                 if (portraitPad!=this.portraitPad) {
                     this.portraitPad = portraitPad;
+                    var largeFontAdjust = 0;
+                    if (this.$store.state.largeFonts && (this.portraitElem.offsetWidth/this.portraitElem.offsetHeight < 0.69)) {
+                        largeFontAdjust = 16;
+                    }
+                    this.portraitImagePad=(portraitPad*-1)-largeFontAdjust;  
+                } else if (this.$store.state.largeFonts) {
+                    var largeFontAdjust = 0;
+                    if (this.portraitElem.offsetWidth/this.portraitElem.offsetHeight < 0.69) {
+                        largeFontAdjust = 16;
+                    }
+                    var portraitImagePad=(this.portraitPad*-1)-largeFontAdjust; 
+                    if (portraitImagePad!=this.portraitImagePad) {
+                        this.portraitImagePad = portraitImagePad;
+                    }
                 }
+            }
+        },
+        showContextMenu(event) {
+            if (this.$store.state.visibleMenus.size<1) {
+                this.showMenu(event);
+            } else {
+                event.preventDefault();
             }
         },
         showMenu(event) {
@@ -576,6 +606,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
         },
         doAction(command) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             bus.$emit('playerCommand', command);
         },
         setPosition() {
@@ -619,6 +652,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                              album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
         },
         trackInfo() {
+            if (undefined==this.playerStatus.current.id) {
+                bus.$emit('showMessage', i18n('Nothing playing'));
+                return;
+            }
             this.info.show=false;
             this.largeView=false;
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
@@ -647,13 +684,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                 }
-                lmsCommand("", command).then(({data}) => {
-                    if (data && data.result && (data.result.lyrics || data.result.error)) {
-                        this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
-                    }
-                }).catch(error => {
-                    this.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
-                });
+                if (3==command.length) { // No details?
+                    this.info.tabs[LYRICS_TAB].text="";
+                } else {
+                    lmsCommand("", command).then(({data}) => {
+                        if (data && data.result && (data.result.lyrics || data.result.error)) {
+                            this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
+                        }
+                    }).catch(error => {
+                        this.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
+                    });
+                }
             }
         },
         fetchBio() {
@@ -695,13 +736,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     } else {
                         command.push("artist:"+this.infoTrack.artist);
                     }
-                    lmsCommand("", command).then(({data}) => {
-                        if (data && data.result && (data.result.biography || data.result.error)) {
-                            this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
-                        }
-                    }).catch(error => {
-                        this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
-                    });
+                    if (3==command.length) { // No details?
+                        this.info.tabs[BIO_TAB].text="";
+                    } else {
+                        lmsCommand("", command).then(({data}) => {
+                            if (data && data.result && (data.result.biography || data.result.error)) {
+                                this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                            }
+                        }).catch(error => {
+                            this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
+                        });
+                    }
                 }
             }
         },
@@ -734,13 +779,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
 
-                lmsCommand("", command).then(({data}) => {
-                    if (data && data.result && (data.result.albumreview || data.result.error)) {
-                        this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
-                    }
-                }).catch(error => {
-                    this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
-                });
+                if (3==command.length) { // No details?
+                    this.info.tabs[REVIEW_TAB].text="";
+                } else {
+                    lmsCommand("", command).then(({data}) => {
+                        if (data && data.result && (data.result.albumreview || data.result.error)) {
+                            this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
+                        }
+                    }).catch(error => {
+                        this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
+                    });
+                }
             }
         },
         showInfo() {
@@ -787,6 +836,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         toggleTime() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             this.showTotal = !this.showTotal;
             setLocalStorageVal("showTotal", this.showTotal);
         },
@@ -796,6 +848,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         playPauseButton(showSleepMenu) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (showSleepMenu) {
                 bus.$emit('dlg.open', 'sleep', this.$store.state.player);
             } else {
@@ -803,6 +858,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showSleep() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
         },
         setRating() {
@@ -815,7 +873,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         clickImage(event) {
             if (this.menu.show) {
                 this.menu.show = false;
-            } else if (!this.clickTimer) {
+                return;
+            }
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout(this.clickTimer);
                     if (isIOS()) {
@@ -912,6 +975,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.calcPortraitPad();
                 });
             }
+        },
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
         }
     },
     computed: {

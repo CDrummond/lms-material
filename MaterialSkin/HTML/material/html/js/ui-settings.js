@@ -19,7 +19,7 @@ Vue.component('lms-ui-settings', {
   </v-card-title>
   <v-card-text>
    <v-list two-line subheader class="settings-list">
-    <v-header>{{i18n('General')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
@@ -30,8 +30,17 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider v-if="allowLayoutAdjust"></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="largeFonts = !largeFonts" class="switch-label">
+      <v-list-tile-title>{{i18n('Larger fonts')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use larger font sizes.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="largeFonts"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -72,7 +81,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Browse')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
@@ -102,24 +111,37 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="serverMenus = !serverMenus" class="switch-label">
-      <v-list-tile-title>{{i18n('Use categories as supplied by server')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Obtain enabled categories (Artists, Albums, etc) from the server. This is required in order to use additional browse modes, or to control the selection of browse categories.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="serverMenus"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
+      <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="sortHome"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content class="switch-label">
+      <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-title>
+     <v-list-tile-content/>
+    </v-list-tile>
+   
+    <template v-for="(item, index) in showItems">
+     <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
+    </template>
+    <div class="dialog-padding"></div>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Now Playing')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Now Playing')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
@@ -146,10 +168,9 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Queue')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
@@ -208,15 +229,15 @@ Vue.component('lms-ui-settings', {
         return {
             show: false,
             darkUi: true,
+            largeFonts: false,
             letterOverlay:false,
-            showMenuAudio:false,
+            showMenuAudio:true,
             sortFavorites:true,
-            serverMenus:false,
             autoScrollQueue:true,
             stopButton:false,
             browseBackdrop:true,
             queueBackdrop:true,
-            showMenuAudioQueue:false,
+            showMenuAudioQueue:true,
             nowPlayingBackdrop:false,
             infoBackdrop:true,
             techInfo:false,
@@ -234,7 +255,11 @@ Vue.component('lms-ui-settings', {
             lsAndNotif: 'playing',
             lsAndNotifItems: [],
             android: isAndroid(),
-            menuIcons: true
+            menuIcons: true,
+            showPresets: false,
+            allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
+            sortHome: isIPhone(),
+            showItems: [ ]
         }
     },
     computed: {
@@ -245,6 +270,7 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('uisettings.open', function(act) {
             this.darkUi = this.$store.state.darkUi;
+            this.largeFonts = this.$store.state.largeFonts;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -257,14 +283,30 @@ Vue.component('lms-ui-settings', {
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
-            this.serverMenus = this.$store.state.serverMenus;
+            this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
-            this.layout = getLocalStorageVal("layout", "auto");
-            this.layoutOrig = this.layout;
+            if (this.allowLayoutAdjust) {
+                this.layout = getLocalStorageVal("layout", "auto");
+                this.layoutOrig = this.layout;
+            }
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
+            this.hidden = this.$store.state.hidden;
+
+            this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
+                            {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
+                            {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
+                            {id: TOP_PRESETS_ID, name:i18n("Presets"), show:!this.hidden.has(TOP_PRESETS_ID)},
+                            {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)}];
+            if (getLocalStorageBool('cdPlayer', false)) {
+                this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
+            }
+            if (getLocalStorageBool('remoteLibraries', true)) {
+                this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
+            }
+
             this.show = true;
         }.bind(this));
 
@@ -295,11 +337,12 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
+                                                  largeFonts:this.largeFonts,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
+                                                  sortHome:this.sortHome,
                                                   showMenuAudio:this.showMenuAudio,
-                                                  serverMenus:this.serverMenus,
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
@@ -312,9 +355,10 @@ Vue.component('lms-ui-settings', {
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
-                                                  menuIcons:this.menuIcons
+                                                  menuIcons:this.menuIcons,
+                                                  hidden:this.hiddenItems()
                                                 } );
-            if (this.layout != this.layoutOrig) {
+            if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
                 if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout) ) {
                     window.location.href = this.layout;
@@ -326,15 +370,16 @@ Vue.component('lms-ui-settings', {
         saveAsDefault() {
             this.$confirm(i18n("Save the current settings as default for new users?")+
                                 "<br/><br/><p style=\"font-weight:200\">"+
-                                i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.")+"</p>",
+                                (this.allowLayoutAdjust ? i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.") : "")+"</p>",
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     var settings = { darkUi:this.darkUi,
+                                     largeFonts:this.largeFonts,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,
+                                     sortHome:this.sortHome,
                                      showMenuAudio:this.showMenuAudio,
-                                     serverMenus:this.serverMenus,
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,
@@ -347,12 +392,24 @@ Vue.component('lms-ui-settings', {
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,
-                                     menuIcons:this.menuIcons
+                                     menuIcons:this.menuIcons,
+                                     hidden:Array.from(this.hiddenItems())
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
-                    lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, getLocalStorageVal("pinned", "[]")]);
+                    lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topitems", "[]")]);
                 }
             });
+        },
+        hiddenItems() {
+            var hidden = new Set(Array.from(this.hidden));
+            for (var i=0, len=this.showItems.length; i<len; ++i) {
+                if (this.showItems[i].show && hidden.has(this.showItems[i].id)) {
+                    hidden.delete(this.showItems[i].id);
+                } else if (!this.showItems[i].show && !hidden.has(this.showItems[i].id)) {
+                    hidden.add(this.showItems[i].id);
+                }
+            }
+            return hidden;
         },
         i18n(str) {
             if (this.show) {

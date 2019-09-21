@@ -1079,9 +1079,14 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
-.dialog-section-header {
+.dialog-section-header, .item-info-header {
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight) !important;
+}
+
+.item-info-text {
+ font-size:var(--std-font-size) !important;
+ font-weight:var(--std-weight) !important;
 }
 
 .btn-icon {

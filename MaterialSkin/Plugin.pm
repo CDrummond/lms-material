@@ -270,7 +270,7 @@ sub _cliCommand {
     if ($cmd eq 'add-podcast') {
         my $name = $request->getParam('name');
         my $url = $request->getParam('url');
-        if ($name && $value) {
+        if ($name && $url) {
             my $prefs = preferences('plugin.podcast');
             my $feeds = $prefs->get('feeds');
             push @{$feeds}, { 'name' => $name, 'value' => $url };

@@ -20,9 +20,26 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
         logJsonMessage("RESP", data);
         if (parent.id && SEARCH_ID===parent.id) {
             var totalResults = 0;
+            var categories = 0;
+            if (data.result.contributors_loop && data.result.contributors_count>0) {
+                categories+=1;
+            }
+            if (data.result.albums_count && data.result.albums_count>0) {
+                categories+=1;
+            }
+            if (data.result.tracks_count && data.result.tracks_count>0) {
+                categories+=1;
+            }
+            if (data.result.genres_count && data.result.genres_count>0) {
+                categories+=1;
+            }
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 totalResults += data.result.contributors_count;
-                resp.items.push({header: i18np("1 Artist", "%1 Artists", data.result.contributors_count), id:"search.artists"});
+                if (categories>1) {
+                    resp.items.push({title: i18np("1 Artist", "%1 Artists", data.result.contributors_count), id:"search.artists", header:true});
+                } else {
+                    resp.subtitle=i18np("1 Artist", "%1 Artists", data.result.contributors_count);
+                }
                 var infoPlugin = getLocalStorageBool('infoPlugin');
                 for (var idx=0, loop=data.result.contributors_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                     var i = loop[idx];
@@ -40,7 +57,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             if (data.result.albums_loop && data.result.albums_count>0) {
                 totalResults += data.result.albums_count;
-                resp.items.push({header: i18np("1 Album", "%1 Albums", data.result.albums_count), id:"search.albums"});
+                if (categories>1) {
+                    resp.items.push({title: i18np("1 Album", "%1 Albums", data.result.albums_count), id:"search.albums", header:true});
+                } else {
+                    resp.subtitle=i18np("1 Album", "%1 Albums", data.result.albums_count);
+                }
                 for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                     var i = loop[idx];
                     resp.items.push({
@@ -57,7 +78,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             if (data.result.tracks_loop && data.result.tracks_count>0) {
                 totalResults += data.result.tracks_count;
-                resp.items.push({header: i18np("1 Track", "%1 Tracks", data.result.tracks_count), id:"search.tracks"});
+                if (categories>1) {
+                    resp.items.push({title: i18np("1 Track", "%1 Tracks", data.result.tracks_count), id:"search.tracks", header:true});
+                } else {
+                    resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.tracks_count);
+                }
                 for (var idx=0, loop=data.result.tracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                     var i = loop[idx]
                     resp.items.push({
@@ -71,7 +96,11 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
             if (data.result.genres_loop && data.result.genres_count>0) {
                 totalResults += data.result.genres_count;
-                resp.items.push({header: i18np("1 Genre", "%1 Genres", data.result.genres_count), id:"search.genres"});
+                if (categories>1) {
+                    resp.items.push({title: i18np("1 Genre", "%1 Genres", data.result.genres_count), id:"search.genres", header:true});
+                } else {
+                    resp.subtitle=i18np("1 Genre", "%1 Genres", data.result.genres_count);
+                }
                 for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                     var i = loop[idx];
                     resp.items.push({
@@ -85,7 +114,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                               });
                 }
             }
-            resp.subtitle=i18np("1 Item", "%1 Items", totalResults);
+            if (categories==0 || categories>1) {
+                resp.subtitle=i18np("1 Item", "%1 Items", totalResults);
+            }
             resp.total = resp.items.length;
         } else if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;

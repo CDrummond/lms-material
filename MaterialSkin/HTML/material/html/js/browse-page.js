@@ -377,7 +377,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('refreshList', function(section) {
-            if (this.current && this.current.section==section) {
+            if (section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
                 this.refreshList();
             }
         }.bind(this));
@@ -588,7 +588,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (SECTION_PRESETS==this.current.section) {
                     this.tbarActions=[ADD_PRESET_ACTION];
                 } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
-                    this.tbarActions=[SEARCH_PODCAST_ACTION];
+                    this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
                 } else if (addAndPlayAllActions(command)) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -1139,12 +1139,16 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (SEARCH_PODCAST_ACTION==act) {
                 bus.$emit('dlg.open', 'podcastsearch');
             } else if (ADD_PODCAST_ACTION==act) {
-                lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({datax}) => {
-                    this.history[this.history.length-1].needsRefresh = true;
-                    bus.$emit('showMessage', i18n("Added '%1'", item.title));
-                }).catch(err => {
-                    logAndShowError(err, i18n("Failed to remove favorite!"), command);
-                });
+                if (item.isPodcast) {
+                    lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({datax}) => {
+                        this.history[this.history.length-1].needsRefresh = true;
+                        bus.$emit('showMessage', i18n("Added '%1'", item.title));
+                    }).catch(err => {
+                        logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                    });
+                } else {
+                    bus.$emit('dlg.open', 'podcastadd');
+                }
             } else if (REMOVE_PODCAST_ACTION==act) {
                     this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n("Remove"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {

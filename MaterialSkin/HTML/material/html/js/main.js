@@ -10,9 +10,9 @@ Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 var app = new Vue({
     el: '#app',
     data() {
-        return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
-                            volume: false, manage: false, rndmix: false, favorite: false, rating: false, 
-                            sleep: false, search: false, movequeue: false, podcastsearch: false, iteminfo: false } }
+        return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
+                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false, search: false,
+                            movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false } }
     },
     created() {
         parseQueryParams();

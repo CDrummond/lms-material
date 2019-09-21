@@ -73,5 +73,6 @@ const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;
 const SECTION_PLAYLISTS = 4;
 const SECTION_PRESETS = 5;
+const SECTION_PODCASTS = 6;
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;

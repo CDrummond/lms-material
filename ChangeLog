@@ -4,6 +4,7 @@
 2. Show desktop style volume control in mobile view if width is 900px or more.
 3. Search vor podcasts via iTunes or GPodder, and add to podcast subscriptions.
 4. Add action to remove podcasts.
+5. Add action to add podcast via URL.
 
 1.0.1
 -----

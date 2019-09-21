@@ -818,3 +818,30 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     return resp;
 }
 
+function parseBrowseUrlResp(data, provider) {
+    var resp = {items: [], baseActions:[], canUseGrid: false, total: 0, jumplist:[] };
+
+    if ('itunes'==provider) {
+        if (data && data.results) {
+            for (var i=0, loop=data.results, loopLen=loop.length; i<loopLen; ++i) {
+                resp.items.push({title: loop[i].trackName, id: loop[i].feedUrl, image: loop[i].artworkUrl100, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
+            }
+        }
+        resp.total = resp.items.length;
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.total);
+    } else if ('gpodder'==provider) {
+        if (data) {
+            for (var i=0, loopLen=data.length; i<loopLen; ++i) {
+                if (!data[i].url.startsWith("http://www.striglsmusicnews.com")) {
+                    resp.items.push({title: data[i].title, id: data[i].url, image: data[i].scaled_logo_url, descr: data[i].description, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
+                }
+            }
+        }
+        resp.total = resp.items.length;
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.total);
+    }
+    if (0==resp.items.length) {
+        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
+    }
+    return resp;
+}

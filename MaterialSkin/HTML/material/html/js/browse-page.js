@@ -403,6 +403,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.enteredTerm = term;
             this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
         }.bind(this));
+        bus.$on('searchPodcasts', function(url, term, provider) {
+            this.enteredTerm = term;
+            this.fetchUrlItems(url, provider);
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -537,6 +541,24 @@ var lmsBrowse = Vue.component("lms-browse", {
                 //}
             });
         },
+        fetchUrlItems(url, provider) {
+            if (this.fetchingItems) {
+                return;
+            }
+
+            this.fetchingItems = true;
+            axios.get(url).then(({data}) => {
+                var resp = parseBrowseUrlResp(data, provider);
+                this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, resp);
+                this.fetchingItems = false;
+            }).catch(err => {
+                this.fetchingItems = false;
+                //if (!axios.isCancel(err)) {
+                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    logError(err, command.command, command.params, start, count);
+                //}
+            });
+        },
         handleListResponse(item, command, resp) {
             if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
                 this.addHistory();
@@ -566,7 +588,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (SECTION_PRESETS==this.current.section) {
                     this.tbarActions=[ADD_PRESET_ACTION];
                 } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
-                    this.tbarActions=[ADD_PODCAST_ACTION];
+                    this.tbarActions=[SEARCH_PODCAST_ACTION];
                 } else if (addAndPlayAllActions(command)) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -909,7 +931,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('dlg.open', 'search');
                 }
             } else if (act===MORE_ACTION) {
-                this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
+                if (item.isPodcast) {
+                    bus.$emit('dlg.open', 'iteminfo', item);
+                } else {
+                    this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
+                }
             } else if (act===MORE_LIB_ACTION) {
                 this.itemMoreMenu(item);
             } else if (act===PIN_ACTION) {
@@ -1110,8 +1136,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }).catch(err => {
                     logAndShowError(err, undefined, command.command);
                 });
+            } else if (SEARCH_PODCAST_ACTION==act) {
+                bus.$emit('dlg.open', 'podcastsearch');
             } else if (ADD_PODCAST_ACTION==act) {
-                bus.$emit('dlg.open', 'podcasts');
+                lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({datax}) => {
+                    this.history[this.history.length-1].needsRefresh = true;
+                    bus.$emit('showMessage', i18n("Added '%1'", item.title));
+                }).catch(err => {
+                    logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                });
             } else if (REMOVE_PODCAST_ACTION==act) {
                     this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n("Remove"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {

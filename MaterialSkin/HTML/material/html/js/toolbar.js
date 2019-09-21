@@ -78,8 +78,9 @@ Vue.component('lms-toolbar', {
     <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
-     <v-list-tile-avatar v-if="players && players.length>1">
-      <v-icon small>{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
+     <v-list-tile-avatar v-if="players && players.length>1 || otherPlayers.length>0">
+      <v-icon small v-if="players && players.length>1">{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
+      <v-icon small v-else></v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
@@ -92,7 +93,7 @@ Vue.component('lms-toolbar', {
    <template v-if="!mini && !nowplaying" v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
-     <v-list-tile-avatar v-if="menuIcons && players && players.length>1"><v-icon small></v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar><v-icon small></v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>

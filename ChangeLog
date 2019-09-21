@@ -6,6 +6,8 @@
 4. Add action to remove podcasts.
 5. Add action to add podcast via URL.
 6. Add configuration of browse-modes to player settings.
+7. When creating, or editing, a group, set browse modes to the enabled modes
+   from all members.
 
 1.0.1
 -----

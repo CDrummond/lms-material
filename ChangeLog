@@ -21,6 +21,7 @@
 13. Fix 'undefined Items' when refreshing some lists.
 14. Always indent player names if more than 1 player, or players on another
     server - makes headers more obvious.
+15. Fix toolbar buttons shifting when connection lost icon shown.
 
 1.0.0
 -----

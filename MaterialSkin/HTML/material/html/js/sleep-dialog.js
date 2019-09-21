@@ -100,9 +100,11 @@ Vue.component('lms-sleep-dialog', {
         setSleep(duration) {
             if (undefined==this.player) {
                 this.$store.state.players.forEach(p => {
-                    lmsCommand(p.id, -1==duration ? ["jiveendoftracksleep"] : ["sleep", duration]).then(({data}) => {
-                        bus.$emit('updatePlayer', p.id);
-                    });
+                    if (!p.isgroup) {
+                        lmsCommand(p.id, -1==duration ? ["jiveendoftracksleep"] : ["sleep", duration]).then(({data}) => {
+                            bus.$emit('updatePlayer', p.id);
+                        });
+                    }
                 });
             } else {
                 lmsCommand(this.player.id, -1==duration ? ["jiveendoftracksleep"] : ["sleep", duration]).then(({data}) => {

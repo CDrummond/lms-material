@@ -34,9 +34,9 @@
     <lms-toolbar></lms-toolbar>
     <lms-currentcover></lms-currentcover>
     <lms-server></lms-server>
-    <lms-browse v-bind:class="{'inactive-page': page!='browse'}"></lms-browse>
-    <lms-now-playing v-bind:class="{'inactive-page': page!='now-playing'}"></lms-now-playing>
-    <lms-queue v-bind:class="{'inactive-page': page!='queue'}"></lms-queue>
+    <lms-browse v-show="page=='browse'"></lms-browse>
+    <lms-now-playing v-show="page=='now-playing'"></lms-now-playing>
+    <lms-queue v-show="page=='queue'"></lms-queue>
     <lms-bottomnav></lms-bottomnav>
     <lms-noconnection></lms-noconnection>
     <lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>

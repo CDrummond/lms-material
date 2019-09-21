@@ -33,12 +33,10 @@ body {
 .settings-title {
  height:var(--main-toolbar-height) !important;
  max-height:var(--main-toolbar-height) !important;
- margin:0px !important;
- padding:0px !important;
 }
 
-.pq-details {
- margin-left:-16px !important;
+.list-details {
+ margin-left:-4px !important;
 }
 
 .subtoolbar {
@@ -91,7 +89,8 @@ body {
  padding-top:16px;
  width:3em;
  text-align:left;
- opacity:0.7;
+ opacity:var(--sub-opacity);
+ font-size:var(--std-font-size) !important;
 }
 
 .vol-label-np {
@@ -137,14 +136,14 @@ body {
 }
 
 .np-text-desktop {
- font-weight:400;
+ font-weight:var(--std-weight);
  margin:12px 8px 0px 0px;
  height:2em;
  max-width:calc(100vw - 400px);
 }
 
 .np-text-sub-desktop {
- font-weight:400;
+ font-weight:var(--std-weight);
  margin:0px 8px -4px 0px;
  height:2em;
  max-width:calc(100vw - 400px);
@@ -174,15 +173,15 @@ body {
 .np-details-desktop div .v-list__tile .v-list__tile__action {
  min-width:unset;
  font-family: monospace, monospace;
- font-weight: 400;
- font-size: 75%;
+ font-weight: var(--std-weight);
+ font-size:calc(var(--std-font-size) - 4px) !important;
  height:54px;
  margin:0px;
  padding:0px;
 }
 
 .np-tech-desktop {
- margin-top:5px;
+ margin-top:calc(21px - var(--std-font-size));
  display:inline-block;
  vertical-align:top;
  height:27px;
@@ -190,14 +189,14 @@ body {
 }
 
 .np-rating-desktop {
- margin-top:2px;
+ margin-top:calc(16px - var(--std-font-size));
  display:inline-block;
  height:27px;
  margin-right:-8px
 }
 
 .np-time-desktop {
- margin-top:-7px;
+ margin-top:calc(7px - var(--std-font-size));
  display:inline-block;
  vertical-align:top;
  height:27px;
@@ -290,19 +289,11 @@ body {
 }
 
 #letterOverlay {
- z-index:2;
- position: fixed;
- top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
- left: 0;
- text-align:center;
- vertical-align:middle;
- font-size: 160px;
- line-height: 160px;
- width: calc(1vw * var(--splitter-pc));
- pointer-events:none;
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
+ width:calc(1vw * var(--splitter-pc));
 }
 
 .ios-vcard-text-workaround {
- top:48px;
- height:calc((var(--vh, 1vh)*100) - 48px);
+ top:var(--main-toolbar-height);
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }

@@ -1,3 +1,106 @@
+1.0.1
+-----
+ 1. Allow items from within 'Radio', and browse modes containing genre_id to be
+    pinned to home screen.
+ 2. For screens up to 500px wide, allow volume control to be full width, for
+    others max width is 450px. This is to prevent scenario where there is a tiny
+    (e.g. 5px) gap on the side.
+ 3. Sort players in 'Information' dialog.
+ 4. Use 'v-show' to control when to show mobile pages.
+ 5. Fix 'clickability' of home screen item checkbox list.
+ 6. When using 'More' menu item for track information, only clear browse history
+    stack if it has 50 or more steps.
+ 7. Add Russian translation - thanks to sky418.
+ 8. Reduce list item height by 3px, so that it's the same as subtoolbar height.
+    This allows initial lists in desktop layout to be balanced.
+ 9. With must be 25% more than height to be classified as landscape.
+10. Check landscape setting of now-playing 1 second after mounted.
+11. Fix toolbar layout when using mobile in landscape with song info showing on
+    now playing page.
+12. Fix missing headers in search results.
+13. Fix 'undefined Items' when refreshing some lists.
+14. Always indent player names if more than 1 player, or players on another
+    server - makes headers more obvious.
+15. Fix toolbar buttons shifting when connection lost icon shown.
+
+1.0.0
+-----
+ 1. Add action to create favourite folders.
+ 2. Allow moving favourites into folders.
+ 3. Add action to move favourite to parent folder.
+ 4. Make list of composer and conductor genres configurable.
+ 5. Optionally support listing and editing presets.
+ 6. Support "auto=false" URL query parameter to disable automatic layout
+    switching.
+ 7. Always sort favourite folders, and place these first, even if sorting of
+    favourites is disabled.
+ 8. Highlight active jumplist item.
+ 9. For mobile browsers, if a list has more than 25 items and no jumplist, then
+    create a fake one with dots. Allows quickly jumping to middle, etc.
+10. Allow renaming of pinned items.
+11. When a menu is open, try to ignore click events and just close menu. This is
+    to work-around a VuetifyJS issue.
+12. Remove section headers.
+13. Add a 'My Music' entry, and place 'Artists', etc, within this.
+14. Allow pinning of items from 'My Music.'
+15. Always use server provided categories.
+16. Allow drag'n'drop re-ordering of top-level browse items.
+17. Add option to auto-sort home screen items, mainly for iPhone as this does
+    not support drag'n'drop.
+18. Allow hiding 'My Music', etc, from home screen.
+19. Add music file icon to 'Music Folder' browsing.
+20. When checking if can activate a text item, check for "do" command as well as
+    "go" command.
+21. When checking text-click response, if an empty list is received
+    (or created), just show alert with activated text.
+22. Refresh player list each time 'Manage Players' is opened.
+23. For mobile layout, show play/pause button in main toolbar for browse and
+    queue pages.
+24. More subtle current track highlight.
+25. Don't use imageproxy for 192.168.*, 127.*, or *.local, HTTP/HTTPS image
+    URLs - fixes display of ShairTunes covers.
+26. Fix group player showing under 'Standard Players' in 'Manage Players' dialog
+    if its the currently active player and last group.
+27. Allow setting a default player in 'Manager players' dialog. If set, then
+    this player will be selected at start-up.
+28. Add a 'page' URL query parameter allowing to set initial page for mobile
+    layout.
+29. As actions are not shown disabled, they should perform at least some
+    indicative action.
+30. For consistency with default web-ui, show standard players before group
+    players in toolbar and 'Manage players' dialog.
+31. 'Set sleep for all players' only applies to non-group players.
+32. Attempt to restrict where add-all/play-all actions are shown.
+33. Try immediate reconnect when page becomes visible and not connected.
+34. Add option to use slightly larger fonts.
+35. Show mobile volume control in a sheet at top-right.
+36. Calling sleep dialog from player settings should only set sleep for that
+    player.
+37. Switch source player off after moving queue.
+38. Use smaller icons to show player status (sync, sleep) in toolbar and in
+    'Manage players' dialog.
+39. List players a player is synced with, not just master, in 'Manage players'
+    dialog.
+40. Default to showing context menu when click on a queue item, to be
+    consistent with defaulting to showing this menu when clicking on an audio
+    item in browse.
+41. If sorting albums by year, use years as jumplist.
+42. When listing album tracks, need to pass "artist_id:ID" regardless of the
+    role filter being set or not.
+
+0.9.7
+-----
+1. Refresh favourites list when rename a favourite.
+2. When changing a favourite's URL, (attempt to) set icon, type, and hasitems.
+3. If a player does not have 'power' attribute, then always assume its on.
+4. Only show volume control if player reports 'digital_volume_control:1'
+5. Add 'hasAlbums:1' to years query.
+6. Reduce height of toolbar in mobile layout.
+7. Make 'synced' part of 'playerStatus' in toolbar, so that UI is updated
+   correctly on change.
+8. Remove arrows from browse headers, and elide titles to indicate collapsed.
+9. Hide list menus when scroll.
+
 0.9.6
 -----
 1. For MAI biography, use in order of preference; first of trackartist_ids,

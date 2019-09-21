@@ -7,6 +7,7 @@
 
 :root {
  scrollbar-color:#888 #c0c0c0;
+ --active-color:#1976d2;
 }
 
 ::-webkit-scrollbar {
@@ -26,12 +27,12 @@ html, .mini-player {
 }
 
 /* Clickable artist/album in queue */
-.v-list__tile__sub-title a {
- color: rgba(0,0,0,.54) !important;
+.v-list__tile__sub-title, .v-list__tile__sub-title a {
+ color: rgba(0,0,0,var(--sub-opacity)) !important;
 }
 
 .vue-splitter .splitter {
- background-color:#f0f0f0 !important;
+ background-color:#e0e0e0 !important;
 }
 
 .np-bar {
@@ -46,13 +47,17 @@ html, .mini-player {
  background:rgba(255, 255, 255, 0.9) !important;
 }
 
-.vue-recycle-scroller__item-view, .lms-queue-item {
- border-bottom: 0.5px solid #e0e0e0;
+.vue-recycle-scroller__item-view, .lms-list-item {
+ border-bottom: 1px solid #e0e0e0;
 }
 
 .subtoolbar {
- background-color:#fff !important;
- border-bottom:1px solid #f0f0f0;
+ background-color:#f5f5f5 !important;
+ border-bottom:1px solid #e0e0e0;
+}
+
+.pmgr-grp-title {
+ border-top: 1px solid #e0e0e0;
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {
@@ -69,7 +74,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .active {
- color:#1976d2 !important;
+ color:var(--active-color) !important;
 }
 
 #app .v-icon {
@@ -85,10 +90,18 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .active-nav div span, .active-nav div i, .active-btn {
- color: #346dd2 !important
+ color: var(--active-color) !important
+}
+
+.inactive-nav div span, .inactive-nav div i {
+ color: #727272 !important;
 }
 
 .v-tabs__slider-wrapper .accent {
- background-color: #346dd2 !important;
- border-color: #346dd2 !important;
+ background-color: var(--active-color) !important;
+ border-color: var(--active-color) !important;
+}
+
+.pq-current {
+ background-color:rgba(0, 0, 0, 0.1);
 }

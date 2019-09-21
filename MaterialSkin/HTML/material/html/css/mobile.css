@@ -6,9 +6,9 @@
  */
 
 :root {
- --main-toolbar-height:56px;
+ --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
- --bottom-nav-height:58px;
+ --bottom-nav-height:52px;
 }
 
 .lms-toolbar {
@@ -21,6 +21,16 @@
  margin-right:-8px !important;
 }
 
+.maintoolbar-subtitle {
+ margin-top:calc(14px - var(--small-font-size));
+ font-size:var(--small-font-size);
+}
+
+.settings-title {
+ height:var(--main-toolbar-height) !important;
+ max-height:var(--main-toolbar-height) !important;
+}
+
 .subtoolbar {
  position:fixed;
  top:var(--main-toolbar-height);
@@ -29,9 +39,7 @@
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- padding-top:2px;
- padding-right:8px;
- padding-bottom:0px;
+ padding:2px 8px 0px 12px;
  z-index:1;
  float:left;
 }
@@ -48,22 +56,29 @@
 .lms-bottom-nav {
  position:relative !important;
  height:var(--bottom-nav-height) !important;
- top:calc(-1 * (var(--bottom-nav-height) + 2px)) !important;
+ top:calc(-1 * (var(--bottom-nav-height) + 8px)) !important;
+ transition:none !important;
 }
 
 .lms-bottom-nav-button {
  width:33.3333% !important;
  max-width:250px !important;
+ transition:none !important;
 }
 
 /* Work-around issue where when swiping to switch views, a previously active nav button would have a
    slightly lighter background than the others */
 .lms-bottom-nav-button:before, .lms-bottom-nav-button:focus:before, .lms-bottom-nav-button:hover:before {
  background-color:transparent !important;
+ transition:none !important;
+}
+
+.lms-bottom-nav .v-ripple__animation {
+ background-color:transparent !important;
 }
 
 .lms-bottom-nav-button .v-btn__content {
- height:48px;
+ height:calc(var(--bottom-nav-height) - 2px);
  margin:0px;
  padding:0px;
 }
@@ -72,7 +87,12 @@
  overflow:hidden;
  text-overflow:ellipsis;
  max-width:100% !important;
- height:18px;
+ height:calc(var(--small-font-size) + 4px);
+ font-size:var(--small-font-size) !important;
+}
+
+.v-item-group.v-bottom-nav .v-btn--active, .v-item-group.v-bottom-nav .v-btn {
+ padding-top: 3px;
 }
 
 .lms-list {
@@ -93,6 +113,10 @@
  overflow:auto;
  backface-visibility:hidden;
  margin:0px;
+}
+
+.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+ padding:0 16px !important;
 }
 
 .lms-list-jump {
@@ -180,12 +204,12 @@
 }
 
 .vol-label {
- margin:0px;
+ margin:-8px 0px 0px 0px;
  padding:0px;
- font-size:12px;
+ font-size:calc(var(--small-font-size)/1.75);
  font-family:monospace, monospace;
  text-align:center;
- vertical-align:middle;
+ vertical-align:bottom;
  position:fixed;
  white-space:nowrap;
  overflow-x:hidden;
@@ -194,34 +218,55 @@
  height:18px !important;
  line-height:18px !important;
  top:38px;
- right:56px;
+ right:100px;
  z-index:-1;
- opacity:0.4;
+ opacity:var(--sub-opacity);
+}
+
+.vol-text {
+ font-size:var(--small-font-size);
+}
+
+.vol-btn {
+ margin-top:-8px;
+}
+
+.vol-slider {
+ margin:-8px 0px 0px 0px;
+ height:8px;
+}
+
+.vol-sheet {
+ padding:0px;
+ position:absolute;
+ top:var(--main-toolbar-height);
+ right:0px;
+ width:100vw;
+ max-width:450px;
+ z-index:2;
+}
+
+@media only screen and (max-width:500px) {
+.vol-sheet {
+  max-width:100vw;
+ }
+}
+
+.vol-sheet .v-card__actions {
+ margin-top:-16px;
 }
 
 #letterOverlay {
- z-index:2;
- position: fixed;
- top: calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)))/2) - 60px));
- left: 0;
- text-align:center;
- vertical-align:middle;
- font-size: 160px;
- line-height: 160px;
- width: 100%;
- pointer-events:none;
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)))/2) - 60px));
+ width:100%;
 }
 
 .ios-vcard-text-workaround {
- top:56px;
- height:calc((var(--vh, 1vh)*100) - 56px);
+ top:var(--main-toolbar-height);
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-.inactive-page {
- display:none;
-}
-
-.inactive-nav {
+.inactive-nav img {
  opacity:0.75;
 }
 
@@ -230,5 +275,24 @@
  height:22px !important;
  margin-bottom:4px;
  vertical-align:middle;
+}
+
+@media only screen and (max-width:800px) {
+ .lms-toolbar > .v-toolbar__content {
+  margin-left:-14px !important;
+  margin-right:-16px !important;
+ }
+
+ .subtoolbar {
+  padding:2px 0px 0px 4px;
+ }
+
+ .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+  padding:0 8px !important;
+ }
+
+ .vol-label {
+  right:92px;
+ }
 }
 

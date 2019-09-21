@@ -8,10 +8,16 @@
 var autoLayout = false;
 function checkLayout() {
     if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109
+        var changeTo=undefined;
         if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
-            window.location.href = "mobile";
+            changeTo = "mobile";
         } else if (window.innerWidth>=600 && /*(!IS_MOBILE || window.innerHeight>=600) &&*/ window.location.href.indexOf("/mobile")>1) {
-            window.location.href = "desktop";
+            changeTo = "desktop";
+        }
+        if (undefined!=changeTo) {
+            // Auto-changing view, so don't see default player!
+            setLocalStorageVal("useLastPlayer", true);
+            window.location.href = changeTo;
         }
     }
 }
@@ -28,6 +34,16 @@ function checkEntryFocus() {
 }
 
 function initApp(app) {
+    lmsUseLastPlayer = false;
+    if (window.location.href.indexOf('/mini')>=0) {
+        lmsUseLastPlayer = true;
+    } else if (pageWasReloaded()) {
+        lmsUseLastPlayer = true;
+    } else {
+        lmsUseLastPlayer = getLocalStorageBool('useLastPlayer', lmsUseLastPlayer);
+        removeLocalStorage('useLastPlayer');
+    }
+
     var storedTrans = getLocalStorageVal('translation', undefined);
     if (storedTrans!=undefined) {
         setTranslation(JSON.parse(storedTrans));
@@ -70,7 +86,26 @@ function initApp(app) {
         }
     });
 
-    if (window.location.href.indexOf('/mini')<0 && window.location.href.indexOf('/now-playing')<0) {
+    lmsCommand("", ["pref", "plugin.material-skin:composergenres", "?"]).then(({data}) => {
+        if (data && data.result && data.result._p2 != null) {
+            var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
+            if (genres.length>0) {
+                LMS_COMPOSER_GENRES = new Set(genres);
+                logJsonMessage("COMPOSER_GENRES", genres);
+            }
+        }
+    });
+    lmsCommand("", ["pref", "plugin.material-skin:conductorgenres", "?"]).then(({data}) => {
+        if (data && data.result && data.result._p2 != null) {
+            var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
+            if (genres.length>0) {
+                LMS_CONDUCTOR_GENRES = new Set(genres);
+                logJsonMessage("CONDUCTOR_GENRES", genres);
+            }
+        }
+    });
+
+    if (window.location.href.indexOf('/mini')<0 && window.location.href.indexOf('/now-playing')<0 && window.location.href.indexOf('auto=false')<0 ) {
         setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
     }
 
@@ -104,7 +139,7 @@ function initApp(app) {
 
     // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-application-closes-de-app
     window.addEventListener('load', function() {
-        window.history.pushState({ noBackExitsApp: true }, '')
+        window.history.pushState({ noBackExitsApp: true }, '');
     }, false);
 
     window.addEventListener('popstate', function(event) {

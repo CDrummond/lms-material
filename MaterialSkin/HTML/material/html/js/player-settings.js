@@ -21,12 +21,12 @@ Vue.component('lms-player-settings', {
 
   <v-card-text>
    <v-list two-line subheader class="settings-list">
-    <v-header>{{i18n('General')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
     <v-list-tile>
      <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
     </v-list-tile>
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Audio')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
     <v-list-tile>
      <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -38,13 +38,13 @@ Vue.component('lms-player-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
 
     <v-list-tile>
-     <v-btn @click="setSleep()" flat>{{i18n('Set sleep timer')}}</v-btn>
+     <v-btn @click="setSleep()" flat style="margin-left:-8px"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn>
     </v-list-tile>
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Alarms')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Alarms')}}</v-header>
      <v-list-tile>
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
@@ -62,7 +62,7 @@ Vue.component('lms-player-settings', {
       </v-list-tile>
       <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
      </template>
-     <v-btn flat icon @click.stop="addAlarm()" class="alarm-add"><v-icon>alarm_add</v-icon></v-btn>
+     <v-btn flat @click.stop="addAlarm()" class="alarm-add"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
      <div class="settings-sub-pad"></div>
      <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
      <v-list-tile>
@@ -80,9 +80,9 @@ Vue.component('lms-player-settings', {
   </v-card>
  </v-dialog>
 
- <v-dialog v-model="alarmDialog.show" width="500">
+ <v-dialog v-model="alarmDialog.show" width="500" persistent>
   <v-card>
-  <v-card-title>{{alarmDialog.id ? i18n("Edit Alarm") : i18n("Create Alarm")}}</v-card-title>
+  <v-card-title>{{alarmDialog.id ? i18n("Edit alarm") : i18n("Add alarm")}}</v-card-title>
   <v-list two-line subheader class="settings-list">
    <v-list-tile class="settings-compact-row">
     <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
@@ -97,19 +97,26 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Days')}}</v-subheader>
-   <v-list-tile class="settings-compact-row">
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
+   <v-list-tile class="settings-compact-row" v-if="wide">
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row">
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
+   <v-list-tile class="settings-compact-row" v-if="wide">
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row"><v-checkbox v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row">
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
+   <v-list-tile class="settings-compact-row"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide">
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
+    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
    </v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Options')}}</v-subheader>
    <v-list-tile>
@@ -169,7 +176,8 @@ Vue.component('lms-player-settings', {
                 repeat: false,
                 url: undefined,
                 shuffle: undefined
-            }
+            },
+            wide:true
         }
     },
     computed: {
@@ -229,6 +237,7 @@ Vue.component('lms-player-settings', {
             this.controlSleepTimer(playerStatus.will_sleep_in);
         },
         playerSettings(player) {
+            this.wide = window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370);
             this.cancelSleepTimer();
             this.dstmItems=[];
             this.crossfade='0';
@@ -423,7 +432,7 @@ Vue.component('lms-player-settings', {
             }
         },
         setSleep(duration) {
-            bus.$emit('dlg.open', 'sleep', this.player);
+            bus.$emit('dlg.open', 'sleep', {id: this.playerId, name: this.playerName});
         },
         cancelSleepTimer() {
             this.sleepTime = undefined;

@@ -21,10 +21,10 @@ var app = new Vue({
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         initApp(this);
-        bus.$on('dlg.open', function(name, a, b) {
+        bus.$on('dlg.open', function(name, a, b, c) {
             this.dialogs[name] = true; // Mount
             this.$nextTick(function () {
-                bus.$emit(name+".open", a, b);
+                bus.$emit(name+".open", a, b, c);
             });
         }.bind(this));
     },

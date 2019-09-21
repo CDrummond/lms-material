@@ -6,6 +6,8 @@
  */
 
 const PLAYER_STATUS_TAGS = "tags:cdegloyrstAKNS";
+var lmsOptions = {noGenreFilter: getLocalStorageBool('noGenreFilter', false),
+                  noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];
@@ -39,18 +41,6 @@ setInterval(function() {
     lastTime = currentTime;
 }, 2000);
 
-function isHidden() {
-    var prop = getHiddenProp();
-    return prop ? document[prop] : false;
-}
-
-/* If we become visibilty, refresh player status */
-function visibilityChanged() {
-    if (!isHidden()) {
-        bus.$emit('refreshStatus');
-    }
-}
-
 var lmsFavorites = new Set();
 var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
@@ -82,6 +72,36 @@ if (isAndroid()) { // currently only need to check current IP address to detect 
             }
         })();
     } catch(e) {
+    }
+}
+
+function isHidden() {
+    var prop = getHiddenProp();
+    return prop ? document[prop] : false;
+}
+
+var lmsIsConnected = undefined;
+var lmsConnectionCheckDelay = undefined;
+var lmsLastFocusOrVisibilityChange = undefined;
+
+function visibilityOrFocusChanged() {
+    lmsLastFocusOrVisibilityChange = (new Date()).getTime();
+
+    if (document.hasFocus() || !isHidden()) {
+        // 250ms after we get focus, check that we are connected, if not try to connect
+        if (!lmsIsConnected) {
+            if (undefined!=lmsConnectionCheckDelay) {
+                clearTimeout(lmsConnectionCheckDelay);
+            }
+            lmsConnectionCheckDelay = setTimeout(function () {
+                lmsConnectionCheckDelay = undefined;
+                if (!lmsIsConnected) {
+                    bus.$emit("reconnect");
+                }
+            }, 250);
+        } else if (IS_MOBILE) { // If we become visibilty, refresh player status
+            bus.$emit('refreshStatus');
+        }
     }
 }
 
@@ -127,6 +147,10 @@ async function lmsListFragment(playerid, command, params, start, fagmentSize, ba
             } else {
                 return lmsListFragment(playerid, command, params, start+fagmentSize, fagmentSize, batchSize, accumulated);
             }
+        } else {
+            return new Promise(function(resolve, reject) {
+                resolve({data:accumulated});
+            });
         }
     });
 }
@@ -236,13 +260,16 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         connectToCometD() {
+            lmsIsConnected = undefined; // Not connected, or disconnected...
             if (this.cometd) {
+                this.cometd.clearSubscriptions();
                 this.cometd.disconnect();
+                delete this.cometd;
             }
             this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
             this.cometd = new org.cometd.CometD();
-            this.cometd.setMaxBackoff(5000); // Max of 5 seconds between retries
+            this.cometd.setMaxBackoff(5000); // Max seconds between retries
             this.cometd.init({url: '/cometd', logLevel:'off'});
 
             this.cometd.addListener('/meta/handshake', (message) => {
@@ -299,7 +326,7 @@ var lmsServer = Vue.component('lms-server', {
                         players.push({ id: i.playerid,
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),
-                                       ison: 1==parseInt(i.power),
+                                       ison: undefined==i.power || 1==parseInt(i.power),
                                        isgroup: 'group'===i.model
                                       });
                         // Check if we have a local SB Player - if so, can't use MediaSession
@@ -350,15 +377,17 @@ var lmsServer = Vue.component('lms-server', {
                 return;
             }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
-            var player = { ison: 1==parseInt(data.power),
+            var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
+                           digital_volume_control: 1==parseInt(data.digital_volume_control),
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                            current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,
                            synced: data.sync_master || data.sync_slaves,
                            issyncmaster: data.sync_master == playerId,
                            syncmaster: data.sync_master,
+                           syncslaves: data.sync_slaves ? data.sync_slaves.split(",") : [],
                            id: playerId,
                            name: data.player_name
                          };
@@ -645,14 +674,6 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
 
-        /* Add an event handler to be called when visibiity changes - so that we can immediately refresh status */
-        if (IS_MOBILE) {
-            var prop = getHiddenProp();
-            if (prop) {
-                document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityChanged);
-            }
-        }
-
         bus.$on('playersRemoved', function(players) {
             if (this.subscribeAll) {
                 for (var i=0, len=players.length; i<len; ++i) {
@@ -664,6 +685,29 @@ var lmsServer = Vue.component('lms-server', {
             if (this.subscribeAll) {
                 for (var i=0, len=players.length; i<len; ++i) {
                     this.subscribe(players[i]);
+                }
+            }
+        }.bind(this));
+
+        // Add event listners for focus change, so that we can do an immediate reconect
+        var prop = getHiddenProp();
+        if (prop) {
+            document.addEventListener(prop.replace(/[H|h]idden/,'') + 'visibilitychange', visibilityOrFocusChanged);
+        }
+        window.addEventListener("focus", visibilityOrFocusChanged);
+
+        // Store connection state, so that focus handler can act accordingly
+        bus.$on('networkStatus', function(connected) {
+            var statusChanged = lmsIsConnected!=connected;
+
+            // Store connection state, so that visibility handler can act accordingly
+            lmsIsConnected = connected;
+
+            // Force reconnect if disconnect received between .25 and 1.5s after visibility change
+            if (statusChanged && !lmsIsConnected && undefined!=lmsLastFocusOrVisibilityChange) {
+                var currentTime = (new Date()).getTime();
+                if (currentTime > (lmsLastFocusOrVisibilityChange+250) && currentTime < (lmsLastFocusOrVisibilityChange + 1500)) {
+                    this.connectToCometD();
                 }
             }
         }.bind(this));

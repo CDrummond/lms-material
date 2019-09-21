@@ -119,7 +119,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
-    <v-subheader v-if="item.header">{{item.header}}</v-subheader>
+    <v-list-tile-content v-if="item.header"><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
@@ -141,7 +141,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <p v-else-if="item.type=='text'" class="browse-text lms-list-item" v-html="item.title"></p>
-   <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id))) && !item.header" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
+   <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+   <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -719,7 +720,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         click(item, index, event) {
-            if (this.fetchingItems) {
+            if (this.fetchingItems || item.header || "search"==item.type || "entry"==item.type) {
                  return;
             }
             if (this.menu.show) {
@@ -735,9 +736,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if ((item.section == SECTION_PRESETS && item.id!=TOP_PRESETS_ID) || (item.isPinned && undefined!=item.url)) { // Radio
                 this.itemMenu(item, index, event);
-                return;
-            }
-            if ("search"==item.type || "entry"==item.type) {
                 return;
             }
             if ("image"==item.type) {

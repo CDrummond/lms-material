@@ -1067,6 +1067,12 @@ div.v-subheader {
  min-width:28px !important;
 }
 
+.browse-header {
+ font-weight:var(--bold-weight);
+ font-size:var(--std-font-size) !important;
+ opacity:var(--sub-opacity);
+}
+
 .queue-action {
  min-width:44px !important;
 }

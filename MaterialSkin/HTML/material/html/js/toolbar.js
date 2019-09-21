@@ -176,7 +176,7 @@ Vue.component('lms-toolbar', {
    </template>
   </v-list>
  </v-menu>
- <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);" class="toolbar-button">
+ <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);">
   <v-icon color="red">error</v-icon>
  </v-btn>
 </v-toolbar>

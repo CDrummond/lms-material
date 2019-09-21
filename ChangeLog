@@ -19,6 +19,8 @@
     now playing page.
 12. Fix missing headers in search results.
 13. Fix 'undefined Items' when refreshing some lists.
+14. Always indent player names if more than 1 player, or players on another
+    server - makes headers more obvious.
 
 1.0.0
 -----

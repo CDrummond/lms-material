@@ -155,11 +155,13 @@ Vue.component('lms-groupplayers-dialog', {
                 lmsCommand(this.player.id, ['name', name]).then(({data}) => {
                     lmsCommand("", cmd).then(({data}) => {
                         bus.$emit('refreshServerStatus');
+                        lmsCommand(this.player.id, ["material-skin-modes", "set-group"]);
                         this.show=false;
                     });
                 });
             } else {
                 lmsCommand("", cmd).then(({data}) => {
+                    lmsCommand(this.player.id, ["material-skin-modes", "set-group"]);
                     this.show=false;
                 });
             }
@@ -172,6 +174,9 @@ Vue.component('lms-groupplayers-dialog', {
             lmsCommand("", ['playergroups', 'add', 'name:'+name, 'members:'+this.chosenPlayers.join(','),
                             'powerMaster:'+(this.options.powerMaster ? 1 : 0), 'powerPlay:'+(this.options.powerPlay ? 1 : 0)]).then(({data}) => {
                 bus.$emit('refreshServerStatus', 1000);
+                if (data && data.result && data.result.id) {
+                    lmsCommand(data.result.id, ["material-skin-modes", "set-group"]);
+                }
                 this.show=false;
             });
         },

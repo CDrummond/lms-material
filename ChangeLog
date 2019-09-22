@@ -1,3 +1,7 @@
+1.0.2
+-----
+1. Simplify volume change logic.
+
 1.0.1
 -----
  1. Allow items from within 'Radio', and browse modes containing genre_id to be

@@ -1,6 +1,7 @@
 1.0.2
 -----
-1. Simplify volume change logic.
+1. Simplify volume change logic. Previously any changes that occured within 1/2
+   second of our change would be ignored.
 
 1.0.1
 -----

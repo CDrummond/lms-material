@@ -13,7 +13,7 @@
  7. Add Russian translation - thanks to sky418.
  8. Reduce list item height by 3px, so that it's the same as subtoolbar height.
     This allows initial lists in desktop layout to be balanced.
- 9. With must be 25% more than height to be classified as landscape.
+ 9. Width must be 25% more than height to be classified as landscape.
 10. Check landscape setting of now-playing 1 second after mounted.
 11. Fix toolbar layout when using mobile in landscape with song info showing on
     now playing page.

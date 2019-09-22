@@ -38,14 +38,12 @@ Vue.component('lms-volume', {
     mounted() {
         this.closeTimer = undefined;
         this.playerVolumeCurrent = -1;
-        this.playerVolumePrev = -1;
         bus.$on('playerStatus', function(playerStatus) {
             if (this.show) {
                 this.muted = playerStatus.volume<0;
                 var vol = Math.abs(playerStatus.volume);
-                if (vol!=this.playerVolume && vol!=this.playerVolumePrev && (!this.lastUpdate || ((new Date())-this.lastUpdate)>500)) {
+                if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
-                    this.lastUpdate = new Date();
                 }
             }
         }.bind(this));
@@ -61,7 +59,6 @@ Vue.component('lms-volume', {
                     this.muted = vol<0;
                     vol = Math.abs(vol);
                     this.playerVolumeCurrent = vol;
-                    this.playerVolumePrev = vol;
                     this.playerVolume = vol;
                     this.show = true;
                     this.resetCloseTimer();
@@ -125,9 +122,7 @@ Vue.component('lms-volume', {
         'playerVolume': function(newVal) {
             if (this.show && newVal>=0 && this.playerVolumeCurrent !== newVal) {
                 this.resetCloseTimer();
-                this.playerVolumePrev = this.playerVolumeCurrent;
                 this.playerVolumeCurrent = newVal;
-                this.lastUpdate = new Date();
                 bus.$emit('playerCommand', ["mixer", "volume", newVal]);
             }
         },

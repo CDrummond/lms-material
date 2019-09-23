@@ -7,7 +7,6 @@
 
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
-var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
@@ -428,11 +427,10 @@ Vue.component('lms-toolbar', {
         initItems() {
             TB_UI_SETTINGS.title=i18n('Settings');
             TB_PLAYER_SETTINGS.title=i18n('Player settings');
-            TB_SERVER_SETTINGS.title=i18n('Server settings');
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MINI_PLAYER.title=i18n('Open mini-player');
-            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
+            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_INFO ];
             if (this.desktop && !this.mini & !IS_MOBILE) {
                 this.menuItems.push(DIVIDER);
                 this.menuItems.push(TB_MINI_PLAYER);
@@ -449,9 +447,7 @@ Vue.component('lms-toolbar', {
             }
         },
         menuAction(id) {
-            if (TB_SERVER_SETTINGS.id==id) {
-                serverSettings();
-            } else if (TB_UI_SETTINGS.id==id) {
+            if (TB_UI_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'playersettings');

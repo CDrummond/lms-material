@@ -24,6 +24,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
+    <v-btn v-if="updates.plugins.length>0" @click="serverSettings()" flat>{{i18n('Server Settings')}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -130,7 +131,7 @@ Vue.component('lms-information-dialog', {
                     for (var i=0, len=data.result.plugins_loop.length; i<len; ++i) {
                         this.plugins.names.add(data.result.plugins_loop[i].name);
                     }
-                    this.plugins.details = data.result.plugins_loop;         
+                    this.plugins.details = data.result.plugins_loop;
                     this.plugins.details.sort(titleSort);
                 }
             });

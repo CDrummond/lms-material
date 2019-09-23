@@ -44,13 +44,15 @@ Vue.component('lms-information-dialog', {
    <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Plugins')}}</p>
-   <p v-if="updates.plugins.length>0">{{i18n('The following plugins have updates available:')}}</p>
-   <p v-else-if="undefined!=updates.error">{{updates.error}}</p>
-   <p v-else>{{i18n('All plugins up to date.')}}</p>
-   <ul v-if="updates.plugins.length>0">
-    <template v-for="(plug, index) in updates.plugins"><li v-if="plug">{{plug.title}}</li></template>
+   <p v-if="updates.size>0">{{i18n('The following plugins have updates available:')}}</p>
+   <ul v-if="updates.size>0">
+    <template v-for="(plug, index) in plugins"><li v-if="updates.has(plug.name)">{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
    </ul>
-   <v-btn v-if="updates.plugins.length>0" @click="serverSettings('SETUP_PLUGINS')" flat>{{i18n('Server Settings')}}</v-btn>
+   <v-btn v-if="updates.size>0" @click="serverSettings('SETUP_PLUGINS')" flat>{{i18n('Server Settings')}}</v-btn>
+   <p v-if="updates.size>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
+   <ul>
+    <template v-for="(plug, index) in plugins"><li v-if="!updates.has(plug.name)">{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
+   </ul>
    <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Players')}}</p>
@@ -93,11 +95,12 @@ Vue.component('lms-information-dialog', {
             server: [],
             library: [],
             players: [],
+            plugins: [],
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
                        {title:undefined, prompt:undefined, command: ["rescan"]},
                        {title:undefined, prompt:undefined, command: ["rescan", "playlists"]} ],
             scanning: false,
-            updates: { plugins: [], error:undefined }
+            updates: new Set()
         }
     },
     mounted() {
@@ -116,16 +119,23 @@ Vue.component('lms-information-dialog', {
                 this.update();
             }.bind(this), 2000);
             this.show = true;
+            lmsCommand("", ["material-skin", "plugins"]).then(({data}) => {
+                if (data && data.result && data.result.plugins_loop) {
+                    this.plugins = data.result.plugins_loop;
+                    this.plugins.sort(titleSort);
+                }
+            });
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
-                this.updates = eval(resp.data);
-                if (!this.updates || !this.updates.plugins) {
-                    this.updates = { plugins: [] };
-                } else if (this.updates && this.updates.plugins && 1==this.updates.plugins.length && null==this.updates.plugins[0]) {
-                    this.updates.plugins=[];
-                    this.updates.error=i18n('Failed to determine plugin status.');
+                var updates = eval(resp.data);
+                this.updates.clear();
+                if (updates && updates.plugins) {
+                    for (var i=0, len=updates.plugins.length; i<len; ++i) {
+                        this.updates.add(updates.plugins[i].name);
+                    }
+                    this.$forceUpdate();
                 }
             }).catch(err => {
-                this.updates.error=i18n('Failed to determine plugin status.');
+                this.updates.clear();
                 logError(err);
             });
         }.bind(this));
@@ -214,6 +224,9 @@ Vue.component('lms-information-dialog', {
                     lmsCommand("", command)
                 }
             });
+        },
+        pluginInfo(plugin) {
+            bus.$emit('dlg.open', 'iteminfo', plugin);
         },
         i18n(str) {
             if (this.show) {

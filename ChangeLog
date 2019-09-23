@@ -9,6 +9,7 @@
 7. When creating, or editing, a group, set browse modes to the enabled modes
    from all members.
 8. List all active plugins in 'Information' dialog.
+9. Add updating of plugins to 'Information' dialog.
 
 1.0.2
 -----

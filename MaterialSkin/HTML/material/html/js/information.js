@@ -44,14 +44,17 @@ Vue.component('lms-information-dialog', {
    <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Plugins')}}</p>
-   <p v-if="updates.size>0">{{i18n('The following plugins have updates available:')}}</p>
-   <ul v-if="updates.size>0">
-    <template v-for="(plug, index) in plugins"><li v-if="updates.has(plug.name)">{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
+   <p v-if="'idle'==pluginStatus && updates.details.length>0">{{i18n('The following plugins have updates available:')}}</p>
+   <p v-if="'needs_restart'==pluginStatus && updates.details.length>0">{{i18n('The following plugins have been updated:')}}</p>
+   <ul v-if="'downloading'!=pluginStatus && updates.details.length>0">
+    <template v-for="(plug, index) in updates.details"><li>{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
    </ul>
-   <v-btn v-if="updates.size>0" @click="serverSettings('SETUP_PLUGINS')" flat>{{i18n('Server Settings')}}</v-btn>
-   <p v-if="updates.size>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
+   <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus" @click="updatePlugins" flat>{{i18n('Update all plugins')}}</v-btn>
+   <p v-if="'downloading'==pluginStatus">{{i18n('Downloading plugin updates')}}</p>
+   <v-btn v-if="'needs_restart'==pluginStatus" @click="restartServer" flat>{{i18n('Restart server')}}</v-btn>
+   <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
    <ul>
-    <template v-for="(plug, index) in plugins"><li v-if="!updates.has(plug.name)">{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
+    <template v-for="(plug, index) in plugins.details"><li v-if="'downloading'==pluginStatus || !updates.names.has(plug.name)">{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
    </ul>
    <div class="dialog-padding"></div>
 
@@ -95,12 +98,13 @@ Vue.component('lms-information-dialog', {
             server: [],
             library: [],
             players: [],
-            plugins: [],
+            plugins: {names: new Set(), details: []},
+            updates: {names: new Set(), details: []},
+            pluginStatus:'idle',
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
                        {title:undefined, prompt:undefined, command: ["rescan"]},
                        {title:undefined, prompt:undefined, command: ["rescan", "playlists"]} ],
-            scanning: false,
-            updates: new Set()
+            scanning: false
         }
     },
     mounted() {
@@ -120,24 +124,33 @@ Vue.component('lms-information-dialog', {
             }.bind(this), 2000);
             this.show = true;
             lmsCommand("", ["material-skin", "plugins"]).then(({data}) => {
+                this.plugins.names.clear();
+                this.plugins.details = [];
                 if (data && data.result && data.result.plugins_loop) {
-                    this.plugins = data.result.plugins_loop;
-                    this.plugins.sort(titleSort);
+                    for (var i=0, len=data.result.plugins_loop.length; i<len; ++i) {
+                        this.plugins.names.add(data.result.plugins_loop[i].name);
+                    }
+                    this.plugins.details = data.result.plugins_loop;         
+                    this.plugins.details.sort(titleSort);
                 }
             });
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
                 var updates = eval(resp.data);
-                this.updates.clear();
+                this.updates.names.clear();
+                this.updates.details = [];
                 if (updates && updates.plugins) {
                     for (var i=0, len=updates.plugins.length; i<len; ++i) {
-                        this.updates.add(updates.plugins[i].name);
+                        this.updates.names.add(updates.plugins[i].name);
                     }
+                    this.updates.details = updates.plugins;
+                    this.updates.details.sort(titleSort);
                     this.$forceUpdate();
                 }
             }).catch(err => {
-                this.updates.clear();
+                this.updates.names.clear();
                 logError(err);
             });
+
         }.bind(this));
 
         bus.$on('langChanged', function() {
@@ -155,6 +168,19 @@ Vue.component('lms-information-dialog', {
             this.rescans[2].prompt=i18n("Rescan for playlist changes?");
         },
         update() {
+            lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
+                if (data && data.result) {
+                    var status='idle';
+                    if (1 == parseInt(data.result.downloading)) {
+                        status='downloading';
+                    } else if (1 == parseInt(data.result.needs_restart)) {
+                        status='needs_restart';
+                    }
+                    if (status!=this.pluginStatus) {
+                        this.pluginStatus = status;
+                    }
+                }
+            });
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var prevStrengths={};
@@ -227,6 +253,23 @@ Vue.component('lms-information-dialog', {
         },
         pluginInfo(plugin) {
             bus.$emit('dlg.open', 'iteminfo', plugin);
+        },
+        updatePlugins() {
+            lmsCommand("", ["material-skin", "plugins-update", "plugins:"+JSON.stringify(this.updates.details)]).then(({data}) => {
+                if (data && data.result && undefined!=data.result.updating && parseInt(data.result.updating)>0) {
+                    bus.$emit('showMessage', i18n('Updating plugins.'));
+                    this.update();
+                }
+            });
+        },
+        restartServer() {
+            lmsCommand("", ["restartserver"]).then(({data}) => {
+                this.close();
+                bus.$emit('showMessage', i18n('Server is being restarted.'));
+            }).catch(err => {
+                this.close();
+                bus.$emit('showMessage', i18n('Server is being restarted.'));
+            });
         },
         i18n(str) {
             if (this.show) {

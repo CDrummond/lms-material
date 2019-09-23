@@ -2,6 +2,7 @@
 -----
 1. Simplify volume change logic. Previously any changes that occured within 1/2
    second of our change would be ignored.
+2. Fix saving of pinned item list to new user defaults.
 
 1.0.1
 -----

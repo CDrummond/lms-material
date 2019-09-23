@@ -241,7 +241,7 @@ Vue.component('lms-information-dialog', {
     },
     filters: {
         svgIcon: function (name, dark) {
-            return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

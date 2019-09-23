@@ -12,7 +12,8 @@ Vue.component('lms-info-dialog', {
   <v-card-text>
   <template v-for="(item, index) in details">
    <v-header class="item-info-header">{{item.title}}</v-header>
-   <p class="item-info-text">{{item.text}}</p>
+   <p v-if="item.link" class="item-info-text"><a class="lms-link" :href="item.text" target="_blank">{{item.text}}</a></p>
+   <p v-else class="item-info-text">{{item.text}}</p>
    </template>
   </v-card-text>
   <v-card-actions>
@@ -37,10 +38,21 @@ Vue.component('lms-info-dialog', {
             if (item.descr) {
                 this.details.push({title: i18n("Description"), text: item.descr});
             }
+            if (item.version) {
+                this.details.push({title: i18n("Version"), text: item.version});
+            }
+            if (item.creator) {
+                this.details.push({title: i18n("Creator"), text: item.creator});
+            }
+            if (item.email) {
+                this.details.push({title: i18n("E-Mail"), text: item.email});
+            }
             if (item.url) {
                 this.details.push({title: i18n("URL"), text: item.url});
-            } else if (item.id.startsWith("http")) {
-                this.details.push({title: i18n("URL"), text: item.id});
+            } else if (undefined!=item.id && item.id.startsWith("http")) {
+                this.details.push({title: i18n("URL"), text: item.id, link:true});
+            } else if (item.homepage) {
+                this.details.push({title: i18n("Homepage"), text: item.homepage, link:true});
             }
             this.show=true
         }.bind(this));

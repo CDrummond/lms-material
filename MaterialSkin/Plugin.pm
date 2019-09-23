@@ -150,7 +150,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -312,6 +312,23 @@ sub _cliCommand {
                 return;
             }
         }
+    }
+
+    if ($cmd eq 'plugins') {
+        my ($current, $active, $inactive, $hide) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
+        my $cnt = 0;
+        foreach my $plugin (@{$active}) {
+            $request->addResultLoop("plugins_loop", $cnt, "name", $plugin->{name});
+            $request->addResultLoop("plugins_loop", $cnt, "title", $plugin->{title});
+            $request->addResultLoop("plugins_loop", $cnt, "descr", $plugin->{desc});
+            $request->addResultLoop("plugins_loop", $cnt, "creator", $plugin->{creator});
+            $request->addResultLoop("plugins_loop", $cnt, "homepage", $plugin->{homepage});
+            $request->addResultLoop("plugins_loop", $cnt, "email", $plugin->{email});
+            $request->addResultLoop("plugins_loop", $cnt, "version", $plugin->{version});
+            $cnt++;
+        }
+        $request->setStatusDone();
+        return;
     }
 
     $request->setStatusBadParams();

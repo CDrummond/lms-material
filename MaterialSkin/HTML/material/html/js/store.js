@@ -149,7 +149,8 @@ const store = new Vuex.Store({
         sortHome: isIPhone(),
         hidden: new Set(),
         visibleMenus: new Set(),
-        swipeVolume: true
+        swipeVolume: true,
+        pluginUpdatesAvailable: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -412,6 +413,9 @@ const store = new Vuex.Store({
                 state.visibleMenus.delete(val.name);
             }
             lmsNumVisibleMenus = state.visibleMenus.size;
+        },
+        setPluginUpdatesAvailable(state, val) {
+            state.pluginUpdatesAvailable = val;
         }
     }
 })

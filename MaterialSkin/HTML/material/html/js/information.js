@@ -146,11 +146,11 @@ Vue.component('lms-information-dialog', {
                     this.updates.details.sort(titleSort);
                     this.$forceUpdate();
                 }
+                this.$store.commit('setPluginUpdatesAvailable', updates && updates.plugins && updates.plugins.length>0);
             }).catch(err => {
                 this.updates.names.clear();
                 logError(err);
             });
-
         }.bind(this));
 
         bus.$on('langChanged', function() {

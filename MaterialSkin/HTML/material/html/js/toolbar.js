@@ -146,7 +146,7 @@ Vue.component('lms-toolbar', {
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon><v-icon v-if="pluginUpdatesAvailable" class="active-btn">info</v-icon><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -605,6 +605,9 @@ Vue.component('lms-toolbar', {
         },
         menuVisible() {
             return this.$store.state.visibleMenus.size>0
+        },
+        pluginUpdatesAvailable() {
+            return this.$store.state.pluginUpdatesAvailable
         }
     },
     filters: {

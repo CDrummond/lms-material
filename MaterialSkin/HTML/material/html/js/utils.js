@@ -343,8 +343,12 @@ function openWindow(page) {
     window.open(page, '_blank');
 }
 
-function serverSettings(page) {
-    openWindow('../Default/settings/index.html' + (page ? '?activePage='+page : ''));
+function serverSettings() {
+    if (IS_MOBILE) {
+        openWindow('../Classic/settings/server/basic.html');
+    } else {
+        openWindow('../Default/settings/index.html');
+    }
 }
 
 function fixId(id, prefix) {

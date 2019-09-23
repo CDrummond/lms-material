@@ -12,6 +12,9 @@
  9. Add updating of plugins to 'Information' dialog.
 10. Remove 'Server settings' from main menu, make accessible from 'Information'
     dialog.
+11. Check for plugin updates 1/2 second after connecting to server, and every
+    30 minutes thereafter. Replace main menu icon with blue info icon to
+    indicate updates available.
 
 1.0.2
 -----

@@ -3,6 +3,9 @@
 1. Simplify volume change logic. Previously any changes that occured within 1/2
    second of our change would be ignored.
 2. Fix saving of pinned item list to new user defaults.
+3. When listing album tracks, need to pass "artist_id:ID" regardless of the role
+   filter being set or not. 2nd attempt at fix - ignore filters when checking
+   to add.
 
 1.0.1
 -----

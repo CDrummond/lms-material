@@ -530,7 +530,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             resp.canUseGrid = true;
             var jumpListYear = false;
             var params = [];
-            if (data.params && data.params.length>1 && (!lmsOptions.noRoleFilter || !lmsOptions.noGenreFilter)) {
+            if (data.params && data.params.length>1) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();

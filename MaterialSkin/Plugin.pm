@@ -150,7 +150,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -329,6 +329,28 @@ sub _cliCommand {
         }
         $request->setStatusDone();
         return;
+    }
+
+    if ($cmd eq 'plugins-status') {
+        $request->addResult("needs_restart", Slim::Utils::PluginManager->needsRestart ? 1 : 0);
+        $request->addResult("downloading", Slim::Utils::PluginDownloader->downloading ? 1 : 0);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'plugins-update') {
+        my $json = $request->getParam('plugins');
+        if ($json) {
+            my $updating = 0;
+            my $plugins = eval { from_json( $json ) };
+            for my $plugin (@{$plugins}) {
+                Slim::Utils::PluginDownloader->install({ name => $plugin->{'name'}, url => $plugin->{'url'}, sha => $plugin->{'sha'} });
+                $updating++;
+            }
+            $request->addResult("updating", $updating);
+            $request->setStatusDone();
+            return;
+        }
     }
 
     $request->setStatusBadParams();

@@ -344,11 +344,7 @@ function openWindow(page) {
 }
 
 function serverSettings() {
-    if (IS_MOBILE) {
-        openWindow('../Classic/settings/server/basic.html');
-    } else {
-        openWindow('../Default/settings/index.html');
-    }
+    openWindow('../Default/settings/index.html');
 }
 
 function fixId(id, prefix) {

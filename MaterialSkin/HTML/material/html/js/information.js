@@ -115,7 +115,6 @@ Vue.component('lms-information-dialog', {
                     var inf = JSON.parse(data.result.info);
                     if (inf && inf.server) {
                         this.server=inf.server;
-                        this.server.push({ label: i18n('Material Skin'), text:""+LMS_MATERIAL_REVISION});
                     }
                 }
             });

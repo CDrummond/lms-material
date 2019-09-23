@@ -12,7 +12,6 @@
  9. Add updating of plugins to 'Information' dialog.
 10. Remove 'Server settings' from main menu, make accessible from 'Information'
     dialog.
-11. Use Classic skin for server setting on mobile device.
 
 1.0.2
 -----

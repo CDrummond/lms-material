@@ -197,7 +197,7 @@ Vue.component('lms-toolbar', {
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
                  infoOpen: false,
                  largeView: false,
-                 playerVolume: {val: -1, current:-1, prev:-1, lastUpdate:undefined, muted:false},
+                 playerVolume: {val: -1, current:-1, muted:false},
                  snackbar:{ show: false, msg: undefined},
                  connected: true
                }
@@ -271,15 +271,10 @@ Vue.component('lms-toolbar', {
             if (this.desktop) {
                 var muted = playerStatus.volume < 0;
                 var val = playerStatus.volume<0 ? -1*playerStatus.volume : playerStatus.volume;
-                if (undefined==this.playerVolume.id ||
-                     this.$store.state.player.id!=this.playerVolume.id ||
-                     this.playerVolume.muted != muted ||
-                    ((val!=this.playerVolume.val && val!=this.playerVolume.prev &&
-                    (!this.playerVolume.lastUpdate || ((new Date())-this.playerVolume.lastUpdate)>500)))) {
+                if (undefined==this.playerVolume.id || this.$store.state.player.id!=this.playerVolume.id || this.playerVolume.muted != muted || val!=this.playerVolume.val) {
                     this.playerVolume.current = val;
                     this.playerVolume.val = val;
                     this.playerVolume.muted = muted;
-                    this.playerVolume.lastUpdate = new Date();
                     this.playerVolume.id = this.$store.state.player.id;
                 }
             }
@@ -629,9 +624,7 @@ Vue.component('lms-toolbar', {
                 if (this.$store.state.visibleMenus.size>0) {
                     bus.$emit('resetToolbarVolume');
                 } else {
-                    this.playerVolume.prev = this.playerVolume.current;
                     this.playerVolume.current = newVal;
-                    this.playerVolume.lastUpdate = new Date();
                     bus.$emit('playerCommand', ["mixer", "volume", newVal]);
                 }
             }

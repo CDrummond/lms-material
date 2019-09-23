@@ -24,7 +24,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn v-if="updates.plugins.length>0" @click="serverSettings()" flat>{{i18n('Server Settings')}}</v-btn>
+    <v-btn @click="serverSettings()" flat>{{i18n('Server Settings')}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 

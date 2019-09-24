@@ -96,6 +96,10 @@ a {
  padding-right:8px;
 }
 
+.pmgr-button {
+ margin-left:0px;
+}
+
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
  height:40px;

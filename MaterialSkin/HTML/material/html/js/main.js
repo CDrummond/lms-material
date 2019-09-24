@@ -48,6 +48,12 @@ var app = new Vue({
         }
     },
     methods: {
+        swipeLeft(ev) {
+            this.swipe(ev, 'l');
+        },
+        swipeRight(ev) {
+            this.swipe(ev, 'r');
+        },
         swipe(ev, direction) {
             if (this.$store.state.visibleMenus.size>0) {
                 return;

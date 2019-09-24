@@ -732,6 +732,7 @@ progress {
 
 .pq-time {
  font-size:var(--small-font-size);
+ margin-top:calc(18px - var(--small-font-size));
  margin-right:-16px;
  opacity:var(--sub-opacity);
  min-width:44px;

@@ -17,7 +17,7 @@ Vue.component('lms-information-dialog', {
     </v-toolbar-title>
    </v-toolbar>
   </v-card-title>
-  <div class="ios-vcard-text-workaround"><div class="infodetails">
+  <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">
 
    <div v-if="server.length>0">
     <p class="about-header">{{i18n('Server')}}</p>
@@ -42,7 +42,7 @@ Vue.component('lms-information-dialog', {
      </template>
     </v-list>
    </v-menu>
-   <div class="dialog-padding"></div>
+   <div class="dialog-padding" id="info-plugins"></div>
 
    <p class="about-header">{{i18n('Plugins')}}</p>
    <p v-if="'idle'==pluginStatus && updates.details.length>0">{{i18n('The following plugins have updates available:')}}</p>
@@ -124,6 +124,7 @@ Vue.component('lms-information-dialog', {
             }.bind(this), 2000);
             this.show = true;
             lmsCommand("", ["material-skin", "plugins"]).then(({data}) => {
+                var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
                 this.plugins.names.clear();
                 this.plugins.details = [];
                 if (data && data.result && data.result.plugins_loop) {
@@ -133,8 +134,12 @@ Vue.component('lms-information-dialog', {
                     this.plugins.details = data.result.plugins_loop;
                     this.plugins.details.sort(titleSort);
                 }
+                if (!hadPlugins && this.$store.state.pluginUpdatesAvailable) {
+                    this.scrollToPlugins();
+                }
             });
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
+                var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
                 var updates = eval(resp.data);
                 this.updates.names.clear();
                 this.updates.details = [];
@@ -147,10 +152,14 @@ Vue.component('lms-information-dialog', {
                     this.$forceUpdate();
                 }
                 this.$store.commit('setPluginUpdatesAvailable', updates && updates.plugins && updates.plugins.length>0);
+                if (!hadPlugins && this.$store.state.pluginUpdatesAvailable) {
+                    this.scrollToPlugins();
+                }
             }).catch(err => {
                 this.updates.names.clear();
                 logError(err);
             });
+            this.scrollToPlugins();
         }.bind(this));
 
         bus.$on('langChanged', function() {
@@ -166,6 +175,14 @@ Vue.component('lms-information-dialog', {
             this.rescans[1].prompt=i18n("Look for new, and modified, files?");
             this.rescans[2].title=i18n("Update playlists");
             this.rescans[2].prompt=i18n("Rescan for playlist changes?");
+        },
+        scrollToPlugins() {
+            if (this.$store.state.pluginUpdatesAvailable) {
+                var plugins = document.getElementById("info-plugins");
+                if (plugins) {
+                    plugins.scrollIntoView(true);
+                }
+            }
         },
         update() {
             lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {

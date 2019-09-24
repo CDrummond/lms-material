@@ -155,8 +155,11 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="menuAction(item.id)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-avatar v-if="menuIcons"><v-icon v-bind:class="{'active-btn':TB_INFO.id==item.id && pluginUpdatesAvailable}">{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content>
+      <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      <v-list-tile-sub-title v-if="TB_INFO.id==item.id && pluginUpdatesAvailable">{{trans.pluginUpdatesAvailable}}</v-list-tile-sub-title>
+     </v-list-tile-content>
     </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
@@ -193,7 +196,8 @@ Vue.component('lms-toolbar', {
                  showMainMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
-                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
+                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
+                        otherServerPlayers:undefined, pluginUpdatesAvailable:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, muted:false},
@@ -436,10 +440,9 @@ Vue.component('lms-toolbar', {
                 this.menuItems.push(TB_MINI_PLAYER);
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
-                          info:i18n("Show current track information"),
-                          showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
-                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players")};
+                          info:i18n("Show current track information"), showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
+                          startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'), groupPlayers:("Group Players"),
+                          standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

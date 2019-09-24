@@ -26,6 +26,8 @@
 3. When listing album tracks, need to pass "artist_id:ID" regardless of the role
    filter being set or not. 2nd attempt at fix - ignore filters when checking
    to add.
+4. Fix missing SVG icons when Material is set as default, and desktop/mobile
+   URL is used. e.g. http://SERVER:9000/mobile
 
 1.0.1
 -----

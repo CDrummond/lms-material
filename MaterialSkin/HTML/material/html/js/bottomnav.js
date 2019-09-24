@@ -82,7 +82,7 @@ Vue.component('lms-bottomnav', {
     },
     filters: {
         svgIcon: function (name, dark, active) {
-            return "svg/"+name+"?c="+(active ? (dark ? LMS_DARK_ACTIVE_SVG : LMS_LIGHT_ACTIVE_SVG) : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+            return "/material/svg/"+name+"?c="+(active ? (dark ? LMS_DARK_ACTIVE_SVG : LMS_LIGHT_ACTIVE_SVG) : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         }
     },
 })

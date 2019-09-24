@@ -937,7 +937,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return formatSeconds(Math.floor(value));
         },
         svgIcon: function (name, dark) {
-            return "svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
         limitStr: function(str) {
             if (undefined==str || str.length<80) {

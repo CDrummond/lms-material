@@ -20,8 +20,13 @@
  font-weight:var(--std-weight);
 }
 
-.v-list__tile__sub-title, .v-btn__content, .v-select__slot .v-label {
+.v-list__tile__sub-title, .v-select__slot .v-label {
  font-size:var(--small-font-size);
+ font-weight:var(--std-weight);
+}
+
+.v-btn__content {
+ font-size:var(--std-font-size);
  font-weight:var(--std-weight);
 }
 

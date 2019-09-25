@@ -15,8 +15,6 @@ var app = new Vue({
                             search: false, movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false }}
     },
     created() {
-        parseQueryParams();
-        this.$store.commit('initUiSettings');
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);

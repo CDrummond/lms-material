@@ -28,8 +28,16 @@ div#innerSettingsBlock {
  font-size:14px !important;
 }
 
-.homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .exlisting, p, ol, ul, dl, dd, td, .stdclick, .stdedit, .exboldlisting, th, h5, a {
+.homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, a {
  color: #000 !important;
+}
+
+.stdedit {
+ background-color:#f8f8f8;
+}
+
+input[type="submit" i], select.stdedit, .stdclick {
+ color: buttontext !important;
 }
 
 select option[value=INTERFACE_SETTINGS] {

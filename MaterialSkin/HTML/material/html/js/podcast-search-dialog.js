@@ -216,7 +216,9 @@ Vue.component('lms-podcast-search-dialog', {
             this.show=true;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'podcastsearch') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -241,7 +243,7 @@ Vue.component('lms-podcast-search-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'podcastsearch', val);
+            this.$store.commit('dialogOpen', {name:'podcastsearch', shown:val});
         }
     }
 })

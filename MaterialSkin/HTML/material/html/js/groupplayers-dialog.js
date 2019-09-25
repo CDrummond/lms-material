@@ -116,7 +116,9 @@ Vue.component('lms-groupplayers-dialog', {
             this.show=false;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'group') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -198,7 +200,7 @@ Vue.component('lms-groupplayers-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'group', val);
+            this.$store.commit('dialogOpen', {name:'group', shown:val});
         }
     }
 })

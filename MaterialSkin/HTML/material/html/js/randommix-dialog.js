@@ -86,7 +86,9 @@ Vue.component('lms-randommix', {
             this.show=false;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'rndmix') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -139,7 +141,7 @@ Vue.component('lms-randommix', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'rndmix', val);
+            this.$store.commit('dialogOpen', {name:'rndmix', shown:val});
         }
     }
 })

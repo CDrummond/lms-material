@@ -170,5 +170,9 @@ function initApp(app) {
             bus.$emit('esc');
         }
     });
+
+    bus.$on('dialogOpen', function(name, val) {
+        this.$store.commit('dialogOpen', {name:name, shown:val});
+    }.bind(app));
 }
 

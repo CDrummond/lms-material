@@ -157,7 +157,9 @@ const store = new Vuex.Store({
         visibleMenus: new Set(),
         swipeVolume: true,
         pluginUpdatesAvailable: false,
-        queueThreeLines: false
+        queueThreeLines: false,
+        openDialogs: [],
+        activeDialog: undefined
     },
     mutations: {
         setPlayers(state, players) {
@@ -422,6 +424,20 @@ const store = new Vuex.Store({
                 state.visibleMenus.delete(val.name);
             }
             lmsNumVisibleMenus = state.visibleMenus.size;
+        },
+        dialogOpen(state, val) {
+            if (val.shown) {
+                state.openDialogs.push(val.name);
+                state.activedialog = val.name;
+            } else if (state.openDialogs.length>0) {
+                for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
+                    if (state.openDialogs[i]==val.name) {
+                        state.openDialogs.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+            state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
         },
         setPluginUpdatesAvailable(state, val) {
             state.pluginUpdatesAvailable = val;

@@ -26,15 +26,6 @@ var app = new Vue({
         }.bind(this));
 
         initApp(this);
-        this.openDialogs = new Set();
-
-        bus.$on('dialogOpen', function(name, open) {
-            if (open) {
-                this.openDialogs.add(name);
-            } else {
-                this.openDialogs.delete(name);
-            }
-        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -58,9 +49,7 @@ var app = new Vue({
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (this.openDialogs.size>1 ||
-                (this.openDialogs.size==1 && (this.$store.state.page=='now-playing' ||
-                                              (!this.openDialogs.has('np-viewer') && !this.openDialogs.has('info-dialog'))))) {
+            if (this.$store.state.openDialogs.length>0) {
                 return;
             }
             if (this.$store.state.page=='now-playing') {

@@ -69,7 +69,9 @@ Vue.component('lms-volume', {
             this.close();
         }.bind(this));
         bus.$on('esc', function() {
-            this.close();
+            if (this.$store.state.activeDialog == 'volume') {
+                this.show=false;
+            }
         }.bind(this));
         bus.$on('dialogOpen', function(name, open) {
             if (open && name!='volume') {
@@ -127,7 +129,7 @@ Vue.component('lms-volume', {
             }
         },
         'show': function(val) {
-            bus.$emit('dialogOpen', 'volume', val);
+            this.$store.commit('dialogOpen', {name:'volume', shown:val});
         }
     }
 })

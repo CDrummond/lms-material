@@ -7,7 +7,7 @@
 
 Vue.component('lms-information-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" scrollable fullscreen>
+<v-dialog v-model="show" v-if="show" scrollable fullscreen persistent>
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">
@@ -178,6 +178,14 @@ Vue.component('lms-information-dialog', {
             this.initItems();
         }.bind(this));
         this.initItems();
+
+        bus.$on('esc', function() {
+            if (this.$store.state.activeDialog == 'serversettings') {
+                this.showServerSettings=false;
+            } else if (this.$store.state.activeDialog == 'info') {
+                this.show=false;
+            }
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -316,7 +324,10 @@ Vue.component('lms-information-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'info', val);
+            this.$store.commit('dialogOpen', {name:'info', shown:val});
+        },
+        'showServerSettings': function(val) {
+            this.$store.commit('dialogOpen', {name:'serversettings', shown:val});
         }
     },
     computed: {

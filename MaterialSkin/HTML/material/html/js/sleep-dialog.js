@@ -77,7 +77,9 @@ Vue.component('lms-sleep-dialog', {
             this.show=false;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'sleep') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -133,7 +135,7 @@ Vue.component('lms-sleep-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'sleep', val);
+            this.$store.commit('dialogOpen', {name:'sleep', shown:val});
         }
     }
 })

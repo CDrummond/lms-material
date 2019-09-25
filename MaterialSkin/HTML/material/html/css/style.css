@@ -780,6 +780,13 @@ progress {
  padding:0px !important;
 }
 
+.settings-note p {
+ font-size:var(--small-font-size) !important;
+ font-weight:var(--std-weight) !important;
+ opacity:var(--sub-opacity);
+ margin-bottom:0px;
+}
+
 .settings-list {
  width:100%;
  height:100%;
@@ -1154,4 +1161,3 @@ div.v-subheader {
 iframe {
  border:0px;
 }
-

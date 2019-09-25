@@ -15,16 +15,6 @@ var app = new Vue({
                             movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false } }
     },
     created() {
-        parseQueryParams();
-        this.$store.commit('initUiSettings');
-
-        bus.$on('dlg.open', function(name, a, b, c) {
-            this.dialogs[name] = true; // Mount
-            this.$nextTick(function () {
-                bus.$emit(name+".open", a, b, c);
-            });
-        }.bind(this));
-
         initApp(this);
     },
     computed: {

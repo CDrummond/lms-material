@@ -75,20 +75,36 @@ Vue.component('lms-player-settings', {
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
 
-     <div class="dialog-padding" v-if="browseModes.length>1"></div>
-     <v-header class="dialog-section-header" v-if="browseModes.length>1">{{i18n('Browse Modes')}}</v-header>
-     <template v-for="(item, index) in browseModes">
-      <v-checkbox v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
-     </template>
+     <div class="dialog-padding"></div>
+     <v-header class="dialog-section-header">{{i18n('Browse modes')}}</v-header>
+     <v-list-tile class="settings-note"><p>{{i18n("Each player can have its own unique set of browse modes (Artists, Albums, Genres, etc). This is the set of options that will appear within the 'My Music' section. Use the button below to configure which modes will be available for this player.")}}</p></v-list-tile>
+     <v-btn @click="browseModesDialog.show=true" flat>{{i18n('Configure browse modes')}}</v-btn>
+
      <div class="dialog-padding"></div>
      <div class="dialog-padding"></div>
-     <v-header class="dialog-section-header">{{i18n('All Settings')}}</v-header>
-     <v-list-tile>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</v-list-tile>
+     <v-header class="dialog-section-header">{{i18n('All settings')}}</v-header>
+     <v-list-tile class="settings-note"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
      <v-btn @click="showAllSettings=true" flat>{{i18n('Show all settings')}}</v-btn>
      <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
   </v-card>
+ </v-dialog>
+
+ <v-dialog v-model="browseModesDialog.show" width="500" persistent>
+  <v-card>
+   <v-card-title>{{i18n("Browse modes")}}</v-card-title>
+    <v-list two-line subheader class="settings-list">
+     <template v-for="(item, index) in browseModesDialog.modes">
+      <v-checkbox v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+     </template>
+    </v-list>
+   <div class="dialog-padding"></div>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
+    </v-card-actions>
+   <v-card>
  </v-dialog>
 
  <v-dialog v-model="alarmDialog.show" width="500" persistent>
@@ -201,7 +217,10 @@ Vue.component('lms-player-settings', {
                 shuffle: undefined
             },
             wide:true,
-            browseModes:[],
+            browseModesDialog: {
+                show: false,
+                modes:[],
+            },
             playerId: undefined
         }
     },
@@ -349,18 +368,18 @@ Vue.component('lms-player-settings', {
                     this.controlSleepTimer(parseInt(data.result._sleep));
                 }
             });
-            this.browseModes = [];
+            this.browseModesDialog.modes = [];
             this.prevEnabledModes = new Set();
             lmsCommand(this.playerId, ["material-skin-modes", "get"]).then(({data}) => {
                 if (data.result && data.result.modes_loop) {
                     for (var i=0, loop=data.result.modes_loop, len=loop.length; i<len; ++i) {
                         loop[i].weight=parseInt(loop[i].weight);
-                        this.browseModes.push(loop[i]);
+                        this.browseModesDialog.modes.push(loop[i]);
                         if (loop[i].enabled) {
                             this.prevEnabledModes.add(loop[i].id);
                         }
                     }
-                    this.browseModes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : nameSort(a, b); });
+                    this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : nameSort(a, b); });
                 }
             });
             this.show=true;
@@ -402,7 +421,7 @@ Vue.component('lms-player-settings', {
             var enabledModes = new Set();
             var enabled = [];
             var disabled = [];
-            for (var i=0, loop=this.browseModes, len=loop.length; i<len; ++i) {
+            for (var i=0, loop=this.browseModesDialog.modes, len=loop.length; i<len; ++i) {
                 var item = loop[i];
                 if (item.enabled) {
                     enabledModes.add(item.id);

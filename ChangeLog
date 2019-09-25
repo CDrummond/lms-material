@@ -18,6 +18,8 @@
 12. Auto-scroll 'Information' dialog to plugins section if there are updates
     available when it is opened.
 13. Add option to use 3 lines for queue items (title, artist, album).
+14. Show server settings, and advanced player setttings, from 'Classic' skin and
+    placed within an iframe.
 
 1.0.2
 -----

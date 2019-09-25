@@ -24,7 +24,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="serverSettings()" flat>{{i18n('Server Settings')}}</v-btn>
+    <v-btn @click="showServerSettings=true" flat>{{i18n('Server Settings')}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -90,12 +90,24 @@ Vue.component('lms-information-dialog', {
    <div class="dialog-padding"></div>
   </div></div>
  </v-card>
+
+ <v-dialog v-model="showServerSettings" persistent>
+  <v-card class="embedded-dialog">
+   <iframe v-if="showServerSettings" id="serverSettingsIframe" src="/Classic/settings/server/basic.html" v-on:load="hideSettingsElems()"></iframe>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click.native="showServerSettings=false">{{i18n('Close')}}</v-btn
+   </v-card-actions>
+  </v-card>
+ </v-dialog>
+
 </v-dialog>
 `,
     props: [],
     data() {
         return {
             show: false,
+            showServerSettings: false,
             server: [],
             library: [],
             players: [],

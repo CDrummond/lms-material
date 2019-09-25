@@ -2,8 +2,13 @@
  display:none;
 }
 
+#statusMessage {
+ color:transparent!important;
+}
+
 div#topGraphicMenu3 {
  height:22px;
+ background:transparent!important;
 }
 
 div#topGraphicBox {
@@ -19,9 +24,13 @@ div#innerSettingsBlock {
 }
 
 * {
-  font-size:14px !important;
+ font-size:14px !important;
 }
 
 .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .exlisting, p, ol, ul, dl, dd, td, .stdclick, .stdedit, .exboldlisting, th, h5, a {
-    color: #000 !important;
+ color: #000 !important;
+}
+
+select option[value=INTERFACE_SETTINGS] {
+ display: none
 }

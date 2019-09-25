@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-function hideSettingsElems() {
+function hideclassicSkinElems() {
     var iframe = document.getElementById("playerSettingsIframe");
     if (!iframe) {
         iframe = document.getElementById("serverSettingsIframe");

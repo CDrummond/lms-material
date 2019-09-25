@@ -17,6 +17,7 @@
     indicate updates available.
 12. Auto-scroll 'Information' dialog to plugins section if there are updates
     available when it is opened.
+13. Add option to use 3 lines for queue items (title, artist, album).
 
 1.0.2
 -----

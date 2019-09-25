@@ -343,10 +343,6 @@ function openWindow(page) {
     window.open(page, '_blank');
 }
 
-function serverSettings() {
-    openWindow('../Default/settings/index.html');
-}
-
 function fixId(id, prefix) {
     var parts = id.split(".");
     if (parts.length>1) {

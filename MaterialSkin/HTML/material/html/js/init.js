@@ -5,6 +5,20 @@
  * MIT license.
  */
 
+function hideSettingsElems() {
+    var iframe = document.getElementById("playerSettingsIframe");
+    if (!iframe) {
+        iframe = document.getElementById("serverSettingsIframe");
+    }
+    if (iframe) {
+        var cssLink = iframe.contentDocument.createElement("link");
+        cssLink.href = "../../../material/html/css/settings.css"; 
+        cssLink.rel = "stylesheet"; 
+        cssLink.type = "text/css"; 
+        iframe.contentDocument.head.appendChild(cssLink);
+    }
+}
+
 var autoLayout = false;
 function checkLayout() {
     if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109

@@ -1140,3 +1140,18 @@ div.v-subheader {
  pointer-events:none;
  opacity:0.5;
 }
+
+.embedded-dialog {
+ width:calc(100vw - 48px);
+ height:calc((var(--vh, 1vh)*100) - 96px);
+}
+
+.embedded-dialog iframe {
+ width:100%;
+ height:calc((var(--vh, 1vh)*100) - 164px);
+}
+
+iframe {
+ border:0px;
+}
+

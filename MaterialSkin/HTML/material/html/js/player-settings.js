@@ -81,6 +81,11 @@ Vue.component('lms-player-settings', {
       <v-checkbox v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
      </template>
      <div class="dialog-padding"></div>
+     <div class="dialog-padding"></div>
+     <v-header class="dialog-section-header">{{i18n('All Settings')}}</v-header>
+     <v-list-tile>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</v-list-tile>
+     <v-btn @click="showAllSettings=true" flat>{{i18n('Show all settings')}}</v-btn>
+     <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
   </v-card>
@@ -150,12 +155,24 @@ Vue.component('lms-player-settings', {
    </v-card-actions>
   </v-card>
  </v-dialog>
+
+ <v-dialog v-model="showAllSettings" persistent>
+  <v-card class="embedded-dialog">
+   <iframe v-if="showAllSettings" id="playerSettingsIframe" :src="'/Classic/settings/player/basic.html?player='+playerId" v-on:load="hideSettingsElems()"></iframe>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click.native="showAllSettings=false">{{i18n('Close')}}</v-btn
+   </v-card-actions>
+  </v-card>
+ </v-dialog>
+
 </div>
 `,
     props: [],
     data() {
         return {
             show: false,
+            showAllSettings: false,
             playerName: undefined,
             crossfade: undefined,
             replaygain: undefined,
@@ -184,7 +201,8 @@ Vue.component('lms-player-settings', {
                 shuffle: undefined
             },
             wide:true,
-            browseModes:[]
+            browseModes:[],
+            playerId: undefined
         }
     },
     computed: {

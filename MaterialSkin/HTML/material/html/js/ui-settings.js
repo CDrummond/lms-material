@@ -215,6 +215,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueShowTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
+      <v-list-tile-title>{{i18n('Three lines')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
     <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
@@ -253,6 +262,7 @@ Vue.component('lms-ui-settings', {
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
             swipeVolume:true,
+            queueThreeLines:false,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -291,6 +301,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.swipeVolume = this.$store.state.swipeVolume;
+            this.queueThreeLines = this.$store.state.queueThreeLines;
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
@@ -364,6 +375,7 @@ Vue.component('lms-ui-settings', {
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
                                                   swipeVolume:this.swipeVolume,
+                                                  queueThreeLines:this.queueThreeLines,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
@@ -402,6 +414,7 @@ Vue.component('lms-ui-settings', {
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
                                      swipeVolume:this.swipeVolume,
+                                     queueThreeLines:this.queueThreeLines,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,

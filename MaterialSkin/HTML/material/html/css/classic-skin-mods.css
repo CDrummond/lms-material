@@ -19,8 +19,9 @@ html {
  width:100%;
  height:100%;
 }
+
 div#innerSettingsBlock {
- height:calc(100vh - 64px)!important;
+ height:calc(100vh - 88px)!important;
 }
 
 * {

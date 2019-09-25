@@ -1150,7 +1150,7 @@ div.v-subheader {
 
 .embedded-dialog {
  width:calc(100vw - 48px);
- height:calc((var(--vh, 1vh)*100) - 96px);
+ height:calc((var(--vh, 1vh)*100) - 100px);
 }
 
 .embedded-dialog iframe {

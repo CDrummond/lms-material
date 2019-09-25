@@ -116,7 +116,6 @@ function buildSubtitle(i, threeLines) {
     }
     if (threeLines) {
         lines.push(subtitle);
-console.log(lines[0], lines[1]);
         return lines;
     }
     return subtitle;

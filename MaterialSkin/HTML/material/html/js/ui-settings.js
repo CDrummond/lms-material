@@ -328,16 +328,13 @@ Vue.component('lms-ui-settings', {
             if (getLocalStorageBool('remoteLibraries', true)) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
-
             this.show = true;
         }.bind(this));
-
-        bus.$on('closeDialog', function(name) {
-            if (this.show && name=='ui-settings') {
-                this.close();
+        bus.$on('esc', function() {
+            if (this.$store.state.activeDialog == 'uisettings') {
+                this.show=false;
             }
         }.bind(this));
-
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -447,7 +444,7 @@ Vue.component('lms-ui-settings', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'uisettings', val);
+            this.$store.commit('dialogOpen', {name:'uisettings', shown:val});
         }
     }
 })

@@ -57,7 +57,9 @@ Vue.component('lms-info-dialog', {
             this.show=true
         }.bind(this));
         bus.$on('esc', function() {
-            this.close();
+            if (this.$store.state.activeDialog == 'iteminfo') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -75,7 +77,7 @@ Vue.component('lms-info-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'iteminfo', val);
+            this.$store.commit('dialogOpen', {name:'iteminfo', shown:val});
         }
     }
 })

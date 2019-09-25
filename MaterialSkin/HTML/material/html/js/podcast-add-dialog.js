@@ -62,7 +62,9 @@ Vue.component('lms-podcast-add-dialog', {
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
-            this.cancel();
+            if (this.$store.state.activeDialog == 'podcastadd') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -137,7 +139,7 @@ Vue.component('lms-podcast-add-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'podcastadd', val);
+            this.$store.commit('dialogOpen', {name:'podcastadd', shown:val});
         }
     },
     beforeDestroy() {

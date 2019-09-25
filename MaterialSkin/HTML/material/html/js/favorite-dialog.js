@@ -92,7 +92,9 @@ Vue.component('lms-favorite', {
             this.show=false;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'favorite') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -178,7 +180,7 @@ Vue.component('lms-favorite', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'favorite', val);
+            this.$store.commit('dialogOpen', {name:'favorite', shown:favorite});
         }
     }
 })

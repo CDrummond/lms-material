@@ -269,9 +269,13 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.alarmDialog.show) {
+            if (this.$store.state.activeDialog == 'alarm') {
                 this.alarmDialog.show=false;
-            } else if (!this.sleepOpen) {
+            } else if (this.$store.state.activeDialog == 'browsemodes') {
+                this.browseModesDialog.show=false;
+            } else if (this.$store.state.activeDialog == 'playerallsettings') {
+                this.showAllSettings=false;
+            } else if (this.$store.state.activeDialog == 'playersettings') {
                 this.show=false;
             }
         }.bind(this));
@@ -580,7 +584,16 @@ Vue.component('lms-player-settings', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'playersettings', val);
+            this.$store.commit('dialogOpen', {name:'playersettings', shown:val});
+        },
+        'alarmDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'alarm', shown:val});
+        },
+        'browseModesDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
+        },
+        'showAllSettings': function(val) {
+            this.$store.commit('dialogOpen', {name:'playersettings', shown:val});
         }
     }
 })

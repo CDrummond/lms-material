@@ -610,7 +610,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             });
             this.gallery.init();
-            bus.$emit('dialogOpen', 'np-viewer', true);
+            this.$store.commit('dialogOpen', {name:'np-viewer', shown:true});
             this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
         },
         doAction(command) {

@@ -12,7 +12,7 @@ function hideclassicSkinElems() {
     }
     if (iframe) {
         var cssLink = iframe.contentDocument.createElement("link");
-        cssLink.href = "../../../material/html/css/classic-skin-mods.css";
+        cssLink.href = "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION;
         cssLink.rel = "stylesheet";
         cssLink.type = "text/css";
         iframe.contentDocument.head.appendChild(cssLink);

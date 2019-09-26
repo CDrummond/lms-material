@@ -174,7 +174,7 @@ Vue.component('lms-player-settings', {
 
  <v-dialog v-model="showAllSettings" persistent>
   <v-card class="embedded-dialog">
-   <iframe v-if="showAllSettings" id="playerSettingsIframe" :src="'/Classic/settings/player/basic.html?player='+playerId" v-on:load="hideclassicSkinElems()"></iframe>
+   <iframe v-if="showAllSettings" id="playerSettingsIframe" :src="'/Classic/settings/player/basic.html?player='+playerId" v-on:load="hideClassicSkinElems()"></iframe>
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click.native="showAllSettings=false">{{i18n('Close')}}</v-btn

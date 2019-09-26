@@ -93,7 +93,7 @@ Vue.component('lms-information-dialog', {
 
  <v-dialog v-model="showServerSettings" persistent>
   <v-card class="embedded-dialog">
-   <iframe v-if="showServerSettings" id="serverSettingsIframe" src="/Classic/settings/server/basic.html" v-on:load="hideclassicSkinElems()"></iframe>
+   <iframe v-if="showServerSettings" id="serverSettingsIframe" src="/Classic/settings/server/basic.html" v-on:load="hideClassicSkinElems()"></iframe>
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click.native="showServerSettings=false">{{i18n('Close')}}</v-btn

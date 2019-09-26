@@ -13,7 +13,7 @@ function insertCss(doc, path) {
     doc.head.appendChild(cssLink);
 }
 
-function hideclassicSkinElems() {
+function hideClassicSkinElems() {
     var page='player';
     var iframe = document.getElementById("playerSettingsIframe");
     if (!iframe) {

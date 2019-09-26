@@ -260,7 +260,7 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=this.alarmDialog.show=false;
+            this.show=this.alarmDialog.show=this.showAllSettings=this.browseModesDialog.show=false;
         }.bind(this));
         this.sleepOpen = false;
         bus.$on('dialogOpen', function(name, open) {

@@ -37,7 +37,7 @@ div#innerSettingsBlock {
 * {
  font-size:16px !important;
  font-family:'Roboto';
- font-weight:300;
+ font-weight:400;
 }
 
 .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, a {

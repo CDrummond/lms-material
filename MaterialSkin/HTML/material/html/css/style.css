@@ -1153,16 +1153,17 @@ div.v-subheader {
  opacity:0.5;
 }
 
-.embedded-dialog {
- width:calc(100vw - 48px);
- height:calc((var(--vh, 1vh)*100) - 100px);
-}
-
-.embedded-dialog iframe {
+.embedded-page {
  width:100%;
- height:calc((var(--vh, 1vh)*100) - 164px);
+ height:100%;
+ margin:0px;
+ padding:0px;
+ background-color:#e8e8e8;
 }
 
-iframe {
+.embedded-page iframe {
+ width:100%;
+ height:calc((var(--vh, 1vh)*100) - 58px);
+ border-radius:0px;
  border:0px;
 }

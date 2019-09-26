@@ -24,7 +24,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="showServerSettings=true" flat><v-icon class="btn-icon">dns</v-icon>{{i18n('Server Settings')}}</v-btn>
+    <v-btn @click="bus.$emit('dlg.open', 'iframe', '/Classic/settings/server/basic.html', i18n('Server settings'))" flat><v-icon class="btn-icon">dns</v-icon>{{i18n('Server Settings')}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -91,23 +91,12 @@ Vue.component('lms-information-dialog', {
   </div></div>
  </v-card>
 
- <v-dialog v-model="showServerSettings" persistent>
-  <v-card class="embedded-dialog">
-   <iframe v-if="showServerSettings" id="serverSettingsIframe" src="/Classic/settings/server/basic.html" v-on:load="hideClassicSkinElems()"></iframe>
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat @click.native="showServerSettings=false">{{i18n('Close')}}</v-btn
-   </v-card-actions>
-  </v-card>
- </v-dialog>
-
 </v-dialog>
 `,
     props: [],
     data() {
         return {
             show: false,
-            showServerSettings: false,
             server: [],
             library: [],
             players: [],
@@ -180,9 +169,7 @@ Vue.component('lms-information-dialog', {
         this.initItems();
 
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'serversettings') {
-                this.showServerSettings=false;
-            } else if (this.$store.state.activeDialog == 'info') {
+            if (this.$store.state.activeDialog == 'info') {
                 this.show=false;
             }
         }.bind(this));
@@ -325,9 +312,6 @@ Vue.component('lms-information-dialog', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'info', shown:val});
-        },
-        'showServerSettings': function(val) {
-            this.$store.commit('dialogOpen', {name:'serversettings', shown:val});
         }
     },
     computed: {

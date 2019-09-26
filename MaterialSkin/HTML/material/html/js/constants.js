@@ -29,6 +29,7 @@ const LMS_DARK_SVG = "fff";
 const LMS_LIGHT_SVG = "444";
 const LMS_DARK_ACTIVE_SVG ="82b1ff";
 const LMS_LIGHT_ACTIVE_SVG = "346dd2";
+const LMS_UPDATE_SVG = "74bf43";
 
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",

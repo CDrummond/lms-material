@@ -78,7 +78,7 @@ Vue.component('lms-player-settings', {
      <div class="dialog-padding"></div>
      <v-header class="dialog-section-header">{{i18n('Browse modes')}}</v-header>
      <v-list-tile class="settings-note"><p>{{i18n("Each player can have its own unique set of browse modes (Artists, Albums, Genres, etc). This is the set of options that will appear within the 'My Music' section. Use the button below to configure which modes will be available for this player.")}}</p></v-list-tile>
-     <v-btn @click="browseModesDialog.show=true" flat><v-icon class="btn-icon">visibility</v-icon>{{i18n('Configure browse modes')}}</v-btn>
+     <v-btn @click="browseModesDialog.show=true" flat><v-icon class="btn-icon">library_music</v-icon>{{i18n('Configure browse modes')}}</v-btn>
 
      <div class="dialog-padding"></div>
      <div class="dialog-padding"></div>

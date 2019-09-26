@@ -1,0 +1,3 @@
+select option[value=ALARM], select option[value=PLUGIN_EXTENDED_BROWSEMODES], select option[value=PLUGIN_DSTM] {
+ display: none
+}

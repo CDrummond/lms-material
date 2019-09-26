@@ -5,17 +5,26 @@
  * MIT license.
  */
 
+function insertCss(doc, path) {
+    var cssLink = doc.createElement("link");
+    cssLink.href = path;
+    cssLink.rel = "stylesheet";
+    cssLink.type = "text/css";
+    doc.head.appendChild(cssLink);
+}
+
 function hideclassicSkinElems() {
+    var page='player';
     var iframe = document.getElementById("playerSettingsIframe");
     if (!iframe) {
         iframe = document.getElementById("serverSettingsIframe");
+        page='server';
     }
     if (iframe) {
-        var cssLink = iframe.contentDocument.createElement("link");
-        cssLink.href = "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION;
-        cssLink.rel = "stylesheet";
-        cssLink.type = "text/css";
-        iframe.contentDocument.head.appendChild(cssLink);
+        insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION);
+        if (page=='player') {
+            insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION);
+        }
     }
 }
 

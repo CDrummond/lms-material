@@ -309,16 +309,6 @@ Vue.component('lms-player-settings', {
                     });
                 }
             });
-            lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
-                if (data && data.result && undefined!=data.result._p2) {
-                    this.crossfade=data.result._p2;
-                }
-            });
-            lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
-                if (data && data.result && undefined!=data.result._p2) {
-                    this.replaygain=data.result._p2;
-                }
-            });
 
             this.alarms.on=true;
             this.alarms.volume=100;
@@ -386,6 +376,7 @@ Vue.component('lms-player-settings', {
                     this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : nameSort(a, b); });
                 }
             });
+            this.update(false);
             this.show=true;
         },
         initItems() {
@@ -408,6 +399,25 @@ Vue.component('lms-player-settings', {
                 { key:'2', label:i18n("Shuffle by album")},
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
+        },
+        update(readName) {
+            if (readName) {
+                lmsCommand(this.playerId, ["playerpref", "playername", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2 && this.playerName!=data.result._p2) {
+                        this.playerName=data.result._p2;
+                    }
+                });
+            }
+            lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._p2) {
+                    this.crossfade=data.result._p2;
+                }
+            });
+            lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._p2) {
+                    this.replaygain=data.result._p2;
+                }
+            });
         },
         close() {
             this.show=false;
@@ -594,6 +604,9 @@ Vue.component('lms-player-settings', {
         },
         'showAllSettings': function(val) {
             this.$store.commit('dialogOpen', {name:'playersettings', shown:val});
+            if (!val) { // Dialog close, update any settings that might have changed
+                this.update(true);
+            }
         }
     }
 })

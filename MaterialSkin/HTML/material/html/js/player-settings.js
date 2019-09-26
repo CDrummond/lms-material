@@ -84,7 +84,7 @@ Vue.component('lms-player-settings', {
      <div class="dialog-padding"></div>
      <v-header class="dialog-section-header">{{i18n('Extra settings')}}</v-header>
      <v-list-tile class="settings-note"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
-     <v-btn @click="showAllSettings=true" flat><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
+     <v-btn @click="showAllSettings" flat><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
      <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
@@ -172,23 +172,12 @@ Vue.component('lms-player-settings', {
   </v-card>
  </v-dialog>
 
- <v-dialog v-model="showAllSettings" persistent>
-  <v-card class="embedded-dialog">
-   <iframe v-if="showAllSettings" id="playerSettingsIframe" :src="'/Classic/settings/player/basic.html?player='+playerId" v-on:load="hideClassicSkinElems()"></iframe>
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat @click.native="showAllSettings=false">{{i18n('Close')}}</v-btn
-   </v-card-actions>
-  </v-card>
- </v-dialog>
-
 </div>
 `,
     props: [],
     data() {
         return {
             show: false,
-            showAllSettings: false,
             playerName: undefined,
             crossfade: undefined,
             replaygain: undefined,
@@ -260,7 +249,7 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=this.alarmDialog.show=this.showAllSettings=this.browseModesDialog.show=false;
+            this.show=this.alarmDialog.show=this.browseModesDialog.show=false;
         }.bind(this));
         this.sleepOpen = false;
         bus.$on('dialogOpen', function(name, open) {
@@ -273,10 +262,13 @@ Vue.component('lms-player-settings', {
                 this.alarmDialog.show=false;
             } else if (this.$store.state.activeDialog == 'browsemodes') {
                 this.browseModesDialog.show=false;
-            } else if (this.$store.state.activeDialog == 'playerallsettings') {
-                this.showAllSettings=false;
             } else if (this.$store.state.activeDialog == 'playersettings') {
                 this.show=false;
+            }
+        }.bind(this));
+        bus.$on('iframeClosed', function(isPlayer)) {
+            if (isPlayer) { // update any settings that might have changed
+                this.update(true);
             }
         }.bind(this));
     },
@@ -566,6 +558,9 @@ Vue.component('lms-player-settings', {
             } else {
                 this.cancelSleepTimer();
             }
+        },
+        showAllSettings() {
+            bus.$emit('dlg.open', 'iframe', '/Classic/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'));
         }
     },
     filters: {
@@ -601,12 +596,6 @@ Vue.component('lms-player-settings', {
         },
         'browseModesDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
-        },
-        'showAllSettings': function(val) {
-            this.$store.commit('dialogOpen', {name:'playersettings', shown:val});
-            if (!val) { // Dialog close, update any settings that might have changed
-                this.update(true);
-            }
         }
     }
 })

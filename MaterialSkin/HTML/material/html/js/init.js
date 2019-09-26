@@ -5,30 +5,6 @@
  * MIT license.
  */
 
-function insertCss(doc, path) {
-    var cssLink = doc.createElement("link");
-    cssLink.href = path;
-    cssLink.rel = "stylesheet";
-    cssLink.type = "text/css";
-    doc.head.appendChild(cssLink);
-}
-
-function hideClassicSkinElems() {
-    var page='player';
-    var iframe = document.getElementById("playerSettingsIframe");
-    if (!iframe) {
-        iframe = document.getElementById("serverSettingsIframe");
-        page='server';
-    }
-    if (iframe) {
-        insertCss(iframe.contentDocument, "../../../material/html/font/font.css");
-        insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION);
-        if (page=='player') {
-            insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION);
-        }
-    }
-}
-
 var autoLayout = false;
 function checkLayout() {
     if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109

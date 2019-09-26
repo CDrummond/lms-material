@@ -146,7 +146,7 @@ Vue.component('lms-toolbar', {
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon><v-icon v-if="pluginUpdatesAvailable" class="active-btn">info</v-icon><v-icon v-else>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon><img v-if="pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -155,7 +155,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="menuAction(item.id)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-bind:class="{'active-btn':TB_INFO.id==item.id && pluginUpdatesAvailable}">{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="TB_INFO.id==item.id && pluginUpdatesAvailable">{{trans.pluginUpdatesAvailable}}</v-list-tile-sub-title>
@@ -626,8 +626,8 @@ Vue.component('lms-toolbar', {
             }
             return value<0 ? -1*value : value;
         },
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, update) {
+            return "/material/svg/"+name+"?c="+(update ? LMS_UPDATE_SVG : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

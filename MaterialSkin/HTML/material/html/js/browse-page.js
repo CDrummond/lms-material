@@ -337,6 +337,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2) {
                         this.updateTopList(JSON.parse(data.result._p2));
+                        this.saveTopList();
                     } else {
                         lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
                             if (data && data.result && data.result._p2) {

@@ -21,6 +21,7 @@ function hideclassicSkinElems() {
         page='server';
     }
     if (iframe) {
+        insertCss(iframe.contentDocument, "../../../material/html/font/font.css");
         insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION);
         if (page=='player') {
             insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION);

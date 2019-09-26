@@ -2,6 +2,11 @@
  display:none;
 }
 
+#choose_setting {
+ margin-left:-8px;
+ margin-bottom:8px;
+}
+
 #statusMessage {
  color:transparent!important;
 }
@@ -11,7 +16,7 @@ div#topGraphicMenu3 {
  background:transparent!important;
 }
 
-div#topGraphicBox {
+div#topGraphicBox, td.even, td.odd {
  background:transparent!important;
 }
 
@@ -20,26 +25,73 @@ html {
  height:100%;
 }
 
+body {
+ background:#e8e8e8;
+}
+
 div#innerSettingsBlock {
  height:calc(100vh - 88px)!important;
 }
 
 * {
- font-size:14px !important;
+ font-size:16px !important;
+ font-family:'Roboto';
 }
 
 .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, a {
- color: #000 !important;
-}
-
-.stdedit {
- background-color:#f8f8f8;
-}
-
-input[type="submit" i], select.stdedit, .stdclick {
- color: buttontext !important;
+ color: black !important;
 }
 
 select option[value=INTERFACE_SETTINGS] {
  display: none
 }
+
+.homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead {
+ background-color: transparent;
+ height: 15px;
+ padding: 8px 6px 4px 0px;
+ font-weight: bold;
+}
+
+select {
+ background-color: #e8e8e8;
+ border: none;
+ border-bottom: 1px solid #000;
+}
+
+select:focus {
+ outline: none;
+}
+
+input[type="text"] {
+ background-color: #f8f8f8;
+ border: none;
+ border-bottom: 1px solid #000;
+ min-width:80px;
+}
+
+input[type="text"]:focus {
+ background-color: white;
+ outline: none;
+}
+
+input[type="submit"], input[type="button"] {
+  color: black !important;
+  background-color: #ccc;
+  border: none;
+  border-radius: 3px;
+  border-bottom: 1px solid #aaa;
+  text-transform: uppercase;
+  padding:4px 8px 2px 8px;
+}
+
+#saveSettings {
+ color: white !important;
+ background-color: #1976d2;
+}
+
+input[type=checkbox] {
+ width:18px;
+ height:18px;
+}
+

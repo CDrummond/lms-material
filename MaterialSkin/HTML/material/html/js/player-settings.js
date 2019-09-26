@@ -91,11 +91,23 @@ Vue.component('lms-player-settings', {
   </v-card>
  </v-dialog>
 
- <v-dialog v-model="browseModesDialog.show" width="500" persistent>
+ <v-dialog v-model="browseModesDialog.show" :width="wide>1 ? 750 : 500" persistent>
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
     <v-list two-line subheader class="settings-list">
-     <template v-for="(item, index) in browseModesDialog.modes">
+     <v-layout v-if="wide>1">
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index % 2 == 0" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index % 2 == 1" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+     </v-layout>
+     <template v-for="(item, index) in browseModesDialog.modes" v-else>
       <v-checkbox v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
      </template>
     </v-list>
@@ -124,26 +136,26 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Days')}}</v-subheader>
-   <v-list-tile class="settings-compact-row" v-if="wide">
+   <v-list-tile class="settings-compact-row" v-if="wide>0">
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide">
+   <v-list-tile class="settings-compact-row" v-if="wide>0">
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
    </v-list-tile>
    <v-list-tile class="settings-compact-row"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide">
+   <v-list-tile class="settings-compact-row" v-if="wide>0">
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Options')}}</v-subheader>
    <v-list-tile>
@@ -205,7 +217,7 @@ Vue.component('lms-player-settings', {
                 url: undefined,
                 shuffle: undefined
             },
-            wide:true,
+            wide:1,
             browseModesDialog: {
                 show: false,
                 modes:[],
@@ -277,7 +289,7 @@ Vue.component('lms-player-settings', {
             this.controlSleepTimer(playerStatus.will_sleep_in);
         },
         playerSettings(player) {
-            this.wide = window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370);
+            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.cancelSleepTimer();
             this.dstmItems=[];
             this.crossfade='0';

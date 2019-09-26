@@ -1011,11 +1011,16 @@ div.v-subheader {
  }
 }
 
-.lms-list .lms-avatar .v-avatar, .lms-list-sub .lms-avatar .v-avatar, .lms-list .v-list__tile__avatar, .lms-list-sub .v-list__tile__avatar {
+.lms-avatar .v-avatar {
  width:calc(var(--list-elem-height) - 1px) !important;
  height:calc(var(--list-elem-height) - 1px) !important;
  margin-left:-4px;
- min-width: 54px;
+}
+
+.lms-avatar-small .v-avatar {
+ width:32px !important;
+ height:32px !important;
+ margin-left:6px;
 }
 
 .lms-list3 .lms-avatar .v-avatar, .lms-list-sub3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar, .lms-list-sub3 .v-list__tile__avatar {
@@ -1024,18 +1029,6 @@ div.v-subheader {
  margin-left:-4px;
  margin-right:4px;
  min-width: 74px;
-}
-
-
-.lms-list .lms-avatar-small .v-avatar, .lms-list-sub .lms-avatar-small .v-avatar {
- width:32px !important;
- height:32px !important;
- margin-left:-4px;
- margin-top:-2px;
-}
-
-.v-menu .v-avatar {
- margin-left:-8px;
 }
 
 .lms-jumplist {

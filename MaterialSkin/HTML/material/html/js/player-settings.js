@@ -266,7 +266,7 @@ Vue.component('lms-player-settings', {
                 this.show=false;
             }
         }.bind(this));
-        bus.$on('iframeClosed', function(isPlayer)) {
+        bus.$on('iframeClosed', function(isPlayer) {
             if (isPlayer) { // update any settings that might have changed
                 this.update(true);
             }

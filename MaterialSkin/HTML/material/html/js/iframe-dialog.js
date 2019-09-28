@@ -13,11 +13,12 @@ function insertCss(doc, path) {
     doc.head.appendChild(cssLink);
 }
 
-function hideClassicSkinElems(isPlayer) {
+function hideClassicSkinElems(dark, isPlayer) {
     var iframe = document.getElementById("classicSkinIframe");
     if (iframe) {
         insertCss(iframe.contentDocument, "../../../material/html/font/font.css");
         insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION);
+        insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-"+(dark ? "dark" : "light")+".css?r=" + LMS_MATERIAL_REVISION);
         if (isPlayer) {
             insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION);
         }
@@ -36,7 +37,7 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(isPlayer)"></iframe>
+    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -71,6 +72,11 @@ Vue.component('lms-iframe-dialog', {
         close() {
             this.show=false;
             bus.$emit('iframeClosed', this.isPlayer);
+        }
+    },
+    computed: {
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     watch: {

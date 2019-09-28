@@ -1,0 +1,45 @@
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead, li {
+ background:white !important;
+}
+
+.homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, a, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead, li {
+ color: black !important;
+}
+
+select {
+ border-bottom: 1px solid black;
+}
+
+input[type="text"], input[type="password"] {
+ border-bottom: 1px solid black;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, .stdedit:focus {
+ background-color: #aaa;
+}
+
+input[type="submit"], input[type="button"] {
+ color: black !important;
+ background-color: #ccc;
+ border-bottom: 1px solid #aaa;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+ background-color: #b8b8b8;
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+ border-bottom: 1px solid transparent;
+}
+
+::-webkit-scrollbar {
+ background:#c0c0c0;
+}
+
+::-webkit-scrollbar-thumb {
+ background:#888;
+}
+
+::-webkit-scrollbar-corner {
+ background:#ddd;
+}

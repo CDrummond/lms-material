@@ -11,6 +11,17 @@
  color:transparent!important;
 }
 
+#prefsSubmit {
+ color:transparent!important;
+ background-color:transparent!important;
+ border-top:none;
+ margin:0px;
+}
+
+#saveSettings {
+ margin-top:4px;
+}
+
 div#topGraphicMenu3 {
  height:22px;
  background:transparent!important;
@@ -23,11 +34,10 @@ div#topGraphicBox, td.even, td.odd {
 html {
  width:100%;
  height:100%;
- background:#e8e8e8;
 }
 
 body {
- background:#e8e8e8;
+ margin-top:-16px;
 }
 
 div#innerSettingsBlock {
@@ -38,10 +48,6 @@ div#innerSettingsBlock {
  font-size:16px !important;
  font-family:'Roboto';
  font-weight:400;
-}
-
-.homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, a {
- color: black !important;
 }
 
 select option[value=INTERFACE_SETTINGS] {
@@ -56,40 +62,29 @@ select option[value=INTERFACE_SETTINGS] {
 }
 
 select {
- background-color: #e8e8e8;
  border: none;
- border-bottom: 1px solid #000;
+ min-height:28px;
 }
 
 select:focus {
  outline: none;
 }
 
-input[type="text"] {
- background-color: #f8f8f8;
+input[type="text"], input[type="password"] {
  border: none;
- border-bottom: 1px solid #000;
  min-width:80px;
+ min-height:28px;
 }
 
-input[type="text"]:focus {
- background-color: white;
+input[type="text"]:focus, input[type="password"]:focus {
  outline: none;
 }
 
 input[type="submit"], input[type="button"] {
- color: black !important;
- background-color: #ccc;
  border: none;
  border-radius: 3px;
- border-bottom: 1px solid #aaa;
  text-transform: uppercase;
- padding:4px 8px 2px 8px;
-}
-
-#saveSettings {
- color: white !important;
- background-color: #1976d2;
+ padding:5px 8px 5px 8px;
 }
 
 input[type=checkbox] {
@@ -97,19 +92,16 @@ input[type=checkbox] {
  height:18px;
 }
 
+#saveSettings {
+ color: white !important;
+ background-color: #316dd3;
+}
+
+#saveSettings:hover {
+ background-color: #215dc3;
+}
+
 ::-webkit-scrollbar {
  max-height:10px;
  max-width:10px;
-}
-
-::-webkit-scrollbar {
- background:#c0c0c0;
-}
-
-::-webkit-scrollbar-thumb {
- background:#888;
-}
-
-::-webkit-scrollbar-corner {
- background:#ddd;
 }

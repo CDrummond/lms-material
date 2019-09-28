@@ -11,6 +11,7 @@
 5. If there is no player on this server, but there are players on another
    server, then still show players menu - so that players may be moved to this
    server.
+6. Tweak 'text' list item margins.
 
 1.0.1
 -----

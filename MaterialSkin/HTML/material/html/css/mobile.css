@@ -291,6 +291,9 @@
   padding:0 8px !important;
  }
 
+.browse-text {
+ padding:12px 8px 12px 8px;
+ }
  .vol-label {
   right:92px;
  }

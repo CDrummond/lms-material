@@ -521,9 +521,10 @@ a {
 }
 
 .browse-text {
- padding:11px;
+ padding:12px 8px 12px 16px;
  font-size:var(--std-font-size);
  font-weight:200;
+ min-height:var(--list-elem-height);
 }
 
 .browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
@@ -1020,7 +1021,7 @@ div.v-subheader {
 .lms-avatar-small .v-avatar {
  width:32px !important;
  height:32px !important;
- margin-left:6px;
+ margin-left:4px;
 }
 
 .lms-list3 .lms-avatar .v-avatar, .lms-list-sub3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar, .lms-list-sub3 .v-list__tile__avatar {

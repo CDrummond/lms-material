@@ -31,6 +31,10 @@
    to add.
 4. Fix missing SVG icons when Material is set as default, and desktop/mobile
    URL is used. e.g. http://SERVER:9000/mobile
+5. If there is no player on this server, but there are players on another
+   server, then still show players menu - so that players may be moved to this
+   server.
+6. Tweak 'text' list item margins.
 
 1.0.1
 -----

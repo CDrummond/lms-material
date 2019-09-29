@@ -15,7 +15,7 @@ input[type="text"], input[type="password"] {
 }
 
 input[type="text"]:focus, input[type="password"]:focus, .stdedit:focus {
- background-color: #484848;
+ border-bottom: 1px solid #82b1ff;
 }
 
 input[type="submit"], input[type="button"] {

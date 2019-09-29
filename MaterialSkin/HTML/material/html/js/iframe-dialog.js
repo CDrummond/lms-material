@@ -38,7 +38,7 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <div style="width:100%; height:100%; display: flex; justify-content: center; align-items: center; position:absolute; top:0px; left:0px; z-index:100;" v-bind:class="{'transparent':!transparent}">
+    <div v-if="transparent" style="width:100%; height:100%; display: flex; justify-content: center; align-items: center; position:absolute; top:0px; left:0px; z-index:100;">
      <p>{{i18n("Loading...")}}</p>
     </div>
     <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)" v-bind:class="{'transparent':transparent}"></iframe>

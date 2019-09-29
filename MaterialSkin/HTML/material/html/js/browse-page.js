@@ -140,7 +140,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
    </v-list-tile>
-   <p v-else-if="item.type=='text'" class="browse-text lms-list-item" v-html="item.title"></p>
+   <v-list-tile v-else-if="item.type=='text'" class="browse-text lms-list-item" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content></v-list-tile>
    <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
@@ -337,6 +337,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2) {
                         this.updateTopList(JSON.parse(data.result._p2));
+                        this.saveTopList();
                     } else {
                         lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
                             if (data && data.result && data.result._p2) {

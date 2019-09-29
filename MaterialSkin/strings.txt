@@ -1,23 +1,29 @@
 MATERIAL_SKIN
 	EN	Material Skin
+	NL	Material Skin
 
 PLUGIN_MATERIAL_SKIN
 	DE	Web Skin im Material Stil, für mobile Nutzung optimiert
 	EN	Material themed skin, suitable for mobile use.
 	FR	Thème 'Material Skin', adapté à une utilisation mobile.
+	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	EN	Composer genres
 	FR	Genres concernés par le tag "composer" (compositeur)
+	NL	Componist genres
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par compositeur.
+	NL	Comma gesepareerde lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	EN	Conductor genres
 	FR	Genres concernés par le tag "conductor" (chef d'orchestre)
+	NL	Dirigent genres
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.
-	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre. 
+	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
+	NL	Comma gesepareerde lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.

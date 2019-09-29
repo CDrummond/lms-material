@@ -1162,3 +1162,7 @@ div.v-subheader {
  margin:0px;
  padding:0px;
 }
+
+.transparent {
+ opacity:0;
+}

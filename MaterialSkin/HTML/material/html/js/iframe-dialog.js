@@ -23,6 +23,7 @@ function hideClassicSkinElems(dark, isPlayer) {
             insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION);
         }
     }
+    bus.$emit('iframe-css-set');
 }
 
 Vue.component('lms-iframe-dialog', {
@@ -37,7 +38,10 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)"></iframe>
+    <div style="width:100%; height:100%; display: flex; justify-content: center; align-items: center; position:absolute; top:0px; left:0px; z-index:100;" v-bind:class="{'transparent':!transparent}">
+     <p>{{i18n("Loading...")}}</p>
+    </div>
+    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)" v-bind:class="{'transparent':transparent}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -49,7 +53,8 @@ Vue.component('lms-iframe-dialog', {
             show: false,
             title: undefined,
             src: undefined,
-            isPlayer: false
+            isPlayer: false,
+            transparent: true
         }
     },
     mounted() {
@@ -58,6 +63,7 @@ Vue.component('lms-iframe-dialog', {
             this.src = page;
             this.isPlayer = page.indexOf("player/basic.html")>0;
             this.show = true;
+            this.transparent = true;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
@@ -67,11 +73,23 @@ Vue.component('lms-iframe-dialog', {
                 this.close();
             }
         }.bind(this));
+        bus.$on('iframe-css-set', function() {
+            setTimeout(function () {
+                this.transparent = false;
+            }.bind(this), 100);
+        }.bind(this));
     },
     methods: {
         close() {
             this.show=false;
             bus.$emit('iframeClosed', this.isPlayer);
+        },
+        i18n(str, arg) {
+            if (this.show && this.transparent) {
+                return i18n(str, arg);
+            } else {
+                return str;
+            }
         }
     },
     computed: {
@@ -85,4 +103,3 @@ Vue.component('lms-iframe-dialog', {
         }
     }
 })
-

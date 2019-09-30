@@ -1,9 +1,16 @@
-html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
  background:white !important;
 }
 
-.homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, a, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
  color: black !important;
+}
+
+hr {
+ border:0.5px solid #bbb;
+}
+a {
+ color: #1976d2;
 }
 
 select {
@@ -11,6 +18,7 @@ select {
 }
 
 input[type="text"], input[type="password"] {
+ color:black;
  border-bottom: 1px solid black;
 }
 
@@ -25,7 +33,7 @@ input[type="submit"], input[type="button"] {
 }
 
 input[type="submit"]:hover, input[type="button"]:hover {
- background-color: #b8b8b8;
+ background-color: #ddd;
 }
 
 input[type="submit"]:active, input[type="button"]:active {

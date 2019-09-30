@@ -40,6 +40,10 @@ body {
  margin-top:-16px;
 }
 
+hr {
+ margin-right:8px;
+}
+
 div#innerSettingsBlock {
  height:calc(100vh - 88px)!important;
 }
@@ -90,6 +94,7 @@ input[type="submit"], input[type="button"] {
 input[type=checkbox] {
  width:18px;
  height:18px;
+ vertical-align: sub;
 }
 
 #saveSettings {
@@ -98,7 +103,7 @@ input[type=checkbox] {
 }
 
 #saveSettings:hover {
- background-color: #215dc3;
+ background-color: #417de3;
 }
 
 ::-webkit-scrollbar {

@@ -41,7 +41,7 @@ Vue.component('lms-iframe-dialog', {
     <div v-if="transparent" style="width:100%; height:100%; display: flex; justify-content: center; align-items: center; position:absolute; top:0px; left:0px; z-index:100;">
      <p>{{i18n("Loading...")}}</p>
     </div>
-    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)" v-bind:class="{'transparent':transparent}"></iframe>
+    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)" v-bind:class="{'transparent':transparent}" frameborder="0"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>

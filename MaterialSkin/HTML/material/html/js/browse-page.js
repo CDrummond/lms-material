@@ -366,11 +366,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
 
-        bus.$on('trackInfo', function(item, index) {
+        bus.$on('trackInfo', function(item, index, page) {
             if (this.history.length>=50) {
                 this.goHome();
             }
-            this.itemMoreMenu(item, index);
+            this.itemMoreMenu(item, index, page);
         }.bind(this));
 
         bus.$on('browse', function(cmd, params, title) {
@@ -523,20 +523,22 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.command = this.command;
             prev.showRatingButton = this.showRatingButton;
             prev.subtitleClickable = this.subtitleClickable;
+            prev.prevPage = this.prevPage;
             this.history.push(prev);
         },
-        fetchItems(command, item, batchSize) {
+        fetchItems(command, item, prevPage) {
             if (this.fetchingItems) {
                 return;
             }
 
             this.fetchingItems = true;
             var start = item.range ? item.range.start : 0;
-            var count = undefined!=batchSize && batchSize>0 ? batchSize : (item.range && item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE);
+            var count = item.range && item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE;
             lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
                 this.options.ratingsSupport=this.$store.state.ratingsSupport;
                 var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
                 this.handleListResponse(item, command, resp);
+                this.prevPage = prevPage;
                 this.fetchingItems = false;
                 this.enableRatings();
             }).catch(err => {
@@ -912,19 +914,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dialog = {};
             }
         },
-        itemMoreMenu(item, queueIndex) {
+        itemMoreMenu(item, queueIndex, page) {
             if (undefined!=queueIndex) {
-                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item);
+                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item, page);
             } else if (item.id) {
                 var params=[item.id, "menu:1", "html:1"];
                 if (item.id.startsWith("artist_id:")) {
-                    this.fetchItems({command: ["artistinfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["artistinfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("album_id:")) {
-                    this.fetchItems({command: ["albuminfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["albuminfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("track_id:")) {
-                    this.fetchItems({command: ["trackinfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["trackinfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("genre_id:")) {
-                    this.fetchItems({command: ["genreinfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["genreinfo", "items"], params: params}, item, page);
                 }
             }
         },
@@ -1396,6 +1398,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 //}
                 return;
             }
+            if (this.prevPage && !this.desktop) {
+                this.$store.commit('setPage', this.prevPage);
+            }
             if (this.history.length<2) {
                 this.goHome();
                 return;
@@ -1417,6 +1422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.command = prev.command;
             this.showRatingButton = prev.showRatingButton;
             this.subtitleClickable = prev.subtitleClickable;
+            this.prevPage = prev.prevPage;
             if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {

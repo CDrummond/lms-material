@@ -5,27 +5,6 @@
  * MIT license.
  */
 
-function insertCss(doc, path) {
-    var cssLink = doc.createElement("link");
-    cssLink.href = path;
-    cssLink.rel = "stylesheet";
-    cssLink.type = "text/css";
-    doc.head.appendChild(cssLink);
-}
-
-function hideClassicSkinElems(dark, isPlayer) {
-    var iframe = document.getElementById("classicSkinIframe");
-    if (iframe) {
-        insertCss(iframe.contentDocument, "../../../material/html/font/font.css");
-        insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods.css?r=" + LMS_MATERIAL_REVISION);
-        insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-"+(dark ? "dark" : "light")+".css?r=" + LMS_MATERIAL_REVISION);
-        if (isPlayer) {
-            insertCss(iframe.contentDocument, "../../../material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION);
-        }
-    }
-    bus.$emit('iframe-css-set');
-}
-
 Vue.component('lms-iframe-dialog', {
     template: `
 <div>
@@ -41,7 +20,7 @@ Vue.component('lms-iframe-dialog', {
     <div v-if="transparent" style="width:100%; height:100%; display: flex; justify-content: center; align-items: center; position:absolute; top:0px; left:0px; z-index:100;">
      <p>{{i18n("Loading...")}}</p>
     </div>
-    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="hideClassicSkinElems(darkUi, isPlayer)" v-bind:class="{'transparent':transparent}" frameborder="0"></iframe>
+    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="transparent=false" v-bind:class="{'transparent':transparent}" frameborder="0"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>

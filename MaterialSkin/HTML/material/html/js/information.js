@@ -24,7 +24,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="bus.$emit('dlg.open', 'iframe', '/Classic/settings/server/basic.html', i18n('Server settings'))" flat><v-icon class="btn-icon">dns</v-icon>{{i18n('Server Settings')}}</v-btn>
+    <v-btn @click="openSettings" flat><v-icon class="btn-icon">dns</v-icon>{{i18n('Server Settings')}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -301,6 +301,9 @@ Vue.component('lms-information-dialog', {
             } else {
                 return str;
             }
+        },
+        openSettings() {
+            bus.$emit('dlg.open', 'iframe', '/material-server-settings-'+(this.$store.state.darkUi ? 'dark' : 'light')+'/settings/server/basic.html', i18n('Server settings'));
         }
     },
     beforeDestroy() {
@@ -315,7 +318,7 @@ Vue.component('lms-information-dialog', {
         }
     },
     computed: {
-            darkUi () {
+        darkUi () {
             return this.$store.state.darkUi
         }
     },

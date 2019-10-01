@@ -68,6 +68,10 @@ select option[value=INTERFACE_SETTINGS] {
 select {
  border: none;
  min-height:28px;
+ text-overflow:ellipsis;
+ overflow:hidden;
+ white-space:nowrap;
+ max-width:calc(100vw - 32px);
 }
 
 select:focus {
@@ -77,7 +81,8 @@ select:focus {
 input[type="text"], input[type="password"] {
  border: none;
  min-width:80px;
- min-height:28px;
+ min-height:25px;
+ max-width:calc(100vw - 32px);
 }
 
 input[type="text"]:focus, input[type="password"]:focus {
@@ -89,6 +94,7 @@ input[type="submit"], input[type="button"] {
  border-radius: 3px;
  text-transform: uppercase;
  padding:5px 8px 5px 8px;
+ outline: none;
 }
 
 input[type=checkbox] {
@@ -104,6 +110,10 @@ input[type=checkbox] {
 
 #saveSettings:hover {
  background-color: #417de3;
+}
+
+#saveSettings:active {
+ background-color: #115dc3;
 }
 
 ::-webkit-scrollbar {

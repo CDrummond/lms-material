@@ -1,4 +1,4 @@
-html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
  background:#424242 !important;
 }
 
@@ -7,7 +7,11 @@ html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentP
 }
 
 hr {
- border:0.5px solid #;
+ border:0.5px solid #ddd;
+}
+
+tbody tr.odd td {
+ background-color:#494949 !important;
 }
 
 a {
@@ -27,6 +31,21 @@ input[type="text"]:focus, input[type="password"]:focus, .stdedit:focus {
  border-bottom: 1px solid #82b1ff;
 }
 
+/* text enty auto-complete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+ -webkit-text-fill-color: white;
+ -webkit-box-shadow: 0 0 0px 1000px #424242 inset;
+ transition: background-color 5000s ease-in-out 0s;
+}
+
 input[type="submit"], input[type="button"] {
  color: white !important;
  background-color: #5F5F5F;
@@ -38,7 +57,8 @@ input[type="submit"]:hover, input[type="button"]:hover {
 }
 
 input[type="submit"]:active, input[type="button"]:active {
- border-bottom: 1px solid transparent;
+ border-bottom: 1px solid #424242;
+ background-color: #4F4F4F;
 }
 
 ::-webkit-scrollbar {

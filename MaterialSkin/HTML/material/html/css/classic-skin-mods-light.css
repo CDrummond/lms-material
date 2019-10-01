@@ -1,4 +1,4 @@
-html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
  background:white !important;
 }
 
@@ -9,6 +9,11 @@ html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentP
 hr {
  border:0.5px solid #bbb;
 }
+
+tbody tr.odd td {
+ background-color:#f9f9f9 !important;
+}
+
 a {
  color: #1976d2;
 }
@@ -26,6 +31,21 @@ input[type="text"]:focus, input[type="password"]:focus, .stdedit:focus {
  border-bottom: 1px solid #1976d2;
 }
 
+/* text enty auto-complete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+ -webkit-text-fill-color: black;
+ -webkit-box-shadow: 0 0 0px 1000px white inset;
+ transition: background-color 5000s ease-in-out 0s;
+}
+
 input[type="submit"], input[type="button"] {
  color: black !important;
  background-color: #ccc;
@@ -37,7 +57,8 @@ input[type="submit"]:hover, input[type="button"]:hover {
 }
 
 input[type="submit"]:active, input[type="button"]:active {
- border-bottom: 1px solid transparent;
+ background-color: #bbb;
+ border-bottom: 1px solid white;
 }
 
 ::-webkit-scrollbar {

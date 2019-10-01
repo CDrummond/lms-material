@@ -14,7 +14,7 @@
     dialog.
 11. Check for plugin updates 1/2 second after connecting to server, and every
     30 minutes thereafter.
-13. Replace main menu icon with green arrow icon to indicate updates available.
+12. Replace main menu icon with green arrow icon to indicate updates available.
 13. Auto-scroll 'Information' dialog to plugins section if there are updates
     available when it is opened.
 14. Add option to use 3 lines for queue items (title, artist, album).

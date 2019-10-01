@@ -8,8 +8,9 @@
  left:18px;
  margin-left:-8px;
  margin-bottom:8px;
- font-size:16px;
- font-weight:500;
+ font-size:16px !important;
+ font-weight:600 !important;
+ text-transform: uppercase;
 }
 
 #statusMessage {
@@ -89,14 +90,14 @@ select:focus {
  outline: none;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="stdedit"] {
  border: none;
  min-width:80px;
  min-height:25px;
  max-width:calc(100vw - 32px);
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus {
  outline: none;
 }
 

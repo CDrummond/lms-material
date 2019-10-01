@@ -2,7 +2,7 @@ html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc
  background:white !important;
 }
 
-html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select {
  color: black !important;
 }
 
@@ -14,6 +14,10 @@ tbody tr.odd td {
  background-color:#f9f9f9 !important;
 }
 
+div.even {
+ background-color:white !important;
+}
+
 a {
  color: #1976d2;
 }
@@ -22,12 +26,13 @@ select {
  border-bottom: 1px solid black;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="stdedit"] {
  color:black;
+ background:white !important;
  border-bottom: 1px solid black;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, .stdedit:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus {
  border-bottom: 1px solid #1976d2;
 }
 

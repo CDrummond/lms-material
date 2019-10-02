@@ -52,7 +52,9 @@ Vue.component('lms-search-dialog', {
         }.bind(this));
         this.initItems();
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'search') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -96,7 +98,7 @@ Vue.component('lms-search-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'search', val);
+            this.$store.commit('dialogOpen', {name:'search', shown:val});
         }
     }
 })

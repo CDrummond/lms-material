@@ -142,7 +142,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
  <div v-else>
-  <div v-if="landscape">
+  <div v-show="overlayVolume>-1" id="volumeOverlay">{{overlayVolume}}%</div>
+  <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
@@ -205,7 +206,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
   </div>
-  <div v-else>
+  <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
    <div v-bind:style="{height: portraitPad+'px'}"></div>
    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
@@ -292,7 +293,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  largeView: false,
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, setting:false},
-                 timeTooltip: {show: false, x:0, y:0, text:undefined}
+                 timeTooltip: {show: false, x:0, y:0, text:undefined},
+                 overlayVolume: -1
                 };
     },
     mounted() {
@@ -484,6 +486,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else if (this.playerStatus.isplaying && trackChanged) {
                 this.startPositionInterval();
             }
+            // 'volume' is NOT reactive, as only want to update when overlay is shown!
+            this.volume = playerStatus.volume<0 ? -1*playerStatus.volume : playerStatus.volume;
+            if (undefined!=this.touch) {
+                this.overlayVolume = this.volume;
+            }
         }.bind(this));
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
@@ -578,7 +585,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         showMenu(event) {
             event.preventDefault();
             this.clearClickTimeout();
-            if (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER) {
+            if (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving)) {
+                this.touch = undefined;
                 this.menu.show = false;
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;
@@ -602,7 +610,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             });
             this.gallery.init();
-            bus.$emit('dialogOpen', 'np-viewer', true);
+            this.$store.commit('dialogOpen', {name:'np-viewer', shown:true});
             this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
         },
         doAction(command) {
@@ -659,7 +667,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.show=false;
             this.largeView=false;
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
-                      this.playerStatus.playlist.current);
+                      this.playerStatus.playlist.current, 'now-playing');
             if (!this.desktop) {
                 this.$store.commit('setPage', 'browse');
             }
@@ -894,6 +902,30 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.clickTimer) {
                 clearTimeout(this.clickTimer);
                 this.clickTimer = undefined;
+            }
+        },
+        touchStart(event) {
+            if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0) {
+                this.touch={x:event.touches[0].clientX, y:event.touches[0].clientY, moving:false};
+            }
+        },
+        touchEnd() {
+            this.touch = undefined;
+            this.overlayVolume = -1;
+        },
+        touchMoving(event) {
+            if (undefined!=this.touch) {
+                if (!this.touch.moving) {
+                    this.touch.moving=true;
+                    this.overlayVolume = this.volume;
+                }
+                if (Math.abs(event.touches[0].clientX-this.touch.x)<48 &&
+                    Math.abs(event.touches[0].clientY-this.touch.y)>=25) {
+                    var steps = Math.floor(Math.abs(event.touches[0].clientY-this.touch.y) / 25);
+                    var inc = event.touches[0].clientY<this.touch.y;
+                    bus.$emit("adjustVolume", inc, steps);
+                    this.touch.y += steps*25*(inc ? -1 : 1);
+                }
             }
         }
     },

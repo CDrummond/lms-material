@@ -34,6 +34,9 @@ function checkEntryFocus() {
 }
 
 function initApp(app) {
+    parseQueryParams();
+    app.$store.commit('initUiSettings');
+
     lmsUseLastPlayer = false;
     if (window.location.href.indexOf('/mini')>=0) {
         lmsUseLastPlayer = true;
@@ -156,5 +159,16 @@ function initApp(app) {
             bus.$emit('esc');
         }
     });
+
+    bus.$on('dialogOpen', function(name, val) {
+        this.$store.commit('dialogOpen', {name:name, shown:val});
+    }.bind(app));
+
+    bus.$on('dlg.open', function(name, a, b, c) {
+        app.dialogs[name] = true; // Mount
+        app.$nextTick(function () {
+            bus.$emit(name+".open", a, b, c);
+        });
+    }.bind(app));
 }
 

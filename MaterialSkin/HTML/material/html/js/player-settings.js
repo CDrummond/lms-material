@@ -74,10 +74,49 @@ Vue.component('lms-player-settings', {
      <v-list-tile>
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
+
+     <div class="dialog-padding"></div>
+     <v-header class="dialog-section-header">{{i18n('Browse modes')}}</v-header>
+     <v-list-tile class="settings-note"><p>{{i18n("Each player can have its own unique set of browse modes (Artists, Albums, Genres, etc). This is the set of options that will appear within the 'My Music' section. Use the button below to configure which modes will be available for this player.")}}</p></v-list-tile>
+     <v-btn @click="browseModesDialog.show=true" flat><v-icon class="btn-icon">library_music</v-icon>{{i18n('Configure browse modes')}}</v-btn>
+
+     <div class="dialog-padding"></div>
+     <div class="dialog-padding"></div>
+     <v-header class="dialog-section-header">{{i18n('Extra settings')}}</v-header>
+     <v-list-tile class="settings-note"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
+     <v-btn @click="showAllSettings" flat><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
      <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
   </v-card>
+ </v-dialog>
+
+ <v-dialog v-model="browseModesDialog.show" :width="wide>1 ? 750 : 500" persistent>
+  <v-card>
+   <v-card-title>{{i18n("Browse modes")}}</v-card-title>
+    <v-list two-line subheader class="settings-list">
+     <v-layout v-if="wide>1">
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index % 2 == 0" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index % 2 == 1" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+     </v-layout>
+     <template v-for="(item, index) in browseModesDialog.modes" v-else>
+      <v-checkbox v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+     </template>
+    </v-list>
+   <div class="dialog-padding"></div>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
+    </v-card-actions>
+   <v-card>
  </v-dialog>
 
  <v-dialog v-model="alarmDialog.show" width="500" persistent>
@@ -97,26 +136,26 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Days')}}</v-subheader>
-   <v-list-tile class="settings-compact-row" v-if="wide">
+   <v-list-tile class="settings-compact-row" v-if="wide>0">
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide">
+   <v-list-tile class="settings-compact-row" v-if="wide>0">
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
    </v-list-tile>
    <v-list-tile class="settings-compact-row"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide">
+   <v-list-tile class="settings-compact-row" v-if="wide>0">
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
    </v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="!wide"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
+   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
    <div class="dialog-padding"></div>
    <v-subheader>{{i18n('Options')}}</v-subheader>
    <v-list-tile>
@@ -144,6 +183,7 @@ Vue.component('lms-player-settings', {
    </v-card-actions>
   </v-card>
  </v-dialog>
+
 </div>
 `,
     props: [],
@@ -177,7 +217,12 @@ Vue.component('lms-player-settings', {
                 url: undefined,
                 shuffle: undefined
             },
-            wide:true
+            wide:1,
+            browseModesDialog: {
+                show: false,
+                modes:[],
+            },
+            playerId: undefined
         }
     },
     computed: {
@@ -216,7 +261,7 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=this.alarmDialog.show=false;
+            this.show=this.alarmDialog.show=this.browseModesDialog.show=false;
         }.bind(this));
         this.sleepOpen = false;
         bus.$on('dialogOpen', function(name, open) {
@@ -225,10 +270,17 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.alarmDialog.show) {
+            if (this.$store.state.activeDialog == 'alarm') {
                 this.alarmDialog.show=false;
-            } else if (!this.sleepOpen) {
+            } else if (this.$store.state.activeDialog == 'browsemodes') {
+                this.browseModesDialog.show=false;
+            } else if (this.$store.state.activeDialog == 'playersettings') {
                 this.show=false;
+            }
+        }.bind(this));
+        bus.$on('iframeClosed', function(isPlayer) {
+            if (isPlayer) { // update any settings that might have changed
+                this.update(true);
             }
         }.bind(this));
     },
@@ -237,7 +289,7 @@ Vue.component('lms-player-settings', {
             this.controlSleepTimer(playerStatus.will_sleep_in);
         },
         playerSettings(player) {
-            this.wide = window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370);
+            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.cancelSleepTimer();
             this.dstmItems=[];
             this.crossfade='0';
@@ -259,16 +311,6 @@ Vue.component('lms-player-settings', {
                             });
                         }
                     });
-                }
-            });
-            lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
-                if (data && data.result && undefined!=data.result._p2) {
-                    this.crossfade=data.result._p2;
-                }
-            });
-            lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
-                if (data && data.result && undefined!=data.result._p2) {
-                    this.replaygain=data.result._p2;
                 }
             });
 
@@ -324,6 +366,21 @@ Vue.component('lms-player-settings', {
                     this.controlSleepTimer(parseInt(data.result._sleep));
                 }
             });
+            this.browseModesDialog.modes = [];
+            this.prevEnabledModes = new Set();
+            lmsCommand(this.playerId, ["material-skin-modes", "get"]).then(({data}) => {
+                if (data.result && data.result.modes_loop) {
+                    for (var i=0, loop=data.result.modes_loop, len=loop.length; i<len; ++i) {
+                        loop[i].weight=parseInt(loop[i].weight);
+                        this.browseModesDialog.modes.push(loop[i]);
+                        if (loop[i].enabled) {
+                            this.prevEnabledModes.add(loop[i].id);
+                        }
+                    }
+                    this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : nameSort(a, b); });
+                }
+            });
+            this.update(false);
             this.show=true;
         },
         initItems() {
@@ -347,6 +404,25 @@ Vue.component('lms-player-settings', {
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
         },
+        update(readName) {
+            if (readName) {
+                lmsCommand(this.playerId, ["playerpref", "playername", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2 && this.playerName!=data.result._p2) {
+                        this.playerName=data.result._p2;
+                    }
+                });
+            }
+            lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._p2) {
+                    this.crossfade=data.result._p2;
+                }
+            });
+            lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._p2) {
+                    this.replaygain=data.result._p2;
+                }
+            });
+        },
         close() {
             this.show=false;
             if (this.dstmItems.length>1) {
@@ -359,6 +435,37 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
             lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
+
+            var enabledModes = new Set();
+            var enabled = [];
+            var disabled = [];
+            for (var i=0, loop=this.browseModesDialog.modes, len=loop.length; i<len; ++i) {
+                var item = loop[i];
+                if (item.enabled) {
+                    enabledModes.add(item.id);
+                    enabled.push(item.id);
+                } else {
+                    disabled.push(item.id);
+                }
+            }
+            var removed = new Set([...enabledModes].filter(x => !this.prevEnabledModes.has(x)));
+            var added = new Set([...this.prevEnabledModes].filter(x => !enabledModes.has(x)));
+            if (removed.size>0 || added.size>0) {
+                var command = ["material-skin-modes", "set"];
+                if (enabled.length>0) {
+                    command.push("enabled:"+enabled.join(","));
+                }
+                if (disabled.length>0) {
+                    command.push("disabled:"+disabled.join(","));
+                }
+                var id = this.playerId;
+                lmsCommand(this.playerId, command).then(({data}) => {
+                    if (this.$store.state.player && id == this.$store.state.player.id) {
+                        bus.$emit('playerMenuUpdated');
+                    }
+                });
+            }
+
             if (this.playerOrigName!=this.playerName) {
                 lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
                     bus.$emit('refreshServerStatus');
@@ -463,6 +570,9 @@ Vue.component('lms-player-settings', {
             } else {
                 this.cancelSleepTimer();
             }
+        },
+        showAllSettings() {
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'));
         }
     },
     filters: {
@@ -491,7 +601,13 @@ Vue.component('lms-player-settings', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'playersettings', val);
+            this.$store.commit('dialogOpen', {name:'playersettings', shown:val});
+        },
+        'alarmDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'alarm', shown:val});
+        },
+        'browseModesDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
         }
     }
 })

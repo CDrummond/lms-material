@@ -168,6 +168,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="swipeVolume = !swipeVolume" class="switch-label">
+      <v-list-tile-title>{{i18n('Swipe to change volume')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="swipeVolume"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
@@ -206,6 +215,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueShowTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
+      <v-list-tile-title>{{i18n('Three lines')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
     <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
@@ -243,6 +261,8 @@ Vue.component('lms-ui-settings', {
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
+            swipeVolume:true,
+            queueThreeLines:false,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -280,6 +300,8 @@ Vue.component('lms-ui-settings', {
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
+            this.swipeVolume = this.$store.state.swipeVolume;
+            this.queueThreeLines = this.$store.state.queueThreeLines;
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
@@ -306,16 +328,13 @@ Vue.component('lms-ui-settings', {
             if (getLocalStorageBool('remoteLibraries', true)) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
-
             this.show = true;
         }.bind(this));
-
-        bus.$on('closeDialog', function(name) {
-            if (this.show && name=='ui-settings') {
-                this.close();
+        bus.$on('esc', function() {
+            if (this.$store.state.activeDialog == 'uisettings') {
+                this.show=false;
             }
         }.bind(this));
-
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -352,6 +371,8 @@ Vue.component('lms-ui-settings', {
                                                   techInfo:this.techInfo,
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
+                                                  swipeVolume:this.swipeVolume,
+                                                  queueThreeLines:this.queueThreeLines,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
@@ -389,6 +410,8 @@ Vue.component('lms-ui-settings', {
                                      techInfo:this.techInfo,
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
+                                     swipeVolume:this.swipeVolume,
+                                     queueThreeLines:this.queueThreeLines,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,
@@ -421,7 +444,7 @@ Vue.component('lms-ui-settings', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'uisettings', val);
+            this.$store.commit('dialogOpen', {name:'uisettings', shown:val});
         }
     }
 })

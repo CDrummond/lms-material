@@ -49,7 +49,9 @@ Vue.component('lms-movequeue-dialog', {
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'movequeue') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -72,7 +74,7 @@ Vue.component('lms-movequeue-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'movequeue', val);
+            this.$store.commit('dialogOpen', {name:'movequeue', shown:val});
         }
     }
 })

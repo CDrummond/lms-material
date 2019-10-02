@@ -123,11 +123,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
+            var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
             var isFavorites = parent && parent.isFavFolder ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isApps = parent && parent.id == TOP_APPS_ID;
-            var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
+            var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -312,6 +313,14 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.menu.push(DELETE_ACTION);
                 }
 
+                if (isPodcastList) {
+                    if (!addedDivider && i.menu.length>0) {
+                        i.menu.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menu.push(REMOVE_PODCAST_ACTION);
+                }
+
                 if (!i.type && i.actions && i.actions.go && i.actions.go.params) {
                     for (var p=0, plen=i.actions.go.params.length; p<plen; ++p) {
                         if (TERM_PLACEHOLDER == i.actions.go.params[p]) {
@@ -463,7 +472,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             }
 
             if (resp.total == resp.items.length) {
-                if (isApps) {
+                if (isApps || isPodcastList) {
                     resp.items.sort(titleSort);
                 } else if (isFavorites) {
                     resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
@@ -840,3 +849,30 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
     return resp;
 }
 
+function parseBrowseUrlResp(data, provider) {
+    var resp = {items: [], baseActions:[], canUseGrid: false, total: 0, jumplist:[] };
+
+    if ('itunes'==provider) {
+        if (data && data.results) {
+            for (var i=0, loop=data.results, loopLen=loop.length; i<loopLen; ++i) {
+                resp.items.push({title: loop[i].trackName, id: loop[i].feedUrl, image: loop[i].artworkUrl100, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
+            }
+        }
+        resp.total = resp.items.length;
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.total);
+    } else if ('gpodder'==provider) {
+        if (data) {
+            for (var i=0, loopLen=data.length; i<loopLen; ++i) {
+                if (!data[i].url.startsWith("http://www.striglsmusicnews.com")) {
+                    resp.items.push({title: data[i].title, id: data[i].url, image: data[i].scaled_logo_url, descr: data[i].description, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
+                }
+            }
+        }
+        resp.total = resp.items.length;
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.total);
+    }
+    if (0==resp.items.length) {
+        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
+    }
+    return resp;
+}

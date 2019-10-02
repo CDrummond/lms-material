@@ -105,3 +105,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .pq-current {
  background-color:rgba(0, 0, 0, 0.1);
 }
+
+.embedded-page {
+ background-color:white;
+}

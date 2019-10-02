@@ -10,31 +10,12 @@ Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 var app = new Vue({
     el: '#app',
     data() {
-        return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
-                            volume: false, manage: false, rndmix: false, favorite: false, rating: false, 
-                            sleep: false, search: false, movequeue:false } }
+        return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
+                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false, search: false,
+                            movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, iframe: false } }
     },
     created() {
-        parseQueryParams();
-        this.$store.commit('initUiSettings');
-
-        bus.$on('dlg.open', function(name, a, b, c) {
-            this.dialogs[name] = true; // Mount
-            this.$nextTick(function () {
-                bus.$emit(name+".open", a, b, c);
-            });
-        }.bind(this));
-
         initApp(this);
-        this.openDialogs = new Set();
-
-        bus.$on('dialogOpen', function(name, open) {
-            if (open) {
-                this.openDialogs.add(name);
-            } else {
-                this.openDialogs.delete(name);
-            }
-        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -48,13 +29,17 @@ var app = new Vue({
         }
     },
     methods: {
+        swipeLeft(ev) {
+            this.swipe(ev, 'l');
+        },
+        swipeRight(ev) {
+            this.swipe(ev, 'r');
+        },
         swipe(ev, direction) {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (this.openDialogs.size>1 ||
-                (this.openDialogs.size==1 && (this.$store.state.page=='now-playing' ||
-                                              (!this.openDialogs.has('np-viewer') && !this.openDialogs.has('info-dialog'))))) {
+            if (this.$store.state.openDialogs.length>0) {
                 return;
             }
             if (this.$store.state.page=='now-playing') {

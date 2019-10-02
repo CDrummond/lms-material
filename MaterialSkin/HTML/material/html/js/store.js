@@ -108,6 +108,16 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
+    if (undefined!=val.swipeVolume && state.swipeVolume!=val.swipeVolume) {
+        state.swipeVolume = val.swipeVolume;
+        setLocalStorageVal('swipeVolume', state.swipeVolume);
+    }
+
+    if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
+        state.queueThreeLines = val.queueThreeLines;
+        setLocalStorageVal('queueThreeLines', state.queueThreeLines);
+        bus.$emit('queueDisplayChanged');
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -144,7 +154,12 @@ const store = new Vuex.Store({
         menuIcons: true,
         sortHome: isIPhone(),
         hidden: new Set(),
-        visibleMenus: new Set()
+        visibleMenus: new Set(),
+        swipeVolume: true,
+        pluginUpdatesAvailable: false,
+        queueThreeLines: false,
+        openDialogs: [],
+        activeDialog: undefined
     },
     mutations: {
         setPlayers(state, players) {
@@ -319,6 +334,8 @@ const store = new Vuex.Store({
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
+            state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
+            state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
@@ -354,7 +371,9 @@ const store = new Vuex.Store({
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                      lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
-                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome)};
+                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
+                                     swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
+                                     queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }
@@ -405,6 +424,23 @@ const store = new Vuex.Store({
                 state.visibleMenus.delete(val.name);
             }
             lmsNumVisibleMenus = state.visibleMenus.size;
+        },
+        dialogOpen(state, val) {
+            if (val.shown) {
+                state.openDialogs.push(val.name);
+                state.activedialog = val.name;
+            } else if (state.openDialogs.length>0) {
+                for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
+                    if (state.openDialogs[i]==val.name) {
+                        state.openDialogs.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+            state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
+        },
+        setPluginUpdatesAvailable(state, val) {
+            state.pluginUpdatesAvailable = val;
         }
     }
 })

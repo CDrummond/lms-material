@@ -33,6 +33,23 @@ my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $DEFAULT_COMPOSER_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
 my $DEFAULT_CONDUCTOR_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
 
+my @BROWSE_MODES = ( { id=>'myMusicArtists', name=>'BROWSE_BY_ARTIST', weight=>10},
+                     { id=>'myMusicArtistsAlbumArtists', name=>'BROWSE_BY_ALBUMARTIST', weight=>9},
+                     { id=>'myMusicArtistsAllArtists', name=>'BROWSE_BY_ALL_ARTISTS', weight=>11},
+                     { id=>'myMusicAlbums', name=>'BROWSE_BY_ALBUM', weight=>20},
+                     { id=>'myMusicGenres', name=>'BROWSE_BY_GENRE', weight=>30},
+                     { id=>'myMusicYears', name=>'BROWSE_BY_YEAR', weight=>40},
+                     { id=>'myMusicNewMusic', name=>'BROWSE_NEW_MUSIC', weight=>50},
+                     { id=>'myMusicMusicFolder', name=>'BROWSE_MUSIC_FOLDER', weight=>70},
+                     { id=>'myMusicPlaylists', name=>'SAVED_PLAYLISTS', weight=>80} );
+
+my @EXTENDED_BROWSE_MODES = ( { id=>'myMusicAlbumsVariousArtists', name=>'PLUGIN_EXTENDED_BROWSEMODES_COMPILATIONS', weight=>22},
+                              { id=>'myMusicFileSystem', name=>'PLUGIN_EXTENDED_BROWSEMODES_BROWSEFS', weight=>75},
+                              { id=>'myMusicRandomAlbums', name=>'PLUGIN_EXTENDED_BROWSEMODES_RANDOM_ALBUMS', weight=>21} );
+
+my @EXTENDED_BROWSE_STATS_MODES = ( { id=>'myMusicTopTracks', name=>'PLUGIN_EXTENDED_BROWSEMODES_TOP_TRACKS', weight=>68},
+                                    { id=>'myMusicFlopTracks', name=>'PLUGIN_EXTENDED_BROWSEMODES_FLOP_TRACKS', weight=>69} );
+
 sub initPlugin {
     my $class = shift;
 
@@ -117,6 +134,9 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin-presets', '_cmd'],
                                                                 [1, 0, 1, \&_cliPresetCommand]
     );
+    Slim::Control::Request::addDispatch(['material-skin-modes', '_cmd'],
+                                                                [1, 0, 1, \&_cliModesCommand]
+    );
 }
 
 sub _cliCommand {
@@ -130,7 +150,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -267,6 +287,72 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'add-podcast') {
+        my $name = $request->getParam('name');
+        my $url = $request->getParam('url');
+        if ($name && $url) {
+            my $prefs = preferences('plugin.podcast');
+            my $feeds = $prefs->get('feeds');
+            push @{$feeds}, { 'name' => $name, 'value' => $url };
+            $prefs->set(feeds => $feeds);
+            $request->setStatusDone();
+            return;
+        }
+    }
+
+    if ($cmd eq 'delete-podcast') {
+        my $pos = $request->getParam('pos');
+        if ($pos) {
+            my $prefs = preferences('plugin.podcast');
+            my $feeds = $prefs->get('feeds');
+            if ($pos < scalar @{$feeds}) {
+                splice @{$feeds}, $pos, 1;
+                $prefs->set(feeds => $feeds);
+                $request->setStatusDone();
+                return;
+            }
+        }
+    }
+
+    if ($cmd eq 'plugins') {
+        my ($current, $active, $inactive, $hide) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
+        my $cnt = 0;
+        foreach my $plugin (@{$active}) {
+            $request->addResultLoop("plugins_loop", $cnt, "name", $plugin->{name});
+            $request->addResultLoop("plugins_loop", $cnt, "title", $plugin->{title});
+            $request->addResultLoop("plugins_loop", $cnt, "descr", $plugin->{desc});
+            $request->addResultLoop("plugins_loop", $cnt, "creator", $plugin->{creator});
+            $request->addResultLoop("plugins_loop", $cnt, "homepage", $plugin->{homepage});
+            $request->addResultLoop("plugins_loop", $cnt, "email", $plugin->{email});
+            $request->addResultLoop("plugins_loop", $cnt, "version", $plugin->{version});
+            $cnt++;
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'plugins-status') {
+        $request->addResult("needs_restart", Slim::Utils::PluginManager->needsRestart ? 1 : 0);
+        $request->addResult("downloading", Slim::Utils::PluginDownloader->downloading ? 1 : 0);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'plugins-update') {
+        my $json = $request->getParam('plugins');
+        if ($json) {
+            my $updating = 0;
+            my $plugins = eval { from_json( $json ) };
+            for my $plugin (@{$plugins}) {
+                Slim::Utils::PluginDownloader->install({ name => $plugin->{'name'}, url => $plugin->{'url'}, sha => $plugin->{'sha'} });
+                $updating++;
+            }
+            $request->addResult("updating", $updating);
+            $request->setStatusDone();
+            return;
+        }
+    }
+
     $request->setStatusBadParams();
 }
 
@@ -348,6 +434,171 @@ sub _cliPresetCommand {
         $serverprefs->client($client)->set('presets', $presets);
         $request->setStatusDone();
         return;
+    }
+
+    $request->setStatusBadParams()
+}
+
+sub _cliModesCommand {
+    my $request = shift;
+
+    # check this is the correct query.
+    if ($request->isNotCommand([['material-skin-modes']])) {
+        $request->setStatusBadDispatch();
+        return;
+    }
+
+    my $cmd = $request->getParam('_cmd');
+    my $client = $request->client();
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['get', 'set', 'set-group']) ) {
+        $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'get') {
+        my $cnt = 0;
+        my $clientPrefs = $serverprefs->client($client);
+        my $pluginPrefs = preferences('plugin.extendedbrowsemodes');
+        if ($pluginPrefs) {
+            my $additionalMenuItems = $pluginPrefs->get('additionalMenuItems');
+            if ($additionalMenuItems) {
+                foreach my $additionalMenuItem (@{$additionalMenuItems}) {
+                    $request->addResultLoop("modes_loop", $cnt, "id", $additionalMenuItem->{id});
+                    $request->addResultLoop("modes_loop", $cnt, "name", $additionalMenuItem->{name});
+                    $request->addResultLoop("modes_loop", $cnt, "weight", $additionalMenuItem->{weight});
+                    $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $additionalMenuItem->{id}) ? 0 : 1);
+                    $cnt++;
+                }
+            }
+        }
+
+        foreach my $mode (@BROWSE_MODES) {
+            $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
+            $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
+            $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
+            $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
+            $cnt++;
+        }
+
+        foreach my $mode (@EXTENDED_BROWSE_MODES) {
+            $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
+            $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
+            $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
+            $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
+            $cnt++;
+        }
+
+        if (main::STATISTICS) {
+            foreach my $mode (@EXTENDED_BROWSE_STATS_MODES) {
+                $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
+                $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
+                $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
+                $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
+                $cnt++;
+            }
+        }
+
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'set') {
+        my $enabled = $request->getParam('enabled');
+        my $disabled = $request->getParam('disabled');
+        if ($enabled || $disabled) {
+            my $clientPrefs = $serverprefs->client($client);
+            if ($enabled) {
+                @list = split(/,/, $enabled);
+                foreach my $mode (@list) {
+                    $clientPrefs->set("disabled_" . $mode, 0);
+                }
+            }
+            if ($disabled) {
+                @list = split(/,/, $disabled);
+                foreach my $mode (@list) {
+                    $clientPrefs->set("disabled_" . $mode, 1);
+                }
+            }
+
+            $request->setStatusDone();
+            return;
+        }
+    }
+
+    if ($cmd eq 'set-group') {
+        # Set group player's enabled browse modes to the enabled modes of all members
+        my $groupsPluginPrefs = preferences('plugin.groups');
+        my $group = $groupsPluginPrefs->client($client);
+        if ($group) {
+            my $members = $group->get('members');
+            if ($members) {
+                my $groupPrefs = $serverprefs->client($client);
+                my $ebmPluginPrefs = preferences('plugin.extendedbrowsemodes');
+                my $additionalMenuItems = $ebmPluginPrefs->get('additionalMenuItems');
+                my %modes;
+                # Set all modes as disabled
+                if ($additionalMenuItems) {
+                    foreach my $additionalMenuItem (@{$additionalMenuItems}) {
+                        $modes{ $additionalMenuItem->{id} } = 1;
+                    }
+                }
+                foreach my $mode (@BROWSE_MODES) {
+                    $modes{ $mode->{id} } = 1;
+                }
+
+                foreach my $mode (@EXTENDED_BROWSE_MODES) {
+                    $modes{ $mode->{id} } = 1;
+                }
+
+                if (main::STATISTICS) {
+                    foreach my $mode (@EXTENDED_BROWSE_STATS_MODES) {
+                        $modes{ $mode->{id} } = 1;
+                    }
+                }
+
+                # iterate over all clients, and set mode to enabled if enabled for client
+                foreach my $id (@{$members}) {
+                    my $member = Slim::Player::Client::getClient($id);
+                    my $clientPrefs = $serverprefs->client($member);
+                    if ($additionalMenuItems) {
+                        foreach my $additionalMenuItem (@{$additionalMenuItems}) {
+                            if ($clientPrefs->get("disabled_" . $additionalMenuItem->{id})==0) {
+                                $modes{ $additionalMenuItem->{id} } = 0;
+                            }
+                        }
+                    }
+
+                    foreach my $mode (@BROWSE_MODES) {
+                        if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
+                            $modes{ $mode->{id} } = 0;
+                        }
+                    }
+
+                    foreach my $mode (@EXTENDED_BROWSE_MODES) {
+                        if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
+                            $modes{ $mode->{id} } = 0;
+                        }
+                    }
+
+                    if (main::STATISTICS) {
+                        foreach my $mode (@EXTENDED_BROWSE_STATS_MODES) {
+                            if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
+                                $modes{ $mode->{id} } = 0;
+                            }
+                        }
+                    }
+                }
+
+                # update group prefs
+                my @keys = keys %modes;
+                for my $key (@keys) {
+                    $groupPrefs->set("disabled_" . $key, $modes{$key});
+                }
+
+                $request->setStatusDone();
+                return;
+            }
+        }
     }
 
     $request->setStatusBadParams()

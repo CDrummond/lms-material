@@ -366,11 +366,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
 
-        bus.$on('trackInfo', function(item, index) {
+        bus.$on('trackInfo', function(item, index, page) {
             if (this.history.length>=50) {
                 this.goHome();
             }
-            this.itemMoreMenu(item, index);
+            this.itemMoreMenu(item, index, page);
         }.bind(this));
 
         bus.$on('browse', function(cmd, params, title) {
@@ -379,7 +379,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('refreshList', function(section) {
-            if (this.current && this.current.section==section) {
+            if (section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
                 this.refreshList();
             }
         }.bind(this));
@@ -404,6 +404,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('searchLib', function(command, params, term) {
             this.enteredTerm = term;
             this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
+        }.bind(this));
+        bus.$on('searchPodcasts', function(url, term, provider) {
+            this.enteredTerm = term;
+            this.fetchUrlItems(url, provider);
+        }.bind(this));
+        bus.$on('playerMenuUpdated', function() {
+            this.goHome()
+            this.serverMyMusic=[];
         }.bind(this));
     },
     methods: {
@@ -515,26 +523,46 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.command = this.command;
             prev.showRatingButton = this.showRatingButton;
             prev.subtitleClickable = this.subtitleClickable;
+            prev.prevPage = this.prevPage;
             this.history.push(prev);
         },
-        fetchItems(command, item, batchSize) {
+        fetchItems(command, item, prevPage) {
             if (this.fetchingItems) {
                 return;
             }
 
             this.fetchingItems = true;
             var start = item.range ? item.range.start : 0;
-            var count = undefined!=batchSize && batchSize>0 ? batchSize : (item.range && item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE);
+            var count = item.range && item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE;
             lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
                 this.options.ratingsSupport=this.$store.state.ratingsSupport;
                 var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
                 this.handleListResponse(item, command, resp);
+                this.prevPage = prevPage;
                 this.fetchingItems = false;
                 this.enableRatings();
             }).catch(err => {
                 this.fetchingItems = false;
                 //if (!axios.isCancel(err)) {
                     this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    logError(err, command.command, command.params, start, count);
+                //}
+            });
+        },
+        fetchUrlItems(url, provider) {
+            if (this.fetchingItems) {
+                return;
+            }
+
+            this.fetchingItems = true;
+            axios.get(url).then(({data}) => {
+                var resp = parseBrowseUrlResp(data, provider);
+                this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, resp);
+                this.fetchingItems = false;
+            }).catch(err => {
+                this.fetchingItems = false;
+                //if (!axios.isCancel(err)) {
+                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
                     logError(err, command.command, command.params, start, count);
                 //}
             });
@@ -567,6 +595,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 } else if (SECTION_PRESETS==this.current.section) {
                     this.tbarActions=[ADD_PRESET_ACTION];
+                } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
+                    this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
                 } else if (addAndPlayAllActions(command)) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -831,7 +861,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
             this.gallery.init();
-            bus.$emit('dialogOpen', 'browse-viewer', true);
+            this.$store.commit('dialogOpen', {name:'browse-viewer', shown:true});
             this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'browse-viewer', false); });
         },
         search(event, item) {
@@ -884,19 +914,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dialog = {};
             }
         },
-        itemMoreMenu(item, queueIndex) {
+        itemMoreMenu(item, queueIndex, page) {
             if (undefined!=queueIndex) {
-                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item);
+                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item, page);
             } else if (item.id) {
                 var params=[item.id, "menu:1", "html:1"];
                 if (item.id.startsWith("artist_id:")) {
-                    this.fetchItems({command: ["artistinfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["artistinfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("album_id:")) {
-                    this.fetchItems({command: ["albuminfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["albuminfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("track_id:")) {
-                    this.fetchItems({command: ["trackinfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["trackinfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("genre_id:")) {
-                    this.fetchItems({command: ["genreinfo", "items"], params: params}, item);
+                    this.fetchItems({command: ["genreinfo", "items"], params: params}, item, page);
                 }
             }
         },
@@ -906,7 +936,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('dlg.open', 'search');
                 }
             } else if (act===MORE_ACTION) {
-                this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
+                if (item.isPodcast) {
+                    bus.$emit('dlg.open', 'iteminfo', item);
+                } else {
+                    this.fetchItems(this.buildCommand(item, ACTIONS[act].cmd), item);
+                }
             } else if (act===MORE_LIB_ACTION) {
                 this.itemMoreMenu(item);
             } else if (act===PIN_ACTION) {
@@ -1106,6 +1140,29 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }).catch(err => {
                     logAndShowError(err, undefined, command.command);
+                });
+            } else if (SEARCH_PODCAST_ACTION==act) {
+                bus.$emit('dlg.open', 'podcastsearch');
+            } else if (ADD_PODCAST_ACTION==act) {
+                if (item.isPodcast) {
+                    lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({datax}) => {
+                        this.history[this.history.length-1].needsRefresh = true;
+                        bus.$emit('showMessage', i18n("Added '%1'", item.title));
+                    }).catch(err => {
+                        logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                    });
+                } else {
+                    bus.$emit('dlg.open', 'podcastadd');
+                }
+            } else if (REMOVE_PODCAST_ACTION==act) {
+                    this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n("Remove"), buttonFalseText: i18n('Cancel')}).then(res => {
+                    if (res) {
+                        lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({datax}) => {
+                            this.refreshList();
+                        }).catch(err => {
+                            logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                        });
+                    }
                 });
             } else {
                 var command = this.buildFullCommand(item, act);
@@ -1341,6 +1398,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 //}
                 return;
             }
+            if (this.prevPage && !this.desktop) {
+                this.$store.commit('setPage', this.prevPage);
+            }
             if (this.history.length<2) {
                 this.goHome();
                 return;
@@ -1362,6 +1422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.command = prev.command;
             this.showRatingButton = prev.showRatingButton;
             this.subtitleClickable = prev.subtitleClickable;
+            this.prevPage = prev.prevPage;
             if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {

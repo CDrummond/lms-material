@@ -21,6 +21,7 @@ const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
 const LMS_CACHE_VERSION = 11;
 const LMS_LIST_ELEMENT_SIZE = 48;
+const LMS_LIST_3LINE_ELEMENT_SIZE = 68;
 const LMS_BLANK_COVER = "/music/0/cover.jpg";
 const LMS_BLANK_IMAGE = "html/images/blank.png";
 const LMS_DOUBLE_CLICK_TIMEOUT = 300;
@@ -28,6 +29,7 @@ const LMS_DARK_SVG = "fff";
 const LMS_LIGHT_SVG = "444";
 const LMS_DARK_ACTIVE_SVG ="82b1ff";
 const LMS_LIGHT_ACTIVE_SVG = "346dd2";
+const LMS_UPDATE_SVG = "74bf43";
 
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
@@ -73,5 +75,6 @@ const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;
 const SECTION_PLAYLISTS = 4;
 const SECTION_PRESETS = 5;
+const SECTION_PODCASTS = 6;
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;

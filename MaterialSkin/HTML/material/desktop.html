@@ -53,6 +53,10 @@
     <lms-sleep-dialog v-if="dialogs.sleep"></lms-sleep-dialog>
     <lms-search-dialog v-if="dialogs.search"></lms-search-dialog>
     <lms-movequeue-dialog v-if="dialogs.movequeue"></lms-movequeue-dialog>
+    <lms-podcast-add-dialog v-if="dialogs.podcastadd"></lms-podcast-add-dialog>
+    <lms-podcast-search-dialog v-if="dialogs.podcastsearch"></lms-podcast-search-dialog>
+    <lms-info-dialog v-if="dialogs.iteminfo"></lms-info-dialog>
+    <lms-iframe-dialog v-if="dialogs.iframe"></lms-iframe-dialog>
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
      <div class="pswp__bg"></div>
      <div class="pswp__scroll-wrap">
@@ -103,6 +107,7 @@
   <script src="html/lib/photoswipe/photoswipe.min.js?r=4.1.2"></script>
   <script src="html/lib/photoswipe/photoswipe-ui-default.min.js?r=4.1.2"></script>
   <script src="html/lib/vue-splitter.js?r=1.3.0"></script>
+  <script src="html/lib/vue-touch-events.min.js?r=2.0.0"></script>
   <script src="html/js/actions.js?r=[% material_revision %]"></script>
   <script src="html/js/constants.js?r=[% material_revision %]"></script>
   <script src="html/js/currentcover.js?r=[% material_revision %]"></script>
@@ -126,6 +131,10 @@
   <script src="html/js/sleep-dialog.js?r=[% material_revision %]"></script>
   <script src="html/js/search-dialog.js?r=[% material_revision %]"></script>
   <script src="html/js/movequeue-dialog.js?r=[% material_revision %]"></script>
+  <script src="html/js/podcast-add-dialog.js?r=[% material_revision %]"></script>
+  <script src="html/js/podcast-search-dialog.js?r=[% material_revision %]"></script>
+  <script src="html/js/info-dialog.js?r=[% material_revision %]"></script>
+  <script src="html/js/iframe-dialog.js?r=[% material_revision %]"></script>
   <script src="html/js/i18n.js?r=[% material_revision %]"></script>
   <script src="html/js/store.js?r=[% material_revision %]"></script>
   <script src="html/js/init.js?r=[% material_revision %]"></script>

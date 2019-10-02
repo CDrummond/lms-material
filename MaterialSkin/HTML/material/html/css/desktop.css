@@ -81,23 +81,6 @@ body {
  left:calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
 }
 
-.vol-slider {
- max-width:200px;
-}
-
-.vol-label {
- padding-top:16px;
- width:3em;
- text-align:left;
- opacity:var(--sub-opacity);
- font-size:var(--std-font-size) !important;
-}
-
-.vol-label-np {
- text-align:right !important;
- padding-right:4px !important;
-}
-
 .np-bar {
  padding:0px 16px 0px 16px; /* t, r, b, l */
  position:fixed;
@@ -291,6 +274,11 @@ body {
 #letterOverlay {
  top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
  width:calc(1vw * var(--splitter-pc));
+}
+
+#volumeOverlay {
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
+ width:100%;
 }
 
 .ios-vcard-text-workaround {

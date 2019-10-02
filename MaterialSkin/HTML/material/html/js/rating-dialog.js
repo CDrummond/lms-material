@@ -58,7 +58,9 @@ Vue.component('lms-rating-dialog', {
             this.show=false;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'rating') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -100,7 +102,7 @@ Vue.component('lms-rating-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'rating', val);
+            this.$store.commit('dialogOpen', {name:'rating', shown:val});
         }
     }
 })

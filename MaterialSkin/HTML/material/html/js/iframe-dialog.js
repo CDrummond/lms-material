@@ -5,6 +5,17 @@
  * MIT license.
  */
 
+function hideClassicSkinElems() {
+    var iframe = document.getElementById("classicSkinIframe");
+    if (iframe) {
+        var cssLink = iframe.contentDocument.createElement("link");
+        cssLink.href = "/material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION;
+        cssLink.rel = "stylesheet";
+        cssLink.type = "text/css";
+        iframe.contentDocument.head.appendChild(cssLink);
+    }
+}
+
 Vue.component('lms-iframe-dialog', {
     template: `
 <div>
@@ -17,10 +28,8 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <div v-if="transparent" style="width:100%; height:100%; display: flex; justify-content: center; align-items: center; position:absolute; top:0px; left:0px; z-index:100;">
-     <p>{{i18n("Loading...")}}</p>
-    </div>
-    <iframe v-if="show" id="classicSkinIframe" :src="src" v-on:load="transparent=false" v-bind:class="{'transparent':transparent}" frameborder="0"></iframe>
+    <iframe v-if="isPlayer" id="classicSkinIframe" v-on:load="hideClassicSkinElems()" :src="src" frameborder="0"></iframe>
+    <iframe v-else :src="src" frameborder="0"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -32,8 +41,7 @@ Vue.component('lms-iframe-dialog', {
             show: false,
             title: undefined,
             src: undefined,
-            isPlayer: false,
-            transparent: true
+            isPlayer: false
         }
     },
     mounted() {
@@ -42,7 +50,6 @@ Vue.component('lms-iframe-dialog', {
             this.src = page;
             this.isPlayer = page.indexOf("player/basic.html")>0;
             this.show = true;
-            this.transparent = true;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
@@ -51,11 +58,6 @@ Vue.component('lms-iframe-dialog', {
             if (this.$store.state.activeDialog == 'iframe') {
                 this.close();
             }
-        }.bind(this));
-        bus.$on('iframe-css-set', function() {
-            setTimeout(function () {
-                this.transparent = false;
-            }.bind(this), 100);
         }.bind(this));
     },
     methods: {

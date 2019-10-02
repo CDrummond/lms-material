@@ -1,5 +1,0 @@
----
-preprocess:
- - cmdwrappers_Classic
-skinparents:
- - Classic

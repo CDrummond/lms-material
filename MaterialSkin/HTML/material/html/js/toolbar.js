@@ -7,7 +7,6 @@
 
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
-var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
@@ -121,16 +120,16 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
- <v-btn v-if="desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-if="desktop && playerStatus.digital_volume_control" class="vol-label" v-bind:class="{'vol-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
- <v-btn v-else-if="!desktop && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
+ <v-btn v-show="(desktop || wide) && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-show="(desktop || wide) && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume.val" class="vol-slider vol-full-slider" @click.middle="toggleMute" id="vol-slider"></v-slider>
+ <v-btn v-show="(desktop || wide) && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerVolume.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-show="(desktop || wide) && playerStatus.digital_volume_control" class="vol-full-label" v-bind:class="{'vol-full-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume.val|displayVolume}}%</p>
+ <v-btn v-show="!(desktop || wide) && playerStatus.digital_volume_control" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!desktop && playerStatus.digital_volume_control" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
+ <div class="vol-label" v-if="!(desktop || wide) && playerStatus.digital_volume_control" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
  <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
@@ -147,7 +146,7 @@ Vue.component('lms-toolbar', {
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon><img v-if="pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -156,8 +155,11 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else @click="menuAction(item.id)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content>
+      <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      <v-list-tile-sub-title v-if="TB_INFO.id==item.id && pluginUpdatesAvailable">{{trans.pluginUpdatesAvailable}}</v-list-tile-sub-title>
+     </v-list-tile-content>
     </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
@@ -194,15 +196,26 @@ Vue.component('lms-toolbar', {
                  showMainMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
-                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined},
+                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
+                        otherServerPlayers:undefined, pluginUpdatesAvailable:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, muted:false},
                  snackbar:{ show: false, msg: undefined},
-                 connected: true
+                 connected: true,
+                 wide: false
                }
     },
     mounted() {
+        if (!this.mini && !this.desktop) {
+            setInterval(function () {
+                this.wide = window.innerWidth>=900;
+            }.bind(this), 1000);
+            bus.$on('windowWidthChanged', function() {
+                this.wide = window.innerWidth>=900;
+            }.bind(this));
+        }
+
         bus.$on('settingsMenuActions', function(actions, page) {
             this.otherMenuItems[page]=[];
             for (var i=0, len=actions.length; i<len; ++i) {
@@ -418,20 +431,18 @@ Vue.component('lms-toolbar', {
         initItems() {
             TB_UI_SETTINGS.title=i18n('Settings');
             TB_PLAYER_SETTINGS.title=i18n('Player settings');
-            TB_SERVER_SETTINGS.title=i18n('Server settings');
             TB_INFO.title=i18n('Information');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MINI_PLAYER.title=i18n('Open mini-player');
-            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
+            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_INFO ];
             if (this.desktop && !this.mini & !IS_MOBILE) {
                 this.menuItems.push(DIVIDER);
                 this.menuItems.push(TB_MINI_PLAYER);
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
-                          info:i18n("Show current track information"),
-                          showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
-                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players")};
+                          info:i18n("Show current track information"), showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
+                          startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'), groupPlayers:("Group Players"),
+                          standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -439,9 +450,7 @@ Vue.component('lms-toolbar', {
             }
         },
         menuAction(id) {
-            if (TB_SERVER_SETTINGS.id==id) {
-                serverSettings();
-            } else if (TB_UI_SETTINGS.id==id) {
+            if (TB_UI_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'playersettings');
@@ -599,6 +608,9 @@ Vue.component('lms-toolbar', {
         },
         menuVisible() {
             return this.$store.state.visibleMenus.size>0
+        },
+        pluginUpdatesAvailable() {
+            return this.$store.state.pluginUpdatesAvailable
         }
     },
     filters: {
@@ -614,8 +626,8 @@ Vue.component('lms-toolbar', {
             }
             return value<0 ? -1*value : value;
         },
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, update) {
+            return "/material/svg/"+name+"?c="+(update ? LMS_UPDATE_SVG : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

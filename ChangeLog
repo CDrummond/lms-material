@@ -1,6 +1,32 @@
+1.1.0
+-----
+ 1. Swipe up/down in now-playing to change volume.
+ 2. Show desktop style volume control in mobile view if width is 900px or more.
+ 3. Search for podcasts via iTunes or GPodder, and add to podcast subscriptions.
+ 4. Add action to remove podcasts.
+ 5. Add action to add podcast via URL.
+ 6. Add configuration of browse-modes to player settings.
+ 7. When creating, or editing, a group, set browse modes to the enabled modes
+    from all members.
+ 8. List all active plugins in 'Information' dialog.
+ 9. Add updating of plugins to 'Information' dialog.
+10. Remove 'Server settings' from main menu, make accessible from 'Information'
+    dialog.
+11. Check for plugin updates 1/2 second after connecting to server, and every
+    30 minutes thereafter.
+12. Replace main menu icon with green arrow icon to indicate updates available.
+13. Auto-scroll 'Information' dialog to plugins section if there are updates
+    available when it is opened.
+14. Add option to use 3 lines for queue items (title, artist, album).
+15. Show server settings, and advanced player setttings, from 'Classic' skin and
+    placed within an iframe.
+16. When showing track information via now-playing, or a queue item, if 'Back'
+    button is pressed, then change back to the relevant 'Playing' or 'Queue'
+    tab.
+
 1.0.2
 -----
-1. Simplify volume change logic. Previously any changes that occured within 1/2
+1. Simplify volume change logic. Previously any changes that occurred within 1/2
    second of our change would be ignored.
 2. Fix saving of pinned item list to new user defaults.
 3. When listing album tracks, need to pass "artist_id:ID" regardless of the role

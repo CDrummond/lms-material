@@ -79,7 +79,9 @@ Vue.component('lms-sync-dialog', {
             this.show=false;
         }.bind(this));
         bus.$on('esc', function() {
-            this.show=false;
+            if (this.$store.state.activeDialog == 'sync') {
+                this.show=false;
+            }
         }.bind(this));
     },
     methods: {
@@ -120,7 +122,7 @@ Vue.component('lms-sync-dialog', {
     },
     watch: {
         'show': function(val) {
-            bus.$emit('dialogOpen', 'sync', val);
+            this.$store.commit('dialogOpen', {name:'sync', shown:val});
         }
     }
 })

@@ -1,0 +1,79 @@
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+ background:#424242 !important;
+}
+
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select {
+ color: white !important;
+}
+
+hr {
+ border:0.5px solid #888;
+}
+
+tbody tr.odd td, div.odd {
+ background-color:#494949 !important;
+}
+
+div.even {
+ background-color:#424242 !important;
+}
+
+a {
+ color: #82b1ff;
+}
+
+select {
+ border-bottom: 1px solid white;
+}
+
+input[type="text"], input[type="password"], input[type="stdedit"] {
+ background:#424242 !important;
+ color:white;
+ border-bottom: 1px solid white;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus {
+ border-bottom: 1px solid #82b1ff;
+}
+
+/* text enty auto-complete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+ -webkit-text-fill-color: white;
+ -webkit-box-shadow: 0 0 0px 1000px #424242 inset;
+ transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="submit"], input[type="button"] {
+ color: white !important;
+ background-color: #5F5F5F;
+ border-bottom: 1px solid #343434;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+ background-color: #6F6F6F;
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+ border-bottom: 1px solid #424242;
+ background-color: #4F4F4F;
+}
+
+::-webkit-scrollbar {
+ background:#3d3d3d;
+}
+
+::-webkit-scrollbar-thumb {
+ background:#777;
+}
+
+::-webkit-scrollbar-corner {
+ background:#333;
+}

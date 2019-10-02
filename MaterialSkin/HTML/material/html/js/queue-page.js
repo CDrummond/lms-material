@@ -71,7 +71,7 @@ function showComposer(id, title) {
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
 }
 
-function buildSubtitle(i, showRatings) {
+function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
     if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre)) {
         var composer_ids = !IS_MOBILE && i.composer_ids ? i.composer_ids.split(",") : undefined;
@@ -96,6 +96,11 @@ function buildSubtitle(i, showRatings) {
         }
     }
 
+    var lines = [];
+    if (threeLines) {
+        lines.push(subtitle);
+        subtitle = undefined;
+    }
     var remoteTitle = checkRemoteTitle(i);
     if (i.album) {
         var album = i.album;
@@ -109,10 +114,14 @@ function buildSubtitle(i, showRatings) {
     } else if (remoteTitle && remoteTitle!=i.title) {
         subtitle=addPart(subtitle, remoteTitle);
     }
-    return !showRatings || undefined==i.rating ? subtitle : ratingString(subtitle, i.rating);
+    if (threeLines) {
+        lines.push(subtitle);
+        return lines;
+    }
+    return subtitle;
 }
 
-function parseResp(data, showTrackNum, index, showRatings) {
+function parseResp(data, showTrackNum, index, showRatings, threeLines) {
     logJsonMessage("RESP", data);
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
@@ -130,8 +139,8 @@ function parseResp(data, showTrackNum, index, showRatings) {
                 var duration = undefined==i.duration ? undefined : parseInt(i.duration);
                 resp.items.push({
                               id: "track_id:"+i.id,
-                              title: title,
-                              subtitle: buildSubtitle(i, showRatings),
+                              title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
+                              subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
                               duration: duration,
@@ -194,7 +203,24 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
- <v-list class="lms-list-sub bgnd-cover" id="queue-list">
+ <v-list class="lms-list-sub bgnd-cover" id="queue-list" v-bind:class="{'lms-list-sub3':threeLines}">
+ <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS && threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key">
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
+    <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" :src="item.image"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle[0]"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle[1]"></v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+   </v-list-tile>
+  </RecycleScroller>
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key">
    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key">
     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
@@ -202,7 +228,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <img v-else :key="item.image" :src="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-content>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
@@ -218,8 +244,10 @@ var lmsQueue = Vue.component("lms-queue", {
      <img v-else :key="item.image" :src="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-content>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-if="!threeLines" v-html="item.subtitle"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[0]"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[1]"></v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
@@ -271,6 +299,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        threeLines() {
+            return this.$store.state.queueThreeLines
         }
     },
     created() {
@@ -288,6 +319,11 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('playerChanged', function() {
             this.items=[];
             this.timestamp=0;
+        }.bind(this));
+        bus.$on('queueDisplayChanged', function() {
+            this.items=[];
+            this.timestamp=0;
+            this.updateItems();
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
@@ -324,7 +360,10 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                     }
-                    var subtitle = buildSubtitle(i, this.desktop && this.$store.state.ratingsSupport);
+                    if (this.$store.state.ratingsSupport && undefined!=i.rating) {
+                        title=ratingString(title, i.rating);
+                    }
+                    var subtitle = buildSubtitle(i, this.$store.state.queueThreeLines);
                     var remoteTitle = checkRemoteTitle(i);
 
                     if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {
@@ -529,7 +568,7 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_MORE_ACTION===act) {
-                bus.$emit('trackInfo', item, index);
+                bus.$emit('trackInfo', item, index, 'queue');
                 if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
                 }
@@ -659,7 +698,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (!IS_MOBILE && this.$store.state.ratingsSupport ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.desktop && this.$store.state.ratingsSupport);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.desktop && this.$store.state.ratingsSupport, this.$store.state.queueThreeLines);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -698,7 +737,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (!IS_MOBILE && this.$store.state.ratingsSupport ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.desktop && this.$store.state.ratingsSupport);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.desktop && this.$store.state.ratingsSupport, this.$store.state.queueThreeLines);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;
@@ -756,7 +795,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             }
                         }
                     } else if (scroll) { // TODO: pulse not implemented!
-                        var pos = this.currentIndex>3 ? (this.currentIndex-3)*LMS_LIST_ELEMENT_SIZE : 0;
+                        var pos = this.currentIndex>3 ? (this.currentIndex-3)*(this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE) : 0;
                         setScrollTop(this.scrollElement, pos>0 ? pos : 0);
                         setTimeout(function () {
                             setScrollTop(this.scrollElement, pos>0 ? pos : 0);

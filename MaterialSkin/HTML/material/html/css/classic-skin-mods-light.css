@@ -1,0 +1,79 @@
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+ background:white !important;
+}
+
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select {
+ color: black !important;
+}
+
+hr {
+ border:0.5px solid #bbb;
+}
+
+tbody tr.odd td {
+ background-color:#f9f9f9 !important;
+}
+
+div.even {
+ background-color:white !important;
+}
+
+a {
+ color: #1976d2;
+}
+
+select {
+ border-bottom: 1px solid black;
+}
+
+input[type="text"], input[type="password"], input[type="stdedit"] {
+ color:black;
+ background:white !important;
+ border-bottom: 1px solid black;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus {
+ border-bottom: 1px solid #1976d2;
+}
+
+/* text enty auto-complete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+ -webkit-text-fill-color: black;
+ -webkit-box-shadow: 0 0 0px 1000px white inset;
+ transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="submit"], input[type="button"] {
+ color: black !important;
+ background-color: #ccc;
+ border-bottom: 1px solid #aaa;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+ background-color: #ddd;
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+ background-color: #bbb;
+ border-bottom: 1px solid white;
+}
+
+::-webkit-scrollbar {
+ background:#c0c0c0;
+}
+
+::-webkit-scrollbar-thumb {
+ background:#888;
+}
+
+::-webkit-scrollbar-corner {
+ background:#ddd;
+}

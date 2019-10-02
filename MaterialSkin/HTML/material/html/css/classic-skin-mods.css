@@ -1,0 +1,143 @@
+#sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon {
+ display:none;
+}
+
+#choose_setting {
+ position:fixed;
+ top:8px;
+ left:18px;
+ margin-left:-8px;
+ margin-bottom:8px;
+ font-size:16px !important;
+ font-weight:600 !important;
+ text-transform: uppercase;
+}
+
+#statusMessage {
+ color:transparent!important;
+}
+
+#prefsSubmit {
+ color:transparent!important;
+ background-color:transparent!important;
+ border-top:none;
+ margin:0px;
+}
+
+#saveSettings {
+ position:fixed;
+ left:8px;
+ bottom:8px;
+}
+
+div#topGraphicMenu3 {
+ height:22px;
+ background:transparent!important;
+}
+
+div#topGraphicBox, td.even, td.odd {
+ background:transparent!important;
+}
+
+html {
+ width:100%;
+ height:100%;
+}
+
+body {
+ margin-top:0px;
+}
+
+hr {
+ margin-right:8px;
+}
+
+.prefDesc, .prefs {
+ margin-right:14px;
+}
+
+table {
+ padding-right:14px;
+}
+
+div#innerSettingsBlock {
+ position:fixed;
+ top:44px;
+ left:0px;
+ height:calc(100vh - 90px)!important;
+ width:100vw!important;
+ padding: 0px 14px 0px 14px;
+}
+
+* {
+ font-size:16px !important;
+ font-family:'Roboto';
+ font-weight:400;
+}
+
+select option[value=INTERFACE_SETTINGS] {
+ display: none
+}
+
+.homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead {
+ background-color: transparent;
+ height: 15px;
+ padding: 8px 6px 4px 0px;
+ font-weight: bold;
+}
+
+select {
+ border: none;
+ min-height:28px;
+ text-overflow:ellipsis;
+ overflow:hidden;
+ white-space:nowrap;
+ max-width:calc(100vw - 32px);
+}
+
+select:focus {
+ outline: none;
+}
+
+input[type="text"], input[type="password"], input[type="stdedit"] {
+ border: none;
+ min-width:80px;
+ min-height:25px;
+ max-width:calc(100vw - 32px);
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus {
+ outline: none;
+}
+
+input[type="submit"], input[type="button"] {
+ border: none;
+ border-radius: 3px;
+ text-transform: uppercase;
+ padding:5px 8px 5px 8px;
+ outline: none;
+}
+
+input[type=checkbox] {
+ width:18px;
+ height:18px;
+ vertical-align: sub;
+}
+
+#saveSettings {
+ color: white !important;
+ background-color: #316dd3;
+}
+
+#saveSettings:hover {
+ background-color: #417de3;
+}
+
+#saveSettings:active {
+ background-color: #115dc3;
+}
+
+::-webkit-scrollbar {
+ max-height:10px;
+ max-width:10px;
+}

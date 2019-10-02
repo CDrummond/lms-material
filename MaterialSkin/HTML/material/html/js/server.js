@@ -221,7 +221,6 @@ var lmsServer = Vue.component('lms-server', {
                 var index = indexes.shift();
                 var command = ["playlists", "edit", "cmd:move", playlist, "index:"+(index<to ? index-movedBefore : index),
                                "toindex:"+(index>to ? to+movedAfter+(movedBefore>0 ? 1 : 0) : to)];
-                console.log(JSON.stringify(command));
                 lmsCommand(this.$store.state.player.id, command).then(({data}) => {
                     this.movePlaylistItems(playlist, indexes, to, index<to ? movedBefore+1 : movedBefore,
                                                                   index>to ? movedAfter+1 : movedAfter);
@@ -582,6 +581,29 @@ var lmsServer = Vue.component('lms-server', {
                 clearTimeout(this.moveTimer);
                 this.moveTimer = undefined;
             }
+        },
+        checkPluginUpdates() {
+            axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?s=time"+(new Date().getTime())).then((resp) => {
+                var updates = eval(resp.data);
+                this.$store.commit('setPluginUpdatesAvailable', updates && updates.plugins && updates.plugins.length>0);
+            }).catch(err => {
+                logError(err);
+            });
+        },
+        cancelUpdatesTimer() {
+            if (undefined!==this.updatesTimer) {
+                clearInterval(this.updatesTimer);
+                this.updatesTimer = undefined;
+            }
+        },
+        startUpdatesTimer() {
+            this.cancelUpdatesTimer();
+            setTimeout(function () {
+                this.checkPluginUpdates();
+                this.updatesTimer = setInterval(function () {
+                    this.checkPluginUpdates();
+                }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
+            }.bind(this), 500);
         }
     },
     created: function() {
@@ -650,9 +672,16 @@ var lmsServer = Vue.component('lms-server', {
                 this.updateCurrentPlayer();
             });
         }.bind(this));
-        bus.$on('adjustVolume', function(inc) {
+        bus.$on('adjustVolume', function(inc, steps) {
             if (this.$store.state.player) {
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", adjustVolume(this.volume, inc)]).then(({data}) => {
+                if (undefined==steps) {
+                    steps = 1;
+                }
+                var val = this.volume;
+                for (var i=0; i<steps; ++i) {
+                    val = adjustVolume(val, inc);
+                }
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
                     this.updateCurrentPlayer();
                 });
             }
@@ -703,6 +732,14 @@ var lmsServer = Vue.component('lms-server', {
             // Store connection state, so that visibility handler can act accordingly
             lmsIsConnected = connected;
 
+            if (statusChanged) {
+                if (connected) {
+                    this.startUpdatesTimer();
+                } else {
+                    this.cancelUpdatesTimer();
+                }
+            }
+
             // Force reconnect if disconnect received between .25 and 1.5s after visibility change
             if (statusChanged && !lmsIsConnected && undefined!=lmsLastFocusOrVisibilityChange) {
                 var currentTime = (new Date()).getTime();
@@ -717,6 +754,7 @@ var lmsServer = Vue.component('lms-server', {
         this.cancelPlayerStatusTimer();
         this.cancelFavoritesTimer();
         this.cancelMoveTimer();
+        this.cancelUpdatesTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

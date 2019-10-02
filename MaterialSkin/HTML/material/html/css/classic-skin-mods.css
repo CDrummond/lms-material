@@ -52,12 +52,21 @@ hr {
  margin-right:8px;
 }
 
+.prefDesc, .prefs {
+ margin-right:14px;
+}
+
+table {
+ padding-right:14px;
+}
+
 div#innerSettingsBlock {
  position:fixed;
  top:44px;
- left:14px;
+ left:0px;
  height:calc(100vh - 90px)!important;
- width:calc(100vw - 16px)!important;
+ width:100vw!important;
+ padding: 0px 14px 0px 14px;
 }
 
 * {

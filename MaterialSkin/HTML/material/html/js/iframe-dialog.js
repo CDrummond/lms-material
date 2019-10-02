@@ -5,7 +5,10 @@
  * MIT license.
  */
 
-function hideClassicSkinElems() {
+function hideClassicSkinElems(isPlayer) {
+    if (!isPlayer) {
+        return;
+    }
     var iframe = document.getElementById("classicSkinIframe");
     if (iframe) {
         var cssLink = iframe.contentDocument.createElement("link");
@@ -28,8 +31,7 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <iframe v-if="isPlayer" id="classicSkinIframe" v-on:load="hideClassicSkinElems()" :src="src" frameborder="0"></iframe>
-    <iframe v-else :src="src" frameborder="0"></iframe>
+    <iframe id="classicSkinIframe" v-on:load="hideClassicSkinElems(isPlayer)" :src="src" frameborder="0"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>

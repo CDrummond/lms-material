@@ -36,8 +36,8 @@
 }
 
 .v-text-field, .v-select__slot .v-label, .v-input .v-label {
- font-size:calc(var(--small-font-size) * 1.25);
- min-height:calc((var(--small-font-size) * 1.25) + 12px);
+ font-size:var(--std-font-size);
+ min-height:calc((var(--std-font-size)) + 12px);
 }
 
 .v-input {
@@ -85,6 +85,11 @@ a {
 
 .lms-search {
  width:100%;
+}
+
+.lms-search .v-input__control {
+ margin-top:-7px;
+ font-size:var(--std-font-size);
 }
 
 .v-divider--vertical {

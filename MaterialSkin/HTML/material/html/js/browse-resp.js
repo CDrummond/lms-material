@@ -382,9 +382,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         }
                     }
                     if (isRadiosTop && i['icon-id']) {
-                        /*if (i['icon-id'].endsWith('bbciplayer.png')) {
-                            i.icon='search'; i.image=undefined;
-                        } else*/ if (i['icon-id'].endsWith('radiopresets.png')) {
+                        if (i['icon-id'].endsWith('bbciplayer.png') || i['icon-id'].endsWith('bbciplayerextra.png')) {
+                            i.svg='bbc-iplayer'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiopresets.png')) {
                             i.icon='favorite'; i.image=undefined;
                         } else if (i['icon-id'].endsWith('radiolocal.png')) {
                             i.icon='my_location'; i.image=undefined;
@@ -405,6 +405,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                             i.icon='rss_feed'; i.image=undefined;
                         } else if (i['icon-id'].endsWith('radiosearch.png')) {
                             i.icon='search'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiofeeds.png')) {
+                            i.svg='radio-tower'; i.image=undefined;
+                        } else if (i['icon-id'].indexOf('www.jazzfm.com')>0) {
+                            i.svg='saxophone'; i.image=undefined;
+                        } else {
+                            i.icon='radio'; i.image=undefined;
                         }
                     }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)

@@ -1,5 +1,57 @@
-#sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon {
+#sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon, .largeAttribute {
  display:none;
+}
+
+/* -- Advanced search mods...--  */
+#advSearchForm {
+ margin-top:-32px;
+}
+#advSearchForm > table > tbody > tr > td:nth-of-type(1) {
+ text-align:right !important;
+ margin-right:4px;
+}
+div#browsedbList {
+ margin-left:-8px;
+ margin-right:-8px;
+}
+/* hide add/play/fav and next-page images */
+.browsedbLeftControls > a > img {
+ display:none;
+}
+/* Set play icon */
+.browsedbLeftControls > a:nth-of-type(1):before {
+ font-family: "Material Icons";
+ font-size:24px;
+ content:"\e039";
+ margin-right:4px;
+ text-decoration:none;
+}
+/* Set add icon */
+.browsedbLeftControls > a:nth-of-type(2):before {
+ font-family: "Material Icons";
+ font-size:24px;
+ content:"\e148";
+ margin-right:4px;
+ text-decoration:none;
+}
+@media (hover: none) and (pointer: coarse) { /* Touch devices */
+ .browsedbLeftControls > a:nth-of-type(1):before {
+  margin-right:12px;
+ }
+ .browsedbLeftControls > a:nth-of-type(2):before {
+  margin-right:8px;
+ }
+}
+/* Hide favorite button */
+.browsedbLeftControls > a:nth-of-type(3) {
+ display:none;
+}
+.pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
+ vertical-align:middle;
+}
+.pagebar > a > img {
+ width:24px!important;
+ height:24px!important;
 }
 
 #choose_setting {

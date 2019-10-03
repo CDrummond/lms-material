@@ -23,6 +23,8 @@
 16. When showing track information via now-playing, or a queue item, if 'Back'
     button is pressed, then change back to the relevant 'Playing' or 'Queue'
     tab.
+17. Add 'Advanced search' - by embedding andvasned search page from Classic
+    skin.
 
 1.0.2
 -----

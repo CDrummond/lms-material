@@ -21,6 +21,7 @@ Vue.component('lms-search-dialog', {
    </v-list>
   </v-form>
   <v-card-actions>
+   <v-btn flat @click.native="advanced()">{{i18n('Advanced')}}</v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="search()">{{i18n('Search')}}</v-btn
@@ -67,6 +68,10 @@ Vue.component('lms-search-dialog', {
         },
         cancel() {
             this.show=false;
+        },
+        advanced() {
+            this.cancel();
+            bus.$emit('dlg.open', 'iframe', '/material/advanced_search.html?player='+this.$store.state.player.id, i18n('Advanced search'));
         },
         search() {
             var str = this.term.trim();

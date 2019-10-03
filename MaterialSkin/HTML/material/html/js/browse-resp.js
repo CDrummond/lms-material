@@ -127,6 +127,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isFavorites = parent && parent.isFavFolder ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isRadios = parent && parent.section == SECTION_RADIO;
+            var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
             var isApps = parent && parent.id == TOP_APPS_ID;
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var haveWithIcons = false;
@@ -352,31 +353,59 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     }
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
-                } else if (isRadios && i.type!="search") {
-                    if (!i.id) {
-                        if (i.params && i.params.item_id) {
-                            i.id = fixId(i.params.item_id, undefined==menu ? "radio" : menu);
-                        } else if (i.presetParams && i.presetParams.favorites_url) {
-                            i.id = "radio:"+i.presetParams.favorites_url;
-                        } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
-                            i.id = "item_id:"+i.actions.go.params.item_id;
-                        } else if (parent && parent.id && TOP_RADIO_ID!=parent.id) {
-                            i.id = parent.id+"."+i.title;
-                        } else {
-                            i.id = "radio:"+i.title;
+                } else if (isRadios) {
+                    if (i.type!="search") {
+                        if (!i.id) {
+                            if (i.params && i.params.item_id) {
+                                i.id = fixId(i.params.item_id, undefined==menu ? "radio" : menu);
+                            } else if (i.presetParams && i.presetParams.favorites_url) {
+                                i.id = "radio:"+i.presetParams.favorites_url;
+                            } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                                i.id = "item_id:"+i.actions.go.params.item_id;
+                            } else if (parent && parent.id && TOP_RADIO_ID!=parent.id) {
+                                i.id = parent.id+"."+i.title;
+                            } else {
+                                i.id = "radio:"+i.title;
+                            }
+                        }
+                        if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
+                            // Only allow to pin if we can play!
+                            if (!addedDivider && i.menu.length>0) {
+                                i.menu.push(DIVIDER);
+                                addedDivider = true;
+                            }
+                            i.isRadio = true;
+                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                        } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                            i.id = 'radio:'+i.actions.go.params.menu;
+                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                         }
                     }
-                    if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
-                        // Only allow to pin if we can play!
-                        if (!addedDivider && i.menu.length>0) {
-                            i.menu.push(DIVIDER);
-                            addedDivider = true;
+                    if (isRadiosTop && i['icon-id']) {
+                        /*if (i['icon-id'].endsWith('bbciplayer.png')) {
+                            i.icon='search'; i.image=undefined;
+                        } else*/ if (i['icon-id'].endsWith('radiopresets.png')) {
+                            i.icon='favorite'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiolocal.png')) {
+                            i.icon='my_location'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiomusic.png')) {
+                            i.icon='music_video'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiosports.png')) {
+                            i.icon='sports_soccer'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radionews.png')) {
+                            i.icon='menu_book'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiotalk.png')) {
+                            i.icon='chat'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radioworld.png')) {
+                            i.icon='public'; i.image=undefined;
+                            if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu=='language') {
+                                i.icon='language';
+                            }
+                        } else if (i['icon-id'].endsWith('podcasts.png')) {
+                            i.icon='rss_feed'; i.image=undefined;
+                        } else if (i['icon-id'].endsWith('radiosearch.png')) {
+                            i.icon='search'; i.image=undefined;
                         }
-                        i.isRadio = true;
-                        i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
-                    } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
-                        i.id = 'radio:'+i.actions.go.params.menu;
-                        i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {

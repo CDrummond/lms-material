@@ -9,6 +9,7 @@ package Plugins::MaterialSkin::Plugin;
 #
 
 use Config;
+use Slim::Music::VirtualLibraries;
 use Slim::Utils::Favorites;
 use Slim::Utils::Log;
 use Slim::Utils::Network;
@@ -150,7 +151,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -348,6 +349,15 @@ sub _cliCommand {
                 $updating++;
             }
             $request->addResult("updating", $updating);
+            $request->setStatusDone();
+            return;
+        }
+    }
+
+    if ($cmd eq 'delete-vlib') {
+        my $id = $request->getParam('id');
+        if ($id) {
+            Slim::Music::VirtualLibraries->unregisterLibrary($id);
             $request->setStatusDone();
             return;
         }

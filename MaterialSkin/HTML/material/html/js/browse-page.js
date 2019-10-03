@@ -235,6 +235,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile @click="selectLibrary(item.id)">
      <v-list-tile-avatar><v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content>
+     <v-list-tile-action @click="deleteLibrary(item)" v-if="index>0"><v-btn icon><v-icon>delete_outline</v-icon></v-btn></v-list-tile-action>
     </v-list-tile>
    </template>
   </v-list>
@@ -1245,6 +1246,17 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         selectLibrary(id) {
             this.$store.commit('setLibrary', id);
+        },
+        deleteLibrary(lib) {
+            this.$confirm(i18n("Delete '%1'?", lib.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    lmsCommand("", ["material-skin", "delete-vlib", "id:"+lib.id]).then(({data}) => {
+                        if (this.$store.state.library==lib.id) {
+                            this.$store.commit('setLibrary', LMS_DEFAULT_LIBRARY);
+                        }
+                    });
+                }
+            });
         },
         sortAlbums(sort) {
             if (!sort.selected) {

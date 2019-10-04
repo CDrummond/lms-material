@@ -124,7 +124,8 @@ select option[value=INTERFACE_SETTINGS] {
 
 .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead {
  background-color: transparent;
- height: 15px;
+ min-height: 15px;
+ height: auto !important;
  padding: 8px 6px 4px 0px;
  font-weight: bold;
 }

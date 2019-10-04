@@ -2,7 +2,7 @@ html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc
  background:white !important;
 }
 
-html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select, b {
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, #statusarea, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select, b {
  color: black !important;
 }
 
@@ -15,6 +15,10 @@ html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentP
 
 hr {
  border:0.5px solid #bbb;
+}
+
+#prefsSubmit {
+ border-top:1px solid #bbb;
 }
 
 tbody tr.odd td {

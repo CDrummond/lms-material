@@ -32,6 +32,7 @@
 22. Remove 15 second play/pause timer, and play/pause icon changes, to media
     session - looks like these were not required? Probably due to reconnection
     changes.
+23. Fix some dynamic playlists.
 
 1.0.2
 -----

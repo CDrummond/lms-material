@@ -37,6 +37,24 @@ Vue.component('lms-bottomnav', {
             this.initItems();
         }.bind(this));
         this.initItems();
+        
+        if (!IS_MOBILE) {
+            bindKey('f1');
+            bindKey('f2');
+            bindKey('f3');
+            bus.$on('keyboard', function(key, modifier) {
+                if (!this.$store.state.keyboardControl || undefined!=modifier || this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
+                    return;
+                }
+                if ('f1'==key && this.$store.state.page!="browse") {
+                    this.browsePressed(false);
+                } else if ('f2'==key && this.$store.state.page!="now-playing") {
+                    this.npPressed(false);
+                } else if ('f3'==key && this.$store.state.page!="queue") {
+                    this.queuePressed(false);
+                }
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {

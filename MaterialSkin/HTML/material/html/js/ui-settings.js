@@ -464,10 +464,12 @@ Vue.component('lms-ui-settings', {
                          i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title,
                          i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD)+SEPARATOR+i18n("Synchronise"),
                          i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO)+SEPARATOR+i18n("Show current track information"),
-                         i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player"),
-                         "F1"+SEPARATOR+i18n("Browse"),
-                         "F2"+SEPARATOR+i18n("Playing"),
-                         "F3"+SEPARATOR+i18n("Queue")];
+                         i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player")];
+            if (!this.desktop) {
+                list.push("F1"+SEPARATOR+i18n("Browse"));
+                list.push("F2"+SEPARATOR+i18n("Playing"));
+                list.push("F3"+SEPARATOR+i18n("Queue"));
+            }
             bus.$emit('dlg.open', 'iteminfo', { list:list });
         },
         i18n(str) {

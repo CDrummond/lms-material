@@ -659,6 +659,13 @@ a {
  }
 }
 
+
+@media screen and (max-width: 399px) {
+ #advanced-search-btn {
+  display:none;
+ }
+}
+
 .np-slider {
  margin:5px 0 !important; /* v-progress-linear has margin: 1rem 0; */
  height:10px !important;

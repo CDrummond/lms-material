@@ -303,7 +303,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.queueThreeLines
         },
         keyboardControl() {
-            return this.$store.state.keyboardControl
+            return this.$store.state.keyboardControl && !IS_MOBILE
         }
     },
     created() {

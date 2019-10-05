@@ -672,7 +672,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.pluginUpdatesAvailable
         },
         keyboardControl() {
-            return this.$store.state.keyboardControl
+            return this.$store.state.keyboardControl && !IS_MOBILE
         }
     },
     filters: {

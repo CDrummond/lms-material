@@ -463,7 +463,8 @@ Vue.component('lms-ui-settings', {
                          i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD)+" : "+TB_INFO.title,
                          i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD)+" : "+TB_MANAGE_PLAYERS.title,
                          i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD)+" : "+i18n("Synchronise"),
-                         i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO)+" : "+i18n("Show current track information") ];
+                         i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO)+" : "+i18n("Show current track information"),
+                         i18n("Alt+N")+" : "+i18n("Switch to Nth player") ];
             bus.$emit('dlg.open', 'iteminfo', { list:list });
         },
         i18n(str) {

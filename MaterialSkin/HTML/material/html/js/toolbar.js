@@ -84,6 +84,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
+      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
        <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)">power_settings_new</v-icon></
       </v-list-tile-action>
@@ -395,29 +396,54 @@ Vue.component('lms-toolbar', {
                 bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
                 bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
                 bindKey(LMS_SYNC_KEYBOARD, 'mod');
+                bindKey('1', 'alt');
+                bindKey('2', 'alt');
+                bindKey('3', 'alt');
+                bindKey('4', 'alt');
+                bindKey('5', 'alt');
+                bindKey('6', 'alt');
+                bindKey('7', 'alt');
+                bindKey('8', 'alt');
+                bindKey('9', 'alt');
+                bindKey('0', 'alt');
                 bus.$on('keyboard', function(key, modifier) {
-                    if (!this.$store.state.keyboardControl || 'mod'!=modifier || this.$store.state.openDialogs.length>0) {
+                    if (!this.$store.state.keyboardControl || this.$store.state.openDialogs.length>0) {
                         return;
                     }
-                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
-                        if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
-                            this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : TB_INFO.id);
-                            bus.$emit('hideMenu', 'main');
+                    if ('mod'==modifier) {
+                        if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : TB_INFO.id);
+                                bus.$emit('hideMenu', 'main');
+                            }
+                        } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
+                            if (LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                                this.menuAction(TB_MANAGE_PLAYERS.id);
+                                bus.$emit('hideMenu', 'player');
+                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                                bus.$emit('hideMenu', 'player');
+                            }
+                        } else if (this.$store.state.visibleMenus.size==0) {
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
+                                                LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
+                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                            }
                         }
-                    } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
-                        if (LMS_MANAGEPLAYERS_KEYBOARD==key) {
-                            this.menuAction(TB_MANAGE_PLAYERS.id);
-                            bus.$emit('hideMenu', 'player');
-                        } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
-                            bus.$emit('dlg.open', 'sync', this.$store.state.player);
-                            bus.$emit('hideMenu', 'player');
+                    } else if ('alt'==modifier && 1==key.length && !isNaN(key)) {
+                        var player = parseInt(key);
+                        if (player==0) {
+                            player=10;
+                        } else {
+                            player=player-1;
                         }
-                    } else if (this.$store.state.visibleMenus.size==0) {
-                        if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_MANAGEPLAYERS_KEYBOARD==key) {
-                            this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
-                                            LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
-                        } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
-                            bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                        if (player<this.$store.state.players.length) {
+                            var id = this.$store.state.players[player].id;
+                            if (id!=this.$store.state.player.id) {
+                                this.setPlayer(id);
+                            }
                         }
                     }
                 }.bind(this));
@@ -675,6 +701,9 @@ Vue.component('lms-toolbar', {
         },
         tooltip: function (str, shortcut, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcut : str;
+        },
+        playerShortcut: function(index) {
+            return i18n("Alt+%1", 9==index ? 0 : index+1);
         }
     },
     watch: {

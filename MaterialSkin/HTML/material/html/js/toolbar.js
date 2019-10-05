@@ -131,7 +131,7 @@ Vue.component('lms-toolbar', {
  <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.info" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
+ <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
   <v-icon>info_outline</v-icon>
  </v-btn>
  <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">

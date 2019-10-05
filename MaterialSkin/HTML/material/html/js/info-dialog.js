@@ -11,7 +11,7 @@ Vue.component('lms-info-dialog', {
  <v-card>
   <v-card-text>
   <template v-for="(item, index) in details">
-   <v-header class="item-info-header">{{item.title}}</v-header>
+   <v-header v-if="item.title" class="item-info-header">{{item.title}}</v-header>
    <p v-if="item.link" class="item-info-text"><a class="lms-link" :href="item.text" target="_blank">{{item.text}}</a></p>
    <p v-else class="item-info-text">{{item.text}}</p>
    </template>
@@ -34,7 +34,9 @@ Vue.component('lms-info-dialog', {
     mounted() {
         bus.$on('iteminfo.open', function(item) {
             this.details = [];
-            this.details.push({title: i18n("Title"), text: item.title});
+            if (item.title) {
+                this.details.push({title: i18n("Title"), text: item.title});
+            }
             if (item.descr) {
                 this.details.push({title: i18n("Description"), text: item.descr});
             }
@@ -53,6 +55,10 @@ Vue.component('lms-info-dialog', {
                 this.details.push({title: i18n("URL"), text: item.id, link:true});
             } else if (item.homepage) {
                 this.details.push({title: i18n("Homepage"), text: item.homepage, link:true});
+            } else if (item.list) {
+                for (var i=0, len=item.list.length; i<len; ++i) {
+                    this.details.push({text:item.list[i]});
+                }
             }
             this.show=true
         }.bind(this));

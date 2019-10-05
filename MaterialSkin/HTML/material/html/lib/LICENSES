@@ -20,6 +20,11 @@ intersection-observer
     URL: https://github.com/w3c/IntersectionObserver
     License: W3C Software and Document License.
 
+moustrap:
+    Version: a4098
+    URL: https://craig.is/killing/mice
+    License: Apache License, Version 2.0
+
 PhotoSwipe:
     Version: 4.1.2
     URL: https://github.com/dimsemenov/PhotoSwipe

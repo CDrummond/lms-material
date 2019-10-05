@@ -104,11 +104,13 @@ Vue.component('lms-toolbar', {
    <v-list-tile v-if="!mini && !nowplaying && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut">{{trans.syncshortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
-    <v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title>
+    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
@@ -150,16 +152,13 @@ Vue.component('lms-toolbar', {
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-list-tile v-else-if="item.href" :href="item.href" target="_blank">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
-    </v-list-tile>
-    <v-list-tile v-else @click="menuAction(item.id)">
+    <v-list-tile @click="menuAction(item.id)">
      <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="TB_INFO.id==item.id && pluginUpdatesAvailable">{{trans.pluginUpdatesAvailable}}</v-list-tile-sub-title>
      </v-list-tile-content>
+     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
     </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
@@ -174,6 +173,7 @@ Vue.component('lms-toolbar', {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
+     <v-list-tile-action v-if="ACTIONS[action].shortcut && keyboardControl" class="menu-shortcut">{{ACTIONS[action].shortcut}}</v-list-tile-action>
     </v-list-tile>
    </template>
   </v-list>
@@ -195,7 +195,7 @@ Vue.component('lms-toolbar', {
                  showPlayerMenu: false,
                  showMainMenu: false,
                  otherMenuItems:{},
-                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, info:undefined, connectionLost:undefined,
+                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncshortcut:undefined, info:undefined, connectionLost:undefined,
                         showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, pluginUpdatesAvailable:undefined},
                  infoOpen: false,
@@ -302,6 +302,13 @@ Vue.component('lms-toolbar', {
         bus.$on('esc', function() {
             this.showPlayerMenu = false;
         }.bind(this));
+        bus.$on('hideMenu', function(name) {
+            if (name=='main') {
+                this.showMainMenu = false;
+            } else if (name=='player') {
+                this.showPlayerMenu = false;
+            }
+        }.bind(this));
 
         bus.$on('dialogOpen', function(name, val) {
             if (name=='info-dialog') {
@@ -373,13 +380,49 @@ Vue.component('lms-toolbar', {
             }
         }.bind(this));
 
-        if (!isMobile()) {
+        if (!IS_MOBILE) {
             if (this.desktop) {
                 this.addMouseWheelhandler("vol-down-btn");
                 this.addMouseWheelhandler("vol-slider");
                 this.addMouseWheelhandler("vol-up-btn");
             } else {
                 this.addMouseWheelhandler("vol-btn");
+            }
+
+            if (!this.mini && !this.nowplaying) {
+                bindKey(LMS_SETTINGS_KEYBOARD, 'mod');
+                bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
+                bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
+                bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
+                bindKey(LMS_SYNC_KEYBOARD, 'mod');
+                bus.$on('keyboard', function(key, modifier) {
+                    if (!this.$store.state.keyboardControl || this.$store.state.openDialogs.length>0) {
+                        return;
+                    }
+                    if ('mod'==modifier) {
+                        if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : TB_INFO.id);
+                                bus.$emit('hideMenu', 'main');
+                            }
+                        } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
+                            if (LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                                this.menuAction(TB_MANAGE_PLAYERS.id);
+                                bus.$emit('hideMenu', 'player');
+                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                                bus.$emit('hideMenu', 'player');
+                            }
+                        } else if (this.$store.state.visibleMenus.size==0) {
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
+                                                LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
+                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                            }
+                        }
+                    }
+                }.bind(this));
             }
         }
     },
@@ -430,16 +473,20 @@ Vue.component('lms-toolbar', {
         },
         initItems() {
             TB_UI_SETTINGS.title=i18n('Settings');
+            TB_UI_SETTINGS.shortcut=i18n("Ctrl(⌘)+%1", LMS_SETTINGS_KEYBOARD);
             TB_PLAYER_SETTINGS.title=i18n('Player settings');
+            TB_PLAYER_SETTINGS.shortcut=i18n("Ctrl(⌘)+%1", LMS_PLAYER_SETTINGS_KEYBOARD);
             TB_INFO.title=i18n('Information');
+            TB_INFO.shortcut=i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD);
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
+            TB_MANAGE_PLAYERS.shortcut=i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD);
             TB_MINI_PLAYER.title=i18n('Open mini-player');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_INFO ];
             if (this.desktop && !this.mini & !IS_MOBILE) {
                 this.menuItems.push(DIVIDER);
                 this.menuItems.push(TB_MINI_PLAYER);
             }
-            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'),
+            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncshortcut:i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD),
                           info:i18n("Show current track information"), showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
                           startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'), groupPlayers:("Group Players"),
                           standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
@@ -579,11 +626,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.otherPlayers
         },
         multipleStandardPlayers () {
-            if (this.$store.state.players) {
-                var len = this.$store.state.players.length;
-                return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
-            }
-            return false;
+            return this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup
         },
         infoPlugin () {
             return this.$store.state.infoPlugin
@@ -611,6 +654,9 @@ Vue.component('lms-toolbar', {
         },
         pluginUpdatesAvailable() {
             return this.$store.state.pluginUpdatesAvailable
+        },
+        keyboardControl() {
+            return this.$store.state.keyboardControl
         }
     },
     filters: {

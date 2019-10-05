@@ -804,3 +804,10 @@ function setFontSize(large) {
     document.documentElement.style.setProperty('--std-font-size', large ? '19px' : '16px');
     document.documentElement.style.setProperty('--small-font-size', large ? '18px' : '14px');
 }
+
+function bindKey(key, modifier) {
+    Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), function(e) {
+        e.preventDefault();
+        bus.$emit('keyboard', key, modifier);
+    } );
+}

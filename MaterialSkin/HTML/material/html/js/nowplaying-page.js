@@ -534,7 +534,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.showTotal = getLocalStorageBool('showTotal', true);
         if (!IS_MOBILE && !this.mini && !this.nowplaying) {
             bindKey(LMS_TRACK_INFO, 'mod');
-            console.log(JSON.stringify(this.$store.state.openDialogs));
+            bus.$on('keyboard', function(key, modifier) {
                 if (!this.$store.state.keyboardControl || 'mod'!=modifier || LMS_TRACK_INFO!=key || !this.$store.state.infoPlugin ||
                     this.$store.state.openDialogs.length>1 || (this.$store.state.openDialogs.length==1 && this.$store.state.openDialogs[0]!='info-dialog') ||
                     (!this.desktop && this.$store.state.page!="now-playing")) {

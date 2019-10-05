@@ -12,7 +12,7 @@ var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
 var mediaAudio = undefined;
-var mediaInterval = undefined;
+var mediaStarted = false;
 
 function initMediaSessionAudio() {
     if (mediaAudio == undefined) {
@@ -26,23 +26,16 @@ function initMediaSessionAudio() {
 }
 
 function startMediaSession() {
-    if (!mediaAudio || mediaInterval) {
+    if (!mediaAudio || mediaStarted) {
         return;
     }
     mediaAudio.src = "html/audio/silence.ogg";
-    // Repeatedly play/pause so that sesssion persists
     mediaAudio.play().then(_ => {
         mediaAudio.currentTime = 0; // Go back to start
         mediaAudio.pause();
         toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
-        navigator.mediaSession.playbackState = /*toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" :*/ "paused";
-        mediaInterval = setInterval(function() {
-            mediaAudio.play().then(_ => {
-                mediaAudio.currentTime = 0; // Go back to start
-                mediaAudio.pause();
-                navigator.mediaSession.playbackState = /*toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" :*/ "paused";
-            });
-        }, 15*1000);
+        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+        mediaStarted = true;
     }).catch(err => {
     });
 }
@@ -478,11 +471,10 @@ Vue.component('lms-toolbar', {
                     this.media.album = undefined;
                 } else {
                     startMediaSession();
-                    navigator.mediaSession.playbackState = /*this.playerStatus && this.playerStatus.isplaying ? "playing" :*/ "paused";
-                    var title = this.playerStatus && this.playerStatus.isplaying ? track.title : ("\u23f8 "+track.title);
+                    navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     var artist = track.trackartist ? track.trackartist : track.artist;
-                    if (force || title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
-                        this.media.title = title;
+                    if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
+                        this.media.title = track.title;
                         this.media.artist = artist;
                         this.media.album = track.album;
                         navigator.mediaSession.metadata = new MediaMetadata({

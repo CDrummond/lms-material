@@ -41,11 +41,10 @@ function startMediaSession() {
 }
 
 function stopMediaSession() {
-    if (!mediaInterval) {
+    if (!mediaStarted) {
         return;
     }
-    clearInterval(mediaInterval);
-    mediaInterval = undefined;
+    mediaStarted = false;
     if (mediaAudio.src) {
         mediaAudio.src = undefined;
     }

@@ -1088,6 +1088,12 @@ div.v-subheader {
  height:24px;
 }
 
+.v-menu__content .v-list__tile .menu-shortcut {
+ min-width:72px!important;
+ margin-left:16px;
+ opacity:var(--sub-opacity);
+}
+
 .current-player {
  font-weight:var(--bold-weight);
 }

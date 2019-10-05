@@ -393,6 +393,7 @@ var lmsServer = Vue.component('lms-server', {
 
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
+                this.isPlaying = player.isplaying;
             } else {
                 for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
                     if (this.$store.state.players[i].id == playerId) {
@@ -604,6 +605,20 @@ var lmsServer = Vue.component('lms-server', {
                     this.checkPluginUpdates();
                 }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
             }.bind(this), 500);
+        },
+        adjustVolume(inc, steps) {
+            if (this.$store.state.player) {
+                if (undefined==steps) {
+                    steps = 1;
+                }
+                var val = this.volume;
+                for (var i=0; i<steps; ++i) {
+                    val = adjustVolume(val, inc);
+                }
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
+                    this.updateCurrentPlayer();
+                });
+            }
         }
     },
     created: function() {
@@ -673,18 +688,7 @@ var lmsServer = Vue.component('lms-server', {
             });
         }.bind(this));
         bus.$on('adjustVolume', function(inc, steps) {
-            if (this.$store.state.player) {
-                if (undefined==steps) {
-                    steps = 1;
-                }
-                var val = this.volume;
-                for (var i=0; i<steps; ++i) {
-                    val = adjustVolume(val, inc);
-                }
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
-                    this.updateCurrentPlayer();
-                });
-            }
+            this.adjustVolume(inc, steps);
         }.bind(this));
         bus.$on('subscribeAll', function(all) {
             if (all==this.subscribeAll) {
@@ -748,6 +752,37 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
         }.bind(this));
+
+        if (!IS_MOBILE) {
+            bindKey('up');
+            bindKey('down');
+            bindKey('space');
+            bindKey('left');
+            bindKey('right');
+            bus.$on('keyboard', function(key) {
+                if (!this.$store.state.keyboardControl || this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>0 || !this.$store.state.player) {
+                    return;
+                }
+                var command = undefined;
+                if (key=='up') {
+                    this.adjustVolume(true);
+                } else if (key=='down') {
+                    this.adjustVolume(false);
+                } else if (key=='left') {
+                    command=['button', 'jump_rew'];
+                } else if (key=='right') {
+                    command=['playlist', 'index', '+1'];
+                } else if (key=='space') {
+                    command=[this.isPlaying ? 'pause' : 'play']
+                }
+
+                if (command) {
+                    lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                        this.updateCurrentPlayer();
+                    });
+                }
+            }.bind(this));
+        }
     },
     beforeDestroy() {
         this.cancelServerStatusTimer();

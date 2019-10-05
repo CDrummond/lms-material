@@ -58,6 +58,15 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <v-list-tile v-if="!IS_MOBILE">
+     <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
+      <v-list-tile-title>{{i18n('Keybaord shortcuts')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px" @click.stop="keyboardInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="keyboardControl"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider v-if="!IS_MOBILE"></v-divider>
+
     <v-list-tile>
      <v-list-tile-content @click="menuIcons = !menuIcons" class="switch-label">
       <v-list-tile-title>{{i18n('Menu icons')}}</v-list-tile-title>
@@ -262,6 +271,7 @@ Vue.component('lms-ui-settings', {
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
             swipeVolume:true,
+            keyboardControl:true,
             queueThreeLines:false,
             layout: null,
             layoutItems: [],
@@ -301,6 +311,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.swipeVolume = this.$store.state.swipeVolume;
+            this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
             this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
@@ -372,6 +383,7 @@ Vue.component('lms-ui-settings', {
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
                                                   swipeVolume:this.swipeVolume,
+                                                  keyboardControl:this.keyboardControl,
                                                   queueThreeLines:this.queueThreeLines,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
@@ -411,6 +423,7 @@ Vue.component('lms-ui-settings', {
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
                                      swipeVolume:this.swipeVolume,
+                                     keyboardControl:this.keyboardControl,
                                      queueThreeLines:this.queueThreeLines,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
@@ -433,6 +446,24 @@ Vue.component('lms-ui-settings', {
                 }
             }
             return hidden;
+        },
+        keyboardInfo() {
+            var list = [ i18n("▲ : Increase volume"),
+                         i18n("▼ : Decrease volume"),
+                         i18n("◀ : Previous track"),
+                         i18n("▶ : Next track"),
+                         i18n("Spacebar : Play/pause"),
+                         i18n("Ctrl(⌘)+%1", LMS_SAVE_QUEUE_KEYBOARD)+" : "+i18n("Save queue"),
+                         i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD)+" : "+i18n("Clear queue"),
+                         ACTIONS[PQ_MOVE_QUEUE_ACTION].shortcut+" : "+ACTIONS[PQ_MOVE_QUEUE_ACTION].title,
+                         ACTIONS[PQ_SCROLL_ACTION].shortcut+" : "+ACTIONS[PQ_SCROLL_ACTION].title,
+                         ACTIONS[PQ_ADD_URL_ACTION].shortcut+" : "+ACTIONS[PQ_ADD_URL_ACTION].title,
+                         i18n("Ctrl(⌘)+%1", LMS_SETTINGS_KEYBOARD)+" : "+TB_UI_SETTINGS.title,
+                         i18n("Ctrl(⌘)+%1", LMS_PLAYER_SETTINGS_KEYBOARD)+" : "+TB_PLAYER_SETTINGS.title,
+                         i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD)+" : "+TB_INFO.title,
+                         i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD)+" : "+TB_MANAGE_PLAYERS.title,
+                         i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD)+" : "+i18n("Synchronise") ];
+            bus.$emit('dlg.open', 'iteminfo', { list:list });
         },
         i18n(str) {
             if (this.show) {

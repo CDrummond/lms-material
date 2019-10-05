@@ -112,7 +112,10 @@ function updateUiSettings(state, val) {
         state.swipeVolume = val.swipeVolume;
         setLocalStorageVal('swipeVolume', state.swipeVolume);
     }
-
+    if (undefined!=val.keyboardControl && state.keyboardControl!=val.keyboardControl) {
+        state.keyboardControl = val.keyboardControl;
+        setLocalStorageVal('keyboardControl', state.keyboardControl);
+    }
     if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
         state.queueThreeLines = val.queueThreeLines;
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
@@ -156,6 +159,7 @@ const store = new Vuex.Store({
         hidden: new Set(),
         visibleMenus: new Set(),
         swipeVolume: true,
+        keyboardControl: true,
         pluginUpdatesAvailable: false,
         queueThreeLines: false,
         openDialogs: [],
@@ -335,6 +339,7 @@ const store = new Vuex.Store({
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
+            state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
@@ -373,6 +378,7 @@ const store = new Vuex.Store({
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
+                                     keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);

@@ -274,7 +274,7 @@ var lmsQueue = Vue.component("lms-queue", {
  </v-menu>
 </div>
 `,
-    props: [ 'desktop' ],
+    props: [ 'desktop', 'mini', 'nowplaying' ],
     data() {
         return {
             items: [],
@@ -461,10 +461,41 @@ var lmsQueue = Vue.component("lms-queue", {
             this.updateSettingsMenu();
         }.bind(this));
         this.updateSettingsMenu();
+        if (!IS_MOBILE) {
+            bindKey(LMS_SAVE_QUEUE_KEYBOARD, 'mod');
+            bindKey(LMS_CLEAR_QUEUE_KEYBOARD, 'mod');
+            bindKey(LMS_QUEUE_ADD_URL_KEYBOARD, 'mod');
+            bindKey(LMS_SCROLL_QUEUE_KEYBOARD, 'mod');
+            bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
+            bus.$on('keyboard', function(key, modifier) {
+                if (!this.$store.state.keyboardControl || (!this.desktop && this.$store.state.page!="queue" || this.$store.state.openDialogs.length>0)) {
+                    return;
+                }
+                if ('mod'==modifier) {
+                    if (LMS_SAVE_QUEUE_KEYBOARD==key) {
+                        if (this.$store.state.visibleMenus.size>0) {
+                            return;
+                        }
+                        this.save();
+                    } else if (LMS_CLEAR_QUEUE_KEYBOARD==key) {
+                        if (this.$store.state.visibleMenus.size>0) {
+                            return;
+                        }
+                        this.clear();
+                    } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key) {
+                        if (this.$store.state.visibleMenus.size>1 || (this.wide<=1 && this.$store.state.visibleMenus==1 && !this.$store.state.visibleMenus.has('main'))) {
+                            return;
+                        }
+                        this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : PQ_MOVE_QUEUE_ACTION);
+                        bus.$emit('hideMenu', 'main');
+                    }
+                }
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save"), clear:i18n("Clear"),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), clear:i18n("Clear queue"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};

@@ -136,8 +136,11 @@ function updateActionStrings() {
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");
     ACTIONS[PQ_REMOVE_ACTION].title=i18n("Remove from queue");
-    ACTIONS[PQ_SCROLL_ACTION].title=i18n("Scroll to current track");
-    ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL");
+    ACTIONS[PQ_SCROLL_ACTION].title=i18n("Scroll queue to current track");
+    ACTIONS[PQ_SCROLL_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_SCROLL_QUEUE_KEYBOARD);
+    ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL to queue");
+    ACTIONS[PQ_ADD_URL_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_QUEUE_ADD_URL_KEYBOARD);
     ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Move queue to another player");
+    ACTIONS[PQ_MOVE_QUEUE_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_MOVE_QUEUE_KEYBOARD);
 }
 

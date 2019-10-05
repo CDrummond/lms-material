@@ -532,6 +532,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.showTotal = getLocalStorageBool('showTotal', true);
+        if (!IS_MOBILE && !this.mini && !this.nowplaying) {
+            bindKey(LMS_TRACK_INFO, 'mod');
+            console.log(JSON.stringify(this.$store.state.openDialogs));
+                if (!this.$store.state.keyboardControl || 'mod'!=modifier || LMS_TRACK_INFO!=key || !this.$store.state.infoPlugin ||
+                    this.$store.state.openDialogs.length>1 || (this.$store.state.openDialogs.length==1 && this.$store.state.openDialogs[0]!='info-dialog') ||
+                    (!this.desktop && this.$store.state.page!="now-playing")) {
+                    return;
+                }
+                this.largeView = false;
+                this.info.show = !this.info.show;
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {

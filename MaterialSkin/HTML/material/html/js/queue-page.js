@@ -194,13 +194,13 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktop || wide>0"></v-divider>
    <template v-if="desktop || wide>1" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
+    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].shortcut,keyboardControl)" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn :title="trans.save" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.save | tooltip(trans.saveShortcut,keyboardControl)" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="trans.clear | tooltip(trans.clearShortcut,keyboardControl)" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list" v-bind:class="{'lms-list-sub3':threeLines}">
@@ -283,10 +283,9 @@ var lmsQueue = Vue.component("lms-queue", {
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
-            trans: { ok: undefined, cancel: undefined, saveAs:undefined, clear:undefined,
-                     repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
-                     shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                     selectMultiple:undefined, remove:undefined },
+            trans: { ok: undefined, cancel: undefined, save:undefined, saveShortcut:undefined, clear:undefined, clearShortcut:undefined,
+                     repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
+                     shuffleOff:undefined, selectMultiple:undefined, remove:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             selection: [],
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
@@ -302,6 +301,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         threeLines() {
             return this.$store.state.queueThreeLines
+        },
+        keyboardControl() {
+            return this.$store.state.keyboardControl
         }
     },
     created() {
@@ -468,34 +470,33 @@ var lmsQueue = Vue.component("lms-queue", {
             bindKey(LMS_SCROLL_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
             bus.$on('keyboard', function(key, modifier) {
-                if (!this.$store.state.keyboardControl || (!this.desktop && this.$store.state.page!="queue" || this.$store.state.openDialogs.length>0)) {
+                if (!this.$store.state.keyboardControl || 'mod'!=modifier || (!this.desktop && this.$store.state.page!="queue" || this.$store.state.openDialogs.length>0)) {
                     return;
                 }
-                if ('mod'==modifier) {
-                    if (LMS_SAVE_QUEUE_KEYBOARD==key) {
-                        if (this.$store.state.visibleMenus.size>0) {
-                            return;
-                        }
-                        this.save();
-                    } else if (LMS_CLEAR_QUEUE_KEYBOARD==key) {
-                        if (this.$store.state.visibleMenus.size>0) {
-                            return;
-                        }
-                        this.clear();
-                    } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key) {
-                        if (this.$store.state.visibleMenus.size>1 || (this.wide<=1 && this.$store.state.visibleMenus==1 && !this.$store.state.visibleMenus.has('main'))) {
-                            return;
-                        }
-                        this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : PQ_MOVE_QUEUE_ACTION);
-                        bus.$emit('hideMenu', 'main');
+                if (LMS_SAVE_QUEUE_KEYBOARD==key) {
+                    if (this.$store.state.visibleMenus.size>0) {
+                        return;
                     }
+                    this.save();
+                } else if (LMS_CLEAR_QUEUE_KEYBOARD==key) {
+                    if (this.$store.state.visibleMenus.size>0) {
+                        return;
+                    }
+                    this.clear();
+                } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key) {
+                    if (this.$store.state.visibleMenus.size>1 || (this.wide<=1 && this.$store.state.visibleMenus==1 && !this.$store.state.visibleMenus.has('main'))) {
+                        return;
+                    }
+                    this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : PQ_MOVE_QUEUE_ACTION);
+                    bus.$emit('hideMenu', 'main');
                 }
             }.bind(this));
         }
     },
     methods: {
         initItems() {
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), clear:i18n("Clear queue"),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), saveShortcut:i18n("Ctrl(⌘)+%1", LMS_SAVE_QUEUE_KEYBOARD),
+                          clear:i18n("Clear queue"), clearShortcut:i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};
@@ -946,6 +947,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        },
+        tooltip: function (str, shortcut, showShortcut) {
+            return showShortcut ? str+SEPARATOR+shortcut : str;
         }
     },
     watch: {

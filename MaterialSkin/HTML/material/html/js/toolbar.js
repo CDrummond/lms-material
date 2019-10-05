@@ -104,7 +104,7 @@ Vue.component('lms-toolbar', {
    <v-list-tile v-if="!mini && !nowplaying && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut">{{trans.syncshortcut}}</v-list-tile-action>
+    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
@@ -132,7 +132,7 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!(desktop || wide) && playerStatus.digital_volume_control" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+ <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
  <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
@@ -195,9 +195,9 @@ Vue.component('lms-toolbar', {
                  showPlayerMenu: false,
                  showMainMenu: false,
                  otherMenuItems:{},
-                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncshortcut:undefined, info:undefined, connectionLost:undefined,
-                        showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
-                        otherServerPlayers:undefined, pluginUpdatesAvailable:undefined},
+                 trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncShortcut:undefined, info:undefined, infoShortcut:undefined,
+                        connectionLost:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined,
+                        standardPlayers:undefined, otherServerPlayers:undefined, pluginUpdatesAvailable:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: {val: -1, current:-1, muted:false},
@@ -396,30 +396,28 @@ Vue.component('lms-toolbar', {
                 bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
                 bindKey(LMS_SYNC_KEYBOARD, 'mod');
                 bus.$on('keyboard', function(key, modifier) {
-                    if (!this.$store.state.keyboardControl || this.$store.state.openDialogs.length>0) {
+                    if (!this.$store.state.keyboardControl || 'mod'!=modifier || this.$store.state.openDialogs.length>0) {
                         return;
                     }
-                    if ('mod'==modifier) {
-                        if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
-                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : TB_INFO.id);
-                                bus.$emit('hideMenu', 'main');
-                            }
-                        } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
-                            if (LMS_MANAGEPLAYERS_KEYBOARD==key) {
-                                this.menuAction(TB_MANAGE_PLAYERS.id);
-                                bus.$emit('hideMenu', 'player');
-                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
-                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
-                                bus.$emit('hideMenu', 'player');
-                            }
-                        } else if (this.$store.state.visibleMenus.size==0) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_MANAGEPLAYERS_KEYBOARD==key) {
-                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
-                                                LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
-                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
-                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
-                            }
+                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
+                        if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                            this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : TB_INFO.id);
+                            bus.$emit('hideMenu', 'main');
+                        }
+                    } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
+                        if (LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                            this.menuAction(TB_MANAGE_PLAYERS.id);
+                            bus.$emit('hideMenu', 'player');
+                        } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                            bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                            bus.$emit('hideMenu', 'player');
+                        }
+                    } else if (this.$store.state.visibleMenus.size==0) {
+                        if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                            this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
+                                            LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
+                        } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                            bus.$emit('dlg.open', 'sync', this.$store.state.player);
                         }
                     }
                 }.bind(this));
@@ -486,10 +484,10 @@ Vue.component('lms-toolbar', {
                 this.menuItems.push(DIVIDER);
                 this.menuItems.push(TB_MINI_PLAYER);
             }
-            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncshortcut:i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD),
-                          info:i18n("Show current track information"), showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"),
-                          startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'), groupPlayers:("Group Players"),
-                          standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
+            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD),
+                          info:i18n("Show current track information"), infoShortcut:i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO), showLarge:i18n("Expand now playing"),
+                          hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
+                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -674,6 +672,9 @@ Vue.component('lms-toolbar', {
         },
         svgIcon: function (name, dark, update) {
             return "/material/svg/"+name+"?c="+(update ? LMS_UPDATE_SVG : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+        },
+        tooltip: function (str, shortcut, showShortcut) {
+            return showShortcut ? str+SEPARATOR+shortcut : str;
         }
     },
     watch: {

@@ -821,8 +821,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 var command = this.buildCommand(item);
                 if (command.command.length>2 && command.command[1]=="playlist") {
-                    // TODO: Is not a browse command
-                    if (this.$store.state.showMenuAudio) {
+                    if (!item.menu || item.menu.length<1) {
+                        lmsCommand(this.playerId(), command.params ? command.command.concat(command.params) : command.command).then(({data}) => {
+                            bus.$emit('showMessage', item.title);
+                        });
+                    } else if (this.$store.state.showMenuAudio) {
                         this.itemMenu(item, index, event);
                     }
                     return;

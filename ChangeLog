@@ -33,7 +33,8 @@
     session - looks like these were not required? Probably due to reconnection
     changes.
 23. Fix some dynamic playlists.
-24. If queue entry has no cover_id, then use artist image (if plugin installed).
+24. If queue entry, or curent track, has no cover_id, then use artist image (if
+    plugin installed).
 
 1.0.2
 -----

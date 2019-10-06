@@ -7,12 +7,19 @@
 
 const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltyAKNS" : "tags:cdegltysAKNS";
 
-function queueItemCover(item) {
+function queueItemCover(item, infoPlugin) {
     if (item.artwork_url) {
         return resolveImageUrl(item.artwork_url);
     }
     if (item.coverid && !(""+item.coverid).startsWith("-")) {
         return "/music/"+item.coverid+"/cover"+LMS_IMAGE_SIZE;
+    }
+    if (infoPlugin) {
+        if (item.artist_ids) {
+            return "/imageproxy/mai/artist/" + item.artist_ids.split(",")[0].trim() + "/image" + LMS_IMAGE_SIZE;
+        } else if (item.artist_id) {
+            return "/imageproxy/mai/artist/" + item.artist_id + "/image" + LMS_IMAGE_SIZE;
+        }
     }
     return resolveImageUrl(LMS_BLANK_COVER);
 }
@@ -121,7 +128,7 @@ function buildSubtitle(i, threeLines) {
     return subtitle;
 }
 
-function parseResp(data, showTrackNum, index, showRatings, threeLines) {
+function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugin) {
     logJsonMessage("RESP", data);
     var resp = { timestamp: 0, items: [], size: 0 };
     if (data.result) {
@@ -141,7 +148,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines) {
                               id: "track_id:"+i.id,
                               title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
                               subtitle: buildSubtitle(i, threeLines),
-                              image: queueItemCover(i),
+                              image: queueItemCover(i,infoPlugin),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
@@ -730,7 +737,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (!IS_MOBILE && this.$store.state.ratingsSupport ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.desktop && this.$store.state.ratingsSupport, this.$store.state.queueThreeLines);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.desktop && this.$store.state.ratingsSupport, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -769,7 +776,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (!IS_MOBILE && this.$store.state.ratingsSupport ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.desktop && this.$store.state.ratingsSupport, this.$store.state.queueThreeLines);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.desktop && this.$store.state.ratingsSupport, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;

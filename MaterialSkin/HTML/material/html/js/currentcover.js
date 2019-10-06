@@ -34,6 +34,13 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 if (undefined==coverUrl && undefined!=playerStatus.current.coverid && !(""+playerStatus.current.coverid).startsWith("-")) {
                     coverUrl=resolveImageUrl("/music/"+playerStatus.current.coverid+"/cover.jpg", LMS_CURRENT_IMAGE_SIZE);
                 }
+                if (undefined==coverUrl && this.$store.state.infoPlugin) {
+                    if (playerStatus.current.artist_ids) {
+                        coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_ids.split(",")[0].trim() + "/image" + LMS_CURRENT_IMAGE_SIZE;
+                    } else if (playerStatus.current.artist_id) {
+                        coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_id + "/image" + LMS_CURRENT_IMAGE_SIZE;
+                    }
+                }
                 if (undefined==coverUrl) {
                     // Use players current cover as cover image. Need to add extra (coverid, etc) params so that
                     // the URL is different between tracks...

@@ -148,7 +148,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               id: "track_id:"+i.id,
                               title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
                               subtitle: buildSubtitle(i, threeLines),
-                              image: queueItemCover(i,infoPlugin),
+                              image: queueItemCover(i, infoPlugin),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,

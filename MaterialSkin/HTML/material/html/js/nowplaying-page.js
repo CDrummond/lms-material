@@ -500,7 +500,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // Service specific buttons? e.g. Pandora...
             var lb = playerStatus.current.buttons ? playerStatus.current.buttons.shuffle : undefined;
             var rb = playerStatus.current.buttons ? playerStatus.current.buttons.repeat : undefined;
-            if (lb) {
+            if (lb && lb.command) {
                 this.leftBtn.show=true;
                 this.leftBtn.command=lb.command;
                 this.leftBtn.tooltip=lb.tooltip;
@@ -509,7 +509,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else if (this.leftBtn.show) {
                 this.leftBtn.show=false;
             }
-            if (rb) {
+            if (rb && rb.command) {
                 this.rightBtn.show=true;
                 this.rightBtn.command=rb.command;
                 this.rightBtn.tooltip=rb.tooltip;

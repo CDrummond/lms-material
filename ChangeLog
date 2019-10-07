@@ -35,6 +35,7 @@
 23. Fix some dynamic playlists.
 24. If queue entry, or curent track, has no cover_id, then use artist image (if
     plugin installed).
+25. Show Pandora thumbs down/up buttons.
 
 1.0.2
 -----

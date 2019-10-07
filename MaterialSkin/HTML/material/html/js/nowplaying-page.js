@@ -142,6 +142,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
  <div v-else>
+  <v-btn v-if="leftBtn.show" :title="leftBtn.tooltip" flat icon @click="doCommand(leftBtn.command, leftBtn.tooltip)" class="np-extra-left-btn" v-bind:class="{'np-extra-left-btn-wide' : landscape && wide>1}"><v-icon v-if="leftBtn.icon" small>{{leftBtn.icon}}</v-icon><img v-else :src="leftBtn.image" class="btn-img"></img></v-btn>
+  <v-btn v-if="rightBtn.show" :title="rightBtn.tooltip" flat icon @click="doCommand(rightBtn.command, rightBtn.tooltip)" class="np-extra-right-btn" v-bind:class="{'np-extra-right-btn-wide' : landscape && wide>1}"><v-icon v-if="rightBtn.icon" small>{{rightBtn.icon}}</v-icon><img v-else :src="rightBtn.image" class="btn-img"></img></v-btn>
+
   <div v-show="overlayVolume>-1" id="volumeOverlay">{{overlayVolume}}%</div>
   <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
@@ -294,7 +297,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  menu: { show: false, x:0, y:0, text: ["", ""] },
                  rating: {value:0, setting:false},
                  timeTooltip: {show: false, x:0, y:0, text:undefined},
-                 overlayVolume: -1
+                 overlayVolume: -1,
+                 leftBtn:{show:false, command:[], icon:undefined, image:undefined, tooltip:undefined},
+                 rightBtn:{show:false, command:[], icon:undefined, image:undefined, tooltip:undefined}
                 };
     },
     mounted() {
@@ -491,7 +496,30 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (undefined!=this.touch) {
                 this.overlayVolume = this.volume;
             }
+
+            // Service specific buttons? e.g. Pandora...
+            var lb = playerStatus.buttons && playerStatus.buttons ? playerStatus.buttons.shuffle : undefined;
+            var rb = playerStatus.buttons && playerStatus.buttons ? playerStatus.buttons.repeat : undefined;
+            if (lb) {
+                this.leftBtn.show=true;
+                this.leftBtn.command=lb.command;
+                this.leftBtn.tooltip=lb.tooltip;
+                this.leftBtn.icon=lb.jiveStyle == "thumbsDown" ? "thumb_down" : lb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined;
+                this.leftBtn.image=lb.icon;
+            } else if (this.leftBtn.show) {
+                this.leftBtn.show=false;
+            }
+            if (rb) {
+                this.rightBtn.show=true;
+                this.rightBtn.command=rb.command;
+                this.rightBtn.tooltip=rb.tooltip;
+                this.rightBtn.icon=rb.jiveStyle == "thumbsUp" ? "thumb_up" : rb.jiveStyle == "thumbsDown" ? "thumb_down" : undefined;
+                this.rightBtn.image=rb.icon;
+            } else if (this.rightBtn.show) {
+                this.rightBtn.show=false;
+            }
         }.bind(this));
+
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
@@ -888,6 +916,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, this.rating.value]).then(({data}) => {
                 bus.$emit('refreshStatus');
                 bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
+            });
+        },
+        doCommand(command, msg) {
+            lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                if (undefined!=msg) {
+                    bus.$emit('showMessage', msg);
+                }
             });
         },
         clickImage(event) {

@@ -38,6 +38,7 @@
 25. Show Pandora thumbs down/up buttons.
 26. If change player whilst browsing presets, just refresh list.
 27. 'Debounce' volume changes via slider.
+28. Increase CometD max backoff to 10 seconds.
 
 1.0.2
 -----

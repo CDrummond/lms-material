@@ -270,11 +270,13 @@ Vue.component('lms-toolbar', {
                 }
             }
 
-            this.playerMuted = playerStatus.volume<0;
-            var vol = Math.abs(playerStatus.volume);
-            if (vol!=this.playerVolume) {
-                this.playerVolume = vol;
-                this.statusVolume = vol;
+            if (!this.movingVolumeSlider) {
+                this.playerMuted = playerStatus.volume<0;
+                var vol = Math.abs(playerStatus.volume);
+                if (vol!=this.playerVolume) {
+                    this.playerVolume = vol;
+                    this.statusVolume = vol;
+                }
             }
             this.updateMediaSession(playerStatus.current);
         }.bind(this));
@@ -625,6 +627,15 @@ Vue.component('lms-toolbar', {
                     bus.$emit('movePlayer', player);
                 }
             });
+        },
+        volumeSliderStart() {
+            this.movingVolumeSlider=true;
+        },
+        volumeSliderEnd() {
+            this.movingVolumeSlider=false;
+            if (this.playerVolume != this.statusVolume) {
+                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            }
         },
         cancelSendVolumeTimer() {
             if (undefined!==this.sendVolumeTimer) {

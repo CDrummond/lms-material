@@ -36,6 +36,7 @@
 24. If queue entry, or curent track, has no cover_id, then use artist image (if
     plugin installed).
 25. Show Pandora thumbs down/up buttons.
+26. If change player whilst browsing presets, just refresh list.
 
 1.0.2
 -----

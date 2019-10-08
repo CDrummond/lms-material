@@ -14,7 +14,7 @@ Vue.component('lms-volume', {
    <v-flex xs12>
     <v-layout>
      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-     <v-slider step="1" v-model="playerVolume" @click.stop="setVolume" class="vol-slider"></v-slider>
+     <v-slider step="1" v-model="playerVolume" @click.stop="setVolume" class="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
     </v-layout>
    </v-flex>
@@ -38,7 +38,7 @@ Vue.component('lms-volume', {
     mounted() {
         this.closeTimer = undefined;
         bus.$on('playerStatus', function(playerStatus) {
-            if (this.show) {
+            if (this.show && !this.movingVolumeSlider) {
                 this.muted = playerStatus.volume<0;
                 var vol = Math.abs(playerStatus.volume);
                 if (vol!=this.playerVolume) {
@@ -115,6 +115,17 @@ Vue.component('lms-volume', {
                 return str;
             }
         },
+        volumeSliderStart() {
+            this.movingVolumeSlider=true;
+            this.cancelCloseTimer();
+        },
+        volumeSliderEnd() {
+            this.movingVolumeSlider=false;
+            if (this.playerVolume != this.statusVolume) {
+                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            }
+            this.resetCloseTimer();
+        },
         cancelCloseTimer() {
             if (undefined!==this.closeTimer) {
                 clearTimeout(this.closeTimer);
@@ -145,7 +156,9 @@ Vue.component('lms-volume', {
     watch: {
         'playerVolume': function(newVal) {
             if (this.show && newVal>=0 && this.statusVolume !== newVal) {
-                this.resetCloseTimer();
+                if (!this.movingVolumeSlider) {
+                    this.resetCloseTimer();
+                }
                 this.resetSendVolumeTimer();
             }
         },

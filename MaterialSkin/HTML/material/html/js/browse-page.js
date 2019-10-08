@@ -142,7 +142,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="browse-text lms-list-item">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-   <v-list-tile v-else-if="!(isTop && (item.disabled || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
+   <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -273,7 +273,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             jumplistWide: false,
             tbarActions: [],
             settingsMenuActions: [],
-            subtitleClickable: false
+            subtitleClickable: false,
+            disabled: new Set()
         }
     },
     computed: {
@@ -305,8 +306,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                       pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites,
                       showPresets: !this.$store.state.hidden.has(TOP_PRESETS_ID)};
-        this.remoteLibraries=getLocalStorageBool('remoteLibraries', true);
-        this.cdPlayer=getLocalStorageBool('cdPlayer', false);
         this.previousScrollPos=0;
         this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
@@ -353,6 +352,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         } else {
             this.updateTopList(savedItems);
         }
+
+        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
 
         bus.$on('esc', function() {
             this.menu.show = false;
@@ -471,15 +472,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                               svg: "cd-player",
                               type: "group",
                               weight: 5,
-                              id: TOP_CDPLAYER_ID,
-                              disabled:!this.cdPlayer },
+                              id: TOP_CDPLAYER_ID },
                             { command: ["selectRemoteLibrary", "items"],
                               params: ["menu:selectRemoteLibrary", "menu:1"],
                               icon: "cloud",
                               type: "group",
                               weight: 6,
-                              id: TOP_REMOTE_ID,
-                              disabled:!this.remoteLibraries }
+                              id: TOP_REMOTE_ID }
                            ];
             }
             for (var i=0, len=this.top.length; i<len; ++i) {
@@ -2181,18 +2180,17 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
             bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));
         },
-        checkFeature(command, key, id) {
+        checkFeature(command, id) {
             lmsCommand("", command).then(({data}) => {
                 if (data && data.result && undefined!=data.result._can) {
                     var can = 1==data.result._can;
-                    if (can!=this[key]) {
-                        this[key] = can;
-                        setLocalStorageVal(key, this[key]);
-                        for (var i=0, len=this.top.length; i<len; ++i) {
-                            if (this.top[i].id == id) {
-                                this.top[i].disabled = !this[key];
-                            }
-                        }
+                    console.log(command, can);
+                    if (can && this.disabled.has(id)) {
+                        this.disabled.delete(id);
+                        setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));
+                    } else if (!can && !this.disabled.has(id)) {
+                        this.disabled.add(id);
+                        setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));
                     }
                 }
             });
@@ -2339,8 +2337,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         });
 
-        this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], "remoteLibraries", TOP_REMOTE_ID);
-        this.checkFeature(["can", "cdplayer", "items", "?"], "cdPlayer", TOP_CDPLAYER_ID);
+        this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], TOP_REMOTE_ID);
+        this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
 
         bus.$on('browseDisplayChanged', function() {
             this.options.sortFavorites=this.$store.state.sortFavorites;

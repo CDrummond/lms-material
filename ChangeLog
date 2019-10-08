@@ -39,6 +39,7 @@
 26. If change player whilst browsing presets, just refresh list.
 27. 'Debounce' volume changes via slider.
 28. Increase CometD max backoff to 10 seconds.
+29. Fix showing/hiding of "CD Player " and "Remote Libraries" items.
 
 1.0.2
 -----

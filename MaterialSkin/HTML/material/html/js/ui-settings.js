@@ -328,15 +328,16 @@ Vue.component('lms-ui-settings', {
             this.menuIcons = this.$store.state.menuIcons;
             this.hidden = this.$store.state.hidden;
 
+            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_PRESETS_ID, name:i18n("Presets"), show:!this.hidden.has(TOP_PRESETS_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)}];
-            if (getLocalStorageBool('cdPlayer', false)) {
+            if (!disabled.has(TOP_CDPLAYER_ID)) {
                 this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
             }
-            if (getLocalStorageBool('remoteLibraries', true)) {
+            if (!disabled.has(TOP_REMOTE_ID)) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
             this.show = true;

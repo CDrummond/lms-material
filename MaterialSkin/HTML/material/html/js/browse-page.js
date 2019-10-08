@@ -360,7 +360,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('playerChanged', function() {
             if (this.current && this.current.section == SECTION_PRESETS) {
-                this.goHome();
+                this.refreshList();
             } else if ((this.current && this.current.id == TOP_MYMUSIC_ID) ||
                        (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID)) {
                 this.serverMyMusicMenu();

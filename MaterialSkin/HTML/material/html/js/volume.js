@@ -14,7 +14,7 @@ Vue.component('lms-volume', {
    <v-flex xs12>
     <v-layout>
      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-     <v-slider step="1" v-model="playerVolume" class="vol-slider"></v-slider>
+     <v-slider step="1" v-model="playerVolume" @click.stop="setVolume" class="vol-slider"></v-slider>
      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
     </v-layout>
    </v-flex>
@@ -37,13 +37,13 @@ Vue.component('lms-volume', {
     },
     mounted() {
         this.closeTimer = undefined;
-        this.playerVolumeCurrent = -1;
         bus.$on('playerStatus', function(playerStatus) {
             if (this.show) {
                 this.muted = playerStatus.volume<0;
                 var vol = Math.abs(playerStatus.volume);
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
+                    this.statusVolume = vol;
                 }
             }
         }.bind(this));
@@ -58,7 +58,7 @@ Vue.component('lms-volume', {
                     var vol = parseInt(data.result._volume);
                     this.muted = vol<0;
                     vol = Math.abs(vol);
-                    this.playerVolumeCurrent = vol;
+                    this.statusVolume = vol;
                     this.playerVolume = vol;
                     this.show = true;
                     this.resetCloseTimer();
@@ -91,10 +91,18 @@ Vue.component('lms-volume', {
             this.cancelCloseTimer();
         },
         volumeDown() {
-            this.playerVolume = adjustVolume(Math.abs(this.playerVolume), false);
+            bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), false)]);
+            this.resetCloseTimer();
         },
         volumeUp() {
-            this.playerVolume = adjustVolume(Math.abs(this.playerVolume), true);
+            bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), true)]);
+            this.resetCloseTimer();
+        },
+        setVolume() {
+            if (this.playerVolume != this.statusVolume) {
+                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            }
+            this.resetCloseTimer();
         },
         toggleMute() {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
@@ -118,18 +126,33 @@ Vue.component('lms-volume', {
             this.closeTimer = setTimeout(function () {
                 this.show = false;
             }.bind(this), LMS_VOLUME_CLOSE_TIMEOUT);
+        },
+        cancelSendVolumeTimer() {
+            if (undefined!==this.sendVolumeTimer) {
+                clearTimeout(this.sendVolumeTimer);
+                this.sendVolumeTimer = undefined;
+            }
+        },
+        resetSendVolumeTimer() {
+            this.cancelSendVolumeTimer();
+            this.sendVolumeTimer = setTimeout(function () {
+                if (this.playerVolume != this.statusVolume) {
+                    bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+                }
+            }.bind(this), 500);
         }
     },
     watch: {
         'playerVolume': function(newVal) {
-            if (this.show && newVal>=0 && this.playerVolumeCurrent !== newVal) {
+            if (this.show && newVal>=0 && this.statusVolume !== newVal) {
                 this.resetCloseTimer();
-                this.playerVolumeCurrent = newVal;
-                bus.$emit('playerCommand', ["mixer", "volume", newVal]);
+                this.resetSendVolumeTimer();
             }
         },
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'volume', shown:val});
+            this.resetCloseTimer();
+            this.cancelSendVolumeTimer();
         }
     }
 })

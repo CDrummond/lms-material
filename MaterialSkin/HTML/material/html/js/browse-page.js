@@ -2186,7 +2186,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsCommand("", command).then(({data}) => {
                 if (data && data.result && undefined!=data.result._can) {
                     var can = 1==data.result._can;
-                    console.log(command, can);
                     if (can && this.disabled.has(id)) {
                         this.disabled.delete(id);
                         setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));

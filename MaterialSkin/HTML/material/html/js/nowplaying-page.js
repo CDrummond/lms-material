@@ -504,28 +504,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             var btns = playerStatus.current.buttons;
             var sb = btns ? btns.shuffle : undefined;
             var rb = btns ? btns.repeat : undefined;
-            var a = undefined;
-            var b = undefined;
             if (sb && sb.command) {
-                a={show:true, command:sb.command, tooltip:sb.tooltip, image:sb.icon,
-                   icon:sb.jiveStyle == "thumbsDown" ? "thumb_down" : sb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined};
+                this.shuffAltBtn={show:true, command:sb.command, tooltip:sb.tooltip, image:sb.icon,
+                                  icon:sb.jiveStyle == "thumbsDown" ? "thumb_down" : sb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined};
+            } else if (this.shuffAltBtn.show) {
+                this.shuffAltBtn.show=false;
             }
             if (rb && rb.command) {
-                b={show:true, command:rb.command, tooltip:rb.tooltip, image:rb.icon,
-                   icon:rb.jiveStyle == "thumbsDown" ? "thumb_down" : rb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined};
-            }
-
-            if (a && b) {
-                this.repAltBtn=a;
-                this.shuffAltBtn=b;
-            } else if (a) {
+                this.repAltBtn={show:true, command:rb.command, tooltip:rb.tooltip, image:rb.icon,
+                                icon:rb.jiveStyle == "thumbsDown" ? "thumb_down" : rb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined};
+            } else if (this.repAltBtn.show) {
                 this.repAltBtn.show=false;
-                this.shuffAltBtn=a;
-            } else if (b) {
-                this.repAltBtn=b;
-                this.shuffAltBtn.show=false;
-            } else {
-                this.repAltBtn.show=this.shuffAltBtn.show=false;
             }
             this.disablePrev=btns && undefined!=btns.rew && 0==parseInt(btns.rew);
             this.disableNext=btns && undefined!=btns.fwd && 0==parseInt(btns.fwd);

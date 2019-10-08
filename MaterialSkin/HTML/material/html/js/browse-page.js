@@ -468,7 +468,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               id: TOP_APPS_ID,
                               section: SECTION_APPS },
                             { command: ["cdplayer", "items"],
-                              params: [],
+                              params: ["menu:1"],
                               svg: "cd-player",
                               type: "group",
                               weight: 5,
@@ -1850,6 +1850,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (var i=0, len=this.top.length; i<len; ++i) {
                 if (!this.top[i].id.startsWith(TOP_ID_PREFIX)) {
                     this.options.pinned.add(this.top[i].id);
+                } else if (this.top[i].id==TOP_CDPLAYER_ID && this.top[i].params.length==0) {
+                    this.top[i].params.push("menu:1");
                 }
             }
             if (this.$store.state.sortHome) {

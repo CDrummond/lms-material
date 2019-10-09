@@ -275,7 +275,6 @@ Vue.component('lms-toolbar', {
                 var vol = Math.abs(playerStatus.volume);
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
-                    this.statusVolume = vol;
                 }
             }
             this.updateMediaSession(playerStatus.current);
@@ -572,9 +571,7 @@ Vue.component('lms-toolbar', {
             }
         },
         setVolume() {
-            if (this.playerVolume != this.statusVolume) {
-                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
-            }
+            bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
         },
         toggleMute() {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
@@ -632,10 +629,17 @@ Vue.component('lms-toolbar', {
             this.movingVolumeSlider=true;
         },
         volumeSliderEnd() {
-            this.movingVolumeSlider=false;
-            if (this.playerVolume != this.statusVolume) {
-                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            if (this.$store.state.player) {
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", this.playerVolume]).then(({data}) => {
+                    bus.$emit('updatePlayer', this.$store.state.player.id);
+                }).catch(err => {
+                    bus.$emit('updatePlayer', this.$store.state.player.id);
+                    this.movingVolumeSlider=false;
+                });
+            } else {
+                this.movingVolumeSlider=false;
             }
+            this.cancelSendVolumeTimer();
         },
         cancelSendVolumeTimer() {
             if (undefined!==this.sendVolumeTimer) {
@@ -646,10 +650,8 @@ Vue.component('lms-toolbar', {
         resetSendVolumeTimer() {
             this.cancelSendVolumeTimer();
             this.sendVolumeTimer = setTimeout(function () {
-                if (this.playerVolume != this.statusVolume) {
-                    bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
-                }
-            }.bind(this), 500);
+                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            }.bind(this), 250);
         }
     },
     computed: {
@@ -721,7 +723,7 @@ Vue.component('lms-toolbar', {
     },
     watch: {
         'playerVolume': function(newVal) {
-            if (newVal>=0 && this.statusVolume !== newVal) {
+            if (newVal>=0) {
                 this.resetSendVolumeTimer();
             }
         },

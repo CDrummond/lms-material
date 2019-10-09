@@ -43,7 +43,6 @@ Vue.component('lms-volume', {
                 var vol = Math.abs(playerStatus.volume);
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
-                    this.statusVolume = vol;
                 }
             }
         }.bind(this));
@@ -58,8 +57,8 @@ Vue.component('lms-volume', {
                     var vol = parseInt(data.result._volume);
                     this.muted = vol<0;
                     vol = Math.abs(vol);
-                    this.statusVolume = vol;
                     this.playerVolume = vol;
+                    this.movingVolumeSlider = false;
                     this.show = true;
                     this.resetCloseTimer();
                 }
@@ -99,9 +98,7 @@ Vue.component('lms-volume', {
             this.resetCloseTimer();
         },
         setVolume() {
-            if (this.playerVolume != this.statusVolume) {
-                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
-            }
+            bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             this.resetCloseTimer();
         },
         toggleMute() {
@@ -120,11 +117,18 @@ Vue.component('lms-volume', {
             this.cancelCloseTimer();
         },
         volumeSliderEnd() {
-            this.movingVolumeSlider=false;
-            if (this.playerVolume != this.statusVolume) {
-                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            if (this.$store.state.player) {
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", this.playerVolume]).then(({data}) => {
+                    bus.$emit('updatePlayer', this.$store.state.player.id);
+                }).catch(err => {
+                    bus.$emit('updatePlayer', this.$store.state.player.id);
+                    this.movingVolumeSlider=false;
+                });
+            } else {
+                this.movingVolumeSlider=false;
             }
             this.resetCloseTimer();
+            this.cancelSendVolumeTimer();
         },
         cancelCloseTimer() {
             if (undefined!==this.closeTimer) {
@@ -147,15 +151,13 @@ Vue.component('lms-volume', {
         resetSendVolumeTimer() {
             this.cancelSendVolumeTimer();
             this.sendVolumeTimer = setTimeout(function () {
-                if (this.playerVolume != this.statusVolume) {
-                    bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
-                }
-            }.bind(this), 500);
+                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+            }.bind(this), 250);
         }
     },
     watch: {
         'playerVolume': function(newVal) {
-            if (this.show && newVal>=0 && this.statusVolume !== newVal) {
+            if (this.show && newVal>=0) {
                 if (!this.movingVolumeSlider) {
                     this.resetCloseTimer();
                 }

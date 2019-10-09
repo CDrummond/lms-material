@@ -1109,6 +1109,12 @@ div.v-subheader {
  min-width:72px!important;
  margin-left:16px;
  opacity:var(--sub-opacity);
+ justify-content:flex-start;
+}
+
+.v-menu__content .v-list__tile .menu-shortcut-player {
+ min-width:42px!important;
+ margin-right:-9px;
 }
 
 .current-player {

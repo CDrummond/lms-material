@@ -543,10 +543,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.enableRatings();
             }).catch(err => {
                 this.fetchingItems = false;
-                //if (!axios.isCancel(err)) {
+                if (!axios.isCancel(err)) {
                     this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
                     logError(err, command.command, command.params, start, count);
-                //}
+                }
             });
         },
         fetchUrlItems(url, provider) {
@@ -561,10 +561,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
-                //if (!axios.isCancel(err)) {
+                if (!axios.isCancel(err)) {
                     this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
                     logError(err, command.command, command.params, start, count);
-                //}
+                }
             });
         },
         handleListResponse(item, command, resp) {
@@ -1340,9 +1340,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 this.fetchingItems = false;
             }).catch(err => {
-                //if (!axios.isCancel(err)) {
+                if (!axios.isCancel(err)) {
                     logAndShowError(err, undefined, this.command.command, this.command.params);
-                //}
+                }
                 this.fetchingItems = false;
             });
         },
@@ -1353,10 +1353,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         goHome() {
             if (this.fetchingItems) {
-                //if (lmsListSource) {
-                //    this.fetchingItems = false;
-                //    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                //}
+                if (lmsListSource) {
+                    this.fetchingItems = false;
+                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
+                }
                 return;
             }
             this.selection = [];
@@ -1406,10 +1406,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         goBack(refresh) {
             if (this.fetchingItems) {
-                //if (lmsListSource) {
-                //    this.fetchingItems = false;
-                //    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                //}
+                if (lmsListSource) {
+                    this.fetchingItems = false;
+                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
+                }
                 return;
             }
             if (this.prevPage && !this.desktop) {

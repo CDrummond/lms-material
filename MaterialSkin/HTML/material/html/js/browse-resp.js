@@ -465,6 +465,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                     i.draggable = true;
                     i.realIndex = resp.items.length; // So items are deleted in correct order, even when lsit is sorted.
                 }
+                if (i.type=="text" && i.title.startsWith("<")) {
+                    i.type="html";
+                }
+                console.log(i.title, i.type);
                 resp.items.push(i);
                 types.add(i.type);
             }

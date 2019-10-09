@@ -525,11 +525,10 @@ a {
  min-width:36px !important;
 }
 
-.browse-text {
- padding:12px 8px 12px 16px;
- font-size:var(--std-font-size);
- font-weight:200;
- min-height:var(--list-elem-height);
+.lms-list-sub > .browse-text > div {
+ font-size:var(--std-font-size)!important;
+ font-weight:200!important;
+ min-height:var(--list-elem-height)!important;
 }
 
 .browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {

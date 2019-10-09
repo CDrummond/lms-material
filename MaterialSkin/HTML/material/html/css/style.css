@@ -1117,6 +1117,10 @@ div.v-subheader {
  margin-right:-9px;
 }
 
+.v-menu__content {
+ max-width:90%;
+}
+
 .current-player {
  font-weight:var(--bold-weight);
 }

@@ -632,6 +632,7 @@ Vue.component('lms-toolbar', {
             if (this.$store.state.player) {
                 lmsCommand(this.$store.state.player.id, ["mixer", "volume", this.playerVolume]).then(({data}) => {
                     bus.$emit('updatePlayer', this.$store.state.player.id);
+                    this.movingVolumeSlider=false;
                 }).catch(err => {
                     bus.$emit('updatePlayer', this.$store.state.player.id);
                     this.movingVolumeSlider=false;

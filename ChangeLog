@@ -41,6 +41,7 @@
 28. Increase CometD max backoff to 10 seconds.
 29. Fix showing/hiding of "CD Player " and "Remote Libraries" items.
 30. Fix "CD Player" listing.
+31. Re-add list cancelation.
 
 1.0.2
 -----

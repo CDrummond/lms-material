@@ -58,7 +58,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
    <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].shortcut,keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
@@ -420,16 +420,50 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.serverMyMusic=[];
         }.bind(this));
         if (!IS_MOBILE && !this.mini && !this.nowplaying) {
+            bindKey('home');
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');
+            bindKey(LMS_PLAY_KEYBOARD, 'mod+shift');
+            bindKey(LMS_APPEND_KEYBOARD, 'mod+shift');
+            bindKey(LMS_ADD_ITEM_ACTION_KEYBOARD, 'mod');
+            bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
+            bindKey('left', 'mod');
             bus.$on('keyboard', function(key, modifier) {
-                if (!this.$store.state.keyboardControl || 'mod'!=modifier || this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.desktop && this.$store.state.page!="browse")) {
+                if (!this.$store.state.keyboardControl || this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.desktop && this.$store.state.page!="browse")) {
                     return;
                 }
-                if (LMS_SEARCH_KEYBOARD==key) {
-                    if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && this.current.id==TOP_MYMUSIC_ID)) {
-                        bus.$emit('dlg.open', 'search');
-                    } else if (this.current && this.current.id==PODCASTS_ID) {
-                        bus.$emit('dlg.open', 'podcastsearch');
+                if ('mod'==modifier) {
+                    if (LMS_SEARCH_KEYBOARD==key) {
+                        if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && this.current.id==TOP_MYMUSIC_ID)) {
+                            bus.$emit('dlg.open', 'search');
+                        } else if (this.current && this.current.id==PODCASTS_ID) {
+                            bus.$emit('dlg.open', 'podcastsearch');
+                        }
+                    } else if ('left'==key) {
+                        this.goBack(undefined, true);
+                    } else {
+                        for (var i=0, len=this.tbarActions.length; i<len; ++i) {
+                            if (ACTIONS[this.tbarActions[i]].key==key) {
+                                this.headerAction(this.tbarActions[i], undefined);
+                                break;
+                            }
+                        }
+                    }
+                } else if ('mod+shift'==modifier) {
+                    for (var i=0, len=this.tbarActions.length; i<len; ++i) {
+                        if (ACTIONS[this.tbarActions[i]].skey==key) {
+                            if (LMS_PLAY_KEYBOARD==key && this.selection.length>0) {
+                                this.playSelectedItems();
+                            } else if (LMS_APPEND_KEYBOARD==key && this.selection.length>0) {
+                                this.addSelectedItems();
+                            } else {
+                                this.headerAction(this.tbarActions[i], undefined);
+                            }
+                            break;
+                        }
+                    }
+                } else if (!modifier) {
+                    if ('home'==key) {
+                        this.goHome(true);
                     }
                 }
             }.bind(this));
@@ -1370,9 +1404,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goHome();
             }
         },
-        goHome() {
+        goHome(keyboard) {
+            if (this.history.length==0) {
+                return;
+            }
             if (this.fetchingItems) {
-                if (lmsListSource) {
+                if (lmsListSource && !keyboard) {
                     this.fetchingItems = false;
                     lmsListSource.cancel(i18n('Operation cancelled by the user.'));
                 }
@@ -1423,9 +1460,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        goBack(refresh) {
+        goBack(refresh, keyboard) {
             if (this.fetchingItems) {
-                if (lmsListSource) {
+                if (lmsListSource && !keyboard) {
                     this.fetchingItems = false;
                     lmsListSource.cancel(i18n('Operation cancelled by the user.'));
                 }
@@ -2409,8 +2446,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
-        tooltip: function (str, shortcut, showShortcut) {
-            return showShortcut && shortcut ? str+SEPARATOR+shortcut : str;
+        tooltip: function (act, showShortcut) {
+            return showShortcut && ACTIONS[act].key
+                        ? ACTIONS[act].title+SEPARATOR+shortcutStr(ACTIONS[act].key)
+                            : showShortcut && ACTIONS[act].skey
+                                ? ACTIONS[act].title+SEPARATOR+shortcutStr(ACTIONS[act].skey, true)
+                                : ACTIONS[act].title;
         }
     },
     watch: {

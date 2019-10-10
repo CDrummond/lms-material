@@ -102,8 +102,10 @@ var ACTIONS=[
 
 function updateActionStrings() {
     ACTIONS[PLAY_ACTION].title=ACTIONS[PLAY_ALL_ACTION].title=i18n("Play now");
+    ACTIONS[PLAY_ACTION].skey=ACTIONS[PLAY_ALL_ACTION].key=LMS_PLAY_KEYBOARD;
     ACTIONS[PLAY_ALBUM_ACTION].title=i18n("Play album starting at track");
     ACTIONS[ADD_ACTION].title=ACTIONS[ADD_ALL_ACTION].title=i18n("Append to queue");
+    ACTIONS[ADD_ACTION].skey=ACTIONS[ADD_ALL_ACTION].key=LMS_APPEND_KEYBOARD;
     ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
     ACTIONS[INSERT_ACTION].title=i18n("Play next");
     ACTIONS[MORE_ACTION].title=i18n("More");
@@ -111,6 +113,7 @@ function updateActionStrings() {
     ACTIONS[RENAME_ACTION].title=i18n("Rename");
     ACTIONS[EDIT_ACTION].title=i18n("Edit");
     ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
+    ACTIONS[ADD_FAV_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD;
     ACTIONS[DELETE_ACTION].title=ACTIONS[DELETE_FAV_FOLDER_ACTION].title=i18n("Delete");
     ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
     ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
@@ -121,28 +124,31 @@ function updateActionStrings() {
     ACTIONS[UNSELECT_ACTION].title=ACTIONS[PQ_UNSELECT_ACTION].title=i18n("Un-select");
     ACTIONS[RATING_ACTION].title=i18n("Set rating");
     ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
-    ACTIONS[SEARCH_LIB_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_SEARCH_KEYBOARD);
+    ACTIONS[SEARCH_LIB_ACTION].key=LMS_SEARCH_KEYBOARD;
     ACTIONS[USE_GRID_ACTION].title=ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
     ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
     ACTIONS[ADD_FAV_FOLDER_ACTION].title=i18n("Create folder");
+    ACTIONS[ADD_FAV_FOLDER_ACTION].skey=LMS_CREATE_FAV_FOLDER_KEYBOARD;
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");
     ACTIONS[SAVE_PRESET_ACTION].title=i18n("Save as preset");
     ACTIONS[MOVE_PRESET_ACTION].title=i18n("Move");
     ACTIONS[ADD_PRESET_ACTION].title=i18n("Add preset");
+    ACTIONS[ADD_PRESET_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD;
     ACTIONS[VLIB_ACTION].title=i18n("Change library");
     ACTIONS[ADD_PODCAST_ACTION].title=i18n("Add podcast");
+    ACTIONS[ADD_PODCAST_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD
     ACTIONS[REMOVE_PODCAST_ACTION].title=i18n("Remove");
     ACTIONS[SEARCH_PODCAST_ACTION].title=i18n("Search for podcasts");
-    ACTIONS[SEARCH_PODCAST_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_SEARCH_KEYBOARD);
+    ACTIONS[SEARCH_PODCAST_ACTION].key=LMS_SEARCH_KEYBOARD;
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");
     ACTIONS[PQ_REMOVE_ACTION].title=i18n("Remove from queue");
     ACTIONS[PQ_SCROLL_ACTION].title=i18n("Scroll queue to current track");
-    ACTIONS[PQ_SCROLL_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_SCROLL_QUEUE_KEYBOARD);
+    ACTIONS[PQ_SCROLL_ACTION].key=LMS_SCROLL_QUEUE_KEYBOARD;
     ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL to queue");
-    ACTIONS[PQ_ADD_URL_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_QUEUE_ADD_URL_KEYBOARD);
+    ACTIONS[PQ_ADD_URL_ACTION].key=LMS_QUEUE_ADD_URL_KEYBOARD;
     ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Move queue to another player");
-    ACTIONS[PQ_MOVE_QUEUE_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_MOVE_QUEUE_KEYBOARD);
+    ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
 }
 

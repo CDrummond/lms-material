@@ -439,7 +439,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             bus.$emit('dlg.open', 'podcastsearch');
                         }
                     } else if ('left'==key) {
-                        this.goBack(undefined, true);
+                        this.goBack();
                     } else {
                         for (var i=0, len=this.tbarActions.length; i<len; ++i) {
                             if (ACTIONS[this.tbarActions[i]].key==key) {
@@ -463,7 +463,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 } else if (!modifier) {
                     if ('home'==key) {
-                        this.goHome(true);
+                        this.goHome();
                     }
                 }
             }.bind(this));
@@ -1404,16 +1404,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goHome();
             }
         },
-        goHome(keyboard) {
+        goHome() {
             if (this.history.length==0) {
                 return;
             }
             if (this.fetchingItems) {
-                if (lmsListSource && !keyboard) {
+                if (lmsListSource) {
                     this.fetchingItems = false;
                     lmsListSource.cancel(i18n('Operation cancelled by the user.'));
+                } else {
+                    return;
                 }
-                return;
             }
             this.selection = [];
             var prev = this.history.length>0 ? this.history[0].pos : 0;
@@ -1460,9 +1461,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        goBack(refresh, keyboard) {
+        goBack(refresh) {
             if (this.fetchingItems) {
-                if (lmsListSource && !keyboard) {
+                if (lmsListSource) {
                     this.fetchingItems = false;
                     lmsListSource.cancel(i18n('Operation cancelled by the user.'));
                 }

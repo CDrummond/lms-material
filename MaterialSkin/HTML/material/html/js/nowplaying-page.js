@@ -496,9 +496,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             // 'volume' is NOT reactive, as only want to update when overlay is shown!
             this.volume = playerStatus.volume<0 ? -1*playerStatus.volume : playerStatus.volume;
-            if (undefined!=this.touch) {
-                this.overlayVolume = this.volume;
-            }
 
             // Service specific buttons? e.g. Pandora...
             var btns = playerStatus.current.buttons;
@@ -954,26 +951,60 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         touchStart(event) {
             if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0) {
                 this.touch={x:event.touches[0].clientX, y:event.touches[0].clientY, moving:false};
+                this.lastSentVolume=-1;
             }
         },
         touchEnd() {
-            this.touch = undefined;
-            this.overlayVolume = -1;
+            if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume) {
+                bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
+            }
+            this.touch=undefined;
+            this.overlayVolume=-1;
+            this.lastSentVolume=-1;
+            this.cancelSendVolumeTimer();
         },
         touchMoving(event) {
             if (undefined!=this.touch) {
                 if (!this.touch.moving) {
                     this.touch.moving=true;
-                    this.overlayVolume = this.volume;
+                    this.overlayVolume=Math.abs(this.volume);
+                    this.lastSentVolume=this.overlayVolume;
                 }
                 if (Math.abs(event.touches[0].clientX-this.touch.x)<48 &&
                     Math.abs(event.touches[0].clientY-this.touch.y)>=25) {
                     var steps = Math.floor(Math.abs(event.touches[0].clientY-this.touch.y) / 25);
-                    var inc = event.touches[0].clientY<this.touch.y;
-                    bus.$emit("adjustVolume", inc, steps);
-                    this.touch.y += steps*25*(inc ? -1 : 1);
+                    if (steps>0) {
+                        var inc = event.touches[0].clientY<this.touch.y;
+                        for (var i=0; i<steps; ++i) {
+                            this.overlayVolume = adjustVolume(Math.abs(this.overlayVolume), inc);
+                            if (this.overlayVolume<0) {
+                                this.overlayVolume=0;
+                                break;
+                            } else if (this.overlayVolume>100) {
+                                this.overlayVolume=100;
+                                break;
+                            }
+                        }
+                        this.touch.y += steps*25*(inc ? -1 : 1);
+                        this.resetSendVolumeTimer();
+                    }
                 }
             }
+        },
+        cancelSendVolumeTimer() {
+            if (undefined!==this.sendVolumeTimer) {
+                clearTimeout(this.sendVolumeTimer);
+                this.sendVolumeTimer = undefined;
+            }
+        },
+        resetSendVolumeTimer() {
+            this.cancelSendVolumeTimer();
+            this.sendVolumeTimer = setTimeout(function () {
+                if (this.overlayVolume!=this.lastSentVolume) {
+                    bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
+                    this.lastSentVolume=this.overlayVolume;
+                }
+            }.bind(this), LMS_VOLUME_DEBOUNCE);
         }
     },
     filters: {

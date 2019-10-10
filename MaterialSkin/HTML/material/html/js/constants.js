@@ -25,6 +25,7 @@ const LMS_LIST_3LINE_ELEMENT_SIZE = 68;
 const LMS_BLANK_COVER = "/music/0/cover.jpg";
 const LMS_BLANK_IMAGE = "html/images/blank.png";
 const LMS_DOUBLE_CLICK_TIMEOUT = 300;
+const LMS_VOLUME_DEBOUNCE = 250;
 const LMS_DARK_SVG = "fff";
 const LMS_LIGHT_SVG = "444";
 const LMS_DARK_ACTIVE_SVG ="82b1ff";

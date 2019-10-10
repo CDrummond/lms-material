@@ -153,7 +153,7 @@ Vue.component('lms-volume', {
             this.cancelSendVolumeTimer();
             this.sendVolumeTimer = setTimeout(function () {
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
-            }.bind(this), 250);
+            }.bind(this), LMS_VOLUME_DEBOUNCE);
         }
     },
     watch: {

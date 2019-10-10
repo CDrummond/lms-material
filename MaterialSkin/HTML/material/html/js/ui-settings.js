@@ -270,7 +270,7 @@ Vue.component('lms-ui-settings', {
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
-            swipeVolume:true,
+            swipeVolume:false,
             keyboardControl:true,
             queueThreeLines:false,
             layout: null,

@@ -158,7 +158,7 @@ const store = new Vuex.Store({
         sortHome: isIPhone(),
         hidden: new Set(),
         visibleMenus: new Set(),
-        swipeVolume: true,
+        swipeVolume: false,
         keyboardControl: true,
         pluginUpdatesAvailable: false,
         queueThreeLines: false,

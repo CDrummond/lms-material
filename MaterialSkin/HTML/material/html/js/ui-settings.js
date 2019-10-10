@@ -454,6 +454,8 @@ Vue.component('lms-ui-settings', {
                          "◀"+SEPARATOR+i18n("Previous track"),
                          "▶"+SEPARATOR+i18n("Next track"),
                          i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
+                         i18n("Ctrl(⌘)+%1", LMS_SEARCH_KEYBOARD)+SEPARATOR+i18n("Search"),
+                         i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information"),
                          i18n("Ctrl(⌘)+%1", LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"),
                          i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"),
                          ACTIONS[PQ_MOVE_QUEUE_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title,
@@ -464,7 +466,6 @@ Vue.component('lms-ui-settings', {
                          i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title,
                          i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title,
                          i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD)+SEPARATOR+i18n("Synchronise"),
-                         i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO)+SEPARATOR+i18n("Show current track information"),
                          i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player")];
             if (!this.desktop) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));

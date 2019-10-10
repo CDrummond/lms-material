@@ -42,7 +42,8 @@ const LMS_PLAYER_SETTINGS_KEYBOARD = "P";
 const LMS_INFORMATION_KEYBOARD = "I";
 const LMS_MANAGEPLAYERS_KEYBOARD = "A";
 const LMS_SYNC_KEYBOARD = "B";
-const LMS_TRACK_INFO = "D";
+const LMS_TRACK_INFO_KEYBOARD = "D";
+const LMS_SEARCH_KEYBOARD = "F";
 
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
@@ -75,6 +76,7 @@ const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
+const PODCASTS_ID = "apps.podcasts";
 const MUSIC_ID_PREFIX = "mm:/";
 const SEARCH_ID = MUSIC_ID_PREFIX+"search";
 const GENRES_ID = MUSIC_ID_PREFIX+"genres";
@@ -88,6 +90,6 @@ const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;
 const SECTION_PLAYLISTS = 4;
 const SECTION_PRESETS = 5;
-const SECTION_PODCASTS = 6;
+const SECTION_PODCASTS = 6; // Not a real 'section' but used to indicate when to refresh...
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;

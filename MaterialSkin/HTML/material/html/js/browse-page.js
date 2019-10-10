@@ -58,7 +58,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
    <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].shortcut,keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
@@ -79,7 +79,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <table slot-scope="{item, index}" :class="[grid.few ? '' : 'full-width', GRID_SIZES[grid.size].clz]">
     <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes"><v-card flat align="left" class="image-grid-item">
      <div v-if="idx>=items.length" class="image-grid-item"></div>
-     <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | tooltip">
+     <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
       <v-btn icon color="primary" v-if="selection.length>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx)">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
@@ -290,6 +290,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         sortHome() {
             return this.$store.state.sortHome
+        },
+        keyboardControl() {
+            return this.$store.state.keyboardControl && !IS_MOBILE
         }
     },
     created() {
@@ -416,6 +419,21 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.goHome()
             this.serverMyMusic=[];
         }.bind(this));
+        if (!IS_MOBILE && !this.mini && !this.nowplaying) {
+            bindKey(LMS_SEARCH_KEYBOARD, 'mod');
+            bus.$on('keyboard', function(key, modifier) {
+                if (!this.$store.state.keyboardControl || 'mod'!=modifier || this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.desktop && this.$store.state.page!="browse")) {
+                    return;
+                }
+                if (LMS_SEARCH_KEYBOARD==key) {
+                    if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && this.current.id==TOP_MYMUSIC_ID)) {
+                        bus.$emit('dlg.open', 'search');
+                    } else if (this.current && this.current.id==PODCASTS_ID) {
+                        bus.$emit('dlg.open', 'podcastsearch');
+                    }
+                }
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {
@@ -2373,7 +2391,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.letterOverlay=document.getElementById("letterOverlay");
     },
     filters: {
-        tooltip: function (item) {
+        itemTooltip: function (item) {
             if (undefined==item ) {
                 return '';
             }
@@ -2390,6 +2408,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        },
+        tooltip: function (str, shortcut, showShortcut) {
+            return showShortcut ? str+SEPARATOR+shortcut : str;
         }
     },
     watch: {

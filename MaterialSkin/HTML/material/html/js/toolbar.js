@@ -402,7 +402,7 @@ Vue.component('lms-toolbar', {
                                 bus.$emit('hideMenu', 'main');
                             }
                         } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
-                            if (LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                            if (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1) {
                                 this.menuAction(TB_MANAGE_PLAYERS.id);
                                 bus.$emit('hideMenu', 'player');
                             } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
@@ -410,7 +410,8 @@ Vue.component('lms-toolbar', {
                                 bus.$emit('hideMenu', 'player');
                             }
                         } else if (this.$store.state.visibleMenus.size==0) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_MANAGEPLAYERS_KEYBOARD==key) {
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
+                                (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
                                 this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
                                                 LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
                             } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {

@@ -2410,7 +2410,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut) {
-            return showShortcut ? str+SEPARATOR+shortcut : str;
+            return showShortcut && shortcut ? str+SEPARATOR+shortcut : str;
         }
     },
     watch: {

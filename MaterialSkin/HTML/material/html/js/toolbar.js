@@ -134,10 +134,10 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge" v-if="desktop && largeView && !mini && !nowplaying" @click.native="toggleLargeView(false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && largeView && !mini && !nowplaying" @click.native="toggleLargeView(false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
@@ -189,8 +189,9 @@ Vue.component('lms-toolbar', {
                  showMainMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncShortcut:undefined, info:undefined, infoShortcut:undefined,
-                        connectionLost:undefined, showLarge:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined,
-                        standardPlayers:undefined, otherServerPlayers:undefined, pluginUpdatesAvailable:undefined},
+                        connectionLost:undefined, showLarge:undefined, showLargeShortcut:undefined, hideLarge:undefined, 
+                        startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
+                        pluginUpdatesAvailable:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: 0,
@@ -496,7 +497,8 @@ Vue.component('lms-toolbar', {
                 this.menuItems.push(TB_MINI_PLAYER);
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD),
-                          info:i18n("Show current track information"), infoShortcut:i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD), showLarge:i18n("Expand now playing"),
+                          info:i18n("Show current track information"), infoShortcut:i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD), 
+                          showLarge:i18n("Expand now playing"), showLargeShortcut:i18n("Ctrl(⌘)+%1", LMS_EXPAND_NP_KEYBOARD),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },

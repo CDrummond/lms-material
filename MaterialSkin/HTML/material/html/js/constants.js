@@ -44,6 +44,7 @@ const LMS_MANAGEPLAYERS_KEYBOARD = "A";
 const LMS_SYNC_KEYBOARD = "B";
 const LMS_TRACK_INFO_KEYBOARD = "D";
 const LMS_SEARCH_KEYBOARD = "F";
+const LMS_EXPAND_NP_KEYBOARD = "X";
 
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",

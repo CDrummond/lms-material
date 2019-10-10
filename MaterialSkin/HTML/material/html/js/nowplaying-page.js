@@ -559,14 +559,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.showTotal = getLocalStorageBool('showTotal', true);
         if (!IS_MOBILE && !this.mini && !this.nowplaying) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
+            if (this.desktop) {
+                bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod');
+            }
             bus.$on('keyboard', function(key, modifier) {
-                if (!this.$store.state.keyboardControl || 'mod'!=modifier || LMS_TRACK_INFO_KEYBOARD!=key || !this.$store.state.infoPlugin ||
-                    this.$store.state.openDialogs.length>1 || (this.$store.state.openDialogs.length==1 && this.$store.state.openDialogs[0]!='info-dialog') ||
-                    (!this.desktop && this.$store.state.page!="now-playing")) {
+                if (!this.$store.state.keyboardControl || 'mod'!=modifier || this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.desktop && this.$store.state.page!="now-playing")) {
                     return;
                 }
-                this.largeView = false;
-                this.info.show = !this.info.show;
+                if (LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog')) {
+                    this.largeView = false;
+                    this.info.show = !this.info.show;
+                } else if (LMS_EXPAND_NP_KEYBOARD==key) {
+                    this.info.show = false;
+                    this.largeView = !this.largeView;
+                }
             }.bind(this));
         }
     },

@@ -455,18 +455,21 @@ Vue.component('lms-ui-settings', {
                          "▶"+SEPARATOR+i18n("Next track"),
                          i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
                          i18n("Ctrl(⌘)+%1", LMS_SEARCH_KEYBOARD)+SEPARATOR+i18n("Search"),
-                         i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information"),
-                         i18n("Ctrl(⌘)+%1", LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"),
-                         i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"),
-                         ACTIONS[PQ_MOVE_QUEUE_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title,
-                         ACTIONS[PQ_SCROLL_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_SCROLL_ACTION].title,
-                         ACTIONS[PQ_ADD_URL_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_ADD_URL_ACTION].title,
-                         i18n("Ctrl(⌘)+%1", LMS_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title,
-                         i18n("Ctrl(⌘)+%1", LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title,
-                         i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title,
-                         i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title,
-                         i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD)+SEPARATOR+i18n("Synchronise"),
-                         i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player")];
+                         i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")];
+            if (this.desktop) {
+                list.push(i18n("Ctrl(⌘)+%1", LMS_EXPAND_NP_KEYBOARD)+SEPARATOR+i18n("Expand now playing"));
+            }
+            list.push(i18n("Ctrl(⌘)+%1", LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"));
+            list.push(i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"));
+            list.push(ACTIONS[PQ_MOVE_QUEUE_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title);
+            list.push(ACTIONS[PQ_SCROLL_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_SCROLL_ACTION].title);
+            list.push(ACTIONS[PQ_ADD_URL_ACTION].shortcut+SEPARATOR+ACTIONS[PQ_ADD_URL_ACTION].title);
+            list.push(i18n("Ctrl(⌘)+%1", LMS_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title);
+            list.push(i18n("Ctrl(⌘)+%1", LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title);
+            list.push(i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
+            list.push(i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
+            list.push(i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD)+SEPARATOR+i18n("Synchronise"));
+            list.push(i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player"));
             if (!this.desktop) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));
                 list.push("F2"+SEPARATOR+i18n("Playing"));

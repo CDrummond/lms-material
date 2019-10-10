@@ -180,7 +180,7 @@ Vue.component('lms-favorite', {
     },
     watch: {
         'show': function(val) {
-            this.$store.commit('dialogOpen', {name:'favorite', shown:favorite});
+            this.$store.commit('dialogOpen', {name:'favorite', shown:val});
         }
     }
 })

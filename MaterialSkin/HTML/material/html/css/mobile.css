@@ -261,6 +261,10 @@
  width:100%;
 }
 
+#volumeOverlay {
+ opacity:0.75!important;
+}
+
 .ios-vcard-text-workaround {
  top:var(--main-toolbar-height);
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));

@@ -86,7 +86,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color: #fff;
 }
 
-#letterOverlay {
+#letterOverlay, #volumeOverlay {
  text-shadow: 0px 0px 8px #000;
 }
 

@@ -761,7 +761,7 @@ var lmsServer = Vue.component('lms-server', {
             bindKey('left');
             bindKey('right');
             bus.$on('keyboard', function(key) {
-                if (!this.$store.state.keyboardControl || this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>0 || !this.$store.state.player) {
+                if (!this.$store.state.keyboardControl || !this.$store.state.player || this.$store.state.visibleMenus.size>0 || (this.$store.state.openDialogs.length>0 && this.$store.state.openDialogs[0]!='info-dialog'))  {
                     return;
                 }
                 var command = undefined;

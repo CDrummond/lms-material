@@ -811,3 +811,7 @@ function bindKey(key, modifier) {
         bus.$emit('keyboard', key, modifier);
     } );
 }
+
+function shortcutStr(key, shift) {
+    return shift ? i18n("Ctrl(⌘)+Shift+%1", key) : i18n("Ctrl(⌘)+%1", key);
+}

@@ -166,7 +166,7 @@ Vue.component('lms-toolbar', {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
-     <v-list-tile-action v-if="ACTIONS[action].shortcut && keyboardControl" class="menu-shortcut">{{ACTIONS[action].shortcut}}</v-list-tile-action>
+     <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
     </v-list-tile>
    </template>
   </v-list>
@@ -483,22 +483,22 @@ Vue.component('lms-toolbar', {
         },
         initItems() {
             TB_UI_SETTINGS.title=i18n('Settings');
-            TB_UI_SETTINGS.shortcut=i18n("Ctrl(⌘)+%1", LMS_SETTINGS_KEYBOARD);
+            TB_UI_SETTINGS.shortcut=shortcutStr(LMS_SETTINGS_KEYBOARD);
             TB_PLAYER_SETTINGS.title=i18n('Player settings');
-            TB_PLAYER_SETTINGS.shortcut=i18n("Ctrl(⌘)+%1", LMS_PLAYER_SETTINGS_KEYBOARD);
+            TB_PLAYER_SETTINGS.shortcut=shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD);
             TB_INFO.title=i18n('Information');
-            TB_INFO.shortcut=i18n("Ctrl(⌘)+%1", LMS_INFORMATION_KEYBOARD);
+            TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
-            TB_MANAGE_PLAYERS.shortcut=i18n("Ctrl(⌘)+%1", LMS_MANAGEPLAYERS_KEYBOARD);
+            TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_MINI_PLAYER.title=i18n('Open mini-player');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_INFO ];
             if (this.desktop && !this.mini & !IS_MOBILE) {
                 this.menuItems.push(DIVIDER);
                 this.menuItems.push(TB_MINI_PLAYER);
             }
-            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD),
-                          info:i18n("Show current track information"), infoShortcut:i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD), 
-                          showLarge:i18n("Expand now playing"), showLargeShortcut:i18n("Ctrl(⌘)+%1", LMS_EXPAND_NP_KEYBOARD),
+            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:shortcutStr(LMS_SYNC_KEYBOARD),
+                          info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
+                          showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },

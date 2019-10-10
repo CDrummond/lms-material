@@ -33,9 +33,9 @@ const LMS_LIGHT_ACTIVE_SVG = "346dd2";
 const LMS_UPDATE_SVG = "74bf43";
 
 const LMS_SAVE_QUEUE_KEYBOARD = "S";
-const LMS_CLEAR_QUEUE_KEYBOARD = "E";
+const LMS_CLEAR_QUEUE_KEYBOARD = "X";
 const LMS_QUEUE_ADD_URL_KEYBOARD = "U";
-const LMS_SCROLL_QUEUE_KEYBOARD = "T";
+const LMS_SCROLL_QUEUE_KEYBOARD = "L";
 const LMS_MOVE_QUEUE_KEYBOARD = "M";
 const LMS_SETTINGS_KEYBOARD = "G";
 const LMS_PLAYER_SETTINGS_KEYBOARD = "P";
@@ -44,7 +44,11 @@ const LMS_MANAGEPLAYERS_KEYBOARD = "A";
 const LMS_SYNC_KEYBOARD = "B";
 const LMS_TRACK_INFO_KEYBOARD = "D";
 const LMS_SEARCH_KEYBOARD = "F";
-const LMS_EXPAND_NP_KEYBOARD = "X";
+const LMS_EXPAND_NP_KEYBOARD = "E";
+const LMS_PLAY_KEYBOARD = "P"; // + shift
+const LMS_APPEND_KEYBOARD = "A"; // + shift
+const LMS_ADD_ITEM_ACTION_KEYBOARD = "C";
+const LMS_CREATE_FAV_FOLDER_KEYBOARD = "M"; // +shift
 
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",

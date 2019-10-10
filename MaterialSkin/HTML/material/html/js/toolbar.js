@@ -496,7 +496,7 @@ Vue.component('lms-toolbar', {
                 this.menuItems.push(TB_MINI_PLAYER);
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:i18n("Ctrl(⌘)+%1", LMS_SYNC_KEYBOARD),
-                          info:i18n("Show current track information"), infoShortcut:i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO), showLarge:i18n("Expand now playing"),
+                          info:i18n("Show current track information"), infoShortcut:i18n("Ctrl(⌘)+%1", LMS_TRACK_INFO_KEYBOARD), showLarge:i18n("Expand now playing"),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },

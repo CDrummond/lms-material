@@ -121,6 +121,7 @@ function updateActionStrings() {
     ACTIONS[UNSELECT_ACTION].title=ACTIONS[PQ_UNSELECT_ACTION].title=i18n("Un-select");
     ACTIONS[RATING_ACTION].title=i18n("Set rating");
     ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
+    ACTIONS[SEARCH_LIB_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_SEARCH_KEYBOARD);
     ACTIONS[USE_GRID_ACTION].title=ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
     ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
     ACTIONS[ADD_FAV_FOLDER_ACTION].title=i18n("Create folder");
@@ -132,6 +133,7 @@ function updateActionStrings() {
     ACTIONS[ADD_PODCAST_ACTION].title=i18n("Add podcast");
     ACTIONS[REMOVE_PODCAST_ACTION].title=i18n("Remove");
     ACTIONS[SEARCH_PODCAST_ACTION].title=i18n("Search for podcasts");
+    ACTIONS[SEARCH_PODCAST_ACTION].shortcut=i18n("Ctrl(⌘)+%1", LMS_SEARCH_KEYBOARD);
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");

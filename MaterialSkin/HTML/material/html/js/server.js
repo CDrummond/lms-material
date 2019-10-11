@@ -261,42 +261,40 @@ var lmsServer = Vue.component('lms-server', {
         },
         connectToCometD() {
             lmsIsConnected = undefined; // Not connected, or disconnected...
+            if (this.cometd) {
+                logCometdMessage("DELETE OLD");
+                this.cometd.clearSubscriptions();
+                this.cometd.disconnect();
+                delete this.cometd;
+            }
+            logCometdMessage("CONNECT");
             this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
-            if (this.cometd) {
-                logCometdMessage("RECONNECT");
-                this.cometd.clearSubscriptions();
-                this.cometd.disconnect((message) => {
-                    logCometdMessage("DISCONNECTED");
-                    this.cometd.handshake(); // Reconnect
-                });
-            } else {
-                logCometdMessage("CONNECT");
-                this.cometd = new org.cometd.CometD();
-                this.cometd.setMaxBackoff(10000); // Max seconds between retries
-                this.cometd.init({url: '/cometd', logLevel:'off'});
-                this.cometd.addListener('/meta/handshake', (message) => {
-                    if (eval(message).successful) {
-                        logCometdMessage("ADD_SUBSCRIPTIONS");
-                        bus.$emit("networkStatus", true);
-                        this.subscribedPlayers = new Set();
-                        this.cometd.subscribe('/'+this.cometd.getClientId()+'/**', (res) => { this.handleCometDMessage(res); });
-                        this.cometd.subscribe('/slim/subscribe',
-                                        function(res) { },
-                                        {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, LMS_MAX_PLAYERS, 'subscribe:60']]}});
-                        this.cometd.subscribe('/slim/subscribe',
-                                        function(res) { },
-                                        {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
-                        this.updateFavorites();
-                        // If we don't get a status update within 5 seconds, assume something wrong and reconnect
-                        this.serverStatusTimer = setTimeout(function () {
-                            logCometdMessage("STATUS_ERROR");
-                            this.serverStatusTimer = undefined;
-                            this.connectToCometD();
-                        }.bind(this), 5000);
-                    }
-                });
-            }
+            this.cometd = new org.cometd.CometD();
+            this.cometd.setMaxBackoff(10000); // Max seconds between retries
+            this.cometd.init({url: '/cometd', logLevel:'off'});
+
+            this.cometd.addListener('/meta/handshake', (message) => {
+                if (eval(message).successful) {
+                    bus.$emit("networkStatus", true);
+                    this.subscribedPlayers = new Set();
+                    logCometdMessage("ADD_SUBSCRIPTIONS");
+                    this.cometd.subscribe('/'+this.cometd.getClientId()+'/**', (res) => { this.handleCometDMessage(res); });
+                    this.cometd.subscribe('/slim/subscribe',
+                                    function(res) { },
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/serverstatus', request:['', ['serverstatus', 0, LMS_MAX_PLAYERS, 'subscribe:60']]}});
+                    this.cometd.subscribe('/slim/subscribe',
+                                    function(res) { },
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
+                    this.updateFavorites();
+                    // If we don't get a status update within 5 seconds, assume something wrong and reconnect
+                    this.serverStatusTimer = setTimeout(function () {
+                        logCometdMessage("STATUS_ERROR");
+                        this.serverStatusTimer = undefined;
+                        this.connectToCometD();
+                    }.bind(this), 5000);
+                }
+            });
         },
         handleCometDMessage(msg) {
             if (!msg.channel || !msg.data) {

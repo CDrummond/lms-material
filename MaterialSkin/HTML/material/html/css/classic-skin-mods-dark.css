@@ -17,6 +17,15 @@ hr {
  border:0.5px solid #888;
 }
 
+div.prefDesc, p {
+ color:rgba(255, 255, 255, 0.7) !important;
+}
+
+p input, p label {
+ color: white !important;
+}
+
+
 #prefsSubmit {
  border-top:1px solid #888;
 }

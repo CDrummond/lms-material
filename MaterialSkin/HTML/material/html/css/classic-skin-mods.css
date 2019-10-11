@@ -99,12 +99,9 @@ hr {
  margin-right:8px;
 }
 
-td {
- vertical-align: bottom;
-}
-
-td input {
- margin-bottom:-1px; /* Fix entry/combo alignmen tin additional browse modes */
+td input { /* Fix entry/combo alignment in additional browse modes */
+ margin-bottom:-1px;
+ padding-bottom:0px;
 }
 
 .prefDesc, .prefs {
@@ -147,7 +144,6 @@ select option[value=INTERFACE_SETTINGS] {
 }
 
 select, input {
- font-family: Roboto,sans-serif;
  min-height:24px;
  cursor: pointer;
 }
@@ -159,6 +155,8 @@ select {
  white-space:nowrap;
  max-width:calc(100vw - 32px);
  border-radius: 0px;
+ min-height:26px;
+ margin-bottom:1px;
 }
 
 select:focus {
@@ -182,7 +180,6 @@ input[type="submit"], input[type="button"] {
  text-transform: uppercase;
  padding:5px 8px 5px 8px;
  outline: none;
- border-radius: 0px;
 }
 
 input[type=checkbox] {

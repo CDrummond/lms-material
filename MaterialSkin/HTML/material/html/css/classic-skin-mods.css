@@ -65,8 +65,7 @@ div#browsedbList {
  margin-bottom:8px;
  font-size:16px !important;
  font-weight:400 !important;
- border: 1px solid white;
- text-transform: uppercase;
+ border-radius: 0px;
 }
 
 #statusMessage {
@@ -100,8 +99,20 @@ hr {
  margin-right:8px;
 }
 
+td {
+ vertical-align: bottom;
+}
+
+td input {
+ margin-bottom:-1px; /* Fix entry/combo alignmen tin additional browse modes */
+}
+
 .prefDesc, .prefs {
  margin-right:14px;
+}
+
+div.prefDesc, p {
+ font-size:14px!important;
 }
 
 table {
@@ -147,6 +158,7 @@ select {
  overflow:hidden;
  white-space:nowrap;
  max-width:calc(100vw - 32px);
+ border-radius: 0px;
 }
 
 select:focus {
@@ -157,6 +169,7 @@ input[type="text"], input[type="password"], input[type="stdedit"] {
  border: none;
  min-width:80px;
  max-width:calc(100vw - 32px);
+ border-radius: 0px;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus {
@@ -169,6 +182,7 @@ input[type="submit"], input[type="button"] {
  text-transform: uppercase;
  padding:5px 8px 5px 8px;
  outline: none;
+ border-radius: 0px;
 }
 
 input[type=checkbox] {

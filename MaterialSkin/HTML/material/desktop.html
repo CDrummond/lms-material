@@ -40,7 +40,6 @@
      <div slot="right-pane"><lms-queue :desktop="true"></lms-queue></div>
     </vue-splitter>
     <lms-now-playing :desktop="true"></lms-now-playing>
-    <lms-noconnection></lms-noconnection>
     <lms-ui-settings v-if="dialogs.uisettings" :desktop="true"></lms-ui-settings>
     <lms-player-settings v-if="dialogs.playersettings"></lms-player-settings>
     <lms-information-dialog v-if="dialogs.info"></lms-information-dialog>
@@ -113,7 +112,6 @@
   <script src="html/js/constants.js?r=[% material_revision %]"></script>
   <script src="html/js/currentcover.js?r=[% material_revision %]"></script>
   <script src="html/js/utils.js?r=[% material_revision %]"></script>
-  <script src="html/js/noconnection.js?r=[% material_revision %]"></script>
   <script src="html/js/toolbar.js?r=[% material_revision %]"></script>
   <script src="html/js/browse-resp.js?r=[% material_revision %]"></script>
   <script src="html/js/browse-page.js?r=[% material_revision %]"></script>

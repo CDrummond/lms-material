@@ -99,7 +99,7 @@ function visibilityOrFocusChanged() {
                     bus.$emit("reconnect");
                 }
             }, 250);
-        } else if (IS_MOBILE) { // If we become visibilty, refresh player status
+        } else if (IS_MOBILE) { // If we become visibile, refresh player status
             bus.$emit('refreshStatus');
         }
     }
@@ -259,26 +259,40 @@ var lmsServer = Vue.component('lms-server', {
                 }.bind(this), timeout<250 ? 250 : timeout);
             }
         },
+        reConnectToCometD() {
+            if (!lmsIsConnected && this.cometd) {
+                this.cometd.connectNow();
+            }
+        },
         connectToCometD() {
             lmsIsConnected = undefined; // Not connected, or disconnected...
-            if (this.cometd) {
-                logCometdMessage("DELETE OLD");
-                this.cometd.clearSubscriptions();
-                this.cometd.disconnect();
-                delete this.cometd;
-            }
-            logCometdMessage("CONNECT");
-            this.cancelServerStatusTimer();
             this.subscribedPlayers = new Set();
+            logCometdDebug("CONNECT");
             this.cometd = new org.cometd.CometD();
             this.cometd.setMaxBackoff(10000); // Max seconds between retries
             this.cometd.init({url: '/cometd', logLevel:'off'});
-
+            this.cometd.addListener('/meta/connect', (message) => {
+                var connected = eval(message).successful;
+                if (connected!=lmsIsConnected) {
+                    lmsIsConnected = connected;
+                    if (!connected) {
+                        this.cancelConnectionFailureTimer();
+                        // Delay showing red 'i' icon for 1.25 seconds - incase of itermittent failures
+                        this.connectionFailureTimer = setTimeout(function () {
+                            this.connectionFailureTimer = undefined;
+                            bus.$emit("networkStatus", lmsIsConnected);
+                        }.bind(this), 1250);
+                    } else {
+                        this.refreshServerStatus();
+                        this.scheduleNextPlayerStatusUpdate(500);
+                        bus.$emit("networkStatus", lmsIsConnected);
+                    }
+                }
+            });
             this.cometd.addListener('/meta/handshake', (message) => {
                 if (eval(message).successful) {
-                    bus.$emit("networkStatus", true);
+                    logCometdDebug("ADD_SUBSCRIPTIONS");
                     this.subscribedPlayers = new Set();
-                    logCometdMessage("ADD_SUBSCRIPTIONS");
                     this.cometd.subscribe('/'+this.cometd.getClientId()+'/**', (res) => { this.handleCometDMessage(res); });
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
@@ -287,12 +301,6 @@ var lmsServer = Vue.component('lms-server', {
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
                     this.updateFavorites();
-                    // If we don't get a status update within 5 seconds, assume something wrong and reconnect
-                    this.serverStatusTimer = setTimeout(function () {
-                        logCometdMessage("STATUS_ERROR");
-                        this.serverStatusTimer = undefined;
-                        this.connectToCometD();
-                    }.bind(this), 5000);
                 }
             });
         },
@@ -314,7 +322,6 @@ var lmsServer = Vue.component('lms-server', {
         },
         handleServerStatus(data) {
             logCometdMessage("SERVER", data);
-            this.cancelServerStatusTimer();
             var players = [];
             var otherPlayers = [];
             if (lmsLastScan!=data.lastscan) {
@@ -564,10 +571,10 @@ var lmsServer = Vue.component('lms-server', {
                 }
             });
         },
-        cancelServerStatusTimer() {
-            if (undefined!==this.serverStatusTimer) {
-                clearTimeout(this.serverStatusTimer);
-                this.serverStatusTimer = undefined;
+        cancelConnectionFailureTimer() {
+            if (undefined!==this.connectionFailureTimer) {
+                clearTimeout(this.connectionFailureTimer);
+                this.connectionFailureTimer = undefined;
             }
         },
         cancelPlayerStatusTimer() {
@@ -633,7 +640,7 @@ var lmsServer = Vue.component('lms-server', {
     mounted: function() {
         this.moving=[];
         bus.$on('reconnect', function() {
-            this.connectToCometD();
+            this.reConnectToCometD();
         }.bind(this));
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);
@@ -734,30 +741,6 @@ var lmsServer = Vue.component('lms-server', {
         }
         window.addEventListener("focus", visibilityOrFocusChanged);
 
-        // Store connection state, so that focus handler can act accordingly
-        bus.$on('networkStatus', function(connected) {
-            var statusChanged = lmsIsConnected!=connected;
-
-            // Store connection state, so that visibility handler can act accordingly
-            lmsIsConnected = connected;
-
-            if (statusChanged) {
-                if (connected) {
-                    this.startUpdatesTimer();
-                } else {
-                    this.cancelUpdatesTimer();
-                }
-            }
-
-            // Force reconnect if disconnect received between .25 and 1.5s after visibility change
-            if (statusChanged && !lmsIsConnected && undefined!=lmsLastFocusOrVisibilityChange) {
-                var currentTime = (new Date()).getTime();
-                if (currentTime > (lmsLastFocusOrVisibilityChange+250) && currentTime < (lmsLastFocusOrVisibilityChange + 1500)) {
-                    this.connectToCometD();
-                }
-            }
-        }.bind(this));
-
         if (!IS_MOBILE) {
             bindKey('up');
             bindKey('down');
@@ -790,7 +773,7 @@ var lmsServer = Vue.component('lms-server', {
         }
     },
     beforeDestroy() {
-        this.cancelServerStatusTimer();
+        this.cancelConnectionFailureTimer();
         this.cancelPlayerStatusTimer();
         this.cancelFavoritesTimer();
         this.cancelMoveTimer();

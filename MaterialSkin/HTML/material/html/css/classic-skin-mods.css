@@ -64,7 +64,8 @@ div#browsedbList {
  margin-left:-8px;
  margin-bottom:8px;
  font-size:16px !important;
- font-weight:600 !important;
+ font-weight:400 !important;
+ border: 1px solid white;
  text-transform: uppercase;
 }
 
@@ -114,8 +115,11 @@ div#innerSettingsBlock {
 
 * {
  font-size:16px !important;
- font-family:'Roboto';
- font-weight:400;
+ font-family:Roboto,sans-serif;
+ text-rendering: optimizeLegibility;
+ line-height: 1.5;
+ -webkit-font-smoothing: antialiased;
+ -moz-osx-font-smoothing: grayscale;
 }
 
 select option[value=INTERFACE_SETTINGS] {
@@ -127,12 +131,18 @@ select option[value=INTERFACE_SETTINGS] {
  min-height: 15px;
  height: auto !important;
  padding: 8px 6px 4px 0px;
- font-weight: bold;
+ font-weight: 500;
+ text-transform: none;
+}
+
+select, input {
+ font-family: Roboto,sans-serif;
+ min-height:24px;
+ cursor: pointer;
 }
 
 select {
  border: none;
- min-height:28px;
  text-overflow:ellipsis;
  overflow:hidden;
  white-space:nowrap;
@@ -146,7 +156,6 @@ select:focus {
 input[type="text"], input[type="password"], input[type="stdedit"] {
  border: none;
  min-width:80px;
- min-height:25px;
  max-width:calc(100vw - 32px);
 }
 

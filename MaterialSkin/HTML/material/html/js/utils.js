@@ -19,7 +19,7 @@ function logJsonMessage(type, msg) {
 
 function logCometdMessage(type, msg) {
     if (debug && (debug.has("cometd") || debug.has("true"))) {
-        console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+type+": "+JSON.stringify(msg));
+        console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+type+(msg ? (": "+JSON.stringify(msg)) : ""));
     }
 }
 

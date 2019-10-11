@@ -31,6 +31,11 @@ html, .mini-player {
  color:var(--active-color) !important;
 }
 
+/* Scheduled alarms / Alarm settings */
+div.v-subheader {
+ color:white!important;
+}
+
 /* Clickable artist/album in queue */
 .v-list__tile__sub-title, .v-list__tile__sub-title a {
  color: hsla(0,0%,100%,var(--sub-opacity)) !important;

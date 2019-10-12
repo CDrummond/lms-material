@@ -437,7 +437,7 @@ function parseQueryParams() {
 }
 
 function isLandscape() {
-    return window.innerWidth > (window.innerHeight*1.25);
+    return window.innerWidth > (window.innerHeight*1.4);
 }
 
 function incrementVolume() {

@@ -45,6 +45,7 @@
 32. Add default artists image.
 33. Remove no connection dialog, and only use icon in roght right corner.
 34. Use CometD's internal reconnection logic to handle reconnects.
+35. Width must be 40% more than height to be classified as landscape.
 
 1.0.2
 -----

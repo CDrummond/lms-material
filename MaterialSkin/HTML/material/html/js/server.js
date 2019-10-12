@@ -277,11 +277,11 @@ var lmsServer = Vue.component('lms-server', {
                     lmsIsConnected = connected;
                     if (!connected) {
                         this.cancelConnectionFailureTimer();
-                        // Delay showing red 'i' icon for 1.25 seconds - incase of itermittent failures
+                        // Delay showing red 'i' icon for 2 seconds - incase of itermittent failures
                         this.connectionFailureTimer = setTimeout(function () {
                             this.connectionFailureTimer = undefined;
                             bus.$emit("networkStatus", lmsIsConnected);
-                        }.bind(this), 1250);
+                        }.bind(this), 2000);
                     } else {
                         this.refreshServerStatus();
                         this.scheduleNextPlayerStatusUpdate(500);

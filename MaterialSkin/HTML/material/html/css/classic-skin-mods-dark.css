@@ -73,12 +73,13 @@ select:-webkit-autofill:focus {
 
 input[type="submit"], input[type="button"] {
  color: white !important;
- background-color: #5F5F5F;
- border-bottom: 1px solid #343434;
+ background-color: transparent;
+ border-bottom: 1px solid transparent;
 }
 
 input[type="submit"]:hover, input[type="button"]:hover {
  background-color: #6F6F6F;
+ border-bottom: 1px solid #343434;
 }
 
 input[type="submit"]:active, input[type="button"]:active {

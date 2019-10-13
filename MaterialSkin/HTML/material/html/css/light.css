@@ -114,3 +114,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .embedded-page {
  background-color:white;
 }
+
+/* Checkbox label */
+.v-input--selection-controls.v-input .v-label {
+ color:rgba(0, 0, 0, 0.86) !important;
+}
+
+/* Checkbox */
+.v-input--selection-controls.v-input i {
+ color: #316dd3 !important;
+ caret-color: #316dd3 !important;
+}

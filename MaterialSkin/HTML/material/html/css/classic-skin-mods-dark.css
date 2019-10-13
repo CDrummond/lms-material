@@ -86,6 +86,14 @@ input[type="submit"]:active, input[type="button"]:active {
  background-color: #4F4F4F;
 }
 
+input[type=checkbox]:before, input[type=radio]:before {
+ color:white;
+}
+
+input[type=checkbox]:checked:before, input[type=radio]:checked:before {
+ color:#89abff;
+}
+
 ::-webkit-scrollbar {
  background:#3d3d3d;
 }

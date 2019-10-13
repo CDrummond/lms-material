@@ -148,7 +148,7 @@ select, input {
  cursor: pointer;
 }
 
-input[type="text"], input[type="button"], input[type="submit"] {
+input[type="text"], input[type="button"], input[type="submit"], input[type=checkbox], input[type=radio] {
  -webkit-appearance: none;
  appearance: none;
 }
@@ -187,10 +187,35 @@ input[type="submit"], input[type="button"] {
  outline: none;
 }
 
-input[type=checkbox] {
- width:18px;
- height:18px;
+input[type=checkbox], input[type=radio]  {
+ width:24px;
+ height:24px;
+}
+
+input[type=checkbox]:before {
  vertical-align: sub;
+ font-family: "Material Icons";
+ font-size:24px;
+ content:"\e835";
+ /*margin-right:4px;*/
+ text-decoration:none;
+}
+
+input[type=checkbox]:checked:before {
+ content:"\e834";
+}
+
+input[type=radio]:before {
+ vertical-align: sub;
+ font-family: "Material Icons";
+ font-size:24px;
+ content:"\e836";
+ /*margin-right:4px;*/
+ text-decoration:none;
+}
+
+input[type=radio]:checked:before {
+ content:"\e837 ";
 }
 
 #saveSettings {

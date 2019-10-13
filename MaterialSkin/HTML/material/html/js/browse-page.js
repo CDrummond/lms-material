@@ -1607,10 +1607,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                             } else if (mode=="vaalbums") {
                                 mode="albums";
                                 p.push("compilation:1");
-                            } else if (mode=="bmf") {
-                                mode="musicfolder"
-                                p.push("type:audio");
-                                p.push("tags:ds");
                             } else if (mode=="years") {
                                 p.push("hasAlbums:1");
                             } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists") {

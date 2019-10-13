@@ -130,6 +130,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
             var isApps = parent && parent.id == TOP_APPS_ID;
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
+            var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -412,6 +413,12 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         } else {
                             i.icon='radio'; i.image=undefined;
                         }
+                    }
+                } else if (isBmf) {
+                    if (i.type=="playlist" && i.actions && i.actions.play && i.actions.play.params && i.actions.play.params.folder_id) {
+                        i.icon = "folder";
+                    } else {
+                        i.svg = "file-music";
                     }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {
@@ -785,28 +792,6 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                           });
             }
             resp.subtitle=i18np("1 Year", "%1 Years", resp.total);
-        } else if (data.result.folder_loop) {
-            for (var idx=0, loop=data.result.folder_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var isFolder = i.type==="folder";
-                var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
-                }
-                resp.items.push({
-                              id: (isFolder ? "folder_id:" : "track_id:") + i.id,
-                              title: i.filename,
-                              subtitle: i.duration!="" && !isFolder ? i.duration : undefined,
-                              command: ["musicfolder"],
-                              params: ["folder_id:"+i.id, "type:audio", "tags:ds"],
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
-                              type: isFolder ? "group" : "track",
-                              icon: isFolder ? "folder" : undefined,
-                              svg: isFolder ? undefined : "file-music",
-                              textkey: key
-                          });
-            }
-            resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
         } else if (data && data.result && data.result.presets_loop) {
             for (var idx=0, loop=data.result.presets_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

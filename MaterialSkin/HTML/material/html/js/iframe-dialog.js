@@ -116,6 +116,12 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe.open', function(page, title) {
             this.title = title;
             this.src = page;
+            if (this.src.indexOf('?')>0) {
+                this.src+='&';
+            } else {
+                this.src+='?';
+            }
+            this.src+='darkUi=' + (this.$store.state.darkUi ? 1 : 0)
             this.page = page.indexOf("player/basic.html")>0 ? "player" : page.indexOf("advanced_search.html")>0 ? "search" : "other";
             this.show = true;
         }.bind(this));

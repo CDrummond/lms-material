@@ -17,7 +17,7 @@ hr {
  border:0.5px solid #888;
 }
 
-div.prefDesc, p {
+div.prefDesc, p, td[colspan="5"] { /* colspan=5 for additional browse modes */
  color:rgba(255, 255, 255, 0.7) !important;
 }
 

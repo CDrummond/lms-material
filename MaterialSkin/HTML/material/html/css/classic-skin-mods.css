@@ -65,7 +65,7 @@ div#browsedbList {
  margin-bottom:8px;
  font-size:16px !important;
  font-weight:400 !important;
- border-radius: 3px;
+ border-radius: 0px;
 }
 
 #statusMessage {
@@ -121,7 +121,7 @@ div#innerSettingsBlock {
  padding: 0px 21px 0px 7px;
 }
 
-* {
+*, body, table, input, select, textarea, p, l {
  font-size:16px !important;
  font-family:Roboto,sans-serif;
  text-rendering: optimizeLegibility;
@@ -159,7 +159,7 @@ select {
  overflow:hidden;
  white-space:nowrap;
  max-width:calc(100vw - 32px);
- border-radius: 3px;
+ border-radius: 0px;
  min-height:26px;
  margin-bottom:1px;
 }

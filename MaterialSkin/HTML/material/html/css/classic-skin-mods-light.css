@@ -72,8 +72,8 @@ select:-webkit-autofill:focus {
 
 input[type="submit"], input[type="button"] {
  color: black !important;
- background-color: transparent;
- border: 1px solid #aaa;
+ background-color: #ccc;
+ border-bottom: 1px solid #aaa;
 }
 
 input[type="submit"]:hover, input[type="button"]:hover {

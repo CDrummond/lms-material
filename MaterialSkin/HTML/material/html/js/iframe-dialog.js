@@ -59,6 +59,7 @@ function clickHandler(e) {
             e.preventDefault();
         }
     }
+    bus.$emit('iframe-loaded');
 }
 
 function hideClassicSkinElems(page) {
@@ -95,6 +96,7 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
+    <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
     <iframe id="classicSkinIframe" v-on:load="hideClassicSkinElems(page)" :src="src" frameborder="0"></iframe>
    </v-card-text>
   </v-card>
@@ -109,7 +111,8 @@ Vue.component('lms-iframe-dialog', {
             title: undefined,
             src: undefined,
             page: undefined,
-            snackbar:{show:false, msg:undefined}
+            snackbar:{show:false, msg:undefined},
+            loaded:false
         }
     },
     mounted() {
@@ -124,6 +127,10 @@ Vue.component('lms-iframe-dialog', {
             this.src+='darkUi=' + (this.$store.state.darkUi ? 1 : 0)
             this.page = page.indexOf("player/basic.html")>0 ? "player" : page.indexOf("advanced_search.html")>0 ? "search" : "other";
             this.show = true;
+            this.loaded = false;
+        }.bind(this));
+            bus.$on('iframe-loaded', function() {
+            this.loaded = true;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();

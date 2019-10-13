@@ -303,7 +303,7 @@ Vue.component('lms-information-dialog', {
             }
         },
         openSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html?darkUi=' + (this.$store.state.darkUi ? 1 : 0), i18n('Server settings'));
+            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', i18n('Server settings'));
         }
     },
     beforeDestroy() {

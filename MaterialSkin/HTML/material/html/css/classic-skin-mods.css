@@ -205,6 +205,11 @@ input[type=checkbox]:checked:before {
  content:"\e834";
 }
 
+input[type=radio] {
+ border:none;
+ background-color: transparent;
+}
+
 input[type=radio]:before {
  vertical-align: sub;
  font-family: "Material Icons";

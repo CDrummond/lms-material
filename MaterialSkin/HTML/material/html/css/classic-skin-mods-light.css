@@ -85,6 +85,10 @@ input[type="submit"]:active, input[type="button"]:active {
  border-bottom: 1px solid white;
 }
 
+input[type=checkbox] {
+ border: none;
+}
+
 input[type=checkbox]:checked:before, input[type=radio]:checked:before {
  color:#316dd3;
 }

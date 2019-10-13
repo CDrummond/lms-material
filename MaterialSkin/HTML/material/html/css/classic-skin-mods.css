@@ -65,7 +65,7 @@ div#browsedbList {
  margin-bottom:8px;
  font-size:16px !important;
  font-weight:400 !important;
- border-radius: 0px;
+ border-radius: 3px;
 }
 
 #statusMessage {
@@ -148,13 +148,18 @@ select, input {
  cursor: pointer;
 }
 
+input[type="text"], input[type="button"], input[type="submit"] {
+ -webkit-appearance: none;
+ appearance: none;
+}
+
 select {
  border: none;
  text-overflow:ellipsis;
  overflow:hidden;
  white-space:nowrap;
  max-width:calc(100vw - 32px);
- border-radius: 0px;
+ border-radius: 3px;
  min-height:26px;
  margin-bottom:1px;
 }

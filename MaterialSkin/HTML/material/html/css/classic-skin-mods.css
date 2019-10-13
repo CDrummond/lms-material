@@ -238,7 +238,7 @@ input[type=radio]:checked:before {
 }
 
 #saveSettings:active {
- background-color: #115dc3;
+ background-color: #518df3;
 }
 
 ::-webkit-scrollbar {

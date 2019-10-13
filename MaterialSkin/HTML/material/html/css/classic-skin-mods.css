@@ -64,8 +64,12 @@ div#browsedbList {
  margin-left:-8px;
  margin-bottom:8px;
  font-size:16px !important;
- font-weight:400 !important;
+ font-weight:500 !important;
  border-radius: 0px;
+}
+
+#choose_setting optgroup {
+ font-weight: 400;
 }
 
 #statusMessage {

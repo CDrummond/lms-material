@@ -104,6 +104,10 @@ td input { /* Fix entry/combo alignment in additional browse modes */
  padding-bottom:0px;
 }
 
+td input[type=checkbox] { /* Fix checkbox in Performance / Custom pre-caching specification */
+ margin-top:-6px;
+}
+
 .prefDesc, .prefs {
  margin-right:14px;
 }
@@ -187,13 +191,13 @@ input[type="submit"], input[type="button"] {
  outline: none;
 }
 
-input[type=checkbox], input[type=radio]  {
+input[type=checkbox], input[type=radio] {
+ vertical-align: sub;
  width:24px;
  height:24px;
 }
 
 input[type=checkbox]:before {
- vertical-align: sub;
  font-family: "Material Icons";
  font-size:24px;
  content:"\e835";

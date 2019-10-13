@@ -209,7 +209,7 @@ input[type=checkbox]:checked:before {
  content:"\e834";
 }
 
-input[type=radio] {
+input[type=checkbox], input[type=radio] {
  border:none;
  background-color: transparent;
 }

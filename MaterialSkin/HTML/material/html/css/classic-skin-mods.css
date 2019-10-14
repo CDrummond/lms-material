@@ -156,9 +156,13 @@ select, input {
  cursor: pointer;
 }
 
-input[type="text"], input[type="button"], input[type="submit"], input[type=checkbox], input[type=radio] {
+input[type="text"], input[type="button"], input[type="submit"], input[type=checkbox], input[type=radio], select {
  -webkit-appearance: none;
  appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
 }
 
 select {

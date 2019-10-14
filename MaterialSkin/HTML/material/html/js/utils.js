@@ -815,3 +815,15 @@ function bindKey(key, modifier) {
 function shortcutStr(key, shift) {
     return shift ? i18n("Ctrl(⌘)+Shift+%1", key) : i18n("Ctrl(⌘)+%1", key);
 }
+
+const PLAYLIST_EXTENSIONS = new Set(["m3u", "m3u8", "pls", "xspf", "asx", "cue"]);
+function isPlaylist(filename) {
+    if (undefined==filename) {
+        return false;
+    }
+    var parts = filename.split('.');
+    if (parts.length<2) {
+        return false;
+    }
+    return PLAYLIST_EXTENSIONS.has(parts[parts.length-1].toLowerCase());
+}

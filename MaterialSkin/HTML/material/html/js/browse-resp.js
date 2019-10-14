@@ -415,11 +415,15 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                         }
                     }
                 } else if (isBmf) {
-                    if (i.type=="playlist" && i.actions && i.actions.play && i.actions.play.params && i.actions.play.params.folder_id) {
-                        i.icon = "folder";
-                    } else {
-                        i.svg = "file-music";
-                    }
+                    i.icon = i.type=="playlist"
+                        ? i.actions && i.actions.play && i.actions.play.params && i.actions.play.params.folder_id
+                            ? "folder"
+                            : "list"
+                        : isPlaylist(i.title)
+                            ? "list"
+                            : i.type=="audio"
+                                ? "music_note"
+                                : "crop_portrait";
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {
                         i.id = "item_id:"+i.params.item_id;

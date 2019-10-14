@@ -112,6 +112,14 @@ td input[type=checkbox] { /* Fix checkbox in Performance / Custom pre-caching sp
  margin-top:-6px;
 }
 
+/* Advanced search */
+.border tbody tr td input[type=text] {
+ padding-bottom:1px;
+}
+.border tbody tr td.content {
+ vertical-align: text-bottom !important;
+}
+
 .prefDesc, .prefs {
  margin-right:14px;
 }

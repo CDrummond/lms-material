@@ -47,6 +47,7 @@
 34. Use CometD's internal reconnection logic to handle reconnects.
 35. Width must be 40% more than height to be classified as landscape.
 36. Use album covers when listing 'Browse Music Folder' tracks.
+37. Revert to pre-0.9.7 behaviour, and always show volume control.
 
 1.0.2
 -----

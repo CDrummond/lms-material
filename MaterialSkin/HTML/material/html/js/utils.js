@@ -60,20 +60,10 @@ function formatSeconds(secs, showDays) {
     var hours      = showDays ? Math.floor(numSeconds / 3600) % 24 : Math.floor(numSeconds / 3600);
     var minutes    = Math.floor(numSeconds / 60) % 60
     var seconds    = numSeconds % 60
-    if (days>0) {
-        return i18np("1 day", "%1 days", days)+" "+
-                 ([hours,minutes,seconds]
-                 .map(v => v < 10 ? "0" + v : v)
-                 .filter((v,i) => v !== "00" || i > 0)
-                 .join(":"));
-    }
-    if (hours>0) {
-        return [hours,minutes,seconds]
-                 .map(v => v < 10 ? "0" + v : v)
-                 .filter((v,i) => v !== "00" || i > 0)
-                 .join(":");
-    }
-    return (minutes<1 ? "00:" : "") +
+
+    return (days>0 ? i18np("1 day", "%1 days", days)+" " : "")+
+           ((hours>0 || (showDays && days>0)) ? hours+":" : "")+
+           (minutes<1 ? "00:" : "") +
            [minutes,seconds]
              .map(v => v < 10 ? "0" + v : v)
              .filter((v,i) => v !== "00" || i > 0)

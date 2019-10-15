@@ -182,6 +182,9 @@ select {
  border-radius: 0px;
  min-height:26px;
  margin-bottom:1px;
+ background-position: 100% center;
+ background-repeat: no-repeat;
+ padding-right:25px;
 }
 
 select:focus {
@@ -195,7 +198,7 @@ input[type="text"], input[type="password"], input[type="stdedit"] {
  border-radius: 0px;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, input[type=checkbox]:focus, input[type=radio]:focus {
  outline: none;
 }
 
@@ -230,6 +233,10 @@ input[type=checkbox], input[type=radio] {
  background-color: transparent;
 }
 
+[type="checkbox"]:focus, [type="radio"]:focus {
+ border-bottom: none !important;
+}
+
 input[type=radio]:before {
  vertical-align: sub;
  font-family: "Material Icons";
@@ -243,13 +250,17 @@ input[type=radio]:checked:before {
  content:"\e837 ";
 }
 
+[type="checkbox"]:before, [type="radio"]:before {
+ border: 1px solid transparent;
+}
+
 #saveSettings {
  color: white !important;
  background-color: #316dd3;
  margin-top:8px;
 }
 
-#saveSettings:hover {
+#saveSettings:hover, #saveSettings:focus {
  background-color: #417de3;
 }
 

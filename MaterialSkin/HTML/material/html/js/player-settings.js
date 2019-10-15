@@ -98,12 +98,12 @@ Vue.component('lms-player-settings', {
      <v-layout v-if="wide>1">
       <v-flex xs6>
        <template v-for="(item, index) in browseModesDialog.modes">
-        <v-checkbox v-if="index % 2 == 0" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+        <v-checkbox v-if="index<(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
        </template>
       </v-flex>
       <v-flex xs6>
        <template v-for="(item, index) in browseModesDialog.modes">
-        <v-checkbox v-if="index % 2 == 1" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
+        <v-checkbox v-if="index>=(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.name" class="player-settings-list-checkbox"></v-checkbox>
        </template>
       </v-flex>
      </v-layout>

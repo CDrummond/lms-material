@@ -35,6 +35,7 @@
     <lms-server></lms-server>
     <lms-toolbar :desktop="true" :nowplaying="true"></lms-toolbar>
     <lms-now-playing :desktop="true" :nowplaying="true"></lms-now-playing>
+    <lms-dstm-dialog v-if="dialogs.dstm"></lms-dstm-dialog>
    </v-app>
   </div>
   <script>const LMS_MATERIAL_REVISION="[% material_revision %]";</script>
@@ -55,6 +56,7 @@
   <script src="html/js/utils.js?r=[% material_revision %]"></script>
   <script src="html/js/toolbar.js?r=[% material_revision %]"></script>
   <script src="html/js/nowplaying-page.js?r=[% material_revision %]"></script>
+  <script src="html/js/dstm-dialog.js?r=[% material_revision %]"></script>
   <script src="html/js/server.js?r=[% material_revision %]"></script>
   <script src="html/js/i18n.js?r=[% material_revision %]"></script>
   <script src="html/js/store.js?r=[% material_revision %]"></script>

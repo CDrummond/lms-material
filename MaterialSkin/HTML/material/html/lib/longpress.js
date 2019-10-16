@@ -12,72 +12,77 @@ Vue.directive('longpress', {
             console.warn(warn)
         }
 
+        var self = this;
+
         // Define variable
-        let pressTimer = null
-        let started = false
-        let timedout = false
-        let touchOnly = false;
-        let elemId = undefined;
+        self.pressTimer = undefined
+        self.started = false
+        self.timedout = false
+        self.touchOnly = false;
 
         // Define funtion handlers
         // Create timeout ( run function after 1s )
-        let start = (e) => {
-            if (undefined==el.id) {
-                return;
-            }
+        self.start = (e) => {
             if (e.type=="touchstart") {
-                touchOnly = true;
-            } else if (touchOnly && !e.type.startsWith("touch")) {
+                self.touchOnly = true;
+            } else if (self.touchOnly && !e.type.startsWith("touch")) {
                 return;
             }
 
-            if (started || ((e.type === 'click' || e.type === 'mousedown') && e.button !== 0)) {
+            if (self.started || ((e.type === 'click' || e.type === 'mousedown') && e.button !== 0)) {
                 return;
             }
-            elemId = el.id;
-            started = true;
-            timedout = false;
-            if (pressTimer === null) {
-                pressTimer = setTimeout(() => {
-                    timedout = true;
-                    started = false;
+            self.started = true;
+            self.timedout = false;
+            if (self.pressTimer === undefined) {
+                self.pressTimer = setTimeout(() => {
+                    self.timedout = true;
+                    self.started = false;
                     // Run function
                     if (undefined==binding.value.method) {
-                        binding.value(true)
+                        binding.value(true);
                     } else {
-                        binding.value.method(binding.value.item, true)
+                        binding.value.method(binding.value.item, true);
                     }
                 }, 1000)
             }
         }
 
         // Cancel Timeout
-        let cancel = (e) => {
-            if (el.id==elemId) {
-               if (started && !timedout) {
-                    if (undefined==binding.value.method) {
-                        binding.value(false)
-                    } else {
-                        binding.value.method(binding.value.item, false)
-                    }
-                    started = false
+        self.cancel = (e) => {
+           if (self.started && !self.timedout) {
+                if (undefined==binding.value.method) {
+                    binding.value(false);
+                } else {
+                    binding.value.method(binding.value.item, false);
                 }
+                self.started = false;
             }
-            started = false;
-            timedout = false;
-            elemId = undefined;
-            if (pressTimer !== null) {
-                clearTimeout(pressTimer)
-                pressTimer = null
+            self.started = false;
+            self.timedout = false;
+            if (self.pressTimer !== undefined) {
+                clearTimeout(self.pressTimer);
+                self.pressTimer = undefined;
             }
         }
 
-        el.addEventListener("touchstart", start, { passive: true });
-        el.addEventListener("touchend", cancel);
-        el.addEventListener("touchcancel", cancel);
-        el.addEventListener("mousedown", start);
-        el.addEventListener("click", cancel);
-        el.addEventListener("mouseout", cancel);
+        el.addEventListener("touchstart", this.start, { passive: true });
+        el.addEventListener("touchend", this.cancel);
+        el.addEventListener("touchcancel", this.cancel);
+        el.addEventListener("mousedown", this.start);
+        el.addEventListener("click", this.cancel);
+        el.addEventListener("mouseout", this.cancel);
+    },
+    unbind: function (el) {
+        if (undefined!=this.pressTimer) {
+            clearTimeout(this.pressTimer);
+            this.pressTimer = undefined;
+        }
+        el.removeEventListener("touchstart", this.start);
+        el.removeEventListener("touchend", this.cancel);
+        el.removeEventListener("touchcancel", this.cancel);
+        el.removeEventListener("mousedown", this.start);
+        el.removeEventListener("click", this.cancel);
+        el.removeEventListener("mouseout", this.cancel);
     }
 })
-

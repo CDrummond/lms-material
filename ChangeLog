@@ -48,6 +48,10 @@
 35. Width must be 40% more than height to be classified as landscape.
 36. Use album covers when listing 'Browse Music Folder' tracks.
 37. Revert to pre-0.9.7 behaviour, and always show volume control.
+38. Show "Don't Stop the Music" status, if enabled, in place of repeat icon
+    (unless repeat single) in queue and now-playing screens. Press icon allows
+    changing setting.
+39. Long-press on "repeat off" icon to show "Don't Stop The Music" selection.
 
 1.0.2
 -----

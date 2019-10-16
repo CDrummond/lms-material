@@ -12,7 +12,7 @@ var app = new Vue({
     data() {
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, iframe: false,
-                            search: false, movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false }}
+                            search: false, movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, dstm: false }}
     },
     created() {
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));

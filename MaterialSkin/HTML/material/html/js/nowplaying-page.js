@@ -987,29 +987,30 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         touchMoving(event) {
             if (undefined!=this.touch) {
-                if (!this.touch.moving) {
-                    this.touch.moving=true;
-                    this.overlayVolume=Math.abs(this.volume);
-                    this.lastSentVolume=this.overlayVolume;
-                }
-                const VOL_STEP_PX = 25;
-                if (Math.abs(event.touches[0].clientX-this.touch.x)<48 &&
-                    Math.abs(event.touches[0].clientY-this.touch.y)>=VOL_STEP_PX) {
-                    var steps = Math.floor(Math.abs(event.touches[0].clientY-this.touch.y) / VOL_STEP_PX);
-                    if (steps>0) {
-                        var inc = event.touches[0].clientY<this.touch.y;
-                        for (var i=0; i<steps; ++i) {
-                            this.overlayVolume = adjustVolume(Math.abs(this.overlayVolume), inc);
-                            if (this.overlayVolume<0) {
-                                this.overlayVolume=0;
-                                break;
-                            } else if (this.overlayVolume>100) {
-                                this.overlayVolume=100;
-                                break;
+                if (Math.abs(event.touches[0].clientX-this.touch.x)<48) {
+                    if (!this.touch.moving && Math.abs(event.touches[0].clientY-this.touch.y)>10) {
+                        this.touch.moving=true;
+                        this.overlayVolume=Math.abs(this.volume);
+                        this.lastSentVolume=this.overlayVolume;
+                    }
+                    const VOL_STEP_PX = 25;
+                    if (Math.abs(event.touches[0].clientY-this.touch.y)>=VOL_STEP_PX) {
+                        var steps = Math.floor(Math.abs(event.touches[0].clientY-this.touch.y) / VOL_STEP_PX);
+                        if (steps>0) {
+                            var inc = event.touches[0].clientY<this.touch.y;
+                            for (var i=0; i<steps; ++i) {
+                                this.overlayVolume = adjustVolume(Math.abs(this.overlayVolume), inc);
+                                if (this.overlayVolume<0) {
+                                    this.overlayVolume=0;
+                                    break;
+                                } else if (this.overlayVolume>100) {
+                                    this.overlayVolume=100;
+                                    break;
+                                }
                             }
+                            this.touch.y += steps*VOL_STEP_PX*(inc ? -1 : 1);
+                            this.resetSendVolumeTimer();
                         }
-                        this.touch.y += steps*VOL_STEP_PX*(inc ? -1 : 1);
-                        this.resetSendVolumeTimer();
                     }
                 }
             }

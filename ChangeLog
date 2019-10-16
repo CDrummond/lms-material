@@ -52,6 +52,8 @@
     (unless repeat single) in queue and now-playing screens. Press icon allows
     changing setting.
 39. Long-press on "repeat off" icon to show "Don't Stop The Music" selection.
+40. If player status has "mode:stop" then use 0 as time, regardless of time
+    setting in status message.
 
 1.0.2
 -----

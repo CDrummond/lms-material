@@ -431,7 +431,7 @@ var lmsServer = Vue.component('lms-server', {
                               };
             if (data.playlist_loop && data.playlist_loop.length>0) {
                 player.current = data.playlist_loop[0];
-                player.current.time = undefined==data.time ? undefined : parseFloat(data.time);
+                player.current.time = undefined==data.time ? undefined : "stop"==data.mode ? 0 : parseFloat(data.time);
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
                 // BBC iPlayer Extras streams can change duration. *But* on the duration in data seems to
@@ -457,7 +457,7 @@ var lmsServer = Vue.component('lms-server', {
                                                             : undefined!=player.current.duration && 0!=player.current.duration
                                                                 ? undefined!=player.current.time
                                                                     ? (player.current.duration-player.current.time)<2.5
-                                                                        ? 500 // Near end, every 5 seconds
+                                                                        ? 500 // Near end, every 1/2 second
                                                                         : (player.current.duration-(player.current.time+2))*1000 // 2 seconds before end
                                                                     : player.current.time<5 // For streams, poll for the first 5 seconds
                                                                         ? 1000

@@ -55,6 +55,8 @@
 40. If player status has "mode:stop" then use 0 as time, regardless of time
     setting in status message.
 41. Re-add long-press on back button to go home.
+42. Long press (or middle click) on play/pause button in mobile toolbar to
+    invoke sleep settings dialog.
 
 1.0.2
 -----

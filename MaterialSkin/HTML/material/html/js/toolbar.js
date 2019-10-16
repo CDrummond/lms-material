@@ -128,7 +128,7 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" @click.stop="playPauseButton" class="toolbar-button" id="pp">
+ <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
@@ -576,11 +576,21 @@ Vue.component('lms-toolbar', {
         toggleMute() {
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
         },
-        playPauseButton() {
+        playPauseButton(long) {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
+            if (long) {
+                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+            } else {
+                bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
+            }
+        },
+        showSleep() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('dlg.open', 'sleep', this.$store.state.player);
         },
         cancelSleepTimer() {
             this.playerStatus.sleepTime = undefined;

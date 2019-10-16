@@ -140,6 +140,7 @@ const store = new Vuex.Store({
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
+        dstmPlugin: false,
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
@@ -322,6 +323,7 @@ const store = new Vuex.Store({
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
+            state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
@@ -350,6 +352,15 @@ const store = new Vuex.Store({
             }).catch(err => {
                 state.infoPlugin = false;
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
+            });
+
+            // Don't Stop The Music installed?
+            lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
+                state.dstmPlugin = data && data.result && data.result._p2 && "disabled"!=data.result._p2;
+                setLocalStorageVal('dstmPlugin', state.dstmPlugin);
+            }).catch(err => {
+                state.dstmPlugin = false;
+                setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             });
 
             // Read defaults, stored on server

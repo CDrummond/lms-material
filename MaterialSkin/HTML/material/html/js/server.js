@@ -481,15 +481,13 @@ var lmsServer = Vue.component('lms-server', {
         },
         getPlayerPrefs() {
             bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0); // reset
-            lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
-                if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
-                    lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
-                        if (data && data.result && undefined!=data.result._p2) {
-                            bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2);
-                        }
-                    });
-                }
-            });
+            if (this.$store.state.dstmPlugin) {
+                lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2);
+                    }
+                });
+            }
         },
         handleFavoritesUpdate() {
             logCometdDebug("FAVORITES");

@@ -41,7 +41,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else>
    <v-btn flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
-   <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}</v-flex>
@@ -1456,10 +1456,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        backBtnPressed() {
+        backBtnPressed(long) {
             if (this.$store.state.visibleMenus.size<1) {
-                this.lastBackBtnPress = new Date();
-                this.goBack();
+                if (long) {
+                    this.goHome();
+                } else {
+                    this.goBack();
+                }
             }
         },
         goBack(refresh) {

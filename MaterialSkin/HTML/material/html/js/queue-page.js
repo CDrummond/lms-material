@@ -193,8 +193,9 @@ var lmsQueue = Vue.component("lms-queue", {
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktop || wide>0) && playerStatus.repeat===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 0])"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.dstm" flat icon v-else-if="(desktop || wide>0) && dstm" class="toolbar-button" @click="bus.$emit('dlg.open', 'dstm')"><v-icon class="active-btn">autorenew</v-icon></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.repeat===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 1])"><v-icon class="active-btn">repeat</v-icon></v-btn>
-   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'repeat', 2])"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" v-longpress="repeatOff"><v-icon>repeat</v-icon></v-btn>
 
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktop || wide>0) && playerStatus.shuffle===2" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><v-icon class="shuffle-albums active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktop || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
@@ -292,11 +293,12 @@ var lmsQueue = Vue.component("lms-queue", {
             playerStatus: { shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined, save:undefined, saveShortcut:undefined, clear:undefined, clearShortcut:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, remove:undefined },
+                     shuffleOff:undefined, selectMultiple:undefined, remove:undefined, dstm:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             selection: [],
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
-            wide: 0
+            wide: 0,
+            dstm: false
         }
     },
     computed: {
@@ -469,6 +471,11 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('playerListChanged', function() {
             this.updateSettingsMenu();
         }.bind(this));
+        bus.$on('prefset', function(pref, value) {
+            if ("plugin.dontstopthemusic:provider"==pref) {
+                this.dstm = (""+value)!="0";
+            }
+        }.bind(this));
         this.updateSettingsMenu();
         if (!IS_MOBILE) {
             bindKey(LMS_SAVE_QUEUE_KEYBOARD, 'mod');
@@ -506,7 +513,7 @@ var lmsQueue = Vue.component("lms-queue", {
                           clear:i18n("Clear queue"), clearShortcut:i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
-                          selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title};
+                          selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title, dstm:i18n("Don't Stop The Music")};
         },
         handleScroll() {
             this.scrollAnimationFrameReq = undefined;
@@ -924,6 +931,13 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (!canMove && this.settingsMenuActions[0]==PQ_MOVE_QUEUE_ACTION) {
                 this.settingsMenuActions.splice(0, 1);
                 bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+            }
+        },
+        repeatOff(showDstm) {
+            if (showDstm) {
+                bus.$emit('dlg.open', 'dstm');
+            } else {
+                bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
             }
         }
     },

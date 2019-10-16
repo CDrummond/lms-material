@@ -175,8 +175,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-flex xs6>
          <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon @click="doCommand(repAltBtn.command, repAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
          <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
+         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="v" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">autorenew</v-icon></v-btn>
          <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
-         <v-btn :title="trans.repeatOff" flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
+         <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatOff" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
         </v-flex>
         <v-flex xs6><v-btn flat icon @click="if (!disablePrev) doAction(['button', 'jump_rew'])" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
        </v-layout>
@@ -241,8 +242,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs6>
       <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon @click="doCommand(repAltBtn.command, repAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
       <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
+      <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="bus.$emit('dlg.open', 'dstm')" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">autorenew</v-icon></v-btn>
       <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
-      <v-btn :title="trans.repeatOff" flat icon v-else @click="doAction(['playlist', 'repeat', 2])" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
+      <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatOff" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
      </v-flex>
      <v-flex xs6><v-btn flat icon @click="if (!disablePrev) doAction(['button', 'jump_rew'])" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
     </v-layout>
@@ -285,7 +287,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
-                 trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined,
+                 trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
                           shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
                  showTotal: true,
@@ -302,7 +304,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  repAltBtn:{show:false, command:[], icon:undefined, image:undefined, tooltip:undefined},
                  shuffAltBtn:{show:false, command:[], icon:undefined, image:undefined, tooltip:undefined},
                  disablePrev:false,
-                 disableNext:false
+                 disableNext:false,
+                 dstm:false
                 };
     },
     mounted() {
@@ -556,6 +559,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.show = !this.info.show;
         }.bind(this));
 
+        bus.$on('prefset', function(pref, value) {
+            if ("plugin.dontstopthemusic:provider"==pref) {
+                this.dstm = (""+value)!="0";
+            }
+        }.bind(this));
+
         this.showTotal = getLocalStorageBool('showTotal', true);
         if (!IS_MOBILE && !this.mini && !this.nowplaying) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
@@ -580,7 +589,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         initItems() {
             this.trans = { close:i18n("Close"), expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
-                           more:i18n("More"),
+                           more:i18n("More"), dstm:i18n("Don't Stop The Music"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                            shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
@@ -906,6 +915,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 bus.$emit('dlg.open', 'sleep', this.$store.state.player);
             } else {
                 this.doAction([this.playerStatus.isplaying ? 'pause' : 'play']);
+            }
+        },
+        repeatOff(showDstm) {
+            if (showDstm) {
+                bus.$emit('dlg.open', 'dstm');
+            } else {
+                bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
             }
         },
         showSleep() {

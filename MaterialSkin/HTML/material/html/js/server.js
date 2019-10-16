@@ -316,6 +316,8 @@ var lmsServer = Vue.component('lms-server', {
                 if (msg.data && msg.data.length>1 && msg.data[0]=="favorites" && msg.data[1]=="changed") {
                    this.handleFavoritesUpdate();
                 }
+            } else if (msg.channel.indexOf('/slim/playerprefs/')>0) {
+                this.handlePlayerPrefs(msg.channel.split('/').pop(), msg.data);
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }
@@ -464,6 +466,31 @@ var lmsServer = Vue.component('lms-server', {
                                                         : undefined); // Not playing?
             }
         },
+        handlePlayerPrefs(playerId, data) {
+            if (data.length<4 || data[0]!="prefset") {
+                return;
+            }
+            var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
+            if (!isCurrent) {
+                return;
+            }
+            logCometdMessage("PLAYERPREFS ("+playerId+")", data);
+            if (data[1]=="plugin.dontstopthemusic" && data[2]=="provider") {
+                bus.$emit("prefset", data[1]+":"+data[2], data[3]);
+            }
+        },
+        getPlayerPrefs() {
+            bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0); // reset
+            lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
+                if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
+                    lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result._p2) {
+                            bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2);
+                        }
+                    });
+                }
+            });
+        },
         handleFavoritesUpdate() {
             logCometdDebug("FAVORITES");
             // 'Debounce' favorites updates...
@@ -517,6 +544,9 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdDebug("Subscribe: "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : ""), "subscribe:30"]]}});
+                    this.cometd.subscribe('/slim/subscribe',
+                                    function(res) { },
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerprefs/'+id, request:[id, ['prefset']]}});
                 this.subscribedPlayers.add(id);
             }
         },
@@ -541,6 +571,7 @@ var lmsServer = Vue.component('lms-server', {
             } else {
                 this.updateCurrentPlayer();
             }
+            this.getPlayerPrefs();
         },
         refreshServerStatus() {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {

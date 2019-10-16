@@ -12,7 +12,7 @@ var app = new Vue({
     data() {
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, search: false,
-                            movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, iframe: false } }
+                            movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, iframe: false, dstm: false } }
     },
     created() {
         initApp(this);

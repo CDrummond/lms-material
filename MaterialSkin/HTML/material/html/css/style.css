@@ -912,14 +912,6 @@ progress {
  max-width:200px !important;
 }
 
-.sleep-item {
- white-space: normal !important;
- overflow: auto !important;
- text-overflow: initial !important;
- height: auto;
- max-height: 48px;
-}
-
 .ios-vcard-text-workaround {
  position:fixed;
  overflow-y:auto;
@@ -1136,7 +1128,16 @@ div.v-subheader {
 }
 
 .sleep-list .v-list__tile {
- padding:0px;
+ padding:4px 0px 4px 0px;
+ height: auto;
+ min-height: 48px;
+ max-height: 96px;
+}
+
+.sleep-list .v-list__tile__content {
+ white-space: normal !important;
+ overflow: auto !important;
+ text-overflow: initial !important;
 }
 
 .browse-action {

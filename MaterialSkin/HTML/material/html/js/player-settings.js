@@ -426,7 +426,9 @@ Vue.component('lms-player-settings', {
         close() {
             this.show=false;
             if (this.dstmItems.length>1) {
-                lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]);
+                lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]).then(({data}) => {
+                    bus.$emit("prefset", "plugin.dontstopthemusic:provider", this.dstm);
+                });
             }
             lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
             lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);

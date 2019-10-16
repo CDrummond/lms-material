@@ -297,22 +297,20 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerOrigName = player.name;
-            lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
-                if (data && data.result && data.result._p2 && "disabled"!=data.result._p2) {
-                    lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
-                        if (data.result && data.result.item_loop) {
-                            data.result.item_loop.forEach(i => {
-                                if (i.actions && i.actions.do && i.actions.do.cmd) {
-                                    this.dstmItems.push({key: i.actions.do.cmd[2], label:i.text});
-                                    if (1===i.radio) {
-                                        this.dstm = i.actions.do.cmd[2];
-                                    }
+            if (this.$store.state.dstmPlugin) {
+                lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
+                    if (data.result && data.result.item_loop) {
+                        data.result.item_loop.forEach(i => {
+                            if (i.actions && i.actions.do && i.actions.do.cmd) {
+                                this.dstmItems.push({key: i.actions.do.cmd[2], label:i.text});
+                                if (1===i.radio) {
+                                    this.dstm = i.actions.do.cmd[2];
                                 }
-                            });
-                        }
-                    });
-                }
-            });
+                            }
+                        });
+                    }
+                });
+            }
 
             this.alarms.on=true;
             this.alarms.volume=100;

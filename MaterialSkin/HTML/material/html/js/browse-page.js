@@ -577,6 +577,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.showRatingButton = this.showRatingButton;
             prev.subtitleClickable = this.subtitleClickable;
             prev.prevPage = this.prevPage;
+            this.prevPage = undefined;
             this.history.push(prev);
         },
         fetchItems(command, item, prevPage) {

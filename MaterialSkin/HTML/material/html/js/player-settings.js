@@ -34,7 +34,7 @@ Vue.component('lms-player-settings', {
      <v-select :items="replaygainItems" :label="i18n('Volume gain')" v-model="replaygain" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-list-tile v-if="dstmItems && dstmItems.length>1">
-     <v-select :items="dstmItems" label="Don't Stop The Music" v-model="dstm" item-text="label" item-value="key"></v-select>
+     <v-select :items="dstmItems" :label="trans.dstm" v-model="dstm" item-text="label" item-value="key"></v-select>
     </v-list-tile>
 
     <div class="dialog-padding"></div>
@@ -222,7 +222,8 @@ Vue.component('lms-player-settings', {
                 show: false,
                 modes:[],
             },
-            playerId: undefined
+            playerId: undefined,
+            ttrans:{dstm:undefined}
         }
     },
     computed: {
@@ -401,6 +402,7 @@ Vue.component('lms-player-settings', {
                 { key:'2', label:i18n("Shuffle by album")},
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
+            this.trans={dstm:i18n("Don't Stop The Music")};
         },
         update(readName) {
             if (readName) {

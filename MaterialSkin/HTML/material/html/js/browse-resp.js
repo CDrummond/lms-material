@@ -483,9 +483,10 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
                 // If an item's menu ONLY has 'more' action, and it does not have a 'click' action - then use 'More' as its click action.
                 // This is to help with removing history items from Spotty - see https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=947874&viewfull=1#post947874
-                if (1==i.menu.length && MORE_ACTION==i.menu[0] && i.type!="audio" && !(i.actions && (i.actions.go || i.actions && i.actions["do"]))) {
+                if (1==i.menu.length && MORE_ACTION==i.menu[0] && i.type!="audio" && !(i.actions && (i.actions.go || i.actions["do"]))) {
                     i.type = MODE_LIST_TYPE;
                     i.menu = [];
+                    i.style = undefined;
                 }
 
                 resp.items.push(i);

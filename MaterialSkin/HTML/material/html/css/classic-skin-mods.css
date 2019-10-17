@@ -8,7 +8,10 @@
 }
 #advSearchForm > table > tbody > tr > td:nth-of-type(1) {
  text-align:right !important;
- margin-right:4px;
+ padding-right:8px !important;
+}
+#advSearchForm > table > tbody > tr > td {
+ padding-bottom:8px;
 }
 div#browsedbList {
  margin-left:-8px;

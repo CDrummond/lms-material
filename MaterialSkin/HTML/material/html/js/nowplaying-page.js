@@ -175,8 +175,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-flex xs6>
          <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon @click="doCommand(repAltBtn.command, repAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
          <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
-         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="v" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">autorenew</v-icon></v-btn>
          <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
+         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="v" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
          <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatOff" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
         </v-flex>
         <v-flex xs6><v-btn flat icon @click="if (!disablePrev) doAction(['button', 'jump_rew'])" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
@@ -242,8 +242,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs6>
       <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon @click="doCommand(repAltBtn.command, repAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
       <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
-      <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="bus.$emit('dlg.open', 'dstm')" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">autorenew</v-icon></v-btn>
       <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
+      <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="bus.$emit('dlg.open', 'dstm')" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
       <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatOff" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
      </v-flex>
      <v-flex xs6><v-btn flat icon @click="if (!disablePrev) doAction(['button', 'jump_rew'])" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>

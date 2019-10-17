@@ -1290,10 +1290,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList("", ["libraries"]).then(({data}) => {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     var libraries = [];
-                    data.result.folder_loop.forEach(i => {
-                        i.name = i.name.replace(SIMPLE_LIB_VIEWS, "");
-                        libraries.push(i);
-                    });
+                    for (var i=0, len=data.result.folder_loop.length; i<len; ++i) {
+                        data.result.folder_loop[i].name = data.result.folder_loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                        libraries.push(data.result.folder_loop[i]);
+                    }
                     libraries.sort(nameSort);
                     libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
                     showMenu(this, {show:true, x:event.clientX, y:event.clientY, libraries:libraries});

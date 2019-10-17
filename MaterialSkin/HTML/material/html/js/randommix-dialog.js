@@ -18,6 +18,7 @@ Vue.component('lms-randommix', {
     </v-list-tile>
     <v-divider slot="prepend-item"></v-divider>
    </v-select>
+   <v-select v-if="libraries.length>1" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
@@ -36,7 +37,9 @@ Vue.component('lms-randommix', {
             chosenGenres: [],
             mixes: [],
             chosenMix: "tracks",
-            active: false
+            active: false,
+            libraries: [],
+            library: undefined
         }
     },
     computed: {
@@ -81,6 +84,20 @@ Vue.component('lms-randommix', {
                     }
                 });
             });
+            lmsList("", ["libraries"]).then(({data}) => {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                    this.libraries = [];
+                    for (var i=0, len=data.result.folder_loop.length; i<len; ++i) {
+                        data.result.folder_loop[i].name = data.result.folder_loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                        this.libraries.push(data.result.folder_loop[i]);
+                    }
+                    this.libraries.sort(nameSort);
+                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                    if (undefined==this.library) {
+                        this.library = LMS_DEFAULT_LIBRARY;
+                    }
+                }
+            });
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=false;
@@ -97,19 +114,21 @@ Vue.component('lms-randommix', {
         },
         start() {
             this.close();
-            if (this.chosenGenres.length==0) {
-                lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
-                    lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
-                });
-            } else if (this.chosenGenres.length==this.genres.length) {
-                lmsCommand(this.playerId, ["randomplaygenreselectall", "1"]).then(({data}) => {
-                    lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
-                });
-            } else {
-                lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
-                   this.addGenre();
-                });
-            }
+            lmsCommand(this.playerId, ["randomplaychooselibrary", this.library]).then(({data}) => {
+                if (this.chosenGenres.length==0) {
+                    lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
+                        lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
+                    });
+                } else if (this.chosenGenres.length==this.genres.length) {
+                    lmsCommand(this.playerId, ["randomplaygenreselectall", "1"]).then(({data}) => {
+                        lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
+                    });
+                } else {
+                    lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
+                        this.addGenre();
+                    });
+                }
+            });
         },
         stop() {
             this.close();

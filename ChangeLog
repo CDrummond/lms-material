@@ -67,6 +67,7 @@
 48. Add add-all/play-all to track and album headers in search results.
 49. Remove 'rules' from dialogs - red text (when simply changing fields) is
     distracting.
+50. Use library_id when performing searches.
 
 1.0.2
 -----

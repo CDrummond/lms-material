@@ -152,14 +152,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn icon v-if="item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
-      <v-icon>more_vert</v-icon>
-     </v-btn>
-     <v-btn flat icon v-if="item.menu.length==1 && MORE_ACTION==item.menu[0]" @click.stop="itemAction(item.menu[0], item, index)">
-      <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
-     </v-btn>
-     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>

@@ -8,16 +8,13 @@
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
 const MODE_LIST_TYPE = "material-skin-more";
 
-function parseBrowseResp(data, parent, options, idStart, cacheKey) {
+function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], canUseGrid: false, total: 0, jumplist:[] };
-    if (undefined==idStart) {
-        idStart = 0;
-    }
 
     try {
     if (data && data.result) {
-        resp.total = parent && parent.range ? parent.range.count : data.result.count;
+        resp.total = data.result.count;
         logJsonMessage("RESP", data);
         if (parent.id && SEARCH_ID===parent.id) {
             var totalResults = 0;
@@ -59,7 +56,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (data.result.albums_loop && data.result.albums_count>0) {
                 totalResults += data.result.albums_count;
                 if (categories>1) {
-                    resp.items.push({title: i18np("1 Album", "%1 Albums", data.result.albums_count), id:"search.albums", header:true});
+                    resp.items.push({title: i18np("1 Album", "%1 Albums", data.result.albums_count), id:"search.albums", header:true,
+                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Album", "%1 Albums", data.result.albums_count);
                 }
@@ -80,7 +78,8 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
             if (data.result.tracks_loop && data.result.tracks_count>0) {
                 totalResults += data.result.tracks_count;
                 if (categories>1) {
-                    resp.items.push({title: i18np("1 Track", "%1 Tracks", data.result.tracks_count), id:"search.tracks", header:true});
+                    resp.items.push({title: i18np("1 Track", "%1 Tracks", data.result.tracks_count), id:"search.tracks", header:true,
+                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Track", "%1 Tracks", data.result.tracks_count);
                 }
@@ -435,9 +434,9 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
                 if (!i.id) {
                     if (parent.id.startsWith(TOP_ID_PREFIX)) {
-                        i.id="item_id:"+(resp.items.length+idStart);
+                        i.id="item_id:"+resp.items.length;
                     } else {
-                        i.id=parent.id+"."+(resp.items.length+idStart);
+                        i.id=parent.id+"."+resp.items.length;
                     }
                 }
 
@@ -471,7 +470,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
 
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 if (isFavorites) {
                     i.draggable = true;
@@ -504,7 +503,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 resp.items.push({
                                 title: replaceNewLines(data.result.window.textarea),
                                 type: "text",
-                                id: parent.id+"."+idStart
+                                id: parent.id+".0"
                                });
                 resp.canUseGrid = false;
             } else if (haveWithoutIcons && haveWithIcons && resp.items.length == resp.total) {
@@ -567,7 +566,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
@@ -585,13 +584,13 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 resp.items.push(artist);
             }
             if (isComposers) {
-                resp.subtitle=i18np("1 Composer", "%1 Composers", parent && parent.range ? parent.range.count : resp.total);
+                resp.subtitle=i18np("1 Composer", "%1 Composers", resp.total);
             } else if (isConductors) {
-                resp.subtitle=i18np("1 Conductor", "%1 Conductors", parent && parent.range ? parent.range.count : resp.total);
+                resp.subtitle=i18np("1 Conductor", "%1 Conductors", resp.total);
             } else if (isBands) {
-                resp.subtitle=i18np("1 Band", "%1 Bands", parent && parent.range ? parent.range.count : resp.total);
+                resp.subtitle=i18np("1 Band", "%1 Bands", resp.total);
             } else {
-                resp.subtitle=i18np("1 Artist", "%1 Artists", parent && parent.range ? parent.range.count : resp.total);
+                resp.subtitle=i18np("1 Artist", "%1 Artists", resp.total);
             }
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
@@ -630,7 +629,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 var key = jumpListYear ? (""+i.year) : i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 var album = {
                               id: "album_id:"+i.id,
@@ -650,7 +649,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 }
                 resp.items.push(album);
             }
-            resp.subtitle=i18np("1 Album", "%1 Albums", parent && parent.range ? parent.range.count : resp.total);
+            resp.subtitle=i18np("1 Album", "%1 Albums", resp.total);
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
@@ -709,7 +708,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 resp.items.push({
                               id: "genre_id:"+i.id,
@@ -731,7 +730,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
@@ -792,7 +791,7 @@ function parseBrowseResp(data, parent, options, idStart, cacheKey) {
                 var i = loop[idx];
                 var key = i.textkey;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+idStart});
+                    resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 resp.items.push({
                               id: "year:"+i.year,

@@ -10,7 +10,7 @@ var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
 Vue.component('lms-player-settings', {
     template: `
 <div>
- <v-dialog v-model="show" v-if="show" scrollable fullscreen persistent>
+ <v-dialog v-model="show" v-if="show" scrollable fullscreen>
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar color="primary" dark app class="lms-toolbar">

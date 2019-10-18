@@ -7,7 +7,7 @@
 
 Vue.component('lms-search-dialog', {
     template: `
-<v-dialog scrollable v-model="show" persistent width="600">
+<v-dialog v-model="show" v-if="show" persistent scrollable width="600">
  <v-card>
   <v-card-title>{{i18n("Search library")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>

@@ -7,7 +7,7 @@
 
 Vue.component('lms-favorite', {
     template: `
-<v-dialog scrollable v-model="show" persistent width="600">
+<v-dialog v-model="show" v-if="show" persistent width="600">
  <v-card>
   <v-card-title>{{isAdd ? (isPreset ? i18n("Add preset") : i18n("Add favorite")) : (isPreset ? i18n("Edit preset") : i18n("Edit favorite"))}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>

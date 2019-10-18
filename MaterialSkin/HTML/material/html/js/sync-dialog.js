@@ -7,7 +7,7 @@
 
 Vue.component('lms-sync-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" width="600" persistent class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
  <v-card v-if="player">
   <v-card-text>
    <v-container grid-list-md>

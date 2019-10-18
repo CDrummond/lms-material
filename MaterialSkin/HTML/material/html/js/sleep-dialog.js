@@ -7,7 +7,7 @@
 
 Vue.component('lms-sleep-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" width="450" persistent class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
  <v-card>
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">

@@ -7,7 +7,7 @@
 
 Vue.component('lms-groupplayers-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" width="600" persistent class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
  <v-card>
   <v-card-title>{{player ? i18n("Edit group player") : i18n("Create group player")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>

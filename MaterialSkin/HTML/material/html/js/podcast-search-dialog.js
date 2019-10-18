@@ -176,7 +176,7 @@ Vue.component('lms-podcast-search-dialog', {
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
-     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()" :rules="termRules" required></v-text-field>
+     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
     </v-list-tile>
     <v-list-tile>
      <v-flex xs6><v-select :items="providers" :label="i18n('Provider')" v-model="provider" item-text="value" item-value="key"></v-select></v-flex>
@@ -202,11 +202,7 @@ Vue.component('lms-podcast-search-dialog', {
             providers: [ {key: 'itunes', value: 'iTunes' },
                          {key: 'gpodder', value: 'GPodder'} ],
             countries: COUNTRIES,
-            term: "",
-            termRules: [
-                v => !!v || i18n('Term is required'),
-                v => (v && v.trim().length > 1) || i18n('Term must be more than 1 character')
-            ]
+            term: ""
         }
     },
     mounted() {

@@ -14,12 +14,12 @@ Vue.component('lms-favorite', {
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable autofocus v-if="show" :label="i18n('Name')" v-model="name" class="lms-search" :rules="nameRules" required></v-text-field>
+      <v-text-field clearable autofocus v-if="show" :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search" :rules="urlRules" required></v-text-field>
+      <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile v-if="isPreset && isAdd">
@@ -49,15 +49,7 @@ Vue.component('lms-favorite', {
             isPreset: false,
             isAdd: true,
             pos: 1,
-            positions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            nameRules: [
-                v => !!v || i18n('Name is required'),
-                v => (v && v.trim().length > 0) || i18n('Name is required')
-            ],
-            urlRules: [
-                v => !!v || i18n('URL is required'),
-                v => (v && v.trim().length > 0) || i18n('URL is required')
-            ]
+            positions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         }
     },
     mounted() {

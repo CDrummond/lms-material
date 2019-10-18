@@ -14,7 +14,7 @@ Vue.component('lms-groupplayers-dialog', {
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable autofocus :label="i18n('Name')" v-model="name" class="lms-search" :rules="nameRules" required></v-text-field>
+      <v-text-field clearable autofocus :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile>
@@ -60,10 +60,6 @@ Vue.component('lms-groupplayers-dialog', {
             show: false,
             player: undefined,
             name: undefined,
-            nameRules: [
-                v => !!v || i18n('Name is required'),
-                v => (v && v.trim().length > 0) || i18n('Name is required')
-            ],
             options: { powerMaster: true, powerPlay: true },
             players: [],
             chosenPlayers: []
@@ -141,7 +137,7 @@ Vue.component('lms-groupplayers-dialog', {
             this.show=false;
         },
         update() {
-            var name = this.name.trim();
+            var name = undefined==this.name ? "" : this.name.trim();
             if (name.length<1) {
                 return;
             }
@@ -169,7 +165,7 @@ Vue.component('lms-groupplayers-dialog', {
             }
         },
         create() {
-            var name = this.name.trim();
+            var name = undefined==this.name ? "" : this.name.trim();
             if (name.length<1) {
                 return;
             }

@@ -65,6 +65,8 @@
 46. Limit search results to 500.
 47. Add add-all/play-all to album results.
 48. Add add-all/play-all to track and album headers in search results.
+49. Remove 'rules' from dialogs - red text (when simply changing fields) is
+    distracting.
 
 1.0.2
 -----

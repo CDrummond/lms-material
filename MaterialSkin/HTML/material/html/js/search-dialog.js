@@ -13,7 +13,7 @@ Vue.component('lms-search-dialog', {
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
-     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()" :rules="termRules" required></v-text-field>
+     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
     </v-list-tile>
     <v-list-tile>
      <v-select :label="i18n('Category')" :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
@@ -36,11 +36,7 @@ Vue.component('lms-search-dialog', {
             categories: [],
             show: false,
             category: 0,
-            term: "",
-            termRules: [
-                v => !!v || i18n('Term is required'),
-                v => (v && v.trim().length > 1) || i18n('Term must be more than 1 character')
-            ]
+            term: ""
         }
     },
     mounted() {

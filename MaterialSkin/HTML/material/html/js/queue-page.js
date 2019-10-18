@@ -168,7 +168,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-card>
    <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);" :rules="dialog.rules" required></v-text-field>
+    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
    </v-card-text>
    <v-card-actions>
     <v-spacer></v-spacer>
@@ -287,7 +287,7 @@ var lmsQueue = Vue.component("lms-queue", {
         return {
             items: [],
             currentIndex: -1,
-            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, rules:undefined},
+            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
@@ -537,8 +537,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
-            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save',
-                         rules: [ v => !!v || i18n('Name is required'), v => (v && v.trim().length > 0) || i18n('Name is required') ] };
+            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save'};
         },
         clear() {
             if (this.items.length<1) {
@@ -651,8 +650,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (act==PQ_ADD_URL_ACTION) {
-                this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add',
-                             rules: [ v => !!v || i18n('URL is required'), v => (v && v.trim().length > 0) || i18n('URL is required') ] };
+                this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add'};
             } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length<1) {
                     bus.$emit('showMessage', i18n('Nothing playing'));

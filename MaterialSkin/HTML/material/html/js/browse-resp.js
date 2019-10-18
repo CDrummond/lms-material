@@ -6,7 +6,6 @@
  */
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
-const MODE_LIST_TYPE = "material-skin-more";
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
@@ -478,14 +477,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 if (i.type=="text" && i.title.startsWith("<")) {
                     i.type="html";
-                }
-
-                // If an item's menu ONLY has 'more' action, and it does not have a 'click' action - then use 'More' as its click action.
-                // This is to help with removing history items from Spotty - see https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=947874&viewfull=1#post947874
-                if (1==i.menu.length && MORE_ACTION==i.menu[0] && i.type!="audio" && !(i.actions && (i.actions.go || i.actions["do"]))) {
-                    i.type = MODE_LIST_TYPE;
-                    i.menu = [];
-                    i.style = undefined;
                 }
 
                 resp.items.push(i);

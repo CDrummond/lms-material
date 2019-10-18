@@ -58,8 +58,8 @@
 42. Long press (or middle click) on play/pause button in mobile toolbar to
     invoke sleep settings dialog.
 43. Add library selection to "Random Mix" dialog.
-44. If an list item only has 'More' menu entry, and no 'go' action, then list
-    'More' contents when clicking on item.
+44. If an list item only has one menu entry, then show this action in the list
+    and not the generic menu icon.
 45. When pressing add-all/play-all for tracks search results, add each track
     individually.
 46. Limit search results to 500.

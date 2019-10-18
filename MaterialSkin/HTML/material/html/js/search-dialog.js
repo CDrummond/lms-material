@@ -73,19 +73,26 @@ Vue.component('lms-search-dialog', {
             var str = this.term.trim();
             if (str.length>1) {
                 this.show=false;
+                var command=[];
+                var params=[];
                 if (0==this.category) {
-                    bus.$emit('searchLib', ["search"], ["tags:jlyAdt", "extended:1", "term:"+str], str);
+                    command=["search"]; params=["tags:jlyAdt", "extended:1", "term:"+str];
                 } else if (1==this.category) {
-                    bus.$emit('searchLib', ["artists"], ["tags:s", "search:"+str], str);
+                    command=["artists"]; params=["tags:s", "search:"+str];
                 } else if (2==this.category) {
-                    bus.$emit('searchLib', ["albums"], [ALBUM_TAGS, "search:"+str], str);
+                    command=["albums"]; params=[ALBUM_TAGS, "search:"+str];
                 } else if (3==this.category) {
-                    bus.$emit('searchLib', ["tracks"], [TRACK_TAGS, "search:"+str], str);
+                    command=["tracks"]; params=[TRACK_TAGS, "search:"+str];
                 } else if (4==this.category) {
-                    bus.$emit('searchLib', ["playlists"], ["tags:s", "search:"+str], str);
+                   command=["playlists"]; params=["tags:s", "search:"+str];
                 } else {
                     return;
                 }
+                var libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
+                if (libId) {
+                     params.push("library_id:"+libId);
+                }
+                bus.$emit('searchLib', command, params, str);
                 this.show=false;
             }
         },

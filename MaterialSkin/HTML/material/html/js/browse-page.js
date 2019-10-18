@@ -86,12 +86,12 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
-      <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>1" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
-       <v-icon>more_vert</v-icon>
-      </v-btn>
-      <v-btn flat icon v-else-if="items[idx].menu && items[idx].menu.length==1" @click.stop="itemAction(items[idx].menu[0], items[idx], idx)" class="image-grid-btn">
+      <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length==1 && MORE_ACTION==items[idx].menu[0]" @click.stop="itemAction(items[idx].menu[0], items[idx], idx)" class="image-grid-btn">
        <img v-if="ACTIONS[items[idx].menu[0]].svg" :src="ACTIONS[items[idx].menu[0]].svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{ACTIONS[items[idx].menu[0]].icon}}</v-icon>
+      </v-btn>
+      <v-btn flat icon v-else-if="items[idx].menu && items[idx].menu.length>1" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
+       <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
     </v-card></td>
@@ -130,12 +130,12 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn icon v-if="item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
-      <v-icon>more_vert</v-icon>
-     </v-btn>
-     <v-btn flat icon v-else-if="item.menu.length==1" @click.stop="itemAction(item.menu[0], item, index)">
+     <v-btn flat icon v-if="item.menu.length==1 && MORE_ACTION==item.menu[0]" @click.stop="itemAction(item.menu[0], item, index)">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
+     </v-btn>
+     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)">
+      <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -155,9 +155,12 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-btn icon v-if="item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
      </v-btn>
-     <v-btn flat icon v-else-if="item.menu.length==1" @click.stop="itemAction(item.menu[0], item, index)">
+     <v-btn flat icon v-if="item.menu.length==1 && MORE_ACTION==item.menu[0]" @click.stop="itemAction(item.menu[0], item, index)">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
+     </v-btn>
+     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)">
+      <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
    </v-list-tile>
@@ -191,18 +194,13 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(SEARCH_LIB_ACTION, item, index)">
-     <v-btn icon>
-      <v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon>
-     </v-btn>
-    </v-list-tile-action>
-    <v-list-tile-action class="browse-action" v-else-if="item.menu && item.menu.length>0">
-     <v-btn icon v-if="item.menu.length>1" @click.stop="itemMenu(item, index, $event)">
-      <v-icon>more_vert</v-icon>
-     </v-btn>
-     <v-btn flat icon v-else-if="item.menu.length==1" @click.stop="itemAction(item.menu[0], item, index)">
+    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
+     <v-btn flat icon v-if="item.menu.length==1 && (MORE_ACTION==item.menu[0] || item.menu[0]==SEARCH_LIB_ACTION)" @click.stop="itemAction(item.menu[0], item, index)">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
+     </v-btn>
+     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)">
+      <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
 
@@ -620,7 +618,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
                     this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
-                    logError(err, command.command, command.params, start, count);
+                    logError(err, command.command, command.params, 0, count);
                 }
             });
         },
@@ -638,7 +636,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
                     this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
-                    logError(err, command.command, command.params, start, count);
+                    logError(err, command.command, command.params);
                 }
             });
         },

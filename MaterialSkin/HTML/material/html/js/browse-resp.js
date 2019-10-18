@@ -478,7 +478,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (i.type=="text" && i.title.startsWith("<")) {
                     i.type="html";
                 }
-
                 resp.items.push(i);
                 types.add(i.type);
             }

@@ -142,7 +142,13 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-text" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
-   <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+   <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon>
+      <v-icon>more_vert</v-icon>
+     </v-btn>
+    </v-list-tile-action>
+   </v-list-tile>
    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.length))">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -409,7 +415,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
             this.enteredTerm = term;
-            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
+            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search", limit:500});
         }.bind(this));
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
@@ -586,11 +592,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItems = true;
-            var start = item.range ? item.range.start : 0;
-            var count = item.range && item.range.count < LMS_BATCH_SIZE ? item.range.count : LMS_BATCH_SIZE;
-            lmsList(this.playerId(), command.command, command.params, start, count, item.cancache).then(({data}) => {
+            var count = item.limit ? item.limit : LMS_BATCH_SIZE;
+            lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache).then(({data}) => {
                 this.options.ratingsSupport=this.$store.state.ratingsSupport;
-                var resp = parseBrowseResp(data, item, this.options, 0, item.cancache ? cacheKey(command.command, command.params, start, count) : undefined);
+                var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined);
                 this.handleListResponse(item, command, resp);
                 this.prevPage = prevPage;
                 this.fetchingItems = false;
@@ -629,7 +634,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.headerTitle=item.title
                                     ? (item.type=="search" || item.type=="entry") && undefined!=this.enteredTerm
                                         ? item.title+SEPARATOR+this.enteredTerm
-                                        : (item.range && this.current && this.current.title ? this.current.title+": "+item.title : item.title)
+                                        : item.title
                                     : "?";
                 this.current = item;
                 this.currentLibId = command.libraryId;
@@ -665,22 +670,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (this.tbarActions.length==0 && this.current && this.current.actions && this.current.actions.play) {
                         this.tbarActions=[ADD_ACTION, PLAY_ACTION];
                     }
+
                     // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                    if (this.tbarActions.length==0 && !item.range && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && this.items.length>0 && this.items[0].menu &&
-                       !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
-                                                           this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
-                        for (var i=0, len=this.items[0].menu.length; i<len; ++i) {
-                            if (this.items[0].menu[i]==ADD_ACTION || this.items[0].menu[i]==PLAY_ACTION) {
-                                this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                                // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
-                                if (this.items[0].params && this.items[0].params.item_id) {
-                                    var parts = this.items[0].params.item_id.split(".");
-                                    if (parts.length>1) {
-                                        parts.pop();
-                                        this.current.allid = "item_id:"+parts.join(".");
-                                    }
-                                }
-                                break;
+                    if (this.tbarActions.length==0 && this.items.length>1 && this.items[0].menu && this.items[0].menu.length>0 &&
+                        (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && 
+                        !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
+                                                            this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
+                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                        // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
+                        if (this.items[0].params && this.items[0].params.item_id) {
+                            var parts = this.items[0].params.item_id.split(".");
+                            if (parts.length>1) {
+                                parts.pop();
+                                this.current.allid = "item_id:"+parts.join(".");
                             }
                         }
                     }
@@ -1224,6 +1226,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                 });
+            } else if ((ADD_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
+                // Can't use standard add/play-all for search results, so just add each item...
+                var commands=[];
+                var check = item.id.endsWith("tracks") || (SEARCH_ID==item.id && this.items[0].id.startsWith("track")) ? "track_id" : "album_id";
+                for (var i=0, len=this.items.length; i<len; ++i) {
+                    if (this.items[i].id.startsWith(check)) {
+                        commands.push({act:PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION, item:this.items[i], idx:i});
+                    } else if (commands.length>0) {
+                        break;
+                    }
+                }
+                this.doCommands(commands, PLAY_ALL_ACTION==act);
             } else {
                 var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {
@@ -1382,7 +1396,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var pos=undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
             this.fetchingItems = true;
             lmsList(this.playerId(), this.command.command, this.command.params, 0, LMS_BATCH_SIZE, this.current.cancache).then(({data}) => {
-                var resp = parseBrowseResp(data, this.current, this.options, 0, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined);
+                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined);
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
                 this.filteredJumplist = [];
@@ -1856,7 +1870,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.icon = undefined;
                                 } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                     if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                        item.range={count: undefined==this.newMusicLimit ? 100 :this.newMusicLimit};
+                                        item.limit=undefined==this.newMusicLimit ? 100 :this.newMusicLimit;
                                     }
                                     if (c.id.startsWith("artist")) {
                                         item.svg = "artist";

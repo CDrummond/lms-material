@@ -764,7 +764,7 @@ function pageWasReloaded() {
 function addAndPlayAllActions(cmd) {
     if (cmd.command[0]=="albums") {
         for (var i=0, len=cmd.params.length; i<len; ++i) {
-            if (cmd.params[i].startsWith("artist_id:") || cmd.params[i].startsWith("genre_id:")) {
+            if (cmd.params[i].startsWith("artist_id:") || cmd.params[i].startsWith("genre_id:") || cmd.params[i].startsWith("search:")) {
                 return true;
             }
         }

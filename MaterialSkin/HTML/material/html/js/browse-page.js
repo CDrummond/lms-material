@@ -86,11 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
-      <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length==1 && MORE_ACTION==items[idx].menu[0]" @click.stop="itemAction(items[idx].menu[0], items[idx], idx)" class="image-grid-btn">
-       <img v-if="ACTIONS[items[idx].menu[0]].svg" :src="ACTIONS[items[idx].menu[0]].svg | svgIcon(darkUi)"></img>
-       <v-icon v-else>{{ACTIONS[items[idx].menu[0]].icon}}</v-icon>
-      </v-btn>
-      <v-btn flat icon v-else-if="items[idx].menu && items[idx].menu.length>1" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
+      <v-btn flat icon v-else-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
@@ -130,11 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn flat icon v-if="item.menu.length==1 && MORE_ACTION==item.menu[0]" @click.stop="itemAction(item.menu[0], item, index)">
-      <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
-     </v-btn>
-     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
@@ -188,7 +180,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn flat icon v-if="item.menu.length==1 && (MORE_ACTION==item.menu[0] || item.menu[0]==SEARCH_LIB_ACTION)" @click.stop="itemAction(item.menu[0], item, index)">
+     <v-btn flat icon v-if="item.menu.length==1 && item.menu[0]!=SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index)">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
      </v-btn>
@@ -217,6 +209,13 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-list-tile @click="menu.show = false">
      <v-list-tile-content><v-list-tile-title>{{trans.cancel}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
+  </v-list>
+  <v-list v-else-if="menu.item && menu.item.moremenu">
+   <template v-for="(entry, index) in menu.item.moremenu">
+    <v-list-tile @click="itemMoreAction(menu.item, index)">
+     <v-list-tile-title>{{entry.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
   </v-list>
   <v-list v-else-if="menu.item">
    <template v-for="(action, index) in menu.item.menu">
@@ -1279,11 +1278,29 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
+        itemMoreAction(item, index) {
+            this.fetchItems(this.buildCommand(item.moremenu[index]), item.moremenu[index]);
+        },
         itemMenu(item, index, event) {
             if (!item.menu) {
                 return;
             }
-            showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+            if (1==item.menu.length && MORE_ACTION==item.menu[0]) {
+                if (item.moremenu) {
+                    showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+                } else {
+                    var command = this.buildFullCommand(item, item.menu[0]);
+                    lmsList(this.playerId(), command.command, command.params, 0, 100, false).then(({data}) => {
+                        var resp = parseBrowseResp(data, item, this.options, undefined);
+                        if (resp.items.length>0) {
+                            item.moremenu = resp.items;
+                            showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+                        }
+                    });
+                }
+            } else {
+                showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+            }
         },
         savePreset(item, pos) {
             var url = item.url ? item.url : (item.favUrl ? item.favUrl : (item.presetParams ? item.presetParams.favorites_url : undefined));

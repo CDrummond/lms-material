@@ -806,6 +806,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.addHistory();
                     this.items = item.allSearchResults;
                     this.headerSubTitle = item.subtitle;
+                    this.current = item;
+                    if ((this.items[0].id.startsWith("album_id") && this.items.length<=50) || this.items[0].id.startsWith("track_id")) {
+                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                    }
                 }
                 return;
             }
@@ -1248,6 +1252,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         break;
                     }
                 }
+                bus.$emit('showMessage', item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
                 this.doCommands(commands, PLAY_ALL_ACTION==act);
             } else {
                 var command = this.buildFullCommand(item, act);

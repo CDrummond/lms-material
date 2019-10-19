@@ -9,26 +9,37 @@ const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fa
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], baseActions:[], canUseGrid: false, total: 0, jumplist:[] };
+    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
 
     try {
     if (data && data.result) {
-        resp.total = data.result.count;
         logJsonMessage("RESP", data);
-        if (parent.id && SEARCH_ID===parent.id) {
+        if (parent && SEARCH_ID===parent.id) {
             var totalResults = 0;
             var categories = 0;
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 categories+=1;
+                if (data.result.contributors_count>LMS_SEARCH_LIMIT) {
+                    data.result.contributors_count=LMS_SEARCH_LIMIT;
+                }
             }
             if (data.result.albums_count && data.result.albums_count>0) {
                 categories+=1;
+                if (data.result.albums_count>LMS_SEARCH_LIMIT) {
+                    data.result.albums_count=LMS_SEARCH_LIMIT;
+                }
             }
             if (data.result.tracks_count && data.result.tracks_count>0) {
                 categories+=1;
+                if (data.result.tracks_count>LMS_SEARCH_LIMIT) {
+                    data.result.tracks_count=LMS_SEARCH_LIMIT;
+                }
             }
             if (data.result.genres_count && data.result.genres_count>0) {
                 categories+=1;
+                if (data.result.genres_count>LMS_SEARCH_LIMIT) {
+                    data.result.genres_count=LMS_SEARCH_LIMIT;
+                }
             }
             if (data.result.contributors_loop && data.result.contributors_count>0) {
                 totalResults += data.result.contributors_count;
@@ -116,7 +127,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             if (categories==0 || categories>1) {
                 resp.subtitle=i18np("1 Item", "%1 Items", totalResults);
             }
-            resp.total = resp.items.length;
         } else if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;
@@ -156,12 +166,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (!i.text || i.showBigArtwork==1) {
-                    resp.total--;
+                    data.result.count--;
                     continue;
                 }
-                if (resp.items.length==resp.total-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
+                if (resp.items.length==data.result.count-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
                     // Remove 'All Songs' entry
-                    resp.total--;
+                    data.result.count--;
                     continue;
                 }
                 var addedPlayAction = false;
@@ -169,7 +179,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert commands
                     if (i.style && MORE_COMMANDS.has(i.style)) {
-                        resp.total--;
+                        data.result.count--;
                         continue;
                     }
                     i.title = replaceNewLines(i.text);
@@ -484,7 +494,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
             if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
                 resp.canUseGrid = false;
-            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && resp.items.length == resp.total && 1==types.size &&
+            } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && 1==types.size &&
                (!types.has("text") && !types.has("search") && !types.has("entry") && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }
@@ -496,7 +506,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 id: parent.id+".0"
                                });
                 resp.canUseGrid = false;
-            } else if (haveWithoutIcons && haveWithIcons && resp.items.length == resp.total) {
+            } else if (haveWithoutIcons && haveWithIcons) {
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);
 
@@ -519,12 +529,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
 
-            if (resp.total == resp.items.length) {
-                if (isApps || isPodcastList) {
-                    resp.items.sort(titleSort);
-                } else if (isFavorites) {
-                    resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
-                }
+            if (isApps || isPodcastList) {
+                resp.items.sort(titleSort);
+            } else if (isFavorites) {
+                resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }
         } else if (data.result.artists_loop) {
             var params = [];
@@ -574,13 +582,13 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.push(artist);
             }
             if (isComposers) {
-                resp.subtitle=i18np("1 Composer", "%1 Composers", resp.total);
+                resp.subtitle=i18np("1 Composer", "%1 Composers", resp.items.length);
             } else if (isConductors) {
-                resp.subtitle=i18np("1 Conductor", "%1 Conductors", resp.total);
+                resp.subtitle=i18np("1 Conductor", "%1 Conductors", resp.items.length);
             } else if (isBands) {
-                resp.subtitle=i18np("1 Band", "%1 Bands", resp.total);
+                resp.subtitle=i18np("1 Band", "%1 Bands", resp.items.length);
             } else {
-                resp.subtitle=i18np("1 Artist", "%1 Artists", resp.total);
+                resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
             }
         } else if (data.result.albums_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
@@ -608,7 +616,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 // Bug on my system? There is a 'No Album' entry with no tracks!
                 /*
                 if (undefined!==i.year && 0==i.year && i.artist && "No Album"===i.album && "Various Artists"===i.artist) {
-                    resp.total--;
                     continue;
                 }
                 */
@@ -639,7 +646,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 resp.items.push(album);
             }
-            resp.subtitle=i18np("1 Album", "%1 Albums", resp.total);
+            resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
         } else if (data.result.titles_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
@@ -655,7 +662,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
 
             var actions = [PLAY_ACTION];
-            if (allowPlayAlbum && resp.total>1) {
+            if (allowPlayAlbum && data.result.count>1) {
                 actions.push(PLAY_ALBUM_ACTION);
             }
             actions.push(INSERT_ACTION);
@@ -689,8 +696,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               rating: i.rating
                           });
             }
-            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
-            if (data.result.titles_loop.length===resp.total) {
+            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+            if (!(parent && parent.id && parent.id.startsWith("search:"))) {
                 resp.subtitle+=" ("+formatSeconds(duration)+")";
             }
         } else if (data.result.genres_loop) {
@@ -711,7 +718,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               textkey: key
                           });
             }
-            resp.subtitle=i18np("1 Genre", "%1 Genres", resp.total);
+            resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
             var menu = options.showPresets
                         ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SAVE_PRESET_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION]
@@ -734,7 +741,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               url:  i.url
                           });
             }
-            resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.total);
+            resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             //if (options.ratingsSupport) {
@@ -775,7 +782,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               draggable: true
                           });
             }
-            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.total);
+            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
         } else if (data.result.years_loop) {
             for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -794,7 +801,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               textkey: key
                           });
             }
-            resp.subtitle=i18np("1 Year", "%1 Years", resp.total);
+            resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length);
         } else if (data && data.result && data.result.presets_loop) {
             for (var idx=0, loop=data.result.presets_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -807,9 +814,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                  num: i.num
                                  });
             }
-            resp.total = resp.items.length;
-            resp.subtitle=i18np("1 Item", "%1 Items", resp.total);
-        } else if (0===resp.total && data.result.networkerror) {
+            resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+        } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
             for (var idx=0, loop=data.result.data, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -829,12 +835,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
                 resp.canUseGrid = resp.forceGrid = true;
             }
-            resp.total = resp.items.length;
         }
 
-        if (resp.total>LMS_BATCH_SIZE) {
+        if (data.result.count>LMS_BATCH_SIZE) {
             resp.subtitle = i18n("Only showing %1 items", LMS_BATCH_SIZE);
-            resp.total = LMS_BATCH_SIZE;
         }
 
         if (cacheKey && lmsLastScan && canUseCache) { // canUseCache defined in utils.js
@@ -876,7 +880,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 }
 
 function parseBrowseUrlResp(data, provider) {
-    var resp = {items: [], baseActions:[], canUseGrid: false, total: 0, jumplist:[] };
+    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
 
     if ('itunes'==provider) {
         if (data && data.results) {
@@ -884,8 +888,7 @@ function parseBrowseUrlResp(data, provider) {
                 resp.items.push({title: loop[i].trackName, id: loop[i].feedUrl, image: loop[i].artworkUrl100, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
             }
         }
-        resp.total = resp.items.length;
-        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.total);
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
     } else if ('gpodder'==provider) {
         if (data) {
             for (var i=0, loopLen=data.length; i<loopLen; ++i) {
@@ -894,8 +897,7 @@ function parseBrowseUrlResp(data, provider) {
                 }
             }
         }
-        resp.total = resp.items.length;
-        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.total);
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
     }
     if (0==resp.items.length) {
         resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});

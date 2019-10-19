@@ -62,14 +62,17 @@
     and not the generic menu icon.
 45. When pressing add-all/play-all for tracks search results, add each track
     individually.
-46. Limit search results to 300.
-47. Add add-all/play-all to album results.
-48. Add add-all/play-all to track and album headers in search results.
-49. Remove 'rules' from dialogs - red text (when simply changing fields) is
+46. Limit search results to 500.
+47. When searching all, only show initial 10 results of each type, click header
+    to show more.
+48. Add add-all/play-all to album search results.
+49. Add add-all/play-all to track and album headers in search results, if all
+    shown.
+50. Remove 'rules' from dialogs - red text (when simply changing fields) is
     distracting.
-50. Use library_id when performing searches.
-51. Unmount dialogs when not in use, otherwise list scroll can slow down.
-52. Show total playlist duration when listing its tracks.
+51. Use library_id when performing searches.
+52. Unmount dialogs when not in use, otherwise list scroll can slow down.
+53. Show total playlist duration when listing its tracks.
 
 1.0.2
 -----

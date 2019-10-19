@@ -1245,9 +1245,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 // Can't use standard add/play-all for search results, so just add each item...
                 var commands=[];
                 var check = item.id.endsWith("tracks") || (SEARCH_ID==item.id && this.items[0].id.startsWith("track")) ? "track_id" : "album_id";
-                for (var i=0, len=this.items.length; i<len; ++i) {
-                    if (this.items[i].id.startsWith(check)) {
-                        commands.push({act:PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION, item:this.items[i], idx:i});
+                var list = item.allSearchResults ? item.allSearchResults : this.items;
+                for (var i=0, len=list.length; i<len; ++i) {
+                    if (list[i].id.startsWith(check)) {
+                        commands.push({act:PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION, item:list[i], idx:i});
                     } else if (commands.length>0) {
                         break;
                     }

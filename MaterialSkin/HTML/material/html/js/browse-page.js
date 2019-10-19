@@ -123,7 +123,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
-    <v-list-tile-content v-if="item.header"><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-content v-if="item.header" @click="click(item, index, $event)"><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
@@ -150,7 +150,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-text" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
-   <v-list-tile v-else-if="item.header" class="lms-list-item"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
+   <v-list-tile v-else-if="item.header" class="lms-list-item" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
      <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
@@ -422,7 +422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
             this.enteredTerm = term;
-            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search", limit:LMS_SEARCH_LIMIT});
+            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
         }.bind(this));
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
@@ -590,6 +590,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.showRatingButton = this.showRatingButton;
             prev.subtitleClickable = this.subtitleClickable;
             prev.prevPage = this.prevPage;
+            prev.allSearchResults = this.allSearchResults;
             this.prevPage = undefined;
             this.history.push(prev);
         },
@@ -790,7 +791,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         click(item, index, event) {
-            if (this.fetchingItems || item.header || "search"==item.type || "entry"==item.type || "html"==item.type) {
+            if (this.fetchingItems || "search"==item.type || "entry"==item.type || "html"==item.type) {
                  return;
             }
             if (this.menu.show) {
@@ -798,6 +799,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            if (item.header) {
+                if (item.allSearchResults) {
+                    this.addHistory();
+                    this.items = item.allSearchResults;
+                    this.headerSubTitle = item.subtitle;
+                }
                 return;
             }
             if (this.selection.length>0) {
@@ -1517,6 +1526,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.showRatingButton = prev.showRatingButton;
             this.subtitleClickable = prev.subtitleClickable;
             this.prevPage = prev.prevPage;
+            this.allSearchResults = prev.allSearchResults;
             if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {

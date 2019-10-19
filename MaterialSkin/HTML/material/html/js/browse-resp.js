@@ -88,7 +88,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (categories>1 || clamped) {
                     resp.items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:"search.albums", header:true,
                                      allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numAlbums),
-                                     menu:clamped ? undefined : [PLAY_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Album", "%1 Albums", titleParam);
                 }
@@ -121,7 +121,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (categories>1 || clamped) {
                     resp.items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:"search.tracks", header:true,
                                      allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numTracks),
-                                     menu:clamped ? undefined : [PLAY_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Track", "%1 Tracks", titleParam);
                 }

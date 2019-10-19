@@ -748,6 +748,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             //    actions.push(DIVIDER);
             //    actions.push(RATING_ACTION);
             //}
+            var totalDuration = 0;
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -757,7 +758,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (!title) {
                     title=i18n("Unknown");
                 }
-                var duration = parseFloat(i.duration || 0)
+                var duration = parseFloat(i.duration || 0);
+                totalDuration+=duration;
                 var subtitle = duration>0 ? formatSeconds(duration) : undefined;
                 if (i.album) {
                     if (subtitle) {
@@ -783,6 +785,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+            if (totalDuration>0) {
+                resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
+            }
         } else if (data.result.years_loop) {
             for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

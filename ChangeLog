@@ -69,6 +69,7 @@
     distracting.
 50. Use library_id when performing searches.
 51. Unmount dialogs when not in use, otherwise list scroll can slow down.
+52. Show total playlist duration when listing its tracks.
 
 1.0.2
 -----

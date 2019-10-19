@@ -62,7 +62,7 @@
     and not the generic menu icon.
 45. When pressing add-all/play-all for tracks search results, add each track
     individually.
-46. Limit search results to 500.
+46. Limit search results to 300.
 47. Add add-all/play-all to album results.
 48. Add add-all/play-all to track and album headers in search results.
 49. Remove 'rules' from dialogs - red text (when simply changing fields) is

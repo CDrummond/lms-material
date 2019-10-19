@@ -68,7 +68,7 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="bus.$emit('dlg.open', 'sleep')"><v-icon class="btn-icon">hotel</v-icon>{{i18n("Set sleep for all players")}}</v-btn></v-flex>
+      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon>{{i18n("Set sleep for all players")}}</v-btn></v-flex>
       <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat class="pmgr-button" @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon>{{i18n('Create group player')}}</v-btn></v-flex>
      </div>
@@ -206,7 +206,16 @@ Vue.component('lms-manage-players', {
             this.menu.show = true;
         },
         createGroup() {
-            bus.$emit('dlg.open', 'group', 'create')
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('dlg.open', 'group', 'create');
+        },
+        sleepAll() {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            bus.$emit('dlg.open', 'sleep');
         },
         playerAction(player, cmd) {
             if (PMGR_EDIT_GROUP_ACTION.cmd==cmd) {
@@ -238,7 +247,7 @@ Vue.component('lms-manage-players', {
             }
         },
         volumeDown(player/*, toggleMute*/) {
-            if (!this.show) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
             //if (toggleMute) {
@@ -248,7 +257,7 @@ Vue.component('lms-manage-players', {
             //}
         },
         volumeUp(player/*, toggleMute*/) {
-            if (!this.show) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
             //if (toggleMute) {
@@ -288,7 +297,7 @@ Vue.component('lms-manage-players', {
             });
         },
         playPause(player) {
-            if (!this.show) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
             lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
@@ -296,7 +305,7 @@ Vue.component('lms-manage-players', {
             });
         },
         stop(player) {
-            if (!this.show) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
             lmsCommand(player.id, ['stop']).then(({data}) => {
@@ -304,7 +313,7 @@ Vue.component('lms-manage-players', {
             });
         },
         prevTrack(player) {
-            if (!this.show) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
             lmsCommand(player.id, ['button', 'jump_rew']).then(({data}) => {
@@ -312,7 +321,7 @@ Vue.component('lms-manage-players', {
             });
         },
         nextTrack(player) {
-            if (!this.show) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
             lmsCommand(player.id, ['playlist', 'index', '+1']).then(({data}) => {
@@ -320,7 +329,7 @@ Vue.component('lms-manage-players', {
             });
         },
         setActive(id) {
-            if (id != this.$store.state.player.id) {
+            if (id != this.$store.state.player.id && this.$store.state.visibleMenus.size<=0) {
                 this.$store.commit('setPlayer', id);
             }
         },
@@ -437,6 +446,9 @@ Vue.component('lms-manage-players', {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'manage', shown:val});
             bus.$emit('subscribeAll', val);
+        },
+        'menu.show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'manage', shown:newVal});
         }
     }
 })

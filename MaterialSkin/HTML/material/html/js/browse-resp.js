@@ -59,7 +59,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     resp.subtitle=i18np("1 Artist", "%1 Artists", titleParam);
                 }
                 var infoPlugin = getLocalStorageBool('infoPlugin');
-                for (var idx=0, loop=data.result.contributors_loop, len=loop.length; idx<len; ++idx) {
+                for (var idx=0, loop=data.result.contributors_loop; idx<numArtists; ++idx) {
                     var i = loop[idx];
                     var item ={
                                   id: "artist_id:"+i.contributor_id,
@@ -92,7 +92,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 } else {
                     resp.subtitle=i18np("1 Album", "%1 Albums", titleParam);
                 }
-                for (var idx=0, loop=data.result.albums_loop, len=loop.length; idx<len; ++idx) {
+                for (var idx=0, loop=data.result.albums_loop; idx<numAlbums; ++idx) {
                     var i = loop[idx];
                     var item ={
                                   id: "album_id:"+i.album_id,
@@ -125,7 +125,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 } else {
                     resp.subtitle=i18np("1 Track", "%1 Tracks", titleParam);
                 }
-                for (var idx=0, loop=data.result.tracks_loop, len=loop.length; idx<len; ++idx) {
+                for (var idx=0, loop=data.result.tracks_loop; idx<numTracks; ++idx) {
                     var i = loop[idx]
                     var item ={
                                   id: "track_id:"+i.track_id,
@@ -154,7 +154,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 } else {
                     resp.subtitle=i18np("1 Genre", "%1 Genres", titleParam);
                 }
-                for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                for (var idx=0, loop=data.result.genres_loop; idx<numGenres; ++idx) {
                     var i = loop[idx];
                     var item ={
                                   id: "genre_id:"+i.genre_id,

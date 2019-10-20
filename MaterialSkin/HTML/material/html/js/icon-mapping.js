@@ -16,9 +16,9 @@ const ENDSWITH_MAP = {
     "/search.png":{"icon":"search"},
     "/playlist-collab.png":{"icon":"list_alt"},
     "/account.png":{"icon":"account_circle"},
-    "/inbox.png":{"icon":"chevron_left"},
+    "/inbox.png":{"svg":"left-arrow"},
     "/playlist.png":{"icon":"list"},
-    "/toptracks.png":{"icon":"trending_up"},
+    "/toptracks.png":{"svg":"trophy"},
     "/account.png":{"icon":"person"},
     "/artists.png":{"avg":"artist"},
     "/whatsnew.png":{"icon":"new_releases"}
@@ -35,9 +35,9 @@ function mapIconType(item, type) {
     for (const [key, value] of Object.entries(ENDSWITH_MAP)) {
         if (item[type].endsWith(key)) {
             if (value['icon']) {
-                item.icon=value['icon']; item.image=undefined;
+                item.image=item[value]=item.svg=undefined; item.icon=value['icon'];
             } else if (value['svg']) {
-                item.svg=value['svg']; item.image=undefined;
+                item.image=item[value]=item.icon=undefined; item.svg=value['svg'];
             }
             return true;
         }
@@ -45,9 +45,9 @@ function mapIconType(item, type) {
     for (const [key, value] of Object.entries(INDEXOF_MAP)) {
         if (item[type].indexOf(key)>0) {
             if (value['icon']) {
-                item.icon=value['icon']; item.image=undefined;
+                item.image=item[value]=item.svg=undefined; item.icon=value['icon'];
             } else if (value['svg']) {
-                item.svg=value['svg']; item.image=undefined;
+                item.image=item[value]=item.icon=undefined; item.svg=value['svg'];
             }
             return true;
         }

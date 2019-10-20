@@ -1863,7 +1863,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                              icon: "music_note"
                                             };
                                 if (c.id.startsWith("myMusicArtists")) {
-                                    mapIcon(command.params, item);
+                                    mapArtistIcon(command.params, item);
                                     item.cancache = true;
                                 } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
                                     item.icon = undefined;

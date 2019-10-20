@@ -29,6 +29,9 @@ const INDEXOF_MAP = {
 };
 
 function mapIcon(item, fallbackIcon) {
+    if (undefined==item['icon-id']) {
+        return;
+    }
     for (const [key, value] of Object.entries(ENDSWITH_MAP)) {
         if (item['icon-id'].endsWith(key)) {
             if (value['icon']) {

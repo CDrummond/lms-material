@@ -28,31 +28,35 @@ const INDEXOF_MAP = {
     "www.jazzfm.com":{"svg":"saxophone"}
 };
 
-function mapIcon(item, fallbackIcon) {
-    if (undefined==item['icon-id']) {
-        return;
+function mapIconType(item, type) {
+    if (undefined==item[type]) {
+        return false;
     }
     for (const [key, value] of Object.entries(ENDSWITH_MAP)) {
-        if (item['icon-id'].endsWith(key)) {
+        if (item[type].endsWith(key)) {
             if (value['icon']) {
                 item.icon=value['icon']; item.image=undefined;
             } else if (value['svg']) {
                 item.svg=value['svg']; item.image=undefined;
             }
-            return;
+            return true;
         }
     }
     for (const [key, value] of Object.entries(INDEXOF_MAP)) {
-        if (item['icon-id'].indexOf(key)>0) {
+        if (item[type].indexOf(key)>0) {
             if (value['icon']) {
                 item.icon=value['icon']; item.image=undefined;
             } else if (value['svg']) {
                 item.svg=value['svg']; item.image=undefined;
             }
-            return;
+            return true;
         }
     }
-    if (undefined!=fallbackIcon) {
+    return false;
+}
+
+function mapIcon(item, fallbackIcon) {
+    if (!mapIconType(item, "icon-id") && !mapIconType(item, "icon") && undefined!=fallbackIcon) {
         item.icon=fallbackIcon; item.image=undefined;
     }
 }

@@ -180,7 +180,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn flat icon v-if="item.menu.length==1 && item.menu[0]!=SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index)">
+     <v-btn flat icon v-if="item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index)">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
      </v-btn>
@@ -729,7 +729,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        handleTextClickResponse(item, command, data) {
+        handleTextClickResponse(item, command, data, isMoreMenu) {
             var resp = parseBrowseResp(data, item, this.options);
             var nextWindow = item.nextWindow
                                 ? item.nextWindow
@@ -740,10 +740,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 nextWindow=nextWindow.toLowerCase();
                 var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && resp.items[0].id!='empty'
                                 ? resp.items[0].title : item.title;
-                if (nextWindow=="refresh") {
+                if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
                     bus.$emit('showMessage', message);
                     this.refreshList();
-                } else if (nextWindow=="parent" && this.history.length>0) {
+                } else if (this.history.length>0 && (nextWindow=="parent" || (isMoreMenu && nextWindow=="grandparent"))) {
                     bus.$emit('showMessage', message);
                     this.goBack(true);
                 } else if (nextWindow=="grandparent" && this.history.length>1) {
@@ -763,13 +763,13 @@ var lmsBrowse = Vue.component("lms-browse", {
         canClickText(item) {
             return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') || (!item.style && ( (item.actions && item.actions.go) || (item.actions && item.actions.do) ||item.nextWindow || item.params /*CustomBrowse*/));
         },
-        doTextClick(item) {
+        doTextClick(item, isMoreMenu) {
             var command = this.buildCommand(item);
             if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1] || "jiveplaylistparameters"==command.command[1])) {
                 this.fetchingItems = true;
                 lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE).then(({data}) => {
                     this.fetchingItems = false;
-                    this.handleTextClickResponse(item, command, data);
+                    this.handleTextClickResponse(item, command, data, isMoreMenu);
                 }).catch(err => {
                     this.fetchingItems = false;
                     logError(err, command.command, command.params);
@@ -783,7 +783,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     logJsonMessage("RESP", data);
-                    this.handleTextClickResponse(item, command, data);
+                    this.handleTextClickResponse(item, command, data, isMoreMenu);
                 }).catch(err => {
                     logError(err, command.command);
                 });
@@ -1279,7 +1279,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemMoreAction(item, index) {
-            this.fetchItems(this.buildCommand(item.moremenu[index]), item.moremenu[index]);
+            this.doTextClick(item.moremenu[index], true);
         },
         itemMenu(item, index, event) {
             if (!item.menu) {

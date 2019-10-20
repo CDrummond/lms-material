@@ -410,7 +410,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
-                    mapIcon(i);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (isRadios) {
@@ -457,11 +456,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             : i.type=="audio"
                                 ? "music_note"
                                 : "crop_portrait";
-                } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
-                    if (i.params && i.params.item_id) {
-                        i.id = "item_id:"+i.params.item_id;
-                    } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
-                        i.id = "item_id:"+i.actions.go.params.item_id;
+                } else {
+                    mapIcon(i);
+                    if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
+                        if (i.params && i.params.item_id) {
+                            i.id = "item_id:"+i.params.item_id;
+                        } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                            i.id = "item_id:"+i.actions.go.params.item_id;
+                        }
                     }
                 }
 

@@ -511,8 +511,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.menu.push(SELECT_ACTION);
                 }
 
-                // Only show 'More' action if ('more' is in baseActions and item as item_id) OR
-                // 'more' is in item's actions. #57
+                // Only show 'More' action if:
+                //    'more' is in baseActions and item has item_id
+                //    - OR -
+                //    'more' is in item's actions. #57
                 if ( !isFavorites &&
                      ( (i.commonParams && (i.commonParams.artist_id || i.commonParams.album_id || i.commonParams.track_id)) ||
                        ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) || (i.actions && i.actions.more && i.actions.more.cmd)) &&

@@ -672,7 +672,7 @@ function forceItemUpdate(vm, item) {
     });
 }
 
-function mapIcon(params, item) {
+function mapArtistIcon(params, item) {
     item.icon=undefined;
     if (params && params.length>0) {
         for (var i=0, len=params.length; i<len; ++i) {

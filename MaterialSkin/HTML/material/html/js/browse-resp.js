@@ -410,6 +410,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
+                    mapIcon(i);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (isRadios) {
@@ -441,36 +442,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                     }
                     if (isRadiosTop && i['icon-id']) {
-                        if (i['icon-id'].endsWith('bbciplayer.png') || i['icon-id'].endsWith('bbciplayerextra.png')) {
-                            i.svg='bbc-iplayer'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiopresets.png')) {
-                            i.icon='favorite'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiolocal.png')) {
-                            i.icon='my_location'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiomusic.png')) {
-                            i.icon='music_video'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiosports.png')) {
-                            i.icon='sports_soccer'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radionews.png')) {
-                            i.icon='menu_book'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiotalk.png')) {
-                            i.icon='chat'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radioworld.png')) {
-                            i.icon='public'; i.image=undefined;
-                            if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu=='language') {
-                                i.icon='language';
-                            }
-                        } else if (i['icon-id'].endsWith('podcasts.png')) {
-                            i.icon='rss_feed'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiosearch.png')) {
-                            i.icon='search'; i.image=undefined;
-                        } else if (i['icon-id'].endsWith('radiofeeds.png')) {
-                            i.svg='radio-tower'; i.image=undefined;
-                        } else if (i['icon-id'].indexOf('www.jazzfm.com')>0) {
-                            i.svg='saxophone'; i.image=undefined;
-                        } else {
-                            i.icon='radio'; i.image=undefined;
+                        if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu=='language') {
+                            i['icon-id']='language.png';
                         }
+                        mapIcon(i, "radio");
                     }
                 } else if (isBmf) {
                     i.icon = i.type=="playlist"

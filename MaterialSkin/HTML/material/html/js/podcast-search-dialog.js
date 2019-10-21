@@ -179,8 +179,10 @@ Vue.component('lms-podcast-search-dialog', {
      <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
     </v-list-tile>
     <v-list-tile>
-     <v-flex xs6><v-select :items="providers" :label="i18n('Provider')" v-model="provider" item-text="value" item-value="key"></v-select></v-flex>
-     <v-flex xs6><v-select :items="countries" :label="i18n('Country')" v-model="country" item-text="value" item-value="key" style="padding-left:8px" v-if="provider=='itunes'"></v-select></v-flex>
+     <v-select :items="providers" :label="i18n('Provider')" v-model="provider" item-text="value" item-value="key"></v-select>
+    </v-list-tile>
+    <v-list-tile v-if="provider=='itunes'">
+     <v-select :items="countries" :label="i18n('Country')" v-model="country" item-text="value" item-value="key"></v-select>
     </v-list-tile>
    </v-list>
   </v-form>

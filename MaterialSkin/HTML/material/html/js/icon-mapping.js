@@ -20,7 +20,7 @@ const ENDSWITH_MAP = {
     "/playlist.png":{"icon":"list"},
     "/toptracks.png":{"svg":"trophy"},
     "/account.png":{"icon":"person"},
-    "/artists.png":{"avg":"artist"},
+    "/artists.png":{"svg":"artist"},
     "/whatsnew.png":{"icon":"new_releases"}
 };
 

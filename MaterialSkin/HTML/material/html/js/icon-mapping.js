@@ -15,7 +15,6 @@ const ENDSWITH_MAP = {
     "/album.png":{"icon":"album"},
     "/search.png":{"icon":"search"},
     "/playlist-collab.png":{"icon":"list_alt"},
-    "/account.png":{"icon":"account_circle"},
     "/inbox.png":{"svg":"left-arrow"},
     "/playlist.png":{"icon":"list"},
     "/toptracks.png":{"svg":"trophy"},

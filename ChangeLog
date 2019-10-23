@@ -3,6 +3,7 @@
 1. Fix menu icon missing from grid items.
 2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
 3. Use Alt+Arrow instead of just Arrow for shortcuts.
+4. When remapping icons, check object icon/icon-id property is a string.
 
 1.1.0
 -----

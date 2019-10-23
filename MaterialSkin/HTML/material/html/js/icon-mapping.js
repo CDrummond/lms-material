@@ -28,7 +28,7 @@ const INDEXOF_MAP = {
 };
 
 function mapIconType(item, type) {
-    if (undefined==item[type]) {
+    if (undefined==item[type] || (typeof item[type] !== 'string')) {
         return false;
     }
     for (const [key, value] of Object.entries(ENDSWITH_MAP)) {

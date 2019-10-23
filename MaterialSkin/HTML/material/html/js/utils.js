@@ -797,8 +797,10 @@ function setFontSize(large) {
 
 function bindKey(key, modifier) {
     Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), function(e) {
-        e.preventDefault();
-        bus.$emit('keyboard', key, modifier);
+        if (store.state.keyboardControl) {
+            e.preventDefault();
+            bus.$emit('keyboard', key, modifier);
+        }
     } );
 }
 

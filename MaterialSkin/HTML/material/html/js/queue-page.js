@@ -484,7 +484,7 @@ var lmsQueue = Vue.component("lms-queue", {
             bindKey(LMS_SCROLL_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
             bus.$on('keyboard', function(key, modifier) {
-                if (!this.$store.state.keyboardControl || 'mod'!=modifier || (!this.desktop && this.$store.state.page!="queue" || this.$store.state.openDialogs.length>0)) {
+                if ('mod'!=modifier || (!this.desktop && this.$store.state.page!="queue" || this.$store.state.openDialogs.length>0)) {
                     return;
                 }
                 if (LMS_SAVE_QUEUE_KEYBOARD==key) {

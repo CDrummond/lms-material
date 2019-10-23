@@ -2,6 +2,7 @@
 -----
 1. Fix menu icon missing from grid items.
 2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
+3. Use Alt+Arrow instead of just Arrow for shortcuts.
 
 1.1.0
 -----

@@ -449,10 +449,10 @@ Vue.component('lms-ui-settings', {
             return hidden;
         },
         keyboardInfo() {
-            var list = [ "▲"+SEPARATOR+i18n("Increase volume"),
-                         "▼ "+SEPARATOR+i18n("Decrease volume"),
-                         "◀"+SEPARATOR+i18n("Previous track"),
-                         "▶"+SEPARATOR+i18n("Next track"),
+            var list = [ i18n("Alt+%1", "▲")+SEPARATOR+i18n("Increase volume"),
+                         i18n("Alt+%1", "▼")+SEPARATOR+i18n("Decrease volume"),
+                         i18n("Alt+%1", "◀")+SEPARATOR+i18n("Previous track"),
+                         i18n("Alt+%1", "▶")+SEPARATOR+i18n("Next track"),
                          i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
                          i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
                          shortcutStr("◀")+SEPARATOR+i18n("Go back"),

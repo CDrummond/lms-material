@@ -770,26 +770,30 @@ var lmsServer = Vue.component('lms-server', {
         window.addEventListener("focus", visibilityOrFocusChanged);
 
         if (!IS_MOBILE) {
-            bindKey('up');
-            bindKey('down');
+            bindKey('up', 'alt');
+            bindKey('down', 'alt');
             bindKey('space');
-            bindKey('left');
-            bindKey('right');
-            bus.$on('keyboard', function(key) {
+            bindKey('left', 'alt');
+            bindKey('right', 'alt');
+            bus.$on('keyboard', function(key, modifier) {
                 if (!this.$store.state.keyboardControl || !this.$store.state.player || this.$store.state.visibleMenus.size>0 || (this.$store.state.openDialogs.length>0 && this.$store.state.openDialogs[0]!='info-dialog'))  {
                     return;
                 }
                 var command = undefined;
-                if (key=='up') {
-                    this.adjustVolume(true);
-                } else if (key=='down') {
-                    this.adjustVolume(false);
-                } else if (key=='left') {
-                    command=['button', 'jump_rew'];
-                } else if (key=='right') {
-                    command=['playlist', 'index', '+1'];
-                } else if (key=='space') {
-                    command=[this.isPlaying ? 'pause' : 'play']
+                if ('alt'!=modifier) {
+                    if (key=='space') {
+                        command=[this.isPlaying ? 'pause' : 'play']
+                    }
+                } else {
+                    if (key=='up') {
+                        this.adjustVolume(true);
+                    } else if (key=='down') {
+                        this.adjustVolume(false);
+                    } else if (key=='left') {
+                        command=['button', 'jump_rew'];
+                    } else if (key=='right') {
+                        command=['playlist', 'index', '+1'];
+                    }
                 }
 
                 if (command) {

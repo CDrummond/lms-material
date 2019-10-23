@@ -440,7 +440,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
             bindKey('left', 'mod');
             bus.$on('keyboard', function(key, modifier) {
-                if (!this.$store.state.keyboardControl || this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.desktop && this.$store.state.page!="browse")) {
+                if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.desktop && this.$store.state.page!="browse")) {
                     return;
                 }
                 if ('mod'==modifier) {

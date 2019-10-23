@@ -572,7 +572,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod');
             }
             bus.$on('keyboard', function(key, modifier) {
-                if (!this.$store.state.keyboardControl || 'mod'!=modifier || this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.desktop && this.$store.state.page!="now-playing")) {
+                if ('mod'!=modifier || this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.desktop && this.$store.state.page!="now-playing")) {
                     return;
                 }
                 if (LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog')) {

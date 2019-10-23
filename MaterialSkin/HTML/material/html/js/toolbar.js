@@ -390,7 +390,7 @@ Vue.component('lms-toolbar', {
                 bindKey('9', 'alt');
                 bindKey('0', 'alt');
                 bus.$on('keyboard', function(key, modifier) {
-                    if (!this.$store.state.keyboardControl || this.$store.state.openDialogs.length>0) {
+                    if (this.$store.state.openDialogs.length>0) {
                         return;
                     }
                     if ('mod'==modifier) {

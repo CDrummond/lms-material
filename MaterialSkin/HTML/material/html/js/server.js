@@ -193,9 +193,7 @@ var lmsServer = Vue.component('lms-server', {
             if (indexes.length>0) {
                 var index = indexes.shift();
                 lmsCommand(this.$store.state.player.id, ["playlist", "delete", index]).then(({data}) => {
-                    if (indexes.length>0) {
-                        this.removeFromQueue(indexes);
-                    }
+                    this.removeFromQueue(indexes);
                 });
             } else {
                 this.updateCurrentPlayer();

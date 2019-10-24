@@ -4,6 +4,7 @@
 2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
 3. Use Alt+Arrow instead of just Arrow for shortcuts.
 4. When remapping icons, check object icon/icon-id property is a string.
+5. Fix broken expand now-playing button in desktop layout.
 
 1.1.0
 -----

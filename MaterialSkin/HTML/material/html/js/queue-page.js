@@ -705,7 +705,7 @@ var lmsQueue = Vue.component("lms-queue", {
         clearSelection() {
             this.selectStart = undefined;
             var selection = Array.from(this.selection);
-            for (var i=0, len=selection.size; i<len; ++i) {
+            for (var i=0, len=selection.length; i<len; ++i) {
                 var index = selection[i];
                 if (index>-1 && index<this.items.length) {
                     var idx = this.items[index].actions.indexOf(UNSELECT_ACTION);

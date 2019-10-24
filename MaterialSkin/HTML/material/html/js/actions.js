@@ -44,13 +44,9 @@ const SEARCH_PODCAST_ACTION   = 34;
 
 const PQ_PLAY_NOW_ACTION      = 35;
 const PQ_PLAY_NEXT_ACTION     = 36;
-const PQ_REMOVE_ACTION        = 37;
-const PQ_MORE_ACTION          = 38;
-const PQ_SELECT_ACTION        = 39;
-const PQ_UNSELECT_ACTION      = 40;
-const PQ_SCROLL_ACTION        = 41;
-const PQ_ADD_URL_ACTION       = 42;
-const PQ_MOVE_QUEUE_ACTION    = 43;
+const PQ_SCROLL_ACTION        = 37;
+const PQ_ADD_URL_ACTION       = 38;
+const PQ_MOVE_QUEUE_ACTION    = 39;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -91,10 +87,6 @@ var ACTIONS=[
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
-    {cmd:"pq-remove",    icon: "remove_circle_outline"},
-    {cmd:"pq-more",      svg:  "more"},
-    {cmd:"pq-select",    icon: "check_box_outline_blank"},
-    {cmd:"pq-unselect",  icon: "check_box"},
     {cmd:"pq-scroll",    svg:  "current-track"},
     {cmd:"pq-addurl",    icon: "add"},
     {cmd:"pq-movequeue", icon: "swap_horiz"}
@@ -109,7 +101,7 @@ function updateActionStrings() {
     ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
     ACTIONS[INSERT_ACTION].title=i18n("Play next");
     ACTIONS[MORE_ACTION].title=i18n("More");
-    ACTIONS[MORE_LIB_ACTION].title=ACTIONS[PQ_MORE_ACTION].title=i18n("More");
+    ACTIONS[MORE_LIB_ACTION].title=i18n("More");
     ACTIONS[RENAME_ACTION].title=i18n("Rename");
     ACTIONS[EDIT_ACTION].title=i18n("Edit");
     ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
@@ -120,8 +112,8 @@ function updateActionStrings() {
     ACTIONS[REMOVE_ACTION].title=i18n("Remove");
     ACTIONS[PIN_ACTION].title=i18n("Pin to home screen");
     ACTIONS[UNPIN_ACTION].title=i18n("Un-pin from home screen");
-    ACTIONS[SELECT_ACTION].title=ACTIONS[PQ_SELECT_ACTION].title=i18n("Select");
-    ACTIONS[UNSELECT_ACTION].title=ACTIONS[PQ_UNSELECT_ACTION].title=i18n("Un-select");
+    ACTIONS[SELECT_ACTION].title=i18n("Select");
+    ACTIONS[UNSELECT_ACTION].title=i18n("Un-select");
     ACTIONS[RATING_ACTION].title=i18n("Set rating");
     ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
     ACTIONS[SEARCH_LIB_ACTION].key=LMS_SEARCH_KEYBOARD;
@@ -143,7 +135,6 @@ function updateActionStrings() {
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");
-    ACTIONS[PQ_REMOVE_ACTION].title=i18n("Remove from queue");
     ACTIONS[PQ_SCROLL_ACTION].title=i18n("Scroll queue to current track");
     ACTIONS[PQ_SCROLL_ACTION].key=LMS_SCROLL_QUEUE_KEYBOARD;
     ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL to queue");

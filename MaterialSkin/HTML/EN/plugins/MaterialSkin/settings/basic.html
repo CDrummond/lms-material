@@ -1,5 +1,9 @@
 [% PROCESS settings/header.html %]
 
+	[% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PASSWORD" desc="PLUGIN_MATERIAL_SKIN_PASSWORD_DESC" %]
+        <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
+	[% END %]
+
 	[% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES" desc="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC" %]
         <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="8">[% prefs.composergenres %]</textarea>
 	[% END %]

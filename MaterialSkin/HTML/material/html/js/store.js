@@ -164,7 +164,8 @@ const store = new Vuex.Store({
         pluginUpdatesAvailable: false,
         queueThreeLines: false,
         openDialogs: [],
-        activeDialog: undefined
+        activeDialog: undefined,
+        unlockAll: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -361,6 +362,14 @@ const store = new Vuex.Store({
             }).catch(err => {
                 state.dstmPlugin = false;
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
+            });
+
+            var pass = queryValue("pass");
+            lmsCommand("", ["material-skin", "checkpassword", "pass:"+(undefined==pass ? "-" : pass)]).then(({data}) => {
+                if (1==parseInt(data.result.ok)) {
+                    state.unlockAll = true;
+                }
+            }).catch(err => {
             });
 
             // Read defaults, stored on server

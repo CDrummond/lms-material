@@ -64,7 +64,8 @@ sub initPlugin {
 
     $prefs->init({
         composergenres => $DEFAULT_COMPOSER_GENRES,
-        conductorgenres => $DEFAULT_CONDUCTOR_GENRES
+        conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
+        password => ''
     });
 
     if (main::WEBUI) {
@@ -151,7 +152,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'checkpassword']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -188,12 +189,12 @@ sub _cliCommand {
 
     if ($cmd eq 'info') {
         my $osDetails = Slim::Utils::OSDetect::details();
-        my $prefs = preferences('server');
+        my $serverPrefs = preferences('server');
         $request->addResult('info', '{"server":'
                                 .'[ {"label":"' . cstring('', 'INFORMATION_VERSION') . '", "text":"' . $::VERSION . ' - ' . $::REVISION . ' @ ' . $::BUILDDATE . '"},'
                                 .  '{"label":"' . cstring('', 'INFORMATION_HOSTNAME') . '", "text":"' . Slim::Utils::Network::hostName() . '"},'
                                 .  '{"label":"' . cstring('', 'INFORMATION_SERVER_IP') . '", "text":"' . Slim::Utils::Network::serverAddr() . '"},'
-                                .  '{"label":"' . cstring('', 'INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $prefs->get('language') . ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
+                                .  '{"label":"' . cstring('', 'INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverPrefs->get('language') . ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
                                 .  '{"label":"' . cstring('', 'INFORMATION_ARCHITECTURE') . '", "text":"' . ($osDetails->{'osArch'} ? $osDetails->{'osArch'} : '?') . '"},'
                                 .  '{"label":"' . cstring('', 'PERL_VERSION') . '", "text":"' . $Config{'version'} . ' - ' . $Config{'archname'} . '"},'
                                 .  '{"label":"Audio::Scan", "text":"' . $Audio::Scan::VERSION . '"},'
@@ -292,10 +293,10 @@ sub _cliCommand {
         my $name = $request->getParam('name');
         my $url = $request->getParam('url');
         if ($name && $url) {
-            my $prefs = preferences('plugin.podcast');
-            my $feeds = $prefs->get('feeds');
+            my $podPrefs = preferences('plugin.podcast');
+            my $feeds = $podPrefs->get('feeds');
             push @{$feeds}, { 'name' => $name, 'value' => $url };
-            $prefs->set(feeds => $feeds);
+            $podPrefs->set(feeds => $feeds);
             $request->setStatusDone();
             return;
         }
@@ -304,11 +305,11 @@ sub _cliCommand {
     if ($cmd eq 'delete-podcast') {
         my $pos = $request->getParam('pos');
         if ($pos) {
-            my $prefs = preferences('plugin.podcast');
-            my $feeds = $prefs->get('feeds');
+            my $podPrefs = preferences('plugin.podcast');
+            my $feeds = $podPrefs->get('feeds');
             if ($pos < scalar @{$feeds}) {
                 splice @{$feeds}, $pos, 1;
-                $prefs->set(feeds => $feeds);
+                $podPrefs->set(feeds => $feeds);
                 $request->setStatusDone();
                 return;
             }
@@ -358,6 +359,20 @@ sub _cliCommand {
         my $id = $request->getParam('id');
         if ($id) {
             Slim::Music::VirtualLibraries->unregisterLibrary($id);
+            $request->setStatusDone();
+            return;
+        }
+    }
+
+    if ($cmd eq 'checkpassword') {
+        my $pass = $request->getParam('pass');
+        if ($pass) {
+            my $storedPass = $prefs->get('password');
+            if (($storedPass eq '') || ($storedPass eq $pass)) {
+                $request->addResult("ok", 1);
+            } else {
+                $request->addResult("ok", 0);
+            }
             $request->setStatusDone();
             return;
         }

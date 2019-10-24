@@ -27,3 +27,9 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
 	NL	Comma gesepareerde lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
+
+PLUGIN_MATERIAL_SKIN_PASSWORD
+	EN	PIN
+
+PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
+	EN	Set a password/pin to control access to alarms and server settings. If set, you will need to pass "pass=<Value>" in Material's URL. e.g. if password is "Test" then you should use "http://localhost:9000/material?pass=Test"

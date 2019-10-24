@@ -43,18 +43,18 @@ Vue.component('lms-player-settings', {
     <v-list-tile>
      <v-btn @click="setSleep()" flat style="margin-left:-8px"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn>
     </v-list-tile>
-    <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Alarms')}}</v-header>
-     <v-list-tile>
+    <div class="dialog-padding" v-if="unlockAll"></div>
+    <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('Alarms')}}</v-header>
+     <v-list-tile v-if="unlockAll">
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
       <v-list-tile-action><v-switch v-model="alarms.on"></v-switch></v-list-tile-action>
      </v-list-tile>
-      <div class="settings-sub-pad"></div>
-     <v-subheader class="alarm-sched-header">{{i18n('Scheduled alarms')}}</v-subheader>
-     <template v-for="(item, index) in alarms.scheduled">
+     <div class="settings-sub-pad" v-if="unlockAll"></div>
+     <v-subheader class="alarm-sched-header" v-if="unlockAll">{{i18n('Scheduled alarms')}}</v-subheader>
+     <template v-for="(item, index) in alarms.scheduled" v-if="unlockAll">
       <v-list-tile class="alarm-entry">
        <v-checkbox v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-checkbox>
        <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
@@ -62,16 +62,16 @@ Vue.component('lms-player-settings', {
       </v-list-tile>
       <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
      </template>
-     <v-btn flat @click.stop="addAlarm()" class="alarm-add"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
-     <div class="settings-sub-pad"></div>
-     <v-subheader>{{i18n('Alarm settings')}}</v-subheader>
-     <v-list-tile>
+     <v-btn flat @click.stop="addAlarm()" class="alarm-add" v-if="unlockAll"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
+     <div class="settings-sub-pad" v-if="unlockAll"></div>
+     <v-subheader v-if="unlockAll">{{i18n('Alarm settings')}}</v-subheader>
+     <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
      </v-list-tile>
-     <v-list-tile>
+     <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
      </v-list-tile>
-     <v-list-tile>
+     <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
 
@@ -81,10 +81,10 @@ Vue.component('lms-player-settings', {
      <v-btn @click="browseModesDialog.show=true" flat><v-icon class="btn-icon">library_music</v-icon>{{i18n('Configure browse modes')}}</v-btn>
 
      <div class="dialog-padding"></div>
-     <div class="dialog-padding"></div>
-     <v-header class="dialog-section-header">{{i18n('Extra settings')}}</v-header>
-     <v-list-tile class="settings-note"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
-     <v-btn @click="showAllSettings" flat><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
+     <div class="dialog-padding" v-if="unlockAll"></div>
+     <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('Extra settings')}}</v-header>
+     <v-list-tile class="settings-note" v-if="unlockAll"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
+     <v-btn @click="showAllSettings" flat v-if="unlockAll"><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
      <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
@@ -233,6 +233,9 @@ Vue.component('lms-player-settings', {
             }
             var parts = this.alarmDialog.time.split(":");
             return formatTime((parseInt(parts[0])*60*60)+(parseInt(parts[1])*60), false);
+        },
+        unlockAll() {
+            return this.$store.state.unlockAll
         }
     },
     mounted() {

@@ -426,6 +426,23 @@ function parseQueryParams() {
     }
 }
 
+function queryValue(param) {
+    var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
+    var hash = queryString.indexOf('#');
+    if (hash>0) {
+        queryString=queryString.substring(0, hash);
+    }
+    var query = queryString.split('&');
+
+    for (var i = query.length - 1; i >= 0; i--) {
+        var kv = query[i].split('=');
+        if (param==kv[0]) {
+            return kv[1];
+        }
+    }
+    return undefined;
+}
+
 function isLandscape() {
     return window.innerWidth > (window.innerHeight*1.4);
 }

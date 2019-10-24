@@ -149,7 +149,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, PQ_REMOVE_ACTION, PQ_SELECT_ACTION, PQ_MORE_ACTION],
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index
@@ -185,7 +185,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
-   <v-btn :title="trans.remove" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
+   <v-btn :title="trans.removeall" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
    <v-divider vertical v-if="desktop"></v-divider>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
@@ -293,7 +293,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playerStatus: { shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined, save:undefined, saveShortcut:undefined, clear:undefined, clearShortcut:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, remove:undefined, dstm:undefined },
+                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, dstm:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             selection: new Set(),
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
@@ -513,7 +513,7 @@ var lmsQueue = Vue.component("lms-queue", {
                           clear:i18n("Clear queue"), clearShortcut:i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
-                          selectMultiple:i18n("Select multiple items"), remove:PQ_REMOVE_ACTION.title, dstm:i18n("Don't Stop The Music")};
+                          selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), dstm:i18n("Don't Stop The Music")};
         },
         handleScroll() {
             this.scrollAnimationFrameReq = undefined;
@@ -610,26 +610,26 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (index!==this.currentIndex) {
                     bus.$emit('playerCommand', ["playlist", "move", index, index>this.currentIndex ? this.currentIndex+1 : this.currentIndex]);
                 }
-            } else if (PQ_REMOVE_ACTION===act) {
+            } else if (REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
-            } else if (PQ_MORE_ACTION===act) {
+            } else if (MORE_ACTION===act) {
                 bus.$emit('trackInfo', item, index, 'queue');
                 if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
                 }
-            } else if (PQ_SELECT_ACTION===act) {
+            } else if (SELECT_ACTION===act) {
                 if (!this.selection.has(index)) {
                     this.selection.add(index);
                     item.selected = true;
-                    var idx = item.actions.indexOf(PQ_SELECT_ACTION);
+                    var idx = item.actions.indexOf(SELECT_ACTION);
                     if (idx>-1) {
-                        item.actions[idx]=PQ_UNSELECT_ACTION;
+                        item.actions[idx]=UNSELECT_ACTION;
                     }
                     forceItemUpdate(this, item);
                     if (event && event.shiftKey) {
                         if (undefined!=this.selectStart) {
                             for (var i=this.selectStart<index ? this.selectStart : index, stop=this.selectStart<index ? index : this.selectStart, len=this.items.length; i<=stop && i<len; ++i) {
-                                this.itemAction(PQ_SELECT_ACTION, this.items[i], i);
+                                this.itemAction(SELECT_ACTION, this.items[i], i);
                             }
                             this.selectStart = undefined;
                         } else {
@@ -641,14 +641,14 @@ var lmsQueue = Vue.component("lms-queue", {
                 } else {
                     this.selectStart = undefined;
                 }
-            } else if (PQ_UNSELECT_ACTION===act) {
+            } else if (UNSELECT_ACTION===act) {
                 this.selectStart = undefined;
                 if (this.selection.has(index)) {
                     this.selection.delete(idx);
                     item.selected = false;
-                    var idx = item.actions.indexOf(PQ_UNSELECT_ACTION);
+                    var idx = item.actions.indexOf(UNSELECT_ACTION);
                     if (idx>-1) {
-                        item.actions[idx]=PQ_SELECT_ACTION;
+                        item.actions[idx]=SELECT_ACTION;
                     }
                     forceItemUpdate(this, item);
                 }
@@ -691,9 +691,9 @@ var lmsQueue = Vue.component("lms-queue", {
             for (var i=0, len=selection.size; i<len; ++i) {
                 var index = selection[i];
                 if (index>-1 && index<this.items.length) {
-                    var idx = this.items[index].actions.indexOf(PQ_UNSELECT_ACTION);
+                    var idx = this.items[index].actions.indexOf(UNSELECT_ACTION);
                     if (idx>-1) {
-                        this.items[index].actions[idx]=PQ_SELECT_ACTION;
+                        this.items[index].actions[idx]=SELECT_ACTION;
                     }
                     this.items[index].selected = false;
                 }
@@ -707,7 +707,7 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         select(item, index, event) {
             if (this.selection.size>0) {
-                this.itemAction(this.selection.has(index) ? PQ_UNSELECT_ACTION : PQ_SELECT_ACTION, item, index, event);
+                this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
             }
         },
         getDuration() {

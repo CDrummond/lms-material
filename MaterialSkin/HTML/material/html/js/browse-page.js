@@ -37,6 +37,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="addSelectedItems()"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="playSelectedItems()"><v-icon>play_circle_outline</v-icon></v-btn>
    <v-divider vertical></v-divider>
+   <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
@@ -273,7 +274,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
-                     deleteall:undefined, removeall:undefined, choosepos:undefined },
+                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             libraryName: undefined,
@@ -491,7 +492,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
-                          deleteall:i18n("Delete all selected items"), removeall:i18n("Remove all selected items"),
+                          deleteall:i18n("Delete all selected items"), invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"),
                           choosepos:i18n("Choose position") };
 
             if (undefined==this.top || this.top.length==0) {
@@ -2070,6 +2071,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                     for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
                         this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
+                }
+            }
+        },
+        invertSelection() {
+            if (this.selection.size==this.items.length) {
+                this.clearSelection();
+                return;
+            }
+            this.selection = new Set();
+            for (var i=0, len=this.items.length; i<len; ++i) {
+                if (this.items[i].selected) {
+                    this.items[i].selected = false;
+                } else {
+                    this.selection.add(i);
+                    this.items[i].selected = true;
                 }
             }
         },

@@ -187,6 +187,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-spacer></v-spacer>
    <v-btn :title="trans.removeall" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
    <v-divider vertical v-if="desktop"></v-divider>
+   <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
@@ -293,7 +294,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playerStatus: { shuffle:0, repeat: 0 },
             trans: { ok: undefined, cancel: undefined, save:undefined, saveShortcut:undefined, clear:undefined, clearShortcut:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, dstm:undefined },
+                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             selection: new Set(),
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
@@ -513,7 +514,8 @@ var lmsQueue = Vue.component("lms-queue", {
                           clear:i18n("Clear queue"), clearShortcut:i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
-                          selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), dstm:i18n("Don't Stop The Music")};
+                          selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
+                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music")};
         },
         handleScroll() {
             this.scrollAnimationFrameReq = undefined;
@@ -684,6 +686,21 @@ var lmsQueue = Vue.component("lms-queue", {
             selection.sort(function(a, b) { return a<b ? 1 : -1; });
             bus.$emit('removeFromQueue', selection);
             this.clearSelection();
+        },
+        invertSelection() {
+            if (this.selection.size==this.items.length) {
+                this.clearSelection();
+                return;
+            }
+            this.selection = new Set();
+            for (var i=0, len=this.items.length; i<len; ++i) {
+                if (this.items[i].selected) {
+                    this.items[i].selected = false;
+                } else {
+                    this.selection.add(i);
+                    this.items[i].selected = true;
+                }
+            }
         },
         clearSelection() {
             this.selectStart = undefined;

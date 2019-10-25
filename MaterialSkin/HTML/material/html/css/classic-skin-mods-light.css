@@ -60,6 +60,14 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:fo
  border-bottom: 1px solid #1976d2;
 }
 
+textarea {
+ border: 1px solid #bbb;
+}
+
+textarea:focus {
+ border: 1px solid #1976d2;
+}
+
 /* text enty auto-complete */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

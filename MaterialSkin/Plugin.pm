@@ -152,7 +152,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'checkpassword']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -364,7 +364,18 @@ sub _cliCommand {
         }
     }
 
-    if ($cmd eq 'checkpassword') {
+    if ($cmd eq 'pass-isset') {
+        my $storedPass = $prefs->get('password');
+        if (($storedPass eq '')) {
+            $request->addResult("set", 0);
+        } else {
+            $request->addResult("set", 1);
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'pass-check') {
         my $pass = $request->getParam('pass');
         if ($pass) {
             my $storedPass = $prefs->get('password');

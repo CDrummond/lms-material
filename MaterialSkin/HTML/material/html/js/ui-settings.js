@@ -88,6 +88,10 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="android">
      <v-select :items="lsAndNotifItems" :label="i18n('Lock screen and notification controls')" v-model="lsAndNotif" item-text="label" item-value="key"></v-select>
     </v-list-tile>
+    <v-divider v-if="hasPassword"></v-divider>
+    <v-list-tile v-if="hasPassword">
+     <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
+    </v-list-tile>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
@@ -289,7 +293,9 @@ Vue.component('lms-ui-settings', {
             showPresets: false,
             allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
             sortHome: isIPhone(),
-            showItems: [ ]
+            showItems: [ ],
+            hasPassword: false,
+            password: undefined
         }
     },
     computed: {
@@ -319,6 +325,7 @@ Vue.component('lms-ui-settings', {
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
+            this.password = getLocalStorageBool('password', '');
             if (this.allowLayoutAdjust) {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
@@ -340,6 +347,13 @@ Vue.component('lms-ui-settings', {
             if (!disabled.has(TOP_REMOTE_ID)) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
+            this.hasPassword = false;
+            lmsCommand("", ["material-skin", "pass-isset"]).then(({data}) => {
+                if (1==parseInt(data.result['set'])) {
+                    this.hasPassword = true;
+                }
+            }).catch(err => {
+            });
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
@@ -399,6 +413,9 @@ Vue.component('lms-ui-settings', {
                 } else {
                     setAutoLayout(this.layout == "auto");
                 }
+            }
+            if (this.password != getLocalStorageBool('password', '-')) {
+                this.$store.commit('setPassword', this.password);
             }
         },
         saveAsDefault() {

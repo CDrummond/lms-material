@@ -364,8 +364,8 @@ const store = new Vuex.Store({
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             });
 
-            var pass = queryValue("pass");
-            lmsCommand("", ["material-skin", "checkpassword", "pass:"+(undefined==pass ? "-" : pass)]).then(({data}) => {
+            var pass = getLocalStorageBool('password', '-');
+            lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
                 if (1==parseInt(data.result.ok)) {
                     state.unlockAll = true;
                 }
@@ -467,6 +467,16 @@ const store = new Vuex.Store({
         },
         setPluginUpdatesAvailable(state, val) {
             state.pluginUpdatesAvailable = val;
+        },
+        setPassword(state, pass) {
+            setLocalStorageVal('password', pass);
+            state.unlockAll = false;
+            lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length ? "-" : pass)]).then(({data}) => {
+                if (1==parseInt(data.result.ok)) {
+                    state.unlockAll = true;
+                }
+            }).catch(err => {
+            });
         }
     }
 })

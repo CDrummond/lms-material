@@ -14,12 +14,12 @@ Vue.component('lms-podcast-add-dialog', {
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable v-if="show" :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
+      <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable autofocus :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
+      <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
      </v-list-tile-content>
      <v-list-tile-action><v-btn flat @click="validate">{{i18n('Validate')}}</v-btn></v-list-tile-action>
     </v-list-tile>
@@ -52,6 +52,7 @@ Vue.component('lms-podcast-add-dialog', {
             this.url = "";
             this.name = "";
             this.show = true;
+            focusEntry(this);
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'podcastadd') {

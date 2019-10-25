@@ -819,3 +819,7 @@ function isPlaylist(filename) {
     }
     return PLAYLIST_EXTENSIONS.has(parts[parts.length-1].toLowerCase());
 }
+
+function focusEntry(ui) {
+    ui.$nextTick(() => { ui.$nextTick(() => { ui.$refs.entry.focus()}); });
+}

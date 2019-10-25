@@ -14,7 +14,7 @@ Vue.component('lms-groupplayers-dialog', {
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable autofocus :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
+      <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile>
@@ -101,11 +101,13 @@ Vue.component('lms-groupplayers-dialog', {
                             });
                         }
                         this.show = true;
+                        focusEntry(this);
                     }
                 });
             } else if ('create'==mode) {
                 this.setDefaults();
                 this.show = true;
+                focusEntry(this);
             }
         }.bind(this));
         bus.$on('noPlayers', function() {

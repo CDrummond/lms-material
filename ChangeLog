@@ -12,6 +12,8 @@
     mobile.
 10. Tweaks to classic skin used for settings, etc.
 11. Set focus each time a dialog is shown.
+12. Customise shortcut text (Ctrl/Command) depending upon whether OS is Mac or
+    not.
 
 1.1.0
 -----

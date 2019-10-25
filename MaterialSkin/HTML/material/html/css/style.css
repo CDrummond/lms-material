@@ -1100,10 +1100,15 @@ div.v-subheader {
 }
 
 .v-menu__content .v-list__tile .menu-shortcut {
- min-width:72px!important;
+ min-width:40px!important;
  margin-left:16px;
+ margin-right:4px;
  opacity:var(--sub-opacity);
  justify-content:flex-start;
+}
+
+.v-menu__content .v-list__tile .player-menu-shortcut {
+ min-width:68px!important;
 }
 
 .v-menu__content .v-list__tile .menu-shortcut-player {

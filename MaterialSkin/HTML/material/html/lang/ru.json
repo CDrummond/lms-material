@@ -386,8 +386,8 @@
 "Appended track to the play queue":"",
 "Clear queue":"",
 "Configure browse modes":"",
-"Ctrl(⌘)+%1":"",
-"Ctrl(⌘)+Shift+%1":"",
+"Ctrl+%1":"",
+"Ctrl+Shift+%1":"",
 "Decrease volume":"",
 "Don't Stop The Music":"",
 "Enable keyboard shortcuts":"",
@@ -402,5 +402,7 @@
 "Save queue":"",
 "Scroll queue to current track":"",
 "Spacebar":"",
-"Switch to Nth player":""
+"Switch to Nth player":"",
+"⌘+%1":"",
+"⌘+Shift+%1":""
 }

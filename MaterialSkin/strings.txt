@@ -29,7 +29,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	NL	Comma gesepareerde lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
-	EN	Password/PIN
+	EN	Password
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
-	EN	Set a password/pin to control access to alarms and server settings. If set, you will need to pass "pass=<Value>" in Material's URL. e.g. if password is "Test" then you should use "http://localhost:9000/material?pass=Test"
+	EN	Set a password to control access to alarms and server settings.

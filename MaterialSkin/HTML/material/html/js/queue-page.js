@@ -164,11 +164,11 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
 var lmsQueue = Vue.component("lms-queue", {
   template: `
 <div> 
- <v-dialog v-model="dialog.show" persistent max-width="500px">
+ <v-dialog v-model="dialog.show" v-if="dialog.show" persistent max-width="500px">
   <v-card>
    <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
+    <v-text-field single-line :label="dialog.hint" v-model="dialog.value" @keyup.enter="dialogResponse(true);" ref="entry"></v-text-field>
    </v-card-text>
    <v-card-actions>
     <v-spacer></v-spacer>
@@ -537,6 +537,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
             this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save'};
+            focusEntry(this);
         },
         clear() {
             if (this.items.length<1) {
@@ -650,6 +651,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (act==PQ_ADD_URL_ACTION) {
                 this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add'};
+                focusEntry(this);
             } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length<1) {
                     bus.$emit('showMessage', i18n('Nothing playing'));

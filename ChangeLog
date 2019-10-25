@@ -11,6 +11,7 @@
  9. Mark icon buttons as non-selectable to try and prevent copy dialog on
     mobile.
 10. Tweaks to classic skin used for settings, etc.
+11. Set focus each time a dialog is shown.
 
 1.1.0
 -----

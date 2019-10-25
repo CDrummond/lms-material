@@ -10,11 +10,11 @@ var B_ALBUM_SORTS=[ ];
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <v-dialog v-model="dialog.show" persistent max-width="500px">
+ <v-dialog v-model="dialog.show" v-if="dialog.show" persistent max-width="500px">
   <v-card>
    <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
+    <v-text-field single-line :label="dialog.hint" v-model="dialog.value" @keyup.enter="dialogResponse(true);" ref="entry"></v-text-field>
    </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
@@ -1035,6 +1035,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]}
                                     : { show:true, title:i18n("Rename favorite"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                         command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
+                focusEntry(this);
             } else if (act==ADD_FAV_ACTION || act==ADD_PRESET_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length}, act==ADD_PRESET_ACTION);
             } else if (act==EDIT_ACTION) { // NOTE: Also edits presets!
@@ -1042,6 +1043,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act==ADD_FAV_FOLDER_ACTION) {
                 this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length] };
+                focusEntry(this);
             } else if (act==SAVE_PRESET_ACTION || act==MOVE_PRESET_ACTION) {
                 showMenu(this, { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
             } else if (act===DELETE_ACTION) {

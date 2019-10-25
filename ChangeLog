@@ -8,6 +8,7 @@
 6. Fix updating queue when remove a selection of tracks.
 7. Place 'Server settings' back into main menu.
 8. Fix missing shortcuts from some queue action tooltips.
+9. Mark icon buttons as non-selectable to try and prevent copy dialog on mobile.
 
 1.1.0
 -----

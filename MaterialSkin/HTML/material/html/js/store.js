@@ -364,7 +364,7 @@ const store = new Vuex.Store({
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             });
 
-            var pass = getLocalStorageBool('password', '-');
+            var pass = getLocalStorageVal('password', '-');
             lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
                 if (1==parseInt(data.result.ok)) {
                     state.unlockAll = true;

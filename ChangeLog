@@ -1,14 +1,16 @@
 1.1.1
 -----
-1. Fix menu icon missing from grid items.
-2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
-3. Use Alt+Arrow instead of just Arrow for shortcuts.
-4. When remapping icons, check object icon/icon-id property is a string.
-5. Fix broken expand now-playing button in desktop layout.
-6. Fix updating queue when remove a selection of tracks.
-7. Place 'Server settings' back into main menu.
-8. Fix missing shortcuts from some queue action tooltips.
-9. Mark icon buttons as non-selectable to try and prevent copy dialog on mobile.
+ 1. Fix menu icon missing from grid items.
+ 2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
+ 3. Use Alt+Arrow instead of just Arrow for shortcuts.
+ 4. When remapping icons, check object icon/icon-id property is a string.
+ 5. Fix broken expand now-playing button in desktop layout.
+ 6. Fix updating queue when remove a selection of tracks.
+ 7. Place 'Server settings' back into main menu.
+ 8. Fix missing shortcuts from some queue action tooltips.
+ 9. Mark icon buttons as non-selectable to try and prevent copy dialog on
+    mobile.
+10. Tweaks to classic skin used for settings, etc.
 
 1.1.0
 -----

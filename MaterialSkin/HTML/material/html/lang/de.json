@@ -243,7 +243,6 @@
 "Select the player you wish to move the queue to:":"Wähle den Player, auf welchen du die Warteschlange übertragen willst:",
 "Select which players you would like to synchronise with '%1'.":"Wähle, mit welchen Geräten du synchronisieren willst",
 "Selected Genres":"Gewählte Stilrichtungen",
-"Server Settings":"Server-Einstellungen",
 "Server connection lost...":"Verbindung zum Server unterbrochen...",
 "Server is being restarted.":"Der Server wird neu gestartet",
 "Server settings":"Server-Einstellungen",
@@ -388,8 +387,8 @@
 "Alt+N":"",
 "Audio":"",
 "CD Player":"",
-"Ctrl(⌘)+%1":"",
-"Ctrl(⌘)+Shift+%1":"",
+"Ctrl+%1":"",
+"Ctrl+Shift+%1":"",
 "E-Mail":"",
 "Firmware: %1":"",
 "IP: %1":"",
@@ -403,5 +402,7 @@
 "Server":"",
 "Start":"",
 "URL":"",
-"Version":""
+"Version":"",
+"⌘+%1":"",
+"⌘+Shift+%1":""
 }

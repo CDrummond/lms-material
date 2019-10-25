@@ -46,7 +46,7 @@ var lmsLastScan = undefined;
 var haveLocalAndroidPlayer = false;
 
 var currentIpAddress = undefined;
-if (isAndroid()) { // currently only need to check current IP address to detect SB player, and this is Android only.
+if (IS_ANDROID) { // currently only need to check current IP address to detect SB player, and this is Android only.
     try {
         var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
         if (RTCPeerConnection)(function() {

@@ -7,6 +7,7 @@
 
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
+var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
@@ -97,13 +98,13 @@ Vue.component('lms-toolbar', {
    <v-list-tile v-if="!mini && !nowplaying && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
+    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut player-menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
+    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
@@ -145,7 +146,7 @@ Vue.component('lms-toolbar', {
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-list-tile v-else @click="menuAction(item.id)">
+    <v-list-tile v-else-if="item.id!=TB_SERVER_SETTINGS.id || unlockAll" @click="menuAction(item.id)">
      <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -376,6 +377,7 @@ Vue.component('lms-toolbar', {
             if (!this.mini && !this.nowplaying) {
                 bindKey(LMS_SETTINGS_KEYBOARD, 'mod');
                 bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
+                bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
                 bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
                 bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
                 bindKey(LMS_SYNC_KEYBOARD, 'mod');
@@ -395,8 +397,9 @@ Vue.component('lms-toolbar', {
                     }
                     if ('mod'==modifier) {
                         if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
-                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : TB_INFO.id);
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
+                                                LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
                                 bus.$emit('hideMenu', 'main');
                             }
                         } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
@@ -408,10 +411,10 @@ Vue.component('lms-toolbar', {
                                 bus.$emit('hideMenu', 'player');
                             }
                         } else if (this.$store.state.visibleMenus.size==0) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
+                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
                                 (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
                                 this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
-                                                LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
+                                                LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
                             } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
                                 bus.$emit('dlg.open', 'sync', this.$store.state.player);
                             }
@@ -483,19 +486,21 @@ Vue.component('lms-toolbar', {
             TB_UI_SETTINGS.shortcut=shortcutStr(LMS_SETTINGS_KEYBOARD);
             TB_PLAYER_SETTINGS.title=i18n('Player settings');
             TB_PLAYER_SETTINGS.shortcut=shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD);
+            TB_SERVER_SETTINGS.title=i18n('Server settings');
+            TB_SERVER_SETTINGS.shortcut=shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD);
             TB_INFO.title=i18n('Information');
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_MINI_PLAYER.title=i18n('Open mini-player');
-            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_INFO ];
+            this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
             if (this.desktop && !this.mini & !IS_MOBILE) {
                 this.menuItems.push(DIVIDER);
                 this.menuItems.push(TB_MINI_PLAYER);
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:shortcutStr(LMS_SYNC_KEYBOARD),
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
-                          showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD),
+                          showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
         },
@@ -509,6 +514,8 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'playersettings');
+            } else if (TB_SERVER_SETTINGS.id==id) {
+                bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title);
             } else if (TB_INFO.id==id) {
                 bus.$emit('dlg.open', 'info');
             } else if (TB_MANAGE_PLAYERS.id==id) {
@@ -682,7 +689,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.infoPlugin
         },
         showPlayerMenuEntry () {
-            return isAndroid() && this.$store.state.showPlayerMenuEntry
+            return IS_ANDROID && this.$store.state.showPlayerMenuEntry
         },
         isNowPlayingPage() {
             return this.$store.state.page == 'now-playing'
@@ -707,6 +714,9 @@ Vue.component('lms-toolbar', {
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
+        },
+        unlockAll() {
+            return this.$store.state.unlockAll
         }
     },
     filters: {

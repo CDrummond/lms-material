@@ -14,7 +14,7 @@ Vue.component('lms-favorite', {
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable autofocus v-if="show" :label="i18n('Name')" v-model="name" class="lms-search"></v-text-field>
+      <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile>
@@ -72,12 +72,14 @@ Vue.component('lms-favorite', {
                                 : undefined;
                 this.isAdd=false;
                 this.show=true;
+                focusEntry(this);
             } else if ('add'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.name = "";
                 this.url = "";
                 this.isAdd=true;
                 this.show=true;
+                focusEntry(this);
             }
         }.bind(this));
         bus.$on('noPlayers', function() {

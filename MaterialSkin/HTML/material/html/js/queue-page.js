@@ -164,11 +164,11 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
 var lmsQueue = Vue.component("lms-queue", {
   template: `
 <div> 
- <v-dialog v-model="dialog.show" persistent max-width="500px">
+ <v-dialog v-model="dialog.show" v-if="dialog.show" persistent max-width="500px">
   <v-card>
    <v-card-title>{{dialog.title}}</v-card-title>
    <v-card-text>
-    <v-text-field single-line v-if="dialog.show" :label="dialog.hint" v-model="dialog.value" autofocus @keyup.enter="dialogResponse(true);"></v-text-field>
+    <v-text-field single-line :label="dialog.hint" v-model="dialog.value" @keyup.enter="dialogResponse(true);" ref="entry"></v-text-field>
    </v-card-text>
    <v-card-actions>
     <v-spacer></v-spacer>
@@ -203,13 +203,13 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktop || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktop || wide>0"></v-divider>
    <template v-if="desktop || wide>1" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].shortcut,keyboardControl)" :id="'tbar'+index">
+    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn :title="trans.save | tooltip(trans.saveShortcut,keyboardControl)" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear | tooltip(trans.clearShortcut,keyboardControl)" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.save | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list" v-bind:class="{'lms-list-sub3':threeLines}">
@@ -292,7 +292,7 @@ var lmsQueue = Vue.component("lms-queue", {
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
-            trans: { ok: undefined, cancel: undefined, save:undefined, saveShortcut:undefined, clear:undefined, clearShortcut:undefined,
+            trans: { ok: undefined, cancel: undefined, save:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
                      shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
@@ -510,8 +510,7 @@ var lmsQueue = Vue.component("lms-queue", {
     },
     methods: {
         initItems() {
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), saveShortcut:i18n("Ctrl(⌘)+%1", LMS_SAVE_QUEUE_KEYBOARD),
-                          clear:i18n("Clear queue"), clearShortcut:i18n("Ctrl(⌘)+%1", LMS_CLEAR_QUEUE_KEYBOARD),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), clear:i18n("Clear queue"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
@@ -540,6 +539,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             var value=""+(undefined==this.playlistName ? "" : this.playlistName);
             this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save'};
+            focusEntry(this);
         },
         clear() {
             if (this.items.length<1) {
@@ -662,6 +662,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (act==PQ_ADD_URL_ACTION) {
                 this.dialog={show: true, title: i18n("Add a URL to play queue"), hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add'};
+                focusEntry(this);
             } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length<1) {
                     bus.$emit('showMessage', i18n('Nothing playing'));
@@ -998,8 +999,8 @@ var lmsQueue = Vue.component("lms-queue", {
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
-        tooltip: function (str, shortcut, showShortcut) {
-            return showShortcut ? str+SEPARATOR+shortcut : str;
+        tooltip: function (str, key, showShortcut) {
+            return showShortcut ? str+SEPARATOR+shortcutStr(key) : str;
         }
     },
     watch: {

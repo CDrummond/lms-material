@@ -176,7 +176,7 @@ Vue.component('lms-podcast-search-dialog', {
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
-     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
+     <v-text-field :label="i18n('Term')" clearable v-model="term" class="lms-search" @keyup.enter="search()" ref="entry"></v-text-field>
     </v-list-tile>
     <v-list-tile>
      <v-select :items="providers" :label="i18n('Provider')" v-model="provider" item-text="value" item-value="key"></v-select>
@@ -212,6 +212,7 @@ Vue.component('lms-podcast-search-dialog', {
             this.provider = getLocalStorageVal('podcasts-provider', 'itunes');
             this.country = getLocalStorageVal('podcasts-country', 'us');
             this.show=true;
+            focusEntry(this);
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'podcastsearch') {

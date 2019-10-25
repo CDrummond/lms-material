@@ -236,7 +236,6 @@
 "Select which players you would like to synchronise with '%1'.":"Какой плеер вы хотите синхронизировать с '%1'.",
 "Selected Genres":"Выбор жанра",
 "Server":"Сервер",
-"Server Settings":"Установки сервера",
 "Server connection lost...":"Соедеинение с сервером потеряно...",
 "Server is being restarted.":"Сервер перегружается",
 "Server settings":"Установки сервера",
@@ -387,8 +386,8 @@
 "Appended track to the play queue":"",
 "Clear queue":"",
 "Configure browse modes":"",
-"Ctrl(⌘)+%1":"",
-"Ctrl(⌘)+Shift+%1":"",
+"Ctrl+%1":"",
+"Ctrl+Shift+%1":"",
 "Decrease volume":"",
 "Don't Stop The Music":"",
 "Enable keyboard shortcuts":"",
@@ -403,5 +402,7 @@
 "Save queue":"",
 "Scroll queue to current track":"",
 "Spacebar":"",
-"Switch to Nth player":""
+"Switch to Nth player":"",
+"⌘+%1":"",
+"⌘+Shift+%1":""
 }

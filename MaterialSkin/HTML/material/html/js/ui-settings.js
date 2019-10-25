@@ -325,7 +325,7 @@ Vue.component('lms-ui-settings', {
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
-            this.password = getLocalStorageBool('password', '');
+            this.password = getLocalStorageVal('password', '');
             if (this.allowLayoutAdjust) {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
@@ -414,7 +414,7 @@ Vue.component('lms-ui-settings', {
                     setAutoLayout(this.layout == "auto");
                 }
             }
-            if (this.password != getLocalStorageBool('password', '-')) {
+            if (this.password != getLocalStorageVal('password', '-')) {
                 this.$store.commit('setPassword', this.password);
             }
         },

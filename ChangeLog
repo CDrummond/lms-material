@@ -6,12 +6,20 @@
 
 1.1.1
 -----
-1. Fix menu icon missing from grid items.
-2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
-3. Use Alt+Arrow instead of just Arrow for shortcuts.
-4. When remapping icons, check object icon/icon-id property is a string.
-5. Fix broken expand now-playing button in desktop layout.
-6. Fix updating queue when remove a selection of tracks.
+ 1. Fix menu icon missing from grid items.
+ 2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
+ 3. Use Alt+Arrow instead of just Arrow for shortcuts.
+ 4. When remapping icons, check object icon/icon-id property is a string.
+ 5. Fix broken expand now-playing button in desktop layout.
+ 6. Fix updating queue when remove a selection of tracks.
+ 7. Place 'Server settings' back into main menu.
+ 8. Fix missing shortcuts from some queue action tooltips.
+ 9. Mark icon buttons as non-selectable to try and prevent copy dialog on
+    mobile.
+10. Tweaks to classic skin used for settings, etc.
+11. Set focus each time a dialog is shown.
+12. Customise shortcut text (Ctrl/Command) depending upon whether OS is Mac or
+    not.
 
 1.1.0
 -----
@@ -99,9 +107,8 @@
    to add.
 4. Fix missing SVG icons when Material is set as default, and desktop/mobile
    URL is used. e.g. http://SERVER:9000/mobile
-5. If there is no player on this server, but there are players on another
-   server, then still show players menu - so that players may be moved to this
-   server.
+5. If there is no player on this server, but there are players on another server
+   then still show players menu - so that players may be moved to this server.
 6. Tweak 'text' list item margins.
 
 1.0.1

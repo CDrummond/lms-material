@@ -24,7 +24,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="openSettings" v-if="unlockAll" flat><v-icon class="btn-icon">dns</v-icon>{{i18n('Server Settings')}}</v-btn>
+    <v-btn @click="openSettings" v-if="unlockAll" flat><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -303,7 +303,7 @@ Vue.component('lms-information-dialog', {
             }
         },
         openSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', i18n('Server settings'));
+            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title);
         }
     },
     beforeDestroy() {

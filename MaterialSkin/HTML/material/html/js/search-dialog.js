@@ -13,7 +13,7 @@ Vue.component('lms-search-dialog', {
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
-     <v-text-field :label="i18n('Term')" clearable v-if="show" v-model="term" class="lms-search" autofocus @keyup.enter="search()"></v-text-field>
+     <v-text-field :label="i18n('Term')" clearable v-model="term" class="lms-search" @keyup.enter="search()" ref="entry"></v-text-field>
     </v-list-tile>
     <v-list-tile>
      <v-select :label="i18n('Category')" :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
@@ -43,6 +43,7 @@ Vue.component('lms-search-dialog', {
         bus.$on('search.open', function() {
             this.term = "";
             this.show = true;
+            focusEntry(this);
         }.bind(this));
         bus.$on('langChanged', function() {
             this.initItems();

@@ -98,13 +98,13 @@ Vue.component('lms-toolbar', {
    <v-list-tile v-if="!mini && !nowplaying && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
+    <v-list-tile-action v-if="keyboardControl" class="menu-shortcut player-menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
+    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
    <v-list-tile v-if="!mini && !nowplaying && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
@@ -689,7 +689,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.infoPlugin
         },
         showPlayerMenuEntry () {
-            return isAndroid() && this.$store.state.showPlayerMenuEntry
+            return IS_ANDROID && this.$store.state.showPlayerMenuEntry
         },
         isNowPlayingPage() {
             return this.$store.state.page == 'now-playing'

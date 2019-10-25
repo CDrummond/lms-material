@@ -356,8 +356,8 @@
 "Configure browse modes":"",
 "Country":"",
 "Creator":"",
-"Ctrl(⌘)+%1":"",
-"Ctrl(⌘)+Shift+%1":"",
+"Ctrl+%1":"",
+"Ctrl+Shift+%1":"",
 "Decrease volume":"",
 "Description":"",
 "Don't Stop The Music":"",
@@ -401,6 +401,8 @@
 "Use three lines (title, artist, album) to show track details.":"",
 "Validate":"",
 "Version":"",
+"⌘+%1":"",
+"⌘+Shift+%1":"",
 "1 Podcast":"",
 "%1 Podcasts":""
 }

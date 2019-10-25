@@ -290,22 +290,11 @@ function removeLocalStorage(key) {
     window.localStorage.removeItem(LS_PREFIX+key);
 }
 
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
-}
-const IS_MOBILE = isMobile();
-
-function isAndroid() {
-    return /Android/i.test(navigator.userAgent);
-}
-
-function isIOS() {
-    return /iPhone|iPad/i.test(navigator.userAgent);
-}
-
-function isIPhone() {
-    return /iPhone/i.test(navigator.userAgent);
-}
+const IS_MOBILE  = /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
+const IS_IOS     = /iPhone|iPad/i.test(navigator.userAgent);
+const IS_IPHONE  = /iPhone/i.test(navigator.userAgent);
+const IS_MAC     = /Mac/i.test(navigator.userAgent);
 
 function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
@@ -805,7 +794,10 @@ function bindKey(key, modifier) {
 }
 
 function shortcutStr(key, shift) {
-    return shift ? i18n("Ctrl(⌘)+Shift+%1", key) : i18n("Ctrl(⌘)+%1", key);
+    if (IS_MAC) {
+        return shift ? i18n("⌘+Shift+%1", key) : i18n("⌘+%1", key);
+    }
+    return shift ? i18n("Ctrl+Shift+%1", key) : i18n("Ctrl+%1", key);
 }
 
 const PLAYLIST_EXTENSIONS = new Set(["m3u", "m3u8", "pls", "xspf", "asx", "cue"]);

@@ -156,7 +156,7 @@ const store = new Vuex.Store({
         lsAndNotif:'playing',
         page:'browse',
         menuIcons: true,
-        sortHome: isIPhone(),
+        sortHome: IS_IPHONE,
         hidden: new Set(),
         visibleMenus: new Set(),
         swipeVolume: false,

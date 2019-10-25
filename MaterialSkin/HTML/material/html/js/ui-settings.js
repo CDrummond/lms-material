@@ -284,11 +284,11 @@ Vue.component('lms-ui-settings', {
             showPlayerMenuEntry: false,
             lsAndNotif: 'playing',
             lsAndNotifItems: [],
-            android: isAndroid(),
+            android: IS_ANDROID,
             menuIcons: true,
             showPresets: false,
             allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
-            sortHome: isIPhone(),
+            sortHome: IS_IPHONE,
             showItems: [ ]
         }
     },

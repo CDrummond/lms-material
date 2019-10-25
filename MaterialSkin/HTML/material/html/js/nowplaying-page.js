@@ -955,7 +955,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout(this.clickTimer);
-                    if (isIOS()) {
+                    if (IS_IOS) {
                         this.showMenu(event);
                     }
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);

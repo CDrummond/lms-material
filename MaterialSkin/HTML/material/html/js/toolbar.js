@@ -13,7 +13,21 @@ var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
 var mediaAudio = undefined;
+var mediaInterval = undefined;
 var mediaStarted = false;
+
+/*
+The 'MediaSession' is actually always paused -  to save wasting battery. With Kiwi browser, this is OK, and
+the pause button still sends a signal - allowing playback to be paused. However, with Chrome whilst the icon
+changes, no signal is sent.
+*/
+const MEDIA_SESSION_ALWAYS_SHOW_PLAY_BUTTON = true;
+
+/*
+With Chrome, if we don not repeatedly play/pause the session then the controls dissapear. Again, works OK
+with Kiwi.
+*/
+const MEDIA_SESSION_KEEP_ALIVE = true;
 
 function initMediaSessionAudio() {
     if (mediaAudio == undefined) {
@@ -30,14 +44,25 @@ function startMediaSession() {
     if (!mediaAudio || mediaStarted) {
         return;
     }
+    mediaStarted = true;
     mediaAudio.src = "html/audio/silence.ogg";
     mediaAudio.play().then(_ => {
         mediaAudio.currentTime = 0; // Go back to start
         mediaAudio.pause();
         toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
-        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
-        mediaStarted = true;
+        navigator.mediaSession.playbackState = !MEDIA_SESSION_ALWAYS_SHOW_PLAY_BUTTON && toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+
+        if (MEDIA_SESSION_KEEP_ALIVE) {
+            mediaInterval = setInterval(function() {
+                mediaAudio.play().then(_ => {
+                    mediaAudio.currentTime = 0; // Go back to start
+                    mediaAudio.pause();
+                    navigator.mediaSession.playbackState = !MEDIA_SESSION_ALWAYS_SHOW_PLAY_BUTTON && toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
+                });
+            }, 15*1000);
+        }
     }).catch(err => {
+        mediaStarted = false;
     });
 }
 
@@ -46,6 +71,10 @@ function stopMediaSession() {
         return;
     }
     mediaStarted = false;
+    if (MEDIA_SESSION_KEEP_ALIVE && mediaInterval) {
+        clearInterval(mediaInterval);
+        mediaInterval = undefined;
+    }
     if (mediaAudio.src) {
         mediaAudio.src = undefined;
     }
@@ -465,10 +494,11 @@ Vue.component('lms-toolbar', {
                     this.media.album = undefined;
                 } else {
                     startMediaSession();
-                    navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
+                    navigator.mediaSession.playbackState = !MEDIA_SESSION_ALWAYS_SHOW_PLAY_BUTTON && this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     var artist = track.trackartist ? track.trackartist : track.artist;
-                    if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
-                        this.media.title = track.title;
+                    var title = MEDIA_SESSION_ALWAYS_SHOW_PLAY_BUTTON ? (this.playerStatus && this.playerStatus.isplaying ? track.title : ("\u23f8 "+track.title)) : track.title;
+                    if (force || title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
+                        this.media.title = title;
                         this.media.artist = artist;
                         this.media.album = track.album;
                         navigator.mediaSession.metadata = new MediaMetadata({

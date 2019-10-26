@@ -3,6 +3,8 @@
 1. Use 'Shift' key to select a range of items.
 2. Add button to invert selection.
 3. Allow protecting alarms and settings via pin/password.
+4. Add option to play silence when lock screen and notification controls are
+   enabled.
 
 1.1.1
 -----

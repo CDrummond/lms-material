@@ -13,7 +13,33 @@ var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 var toolbarComponent;
 var mediaAudio = undefined;
+var mediaInterval = undefined;
 var mediaStarted = false;
+
+const MEDIA_SESSION_PLAY_SILENCE = getLocalStorageBool('playSilence', false);
+
+function controlAudio() {
+    if (!MEDIA_SESSION_PLAY_SILENCE || !mediaAudio || !mediaStarted) {
+        return;
+    }
+    if (toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying) {
+        if (mediaAudio.paused) {
+            mediaAudio.currentTime = 0; // Go back to start
+            mediaAudio.play().then(_ => {
+                mediaInterval = setInterval(function() {
+                    mediaAudio.currentTime = 0; // Go back to start
+                }, 5000);
+            }).catch(err => {
+            });
+        }
+    } else if (!mediaAudio.paused) {
+        mediaAudio.pause();
+        if (mediaInterval) {
+            clearInterval(mediaInterval);
+            mediaInterval=undefined;
+        }
+    }
+}
 
 function initMediaSessionAudio() {
     if (mediaAudio == undefined) {
@@ -28,6 +54,7 @@ function initMediaSessionAudio() {
 
 function startMediaSession() {
     if (!mediaAudio || mediaStarted) {
+        controlAudio();
         return;
     }
     mediaAudio.src = "html/audio/silence.ogg";
@@ -39,11 +66,16 @@ function startMediaSession() {
         mediaStarted = true;
     }).catch(err => {
     });
+    controlAudio();
 }
 
 function stopMediaSession() {
     if (!mediaStarted) {
         return;
+    }
+    if (mediaInterval) {
+        clearInterval(mediaInterval);
+        mediaInterval=undefined;
     }
     mediaStarted = false;
     if (mediaAudio.src) {
@@ -456,9 +488,7 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if ('mediaSession' in navigator) {
-                if (haveLocalAndroidPlayer || 'never'==this.$store.state.lsAndNotif ||
-                    ('playing'==this.$store.state.lsAndNotif &&
-                              (undefined==track || (isEmpty(track.title) && isEmpty(track.trackartist) && isEmpty(track.artist) && isEmpty(track.album)) ) ) ) {
+                if (haveLocalAndroidPlayer || !this.$store.state.lsAndNotif) {
                     stopMediaSession();
                     this.media.title = undefined;
                     this.media.artist = undefined;

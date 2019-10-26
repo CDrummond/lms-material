@@ -1,3 +1,9 @@
+1.1.2
+-----
+1. Re-apply lockscreen/notification hacks (always showing play button, state
+   shown by adding pause to title, and repeatledy play/pausing). These hacks are
+   required for Chrome - but not for Kiwi browser.
+
 1.1.1
 -----
  1. Fix menu icon missing from grid items.

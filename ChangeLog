@@ -6,6 +6,11 @@
 4. Add option to play silence when lock screen and notification controls are
    enabled.
 
+1.1.2
+-----
+1. If restarting server (e.g. after updating plugins) then reload page after 2.5
+   seconds.
+
 1.1.1
 -----
  1. Fix menu icon missing from grid items.

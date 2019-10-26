@@ -1,7 +1,7 @@
 1.1.1
 -----
  1. Fix menu icon missing from grid items.
- 2. If keyboard shortcuts are disabled, dont prevent the event from propogating.
+ 2. If keyboard shortcuts are disabled, dont prevent the event from propagating.
  3. Use Alt+Arrow instead of just Arrow for shortcuts.
  4. When remapping icons, check object icon/icon-id property is a string.
  5. Fix broken expand now-playing button in desktop layout.

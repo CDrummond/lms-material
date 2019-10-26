@@ -463,7 +463,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr(ACTIONS[ADD_FAV_FOLDER_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_FAV_FOLDER_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")];
             if (this.desktop) {
-                list.push(shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),+SEPARATOR+i18n("Expand now playing"));
+                list.push(shortcutStr(LMS_EXPAND_NP_KEYBOARD, true)+SEPARATOR+i18n("Expand now playing"));
             }
             list.push(shortcutStr(LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"));
             list.push(shortcutStr(LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"));

@@ -84,13 +84,27 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <v-divider v-if="android"></v-divider>
-    <v-list-tile v-if="android">
-     <v-select :items="lsAndNotifItems" :label="i18n('Lock screen and notification controls')" v-model="lsAndNotif" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
     <v-divider v-if="hasPassword"></v-divider>
     <v-list-tile v-if="hasPassword">
      <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
+    </v-list-tile>
+
+    <div class="dialog-padding" v-if="android"></div>
+    <v-header class="dialog-section-header" v-if="android">{{i18n('Lock screen and notification')}}</v-header>
+    <v-list-tile v-if="android">
+     <v-list-tile-content @click="lsAndNotif = !lsAndNotif" class="switch-label">
+      <v-list-tile-title>{{i18n('Show controls')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show playback controls and details of current track on Android's lock screen and notifications.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="lsAndNotif"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider v-if="android"></v-divider>
+    <v-list-tile v-if="android">
+     <v-list-tile-content @click="lsAndNotifPlaySilence = !lsAndNotifPlaySilence" class="switch-label">
+      <v-list-tile-title>{{i18n('Play silence')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Enable this option to have a dummy silence file played whilst LMS is playing music. This is required for some browsers (e.g. Chrome). If you togle this setting you will need to reload your browser session.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="lsAndNotifPlaySilence"></v-switch></v-list-tile-action>
     </v-list-tile>
 
     <div class="dialog-padding"></div>
@@ -286,8 +300,8 @@ Vue.component('lms-ui-settings', {
                          ],
             volumeStep: 5,
             showPlayerMenuEntry: false,
-            lsAndNotif: 'playing',
-            lsAndNotifItems: [],
+            lsAndNotif: true,
+            lsAndNotifPlaySilence: false,
             android: IS_ANDROID,
             menuIcons: true,
             showPresets: false,
@@ -305,6 +319,7 @@ Vue.component('lms-ui-settings', {
     },
     mounted() {
         bus.$on('uisettings.open', function(act) {
+            this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
             this.darkUi = this.$store.state.darkUi;
             this.largeFonts = this.$store.state.largeFonts;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
@@ -373,14 +388,10 @@ Vue.component('lms-ui-settings', {
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
                 ];
-            this.lsAndNotifItems=[
-                { key:"never",  label:i18n("Never")},
-                { key:"always", label:i18n("Always")},
-                { key:"playing", label:i18n("When playing")}
-                ];
         },
         close() {
             this.show=false;
+            setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
             this.$store.commit('setUiSettings', { darkUi:this.darkUi,
                                                   largeFonts:this.largeFonts,
                                                   autoScrollQueue:this.autoScrollQueue,

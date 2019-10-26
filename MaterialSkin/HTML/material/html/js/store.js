@@ -126,6 +126,15 @@ function updateUiSettings(state, val) {
     }
 }
 
+function convertLsAndNotif(val) {
+    if ('playing'==val || 'always'==val) {
+        return true;
+    } else if ('never'==val) {
+        return false;
+    }
+    return val;
+}
+
 const store = new Vuex.Store({
     state: {
         players: null, // List of players
@@ -153,7 +162,7 @@ const store = new Vuex.Store({
         ratingsSupport: false,
         maxRating: 5,
         showPlayerMenuEntry: false,
-        lsAndNotif:'playing',
+        lsAndNotif:true,
         page:'browse',
         menuIcons: true,
         sortHome: IS_IPHONE,
@@ -337,7 +346,7 @@ const store = new Vuex.Store({
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
-            state.lsAndNotif = getLocalStorageVal('lsAndNotif', state.lsAndNotif);
+            state.lsAndNotif = convertLsAndNotif(getLocalStorageVal('lsAndNotif', state.lsAndNotif));
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
@@ -394,7 +403,7 @@ const store = new Vuex.Store({
                                      nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
-                                     lsAndNotif: getLocalStorageVal('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : prefs.lsAndNotif),
+                                     lsAndNotif: getLocalStorageBool('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : convertLsAndNotif(prefs.lsAndNotif)),
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),

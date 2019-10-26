@@ -43,37 +43,6 @@ setInterval(function() {
 
 var lmsFavorites = new Set();
 var lmsLastScan = undefined;
-var haveLocalAndroidPlayer = false;
-
-var currentIpAddress = undefined;
-if (IS_ANDROID) { // currently only need to check current IP address to detect SB player, and this is Android only.
-    try {
-        var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-        if (RTCPeerConnection)(function() {
-            var rtc = new RTCPeerConnection({iceServers:[]});
-            rtc.createDataChannel('', {reliable: false});
-            rtc.onicecandidate = function(evt) {
-                if (evt.candidate) {
-                    grepSdp(evt.candidate.candidate);
-                }
-            };
-
-            rtc.createOffer(function(offerDesc) {
-                rtc.setLocalDescription(offerDesc);
-            }, function(e) { console.warn("Failed to get IP address", e); });
-
-            function grepSdp(sdp) {
-                var ip = /(192\.168\.(0|\d{0,3})\.(0|\d{0,3}))/i;
-                sdp.split('\r\n').forEach(function(line) {
-                    if (line.match(ip)) {
-                        currentIpAddress = line.match(ip)[0];
-                    }
-                });
-            }
-        })();
-    } catch(e) {
-    }
-}
 
 function isHidden() {
     var prop = getHiddenProp();
@@ -329,7 +298,6 @@ var lmsServer = Vue.component('lms-server', {
                 clearListCache();
             }
             if (data.players_loop) {
-                var localAndroidPlayer = false;
                 var ids = new Set();
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
@@ -340,10 +308,6 @@ var lmsServer = Vue.component('lms-server', {
                                        ison: undefined==i.power || 1==parseInt(i.power),
                                        isgroup: 'group'===i.model
                                       });
-                        // Check if we have a local SB Player - if so, can't use MediaSession
-                        if (!localAndroidPlayer && currentIpAddress && 'SB Player' ===i.modelname && i.ip.split(':')[0] == currentIpAddress) {
-                            localAndroidPlayer = true;
-                        }
                         ids.add(i.playerid);
                     }
                 }
@@ -353,12 +317,6 @@ var lmsServer = Vue.component('lms-server', {
                         if (!ids.has(i.playerid)) {
                             otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
                         }
-                    }
-                }
-                if (localAndroidPlayer != haveLocalAndroidPlayer) {
-                    haveLocalAndroidPlayer = localAndroidPlayer;
-                    if (haveLocalAndroidPlayer) {
-                        bus.$emit('haveLocalAndroidPlayer');
                     }
                 }
                 this.$store.commit('setPlayers', players.sort(playerSort));

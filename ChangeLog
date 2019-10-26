@@ -5,6 +5,7 @@
 3. Allow protecting alarms and settings via pin/password.
 4. Add option to play silence when lock screen and notification controls are
    enabled.
+5. No need to prevent media session if using SB Player, seems to work OK.
 
 1.1.2
 -----

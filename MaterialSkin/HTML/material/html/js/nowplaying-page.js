@@ -736,8 +736,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         fetchLyrics() {
             if (this.info.tabs[LYRICS_TAB].artist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||
-                (this.infoTrack.track_id && this.info.tabs[LYRICS_TAB].track_id!=this.infoTrack.track_id) ||
-                (this.infoTrack.artist_id && this.info.tabs[LYRICS_TAB].artist_id!=this.infoTrack.artist_id)) {
+                this.info.tabs[LYRICS_TAB].track_id!=this.infoTrack.track_id || this.info.tabs[LYRICS_TAB].artist_id!=this.infoTrack.artist_id) {
                 this.info.tabs[LYRICS_TAB].text=i18n("Fetching...");
                 this.info.tabs[LYRICS_TAB].track_id=this.infoTrack.track_id;
                 this.info.tabs[LYRICS_TAB].artist=this.infoTrack.artist;
@@ -768,11 +767,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchBio() {
-            if (this.info.tabs[BIO_TAB].artist!=this.infoTrack.artist ||
-                (this.infoTrack.artist_id && this.info.tabs[BIO_TAB].artist_id!=this.infoTrack.artist_id)) {
+            if (this.info.tabs[BIO_TAB].artist!=this.infoTrack.artist || this.info.tabs[BIO_TAB].artist_id!=this.infoTrack.artist_id ||
+                this.info.tabs[BIO_TAB].artist_ids!=this.infoTrack.artist_ids) {
                 this.info.tabs[BIO_TAB].text=i18n("Fetching...");
                 this.info.tabs[BIO_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[BIO_TAB].artist_id=this.infoTrack.artist_id;
+                this.info.tabs[BIO_TAB].artist_ids=this.infoTrack.artist_ids;
 
                 var ids = this.infoTrack.artist_ids ? this.infoTrack.artist_ids.split(",") : [];
                 if (ids.length>1) {
@@ -821,14 +821,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         fetchReview() {
-            if (this.info.tabs[REVIEW_TAB].albumartist!=this.infoTrack.albumartist || this.info.tabs[REVIEW_TAB].album!=this.infoTrack.album ||
-                (this.infoTrack.albumartist_ids && this.info.tabs[REVIEW_TAB].albumartist_ids!=this.infoTrack.albumartist_ids) ||
-                (this.infoTrack.album_id && this.info.tabs[REVIEW_TAB].album_id!=this.infoTrack.album_id)) {
+            if (this.info.tabs[REVIEW_TAB].albumartist!=this.infoTrack.albumartist || this.info.tabs[REVIEW_TAB].albumartist_ids!=this.infoTrack.albumartist_ids ||
+                this.info.tabs[REVIEW_TAB].artist_id!=this.infoTrack.artist_id || this.info.tabs[REVIEW_TAB].album!=this.infoTrack.album ||
+                this.info.tabs[REVIEW_TAB].album_id!=this.infoTrack.album_id) {
                 this.info.tabs[REVIEW_TAB].text=i18n("Fetching...");
                 this.info.tabs[REVIEW_TAB].albumartist=this.infoTrack.albumartist;
                 this.info.tabs[REVIEW_TAB].albumartist_ids=this.infoTrack.albumartist_ids;
-                this.info.tabs[REVIEW_TAB].album=this.infoTrack.album;
                 this.info.tabs[REVIEW_TAB].artist_id=this.infoTrack.artist_id;
+                this.info.tabs[REVIEW_TAB].album=this.infoTrack.album;
                 this.info.tabs[REVIEW_TAB].album_id=this.infoTrack.album_id;
                 var command = ["musicartistinfo", "albumreview", "html:1"];
                 if (this.infoTrack.album_id!=undefined) {

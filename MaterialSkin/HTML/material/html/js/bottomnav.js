@@ -7,7 +7,7 @@
  
 Vue.component('lms-bottomnav', {
     template: `
-<v-footer height="auto" class="lms-footer">
+<v-footer class="lms-footer">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress="browsePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">

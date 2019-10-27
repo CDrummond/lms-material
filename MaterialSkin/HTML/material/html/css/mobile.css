@@ -48,22 +48,30 @@
  position:fixed;
  bottom:0;
  width:100%;
- padding:0 !important;
- max-height:var(--bottom-nav-height) !important;
+ padding:0px !important;
+ margin:0px !important;
+ height:var(--bottom-nav-height) !important;
  box-shadow: 0px -2px 4px 1px rgba(0,0,0,.1), 0 4px 5px 0 rgba(0,0,0,.07), 0 1px 10px 0 rgba(0,0,0,.06);
+}
+
+.lms-footer .lms-bottom-nav {
+  height:var(--bottom-nav-height) !important;
 }
 
 .lms-bottom-nav {
  position:relative !important;
- height:var(--bottom-nav-height) !important;
+ padding:0px !important;
+ margin:0px !important;
  top:calc(-1 * (var(--bottom-nav-height) + 8px)) !important;
  transition:none !important;
 }
 
 .lms-bottom-nav-button {
  width:33.3333% !important;
+ height:var(--bottom-nav-height) !important;
  max-width:250px !important;
  transition:none !important;
+ padding:0px !important;
 }
 
 /* Work-around issue where when swiping to switch views, a previously active nav button would have a
@@ -78,7 +86,7 @@
 }
 
 .lms-bottom-nav-button .v-btn__content {
- height:calc(var(--bottom-nav-height) - 2px);
+ height:calc(var(--bottom-nav-height) - 2px)
  margin:0px;
  padding:0px;
 }
@@ -276,8 +284,8 @@
 
 .nav-svg-img {
  width:22px !important;
- height:22px !important;
- margin-bottom:4px;
+ height:28px !important;
+ padding-bottom:2px;
  vertical-align:middle;
 }
 

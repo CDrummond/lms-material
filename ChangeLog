@@ -2,6 +2,8 @@
 -----
 1. If restarting server (e.g. after updating plugins) then reload page after 2.5
    seconds.
+2. Align mobile bottom nav texts.
+3. Fix mobile bottom nav layout with Firefox.
 
 1.1.1
 -----

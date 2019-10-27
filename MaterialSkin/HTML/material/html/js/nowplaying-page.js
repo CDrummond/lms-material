@@ -702,14 +702,24 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         setInfoTrack() {
-            this.infoTrack={ title: this.playerStatus.current.title, track_id: this.playerStatus.current.id,
+            this.infoTrack={ title: this.playerStatus.current.title,
+                             track_id: this.playerStatus.current.id,
                              artist: this.playerStatus.current.artist,
                              artist_id: this.playerStatus.current.artist_ids
                                 ? this.playerStatus.current.artist_ids.split(",")[0].trim()
                                 : this.playerStatus.current.artist_id,
                              artist_ids: this.playerStatus.current.artist_ids,
-                             albumartist: this.playerStatus.current.albumartist, albumartist_ids: this.playerStatus.current.albumartist_ids,
+                             albumartist: this.playerStatus.current.albumartist,
+                             albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
+            this.infoTrack.empty=undefined==this.infoTrack.title &&
+                                 undefined==this.infoTrack.track_id &&
+                                 undefined==this.infoTrack.artist &&
+                                 undefined==this.infoTrack.artist_id &&
+                                 undefined==this.infoTrack.artist_ids &&
+                                 undefined==this.infoTrack.albumartist &&
+                                 undefined==this.albumartist_ids &&
+                                 undefined==this.infoTrack.album;
         },
         trackInfo() {
             if (undefined==this.playerStatus.current.id) {
@@ -745,7 +755,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
                 if (3==command.length) { // No details?
-                    this.info.tabs[LYRICS_TAB].text="";
+                    this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch details.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
                         if (data && data.result && (data.result.lyrics || data.result.error)) {
@@ -797,7 +807,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                     if (3==command.length) { // No details?
-                        this.info.tabs[BIO_TAB].text="";
+                        this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch details.");
                     } else {
                         lmsCommand("", command).then(({data}) => {
                             if (data && data.result && (data.result.biography || data.result.error)) {
@@ -840,7 +850,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
 
                 if (3==command.length) { // No details?
-                    this.info.tabs[REVIEW_TAB].text="";
+                    this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch details.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
                         if (data && data.result && (data.result.albumreview || data.result.error)) {

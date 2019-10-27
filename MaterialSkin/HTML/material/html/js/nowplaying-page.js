@@ -82,7 +82,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
      <v-card flat class="np-info-card-cover">
-      <v-card-text class="np-info-text-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
+      <v-card-text class="np-info-text-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index || tab.isMsg}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
@@ -93,7 +93,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
        <v-card-title><p>{{tab.title}}</p></v-card-title>
-       <v-card-text class="np-info-text-full-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
+       <v-card-text class="np-info-text-full-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index || tab.isMsg}" v-html="tab.text"></v-card-text>
       </v-card>
      </v-flex>
     </template>
@@ -123,7 +123,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
      <v-card flat class="np-info-card-cover">
-      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index}" v-html="tab.text"></v-card-text>
+      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index || tab.isMsg}" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
@@ -765,13 +765,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     });
                 }
             } else if (undefined==this.infoTrack.artist && undefined==this.infoTrack.title && undefined==this.infoTrack.track_id && undefined==this.infoTrack.artist_id) {
-                this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+                this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
         },
         fetchBio() {
             if (this.info.tabs[BIO_TAB].artist!=this.infoTrack.artist || this.info.tabs[BIO_TAB].artist_id!=this.infoTrack.artist_id ||
                 this.info.tabs[BIO_TAB].artist_ids!=this.infoTrack.artist_ids) {
                 this.info.tabs[BIO_TAB].text=i18n("Fetching...");
+                this.info.tabs[BIO_TAB].isMsg=true;
                 this.info.tabs[BIO_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[BIO_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[BIO_TAB].artist_ids=this.infoTrack.artist_ids;
@@ -798,6 +799,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                             this.info.tabs[BIO_TAB].count--;
                             if (0 == this.info.tabs[BIO_TAB].count && !this.info.tabs[BIO_TAB].found) {
                                 this.info.tabs[BIO_TAB].text = i18n("No artist found");
+                            } else {
+                                this.info.tabs[BIO_TAB].isMsg=false;
                             }
                         });
                     }
@@ -814,6 +817,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         lmsCommand("", command).then(({data}) => {
                             if (data && data.result && (data.result.biography || data.result.error)) {
                                 this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                                this.info.tabs[BIO_TAB].isMsg=data.result.biography ? false : true;
                             }
                         }).catch(error => {
                             this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
@@ -821,7 +825,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
             } else if (undefined==this.infoTrack.artist && undefined==this.infoTrack.artist_id && undefined==this.infoTrack.artist_ids) {
-                this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+                this.info.tabs[BIO_TAB].isMsg=true;
+                this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
         },
         fetchReview() {
@@ -829,6 +834,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[REVIEW_TAB].artist_id!=this.infoTrack.artist_id || this.info.tabs[REVIEW_TAB].album!=this.infoTrack.album ||
                 this.info.tabs[REVIEW_TAB].album_id!=this.infoTrack.album_id) {
                 this.info.tabs[REVIEW_TAB].text=i18n("Fetching...");
+                this.info.tabs[REVIEW_TAB].isMsg=true;
                 this.info.tabs[REVIEW_TAB].albumartist=this.infoTrack.albumartist;
                 this.info.tabs[REVIEW_TAB].albumartist_ids=this.infoTrack.albumartist_ids;
                 this.info.tabs[REVIEW_TAB].artist_id=this.infoTrack.artist_id;
@@ -859,6 +865,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     lmsCommand("", command).then(({data}) => {
                         if (data && data.result && (data.result.albumreview || data.result.error)) {
                             this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
+                            this.info.tabs[REVIEW_TAB].isMsg=data.result.albumreview ? false : true;
                         }
                     }).catch(error => {
                         this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
@@ -866,6 +873,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             } else if (undefined==this.infoTrack.albumartist && undefined==this.infoTrack.albumartist_ids && undefined==this.infoTrack.artist_id &&
                        undefined==this.infoTrack.album && undefined==this.infoTrack.album) {
+                this.info.tabs[REVIEW_TAB].isMsg=true;
                 this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
         },

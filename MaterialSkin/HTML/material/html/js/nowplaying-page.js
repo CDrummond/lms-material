@@ -755,7 +755,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
                 if (3==command.length) { // No details?
-                    this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch details.");
+                    this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
                         if (data && data.result && (data.result.lyrics || data.result.error)) {
@@ -807,7 +807,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                     if (3==command.length) { // No details?
-                        this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch details.");
+                        this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                     } else {
                         lmsCommand("", command).then(({data}) => {
                             if (data && data.result && (data.result.biography || data.result.error)) {
@@ -850,7 +850,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
 
                 if (3==command.length) { // No details?
-                    this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch details.");
+                    this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
                         if (data && data.result && (data.result.albumreview || data.result.error)) {

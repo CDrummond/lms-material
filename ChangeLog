@@ -6,7 +6,7 @@
 4. Add option to play silence when lock screen and notification controls are
    enabled.
 5. No need to prevent media session if using SB Player, seems to work OK.
-6. Show "Insufficient metadata to fetch details." if the required info is not
+6. Display message indicating insufficient metadata if the required info is not
    present for MAI lyrics, review, or biography.
 
 1.1.2

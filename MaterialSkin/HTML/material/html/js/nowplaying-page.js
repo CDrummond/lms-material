@@ -764,6 +764,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         this.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
                     });
                 }
+            } else if (undefined==this.infoTrack.artist && undefined==this.infoTrack.title && undefined==this.infoTrack.track_id && undefined==this.infoTrack.artist_id) {
+                this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
         },
         fetchBio() {
@@ -818,6 +820,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         });
                     }
                 }
+            } else if (undefined==this.infoTrack.artist && undefined==this.infoTrack.artist_id && undefined==this.infoTrack.artist_ids) {
+                this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
         },
         fetchReview() {
@@ -860,6 +864,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
                     });
                 }
+            } else if (undefined==this.infoTrack.albumartist && undefined==this.infoTrack.albumartist_ids && undefined==this.infoTrack.artist_id &&
+                       undefined==this.infoTrack.album && undefined==this.infoTrack.album) {
+                this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
         },
         showInfo() {

@@ -102,7 +102,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="android">
      <v-list-tile-content @click="lsAndNotifPlaySilence = !lsAndNotifPlaySilence" class="switch-label">
       <v-list-tile-title>{{i18n('Play silence')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Enable this option to have a dummy silence file played whilst LMS is playing music. This is required for some browsers (e.g. Chrome). If you togle this setting you will need to reload your browser session.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Enable this option to have a dummy silence file played whilst LMS is playing music. This is required for some browsers (e.g. Chrome) to keep the notifications alive and for correct operation of the play/pause button. If you toggle this setting you will need to reload your browser session.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="lsAndNotifPlaySilence"></v-switch></v-list-tile-action>
     </v-list-tile>

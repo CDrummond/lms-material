@@ -7,6 +7,7 @@
 4. Fix add-all/play-all from Genre albums list.
 5. Supply album sort when using add-all/play-all.
 6. Better time alignment for queue items.
+7. Don't show composer if it's the same as artist.
 
 1.1.1
 -----

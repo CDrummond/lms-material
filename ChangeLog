@@ -6,6 +6,7 @@
 3. Fix mobile bottom nav layout with Firefox.
 4. Fix add-all/play-all from Genre albums list.
 5. Supply album sort when using add-all/play-all.
+6. Better time alignment for queue items.
 
 1.1.1
 -----

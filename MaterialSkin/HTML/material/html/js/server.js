@@ -493,7 +493,7 @@ var lmsServer = Vue.component('lms-server', {
             this.cancelFavoritesTimer();
             this.favoritesTimer = setTimeout(function () {
                 this.updateFavorites();
-            }.bind(this), 500);
+            }.bind(this), 1500);
         },
         updateFavorites() { // Update set of favorites URLs
             lmsCommand("", ["material-skin", "favorites"]).then(({data}) => {

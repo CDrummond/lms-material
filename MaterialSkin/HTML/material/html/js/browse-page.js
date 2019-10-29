@@ -1763,8 +1763,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 if (!item.id.startsWith("artist_id:") || !p.startsWith("artist_id:")) {
                                     command.command.push(p);
                                 }
+                                if (p.startsWith("artist_id:")) {
+                                    command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
+                                }
                             }
                         });
+                    } else if (item.id.startsWith("genre_id:")) {
+                        command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
                     }
 
                     command.command.push(originalId(item.id));

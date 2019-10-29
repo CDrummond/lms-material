@@ -817,7 +817,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         lmsCommand("", command).then(({data}) => {
                             if (data && data.result && (data.result.biography || data.result.error)) {
                                 this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
-                                this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography || data.result.biography.length<110;
+                                this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
                             }
                         }).catch(error => {
                             this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
@@ -865,7 +865,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     lmsCommand("", command).then(({data}) => {
                         if (data && data.result && (data.result.albumreview || data.result.error)) {
                             this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
-                            this.info.tabs[REVIEW_TAB].isMsg=undefined==data.result.albumreview || data.result.albumreview.length<110;
+                            this.info.tabs[REVIEW_TAB].isMsg=undefined==data.result.albumreview;
                         }
                     }).catch(error => {
                         this.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");

@@ -860,14 +860,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                               params: [item.params[0]],
                               svg: "artist",
                               type: "group",
-                              id: item.id+"artists",
+                              id: uniqueId(item.id, 0),
                               genreArtists:true },
                             { title: i18n("Albums"),
                               command: ["albums"],
                               params: [item.params[0], ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
-                              id: item.id+"albums"}];
+                              id: uniqueId(item.id, 1)}];
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
@@ -875,7 +876,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
-                                        id: item.id+"composers"});
+                                        id: uniqueId(item.id, 2)});
                 }
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
@@ -884,7 +885,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",
-                                        id: item.id+"conductors"});
+                                        id: uniqueId(item.id, 3)});
                 }
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Select category");

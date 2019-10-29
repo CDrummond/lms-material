@@ -493,7 +493,7 @@ var lmsServer = Vue.component('lms-server', {
             this.cancelFavoritesTimer();
             this.favoritesTimer = setTimeout(function () {
                 this.updateFavorites();
-            }.bind(this), 1500);
+            }.bind(this), 500);
         },
         updateFavorites() { // Update set of favorites URLs
             lmsCommand("", ["material-skin", "favorites"]).then(({data}) => {
@@ -642,7 +642,7 @@ var lmsServer = Vue.component('lms-server', {
                 this.updatesTimer = setInterval(function () {
                     this.checkPluginUpdates();
                 }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
-            }.bind(this), 500);
+            }.bind(this), 1500);
         },
         adjustVolume(inc, steps) {
             if (this.$store.state.player) {

@@ -543,6 +543,13 @@ a {
  display:block;
 }
 
+/* Biographies, etc, from More > Artist information > ... */
+.lms-list-sub > .browse-text > div.text {
+ padding-left:8px;
+ padding-right:8px;
+ font-weight:var(--std-weight) !important;
+}
+
 .np-playpause {
  margin:2px !important;
  width:48px !important;

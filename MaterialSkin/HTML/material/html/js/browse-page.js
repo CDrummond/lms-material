@@ -421,7 +421,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
             this.enteredTerm = term;
-            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
+            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : SEARCH_ID+":"+command[0], type:"search", libsearch:true});
         }.bind(this));
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
@@ -445,7 +445,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 if ('mod'==modifier) {
                     if (LMS_SEARCH_KEYBOARD==key) {
-                        if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && this.current.id==TOP_MYMUSIC_ID)) {
+                        if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
                             bus.$emit('dlg.open', 'search');
                         } else if (this.current && this.current.id==PODCASTS_ID) {
                             bus.$emit('dlg.open', 'podcastsearch');
@@ -635,7 +635,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleListResponse(item, command, resp) {
             if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
-                this.addHistory();
+                if (!item.id.startsWith(SEARCH_ID) || this.history.length<1 || !this.current || !this.current.id.startsWith(SEARCH_ID)) {
+                    this.addHistory();
+                }
                 this.command = command;
                 this.currentBaseActions = this.baseActions;
                 this.headerTitle=item.title
@@ -657,7 +659,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
                 this.jumplistActive=0;
 
-                if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
+                if (item.id.startsWith(SEARCH_ID)) {
+                    this.tbarActions=[SEARCH_LIB_ACTION];
+                } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 } else if (SECTION_PRESETS==this.current.section) {
                     this.tbarActions=[ADD_PRESET_ACTION];

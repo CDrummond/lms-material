@@ -141,7 +141,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
     </v-list-tile-content>
    </v-list-tile>
-   <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-text" v-html="item.title"></v-list-tile>
+   <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
@@ -422,7 +422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('searchLib', function(command, params, term) {
             this.enteredTerm = term;
-            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : "search:"+command[0], type:"search"});
+            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : SEARCH_ID+":"+command[0], type:"search", libsearch:true});
         }.bind(this));
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
@@ -446,7 +446,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 if ('mod'==modifier) {
                     if (LMS_SEARCH_KEYBOARD==key) {
-                        if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && this.current.id==TOP_MYMUSIC_ID)) {
+                        if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
                             bus.$emit('dlg.open', 'search');
                         } else if (this.current && this.current.id==PODCASTS_ID) {
                             bus.$emit('dlg.open', 'podcastsearch');
@@ -636,7 +636,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleListResponse(item, command, resp) {
             if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
-                this.addHistory();
+                if (!item.id.startsWith(SEARCH_ID) || this.history.length<1 || !this.current || !this.current.id.startsWith(SEARCH_ID)) {
+                    this.addHistory();
+                }
                 this.command = command;
                 this.currentBaseActions = this.baseActions;
                 this.headerTitle=item.title
@@ -658,7 +660,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
                 this.jumplistActive=0;
 
-                if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
+                if (item.id.startsWith(SEARCH_ID)) {
+                    this.tbarActions=[SEARCH_LIB_ACTION];
+                } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 } else if (SECTION_PRESETS==this.current.section) {
                     this.tbarActions=[ADD_PRESET_ACTION];
@@ -861,14 +865,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                               params: [item.params[0]],
                               svg: "artist",
                               type: "group",
-                              id: item.id+"artists",
+                              id: uniqueId(item.id, 0),
                               genreArtists:true },
                             { title: i18n("Albums"),
                               command: ["albums"],
                               params: [item.params[0], ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
-                              id: item.id+"albums"}];
+                              id: uniqueId(item.id, 1)}];
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
@@ -876,7 +881,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
-                                        id: item.id+"composers"});
+                                        id: uniqueId(item.id, 2)});
                 }
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
@@ -885,7 +890,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",
-                                        id: item.id+"conductors"});
+                                        id: uniqueId(item.id, 3)});
                 }
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Select category");
@@ -1772,8 +1777,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 if (!item.id.startsWith("artist_id:") || !p.startsWith("artist_id:")) {
                                     command.command.push(p);
                                 }
+                                if (p.startsWith("artist_id:")) {
+                                    command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
+                                }
                             }
                         });
+                    } else if (item.id.startsWith("genre_id:")) {
+                        command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
                     }
 
                     command.command.push(originalId(item.id));

@@ -80,7 +80,7 @@ function showComposer(id, title) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
-    if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre)) {
+    if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre) && i.composer!=i.artist) {
         var composer_ids = !IS_MOBILE && i.composer_ids ? i.composer_ids.split(",") : undefined;
         if (composer_ids && 1==composer_ids.length) {
             subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");

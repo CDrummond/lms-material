@@ -784,10 +784,17 @@ progress {
 
 .pq-time {
  font-size:var(--small-font-size);
- margin-top:calc(18px - var(--small-font-size));
+ height:var(--list-elem-height);
+ line-height:var(--list-elem-height);
  margin-right:-16px;
  opacity:var(--sub-opacity);
  min-width:44px;
+ vertical-align:middle !important;
+}
+
+.lms-list3 .pq-time, .lms-list-sub3 .pq-time {
+ height:var(--list-elem-3line-height);
+ line-height:var(--list-elem-3line-height);
 }
 
 .dialog--fullscreen > .card {
@@ -1014,7 +1021,7 @@ div.v-subheader {
 .player-status-icon {
  font-size:16px;
  line-height:22px;
- vertical-align::middle;
+ vertical-align:middle;
  padding-left:4px;
 }
 

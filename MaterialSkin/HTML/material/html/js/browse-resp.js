@@ -528,9 +528,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
 
             if (0==resp.items.length && data.result.window && data.result.window.textarea) {
+                var text = replaceNewLines(data.result.window.textarea);
                 resp.items.push({
-                                title: replaceNewLines(data.result.window.textarea),
-                                type: "text",
+                                title: text,
+                                type: text.startsWith("<") ? "html" : "text",
                                 id: parent.id+".0"
                                });
                 resp.canUseGrid = false;

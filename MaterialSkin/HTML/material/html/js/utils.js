@@ -633,6 +633,14 @@ function commandAlbumSortKey(command) {
             isCompilation = true;
         }
     }
+    for (var i=0, len=command.command.length; i<len; ++i) {
+        if (command.command[i].startsWith("artist_id:")) {
+            isArtist = true;
+        }
+        if (command.command[i]=="compilation:1") {
+            isCompilation = true;
+        }
+    }
     return isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
 }
 

@@ -39,9 +39,6 @@ var app = new Vue({
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (this.$store.state.openDialogs.length>0) {
-                return;
-            }
             if (this.$store.state.page=='now-playing') {
                 // Ignore swipes on position slider...
                 var elem = document.getElementById("pos-slider");
@@ -55,6 +52,22 @@ var app = new Vue({
             }
             if (Math.abs(ev.touchstartX-ev.touchendX)<75) {
                 return;
+            }
+            if (this.$store.state.openDialogs.length>0) {
+                if (this.$store.state.openDialogs.length==1) {
+                    // Info dialog is open. If not on now-playing, can still swipe to change main nav.
+                    // ...if in now-playing, then use to change info tab.
+                    if ('info-dialog'==this.$store.state.openDialogs[0]) {
+                        if (this.$store.state.page=='now-playing') {
+                            bus.$emit('info-swipe', direction);
+                            return;
+                        }
+                    } else {
+                        return;
+                    }
+                } else {
+                    return;
+                }
             }
             if ('l'==direction) {
                 if (this.$store.state.page=='browse') {

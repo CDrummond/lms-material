@@ -1,15 +1,17 @@
 1.1.2
 -----
-1. If restarting server (e.g. after updating plugins) then reload page after 2.5
-   seconds.
-2. Align mobile bottom nav texts.
-3. Fix mobile bottom nav layout with Firefox.
-4. Fix add-all/play-all from Genre albums list.
-5. Supply album sort when using add-all/play-all.
-6. Better time alignment for queue items.
-7. Don't show composer if it's the same as artist.
-8. Delay plugin check until 1.5 seconds after started.
-9. Allow starting a new search from search results list.
+ 1. If restarting server (e.g. after updating plugins) then reload page after
+    2.5 seconds.
+ 2. Align mobile bottom nav texts.
+ 3. Fix mobile bottom nav layout with Firefox.
+ 4. Fix add-all/play-all from Genre albums list.
+ 5. Supply album sort when using add-all/play-all.
+ 6. Better time alignment for queue items.
+ 7. Don't show composer if it's the same as artist.
+ 8. Delay plugin check until 1.5 seconds after started.
+ 9. Allow starting a new search from search results list.
+10. Fix HTML rendering for biographies, reviews, etc. when called from 'More'
+    menu.
 
 1.1.1
 -----

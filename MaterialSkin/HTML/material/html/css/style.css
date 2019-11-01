@@ -751,11 +751,6 @@ a {
  margin-right:auto;
 }
 
-/* Adjust link/more/close buttons in now-playing page up a little */
-#np-info > .v-card > .v-card__actions > button {
- margin-top:-2px
-}
-
 .btn-img {
  width:24px;
  height:24px;

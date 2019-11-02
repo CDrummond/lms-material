@@ -744,7 +744,7 @@ a {
 }
 
 .np-info-text {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 50px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
  overflow:auto;
  max-width:1000px;
  margin-left:auto;

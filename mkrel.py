@@ -117,11 +117,29 @@ def cleanup():
 
 def fixUtils():
     text=""
+    info("...updating utils.js")
     with open("%s/js/utils.js" % HTML_FOLDER, "r") as f:
         for line in f.readlines():
             text+=line.replace(".css?", ".min.css?")
     with open("%s/js/utils.js" % HTML_FOLDER, "w") as f:
          f.write(text)
+
+
+def fixClassisSkinMods():
+    info("...updating Classic Skin mods")
+    for entry in ["skin.css", "standardheader.html", "html/js/iframe-dialog.js"]:
+        fixedLines = []
+        path = "%s/../%s" % (HTML_FOLDER, entry)
+        with open(path, "r") as f:
+            lines=f.readlines()
+            for line in lines:
+                for css in ["classic-skin-mods-dark", "classic-skin-mods-light", "classic-skin-mods-player", "classic-skin-mods"]:
+                    line=line.replace(css+".css", css+".min.css")
+                fixedLines.append(line)
+
+        with open(path, "w") as f:
+            for line in fixedLines:
+                f.write(line)
 
 
 def minifyJs():
@@ -204,6 +222,7 @@ def fixHtml():
 def minify():
     info("Minifying")
     fixUtils()
+    fixClassisSkinMods()
     minifyJs()
     minifyCss()
     removeUnminified()

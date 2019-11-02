@@ -207,6 +207,11 @@
  flex-direction:column;
 }
 
+/* Adjust link/more/close buttons in now-playing page up a little */
+#np-info > .v-card > .v-card__actions > button {
+ margin-top:-2px
+}
+
 .no-control-adjust {
  margin-top:-14px;
 }

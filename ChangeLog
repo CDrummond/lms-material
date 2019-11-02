@@ -23,6 +23,8 @@
  9. Allow starting a new search from search results list.
 10. Fix HTML rendering for biographies, reviews, etc. when called from 'More'
     menu.
+11. Fix swipe to change now-playing info tabs on mobile layout.
+12. Fix references to classic skin modification CSS files in releases.
 
 1.1.1
 -----

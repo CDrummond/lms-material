@@ -322,6 +322,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }.bind(this));
             }
         } else {
+            bus.$on('info-swipe', function(d) {
+                if (this.info.show) {
+                    if ('l'==d) {
+                        if (this.info.tab==2) {
+                            this.info.tab=0;
+                        } else {
+                            this.info.tab++;
+                        }
+                    } else {
+                        if (this.info.tab==0) {
+                            this.info.tab=2;
+                        } else {
+                            this.info.tab--;
+                        }
+                    }
+                }
+            }.bind(this));
             bus.$on('pageChanged', function(val) {
                 if (0==this.lastWidth && val=='now-playing') {
                     this.$nextTick(() => {

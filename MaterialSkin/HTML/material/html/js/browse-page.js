@@ -370,7 +370,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.updateTopList(savedItems);
         }
 
-        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
+        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
 
         bus.$on('esc', function() {
             this.menu.show = false;

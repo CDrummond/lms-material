@@ -1532,7 +1532,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if (this.prevPage && !this.desktop) {
-                this.$store.commit('setPage', this.prevPage);
+                var nextPage = ""+this.prevPage;
+                this.$nextTick(function () { this.$nextTick(function () { this.$store.commit('setPage', nextPage); }); });
             }
             if (this.history.length<2) {
                 this.goHome();

@@ -1706,7 +1706,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         } else if (mode=="albums") {
                             if (!hasTags) {
-                                p.push(ALBUM_TAGS);
+                                p.push(hasArtistId ? ARTIST_ALBUM_TAGS : ALBUM_TAGS);
                             }
                             if (!hasSort) {
                                 p.push(SORT_KEY+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));

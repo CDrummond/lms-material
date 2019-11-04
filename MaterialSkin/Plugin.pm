@@ -14,6 +14,7 @@ use Slim::Utils::Favorites;
 use Slim::Utils::Log;
 use Slim::Utils::Network;
 use Slim::Utils::Prefs;
+use Slim::Utils::Strings;
 use JSON::XS::VersionOneAndTwo;
 use Slim::Utils::Strings qw(string cstring);
 use HTTP::Status qw(RC_NOT_FOUND RC_OK);
@@ -31,8 +32,8 @@ my $serverprefs = preferences('server');
 
 my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 
-my $DEFAULT_COMPOSER_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
-my $DEFAULT_CONDUCTOR_GENRES = 'Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music';
+my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
+my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
 
 my @BROWSE_MODES = ( { id=>'myMusicArtists', name=>'BROWSE_BY_ARTIST', weight=>10},
                      { id=>'myMusicArtistsAlbumArtists', name=>'BROWSE_BY_ALBUMARTIST', weight=>9},

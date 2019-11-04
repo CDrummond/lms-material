@@ -9,21 +9,33 @@ PLUGIN_MATERIAL_SKIN
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
+	DE	Komponisten Stilrichtungen
 	EN	Composer genres
 	FR	Genres concernés par le tag "composer" (compositeur)
 	NL	Componist genres
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
+	DE	Komma-getrennte Liste von Stilrichtungen, die Komponisten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Komponisten durchsuchen willst.
 	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par compositeur.
 	NL	Comma gesepareerde lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
+	DE	Dirigent Stilrichtungen
 	EN	Conductor genres
 	FR	Genres concernés par le tag "conductor" (chef d'orchestre)
 	NL	Dirigent genres
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
+	DE	Komma-getrennte Liste von Stilrichtungen, die Dirigenten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Dirigenten durchsuchen willst.
 	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
 	NL	Comma gesepareerde lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
+
+PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
+	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Jazz, Mittelalterlich, Medieval, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
+	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
+
+PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
+	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Mittelalterlich, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
+	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music

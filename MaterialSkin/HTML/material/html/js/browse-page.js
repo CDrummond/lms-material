@@ -2235,7 +2235,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             var haveSubtitle = false;
             // How many columns?
-            var numColumns = Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length);
+            var numColumns = Math.max(Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length), 1);
             if (numColumns != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];

@@ -5,6 +5,8 @@
    artist name as subtitle.
 3. Fix queue corruption of using 3 line elements and have more than 200
    entries.
+4. If replacing new-lines with 'br' tag, then treat text as HTML. Fixes display
+   of embedded lyrics.
 
 1.1.2
 -----

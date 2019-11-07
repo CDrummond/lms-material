@@ -544,7 +544,7 @@ a {
 }
 
 /* Biographies, etc, from More > Artist information > ... */
-.lms-list-sub > .browse-html > div {
+.lms-list-sub > .browse-html {
  font-size:var(--std-font-size)!important;
  min-height:var(--list-elem-height)!important;
  height:auto!important;

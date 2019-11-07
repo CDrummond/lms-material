@@ -12,7 +12,7 @@ Vue.directive('longpress', {
             console.warn(warn)
         }
 
-        el.longpress={time:undefined, stated:false, timedout:false, touchOnly:false, start:undefined, cancel:undefined, binding:binding};
+        el.longpress={time:undefined, stated:false, timedout:false, touchOnly:false, start:undefined, cancel:undefined, binding:binding, repeat:binding.arg};
 
         // Define funtion handlers
         // Create timeout ( run function after 1s )
@@ -29,16 +29,29 @@ Vue.directive('longpress', {
             el.longpress.started = true;
             el.longpress.timedout = false;
             if (el.longpress.pressTimer === undefined) {
-                el.longpress.pressTimer = setTimeout(() => {
-                    el.longpress.timedout = true;
-                    el.longpress.started = false;
-                    // Run function
-                    if (undefined==el.longpress.binding.value.method) {
-                        el.longpress.binding.value(true);
-                    } else {
-                        el.longpress.binding.value.method(binding.value.item, true);
-                    }
-                }, 1000)
+                if (el.longpress.repeat) {
+                    el.longpress.pressTimer = setInterval(() => {
+                        el.longpress.timedout = true;
+                        el.longpress.started = false;
+                        // Run function
+                        if (undefined==el.longpress.binding.value.method) {
+                            el.longpress.binding.value(true);
+                        } else {
+                            el.longpress.binding.value.method(binding.value.item, true);
+                        }
+                    }, 1000)
+                } else {
+                    el.longpress.pressTimer = setTimeout(() => {
+                        el.longpress.timedout = true;
+                        el.longpress.started = false;
+                        // Run function
+                        if (undefined==el.longpress.binding.value.method) {
+                            el.longpress.binding.value(true);
+                        } else {
+                            el.longpress.binding.value.method(binding.value.item, true);
+                        }
+                    }, 1000)
+                }
             }
         }
 

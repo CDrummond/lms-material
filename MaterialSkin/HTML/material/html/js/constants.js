@@ -90,6 +90,7 @@ const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";
 const GENRES_ID = MUSIC_ID_PREFIX+"genres";
 const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ALBUM_TAGS = "tags:jlyasS";
+const ARTIST_ALBUM_TAGS = "tags:jly";
 const TRACK_TAGS = "tags:ACdts";
 const PLAYLIST_TAGS = "tags:su";
 const SORT_KEY = "sort:";

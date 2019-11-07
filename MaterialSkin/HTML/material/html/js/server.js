@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const PLAYER_STATUS_TAGS = "tags:cdegloyrstABKNS";
+const PLAYER_STATUS_TAGS = "tags:cdegloyrstABKNST";
 var lmsOptions = {noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                   noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
 

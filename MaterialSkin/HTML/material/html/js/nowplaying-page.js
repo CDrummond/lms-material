@@ -492,6 +492,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.current.bitrate) {
                 technical.push(playerStatus.current.bitrate);
             }
+            if (playerStatus.current.samplerate) {
+                technical.push((playerStatus.current.samplerate/1000)+"kHz");
+            }
             if (playerStatus.current.type) {
                 var bracket = playerStatus.current.type.indexOf(" (");
                 technical.push(bracket>0 ? playerStatus.current.type.substring(0, bracket) : playerStatus.current.type);

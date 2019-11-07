@@ -9,6 +9,7 @@
 6. Display message indicating insufficient metadata if the required info is not
    present for MAI lyrics, review, or biography.
 7. Add link to user guide from 'Information' dialog.
+8. Show sample rate in technical info.
 
 1.1.3
 -----

@@ -1716,7 +1716,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         } else if (mode=="albums") {
                             if (!hasTags) {
-                                p.push(ALBUM_TAGS);
+                                p.push(hasArtistId ? ARTIST_ALBUM_TAGS : ALBUM_TAGS);
                             }
                             if (!hasSort) {
                                 p.push(SORT_KEY+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));
@@ -2265,7 +2265,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             var haveSubtitle = false;
             // How many columns?
-            var numColumns = Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length);
+            var numColumns = Math.max(Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length), 1);
             if (numColumns != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];

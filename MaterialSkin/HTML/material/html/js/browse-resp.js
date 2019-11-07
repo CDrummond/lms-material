@@ -531,7 +531,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var text = replaceNewLines(data.result.window.textarea);
                 resp.items.push({
                                 title: text,
-                                type: text.startsWith("<") ? "html" : "text",
+                                type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",
                                 id: parent.id+".0"
                                });
                 resp.canUseGrid = false;

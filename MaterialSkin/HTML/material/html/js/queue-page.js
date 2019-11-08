@@ -614,9 +614,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_MORE_ACTION===act) {
                 bus.$emit('trackInfo', item, index, 'queue');
-                if (!this.desktop) {
-                    this.$store.commit('setPage', 'browse');
-                }
             } else if (PQ_SELECT_ACTION===act) {
                 var idx=this.selection.indexOf(index);
                 if (idx<0) {

@@ -1,11 +1,11 @@
 # Material skin for SlimServer (Logitech Media Server)
 
-NOTE: The following screenshot is from the 0.0.1 release, and there have been
-a few changes since.
-
 ![Now Playing](screenshots/now-playing.png)
 
-See https://github.com/CDrummond/lms-material/wiki/Screenshots for more screenshots.
+The [Screenshots wiki page](https://github.com/CDrummond/lms-material/wiki/Screenshots) has more screenshots.
+
+For more information, please refer to the [User Guide](https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html).
+This guide is on a separate github page, and is authored by Jim Gooch.
 
 ## Features
 

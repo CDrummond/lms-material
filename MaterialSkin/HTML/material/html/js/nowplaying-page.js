@@ -14,7 +14,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 <div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-if="!mini && !nowplaying" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
-  <v-list>
+  <v-list v-if="info.show">
+   <v-list-tile @click="adjustFont(10)" v-bind:class="{'disabled':infoZoom<=10}"><v-list-tile-title>{{trans.stdFont}}</v-list-tile-title></v-list-tile>
+  <v-list-tile @click="adjustFont(15)" v-bind:class="{'disabled':infoZoom==15}"><v-list-tile-title>{{trans.mediumFont}}</v-list-tile-title></v-list-tile>
+  <v-list-tile @click="adjustFont(20)" v-bind:class="{'disabled':infoZoom>=20}"><v-list-tile-title>{{trans.largeFont}}</v-list-tile-title></v-list-tile>
+  </v-list>
+  <v-list v-else>
    <v-list-tile @click="showPic()">
     <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
@@ -81,8 +86,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-     <v-card flat class="np-info-card-cover">
-      <v-card-text class="np-info-text-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index || tab.isMsg}" v-html="tab.text"></v-card-text>
+     <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+      <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
@@ -91,9 +96,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-layout row>
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
-      <v-card flat class="np-info-card-cover">
+      <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
        <v-card-title><p>{{tab.title}}</p></v-card-title>
-       <v-card-text class="np-info-text-full-desktop" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index || tab.isMsg}" v-html="tab.text"></v-card-text>
+       <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-flex>
     </template>
@@ -122,8 +127,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-     <v-card flat class="np-info-card-cover">
-      <v-card-text class="np-info-text" v-bind:class="{'np-info-lyrics': LYRICS_TAB==index || tab.isMsg}" v-html="tab.text"></v-card-text>
+     <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+      <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
      </v-card>
     </v-tab-item>
    </template>
@@ -289,7 +294,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
-                          shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined },
+                          shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
+                          stdFont:undefined, mediumFont:undefined, largerFont:undefined },
                  showTotal: true,
                  portraitPad: 0,
                  portraitImagePad: 0,
@@ -305,10 +311,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  shuffAltBtn:{show:false, command:[], icon:undefined, image:undefined, tooltip:undefined},
                  disablePrev:false,
                  disableNext:false,
-                 dstm:false
+                 dstm:false,
+                 infoZoom:10
                 };
     },
     mounted() {
+        this.infoZoom = parseInt(getLocalStorageVal('npInfoZoom', 10));
+        if (this.infoZoom<10 | this.infoZoom>20) {
+            this.infoZoom = 10;
+        }
         if (this.desktop) {
             if (this.nowplaying) {
                 this.largeView = true;
@@ -613,7 +624,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"),
                            repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
-                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle") };
+                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
+                           stdFont:i18n("Standard font size"), mediumFont:i18n("Medium font size"), largeFont:i18n("Large font size") };
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
@@ -659,7 +671,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         showMenu(event) {
             event.preventDefault();
             this.clearClickTimeout();
-            if (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving)) {
+            if (this.info.show || (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving))) {
                 this.touch = undefined;
                 this.menu.show = false;
                 this.menu.x = event.clientX;
@@ -1100,6 +1112,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.lastSentVolume=this.overlayVolume;
                 }
             }.bind(this), LMS_VOLUME_DEBOUNCE);
+        },
+        adjustFont(sz) {
+            this.infoZoom=sz;
+            getLocalStorageVal('npInfoZoom', sz);
         }
     },
     filters: {
@@ -1225,6 +1241,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        zoomInfoClass() {
+            return "np-info-text-"+this.infoZoom;
         }
     },
     beforeDestroy() {

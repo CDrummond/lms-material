@@ -751,6 +751,13 @@ a {
  margin-right:auto;
 }
 
+.np-info-text-15 {
+ font-size:calc(var(--std-font-size)*1.5);
+}
+.np-info-text-20 {
+ font-size:calc(var(--std-font-size)*2);
+}
+
 .btn-img {
  width:24px;
  height:24px;

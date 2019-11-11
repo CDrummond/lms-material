@@ -1,17 +1,19 @@
 1.2.0
 -----
-1. Use 'Shift' key to select a range of items.
-2. Add button to invert selection.
-3. Allow protecting alarms and settings via pin/password.
-4. Add option to play silence when lock screen and notification controls are
-   enabled.
-5. No need to prevent media session if using SB Player, seems to work OK.
-6. Display message indicating insufficient metadata if the required info is not
-   present for MAI lyrics, review, or biography.
-7. Add link to user guide from 'Information' dialog.
-8. Show sample rate in technical info.
-9. Long press on prev/next buttons in now playing to skip back/forward 30
-   seconds.
+ 1. Use 'Shift' key to select a range of items.
+ 2. Add button to invert selection.
+ 3. Allow protecting alarms and settings via pin/password.
+ 4. Add option to play silence when lock screen and notification controls are
+    enabled.
+ 5. No need to prevent media session if using SB Player, seems to work OK.
+ 6. Display message indicating insufficient metadata if the required info is not
+    present for MAI lyrics, review, or biography.
+ 7. Add link to user guide from 'Information' dialog.
+ 8. Show sample rate in technical info.
+ 9. Long press on prev/next buttons in now playing to skip back/forward 30
+    seconds.
+10. Add context menu to now-playing info view to set font size; Standard,
+    Medium, or Large.
 
 1.1.3
 -----

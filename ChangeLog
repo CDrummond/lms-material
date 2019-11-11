@@ -14,6 +14,7 @@
     seconds.
 10. Add context menu to now-playing info view to set font size; Standard,
     Medium, or Large.
+11. Add Italian translation, thanks to franz159
 
 1.1.3
 -----
@@ -24,6 +25,7 @@
    entries.
 4. If replacing new-lines with 'br' tag, then treat text as HTML. Fixes display
    of embedded lyrics.
+5. In mobile layout, if click link in queue then switch to browse view.
 
 1.1.2
 -----

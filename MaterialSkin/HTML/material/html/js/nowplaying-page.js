@@ -764,9 +764,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.largeView=false;
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
                       this.playerStatus.playlist.current, 'now-playing');
-            if (!this.desktop) {
-                this.$store.commit('setPage', 'browse');
-            }
         },
         fetchLyrics() {
             if (this.info.tabs[LYRICS_TAB].artist!=this.infoTrack.artist || this.info.tabs[LYRICS_TAB].songtitle!=this.infoTrack.title ||

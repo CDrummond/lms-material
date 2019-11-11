@@ -386,6 +386,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('trackInfo', function(item, index, page) {
+            if (!this.desktop) {
+                this.$store.commit('setPage', 'browse');
+            }
             if (this.history.length>=50) {
                 this.goHome();
             }
@@ -393,6 +396,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('browse', function(cmd, params, title) {
+            if (!this.desktop) {
+                this.$store.commit('setPage', 'browse');
+            }
             this.goHome();
             this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:"<>", title:title});
         }.bind(this));

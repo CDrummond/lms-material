@@ -619,9 +619,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
                 }
-            } else if (SELECT_ACTION===act) {
-                if (!this.selection.has(index)) {
-                    this.selection.add(index);
+            } else if (PQ_SELECT_ACTION===act) {
+                var idx=this.selection.indexOf(index);
+                if (idx<0) {
+                    this.selection.push(index);
                     item.selected = true;
                     var idx = item.actions.indexOf(SELECT_ACTION);
                     if (idx>-1) {

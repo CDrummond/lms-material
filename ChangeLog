@@ -15,6 +15,8 @@
 10. Add context menu to now-playing info view to set font size; Standard,
     Medium, or Large.
 11. Add Italian translation, thanks to franz159
+12. Don't ingore negative coverids. Playing from 'Disks and folders' can give
+    negative IDs.
 
 1.1.3
 -----

@@ -11,7 +11,7 @@ function queueItemCover(item, infoPlugin) {
     if (item.artwork_url) {
         return resolveImageUrl(item.artwork_url);
     }
-    if (item.coverid && !(""+item.coverid).startsWith("-")) {
+    if (undefined!=item.coverid) { // && !(""+item.coverid).startsWith("-")) {
         return "/music/"+item.coverid+"/cover"+LMS_IMAGE_SIZE;
     }
     if (infoPlugin) {

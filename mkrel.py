@@ -133,7 +133,7 @@ def fixClassisSkinMods():
         with open(path, "r") as f:
             lines=f.readlines()
             for line in lines:
-                for css in ["classic-skin-mods-dark", "classic-skin-mods-light", "classic-skin-mods-player", "classic-skin-mods"]:
+                for css in ["classic-skin-mods-dark", "classic-skin-mods-light", "classic-skin-mods"]:
                     line=line.replace(css+".css", css+".min.css")
                 fixedLines.append(line)
 

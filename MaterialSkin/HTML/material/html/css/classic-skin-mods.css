@@ -149,10 +149,6 @@ div#innerSettingsBlock {
  -moz-osx-font-smoothing: grayscale;
 }
 
-select option[value=INTERFACE_SETTINGS] {
- display: none
-}
-
 .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead {
  background-color: transparent;
  min-height: 15px;

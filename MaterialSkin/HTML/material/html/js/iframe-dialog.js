@@ -68,17 +68,27 @@ function hideClassicSkinElems(page) {
     }
     var iframe = document.getElementById("classicSkinIframe");
     if (iframe) {
+    console.log("PAGE" ,page);
+        var toHide = toHide;
         if ('player'==page) {
-            var cssLink = iframe.contentDocument.createElement("link");
-            cssLink.href = "/material/html/css/classic-skin-mods-player.css?r=" + LMS_MATERIAL_REVISION;
-            cssLink.rel = "stylesheet";
-            cssLink.type = "text/css";
-            iframe.contentDocument.head.appendChild(cssLink);
+            toHide = new Set(['ALARM', 'PLUGIN_EXTENDED_BROWSEMODES', 'PLUGIN_DSTM', 'PLUGIN_PRESETS_EDITOR']);
+        } else if ('server'==page) {
+            toHide = new Set(['INTERFACE_SETTINGS']);
         } else if ('search'==page) {
             if (iframe.contentDocument.addEventListener) {
                 iframe.contentDocument.addEventListener('click', clickHandler);
             } else if (iframe.contentDocument.attachEvent) {
                 iframe.contentDocument.attachEvent('onclick', clickHandler);
+            }
+        }
+        if (undefined!=toHide) {
+            var select = iframe.contentDocument.getElementById("choose_setting");
+            if (undefined!=select) {
+                for (var i=select.length-1; i>=0; i--) {
+                    if (toHide.has(select.options[i].value)) {
+                        select.remove(i);
+                    }
+                }
             }
         }
     }
@@ -119,7 +129,13 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe.open', function(page, title) {
             this.title = title;
             this.src = page;
-            this.page = page.indexOf("player/basic.html")>0 ? "player" : page.indexOf("advanced_search.html")>0 ? "search" : "other";
+            this.page = page.indexOf("player/basic.html")>0
+                            ? "player"
+                            : page.indexOf("server/basic.html")>0
+                                ?  "server"
+                                : page.indexOf("advanced_search.html")>0
+                                    ? "search"
+                                    : "other";
             this.show = true;
             this.loaded = false;
         }.bind(this));

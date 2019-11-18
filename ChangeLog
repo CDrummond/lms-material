@@ -15,7 +15,7 @@
 10. Add context menu to now-playing info view to set font size; Standard,
     Medium, or Large.
 11. Add Italian translation, thanks to franz159
-12. Don't ingore negative coverids. Playing from 'Disks and folders' can give
+12. Don't ignore negative coverids. Playing from 'Disks and folders' can give
     negative IDs.
 13. Use javascript to hide certain options from classic skin. CSS only does not
     work for iOS.

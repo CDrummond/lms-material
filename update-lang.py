@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 # LMS-Material
@@ -12,6 +12,7 @@
 # and update JSON lang files.
 #
 
+import collections
 import json
 import os
 import re
@@ -97,23 +98,13 @@ def update(path):
         if i in values and len(values[i])>0:
             translated.append([i, values[i]])
         else:
-            untranslated.append([i, None])
-    entries = translated + untranslated
+            untranslated.append([i, ""])
+    entries = collections.OrderedDict(translated)
+    entries.update(untranslated)
 
     first=True
     with open(path, "w") as f:
-        f.write("{")
-        for i in entries:
-            if not first:
-                f.write(",\n")
-            else:
-                first=False
-                f.write("\n")
-            if i[1]:
-                f.write('"%s":"%s"' % (i[0], i[1].encode("utf-8")))
-            else:
-                f.write('"%s":""' % i[0])
-        f.write("\n}\n")
+        json.dump(entries, f, ensure_ascii=False, indent=0, separators=(',', ':'))
 
 
 def extractAll(path, ext):

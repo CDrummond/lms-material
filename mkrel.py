@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 # LMS-Material
@@ -75,7 +75,7 @@ def updateInstallXml(version):
     info("Updating %s" % INSTALL_XML)
     with open(INSTALL_XML, "r") as f:
         lines=f.readlines()
-    for i in xrange(len(lines)):
+    for i in range(len(lines)):
         updated = updateLine(lines[i], "<version>", "</version>", version)
         if updated:
             lines[i]=updated

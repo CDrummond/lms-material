@@ -149,10 +149,13 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MORE_ACTION],
+                              actions: undefined==i.album_id
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, SELECT_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
-                              key: i.id+"."+index
+                              key: i.id+"."+index,
+                              album_id: i.album_id
                           });
                 index++;
             }
@@ -614,6 +617,18 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             } else if (REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
+            } else if (PQ_REMOVE_ALBUM_ACTION==act) {
+                var indexes = [];
+                for (var i=this.items.length-1; i>=0; --i) {
+                    if (this.items[i].album_id==item.album_id) {
+                        indexes.push(i);
+                    }
+                }
+                if (indexes.length==this.listSize) {
+                    bus.$emit('playerCommand', ["playlist", "clear"]);
+                } else {
+                    bus.$emit('removeFromQueue', indexes);
+                }
             } else if (MORE_ACTION===act) {
                 bus.$emit('trackInfo', item, index, 'queue');
                 if (!this.desktop) {

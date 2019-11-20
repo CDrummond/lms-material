@@ -19,6 +19,8 @@
     negative IDs.
 13. Use javascript to hide certain options from classic skin. CSS only does not
     work for iOS.
+14. Add 'Remove album' option to queue items. Allows all track from an album to be removed
+    from queue.
 
 1.1.3
 -----

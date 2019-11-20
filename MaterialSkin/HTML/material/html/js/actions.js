@@ -47,6 +47,7 @@ const PQ_PLAY_NEXT_ACTION     = 36;
 const PQ_SCROLL_ACTION        = 37;
 const PQ_ADD_URL_ACTION       = 38;
 const PQ_MOVE_QUEUE_ACTION    = 39;
+const PQ_REMOVE_ALBUM_ACTION  = 40;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -89,7 +90,8 @@ var ACTIONS=[
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
     {cmd:"pq-scroll",    svg:  "current-track"},
     {cmd:"pq-addurl",    icon: "add"},
-    {cmd:"pq-movequeue", icon: "swap_horiz"}
+    {cmd:"pq-movequeue", icon: "swap_horiz"},
+    {cmd:"pq-rmalbum",   icon: "album"}
 ];
 
 function updateActionStrings() {
@@ -141,5 +143,6 @@ function updateActionStrings() {
     ACTIONS[PQ_ADD_URL_ACTION].key=LMS_QUEUE_ADD_URL_KEYBOARD;
     ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Move queue to another player");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
+    ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=i18n("Remove album");
 }
 

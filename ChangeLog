@@ -21,6 +21,8 @@
     work for iOS.
 14. Add 'Remove album' option to queue items. Allows all track from an album to be removed
     from queue.
+15. If player has no digital volume control (i.e. "Output Level is fixed at 100%" is set),
+    then show volume as 100% and add "Fixed Volume" label.
 
 1.1.3
 -----

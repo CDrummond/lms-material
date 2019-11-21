@@ -349,6 +349,7 @@ var lmsServer = Vue.component('lms-server', {
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
+                           dvc: 1==parseInt(data.digital_volume_control),
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                            current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,
@@ -371,7 +372,7 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
 
-            player.volume = undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
+            player.volume = !player.dvc ? 100 : undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
 
             // Store volume, so that it can be accessed in 'adjustVolume' handler
             if (isCurrent) {

@@ -149,7 +149,8 @@ Vue.component('lms-toolbar', {
  </v-menu>
  <v-spacer></v-spacer>
  <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+ <v-slider v-show="desktop || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+ <div v-show="!playerDvc && (desktop || wide)" class="vol-fixed-label" v-bind:class="{'vol-fixed-label-noinf' : !infoPlugin}">{{trans.fixedVol}}</div>
  <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="desktop || wide" class="vol-full-label" v-bind:class="{'vol-full-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}%</p>
  <v-btn v-show="!(desktop || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
@@ -224,11 +225,12 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncShortcut:undefined, info:undefined, infoShortcut:undefined,
                         connectionLost:undefined, showLarge:undefined, showLargeShortcut:undefined, hideLarge:undefined, 
                         startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
-                        pluginUpdatesAvailable:undefined},
+                        pluginUpdatesAvailable:undefined, fixedVol:undefined},
                  infoOpen: false,
                  largeView: false,
                  playerVolume: 0,
                  playerMuted: false,
+                 playerDvc: true,
                  snackbar:{ show: false, msg: undefined},
                  connected: true,
                  wide: false
@@ -301,6 +303,7 @@ Vue.component('lms-toolbar', {
                 }
             }
 
+            this.playerDvc = playerStatus.dvc;
             if (!this.movingVolumeSlider) {
                 this.playerMuted = playerStatus.volume<0;
                 var vol = Math.abs(playerStatus.volume);
@@ -529,7 +532,8 @@ Vue.component('lms-toolbar', {
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
-                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available')};
+                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available'),
+                          fixedVol:i18n("Fixed Volume")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -578,7 +582,7 @@ Vue.component('lms-toolbar', {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (toggleMute) {
+            if (toggleMute && this.playerDvc) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
                 bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), false)]);
@@ -588,7 +592,7 @@ Vue.component('lms-toolbar', {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (toggleMute) {
+            if (toggleMute && this.playerDvc) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else {
                 bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), true)]);
@@ -598,7 +602,7 @@ Vue.component('lms-toolbar', {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (toggleMute) {
+            if (toggleMute && this.playerDvc) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
             } else if (this.playerMuted) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 0]);

@@ -10,18 +10,18 @@ Vue.component('lms-volume', {
 <v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet">
  <v-container grid-list-md text-xs-center>
   <v-layout row wrap>
-   <v-flex xs12 class="vol-text">{{playerVolume}}%</v-flex xs12>
+   <v-flex xs12 class="vol-text">{{playerVolume|displayVolume(dvc)}}</v-flex xs12>
    <v-flex xs12>
     <v-layout>
      <v-btn flat icon @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-     <v-slider step="1" v-model="playerVolume" @click.stop="setVolume" class="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+     <v-slider step="1" :disabled="!dvc" v-model="playerVolume" @click.stop="setVolume" class="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
      <v-btn flat icon @click.stop="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
     </v-layout>
    </v-flex>
   </v-layout>
  </v-container>
  <v-card-actions>
-  <v-btn flat @click.native="toggleMute()">{{muted ? i18n('Unmute') : i18n('Mute')}}</v-btn>
+  <v-btn flat v-if="dvc" @click.native="toggleMute()">{{muted ? i18n('Unmute') : i18n('Mute')}}</v-btn>
   <v-spacer></v-spacer>
   <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
  </v-card-actions>
@@ -31,18 +31,26 @@ Vue.component('lms-volume', {
     data() {
         return { 
                  show: false,
-                 playerVolume:0,
-                 muted: false
+                 playerVolume: 0,
+                 muted: false,
+                 dvc: true
                }
     },
     mounted() {
         this.closeTimer = undefined;
         bus.$on('playerStatus', function(playerStatus) {
-            if (this.show && !this.movingVolumeSlider) {
+            if ((this.show || this.showing) && !this.movingVolumeSlider) {
                 this.muted = playerStatus.volume<0;
                 var vol = Math.abs(playerStatus.volume);
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
+                }
+                this.dvc = playerStatus.dvc;
+                if (this.showing) {
+                    this.showing = false;
+                    this.movingVolumeSlider = false;
+                    this.show = true;
+                    this.resetCloseTimer();
                 }
             }
         }.bind(this));
@@ -52,24 +60,15 @@ Vue.component('lms-volume', {
                 this.close();
                 return;
             }
-            lmsCommand(this.$store.state.player.id, ["mixer", "volume", "?"]).then(({data}) => {
-                if (data && data.result && data.result._volume) {
-                    var vol = parseInt(data.result._volume);
-                    this.muted = vol<0;
-                    vol = Math.abs(vol);
-                    this.playerVolume = vol;
-                    this.movingVolumeSlider = false;
-                    this.show = true;
-                    this.resetCloseTimer();
-                }
-            });
+            this.showing=true;
+            bus.$emit('refreshStatus');
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'volume') {
-                this.show=false;
+                this.close();
             }
         }.bind(this));
         bus.$on('dialogOpen', function(name, open) {
@@ -87,6 +86,7 @@ Vue.component('lms-volume', {
     methods: {
         close() {
             this.show=false;
+            this.showing=false;
             this.cancelCloseTimer();
         },
         volumeDown() {
@@ -170,5 +170,13 @@ Vue.component('lms-volume', {
             this.resetCloseTimer();
             this.cancelSendVolumeTimer();
         }
+    },
+    filters: {
+        displayVolume: function (value, dvc) {
+            if (!dvc) {
+                return i18n("Fixed Volume");
+            }
+            return value+'%';
+        },
     }
 })

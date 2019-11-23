@@ -501,6 +501,10 @@ a {
  right:190px;
 }
 
+.vol-fixed-label-np {
+ right:110px;
+}
+
 .v-menu__content {
  max-height:calc((var(--vh, 1vh)*100) - var(--std-font-size));
  white-space:nowrap;

@@ -381,6 +381,9 @@ Vue.component('lms-toolbar', {
                 this.updateMediaSession(this.playerStatus.current, true);
             }.bind(this));
             bus.$emit('getCurrentCover');
+            bus.$on('haveLocalAndroidPlayer', function(coverUrl) {
+                this.updateMediaSession(undefined, true);
+            }.bind(this));
             bus.$on('lsAndNotifChanged', function(coverUrl) {
                 this.updateMediaSession(this.playerStatus.current, true);
             }.bind(this));
@@ -488,7 +491,8 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if ('mediaSession' in navigator) {
-                if (!this.$store.state.lsAndNotif) {
+                // haveLocalAndroidPlayer is defined in server.js
+                if ((haveLocalAndroidPlayer && MEDIA_SESSION_PLAY_SILENCE) || !this.$store.state.lsAndNotif) {
                     stopMediaSession();
                     this.media.title = undefined;
                     this.media.artist = undefined;

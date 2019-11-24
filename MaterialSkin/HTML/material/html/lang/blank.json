@@ -1,5 +1,6 @@
 {
 "%1 minutes":"",
+"%1 seconds":"",
 "%1 until sleep":"",
 "(Currently only 'SB Player' is supported.)":"",
 "About":"",
@@ -220,6 +221,7 @@
 "Power on/off all":"",
 "Presets":"",
 "Previous track":"",
+"Previous/next long-press skip":"",
 "Provider":"",
 "Queue":"",
 "Queue is empty":"",

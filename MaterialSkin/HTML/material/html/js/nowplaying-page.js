@@ -978,8 +978,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return;
             }
             if (!this.disablePrev) {
-                if (skip && this.playerStatus.current.time>=LMS_SKIP_DURATION) {
-                    this.doAction(['time', this.playerStatus.current.time-LMS_SKIP_DURATION]);
+                if (skip && this.playerStatus.current.time>=this.$store.state.skipSeconds) {
+                    this.doAction(['time', this.playerStatus.current.time-this.$store.state.skipSeconds]);
                 } else {
                     this.doAction(['button', 'jump_rew']);
                 }
@@ -990,8 +990,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return;
             }
             if (!this.disableNext) {
-                if (skip && (this.playerStatus.current.time+LMS_SKIP_DURATION)<this.playerStatus.current.duration) {
-                    this.doAction(['time', this.playerStatus.current.time+LMS_SKIP_DURATION]);
+                if (skip && (this.playerStatus.current.time+this.$store.state.skipSeconds)<this.playerStatus.current.duration) {
+                    this.doAction(['time', this.playerStatus.current.time+this.$store.state.skipSeconds]);
                 } else {
                     this.doAction(['playlist', 'index', '+1']);
                 }

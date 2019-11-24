@@ -125,6 +125,10 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
         bus.$emit('queueDisplayChanged');
     }
+    if (undefined!=val.skipSeconds && state.skipSeconds!=val.skipSeconds) {
+        state.skipSeconds = val.skipSeconds;
+        setLocalStorageVal('skipSeconds', state.skipSeconds);
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -178,7 +182,8 @@ const store = new Vuex.Store({
         queueThreeLines: false,
         openDialogs: [],
         activeDialog: undefined,
-        unlockAll: false
+        unlockAll: false,
+        skipSeconds: 30
     },
     mutations: {
         setPlayers(state, players) {
@@ -357,6 +362,7 @@ const store = new Vuex.Store({
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
+            state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
@@ -412,7 +418,8 @@ const store = new Vuex.Store({
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
-                                     queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines) };
+                                     queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
+                                     skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

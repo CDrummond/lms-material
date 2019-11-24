@@ -10,6 +10,10 @@ var lmsNumVisibleMenus = 0;
    switching mobile/desktop or when mini-player is launched */
 var lmsUseLastPlayer = false;
 
+function copyPlayer(p){
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip};
+}
+
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
     if (undefined!=val.darkUi && state.darkUi!=val.darkUi) {
@@ -245,7 +249,7 @@ const store = new Vuex.Store({
                 if (!lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
-                            state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                            state.player = copyPlayer(state.players[i]);
                             setLocalStorageVal('player', state.player.id);
                             break;
                         }
@@ -256,7 +260,7 @@ const store = new Vuex.Store({
                     if (config) {
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if (state.players[i].id === config || state.players[i].name == config) {
-                                state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                                state.player = copyPlayer(state.players[i]);
                                 setLocalStorageVal('player', state.player.id);
                                 break;
                             }
@@ -266,7 +270,7 @@ const store = new Vuex.Store({
                 if (lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
-                            state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                            state.player = copyPlayer(state.players[i]);
                             setLocalStorageVal('player', state.player.id);
                             break;
                         }
@@ -283,7 +287,7 @@ const store = new Vuex.Store({
                     for (var j=0; j<4 && !state.player; ++j) {
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
-                                state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                                state.player = copyPlayer(state.players[i]);
                                 setLocalStorageVal('player', state.player.id);
                                 break;
                             }
@@ -301,7 +305,7 @@ const store = new Vuex.Store({
             if (state.players) {
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === id) {
-                        state.player = {id:state.players[i].id, name:state.players[i].name, isgroup:state.players[i].isgroup};
+                        state.player = copyPlayer(state.players[i]);
                         setLocalStorageVal('player', id);
                         break;
                     }

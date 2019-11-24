@@ -11,78 +11,6 @@ var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
-var toolbarComponent;
-var mediaAudio = undefined;
-var mediaInterval = undefined;
-var mediaStarted = false;
-
-const MEDIA_SESSION_PLAY_SILENCE = getLocalStorageBool('playSilence', false);
-
-function controlAudio() {
-    if (!MEDIA_SESSION_PLAY_SILENCE || !mediaAudio || !mediaStarted) {
-        return;
-    }
-    if (toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying) {
-        if (mediaAudio.paused) {
-            mediaAudio.currentTime = 0; // Go back to start
-            mediaAudio.play().then(_ => {
-                mediaInterval = setInterval(function() {
-                    mediaAudio.currentTime = 0; // Go back to start
-                }, 5000);
-            }).catch(err => {
-            });
-        }
-    } else if (!mediaAudio.paused) {
-        mediaAudio.pause();
-        if (mediaInterval) {
-            clearInterval(mediaInterval);
-            mediaInterval=undefined;
-        }
-    }
-}
-
-function initMediaSessionAudio() {
-    if (mediaAudio == undefined) {
-        mediaAudio = document.createElement('audio');
-        //window.removeEventListener('touchend', initMediaSessionAudio);
-        window.removeEventListener('click', initMediaSessionAudio);
-        setTimeout(function () {
-            toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
-        }, 500);
-    }
-}
-
-function startMediaSession() {
-    if (!mediaAudio || mediaStarted) {
-        controlAudio();
-        return;
-    }
-    mediaAudio.src = "html/audio/silence.ogg";
-    mediaAudio.play().then(_ => {
-        mediaAudio.currentTime = 0; // Go back to start
-        mediaAudio.pause();
-        toolbarComponent.updateMediaSession(toolbarComponent.playerStatus.current, true);
-        navigator.mediaSession.playbackState = toolbarComponent.playerStatus && toolbarComponent.playerStatus.isplaying ? "playing" : "paused";
-        mediaStarted = true;
-    }).catch(err => {
-    });
-    controlAudio();
-}
-
-function stopMediaSession() {
-    if (!mediaStarted) {
-        return;
-    }
-    if (mediaInterval) {
-        clearInterval(mediaInterval);
-        mediaInterval=undefined;
-    }
-    mediaStarted = false;
-    if (mediaAudio.src) {
-        mediaAudio.src = undefined;
-    }
-    navigator.mediaSession.metadata = undefined;
-}
 
 Vue.component('lms-toolbar', {
     template: `
@@ -311,7 +239,6 @@ Vue.component('lms-toolbar', {
                     this.playerVolume = vol;
                 }
             }
-            this.updateMediaSession(playerStatus.current);
         }.bind(this));
         
         bus.$on('langChanged', function() {
@@ -355,39 +282,6 @@ Vue.component('lms-toolbar', {
             this.snackbar = {msg: msg, show: true };
         }.bind(this));
 
-        if ('mediaSession' in navigator && IS_MOBILE) {
-            toolbarComponent = this;
-            //window.addEventListener('touchend', initMediaSessionAudio);
-            window.addEventListener('click', initMediaSessionAudio);
-            this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
-            navigator.mediaSession.setActionHandler('play', () => {
-                if (this.playerStatus && this.playerStatus.isplaying) {
-                    bus.$emit('playerCommand', ['pause']);
-                } else {
-                    bus.$emit('playerCommand', ['play']);
-                }
-            });
-            navigator.mediaSession.setActionHandler('pause', function() {
-                bus.$emit('playerCommand', ['pause']);
-            });
-            navigator.mediaSession.setActionHandler('previoustrack', function() {
-                bus.$emit('playerCommand', ['button', 'jump_rew']);
-            });
-            navigator.mediaSession.setActionHandler('nexttrack', function() {
-                bus.$emit('playerCommand', ['playlist', 'index', '+1']);
-            });
-            bus.$on('currentCover', function(coverUrl) {
-                this.media.cover = coverUrl;
-                this.updateMediaSession(this.playerStatus.current, true);
-            }.bind(this));
-            bus.$emit('getCurrentCover');
-            bus.$on('haveLocalAndroidPlayer', function(coverUrl) {
-                this.updateMediaSession(undefined, true);
-            }.bind(this));
-            bus.$on('lsAndNotifChanged', function(coverUrl) {
-                this.updateMediaSession(this.playerStatus.current, true);
-            }.bind(this));
-        }
         bus.$on('networkStatus', function(connected) {
             if (connected) {
                 this.connected = true;
@@ -484,35 +378,6 @@ Vue.component('lms-toolbar', {
                     }
                     return false;
                 }.bind(this), { passive: true });
-            }
-        },
-        updateMediaSession(track, force) {
-            if (!mediaAudio) {
-                return;
-            }
-            if ('mediaSession' in navigator) {
-                // haveLocalAndroidPlayer is defined in server.js
-                if ((haveLocalAndroidPlayer && MEDIA_SESSION_PLAY_SILENCE) || !this.$store.state.lsAndNotif) {
-                    stopMediaSession();
-                    this.media.title = undefined;
-                    this.media.artist = undefined;
-                    this.media.album = undefined;
-                } else {
-                    startMediaSession();
-                    navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
-                    var artist = track.trackartist ? track.trackartist : track.artist;
-                    if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
-                        this.media.title = track.title;
-                        this.media.artist = artist;
-                        this.media.album = track.album;
-                        navigator.mediaSession.metadata = new MediaMetadata({
-                            title: this.media.title,
-                            artist: this.media.artist,
-                            album: this.media.album,
-                            artwork: [ {src: ""+this.media.cover, type: 'image/jpeg'}]
-                        });
-                    }
-                }
             }
         },
         initItems() {

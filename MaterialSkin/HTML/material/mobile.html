@@ -33,6 +33,7 @@
    <v-app class="lms-app" :dark="darkUi" v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight">
     <lms-toolbar></lms-toolbar>
     <lms-currentcover></lms-currentcover>
+    <lms-mediasession></lms-mediasession>
     <lms-server></lms-server>
     <lms-browse v-show="page=='browse'"></lms-browse>
     <lms-now-playing v-show="page=='now-playing'"></lms-now-playing>
@@ -111,6 +112,7 @@
   <script src="html/js/constants.js?r=[% material_revision %]"></script>
   <script src="html/js/currentcover.js?r=[% material_revision %]"></script>
   <script src="html/js/utils.js?r=[% material_revision %]"></script>
+  <script src="html/js/mediasession.js?r=[% material_revision %]"></script>
   <script src="html/js/toolbar.js?r=[% material_revision %]"></script>
   <script src="html/js/bottomnav.js?r=[% material_revision %]"></script>
   <script src="html/js/icon-mapping.js?r=[% material_revision %]"></script>

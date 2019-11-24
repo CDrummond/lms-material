@@ -204,6 +204,11 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="swipeVolume"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+    <v-list-tile>
+     <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
+    </v-list-tile>
+
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
@@ -299,6 +304,8 @@ Vue.component('lms-ui-settings', {
                            { value: 10, label: "10%"}
                          ],
             volumeStep: 5,
+            skipSecondsOptions: [ ],
+            skipSeconds: 30,
             showPlayerMenuEntry: false,
             lsAndNotif: true,
             lsAndNotifPlaySilence: false,
@@ -345,6 +352,7 @@ Vue.component('lms-ui-settings', {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
             }
+            this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
@@ -388,6 +396,11 @@ Vue.component('lms-ui-settings', {
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
                 ];
+            this.skipSecondsOptions = [ { value: 5,  label: i18n("%1 seconds", 5) },
+                               { value: 10, label: i18n("%1 seconds", 10)},
+                               { value: 15, label: i18n("%1 seconds", 15)},
+                               { value: 30, label: i18n("%1 seconds", 30)}
+                             ];
         },
         close() {
             this.show=false;
@@ -415,7 +428,8 @@ Vue.component('lms-ui-settings', {
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   lsAndNotif:this.lsAndNotif,
                                                   menuIcons:this.menuIcons,
-                                                  hidden:this.hiddenItems()
+                                                  hidden:this.hiddenItems(),
+                                                  skipSeconds:this.skipSeconds
                                                 } );
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -458,7 +472,8 @@ Vue.component('lms-ui-settings', {
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      lsAndNotif:this.lsAndNotif,
                                      menuIcons:this.menuIcons,
-                                     hidden:Array.from(this.hiddenItems())
+                                     hidden:Array.from(this.hiddenItems()),
+                                     skipSeconds:this.skipSeconds
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);

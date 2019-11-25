@@ -147,7 +147,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
  <div v-else>
-  <div v-show="overlayVolume>-1" id="volumeOverlay">{{overlayVolume}}%</div>
+  <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
   <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
@@ -286,6 +286,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  playerStatus: {
                     isplaying: false,
                     sleepTimer: false,
+                    dvc: true,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
@@ -439,6 +440,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
                 this.playerStatus.sleepTimer = playerStatus.will_sleep_in;
+            }
+            if (playerStatus.dvc!=this.playerStatus.dvc) {
+                this.playerStatus.dvc = playerStatus.dvc;
             }
             var artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
             var artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;

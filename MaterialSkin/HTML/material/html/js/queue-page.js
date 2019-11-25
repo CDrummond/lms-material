@@ -540,9 +540,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('showMessage', i18n('Queue is empty'));
                 return;
             }
-            var value=""+(undefined==this.playlistName ? "" : this.playlistName);
-            this.dialog={show: true, title: i18n("Save play queue"), hint: i18n("Name"), ok: i18n("Save"), value: value, action:'save'};
-            focusEntry(this);
+            bus.$emit('dlg.open', 'savequeue', ""+(undefined==this.playlistName ? "" : this.playlistName));
         },
         clear() {
             if (this.items.length<1) {
@@ -564,13 +562,6 @@ var lmsQueue = Vue.component("lms-queue", {
                     if ('add'==this.dialog.action) {
                         lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", str]).then(({data}) => {
                             bus.$emit('refreshStatus');
-                        });
-                    } else {
-                        lmsCommand(this.$store.state.player.id, ["playlist", "save", str]).then(({data})=>{
-                            bus.$emit('refreshPlaylist', str);
-                        }).catch(err => {
-                            bus.$emit('showError', err, i18n("Failed to save play queue!"));
-                            logError(err);
                         });
                     }
                 }

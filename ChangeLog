@@ -25,6 +25,9 @@
     100%" is set), then show volume as 100% and add "Fixed Volume" label.
 16. Indicate when saving queue if a playlist already exists with the chosen
     name.
+17. Single click on DSTM icon in queue or now-playing will switch to
+    "repeat all". To disable DSTM, or change its options, long press on DSTM
+    icon.
 
 1.1.3
 -----

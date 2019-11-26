@@ -178,11 +178,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs4>
        <v-layout text-xs-center>
         <v-flex xs6>
-         <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon @click="doCommand(repAltBtn.command, repAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-         <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
-         <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
-         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="bus.$emit('dlg.open', 'dstm')" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
-         <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatOff" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
+         <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+         <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
+         <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
+         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
+         <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
         </v-flex>
         <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
        </v-layout>
@@ -245,11 +245,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>
      <v-flex xs6>
-      <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon @click="doCommand(repAltBtn.command, repAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-      <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" @click="doAction(['playlist', 'repeat', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
-      <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" @click="doAction(['playlist', 'repeat', 1])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
-      <v-btn :title="trans.dstm" flat icon v-else-if="dstm" @click="bus.$emit('dlg.open', 'dstm')" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
-      <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatOff" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
+      <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+      <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
+      <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
+      <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
+      <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
      </v-flex>
      <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
     </v-layout>
@@ -1001,11 +1001,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         },
-        repeatOff(showDstm) {
-            if (showDstm) {
-                bus.$emit('dlg.open', 'dstm');
+        repeatClicked(longPress) {
+            if (this.repAltBtn.show) {
+                this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {
-                bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
+                if (longPress & (this.dstm || this.playerStatus.playlist.repeat===0)) {
+                   bus.$emit('dlg.open', 'dstm');
+                } else if (this.playerStatus.playlist.repeat===1) {
+                    bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
+                } else if (this.playerStatus.playlist.repeat===2) {
+                    bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
+                } else {
+                    bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
+                }
             }
         },
         showSleep() {

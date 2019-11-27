@@ -28,6 +28,8 @@
 17. Single click on DSTM icon in queue or now-playing will switch to
     "repeat all". To disable DSTM, or change its options, long press on DSTM
     icon.
+18. Check player status at least once every 5 seconds whilst playing, so that
+    updates made from another instance, or UI, are reflected quicker.
 
 1.1.3
 -----

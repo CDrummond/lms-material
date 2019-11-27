@@ -417,7 +417,7 @@ var lmsServer = Vue.component('lms-server', {
                                                                 ? undefined!=player.current.time
                                                                     ? (player.current.duration-player.current.time)<2.5
                                                                         ? 500 // Near end, every 1/2 second
-                                                                        : (player.current.duration-(player.current.time+2))*1000 // 2 seconds before end
+                                                                        : 5000 // Every 5 seconds...
                                                                     : player.current.time<5 // For streams, poll for the first 5 seconds
                                                                         ? 1000
                                                                         : undefined

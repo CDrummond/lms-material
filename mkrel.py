@@ -260,7 +260,7 @@ def updatePublicXml(version, zipFile, sha1):
     info("Updating %s" % PUBLIC_XML)
     with open(PUBLIC_XML, "r") as f:
         lines=f.readlines()
-    for i in xrange(len(lines)):
+    for i in range(len(lines)):
         updated = updateLine(lines[i], 'version="', '"', version)
         if updated:
             lines[i]=updated

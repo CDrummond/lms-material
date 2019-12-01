@@ -812,7 +812,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if (item.header) {
-                if (item.allSearchResults) {
+                if (item.allSearchResults && item.allSearchResults.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
                     this.addHistory();
                     this.items = item.allSearchResults;
                     this.headerSubTitle = item.subtitle;

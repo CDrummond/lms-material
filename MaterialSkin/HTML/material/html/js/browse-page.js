@@ -691,8 +691,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                     // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
                     if (this.tbarActions.length==0 && this.items.length>1 && this.items[0].menu && this.items[0].menu.length>0 &&
-                        (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) && 
-                        !(this.command.command.length>0 && (this.command.command[0]=="trackinfo" || this.command.command[0]=="artistinfo" ||
+                        (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
+                        // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+                        !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||
                                                             this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                         // If first item's id is xx.yy.zz then use xx.yy as playall/addall id

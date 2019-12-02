@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdgltyAKNS" : "tags:cdegltysAKNS";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegltyAKNS" : "tags:cdegltysAKNS";
 
 function queueItemCover(item, infoPlugin) {
     if (item.artwork_url) {

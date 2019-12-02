@@ -340,6 +340,9 @@ var lmsQueue = Vue.component("lms-queue", {
             this.timestamp=0;
             this.updateItems();
         }.bind(this));
+        bus.$on('playerChanged', function() {
+            this.clearSelection();
+        }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.playlist.shuffle!=this.playerStatus.shuffle) {

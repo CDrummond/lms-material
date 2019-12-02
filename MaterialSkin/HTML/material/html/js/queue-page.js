@@ -655,7 +655,7 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (UNSELECT_ACTION===act) {
                 this.selectStart = undefined;
                 if (this.selection.has(index)) {
-                    this.selection.delete(idx);
+                    this.selection.delete(index);
                     item.selected = false;
                     var idx = item.actions.indexOf(UNSELECT_ACTION);
                     if (idx>-1) {

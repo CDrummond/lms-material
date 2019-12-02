@@ -5,6 +5,7 @@
    'More' needs this
 3. Fix 'Remove album' missing from queue menu in mobile browsers.
 4. Clear queue selection if change player.
+5. Fix unselection uf queue items.
 
 1.2.0
 -----

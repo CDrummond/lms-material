@@ -4,6 +4,7 @@
 2. Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via
    'More' needs this
 3. Fix 'Remove album' missing from queue menu in mobile browsers.
+4. Clear queue selection if change player.
 
 1.2.0
 -----

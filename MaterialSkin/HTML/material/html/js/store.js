@@ -305,6 +305,7 @@ const store = new Vuex.Store({
             } else {
                 bus.$emit('playerListChanged');
             }
+            bus.$emit('playerChanged');
         },
         setPlayer(state, id) {
             if (state.players) {
@@ -312,6 +313,7 @@ const store = new Vuex.Store({
                     if (state.players[i].id === id) {
                         state.player = copyPlayer(state.players[i]);
                         setLocalStorageVal('player', id);
+                        bus.$emit('playerChanged');
                         break;
                     }
                 }

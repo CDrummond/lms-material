@@ -7,6 +7,7 @@
 4. Clear queue selection if change player.
 5. Fix unselection of queue items.
 6. Unescape titles - mainly to fix YouTube lists.
+7. Actually start updates checking timer.
 
 1.2.0
 -----

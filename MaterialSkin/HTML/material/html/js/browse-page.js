@@ -767,7 +767,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);
             } else if (1==resp.items.length && resp.items[0].id=="empty") {
-                bus.$emit('showMessage', item.title);
+                // Dont show 'Empty' no point! #196
+                //bus.$emit('showMessage', item.title);
             } else {
                 this.handleListResponse(item, command, resp);
             }

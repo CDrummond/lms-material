@@ -240,6 +240,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else {
                         i.title=i.text;
                     }
+                    i.title=i.title.replace(/&#(\d+);/g, function(m, dec) { return String.fromCharCode(dec); });
+                    i.title=i.title.replace(/&quot;/g, '"').replace(/.&amp;/g, '"').replace(/.lt;/g, '"').replace(/.&gt;/g, '"');
                 }
 
                 if (!i.type && !i.style && i.actions && i.actions.go && i.actions.go.params) {

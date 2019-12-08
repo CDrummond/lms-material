@@ -6,6 +6,7 @@
 3. Fix 'Remove album' missing from queue menu in mobile browsers.
 4. Clear queue selection if change player.
 5. Fix unselection of queue items.
+6. Unescape titles - mainly to fix YouTube lists.
 
 1.2.0
 -----

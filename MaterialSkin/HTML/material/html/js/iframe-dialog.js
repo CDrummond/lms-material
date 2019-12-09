@@ -68,7 +68,6 @@ function hideClassicSkinElems(page) {
     }
     var iframe = document.getElementById("classicSkinIframe");
     if (iframe) {
-    console.log("PAGE" ,page);
         var toHide = toHide;
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_EXTENDED_BROWSEMODES', 'PLUGIN_DSTM', 'PLUGIN_PRESETS_EDITOR']);

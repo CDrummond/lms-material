@@ -147,15 +147,17 @@ Vue.component('lms-information-dialog', {
                 var updates = eval(resp.data);
                 this.updates.names.clear();
                 this.updates.details = [];
-                if (updates && updates.plugins) {
+                if (updates && updates.plugins && updates.plugins.length>0) {
                     for (var i=0, len=updates.plugins.length; i<len; ++i) {
-                        this.updates.names.add(updates.plugins[i].name);
+                        if (updates.plugins[i]!=null) {
+                            this.updates.names.add(updates.plugins[i].name);
+                            this.updates.details.push(updates.plugins[i]);
+                        }
                     }
-                    this.updates.details = updates.plugins;
                     this.updates.details.sort(titleSort);
                     this.$forceUpdate();
                 }
-                this.$store.commit('setPluginUpdatesAvailable', updates && updates.plugins && updates.plugins.length>0);
+                this.$store.commit('setPluginUpdatesAvailable', this.updates.names.size>0);
                 if (!hadPlugins && this.$store.state.pluginUpdatesAvailable) {
                     this.scrollToPlugins();
                 }

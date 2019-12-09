@@ -603,7 +603,7 @@ var lmsServer = Vue.component('lms-server', {
                 this.updatesTimer = setInterval(function () {
                     this.checkPluginUpdates();
                 }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
-            }.bind(this), 1500);
+            }.bind(this), 500);
         },
         adjustVolume(inc, steps) {
             if (this.$store.state.player) {

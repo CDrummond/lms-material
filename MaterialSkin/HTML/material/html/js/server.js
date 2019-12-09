@@ -627,7 +627,11 @@ var lmsServer = Vue.component('lms-server', {
     mounted: function() {
         this.moving=[];
         bus.$on('networkStatus', function(connected) {
-            this.startUpdatesTimer();
+            if (connected) {
+                this.startUpdatesTimer();
+            } else {
+                this.cancelUpdatesTimer();
+            }
         }.bind(this));
         bus.$on('reconnect', function() {
             this.reConnectToCometD();

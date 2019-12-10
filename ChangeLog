@@ -8,6 +8,7 @@
 5. Fix unselection of queue items.
 6. Unescape titles - mainly to fix YouTube lists.
 7. Actually start updates checking timer.
+8. Fix location of 'Fixed Volume' label in mini-player.
 
 1.2.0
 -----

@@ -78,7 +78,7 @@ Vue.component('lms-toolbar', {
  <v-spacer></v-spacer>
  <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-show="desktop || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (desktop || wide)" :class="['vol-fixed-label', !desktop || !infoPlugin ? 'vol-fixed-label-noinf' : '', nowplaying ? 'vol-fixed-label-np' : '']">{{trans.fixedVol}}</div>
+ <div v-show="!playerDvc && (desktop || wide)" :class="['vol-fixed-label', !desktop || !infoPlugin ? 'vol-fixed-label-noinf' : '', nowplaying ? 'vol-fixed-label-np' : '', mini ? 'vol-fixed-label-mini' : '']">{{trans.fixedVol}}</div>
  <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="desktop || wide" class="vol-full-label" v-bind:class="{'vol-full-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}%</p>
  <v-btn v-show="!(desktop || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">

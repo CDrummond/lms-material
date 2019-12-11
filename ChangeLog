@@ -9,6 +9,7 @@
 6. Unescape titles - mainly to fix YouTube lists.
 7. Actually start updates checking timer.
 8. Fix location of 'Fixed Volume' label in mini-player.
+9. Minify all material JS files into 1.
 
 1.2.0
 -----

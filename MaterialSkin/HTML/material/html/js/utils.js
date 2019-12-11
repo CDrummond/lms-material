@@ -653,14 +653,6 @@ function setAlbumSort(command, sort) {
     setLocalStorageVal(commandAlbumSortKey(command), sort);
 }
 
-function folderName(path) {
-    var parts = path.split("/");
-    if (1==parts) {
-        parts = i.path.split("\\"); // Windows?
-    }
-    return parts[parts.length-1];
-}
-
 function forceItemUpdate(vm, item) {
     var prev = item.title;
     item.title = "XX"+item.title;

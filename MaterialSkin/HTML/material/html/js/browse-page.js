@@ -636,7 +636,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
                     this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
-                    logError(err, command.command, command.params);
+                    logError(err);
                 }
             });
         },
@@ -1837,9 +1837,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var modifiedParams = [];
                 var albumSort=getAlbumSort(cmd);
                 cmd.params.forEach(p => {
-                    r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                       .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                       .replace(TERM_PLACEHOLDER, this.enteredTerm)
+                    var r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                           .replace(TERM_PLACEHOLDER, this.enteredTerm)
                     if (this.$store.state.ratingsSupport && p==TRACK_TAGS) {
                         r=TRACK_TAGS+"R";
                     }

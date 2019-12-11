@@ -170,7 +170,7 @@ Vue.component('lms-iframe-dialog', {
                         this.snackbar={show:true, msg:i18n("Appended all tracks to the play queue")};
                     }
                 }).catch(err => {
-                    logError(err, command.command);
+                    logError(err);
                 });
             }
         }.bind(this));

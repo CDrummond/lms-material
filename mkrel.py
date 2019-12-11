@@ -21,7 +21,9 @@ BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
 INSTALL_XML = BUILD_FOLDER + "/MaterialSkin/install.xml"
 MINIFY = True
+SINGLE_JS = True
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
+MINIFIED_JS = "material.min.js"
 
 def info(s):
     print("INFO: %s" %s)
@@ -144,11 +146,24 @@ def fixClassisSkinMods():
 
 def minifyJs():
     info("...JS")
-    for js in sorted(os.listdir("%s/js" % HTML_FOLDER)):
-        if js.endswith(".js"):
-            info("......%s" % js)
-            jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, js.replace(".js", ".min.js")), "%s/js/%s" % (HTML_FOLDER, js)]
-            subprocess.call(jsCommand, shell=False)
+    if SINGLE_JS:
+        jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, MINIFIED_JS)]
+        with open("%s/../mobile.html" % HTML_FOLDER, "r") as f:
+            for line in f.readlines():
+                start = line.find("html/js/")
+                if start>0:
+                    start+=len("html/js/")
+                    end = line.find("?r=", start)
+                    if end>0:
+                        jsCommand.append("%s/js/%s" % (HTML_FOLDER, line[start:end]))
+        subprocess.call(jsCommand, shell=False)
+    else:
+        for js in sorted(os.listdir("%s/js" % HTML_FOLDER)):
+            if js.endswith(".js"):
+                info("......%s" % js)
+                jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, js.replace(".js", ".min.js")), "%s/js/%s" % (HTML_FOLDER, js)]
+                subprocess.call(jsCommand, shell=False)
+
 
 
 def minifyCss():
@@ -194,6 +209,7 @@ def fixHtml():
         if entry.endswith(".html"):
             fixedLines = []
             path = "%s/../%s" % (HTML_FOLDER, entry)
+            replacedJs = False
             with open(path, "r") as f:
                 lines=f.readlines()
             for line in lines:
@@ -208,7 +224,12 @@ def fixHtml():
                         matchedCss = True
 
                 if matchedJs:
-                    fixedLines.append(line.replace(".js", ".min.js"))
+                    if SINGLE_JS:
+                        if not replacedJs:
+                            replacedJs = True
+                            fixedLines.append('  <script src="html/js/'+MINIFIED_JS+'?r=[% material_revision %]"></script>\n')
+                    else:
+                        fixedLines.append(line.replace(".js", ".min.js"))
                 elif matchedCss:
                     fixedLines.append(line.replace(".css", ".min.css"))
                 else:

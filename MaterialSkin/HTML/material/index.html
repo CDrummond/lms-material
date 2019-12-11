@@ -20,12 +20,10 @@
   <link href="html/images/icon-ios.png?r=[% material_revision %]" rel="apple-touch-icon" sizes="128x128">
  </head>
  <body>
-  <script src="html/lib/vue.min.js?r=2.5.17"></script>
-  <script src="html/js/utils.js?r=[% material_revision %]"></script>
   <script>
-   var layout = getLocalStorageVal("layout", "auto");
+   var layout = window.localStorage.getItem("lms-material::layout");
    if (layout != "desktop" && layout != "mobile") {
-     layout = IS_MOBILE ? "mobile" : "desktop";
+     layout = window.innerWidth<600 || /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent) ? "mobile" : "desktop";
    }
    var query = window.location.href.indexOf('?');
    var queryString = query > 0 ? window.location.href.substring(window.location.href.indexOf('?')) : "";

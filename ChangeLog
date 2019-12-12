@@ -1,15 +1,16 @@
 1.2.1
 -----
-1. Ignore clicks on search header if all values for that field are being shown.
-2. Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via
-   'More' needs this
-3. Fix 'Remove album' missing from queue menu in mobile browsers.
-4. Clear queue selection if change player.
-5. Fix unselection of queue items.
-6. Unescape titles - mainly to fix YouTube lists.
-7. Actually start updates checking timer.
-8. Fix location of 'Fixed Volume' label in mini-player.
-9. Minify all material JS files into 1.
+ 1. Ignore clicks on search header if all values for that field are being shown.
+ 2. Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via
+    'More' needs this
+ 3. Fix 'Remove album' missing from queue menu in mobile browsers.
+ 4. Clear queue selection if change player.
+ 5. Fix unselection of queue items.
+ 6. Unescape titles - mainly to fix YouTube lists.
+ 7. Actually start updates checking timer.
+ 8. Fix location of 'Fixed Volume' label in mini-player.
+ 9. Minify all material JS files into 1.
+10. Combine library JS and CSS files.
 
 1.2.0
 -----

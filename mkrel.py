@@ -22,8 +22,11 @@ HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
 INSTALL_XML = BUILD_FOLDER + "/MaterialSkin/install.xml"
 MINIFY = True
 SINGLE_JS = True
+SINGLE_LIB = True
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
-MINIFIED_JS = "material.min.js"
+MATERIAL_SINGLE_JS = "material.min.js"
+LIB_SINGLE_JS = "lib.min.js"
+LIB_SINGLE_CSS = "lib.min.css"
 
 def info(s):
     print("INFO: %s" %s)
@@ -90,6 +93,30 @@ def updateInstallXml(version):
             f.write(line)
 
 
+def checkAndRemove(path, t):
+    orig = path.replace(".min."+t, "."+t)
+    if os.path.exists(orig):
+        os.remove(orig)
+        info("...remove %s" % orig)
+    orig = path.replace(".min."+t, ".orig."+t)
+    if os.path.exists(orig):
+        os.remove(orig)
+        info("...remove %s" % orig)
+
+
+def cleanDir(path):
+    for e in os.listdir(path):
+        entry = "%s/%s" % (path, e)
+        if e == "minify.sh":
+            os.remove(entry)
+        elif e.endswith(".min.js"):
+            checkAndRemove(entry, "js")
+        elif e.endswith(".min.css"):
+            checkAndRemove(entry, "css")
+        elif os.path.isdir(entry):
+            cleanDir(entry)
+
+
 def prepare():
     info("Preparing code")
     if os.path.exists(BUILD_FOLDER):
@@ -100,15 +127,8 @@ def prepare():
     except Exception as e:
         error("Failed to copy files to %s folder - %s" % (BUILD_FOLDER, str(e)))
 
-    # Remove unminified versions of JS files, if we have the minified version
-    for js in os.listdir("%s/lib" % HTML_FOLDER):
-        if js.endswith(".min.js"):
-            orig = js.replace(".min.js", ".js")
-            if os.path.exists("%s/lib/%s" % (HTML_FOLDER, orig)):
-                os.remove("%s/lib/%s" % (HTML_FOLDER, orig))
-            orig = js.replace(".min.js", ".orig.js")
-            if os.path.exists("%s/lib/%s" % (HTML_FOLDER, orig)):
-                os.remove("%s/lib/%s" % (HTML_FOLDER, orig))
+    # Remove unminified versions of CSS and JS files, if we have the minified version
+    cleanDir("%s/lib" % HTML_FOLDER)
 
 
 def cleanup():
@@ -147,15 +167,20 @@ def fixClassisSkinMods():
 def minifyJs():
     info("...JS")
     if SINGLE_JS:
-        jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, MINIFIED_JS)]
-        with open("%s/../mobile.html" % HTML_FOLDER, "r") as f:
-            for line in f.readlines():
-                start = line.find("html/js/")
-                if start>0:
-                    start+=len("html/js/")
-                    end = line.find("?r=", start)
-                    if end>0:
-                        jsCommand.append("%s/js/%s" % (HTML_FOLDER, line[start:end]))
+        scripts=[]
+        jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, MATERIAL_SINGLE_JS)]
+        for variant in ["mobile", "desktop"]:
+            with open("%s/../%s.html" % (HTML_FOLDER, variant), "r") as f:
+                for line in f.readlines():
+                    start = line.find("html/js/")
+                    if start>0:
+                        start+=len("html/js/")
+                        end = line.find("?r=", start)
+                        if end>0:
+                            script=line[start:end]
+                            if not script in scripts:
+                                jsCommand.append("%s/js/%s" % (HTML_FOLDER, script))
+                                scripts.append(script)
         subprocess.call(jsCommand, shell=False)
     else:
         for js in sorted(os.listdir("%s/js" % HTML_FOLDER)):
@@ -203,18 +228,61 @@ def removeUnminified():
                 os.remove("%s/css/%s" % (HTML_FOLDER, entry))
 
 
+def combineLib():
+    info("...Combining library files")
+    scripts=[]
+    css=[]
+    for variant in ["mobile", "desktop"]:
+        with open("%s/../%s.html" % (HTML_FOLDER, variant), "r") as f:
+            for line in f.readlines():
+                start = line.find("html/lib/")
+                if start>0:
+                    start+=len("html/lib/")
+                    end = line.find("?r=", start)
+                    if end<=0:
+                        end = line.find('"', start)
+                    if end>0:
+                        file=line[start:end]
+                        if file.endswith(".js"):
+                            if not file in scripts:
+                                scripts.append(file)
+                        elif file.endswith(".css"):
+                            if not file in css:
+                                css.append(file)
+    info("......JS")
+    with open("%s/lib/%s" % (HTML_FOLDER, LIB_SINGLE_JS), "w") as out:
+        for script in scripts:
+            with open("%s/lib/%s" % (HTML_FOLDER, script), "r") as f:
+                out.writelines(f.readlines())
+                out.write("\n")
+            info("......... %s" % script)
+            os.remove("%s/lib/%s" % (HTML_FOLDER, script))
+    info("......CSS")
+    with open("%s/lib/%s" % (HTML_FOLDER, LIB_SINGLE_CSS), "w") as out:
+        for c in css:
+            with open("%s/lib/%s" % (HTML_FOLDER, c), "r") as f:
+                out.writelines(f.readlines())
+                out.write("\n")
+            info("......... %s" % c)
+            os.remove("%s/lib/%s" % (HTML_FOLDER, c))
+
+
 def fixHtml():
     info("...updating HTML files")
     for entry in os.listdir("%s/../" % HTML_FOLDER):
         if entry.endswith(".html"):
             fixedLines = []
             path = "%s/../%s" % (HTML_FOLDER, entry)
-            replacedJs = False
+            replacedMaterialJs = False
+            replacedLibJs = False
+            replacedLibCss = False
             with open(path, "r") as f:
                 lines=f.readlines()
             for line in lines:
                 matchedJs = False
                 matchedCss = False
+                matchedLibJs = False
+                matchedLibCss = False
                 matches = re.findall('src\\s*\\=\\"html/js/[^\\"]+\\.js', line)
                 if matches and 1==len(matches):
                     matchedJs = True
@@ -222,16 +290,32 @@ def fixHtml():
                     matches = re.findall('href\\s*\\=\\"html/css/[^\\"]+\\.css', line)
                     if matches and 1==len(matches):
                         matchedCss = True
+                    elif SINGLE_LIB:
+                        matches = re.findall('src\\s*\\=\\"html/lib/[^\\"]+\\.js', line)
+                        if matches and 1==len(matches):
+                            matchedLibJs = True
+                        else:
+                            matches = re.findall('href\\s*\\=\\"html/lib/[^\\"]+\\.css', line)
+                            if matches and 1==len(matches):
+                                matchedLibCss = True
 
                 if matchedJs:
                     if SINGLE_JS:
-                        if not replacedJs:
-                            replacedJs = True
-                            fixedLines.append('  <script src="html/js/'+MINIFIED_JS+'?r=[% material_revision %]"></script>\n')
+                        if not replacedMaterialJs:
+                            replacedMaterialJs = True
+                            fixedLines.append('  <script src="html/js/'+MATERIAL_SINGLE_JS+'?r=[% material_revision %]"></script>\n')
                     else:
                         fixedLines.append(line.replace(".js", ".min.js"))
                 elif matchedCss:
                     fixedLines.append(line.replace(".css", ".min.css"))
+                elif matchedLibJs:
+                    if not replacedLibJs:
+                        replacedLibJs = True
+                        fixedLines.append('  <script src="html/lib/'+LIB_SINGLE_JS+'?r=[% material_revision %]"></script>\n')
+                elif matchedLibCss:
+                    if not replacedLibCss:
+                        replacedLibCss = True
+                        fixedLines.append('  <link href="html/lib/'+LIB_SINGLE_CSS+'?r=[% material_revision %]" rel="stylesheet">\n')
                 else:
                     fixedLines.append(line)
 
@@ -247,6 +331,8 @@ def minify():
     minifyJs()
     minifyCss()
     removeUnminified()
+    if SINGLE_LIB:
+        combineLib()
     fixHtml()
 
 

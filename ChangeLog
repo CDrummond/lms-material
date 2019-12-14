@@ -1,8 +1,8 @@
 1.2.1
 -----
  1. Ignore clicks on search header if all values for that field are being shown.
- 2. Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via
-    'More' needs this
+ 2. Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' accessed
+    via 'More' needs this
  3. Fix 'Remove album' missing from queue menu in mobile browsers.
  4. Clear queue selection if change player.
  5. Fix unselection of queue items.

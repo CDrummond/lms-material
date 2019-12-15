@@ -168,11 +168,11 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
 
     <v-list-tile-content v-if="item.type=='search'">
-     <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
+     <v-text-field :autofocus="index==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
     </v-list-tile-content>
 
     <v-list-tile-content v-else-if="item.type=='entry'">
-     <v-text-field single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
+     <v-text-field :autofocus="index==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
     </v-list-tile-content>
 
     <v-list-tile-content v-else>

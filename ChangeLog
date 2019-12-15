@@ -1,3 +1,8 @@
+1.2.2
+-----
+1. For desktop browsers, auto-focus search field if it is the first item in a
+   list. (Issue #198)
+
 1.2.1
 -----
  1. Ignore clicks on search header if all values for that field are being shown.

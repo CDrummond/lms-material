@@ -736,7 +736,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     this.setBgndCover();
                     this.filterJumplist();
-                    this.layoutGrid();
+                    this.layoutGrid(true);
                     setScrollTop(this.scrollElement, 0);
                 });
             }
@@ -1435,7 +1435,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$nextTick(function () {
                     this.setScrollElement();
                     this.setBgndCover();
-                    this.layoutGrid();
+                    this.layoutGrid(true);
                     setUseGrid(this.command, this.grid.use);
                     var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
                     var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
@@ -1585,7 +1585,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     this.setBgndCover();
                     this.filterJumplist();
-                    this.layoutGrid();
+                    this.layoutGrid(true);
                     setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
                 });
             }
@@ -2254,7 +2254,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        layoutGrid() {
+        layoutGrid(force) {
             if (!this.grid.use) {
                 return;
             }
@@ -2274,7 +2274,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var haveSubtitle = false;
             // How many columns?
             var numColumns = Math.max(Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length), 1);
-            if (numColumns != this.grid.numColumns) { // Need to re-layout...
+            if (force || numColumns != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
                 for (var i=0; i<this.items.length; i+=numColumns) {

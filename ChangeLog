@@ -3,6 +3,7 @@
 1. For desktop browsers, auto-focus search field if it is the first item in a
    list. (Issue #198)
 2. Force grid re-layout when change item list
+3. Fix missing icons in picture viewer.
 
 1.2.1
 -----

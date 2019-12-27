@@ -190,7 +190,6 @@ def minifyJs():
                 subprocess.call(jsCommand, shell=False)
 
 
-
 def minifyCss():
     info("...CSS")
     for css in sorted(os.listdir("%s/css" % HTML_FOLDER)):
@@ -265,6 +264,10 @@ def combineLib():
                 out.write("\n")
             info("......... %s" % c)
             os.remove("%s/lib/%s" % (HTML_FOLDER, c))
+    info("......PhotoSwipe Skin")
+    for entry in os.listdir("%s/lib/photoswipe/default-skin/" % HTML_FOLDER):
+        os.rename("%s/lib/photoswipe/default-skin/%s" % (HTML_FOLDER, entry), "%s/lib/%s" % (HTML_FOLDER, entry))
+    shutil.rmtree("%s/lib/photoswipe" % HTML_FOLDER)
 
 
 def fixHtml():

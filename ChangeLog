@@ -4,6 +4,7 @@
    list. (Issue #198)
 2. Force grid re-layout when change item list
 3. Fix missing icons in picture viewer.
+4. Fix unescaping of titles.
 
 1.2.1
 -----

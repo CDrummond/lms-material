@@ -1,7 +1,7 @@
 /**
  * LMS-Material
  *
- * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
 
@@ -89,7 +89,7 @@ Vue.component('lms-information-dialog', {
    <div class="dialog-padding"></div>
    <v-divider></v-divider>
    <div class="dialog-padding"></div>
-   <p>© 2018-2019 Craig Drummond</p>
+   <p>© 2018-2020 Craig Drummond</p>
    <div class="dialog-padding"></div>
   </div></div>
  </v-card>

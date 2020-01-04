@@ -816,7 +816,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION],
                               type: "track",
                               draggable: true
                           });

@@ -41,13 +41,14 @@ const VLIB_ACTION             = 31;
 const ADD_PODCAST_ACTION      = 32;
 const REMOVE_PODCAST_ACTION   = 33;
 const SEARCH_PODCAST_ACTION   = 34;
+const MOVE_HERE_ACTION        = 35;
 
-const PQ_PLAY_NOW_ACTION      = 35;
-const PQ_PLAY_NEXT_ACTION     = 36;
-const PQ_SCROLL_ACTION        = 37;
-const PQ_ADD_URL_ACTION       = 38;
-const PQ_MOVE_QUEUE_ACTION    = 39;
-const PQ_REMOVE_ALBUM_ACTION  = 40;
+const PQ_PLAY_NOW_ACTION      = 36;
+const PQ_PLAY_NEXT_ACTION     = 37;
+const PQ_SCROLL_ACTION        = 38;
+const PQ_ADD_URL_ACTION       = 39;
+const PQ_MOVE_QUEUE_ACTION    = 40;
+const PQ_REMOVE_ALBUM_ACTION  = 41;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -85,6 +86,7 @@ var ACTIONS=[
     {cmd:"add-podcast",  icon:"add_box"},
     {cmd:"remove-podcast",icon:"remove_circle_outline"},
     {cmd:"search-podcast",icon:"search"},
+    {cmd:"move-here",    icon:"format_indent_increase"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
@@ -134,6 +136,7 @@ function updateActionStrings() {
     ACTIONS[REMOVE_PODCAST_ACTION].title=i18n("Remove");
     ACTIONS[SEARCH_PODCAST_ACTION].title=i18n("Search for podcasts");
     ACTIONS[SEARCH_PODCAST_ACTION].key=LMS_SEARCH_KEYBOARD;
+    ACTIONS[MOVE_HERE_ACTION].title=i18n("Move selection here");
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");

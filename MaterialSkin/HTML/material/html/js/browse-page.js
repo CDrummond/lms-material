@@ -228,7 +228,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !selection.has(menu.index))" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -1227,6 +1227,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                         item.menu[idx]=SELECT_ACTION;
                     }
                     forceItemUpdate(this, item);
+                }
+            } else if (MOVE_HERE_ACTION==act) {
+                if (this.selection.size>0 && !this.selection.has(index)) {
+                    bus.$emit('movePlaylistItems', this.current.id, Array.from(this.selection).sort(function(a, b) { return a<b ? -1 : 1; }), index);
+                    this.clearSelection();
                 }
             } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);

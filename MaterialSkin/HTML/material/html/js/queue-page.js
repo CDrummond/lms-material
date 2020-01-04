@@ -150,8 +150,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, SELECT_ACTION, MORE_ACTION],
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
@@ -274,7 +274,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
-    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !selection.has(menu.index))" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -663,6 +663,11 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     forceItemUpdate(this, item);
                 }
+            } else if (MOVE_HERE_ACTION==act) {
+                if (this.selection.size>0 && !this.selection.has(index)) {
+                    bus.$emit('moveQueueItems', Array.from(this.selection).sort(function(a, b) { return a<b ? -1 : 1; }), index);
+                    this.clearSelection();
+                }
             }
         },
         headerAction(act) {
@@ -833,7 +838,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         var selection = Array.from(this.selection);
                         for (var i=0, len=selection.length; i<len; ++i) {
                             if (selection[i]<this.items.length) {
-                                sel.push(selection[i]);
+                                sel.add(selection[i]);
                                 this.items[selection[i]].selected = true;
                             }
                         }

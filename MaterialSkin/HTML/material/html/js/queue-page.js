@@ -833,7 +833,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         var selection = Array.from(this.selection);
                         for (var i=0, len=selection.length; i<len; ++i) {
                             if (selection[i]<this.items.length) {
-                                sel.push(selection[i]);
+                                sel.add(selection[i]);
                                 this.items[selection[i]].selected = true;
                             }
                         }

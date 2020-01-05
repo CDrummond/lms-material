@@ -9,6 +9,7 @@ package Plugins::MaterialSkin::Plugin;
 #
 
 use Config;
+use Slim::Menu::BrowseLibrary;
 use Slim::Music::VirtualLibraries;
 use Slim::Utils::Favorites;
 use Slim::Utils::Log;
@@ -139,6 +140,9 @@ sub initCLI {
     );
     Slim::Control::Request::addDispatch(['material-skin-modes', '_cmd'],
                                                                 [1, 0, 1, \&_cliModesCommand]
+    );
+    Slim::Control::Request::addDispatch(['material-skin-browsemodes'],
+                                                                [1, 0, 0, \&_cliBrowseModesCommand]
     );
 }
 
@@ -491,7 +495,7 @@ sub _cliModesCommand {
         $request->setStatusBadParams();
         return;
     }
-
+    
     if ($cmd eq 'get') {
         my $cnt = 0;
         my $clientPrefs = $serverprefs->client($client);
@@ -639,6 +643,55 @@ sub _cliModesCommand {
     }
 
     $request->setStatusBadParams()
+}
+
+sub _cliBrowseModesCommand {
+    my $request = shift;
+    # check this is the correct query.
+    if ($request->isNotCommand([['material-skin-browsemodes']])) {
+        $request->setStatusBadDispatch();
+        return;
+    }
+
+    my $client = $request->client();
+    
+    my $cnt = 0;
+    my $clientPrefs = $serverprefs->client($client);
+    my $perClient = $prefs->get('perClientBrowseModes');
+    my $disabledModes = [];
+    
+    if (! $perClient) {
+        my $disabledModes = $prefs->get('disabledBrowseModes');
+        $disabledModes=['myMusicFlopTracks', 'myMusicTopTracks', 'myMusicFileSystem', 'myMusicMusicFolder'] if $disabledModes eq '';
+        my %disabledModes = map { $_ => 1 } @{$disabledModes};
+    }
+
+    foreach my $node (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
+        if ($node->{id} eq 'myMusicSearch') {
+            next;
+        }
+        if ($perClient = 1) {
+            if ($clientPrefs->get("disabled_" . $node->{id})!=0) {
+                next;
+            }
+        } else {
+            if (exists($disabledModes{$node->{id}})) {
+                next;
+            }
+        }
+        $request->addResultLoop("modes_loop", $cnt, "id", $node->{'id'});
+        $request->addResultLoop("modes_loop", $cnt, "text", cstring($client, $node->{'name'}));
+        $request->addResultLoop("modes_loop", $cnt, "weight", $node->{'weight'});
+        $request->addResultLoop("modes_loop", $cnt, "params", $node->{'params'});
+        if ($node->{'jiveIcon'}) {
+            $request->addResultLoop("modes_loop", $cnt, "icon", $node->{'jiveIcon'});
+        } elsif ($node->{'icon'}) { # ???
+            $request->addResultLoop("modes_loop", $cnt, "icon", $node->{'icon'});
+        }
+        $cnt++;
+    }
+
+    $request->setStatusDone();
 }
 
 sub _connectDone {

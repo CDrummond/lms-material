@@ -10,6 +10,8 @@ package Plugins::MaterialSkin::Settings;
 
 use strict;
 use base qw(Slim::Web::Settings);
+use Slim::Utils::Strings qw(cstring);
+use Slim::Menu::BrowseLibrary;
 use Slim::Utils::Prefs;
 
 my $prefs = preferences('plugin.material-skin');
@@ -24,6 +26,28 @@ sub page {
 
 sub prefs {
 	return ($prefs, 'composergenres', 'conductorgenres', 'password');
+}
+
+sub handler {
+	my ($class, $client, $params) = @_;
+	
+	if ($params->{'saveSettings'}) {
+	}
+
+    my $disabledModes = $prefs->get('disabledBrowseModes');
+    $disabledModes=['myMusicFlopTracks', 'myMusicTopTracks', 'myMusicFileSystem', 'myMusicMusicFolder'] if $disabledModes eq '';
+    my %disabledModes = map { $_ => 1 } @{$disabledModes};
+    
+    $params->{menu_items} = [ ];
+    foreach my $node (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
+        if ($node->{id} eq 'myMusicSearch') {
+            next;
+        }
+        push @{$params->{menu_items}}, {id => $node->{id}, name => cstring('', $node->{name}), weight => $node->{weight}, enabled => exists($disabledModes{$node->{id}}) ? 0 : 1};
+    }
+    @{$params->{menu_items}} = sort { $a->{weight} <=> $b->{weight} } @{$params->{menu_items}};
+                
+	$class->SUPER::handler($client, $params);
 }
 
 1;

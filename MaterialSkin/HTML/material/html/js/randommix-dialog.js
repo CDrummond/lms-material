@@ -18,10 +18,13 @@ Vue.component('lms-randommix', {
     </v-list-tile>
     <v-divider slot="prepend-item"></v-divider>
    </v-select>
-   <v-select v-if="libraries.length>1" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
-   <v-checkbox v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
+   <v-select v-if="libraries.length>1 && showAll" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+   <v-checkbox v-if="showAll" v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
+   <v-text-field v-if="showAll" :label="i18n('Historic track count')" v-model="oldTracks" type="number"></v-text-field>
+   <v-text-field v-if="showAll" :label="i18n('Upcomming track count')" v-model="newTracks" type="number"></v-text-field>
   </v-card-text>
   <v-card-actions>
+   <v-btn flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
    <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
@@ -34,6 +37,7 @@ Vue.component('lms-randommix', {
     data() {
         return {
             show: false,
+            showAll: false,
             genres: [],
             chosenGenres: [],
             mixes: [],
@@ -41,7 +45,9 @@ Vue.component('lms-randommix', {
             active: false,
             libraries: [],
             library: undefined,
-            continuous: true
+            continuous: true,
+            oldTracks: 10,
+            newTracks: 10
         }
     },
     computed: {
@@ -57,6 +63,7 @@ Vue.component('lms-randommix', {
     },
     mounted() {
         bus.$on('rndmix.open', function() {
+            this.showAll = getLocalStorageVal("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
                 this.mixes=[{key:"tracks", label:i18n("Song Mix")},
@@ -118,6 +125,16 @@ Vue.component('lms-randommix', {
                         this.continuous = 1 == parseInt(data.result._p2);
                     }
                 });
+                lmsCommand("", ["pref", "plugin.randomplay:newtracks", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        this.newTracks = parseInt(data.result._p2);
+                    }
+                });
+                lmsCommand("", ["pref", "plugin.randomplay:oldtracks", "?"]).then(({data}) => {
+                   if (data && data.result && data.result._p2 != null) {
+                        this.oldTracks = parseInt(data.result._p2);
+                    }
+                });
             });
         }.bind(this));
         bus.$on('noPlayers', function() {
@@ -132,10 +149,14 @@ Vue.component('lms-randommix', {
     methods: {
         close() {
             this.show=false;
+            setLocalStorageVal("rndmix.showAll", this.showAll);
         },
         start() {
             this.close();
+            setLocalStorageVal("rndmix.showAll", this.showAll);
             lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
+            lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
+            lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
             lmsCommand(this.playerId, ["randomplaychooselibrary", this.library]).then(({data}) => {
                 if (this.chosenGenres.length==0) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {

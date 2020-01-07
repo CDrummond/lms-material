@@ -19,6 +19,7 @@ Vue.component('lms-randommix', {
     <v-divider slot="prepend-item"></v-divider>
    </v-select>
    <v-select v-if="libraries.length>1" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+   <v-checkbox v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
@@ -39,7 +40,8 @@ Vue.component('lms-randommix', {
             chosenMix: "tracks",
             active: false,
             libraries: [],
-            library: undefined
+            library: undefined,
+            continuous: true
         }
     },
     computed: {
@@ -110,6 +112,12 @@ Vue.component('lms-randommix', {
                         }
                     });
                 });
+
+                lmsCommand("", ["pref", "plugin.randomplay:continuous", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        this.continuous = 1 == parseInt(data.result._p2);
+                    }
+                });
             });
         }.bind(this));
         bus.$on('noPlayers', function() {
@@ -127,6 +135,7 @@ Vue.component('lms-randommix', {
         },
         start() {
             this.close();
+            lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
             lmsCommand(this.playerId, ["randomplaychooselibrary", this.library]).then(({data}) => {
                 if (this.chosenGenres.length==0) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {

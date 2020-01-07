@@ -57,6 +57,10 @@ Vue.component('lms-randommix', {
         bus.$on('rndmix.open', function() {
             this.playerId = this.$store.state.player.id;
             lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
+                this.mixes=[{key:"tracks", label:i18n("Song Mix")},
+                            {key:"albums", label:i18n("Album Mix")},
+                            {key:"contributors", label:i18n("Artist Mix")},
+                            {key:"year", label:i18n("Year Mix")}];
                 if (data && data.result && data.result._randomplayisactive) {
                     this.chosenMix = data.result._randomplayisactive;
                     this.active = true;
@@ -64,39 +68,48 @@ Vue.component('lms-randommix', {
                     this.active = false;
                     this.choseMix = "tracks";
                 }
-                this.mixes=[{key:"tracks", label:i18n("Song Mix")},
-                            {key:"albums", label:i18n("Album Mix")},
-                            {key:"contributors", label:i18n("Artist Mix")},
-                            {key:"year", label:i18n("Year Mix")}];
-                this.chosenGenres = [];
-                this.genres = [];
-                lmsList(this.playerId, ["randomplaygenrelist"], undefined, 0, 500).then(({data}) => {
-                    if (data && data.result && data.result.item_loop) {
-                        data.result.item_loop.forEach(i => {
-                            if (undefined!==i.checkbox) {
-                                this.genres.push(i.text);
+
+                lmsList(this.playerId, ["randomplaylibrarylist"], undefined, 0, 500).then(({data}) => {
+                    if (data && data.result && data.result.item_loop && data.result.item_loop.length>0) {
+                        this.libraries = [];
+                        this.library = undefined;
+                        for (var i=0, len=data.result.item_loop.length; i<len; ++i) {
+                            var id = data.result.item_loop[i].actions.do.cmd[1];
+                            if ((""+id).length>2) {
+                                this.libraries.push({name:data.result.item_loop[i].text.replace(SIMPLE_LIB_VIEWS, ""), id:id});
+                                if (parseInt(data.result.item_loop[i].radio)==1) {
+                                    this.library = id;
+                                }
+                            }
+                        }
+                        this.libraries.sort(nameSort);
+                        this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                        if (undefined==this.library) {
+                            this.library = LMS_DEFAULT_LIBRARY;
+                        }
+                    }
+                });
+
+                lmsList(this.playerId, ["genres"], undefined, 0, 1000).then(({data}) => {
+                    this.chosenGenres = [];
+                    this.genres = [];
+                    // Get list of all genres (randomplaygenrelist filters on library chosen for mix!)
+                    if (data && data.result && data.result.genres_loop) {
+                        for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            this.genres.push(loop[idx].genre);
+                        }
+                    }
+                    lmsList(this.playerId, ["randomplaygenrelist"], undefined, 0, 500).then(({data}) => {
+                        if (data && data.result && data.result.item_loop) {
+                            data.result.item_loop.forEach(i => {
                                 if (i.checkbox==1) {
                                     this.chosenGenres.push(i.text);
                                 }
-                            }
-                        });
-                        this.show=true;
-                    }
+                            });
+                            this.show=true;
+                        }
+                    });
                 });
-            });
-            lmsList("", ["libraries"]).then(({data}) => {
-                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                    this.libraries = [];
-                    for (var i=0, len=data.result.folder_loop.length; i<len; ++i) {
-                        data.result.folder_loop[i].name = data.result.folder_loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
-                        this.libraries.push(data.result.folder_loop[i]);
-                    }
-                    this.libraries.sort(nameSort);
-                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
-                    if (undefined==this.library) {
-                        this.library = LMS_DEFAULT_LIBRARY;
-                    }
-                }
             });
         }.bind(this));
         bus.$on('noPlayers', function() {

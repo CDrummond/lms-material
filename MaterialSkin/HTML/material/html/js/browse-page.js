@@ -1270,14 +1270,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                 });
-            } else if ((ADD_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
+            } else if ((ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
                 // Can't use standard add/play-all for search results, so just add each item...
                 var commands=[];
                 var check = item.id.endsWith("tracks") || (SEARCH_ID==item.id && this.items[0].id.startsWith("track")) ? "track_id" : "album_id";
                 var list = item.allSearchResults ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (list[i].id.startsWith(check)) {
-                        commands.push({act:PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION, item:list[i], idx:i});
+                        commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});
                     } else if (commands.length>0) {
                         break;
                     }

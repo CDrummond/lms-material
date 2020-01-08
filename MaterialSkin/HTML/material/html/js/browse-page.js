@@ -84,7 +84,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn icon color="primary" v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <img v-if="items[idx].image" :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <v-icon v-else-if="items[idx].icon" class="image-grid-item-img image-grid-item-icon">{{items[idx].icon}}</v-icon>
+      <img  v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
       <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">

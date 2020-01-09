@@ -10,6 +10,9 @@
 6. Add support for showing icons in grid.
 7. Get list of all browse modes from Slim::Menu::BrowseLibrary, as opposed to
    hard-coding.
+8. Long-press on player 'Extra settings' will show all settings.
+9. Long-press on 'Server settings' in 'Information' dialog will show all
+   server settings.
 
 1.2.2
 -----

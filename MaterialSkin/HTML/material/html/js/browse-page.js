@@ -2329,7 +2329,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
         },
         enableRatings() {
-            this.showRatingButton = (this.$store.state.ratingsSupport &&
+            this.showRatingButton = (this.$store.state.ratingsSupport && this.items.length>0 &&
                 !(this.current && this.current.id && this.current.id.startsWith("playlist_id:")) &&
                 !(this.current && this.current.actions && this.current.actions.go && this.current.actions.go.cmd &&
                   this.current.actions.go.cmd.length>1 && this.current.actions.go.cmd[0]=="trackstat") &&

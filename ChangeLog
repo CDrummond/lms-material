@@ -8,6 +8,8 @@
 5. Add continuous play, upcomming track, and historic track options to
    'Random Mix' dialog.
 6. Add support for showing icons in grid.
+7. Get list of all browse modes from Slim::Menu::BrowseLibrary, as opposed to
+   hard-coding.
 
 1.2.2
 -----

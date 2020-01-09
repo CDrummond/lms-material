@@ -909,10 +909,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         resp = data;
     }
 
-    if (0==resp.items.length) {
-        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
-    }
-
     } catch(e) {
         resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e, type: 'text', id:'error'});
         logError(e);
@@ -940,9 +936,6 @@ function parseBrowseUrlResp(data, provider) {
             }
         }
         resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
-    }
-    if (0==resp.items.length) {
-        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
     }
     return resp;
 }

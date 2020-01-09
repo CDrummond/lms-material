@@ -619,7 +619,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    this.handleListResponse(item, command, {items: []});
                     logError(err, command.command, command.params, 0, count);
                 }
             });
@@ -637,13 +637,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: []});
                     logError(err);
                 }
             });
         },
         handleListResponse(item, command, resp) {
-            if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
+            if (resp && resp.items) {
                 if (!item.id.startsWith(SEARCH_ID) || this.history.length<1 || !this.current || !this.current.id.startsWith(SEARCH_ID)) {
                     this.addHistory();
                 }
@@ -752,7 +752,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     : undefined;
             if (nextWindow) {
                 nextWindow=nextWindow.toLowerCase();
-                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && resp.items[0].id!='empty'
+                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
                                 ? resp.items[0].title : item.title;
                 if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
                     bus.$emit('showMessage', message);
@@ -768,10 +768,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);
-            } else if (1==resp.items.length && resp.items[0].id=="empty") {
-                // Dont show 'Empty' no point! #196
-                //bus.$emit('showMessage', item.title);
-            } else {
+            } else if (resp.items && resp.items.length>0) {
                 this.handleListResponse(item, command, resp);
             }
         },

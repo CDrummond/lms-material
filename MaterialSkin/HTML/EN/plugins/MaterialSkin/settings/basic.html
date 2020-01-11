@@ -1,15 +1,12 @@
 [% PROCESS settings/header.html %]
 
-   [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_BROWSEMODES_PER_PLAYER" desc="PLUGIN_MATERIAL_SKIN_BROWSEMODES_PER_PLAYER_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_enabled %]checked [% END %] class="stdedit" name="pref_enabled" value="1"/>
-    [% END %]
-
 	[% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_BROWSEMODES" desc="PLUGIN_MATERIAL_SKIN_BROWSEMODES_DESC" %]
 		<table>
 		[% FOREACH menu = menu_items; menu_no = loop.count %]
 			<tr>
 				<td style="text-align:left;">
 					<input type="checkbox" name="enabled[% menu_no %]" id="enabled[% menu_no %]" [% IF menu.enabled %]checked="checked"[% END %] value="1" class="stdedit" />
+					<input type="hidden" name="id[% menu_no %]" value="[% menu.id %]" /
 					<td colspan="6"><label for="enabled[% menu_no %]">[% menu.name | getstring %]</label></td>
 				</td>
 			</tr>

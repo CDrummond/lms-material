@@ -436,10 +436,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.enteredTerm = term;
             this.fetchUrlItems(url, provider);
         }.bind(this));
-        bus.$on('playerMenuUpdated', function() {
-            this.goHome()
-            this.serverMyMusic=[];
-        }.bind(this));
         if (!IS_MOBILE && !this.mini && !this.nowplaying) {
             bindKey('home');
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');
@@ -1872,119 +1868,144 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         serverMyMusicMenu() {
-            if (this.serverMyMusic.length>0 && this.serverMyMusic[0].player==this.playerId()) {
-                return;
-            }
-
             this.fetchingItems=true;
-            lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
-                if (data && data.result && data.result.item_loop) {
+            lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
+                if (data && data.result) {
                     this.serverMyMusic = [];
-                    for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                        var c = loop[idx];
-                        if (c.node=="myMusic" && c.id) {
-                            if (c.id=="randomplay") {
-                                this.serverMyMusic.push({ title: i18n("Random Mix"),
-                                                      svg: "dice-multiple",
-                                                      id: RANDOM_MIX_ID,
-                                                      type: "app",
-                                                      weight: c.weight ? parseFloat(c.weight) : 100 });
-                            } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect")) {
-                                var command = this.buildCommand(c, "go", false);
-                                var item = { title: c.text,
-                                             command: command.command ,
-                                             params: command.params,
-                                             weight: c.weight ? parseFloat(c.weight) : 100,
-                                             id: MUSIC_ID_PREFIX+c.id,
-                                             type: "group",
-                                             icon: "music_note"
-                                            };
-                                if (c.id.startsWith("myMusicArtists")) {
-                                    mapArtistIcon(command.params, item);
-                                    item.cancache = true;
-                                } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
-                                    item.icon = undefined;
-                                    item.svg = "album-multi";
-                                    item.cancache = true;
-                                } else if (c.id.startsWith("myMusicAlbums")) {
-                                    item.icon = "album";
-                                    item.cancache = true;
-                                } else if (c.id.startsWith("myMusicGenres")) {
-                                    item.icon = "label";
-                                    item.cancache = true;
-                                    item.id = GENRES_ID;
-                                } else if (c.id == "myMusicPlaylists" || c.id.startsWith("playlists")) {
-                                    item.icon = "list";
-                                    item.section = SECTION_PLAYLISTS;
-                                } else if (c.id.startsWith("myMusicYears")) {
-                                    item.icon = "date_range";
-                                    item.cancache = true;
-                                } else if (c.id == "myMusicNewMusic") {
-                                    item.icon = "new_releases";
-                                } else if (c.id.startsWith("myMusicMusicFolder")) {
-                                    item.icon = "folder";
-                                } else if (c.id.startsWith("myMusicFileSystem")) {
-                                    item.icon = "computer";
-                                } else if (c.id == "myMusicRandomAlbums") {
-                                    item.svg = "dice-album";
-                                    item.icon = undefined;
-                                } else if (c.id.startsWith("myMusicTopTracks")) {
-                                    item.icon = "arrow_upward";
-                                } else if (c.id.startsWith("myMusicFlopTracks")) {
-                                    item.icon = "arrow_downward";
-                                } else if (c.id == "dynamicplaylist") {
-                                    item.svg = "dice-list";
-                                    item.icon = undefined;
-                                } else if (c.id.startsWith("trackstat")) {
-                                    item.icon = "bar_chart";
-                                } else if (c.id.startsWith("artist")) {
-                                    item.svg = "artist";
-                                    item.icon = undefined;
-                                } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
-                                    if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                        item.limit=undefined==this.newMusicLimit ? 100 :this.newMusicLimit;
-                                    }
-                                    if (c.id.startsWith("artist")) {
-                                        item.svg = "artist";
-                                        item.icon = undefined;
-                                    } else {
-                                        item.icon = c.id.startsWith("new") ? "new_releases" :
-                                                    c.id.startsWith("album") ? "album" :
-                                                    c.id.startsWith("artist") ? "group" :
-                                                    c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
-                                                    c.id.startsWith("genre") ? "label" :
-                                                    c.id.startsWith("playlist") ? "list" :
-                                                    c.id.startsWith("ratedmysql") ? "star" :
-                                                    "music_note";
-                                    }
-                                } else if (c.icon) {
-                                    if (c.icon.endsWith("/albums.png")) {
-                                        item.icon = "album";
-                                    } else if (c.icon.endsWith("/artists.png")) {
-                                        item.svg = "artist";
-                                    } else if (c.icon.endsWith("/genres.png")) {
-                                        item.icon = "label";
-                                    }
-                                }
-                                if (getField(item, "genre_id:")>=0) {
-                                    item['mapgenre']=true;
-                                }
-                                this.serverMyMusic.push(item);
+                    // Get basic, configurable, browse modes...
+                    if (data && data.result && data.result.modes_loop) {
+                        for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            var c = loop[idx];
+                            var command = this.buildCommand({id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false);
+                            var item = { title: c.text,
+                                         command: command.command,
+                                         params: command.params,
+                                         weight: c.weight ? parseFloat(c.weight) : 100,
+                                         id: MUSIC_ID_PREFIX+c.id,
+                                         type: "group",
+                                         icon: "music_note"
+                                        };
+                            if (c.id.startsWith("myMusicArtists")) {
+                                mapArtistIcon(item.params, item);
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
+                                item.icon = undefined;
+                                item.svg = "album-multi";
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicAlbums")) {
+                                item.icon = "album";
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicGenres")) {
+                                item.icon = "label";
+                                item.cancache = true;
+                                item.id = GENRES_ID;
+                            } else if (c.id == "myMusicPlaylists") {
+                                item.icon = "list";
+                                item.section = SECTION_PLAYLISTS;
+                            } else if (c.id.startsWith("myMusicYears")) {
+                                item.icon = "date_range";
+                                item.cancache = true;
+                            } else if (c.id == "myMusicNewMusic") {
+                                item.icon = "new_releases";
+                            } else if (c.id.startsWith("myMusicMusicFolder")) {
+                                item.icon = "folder";
+                            } else if (c.id.startsWith("myMusicFileSystem")) {
+                                item.icon = "computer";
+                            } else if (c.id == "myMusicRandomAlbums") {
+                                item.svg = "dice-album";
+                                item.icon = undefined;
+                            } else if (c.id.startsWith("myMusicTopTracks")) {
+                                item.icon = "arrow_upward";
+                            } else if (c.id.startsWith("myMusicFlopTracks")) {
+                                item.icon = "arrow_downward";
                             }
+                            this.serverMyMusic.push(item);
                         }
                     }
-                    this.serverMyMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                    this.serverMyMusic[0].player=this.playerId();
-                    for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-                    }
-                    if (this.current && TOP_MYMUSIC_ID==this.current.id) {
-                        this.items = this.serverMyMusic;
-                    } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
-                        this.history[1].items = this.serverMyMusic;
-                    }
+                    // Now get standard menu, for extra (e.g. CustomBrowse) entries...
+                    lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
+                        if (data && data.result && data.result.item_loop) {
+                            var stdItems = new Set(["myMusicGenres", "myMusicPlaylists", "myMusicYears", "myMusicNewMusic", "myMusicMusicFolder", "myMusicFileSystem", "myMusicRandomAlbums", "myMusicTopTracks", "myMusicFlopTracks"]);
+                            for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                                var c = loop[idx];
+                                if (c.node=="myMusic" && c.id) {
+                                    if (c.id=="randomplay") {
+                                        this.serverMyMusic.push({ title: i18n("Random Mix"),
+                                                              svg: "dice-multiple",
+                                                              id: RANDOM_MIX_ID,
+                                                              type: "app",
+                                                              weight: c.weight ? parseFloat(c.weight) : 100 });
+                                    } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("myMusicArtists") && !c.id.startsWith("myMusicAlbums") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
+                                        var command = this.buildCommand(c, "go", false);
+                                        var item = { title: c.text,
+                                                     command: command.command,
+                                                     params: command.params,
+                                                     weight: c.weight ? parseFloat(c.weight) : 100,
+                                                     id: MUSIC_ID_PREFIX+c.id,
+                                                     type: "group",
+                                                     icon: "music_note"
+                                                    };
+
+                                        if (c.id == "dynamicplaylist") {
+                                            item.svg = "dice-list";
+                                            item.icon = undefined;
+                                        } else if (c.id.startsWith("trackstat")) {
+                                            item.icon = "bar_chart";
+                                        } else if (c.id.startsWith("artist")) {
+                                            item.svg = "artist";
+                                            item.icon = undefined;
+                                        } else if (c.id.startsWith("playlists")) {
+                                            item.icon = "list";
+                                            item.section = SECTION_PLAYLISTS;
+                                        } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
+                                            if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
+                                                item.limit=undefined==this.newMusicLimit ? 100 :this.newMusicLimit;
+                                            }
+                                            if (c.id.startsWith("artist")) {
+                                                item.svg = "artist";
+                                                item.icon = undefined;
+                                            } else {
+                                                item.icon = c.id.startsWith("new") ? "new_releases" :
+                                                            c.id.startsWith("album") ? "album" :
+                                                            c.id.startsWith("artist") ? "group" :
+                                                            c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
+                                                            c.id.startsWith("genre") ? "label" :
+                                                            c.id.startsWith("playlist") ? "list" :
+                                                            c.id.startsWith("ratedmysql") ? "star" :
+                                                            "music_note";
+                                            }
+                                        } else if (c.icon) {
+                                            if (c.icon.endsWith("/albums.png")) {
+                                                item.icon = "album";
+                                            } else if (c.icon.endsWith("/artists.png")) {
+                                                item.svg = "artist";
+                                            } else if (c.icon.endsWith("/genres.png")) {
+                                                item.icon = "label";
+                                            }
+                                        }
+                                        if (getField(item, "genre_id:")>=0) {
+                                            item['mapgenre']=true;
+                                        }
+                                        this.serverMyMusic.push(item);
+                                    }
+                                }
+                            }
+                            this.serverMyMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
+                            for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
+                                this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                            }
+                            if (this.current && TOP_MYMUSIC_ID==this.current.id) {
+                                this.items = this.serverMyMusic;
+                            } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
+                                this.history[1].items = this.serverMyMusic;
+                            }
+                        }
+                        this.fetchingItems=false;
+                    }).catch(err => {
+                        this.fetchingItems = false;
+                        logAndShowError(err);
+                    });
                 }
-                this.fetchingItems=false;
             }).catch(err => {
                 this.fetchingItems = false;
                 logAndShowError(err);

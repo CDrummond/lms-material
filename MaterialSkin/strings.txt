@@ -12,13 +12,7 @@ PLUGIN_MATERIAL_SKIN_BROWSEMODES
 	EN	Browse modes
 
 PLUGIN_MATERIAL_SKIN_BROWSEMODES_DESC
-	EN	Select which browse modes you wish to display.
-
-PLUGIN_MATERIAL_SKIN_BROWSEMODES_PER_PLAYER
-	EN	Use player-defined browse modes
-
-PLUGIN_MATERIAL_SKIN_BROWSEMODES_PER_PLAYER_DESC
-	EN	If enabled, browse mades are controlled in the player settings, and the settings below are ignored.
+	EN	Select which standard browse modes you wish to display under 'My Music'.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen

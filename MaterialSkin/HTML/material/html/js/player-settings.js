@@ -84,7 +84,7 @@ Vue.component('lms-player-settings', {
      <div class="dialog-padding" v-if="unlockAll"></div>
      <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('Extra settings')}}</v-header>
      <v-list-tile class="settings-note" v-if="unlockAll"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
-     <v-btn @click="showAllSettings" flat v-if="unlockAll"><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
+     <v-btn v-longpress="showAllSettings" flat v-if="unlockAll"><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
      <div class="dialog-padding"></div>
     </v-list>
    </v-card-text>
@@ -576,8 +576,11 @@ Vue.component('lms-player-settings', {
                 this.cancelSleepTimer();
             }
         },
-        showAllSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'));
+        showAllSettings(longPress) {
+            if (longPress) {
+                this.close();
+            }
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'), longPress);
         }
     },
     filters: {

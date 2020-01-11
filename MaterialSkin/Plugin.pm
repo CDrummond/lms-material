@@ -36,23 +36,6 @@ my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
 
-my @BROWSE_MODES = ( { id=>'myMusicArtists', name=>'BROWSE_BY_ARTIST', weight=>10},
-                     { id=>'myMusicArtistsAlbumArtists', name=>'BROWSE_BY_ALBUMARTIST', weight=>9},
-                     { id=>'myMusicArtistsAllArtists', name=>'BROWSE_BY_ALL_ARTISTS', weight=>11},
-                     { id=>'myMusicAlbums', name=>'BROWSE_BY_ALBUM', weight=>20},
-                     { id=>'myMusicGenres', name=>'BROWSE_BY_GENRE', weight=>30},
-                     { id=>'myMusicYears', name=>'BROWSE_BY_YEAR', weight=>40},
-                     { id=>'myMusicNewMusic', name=>'BROWSE_NEW_MUSIC', weight=>50},
-                     { id=>'myMusicMusicFolder', name=>'BROWSE_MUSIC_FOLDER', weight=>70},
-                     { id=>'myMusicPlaylists', name=>'SAVED_PLAYLISTS', weight=>80} );
-
-my @EXTENDED_BROWSE_MODES = ( { id=>'myMusicAlbumsVariousArtists', name=>'PLUGIN_EXTENDED_BROWSEMODES_COMPILATIONS', weight=>22},
-                              { id=>'myMusicFileSystem', name=>'PLUGIN_EXTENDED_BROWSEMODES_BROWSEFS', weight=>75},
-                              { id=>'myMusicRandomAlbums', name=>'PLUGIN_EXTENDED_BROWSEMODES_RANDOM_ALBUMS', weight=>21} );
-
-my @EXTENDED_BROWSE_STATS_MODES = ( { id=>'myMusicTopTracks', name=>'PLUGIN_EXTENDED_BROWSEMODES_TOP_TRACKS', weight=>68},
-                                    { id=>'myMusicFlopTracks', name=>'PLUGIN_EXTENDED_BROWSEMODES_FLOP_TRACKS', weight=>69} );
-
 sub initPlugin {
     my $class = shift;
 
@@ -499,44 +482,16 @@ sub _cliModesCommand {
     if ($cmd eq 'get') {
         my $cnt = 0;
         my $clientPrefs = $serverprefs->client($client);
-        my $pluginPrefs = preferences('plugin.extendedbrowsemodes');
-        if ($pluginPrefs) {
-            my $additionalMenuItems = $pluginPrefs->get('additionalMenuItems');
-            if ($additionalMenuItems) {
-                foreach my $additionalMenuItem (@{$additionalMenuItems}) {
-                    $request->addResultLoop("modes_loop", $cnt, "id", $additionalMenuItem->{id});
-                    $request->addResultLoop("modes_loop", $cnt, "name", $additionalMenuItem->{name});
-                    $request->addResultLoop("modes_loop", $cnt, "weight", $additionalMenuItem->{weight});
-                    $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $additionalMenuItem->{id}) ? 0 : 1);
-                    $cnt++;
-                }
+        foreach my $mode (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
+            if ($mode->{id} eq 'myMusicSearch') {
+                next;
             }
-        }
 
-        foreach my $mode (@BROWSE_MODES) {
             $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
             $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
             $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
             $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
             $cnt++;
-        }
-
-        foreach my $mode (@EXTENDED_BROWSE_MODES) {
-            $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
-            $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
-            $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
-            $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
-            $cnt++;
-        }
-
-        if (main::STATISTICS) {
-            foreach my $mode (@EXTENDED_BROWSE_STATS_MODES) {
-                $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
-                $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
-                $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
-                $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
-                $cnt++;
-            }
         }
 
         $request->setStatusDone();
@@ -574,58 +529,21 @@ sub _cliModesCommand {
             my $members = $group->get('members');
             if ($members) {
                 my $groupPrefs = $serverprefs->client($client);
-                my $ebmPluginPrefs = preferences('plugin.extendedbrowsemodes');
-                my $additionalMenuItems = $ebmPluginPrefs->get('additionalMenuItems');
+                my $modeList = Slim::Menu::BrowseLibrary->_getNodeList();
                 my %modes;
                 # Set all modes as disabled
-                if ($additionalMenuItems) {
-                    foreach my $additionalMenuItem (@{$additionalMenuItems}) {
-                        $modes{ $additionalMenuItem->{id} } = 1;
-                    }
-                }
-                foreach my $mode (@BROWSE_MODES) {
+                foreach my $mode (@{$modeList}) {
                     $modes{ $mode->{id} } = 1;
-                }
-
-                foreach my $mode (@EXTENDED_BROWSE_MODES) {
-                    $modes{ $mode->{id} } = 1;
-                }
-
-                if (main::STATISTICS) {
-                    foreach my $mode (@EXTENDED_BROWSE_STATS_MODES) {
-                        $modes{ $mode->{id} } = 1;
-                    }
                 }
 
                 # iterate over all clients, and set mode to enabled if enabled for client
                 foreach my $id (@{$members}) {
                     my $member = Slim::Player::Client::getClient($id);
                     my $clientPrefs = $serverprefs->client($member);
-                    if ($additionalMenuItems) {
-                        foreach my $additionalMenuItem (@{$additionalMenuItems}) {
-                            if ($clientPrefs->get("disabled_" . $additionalMenuItem->{id})==0) {
-                                $modes{ $additionalMenuItem->{id} } = 0;
-                            }
-                        }
-                    }
 
-                    foreach my $mode (@BROWSE_MODES) {
+                    foreach my $mode (@{$modeList}) {
                         if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
                             $modes{ $mode->{id} } = 0;
-                        }
-                    }
-
-                    foreach my $mode (@EXTENDED_BROWSE_MODES) {
-                        if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
-                            $modes{ $mode->{id} } = 0;
-                        }
-                    }
-
-                    if (main::STATISTICS) {
-                        foreach my $mode (@EXTENDED_BROWSE_STATS_MODES) {
-                            if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
-                                $modes{ $mode->{id} } = 0;
-                            }
                         }
                     }
                 }

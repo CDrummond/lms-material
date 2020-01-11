@@ -88,7 +88,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (categories>1 || clamped) {
                     resp.items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:"search.albums", header:true,
                                      allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numAlbums),
-                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Album", "%1 Albums", titleParam);
                 }
@@ -121,7 +121,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (categories>1 || clamped) {
                     resp.items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:"search.tracks", header:true,
                                      allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numTracks),
-                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Track", "%1 Tracks", titleParam);
                 }
@@ -909,10 +909,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         resp = data;
     }
 
-    if (0==resp.items.length) {
-        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
-    }
-
     } catch(e) {
         resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e, type: 'text', id:'error'});
         logError(e);
@@ -940,9 +936,6 @@ function parseBrowseUrlResp(data, provider) {
             }
         }
         resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
-    }
-    if (0==resp.items.length) {
-        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
     }
     return resp;
 }

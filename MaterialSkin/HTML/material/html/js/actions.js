@@ -50,6 +50,8 @@ const PQ_ADD_URL_ACTION       = 39;
 const PQ_MOVE_QUEUE_ACTION    = 40;
 const PQ_REMOVE_ALBUM_ACTION  = 41;
 
+const INSERT_ALL_ACTION       = 42;
+
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
     {cmd:"play_album",   icon:"album"},
@@ -93,7 +95,9 @@ var ACTIONS=[
     {cmd:"pq-scroll",    svg:  "current-track"},
     {cmd:"pq-addurl",    icon: "add"},
     {cmd:"pq-movequeue", icon: "swap_horiz"},
-    {cmd:"pq-rmalbum",   icon: "album"}
+    {cmd:"pq-rmalbum",   icon: "album"},
+
+    {cmd:"insert-all",   icon:"format_indent_increase"}
 ];
 
 function updateActionStrings() {
@@ -103,7 +107,7 @@ function updateActionStrings() {
     ACTIONS[ADD_ACTION].title=ACTIONS[ADD_ALL_ACTION].title=i18n("Append to queue");
     ACTIONS[ADD_ACTION].skey=ACTIONS[ADD_ALL_ACTION].key=LMS_APPEND_KEYBOARD;
     ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
-    ACTIONS[INSERT_ACTION].title=i18n("Play next");
+    ACTIONS[INSERT_ACTION].title=ACTIONS[INSERT_ALL_ACTION].title=i18n("Play next");
     ACTIONS[MORE_ACTION].title=i18n("More");
     ACTIONS[MORE_LIB_ACTION].title=i18n("More");
     ACTIONS[RENAME_ACTION].title=i18n("Rename");

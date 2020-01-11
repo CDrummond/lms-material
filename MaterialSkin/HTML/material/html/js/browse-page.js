@@ -84,7 +84,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn icon color="primary" v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <img v-if="items[idx].image" :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <v-icon v-else-if="items[idx].icon" class="image-grid-item-img image-grid-item-icon">{{items[idx].icon}}</v-icon>
+      <img  v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
       <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
@@ -617,7 +619,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    this.handleListResponse(item, command, {items: []});
                     logError(err, command.command, command.params, 0, count);
                 }
             });
@@ -635,13 +637,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: []});
                     logError(err);
                 }
             });
         },
         handleListResponse(item, command, resp) {
-            if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
+            if (resp && resp.items) {
                 if (!item.id.startsWith(SEARCH_ID) || this.history.length<1 || !this.current || !this.current.id.startsWith(SEARCH_ID)) {
                     this.addHistory();
                 }
@@ -750,7 +752,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     : undefined;
             if (nextWindow) {
                 nextWindow=nextWindow.toLowerCase();
-                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && resp.items[0].id!='empty'
+                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
                                 ? resp.items[0].title : item.title;
                 if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
                     bus.$emit('showMessage', message);
@@ -766,10 +768,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);
-            } else if (1==resp.items.length && resp.items[0].id=="empty") {
-                // Dont show 'Empty' no point! #196
-                //bus.$emit('showMessage', item.title);
-            } else {
+            } else if (resp.items && resp.items.length>0) {
                 this.handleListResponse(item, command, resp);
             }
         },
@@ -1270,14 +1269,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                 });
-            } else if ((ADD_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
+            } else if ((ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
                 // Can't use standard add/play-all for search results, so just add each item...
                 var commands=[];
                 var check = item.id.endsWith("tracks") || (SEARCH_ID==item.id && this.items[0].id.startsWith("track")) ? "track_id" : "album_id";
                 var list = item.allSearchResults ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (list[i].id.startsWith(check)) {
-                        commands.push({act:PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION, item:list[i], idx:i});
+                        commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});
                     } else if (commands.length>0) {
                         break;
                     }
@@ -1325,6 +1324,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (resp.items.length>0) {
                             item.moremenu = resp.items;
                             showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+                        } else {
+                            logAndShowError(undefined, i18n("No  entries found"), command.command);
                         }
                     });
                 }
@@ -2327,7 +2328,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
         },
         enableRatings() {
-            this.showRatingButton = (this.$store.state.ratingsSupport &&
+            this.showRatingButton = (this.$store.state.ratingsSupport && this.items.length>0 &&
                 !(this.current && this.current.id && this.current.id.startsWith("playlist_id:")) &&
                 !(this.current && this.current.actions && this.current.actions.go && this.current.actions.go.cmd &&
                   this.current.actions.go.cmd.length>1 && this.current.actions.go.cmd[0]=="trackstat") &&

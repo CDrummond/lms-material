@@ -18,9 +18,13 @@ Vue.component('lms-randommix', {
     </v-list-tile>
     <v-divider slot="prepend-item"></v-divider>
    </v-select>
-   <v-select v-if="libraries.length>1" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+   <v-select v-if="libraries.length>1 && showAll" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+   <v-checkbox v-if="showAll" v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
+   <v-text-field v-if="showAll" :label="i18n('Historic track count')" v-model="oldTracks" type="number"></v-text-field>
+   <v-text-field v-if="showAll" :label="i18n('Upcomming track count')" v-model="newTracks" type="number"></v-text-field>
   </v-card-text>
   <v-card-actions>
+   <v-btn flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
    <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
@@ -33,13 +37,17 @@ Vue.component('lms-randommix', {
     data() {
         return {
             show: false,
+            showAll: false,
             genres: [],
             chosenGenres: [],
             mixes: [],
             chosenMix: "tracks",
             active: false,
             libraries: [],
-            library: undefined
+            library: undefined,
+            continuous: true,
+            oldTracks: 10,
+            newTracks: 10
         }
     },
     computed: {
@@ -55,8 +63,13 @@ Vue.component('lms-randommix', {
     },
     mounted() {
         bus.$on('rndmix.open', function() {
+            this.showAll = getLocalStorageVal("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
+                this.mixes=[{key:"tracks", label:i18n("Song Mix")},
+                            {key:"albums", label:i18n("Album Mix")},
+                            {key:"contributors", label:i18n("Artist Mix")},
+                            {key:"year", label:i18n("Year Mix")}];
                 if (data && data.result && data.result._randomplayisactive) {
                     this.chosenMix = data.result._randomplayisactive;
                     this.active = true;
@@ -64,39 +77,64 @@ Vue.component('lms-randommix', {
                     this.active = false;
                     this.choseMix = "tracks";
                 }
-                this.mixes=[{key:"tracks", label:i18n("Song Mix")},
-                            {key:"albums", label:i18n("Album Mix")},
-                            {key:"contributors", label:i18n("Artist Mix")},
-                            {key:"year", label:i18n("Year Mix")}];
-                this.chosenGenres = [];
-                this.genres = [];
-                lmsList(this.playerId, ["randomplaygenrelist"], undefined, 0, 500).then(({data}) => {
-                    if (data && data.result && data.result.item_loop) {
-                        data.result.item_loop.forEach(i => {
-                            if (undefined!==i.checkbox) {
-                                this.genres.push(i.text);
+
+                lmsList(this.playerId, ["randomplaylibrarylist"], undefined, 0, 500).then(({data}) => {
+                    if (data && data.result && data.result.item_loop && data.result.item_loop.length>0) {
+                        this.libraries = [];
+                        this.library = undefined;
+                        for (var i=0, len=data.result.item_loop.length; i<len; ++i) {
+                            var id = data.result.item_loop[i].actions.do.cmd[1];
+                            if ((""+id).length>2) {
+                                this.libraries.push({name:data.result.item_loop[i].text.replace(SIMPLE_LIB_VIEWS, ""), id:id});
+                                if (parseInt(data.result.item_loop[i].radio)==1) {
+                                    this.library = id;
+                                }
+                            }
+                        }
+                        this.libraries.sort(nameSort);
+                        this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                        if (undefined==this.library) {
+                            this.library = LMS_DEFAULT_LIBRARY;
+                        }
+                    }
+                });
+
+                lmsList(this.playerId, ["genres"], undefined, 0, 1000).then(({data}) => {
+                    this.chosenGenres = [];
+                    this.genres = [];
+                    // Get list of all genres (randomplaygenrelist filters on library chosen for mix!)
+                    if (data && data.result && data.result.genres_loop) {
+                        for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            this.genres.push(loop[idx].genre);
+                        }
+                    }
+                    lmsList(this.playerId, ["randomplaygenrelist"], undefined, 0, 500).then(({data}) => {
+                        if (data && data.result && data.result.item_loop) {
+                            data.result.item_loop.forEach(i => {
                                 if (i.checkbox==1) {
                                     this.chosenGenres.push(i.text);
                                 }
-                            }
-                        });
-                        this.show=true;
+                            });
+                            this.show=true;
+                        }
+                    });
+                });
+
+                lmsCommand("", ["pref", "plugin.randomplay:continuous", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        this.continuous = 1 == parseInt(data.result._p2);
                     }
                 });
-            });
-            lmsList("", ["libraries"]).then(({data}) => {
-                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                    this.libraries = [];
-                    for (var i=0, len=data.result.folder_loop.length; i<len; ++i) {
-                        data.result.folder_loop[i].name = data.result.folder_loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
-                        this.libraries.push(data.result.folder_loop[i]);
+                lmsCommand("", ["pref", "plugin.randomplay:newtracks", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        this.newTracks = parseInt(data.result._p2);
                     }
-                    this.libraries.sort(nameSort);
-                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
-                    if (undefined==this.library) {
-                        this.library = LMS_DEFAULT_LIBRARY;
+                });
+                lmsCommand("", ["pref", "plugin.randomplay:oldtracks", "?"]).then(({data}) => {
+                   if (data && data.result && data.result._p2 != null) {
+                        this.oldTracks = parseInt(data.result._p2);
                     }
-                }
+                });
             });
         }.bind(this));
         bus.$on('noPlayers', function() {
@@ -111,9 +149,14 @@ Vue.component('lms-randommix', {
     methods: {
         close() {
             this.show=false;
+            setLocalStorageVal("rndmix.showAll", this.showAll);
         },
         start() {
             this.close();
+            setLocalStorageVal("rndmix.showAll", this.showAll);
+            lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
+            lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
+            lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
             lmsCommand(this.playerId, ["randomplaychooselibrary", this.library]).then(({data}) => {
                 if (this.chosenGenres.length==0) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {

@@ -311,7 +311,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     created() {
-        this.serverMyMusic=[];
+        this.myMusic=[];
         this.history=[];
         this.fetchingItems = false;
         this.current = null;
@@ -383,7 +383,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             } else if ((this.current && this.current.id == TOP_MYMUSIC_ID) ||
                        (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID)) {
-                this.serverMyMusicMenu();
+                this.myMusicMenu();
             }
         }.bind(this));
 
@@ -849,8 +849,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             if (TOP_MYMUSIC_ID==item.id) {
                 this.addHistory();
-                this.items = this.serverMyMusic;
-                this.serverMyMusicMenu();
+                this.items = this.myMusic;
+                this.myMusicMenu();
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Browse music library");
                 this.current = item;
@@ -1867,11 +1867,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        serverMyMusicMenu() {
+        myMusicMenu() {
             this.fetchingItems=true;
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
                 if (data && data.result) {
-                    this.serverMyMusic = [];
+                    this.myMusic = [];
                     // Get basic, configurable, browse modes...
                     if (data && data.result && data.result.modes_loop) {
                         for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -1920,7 +1920,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.icon = "arrow_downward";
                             }
                             item.params.push("menu:1");
-                            this.serverMyMusic.push(item);
+                            this.myMusic.push(item);
                         }
                     }
                     // Now get standard menu, for extra (e.g. CustomBrowse) entries...
@@ -1931,7 +1931,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 var c = loop[idx];
                                 if (c.node=="myMusic" && c.id) {
                                     if (c.id=="randomplay") {
-                                        this.serverMyMusic.push({ title: i18n("Random Mix"),
+                                        this.myMusic.push({ title: i18n("Random Mix"),
                                                               svg: "dice-multiple",
                                                               id: RANDOM_MIX_ID,
                                                               type: "app",
@@ -1987,18 +1987,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         if (getField(item, "genre_id:")>=0) {
                                             item['mapgenre']=true;
                                         }
-                                        this.serverMyMusic.push(item);
+                                        this.myMusic.push(item);
                                     }
                                 }
                             }
-                            this.serverMyMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                            for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                                this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                            this.myMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
+                            for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                             }
                             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
-                                this.items = this.serverMyMusic;
+                                this.items = this.myMusic;
                             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
-                                this.history[1].items = this.serverMyMusic;
+                                this.history[1].items = this.myMusic;
                             }
                         }
                         this.fetchingItems=false;
@@ -2050,8 +2050,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.history.length<1) {
                 this.items = this.top;
             }
-            for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+            for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
             }
             this.saveTopList();
             removeLocalStorage("pinned");
@@ -2117,8 +2117,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
                 if (item.id.startsWith(TOP_ID_PREFIX)) {
-                    for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                    for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                        this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
                 }
             }

@@ -381,9 +381,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('playerChanged', function() {
             if (this.current && this.current.section == SECTION_PRESETS) {
                 this.refreshList();
-            } else if ((this.current && this.current.id == TOP_MYMUSIC_ID) ||
-                       (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID)) {
-                this.myMusicMenu();
+            }
+        }.bind(this));
+        bus.$on('prefset', function(pref, value) {
+            if ('plugin.material-skin:enabledBrowseModes'==pref && this.myMusic.length>0) {
+                this.myMusic[0].needsUpdating=true;
             }
         }.bind(this));
 
@@ -1868,6 +1870,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         myMusicMenu() {
+            if (this.myMusic.length>0 && !this.myMusic[0].needsUpdating) {
+                return;
+            }
             this.fetchingItems=true;
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
                 if (data && data.result) {

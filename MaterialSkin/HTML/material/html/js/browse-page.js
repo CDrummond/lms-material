@@ -1919,6 +1919,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             } else if (c.id.startsWith("myMusicFlopTracks")) {
                                 item.icon = "arrow_downward";
                             }
+                            item.params.push("menu:1");
                             this.serverMyMusic.push(item);
                         }
                     }

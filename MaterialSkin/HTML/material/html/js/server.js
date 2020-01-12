@@ -460,7 +460,7 @@ var lmsServer = Vue.component('lms-server', {
             if (data.length<4 || data[0]!="prefset") {
                 return;
             }
-            if (data[1]=="plugin.material-skin" && data[2]=="enabledBrowseModes") {
+            if ((data[1]=="plugin.material-skin" && data[2]=="enabledBrowseModes") || (data[1]=="server" && data[2]=="useUnifiedArtistsList")) {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
             }
         }, handleFavoritesUpdate() {

@@ -384,7 +384,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         }.bind(this));
         bus.$on('prefset', function(pref, value) {
-            if ('plugin.material-skin:enabledBrowseModes'==pref && this.myMusic.length>0) {
+            if (this.myMusic.length>0 && ('plugin.material-skin:enabledBrowseModes'==pref || 'server:useUnifiedArtistsList'==pref)) {
                 this.myMusic[0].needsUpdating=true;
             }
         }.bind(this));

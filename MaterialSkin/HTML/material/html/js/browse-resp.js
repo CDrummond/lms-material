@@ -807,6 +807,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         subtitle=i.album;
                     }
                 }
+                var isRemote = undefined!=parent && parent.remotePlaylist;
                 //if (options.ratingsSupport && undefined!=i.rating) {
                 //    subtitle = ratingString(subtitle, i.rating);
                 //}
@@ -818,9 +819,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION],
+                              menu: isRemote ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION],
                               type: "track",
-                              draggable: undefined==parent || !parent.remotePlaylist
+                              draggable: !isRemote
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);

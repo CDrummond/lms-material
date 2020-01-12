@@ -35,7 +35,7 @@ my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
-my $DEFAULT_MODES = ["myMusicArtists", "myMusicArtistsAlbumArtists", "myMusicArtistsAllArtists", "myMusicAlbums", "myMusicAlbumsVariousArtists", "myMusicGenres", "myMusicPlaylists", "myMusicYears", "myMusicNewMusic", "myMusicRandomAlbums"];
+my $DEFAULT_DISABLED_BROWSE_MODES = ['myMusicFlopTracks', 'myMusicTopTracks', 'myMusicFileSystem'];
 
 sub initPlugin {
     my $class = shift;
@@ -373,9 +373,9 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'browsemodes') {
-        my $enabledModes = $prefs->get('enabledBrowseModes');
-        $enabledModes=$DEFAULT_MODES if $enabledModes eq '';
-        my %enabledModes = map { $_ => 1 } @{$enabledModes};
+        my $disabledModes = $prefs->get('disabledBrowseModes');
+        $disabledModes=$DEFAULT_DISABLED_BROWSE_MODES if $disabledModes eq '';
+        my %disabledModes = map { $_ => 1 } @{$disabledModes};
         my $useUnifiedArtistsList = $serverprefs->get('useUnifiedArtistsList');
         my $cnt = 0;
 
@@ -383,7 +383,7 @@ sub _cliCommand {
             if ($node->{id} eq 'myMusicSearch') {
                 next;
             }
-            if (! exists($enabledModes{$node->{id}})) {
+            if (exists($disabledModes{$node->{id}})) {
                 next;
             }
             if ($useUnifiedArtistsList) {

@@ -14,7 +14,7 @@ use Slim::Utils::Strings qw(cstring);
 use Slim::Menu::BrowseLibrary;
 use Slim::Utils::Prefs;
 
-my $DEFAULT_MODES = ["myMusicArtists", "myMusicArtistsAlbumArtists", "myMusicArtistsAllArtists", "myMusicAlbums", "myMusicAlbumsVariousArtists", "myMusicGenres", "myMusicPlaylists", "myMusicYears", "myMusicNewMusic", "myMusicRandomAlbums"];
+my $DEFAULT_DISABLED_BROWSE_MODES = ['myMusicFlopTracks', 'myMusicTopTracks', 'myMusicFileSystem'];
 
 my $prefs = preferences('plugin.material-skin');
 
@@ -34,25 +34,25 @@ sub handler {
 	my ($class, $client, $params) = @_;
 
 	if ($params->{'saveSettings'}) {
-	    my $enabledModes=[];
+	    my $disabledModes=[];
 	    for (my $i = 1; defined $params->{"id$i"}; $i++) {
-	        if (defined ($params->{"enabled$i"})) {
-	            push @{$enabledModes}, $params->{"id$i"};
+	        if (! defined ($params->{"enabled$i"})) {
+	            push @{$disabledModes}, $params->{"id$i"};
 	        }
 	    }
-	    $prefs->set('enabledBrowseModes', $enabledModes);
+	    $prefs->set('disabledBrowseModes', $disabledModes);
 	}
 
-    my $enabledModes = $prefs->get('enabledBrowseModes');
-    $enabledModes=$DEFAULT_MODES if $enabledModes eq '';
-    my %enabledModes = map { $_ => 1 } @{$enabledModes};
+    my $disabledModes = $prefs->get('disabledBrowseModes');
+    $disabledModes=$DEFAULT_DISABLED_BROWSE_MODES if $disabledModes eq '';
+    my %disabledModes = map { $_ => 1 } @{$disabledModes};
     
     $params->{menu_items} = [ ];
     foreach my $node (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
         if ($node->{id} eq 'myMusicSearch') {
             next;
         }
-        push @{$params->{menu_items}}, {id => $node->{id}, name => cstring('', $node->{name}), weight => $node->{weight}, enabled => exists($enabledModes{$node->{id}}) ? 1 : 0};
+        push @{$params->{menu_items}}, {id => $node->{id}, name => cstring('', $node->{name}), weight => $node->{weight}, enabled => exists($disabledModes{$node->{id}}) ? 0 : 1};
     }
     @{$params->{menu_items}} = sort { $a->{weight} <=> $b->{weight} } @{$params->{menu_items}};
                 

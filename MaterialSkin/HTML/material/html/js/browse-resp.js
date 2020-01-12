@@ -763,6 +763,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
+                var isRemote = 1 == parseInt(i.remote);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }
@@ -775,7 +776,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               menu: menu,
                               type: "group",
                               section: SECTION_PLAYLISTS,
-                              url:  i.url
+                              url:  i.url,
+                              remotePlaylist: isRemote
                           });
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
@@ -818,7 +820,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               //icon: "music_note",
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION],
                               type: "track",
-                              draggable: true
+                              draggable: undefined==parent || !parent.remotePlaylist
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);

@@ -15,6 +15,7 @@
     server settings.
 10. Don't add 'Empty' list item for empty lists, '0 Items' is stated in
     sub-toolbar.
+11. Cannot edit remote playlists (LMS 8.0 feature).
 
 1.2.2
 -----

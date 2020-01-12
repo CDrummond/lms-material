@@ -760,6 +760,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var menu = options.showPresets
                         ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SAVE_PRESET_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION]
                         : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION];
+            var remoteMenu = options.showPresets
+                        ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SAVE_PRESET_ACTION, SELECT_ACTION]
+                        : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION];
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
@@ -773,7 +776,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
-                              menu: menu,
+                              menu: isRemote ? remoteMenu : menu,
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url,

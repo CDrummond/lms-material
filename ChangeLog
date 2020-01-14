@@ -18,6 +18,8 @@
 11. Cannot edit remote playlists (LMS 8.0 feature).
 12. For Custom Browse, always add play/insert/add actions if these are
     indicated in the response.
+13. Use different album sort settings for albums under composer or conductor
+    genres.
 
 1.2.2
 -----

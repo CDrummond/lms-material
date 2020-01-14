@@ -599,6 +599,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.subtitleClickable = this.subtitleClickable;
             prev.prevPage = this.prevPage;
             prev.allSearchResults = this.allSearchResults;
+            prev.inGenre = this.inGenre;
             this.prevPage = undefined;
             this.history.push(prev);
         },
@@ -881,6 +882,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "album",
                               type: "group",
                               id: uniqueId(item.id, 1)}];
+                this.inGenre = item.title;
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
@@ -1404,7 +1406,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         break;
                     }
                 }
-                setAlbumSort(this.command, sort.key);
+                setAlbumSort(this.command, this.inGenre, sort.key);
                 this.refreshList(false);
             }
         },
@@ -1518,6 +1520,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.command = undefined;
             this.showRatingButton = false;
             this.subtitleClickable = false;
+            this.inGenre = undefined;
             this.$nextTick(function () {
                 this.setScrollElement();
                 this.setBgndCover();
@@ -1582,6 +1585,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.subtitleClickable = prev.subtitleClickable;
             this.prevPage = prev.prevPage;
             this.allSearchResults = prev.allSearchResults;
+            this.inGenre = prev.inGenre;
             if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {
@@ -1841,7 +1845,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             // Replace sort and search terms
             if (cmd.params.length>0) {
                 var modifiedParams = [];
-                var albumSort=getAlbumSort(cmd);
+                var albumSort=getAlbumSort(cmd, this.inGenre);
                 cmd.params.forEach(p => {
                     var r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)

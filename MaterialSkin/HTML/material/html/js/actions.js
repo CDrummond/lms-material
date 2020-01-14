@@ -34,23 +34,20 @@ const ALBUM_SORTS_ACTION      = 24;
 const ADD_FAV_FOLDER_ACTION   = 25;
 const DELETE_FAV_FOLDER_ACTION= 26;
 const MOVE_FAV_TO_PARENT_ACTION=27;
-const SAVE_PRESET_ACTION      = 28;
-const MOVE_PRESET_ACTION      = 29;
-const ADD_PRESET_ACTION       = 30;
-const VLIB_ACTION             = 31;
-const ADD_PODCAST_ACTION      = 32;
-const REMOVE_PODCAST_ACTION   = 33;
-const SEARCH_PODCAST_ACTION   = 34;
-const MOVE_HERE_ACTION        = 35;
+const VLIB_ACTION             = 28;
+const ADD_PODCAST_ACTION      = 29
+const REMOVE_PODCAST_ACTION   = 30;
+const SEARCH_PODCAST_ACTION   = 31;
+const MOVE_HERE_ACTION        = 32;
 
-const PQ_PLAY_NOW_ACTION      = 36;
-const PQ_PLAY_NEXT_ACTION     = 37;
-const PQ_SCROLL_ACTION        = 38;
-const PQ_ADD_URL_ACTION       = 39;
-const PQ_MOVE_QUEUE_ACTION    = 40;
-const PQ_REMOVE_ALBUM_ACTION  = 41;
+const PQ_PLAY_NOW_ACTION      = 33;
+const PQ_PLAY_NEXT_ACTION     = 34;
+const PQ_SCROLL_ACTION        = 35;
+const PQ_ADD_URL_ACTION       = 36;
+const PQ_MOVE_QUEUE_ACTION    = 37;
+const PQ_REMOVE_ALBUM_ACTION  = 38;
 
-const INSERT_ALL_ACTION       = 42;
+const INSERT_ALL_ACTION       = 39;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -81,9 +78,6 @@ var ACTIONS=[
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete_outline"},
     {cmd:"move-fav-parent", svg:"folder-up"},
-    {cmd:"set-preset",   icon:"ballot"},
-    {cmd:"move-preset",  icon:"import_export"},
-    {cmd:"add-preset",   icon:"add_box"},
     {cmd:"vlib",         icon:"library_music"},
     {cmd:"add-podcast",  icon:"add_box"},
     {cmd:"remove-podcast",icon:"remove_circle_outline"},
@@ -130,10 +124,6 @@ function updateActionStrings() {
     ACTIONS[ADD_FAV_FOLDER_ACTION].title=i18n("Create folder");
     ACTIONS[ADD_FAV_FOLDER_ACTION].skey=LMS_CREATE_FAV_FOLDER_KEYBOARD;
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");
-    ACTIONS[SAVE_PRESET_ACTION].title=i18n("Save as preset");
-    ACTIONS[MOVE_PRESET_ACTION].title=i18n("Move");
-    ACTIONS[ADD_PRESET_ACTION].title=i18n("Add preset");
-    ACTIONS[ADD_PRESET_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD;
     ACTIONS[VLIB_ACTION].title=i18n("Change library");
     ACTIONS[ADD_PODCAST_ACTION].title=i18n("Add podcast");
     ACTIONS[ADD_PODCAST_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD

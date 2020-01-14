@@ -23,6 +23,7 @@
 14. If queue does not have artist/artist_id but does have
     trackartist/trackartist_id, then when clicking on a artist link in the
     queue, pass role_id:TRACKARTIST to album list request.
+15. Remove presets code - these are per-player hadware specific items.
 
 1.2.2
 -----

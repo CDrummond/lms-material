@@ -9,7 +9,7 @@ Vue.component('lms-favorite', {
     template: `
 <v-dialog v-model="show" v-if="show" persistent width="600">
  <v-card>
-  <v-card-title>{{isAdd ? (isPreset ? i18n("Add preset") : i18n("Add favorite")) : (isPreset ? i18n("Edit preset") : i18n("Edit favorite"))}}</v-card-title>
+  <v-card-title>{{isAdd ? i18n("Add favorite") : i18n("Edit favorite")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
@@ -20,11 +20,6 @@ Vue.component('lms-favorite', {
     <v-list-tile>
      <v-list-tile-content>
       <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
-     </v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile v-if="isPreset && isAdd">
-     <v-list-tile-content>
-      <v-select :items="positions" label="Position" v-model="pos" item-text="label" item-value="key"></v-select>
      </v-list-tile-content>
     </v-list-tile>
    </v-list>
@@ -46,30 +41,18 @@ Vue.component('lms-favorite', {
             name: "",
             url: "",
             item: undefined,
-            isPreset: false,
             isAdd: true,
             pos: 1,
             positions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         }
     },
     mounted() {
-        bus.$on('favorite.open', function(mode, item, isPreset) {
-            this.isPreset = isPreset;
+        bus.$on('favorite.open', function(mode, item) {
             this.item = item;
             if ('edit'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
-                this.name = isPreset ? item.text : item.title;
-                this.url = isPreset 
-                            ? item.url
-                                ? item.url
-                                : item.favUrl 
-                                    ? item.favUrl
-                                    : item.presetParams
-                                        ? item.presetParams.favorites_url
-                                        : undefined
-                            : item.presetParams
-                                ? item.presetParams.favorites_url
-                                : undefined;
+                this.name = item.title;
+                this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
                 this.isAdd=false;
                 this.show=true;
                 focusEntry(this);
@@ -101,43 +84,37 @@ Vue.component('lms-favorite', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-            if (this.isPreset) {
-                lmsCommand(this.playerId, ["material-skin-presets", "set", "num:"+this.item.num, "url:"+url, "text:"+name]).then(({data})=> {
-                    bus.$emit('refreshList', SECTION_PRESETS);
+            if (url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) {
+                if (name == this.item.title) {
+                    return;
+                }
+                lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
+                    bus.$emit('refreshFavorites');
+                    bus.$emit('refreshList', SECTION_FAVORITES);
                 });
             } else {
-                if (url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) {
-                    if (name == this.item.title) {
-                        return;
-                    }
-                    lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
-                        bus.$emit('refreshFavorites');
-                        bus.$emit('refreshList', SECTION_FAVORITES);
-                    });
-                } else {
-                    lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
-                        var command = ["favorites", "add", "url:"+url, "title:"+name, this.item.id];
-                        if (this.item.presetParams) {
-                            if (this.item.presetParams.icon) {
-                                command.push("icon:"+this.item.presetParams.icon);
-                            }
-                            if (this.item.presetParams.favorites_type) {
-                                command.push("type:"+this.item.presetParams.favorites_type);
-                            }
-                            if ((this.item.presetParams.favorites_url &&
-                                 (this.item.presetParams.favorites_url.startsWith("db:contributor") ||
-                                  this.item.presetParams.favorites_url.startsWith("db:genre") ||
-                                  this.item.presetParams.favorites_url.startsWith("db:album") ||
-                                  this.item.presetParams.favorites_url.startsWith("db:year"))) ||
-                                (this.item['icon-id'] && this.item['icon-id']=="html/images/playlists.png")) {
-                                command.push("hasitems:1");
-                            }
+                lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
+                    var command = ["favorites", "add", "url:"+url, "title:"+name, this.item.id];
+                    if (this.item.presetParams) {
+                        if (this.item.presetParams.icon) {
+                            command.push("icon:"+this.item.presetParams.icon);
                         }
-                        lmsCommand(this.playerId, command).then(({datax})=> {
-                            bus.$emit('refreshFavorites');
-                        });
+                        if (this.item.presetParams.favorites_type) {
+                            command.push("type:"+this.item.presetParams.favorites_type);
+                        }
+                        if ((this.item.presetParams.favorites_url &&
+                             (this.item.presetParams.favorites_url.startsWith("db:contributor") ||
+                              this.item.presetParams.favorites_url.startsWith("db:genre") ||
+                              this.item.presetParams.favorites_url.startsWith("db:album") ||
+                              this.item.presetParams.favorites_url.startsWith("db:year"))) ||
+                            (this.item['icon-id'] && this.item['icon-id']=="html/images/playlists.png")) {
+                            command.push("hasitems:1");
+                        }
+                    }
+                    lmsCommand(this.playerId, command).then(({datax})=> {
+                        bus.$emit('refreshFavorites');
                     });
-                }
+                });
             }
             this.show=false;
         },
@@ -147,21 +124,15 @@ Vue.component('lms-favorite', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-            if (this.isPreset) {
-                lmsCommand(this.playerId, ["material-skin-presets", "set", "num:"+this.pos, "url:"+url, "text:"+name]).then(({data})=> {
-                    bus.$emit('refreshList', SECTION_PRESETS);
-                });
-            } else {
-                lmsCommand(this.playerId, ["favorites", "exists", url]).then(({data})=> {
-                    if (data && data.result && data.result.exists==1) {
-                        bus.$emit('showMessage', i18n("Already in favorites"));
-                    } else {
-                        lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, this.item.id]).then(({datax})=> {
-                            bus.$emit('refreshFavorites');
-                        });
-                    }
-                });
-            }
+            lmsCommand(this.playerId, ["favorites", "exists", url]).then(({data})=> {
+                if (data && data.result && data.result.exists==1) {
+                    bus.$emit('showMessage', i18n("Already in favorites"));
+                } else {
+                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, this.item.id]).then(({datax})=> {
+                        bus.$emit('refreshFavorites');
+                    });
+                }
+            });
             this.show=false;
         },
         i18n(str) {

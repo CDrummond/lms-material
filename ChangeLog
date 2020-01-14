@@ -20,6 +20,9 @@
     indicated in the response.
 13. Use different album sort settings for albums under composer or conductor
     genres.
+14. If queue does not have artist/artist_id but does have
+    trackartist/trackartist_id, then when clicking on a artist link in the
+    queue, pass role_id:TRACKARTIST to album list request.
 
 1.2.2
 -----

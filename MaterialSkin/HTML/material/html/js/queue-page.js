@@ -105,7 +105,7 @@ function buildSubtitle(i, threeLines) {
         }
     } else if (i.trackartist) {
         if (!IS_MOBILE && undefined!=i.trackartist_id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showTrackArtist("+i.trackartist_id)+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showTrackArtist("+i.trackartist_id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.trackartist);
         }

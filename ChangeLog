@@ -24,6 +24,7 @@
     trackartist/trackartist_id, then when clicking on a artist link in the
     queue, pass role_id:TRACKARTIST to album list request.
 15. Remove presets code - these are per-player hadware specific items.
+16. Make browse-modes non-player specific.
 
 1.2.2
 -----

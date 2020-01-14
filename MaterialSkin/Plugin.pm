@@ -118,8 +118,11 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin', '_cmd'],
                                                                 [0, 0, 1, \&_cliCommand]
     );
-    Slim::Control::Request::addDispatch(['material-skin-modes', '_cmd'],
-                                                                [1, 0, 1, \&_cliModesCommand]
+    Slim::Control::Request::addDispatch(['material-skin-presets', '_cmd'],
+                                                                [1, 0, 1, \&_cliPresetCommand]
+    );
+    Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],
+                                                                [1, 0, 1, \&_cliGroupCommand]
     );
 }
 
@@ -134,7 +137,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -371,68 +374,141 @@ sub _cliCommand {
         }
     }
 
+
+    if ($cmd eq 'browsemodes') {
+        my $useUnifiedArtistsList = $serverprefs->get('useUnifiedArtistsList');
+        my $cnt = 0;
+
+        foreach my $node (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
+            if ($node->{id} eq 'myMusicSearch') {
+                next;
+            }
+            if ($useUnifiedArtistsList) {
+                if (($node->{'id'} eq 'myMusicArtistsAllArtists') || ($node->{'id'} eq 'myMusicArtistsAlbumArtists')) {
+                    next;
+                }
+            } else {
+                if ($node->{'id'} eq 'myMusicArtists') {
+                    next;
+                }
+            }
+            $request->addResultLoop("modes_loop", $cnt, "id", $node->{'id'});
+            $request->addResultLoop("modes_loop", $cnt, "text", cstring('', $node->{'name'}));
+            $request->addResultLoop("modes_loop", $cnt, "weight", $node->{'weight'});
+            $request->addResultLoop("modes_loop", $cnt, "params", $node->{'params'});
+            if ($node->{'jiveIcon'}) {
+                $request->addResultLoop("modes_loop", $cnt, "icon", $node->{'jiveIcon'});
+            } elsif ($node->{'icon'}) { # ???
+                $request->addResultLoop("modes_loop", $cnt, "icon", $node->{'icon'});
+            }
+            $cnt++;
+        }
+        return;
+    }
+
     $request->setStatusBadParams();
 }
 
-sub _cliModesCommand {
+sub _cliPresetCommand {
     my $request = shift;
 
     # check this is the correct query.
-    if ($request->isNotCommand([['material-skin-modes']])) {
+    if ($request->isNotCommand([['material-skin-presets']])) {
         $request->setStatusBadDispatch();
         return;
     }
 
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['get', 'set', 'set-group']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['list', 'set', 'clear']) ) {
         $request->setStatusBadParams();
         return;
     }
 
-    if ($cmd eq 'get') {
+    if ($cmd eq 'list') {
+        my $presets = $serverprefs->client($client)->get('presets');
         my $cnt = 0;
-        my $clientPrefs = $serverprefs->client($client);
-        foreach my $mode (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
-            if ($mode->{id} eq 'myMusicSearch') {
-                next;
+        my $id = 1;
+        foreach my $preset (@{$presets}) {
+            if ($preset->{URL} && $preset->{type} eq 'audio') {
+               $request->addResultLoop("presets_loop", $cnt, "url", $preset->{URL});
+               $request->addResultLoop("presets_loop", $cnt, "text", $preset->{text});
+               $request->addResultLoop("presets_loop", $cnt, "id", $client->id . '-' . $id);
+               $request->addResultLoop("presets_loop", $cnt, "num", $id);
+               $cnt++;
             }
-
-            $request->addResultLoop("modes_loop", $cnt, "id", $mode->{id});
-            $request->addResultLoop("modes_loop", $cnt, "name", cstring('', $mode->{name}));
-            $request->addResultLoop("modes_loop", $cnt, "weight", $mode->{weight});
-            $request->addResultLoop("modes_loop", $cnt, "enabled", $clientPrefs->get("disabled_" . $mode->{id}) ? 0 : 1);
-            $cnt++;
+            $id++;
         }
-
         $request->setStatusDone();
         return;
     }
 
     if ($cmd eq 'set') {
-        my $enabled = $request->getParam('enabled');
-        my $disabled = $request->getParam('disabled');
-        if ($enabled || $disabled) {
-            my $clientPrefs = $serverprefs->client($client);
-            if ($enabled) {
-                @list = split(/,/, $enabled);
-                foreach my $mode (@list) {
-                    $clientPrefs->set("disabled_" . $mode, 0);
-                }
-            }
-            if ($disabled) {
-                @list = split(/,/, $disabled);
-                foreach my $mode (@list) {
-                    $clientPrefs->set("disabled_" . $mode, 1);
-                }
-            }
-
-            $request->setStatusDone();
+        my $presets = $serverprefs->client($client)->get('presets');
+        my $num = $request->getParam('num');
+        my $prev = $request->getParam('prev');
+        my $text = $request->getParam('text');
+        my $url = $request->getParam('url');
+        if (!$num || !$url) {
+            $request->setStatusBadParams();
             return;
         }
+        my $val = int($num);
+        if ($val<1 || $val>10) {
+            $request->setStatusBadParams();
+            return;
+        }
+        if ($prev) {
+            # If this is a move, then copy contents at destination to source
+            my $prevval = int($prev);
+            if ($prevval>=1 && $prevval<=10) {
+                $presets->[$prevval-1] = $presets->[$val-1];
+            }
+        }
+        $presets->[$val-1] = { URL => $url, text => $text || '', type => 'audio'};
+        $serverprefs->client($client)->set('presets', $presets);
+        $request->setStatusDone();
+        return;
     }
 
-    if ($cmd eq 'set-group') {
+    if ($cmd eq 'clear') {
+        my $presets = $serverprefs->client($client)->get('presets');
+        my $num = $request->getParam('num');
+        if (!$num) {
+            $request->setStatusBadParams();
+            return;
+        }
+        my $val = int($num);
+        if ($val<1 || $val>10) {
+            $request->setStatusBadParams();
+            return;
+        }
+        $presets->[$val-1] = { };
+        $serverprefs->client($client)->set('presets', $presets);
+        $request->setStatusDone();
+        return;
+    }
+
+    $request->setStatusBadParams()
+}
+
+sub _cliGroupCommand {
+    my $request = shift;
+
+    # check this is the correct query.
+    if ($request->isNotCommand([['material-skin-group']])) {
+        $request->setStatusBadDispatch();
+        return;
+    }
+
+    my $cmd = $request->getParam('_cmd');
+    my $client = $request->client();
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-modes']) ) {
+        $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'set-modes') {
         # Set group player's enabled browse modes to the enabled modes of all members
         my $groupsPluginPrefs = preferences('plugin.groups');
         my $group = $groupsPluginPrefs->client($client);

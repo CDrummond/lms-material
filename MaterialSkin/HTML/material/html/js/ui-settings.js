@@ -7,6 +7,7 @@
 
 Vue.component('lms-ui-settings', {
     template: `
+<div>
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
@@ -163,7 +164,10 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
    
     <template v-for="(item, index) in showItems">
-     <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
+     <div style="display:flex">
+      <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
+      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="browseModesDialog.show=true" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
+     </div>
     </template>
     <div class="dialog-padding"></div>
 
@@ -273,6 +277,36 @@ Vue.component('lms-ui-settings', {
   </v-card-text>
  </v-card>
 </v-dialog>
+
+ <v-dialog v-model="browseModesDialog.show" :width="wide>1 ? 750 : 500" persistent>
+  <v-card>
+   <v-card-title>{{i18n("Browse modes")}}</v-card-title>
+    <v-list two-line subheader class="settings-list">
+     <v-layout v-if="wide>1">
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index<(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index>=(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+     </v-layout>
+     <template v-for="(item, index) in browseModesDialog.modes" v-else>
+      <v-checkbox v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
+     </template>
+    </v-list>
+   <div class="dialog-padding"></div>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
+    </v-card-actions>
+   <v-card>
+ </v-dialog>
+
+</div>
 `,
     props: [ 'desktop' ],
     data() {
@@ -315,7 +349,12 @@ Vue.component('lms-ui-settings', {
             sortHome: IS_IPHONE,
             showItems: [ ],
             hasPassword: false,
-            password: undefined
+            password: undefined,
+            wide:1,
+            browseModesDialog: {
+                show: false,
+                modes:[],
+            }
         }
     },
     computed: {
@@ -325,6 +364,7 @@ Vue.component('lms-ui-settings', {
     },
     mounted() {
         bus.$on('uisettings.open', function(act) {
+            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
             this.darkUi = this.$store.state.darkUi;
             this.largeFonts = this.$store.state.largeFonts;
@@ -375,10 +415,23 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+            lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
+                this.browseModesDialog.modes=[];
+                if (data && data.result && data.result.modes_loop) {
+                    this.browseModesDialog.modes=data.result.modes_loop;
+                    for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {
+                        loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
+                    }
+                    this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
+                }
+            }).catch(err => {
+            });
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'uisettings') {
+            if (this.$store.state.activeDialog == 'browsemodes') {
+                this.browseModesDialog.show=false;
+            } else if (this.$store.state.activeDialog == 'uisettings') {
                 this.show=false;
             }
         }.bind(this));
@@ -427,7 +480,8 @@ Vue.component('lms-ui-settings', {
                                                   lsAndNotif:this.lsAndNotif,
                                                   menuIcons:this.menuIcons,
                                                   hidden:this.hiddenItems(),
-                                                  skipSeconds:this.skipSeconds
+                                                  skipSeconds:this.skipSeconds,
+                                                  disabledBrowseModes:this.disabledBrowseModes(),
                                                 } );
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -471,7 +525,8 @@ Vue.component('lms-ui-settings', {
                                      lsAndNotif:this.lsAndNotif,
                                      menuIcons:this.menuIcons,
                                      hidden:Array.from(this.hiddenItems()),
-                                     skipSeconds:this.skipSeconds
+                                     skipSeconds:this.skipSeconds,
+                                     disabledBrowseModes:this.disabledBrowseModes()
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);
@@ -488,6 +543,15 @@ Vue.component('lms-ui-settings', {
                 }
             }
             return hidden;
+        },
+        disabledBrowseModes() {
+            var disabledModes = new Set();
+            for (var i=0, len=this.browseModesDialog.modes.length; i<len; ++i) {
+                if (!this.browseModesDialog.modes[i].enabled) {
+                    disabledModes.add(this.browseModesDialog.modes[i].id);
+                }
+            }
+            return disabledModes;
         },
         keyboardInfo() {
             var list = [ i18n("Alt+%1", "▲")+SEPARATOR+i18n("Increase volume"),
@@ -538,6 +602,9 @@ Vue.component('lms-ui-settings', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'uisettings', shown:val});
+        },
+        'browseModesDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
         }
     }
 })

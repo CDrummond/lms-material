@@ -189,6 +189,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var isApps = parent && parent.id == TOP_APPS_ID;
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
+            var isCustomBrowse = command == "custombrowse" ;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -272,7 +273,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 i.menu=[];
 
-                if (i.type=="artist" || i.type=="album" || i.type=="year" || i.type=="genre" || // CustomBrowse
+                if (i.type=="artist" || i.type=="album" || i.type=="year" || i.type=="genre" || isCustomBrowse ||
                     i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
                     // Convert NUM. TITLE into 0NUM TITLE - e.g 1. Wibble => 01 Wibble
                     /* Removed, as converts titles "22. Acacia Avenue" to "22 <dot> Acacia Avenue"
@@ -284,7 +285,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     */
                     if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
-                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) ) {
+                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;

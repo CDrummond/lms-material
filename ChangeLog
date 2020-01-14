@@ -16,6 +16,8 @@
 10. Don't add 'Empty' list item for empty lists, '0 Items' is stated in
     sub-toolbar.
 11. Cannot edit remote playlists (LMS 8.0 feature).
+12. For Custom Browse, always add play/insert/add actions if these are
+    indicated in the response.
 
 1.2.2
 -----

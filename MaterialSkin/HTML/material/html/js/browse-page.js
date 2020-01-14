@@ -1881,6 +1881,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (data && data.result && data.result.modes_loop) {
                         for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                             var c = loop[idx];
+                            if (this.$store.state.disabledBrowseModes.has(c.id)) {
+                                continue;
+                            }
                             var command = this.buildCommand({id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false);
                             var item = { title: c.text,
                                          command: command.command,
@@ -2534,6 +2537,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
 
         bus.$on('browseDisplayChanged', function() {
+            if (this.myMusic.length>0) {
+                this.myMusic[0].needsUpdating=true;
+            }
             this.options.sortFavorites=this.$store.state.sortFavorites;
             this.options.showPresets=this.$store.state.hidden.has(TOP_PRESETS_ID);
             if (this.$store.state.sortHome) {

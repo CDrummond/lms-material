@@ -35,7 +35,6 @@ my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
-my $DEFAULT_DISABLED_BROWSE_MODES = ['myMusicFlopTracks', 'myMusicTopTracks', 'myMusicFileSystem'];
 
 sub initPlugin {
     my $class = shift;
@@ -121,6 +120,9 @@ sub initCLI {
     );
     Slim::Control::Request::addDispatch(['material-skin-presets', '_cmd'],
                                                                 [1, 0, 1, \&_cliPresetCommand]
+    );
+    Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],
+                                                                [1, 0, 1, \&_cliGroupCommand]
     );
 }
 
@@ -372,18 +374,13 @@ sub _cliCommand {
         }
     }
 
+
     if ($cmd eq 'browsemodes') {
-        my $disabledModes = $prefs->get('disabledBrowseModes');
-        $disabledModes=$DEFAULT_DISABLED_BROWSE_MODES if $disabledModes eq '';
-        my %disabledModes = map { $_ => 1 } @{$disabledModes};
         my $useUnifiedArtistsList = $serverprefs->get('useUnifiedArtistsList');
         my $cnt = 0;
 
         foreach my $node (@{Slim::Menu::BrowseLibrary->_getNodeList()}) {
             if ($node->{id} eq 'myMusicSearch') {
-                next;
-            }
-            if (exists($disabledModes{$node->{id}})) {
                 next;
             }
             if ($useUnifiedArtistsList) {
@@ -396,7 +393,7 @@ sub _cliCommand {
                 }
             }
             $request->addResultLoop("modes_loop", $cnt, "id", $node->{'id'});
-            $request->addResultLoop("modes_loop", $cnt, "text", cstring($client, $node->{'name'}));
+            $request->addResultLoop("modes_loop", $cnt, "text", cstring('', $node->{'name'}));
             $request->addResultLoop("modes_loop", $cnt, "weight", $node->{'weight'});
             $request->addResultLoop("modes_loop", $cnt, "params", $node->{'params'});
             if ($node->{'jiveIcon'}) {
@@ -406,7 +403,6 @@ sub _cliCommand {
             }
             $cnt++;
         }
-        $request->setStatusDone();
         return;
     }
 
@@ -491,6 +487,64 @@ sub _cliPresetCommand {
         $serverprefs->client($client)->set('presets', $presets);
         $request->setStatusDone();
         return;
+    }
+
+    $request->setStatusBadParams()
+}
+
+sub _cliGroupCommand {
+    my $request = shift;
+
+    # check this is the correct query.
+    if ($request->isNotCommand([['material-skin-group']])) {
+        $request->setStatusBadDispatch();
+        return;
+    }
+
+    my $cmd = $request->getParam('_cmd');
+    my $client = $request->client();
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-modes']) ) {
+        $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'set-modes') {
+        # Set group player's enabled browse modes to the enabled modes of all members
+        my $groupsPluginPrefs = preferences('plugin.groups');
+        my $group = $groupsPluginPrefs->client($client);
+        if ($group) {
+            my $members = $group->get('members');
+            if ($members) {
+                my $groupPrefs = $serverprefs->client($client);
+                my $modeList = Slim::Menu::BrowseLibrary->_getNodeList();
+                my %modes;
+                # Set all modes as disabled
+                foreach my $mode (@{$modeList}) {
+                    $modes{ $mode->{id} } = 1;
+                }
+
+                # iterate over all clients, and set mode to enabled if enabled for client
+                foreach my $id (@{$members}) {
+                    my $member = Slim::Player::Client::getClient($id);
+                    my $clientPrefs = $serverprefs->client($member);
+
+                    foreach my $mode (@{$modeList}) {
+                        if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
+                            $modes{ $mode->{id} } = 0;
+                        }
+                    }
+                }
+
+                # update group prefs
+                my @keys = keys %modes;
+                for my $key (@keys) {
+                    $groupPrefs->set("disabled_" . $key, $modes{$key});
+                }
+
+                $request->setStatusDone();
+                return;
+            }
+        }
     }
 
     $request->setStatusBadParams()

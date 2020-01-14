@@ -944,6 +944,10 @@ progress {
  height:24px;
 }
 
+.settings-list-checkbox-action {
+ margin:16px 16px -32px 0px; /* t, r, b, l */
+}
+
 .player-settings-list-checkbox {
  margin-left:16px;
  height:24px;

@@ -75,6 +75,13 @@ Vue.component('lms-player-settings', {
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
 
+     <div v-if="libraries.length>1" class="dialog-padding"></div>
+     <v-header v-if="libraries.length>1" class="dialog-section-header">{{i18n('Library')}}</v-header>
+     <v-list-tile class="settings-note" v-if="libraries.length>1"><p>{{i18n("Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other LMS control points (such as the default web UI).")}}</p></v-list-tile>
+     <v-list-tile v-if="libraries.length>1">
+      <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+     </v-list-tile>
+
      <div class="dialog-padding"></div>
      <div class="dialog-padding" v-if="unlockAll"></div>
      <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('Extra settings')}}</v-header>
@@ -186,7 +193,9 @@ Vue.component('lms-player-settings', {
             },
             wide:1,
             playerId: undefined,
-            ttrans:{dstm:undefined}
+            trans:{dstm:undefined},
+            libraries:[],
+            library:undefined
         }
     },
     computed: {
@@ -329,6 +338,28 @@ Vue.component('lms-player-settings', {
                     this.controlSleepTimer(parseInt(data.result._sleep));
                 }
             });
+            lmsList("", ["libraries"]).then(({data}) => {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                    this.libraries = [];
+                    for (var i=0, len=data.result.folder_loop.length; i<len; ++i) {
+                        data.result.folder_loop[i].name = data.result.folder_loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                        this.libraries.push(data.result.folder_loop[i]);
+                    }
+                    this.libraries.sort(nameSort);
+                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                    this.library=this.libraries[0].id;
+                    lmsCommand(this.playerId, ["libraries", "getid"]).then(({data}) => {
+                        if (data && data.result) {
+                            for (var i=0, len=this.libraries.length; i<len; ++i) {
+                                if (this.libraries[i].id==data.result.id) {
+                                    this.library=this.libraries[i].id;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
             this.update(false);
             this.show=true;
         },
@@ -380,6 +411,7 @@ Vue.component('lms-player-settings', {
                     bus.$emit("prefset", "plugin.dontstopthemusic:provider", this.dstm);
                 });
             }
+            lmsCommand(this.playerId, ["material-skin-client", "set-lib", "id:"+this.library]);
             lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
             lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
             lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);

@@ -118,8 +118,8 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin', '_cmd'],
                                                                 [0, 0, 1, \&_cliCommand]
     );
-    Slim::Control::Request::addDispatch(['material-skin-presets', '_cmd'],
-                                                                [1, 0, 1, \&_cliPresetCommand]
+    Slim::Control::Request::addDispatch(['material-skin-client', '_cmd'],
+                                                                [1, 0, 1, \&_cliClientCommand]
     );
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],
                                                                 [1, 0, 1, \&_cliGroupCommand]
@@ -409,82 +409,26 @@ sub _cliCommand {
     $request->setStatusBadParams();
 }
 
-sub _cliPresetCommand {
+sub _cliClientCommand {
     my $request = shift;
 
     # check this is the correct query.
-    if ($request->isNotCommand([['material-skin-presets']])) {
+    if ($request->isNotCommand([['material-skin-client']])) {
         $request->setStatusBadDispatch();
         return;
     }
-
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['list', 'set', 'clear']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib']) ) {
         $request->setStatusBadParams();
         return;
     }
 
-    if ($cmd eq 'list') {
-        my $presets = $serverprefs->client($client)->get('presets');
-        my $cnt = 0;
-        my $id = 1;
-        foreach my $preset (@{$presets}) {
-            if ($preset->{URL} && $preset->{type} eq 'audio') {
-               $request->addResultLoop("presets_loop", $cnt, "url", $preset->{URL});
-               $request->addResultLoop("presets_loop", $cnt, "text", $preset->{text});
-               $request->addResultLoop("presets_loop", $cnt, "id", $client->id . '-' . $id);
-               $request->addResultLoop("presets_loop", $cnt, "num", $id);
-               $cnt++;
-            }
-            $id++;
-        }
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'set') {
-        my $presets = $serverprefs->client($client)->get('presets');
-        my $num = $request->getParam('num');
-        my $prev = $request->getParam('prev');
-        my $text = $request->getParam('text');
-        my $url = $request->getParam('url');
-        if (!$num || !$url) {
-            $request->setStatusBadParams();
-            return;
-        }
-        my $val = int($num);
-        if ($val<1 || $val>10) {
-            $request->setStatusBadParams();
-            return;
-        }
-        if ($prev) {
-            # If this is a move, then copy contents at destination to source
-            my $prevval = int($prev);
-            if ($prevval>=1 && $prevval<=10) {
-                $presets->[$prevval-1] = $presets->[$val-1];
-            }
-        }
-        $presets->[$val-1] = { URL => $url, text => $text || '', type => 'audio'};
-        $serverprefs->client($client)->set('presets', $presets);
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'clear') {
-        my $presets = $serverprefs->client($client)->get('presets');
-        my $num = $request->getParam('num');
-        if (!$num) {
-            $request->setStatusBadParams();
-            return;
-        }
-        my $val = int($num);
-        if ($val<1 || $val>10) {
-            $request->setStatusBadParams();
-            return;
-        }
-        $presets->[$val-1] = { };
-        $serverprefs->client($client)->set('presets', $presets);
+    if ($cmd eq 'set-lib') {
+        my $id = $request->getParam('id');
+        $serverprefs->client($client)->set('libraryId', $id);
+        $serverprefs->client($client)->remove('libraryId') unless $id;
+        Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 0.1, sub {Slim::Schema->totals($client);});
         $request->setStatusDone();
         return;
     }

@@ -26,6 +26,7 @@
 15. Remove presets code - these are per-player hadware specific items.
 16. Make browse-modes non-player specific.
 17. Add button on settings dialog to revert to default.
+18. Add library selection to player settings.
 
 1.2.2
 -----

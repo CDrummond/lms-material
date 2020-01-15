@@ -7,6 +7,7 @@
 
 Vue.component('lms-ui-settings', {
     template: `
+<div>
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
@@ -14,7 +15,8 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save</b-icon></v-btn>
+    <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>
+    <v-btn flat icon @click.native="revertToDefault" :title="i18n('Revert to default')"><v-icon>settings_backup_restore</b-icon></v-btn>
    </v-toolbar>
   </v-card-title>
   <v-card-text>
@@ -163,7 +165,10 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
    
     <template v-for="(item, index) in showItems">
-     <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
+     <div style="display:flex">
+      <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
+      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="browseModesDialog.show=true" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
+     </div>
     </template>
     <div class="dialog-padding"></div>
 
@@ -273,6 +278,36 @@ Vue.component('lms-ui-settings', {
   </v-card-text>
  </v-card>
 </v-dialog>
+
+ <v-dialog v-model="browseModesDialog.show" :width="wide>1 ? 750 : 500" persistent>
+  <v-card>
+   <v-card-title>{{i18n("Browse modes")}}</v-card-title>
+    <v-list two-line subheader class="settings-list">
+     <v-layout v-if="wide>1">
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index<(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+      <v-flex xs6>
+       <template v-for="(item, index) in browseModesDialog.modes">
+        <v-checkbox v-if="index>=(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
+       </template>
+      </v-flex>
+     </v-layout>
+     <template v-for="(item, index) in browseModesDialog.modes" v-else>
+      <v-checkbox v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
+     </template>
+    </v-list>
+   <div class="dialog-padding"></div>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
+    </v-card-actions>
+   <v-card>
+ </v-dialog>
+
+</div>
 `,
     props: [ 'desktop' ],
     data() {
@@ -311,12 +346,16 @@ Vue.component('lms-ui-settings', {
             lsAndNotifPlaySilence: false,
             android: IS_ANDROID,
             menuIcons: true,
-            showPresets: false,
             allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
             sortHome: IS_IPHONE,
             showItems: [ ],
             hasPassword: false,
-            password: undefined
+            password: undefined,
+            wide:1,
+            browseModesDialog: {
+                show: false,
+                modes:[],
+            }
         }
     },
     computed: {
@@ -326,7 +365,48 @@ Vue.component('lms-ui-settings', {
     },
     mounted() {
         bus.$on('uisettings.open', function(act) {
+            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
+            this.readStore();
+            this.password = getLocalStorageVal('password', '');
+            if (this.allowLayoutAdjust) {
+                this.layout = getLocalStorageVal("layout", "auto");
+                this.layoutOrig = this.layout;
+            }
+            this.hasPassword = false;
+            lmsCommand("", ["material-skin", "pass-isset"]).then(({data}) => {
+                if (1==parseInt(data.result['set'])) {
+                    this.hasPassword = true;
+                }
+            }).catch(err => {
+            });
+            lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
+                this.browseModesDialog.modes=[];
+                if (data && data.result && data.result.modes_loop) {
+                    this.browseModesDialog.modes=data.result.modes_loop;
+                    for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {
+                        loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
+                    }
+                    this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
+                }
+            }).catch(err => {
+            });
+            this.show = true;
+        }.bind(this));
+        bus.$on('esc', function() {
+            if (this.$store.state.activeDialog == 'browsemodes') {
+                this.browseModesDialog.show=false;
+            } else if (this.$store.state.activeDialog == 'uisettings') {
+                this.show=false;
+            }
+        }.bind(this));
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
+    },
+    methods: {
+        readStore() {
             this.darkUi = this.$store.state.darkUi;
             this.largeFonts = this.$store.state.largeFonts;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
@@ -347,22 +427,15 @@ Vue.component('lms-ui-settings', {
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
-            this.password = getLocalStorageVal('password', '');
-            if (this.allowLayoutAdjust) {
-                this.layout = getLocalStorageVal("layout", "auto");
-                this.layoutOrig = this.layout;
-            }
             this.skipSeconds = this.$store.state.skipSeconds;
-            this.volumeStep = volumeStep;
+            this.volumeStep = this.$store.state.volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
             this.hidden = this.$store.state.hidden;
-
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
-                            {id: TOP_PRESETS_ID, name:i18n("Presets"), show:!this.hidden.has(TOP_PRESETS_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)}];
             if (!disabled.has(TOP_CDPLAYER_ID)) {
                 this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
@@ -370,26 +443,7 @@ Vue.component('lms-ui-settings', {
             if (!disabled.has(TOP_REMOTE_ID)) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
-            this.hasPassword = false;
-            lmsCommand("", ["material-skin", "pass-isset"]).then(({data}) => {
-                if (1==parseInt(data.result['set'])) {
-                    this.hasPassword = true;
-                }
-            }).catch(err => {
-            });
-            this.show = true;
-        }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'uisettings') {
-                this.show=false;
-            }
-        }.bind(this));
-        bus.$on('langChanged', function() {
-            this.initItems();
-        }.bind(this));
-        this.initItems();
-    },
-    methods: {
+        },
         initItems() {
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},
@@ -429,7 +483,8 @@ Vue.component('lms-ui-settings', {
                                                   lsAndNotif:this.lsAndNotif,
                                                   menuIcons:this.menuIcons,
                                                   hidden:this.hiddenItems(),
-                                                  skipSeconds:this.skipSeconds
+                                                  skipSeconds:this.skipSeconds,
+                                                  disabledBrowseModes:this.disabledBrowseModes(),
                                                 } );
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -473,10 +528,41 @@ Vue.component('lms-ui-settings', {
                                      lsAndNotif:this.lsAndNotif,
                                      menuIcons:this.menuIcons,
                                      hidden:Array.from(this.hiddenItems()),
-                                     skipSeconds:this.skipSeconds
+                                     skipSeconds:this.skipSeconds,
+                                     disabledBrowseModes:Array.from(this.disabledBrowseModes())
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);
+                }
+            });
+        },
+        revertToDefault() {
+            this.$confirm(i18n("Rever to default settings?"),
+                          {buttonTrueText: i18n('Revert'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
+                        if (data && data.result && data.result._p2) {
+                            try {
+                                var prefs = JSON.parse(data.result._p2);
+                                try {
+                                    prefs.hidden = undefined==prefs.hidden ? undefined : new Set(prefs.hidden);
+                                } catch(e) {
+                                    prefs.hidden = undefined;
+                                }
+                                try {
+                                    prefs.disabledBrowseModes = undefined==prefs.disabledBrowseModes ? undefined : new Set(prefs.disabledBrowseModes);
+                                } catch(e) {
+                                    prefs.disabledBrowseModes = undefined;
+                                }
+                                this.$store.commit('setUiSettings', prefs);
+                                this.readStore();
+                                for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {
+                                    loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
+                                }
+                            } catch(e) {
+                            }
+                        }
+                    });
                 }
             });
         },
@@ -491,6 +577,15 @@ Vue.component('lms-ui-settings', {
             }
             return hidden;
         },
+        disabledBrowseModes() {
+            var disabledModes = new Set();
+            for (var i=0, len=this.browseModesDialog.modes.length; i<len; ++i) {
+                if (!this.browseModesDialog.modes[i].enabled) {
+                    disabledModes.add(this.browseModesDialog.modes[i].id);
+                }
+            }
+            return disabledModes;
+        },
         keyboardInfo() {
             var list = [ i18n("Alt+%1", "▲")+SEPARATOR+i18n("Increase volume"),
                          i18n("Alt+%1", "▼")+SEPARATOR+i18n("Decrease volume"),
@@ -502,7 +597,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title,
                          shortcutStr(ACTIONS[PLAY_ACTION].skey, true)+SEPARATOR+ACTIONS[PLAY_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
-                         shortcutStr(LMS_ADD_ITEM_ACTION_KEYBOARD, true)+SEPARATOR+i18n("Add favorite, podcast, or preset"),
+                         shortcutStr(LMS_ADD_ITEM_ACTION_KEYBOARD, true)+SEPARATOR+i18n("Add favorite or podcast"),
                          shortcutStr(ACTIONS[ADD_FAV_FOLDER_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_FAV_FOLDER_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")];
             if (this.desktop) {
@@ -540,6 +635,9 @@ Vue.component('lms-ui-settings', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'uisettings', shown:val});
+        },
+        'browseModesDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
         }
     }
 })

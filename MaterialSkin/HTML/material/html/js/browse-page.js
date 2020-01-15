@@ -84,7 +84,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn icon color="primary" v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <img v-if="items[idx].image" :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <v-icon v-else-if="items[idx].icon" class="image-grid-item-img image-grid-item-icon">{{items[idx].icon}}</v-icon>
+      <img  v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
       <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
@@ -198,20 +200,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
-  <v-list v-if="menu.presets">
-   <v-list-tile><v-list-tile-title><b>{{trans.choosepos}}</b></v-list-tile-title></v-list-tile>
-   <v-divider></v-divider>
-   <template v-for="(p, index) in menu.presets">
-    <v-list-tile @click="savePreset(menu.item, p)">
-     <v-list-tile-content><v-list-tile-title>{{p}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-   </template>
-   <v-divider></v-divider>
-   <v-list-tile @click="menu.show = false">
-     <v-list-tile-content><v-list-tile-title>{{trans.cancel}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-  </v-list>
-  <v-list v-else-if="menu.item && menu.item.moremenu">
+  <v-list v-if="menu.item && menu.item.moremenu">
    <template v-for="(entry, index) in menu.item.moremenu">
     <v-list-tile @click="itemMoreAction(menu.item, index)">
      <v-list-tile-title>{{entry.title}}</v-list-tile-title>
@@ -228,7 +217,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !selection.has(menu.index))" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -309,7 +298,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     created() {
-        this.serverMyMusic=[];
+        this.myMusic=[];
         this.history=[];
         this.fetchingItems = false;
         this.current = null;
@@ -321,8 +310,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.mediaDirs=[];
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       pinned: new Set(),
-                      sortFavorites: this.$store.state.sortFavorites,
-                      showPresets: !this.$store.state.hidden.has(TOP_PRESETS_ID)};
+                      sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
         this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
@@ -376,12 +364,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.menu.show = false;
         }.bind(this));
 
-        bus.$on('playerChanged', function() {
-            if (this.current && this.current.section == SECTION_PRESETS) {
-                this.refreshList();
-            } else if ((this.current && this.current.id == TOP_MYMUSIC_ID) ||
-                       (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID)) {
-                this.serverMyMusicMenu();
+        bus.$on('prefset', function(pref, value) {
+            if (this.myMusic.length>0 && ('plugin.material-skin:enabledBrowseModes'==pref || 'server:useUnifiedArtistsList'==pref)) {
+                this.myMusic[0].needsUpdating=true;
             }
         }.bind(this));
 
@@ -433,10 +418,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
             this.fetchUrlItems(url, provider);
-        }.bind(this));
-        bus.$on('playerMenuUpdated', function() {
-            this.goHome()
-            this.serverMyMusic=[];
         }.bind(this));
         if (!IS_MOBILE && !this.mini && !this.nowplaying) {
             bindKey('home');
@@ -525,13 +506,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                               id: TOP_FAVORITES_ID,
                               section: SECTION_FAVORITES,
                               isFavFolder: true },
-                            { command: ["material-skin-presets", "list"],
-                              icon: "ballot",
-                              type: "presets",
-                              app: "presets",
-                              weight: 3,
-                              id: TOP_PRESETS_ID,
-                              section: SECTION_PRESETS },
                             { command: ["myapps", "items"],
                               params: ["menu:1"],
                               icon: "apps",
@@ -560,15 +534,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                             ? i18n("Radio")
                             : this.top[i].id==TOP_FAVORITES_ID
                                 ? i18n("Favorites")
-                                : this.top[i].id==TOP_PRESETS_ID
-                                    ? i18n("Presets")
-                                    : this.top[i].id==TOP_APPS_ID
-                                        ? i18n("Apps")
-                                        : this.top[i].id==TOP_CDPLAYER_ID
-                                            ? i18n("CD Player")
-                                            : this.top[i].id==TOP_REMOTE_ID
-                                                ? i18n("Remote Libraries")
-                                                : this.top[i].title;
+                                : this.top[i].id==TOP_APPS_ID
+                                    ? i18n("Apps")
+                                    : this.top[i].id==TOP_CDPLAYER_ID
+                                        ? i18n("CD Player")
+                                        : this.top[i].id==TOP_REMOTE_ID
+                                            ? i18n("Remote Libraries")
+                                            : this.top[i].title;
             }
 
             if (this.history.length<1) {
@@ -597,6 +569,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.subtitleClickable = this.subtitleClickable;
             prev.prevPage = this.prevPage;
             prev.allSearchResults = this.allSearchResults;
+            prev.inGenre = this.inGenre;
             this.prevPage = undefined;
             this.history.push(prev);
         },
@@ -617,7 +590,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse(item, command, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    this.handleListResponse(item, command, {items: []});
                     logError(err, command.command, command.params, 0, count);
                 }
             });
@@ -635,13 +608,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: [{title:i18n("Empty"), type: 'text', id:'empty'}]});
+                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: []});
                     logError(err);
                 }
             });
         },
         handleListResponse(item, command, resp) {
-            if (resp && resp.items && (resp.items.length>0 || (command.command.length==1 && ("artists"==command.command[0] || "albums"==command.command[0])))) {
+            if (resp && resp.items) {
                 if (!item.id.startsWith(SEARCH_ID) || this.history.length<1 || !this.current || !this.current.id.startsWith(SEARCH_ID)) {
                     this.addHistory();
                 }
@@ -670,8 +643,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[SEARCH_LIB_ACTION];
                 } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
-                } else if (SECTION_PRESETS==this.current.section) {
-                    this.tbarActions=[ADD_PRESET_ACTION];
                 } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
                     this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
                 } else if (addAndPlayAllActions(command)) {
@@ -750,7 +721,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     : undefined;
             if (nextWindow) {
                 nextWindow=nextWindow.toLowerCase();
-                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && resp.items[0].id!='empty'
+                var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title
                                 ? resp.items[0].title : item.title;
                 if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
                     bus.$emit('showMessage', message);
@@ -766,10 +737,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);
-            } else if (1==resp.items.length && resp.items[0].id=="empty") {
-                // Dont show 'Empty' no point! #196
-                //bus.$emit('showMessage', item.title);
-            } else {
+            } else if (resp.items && resp.items.length>0) {
                 this.handleListResponse(item, command, resp);
             }
         },
@@ -829,7 +797,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index, event);
                 return;
             }
-            if ((item.section == SECTION_PRESETS && item.id!=TOP_PRESETS_ID) || (item.isPinned && undefined!=item.url)) { // Radio
+            if (item.isPinned && undefined!=item.url) { // Radio
                 this.itemMenu(item, index, event);
                 return;
             }
@@ -854,8 +822,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             if (TOP_MYMUSIC_ID==item.id) {
                 this.addHistory();
-                this.items = this.serverMyMusic;
-                this.serverMyMusicMenu();
+                this.items = this.myMusic;
+                this.myMusicMenu();
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Browse music library");
                 this.current = item;
@@ -882,6 +850,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "album",
                               type: "group",
                               id: uniqueId(item.id, 1)}];
+                this.inGenre = item.title;
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
@@ -1050,16 +1019,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     : { show:true, title:i18n("Rename favorite"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                         command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
                 focusEntry(this);
-            } else if (act==ADD_FAV_ACTION || act==ADD_PRESET_ACTION) {
-                bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length}, act==ADD_PRESET_ACTION);
-            } else if (act==EDIT_ACTION) { // NOTE: Also edits presets!
-                bus.$emit('dlg.open', 'favorite', 'edit', item, SECTION_PRESETS==item.section);
+            } else if (act==ADD_FAV_ACTION) {
+                bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length});
+            } else if (act==EDIT_ACTION) {
+                bus.$emit('dlg.open', 'favorite', 'edit', item);
             } else if (act==ADD_FAV_FOLDER_ACTION) {
                 this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length] };
                 focusEntry(this);
-            } else if (act==SAVE_PRESET_ACTION || act==MOVE_PRESET_ACTION) {
-                showMenu(this, { show: true, item: item, x:this.menu.x, y:0, presets:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
             } else if (act===DELETE_ACTION) {
                 this.$confirm(i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
@@ -1079,9 +1046,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
-                        lmsCommand(this.playerId(), SECTION_PRESETS==item.section
-                                                    ? ["material-skin-presets", "clear", "num:"+item.num]
-                                                    : ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({datax}) => {
+                        lmsCommand(this.playerId(), ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({datax}) => {
                             logJsonMessage("RESP", datax);
                             this.refreshList();
                         }).catch(err => {
@@ -1228,6 +1193,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     forceItemUpdate(this, item);
                 }
+            } else if (MOVE_HERE_ACTION==act) {
+                if (this.selection.size>0 && !this.selection.has(index)) {
+                    bus.$emit('movePlaylistItems', this.current.id, Array.from(this.selection).sort(function(a, b) { return a<b ? -1 : 1; }), index);
+                    this.clearSelection();
+                }
             } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);
             } else if (PLAY_ALBUM_ACTION==act) {
@@ -1265,14 +1235,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                 });
-            } else if ((ADD_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
+            } else if ((ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith("search.") || item.id==SEARCH_ID)) {
                 // Can't use standard add/play-all for search results, so just add each item...
                 var commands=[];
                 var check = item.id.endsWith("tracks") || (SEARCH_ID==item.id && this.items[0].id.startsWith("track")) ? "track_id" : "album_id";
                 var list = item.allSearchResults ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (list[i].id.startsWith(check)) {
-                        commands.push({act:PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION, item:list[i], idx:i});
+                        commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});
                     } else if (commands.length>0) {
                         break;
                     }
@@ -1320,30 +1290,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (resp.items.length>0) {
                             item.moremenu = resp.items;
                             showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+                        } else {
+                            logAndShowError(undefined, i18n("No  entries found"), command.command);
                         }
                     });
                 }
             } else {
                 showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
             }
-        },
-        savePreset(item, pos) {
-            var url = item.url ? item.url : (item.favUrl ? item.favUrl : (item.presetParams ? item.presetParams.favorites_url : undefined));
-            var command = ["material-skin-presets", "set", "num:"+pos, "url:"+url, "text:"+(item.section==SECTION_PRESETS ? item.text : item.title)];
-            if (item.section==SECTION_PRESETS) {
-                if (pos==item.num) {
-                    return;
-                } else {
-                    command.push("prev:"+item.num);
-                }
-            }
-            lmsCommand(this.playerId(), command).then(({data}) => {
-                if (item.section==SECTION_PRESETS) {
-                    this.refreshList();
-                } else {
-                    bus.$emit('showMessage', i18n("Set preset"));
-                }
-            });
         },
         clickSubtitle(item, index, event) {
             if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
@@ -1398,7 +1352,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         break;
                     }
                 }
-                setAlbumSort(this.command, sort.key);
+                setAlbumSort(this.command, this.inGenre, sort.key);
                 this.refreshList(false);
             }
         },
@@ -1512,6 +1466,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.command = undefined;
             this.showRatingButton = false;
             this.subtitleClickable = false;
+            this.inGenre = undefined;
             this.$nextTick(function () {
                 this.setScrollElement();
                 this.setBgndCover();
@@ -1576,6 +1531,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.subtitleClickable = prev.subtitleClickable;
             this.prevPage = prev.prevPage;
             this.allSearchResults = prev.allSearchResults;
+            this.inGenre = prev.inGenre;
             if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {
@@ -1769,7 +1725,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         buildFullCommand(item, act) {
             var command = this.buildCommand(item, ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
-                if (item.url && ((item.section && item.section == SECTION_PRESETS) || !item.id || !item.id.startsWith("playlist_id:"))) {
+                if (item.url && (!item.id || !item.id.startsWith("playlist_id:"))) {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
@@ -1835,7 +1791,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             // Replace sort and search terms
             if (cmd.params.length>0) {
                 var modifiedParams = [];
-                var albumSort=getAlbumSort(cmd);
+                var albumSort=getAlbumSort(cmd, this.inGenre);
                 cmd.params.forEach(p => {
                     var r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
@@ -1865,120 +1821,163 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        serverMyMusicMenu() {
-            if (this.serverMyMusic.length>0 && this.serverMyMusic[0].player==this.playerId()) {
+        myMusicMenu() {
+            if (this.myMusic.length>0 && !this.myMusic[0].needsUpdating) {
                 return;
             }
-
             this.fetchingItems=true;
-            lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
-                if (data && data.result && data.result.item_loop) {
-                    this.serverMyMusic = [];
-                    for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                        var c = loop[idx];
-                        if (c.node=="myMusic" && c.id) {
-                            if (c.id=="randomplay") {
-                                this.serverMyMusic.push({ title: i18n("Random Mix"),
-                                                      svg: "dice-multiple",
-                                                      id: RANDOM_MIX_ID,
-                                                      type: "app",
-                                                      weight: c.weight ? parseFloat(c.weight) : 100 });
-                            } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect")) {
-                                var command = this.buildCommand(c, "go", false);
-                                var item = { title: c.text,
-                                             command: command.command ,
-                                             params: command.params,
-                                             weight: c.weight ? parseFloat(c.weight) : 100,
-                                             id: MUSIC_ID_PREFIX+c.id,
-                                             type: "group",
-                                             icon: "music_note"
-                                            };
-                                if (c.id.startsWith("myMusicArtists")) {
-                                    mapArtistIcon(command.params, item);
-                                    item.cancache = true;
-                                } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
-                                    item.icon = undefined;
-                                    item.svg = "album-multi";
-                                    item.cancache = true;
-                                } else if (c.id.startsWith("myMusicAlbums")) {
+            lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
+                if (data && data.result) {
+                    this.myMusic = [];
+                    var stdItems = new Set();
+                    // Get basic, configurable, browse modes...
+                    if (data && data.result && data.result.modes_loop) {
+                        for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            var c = loop[idx];
+                            stdItems.add(c.id);
+                            if (this.$store.state.disabledBrowseModes.has(c.id)) {
+                                continue;
+                            }
+                            var command = this.buildCommand({id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false);
+                            var item = { title: c.text,
+                                         command: command.command,
+                                         params: command.params,
+                                         weight: c.weight ? parseFloat(c.weight) : 100,
+                                         id: MUSIC_ID_PREFIX+c.id,
+                                         type: "group",
+                                         icon: "music_note"
+                                        };
+                            if (c.id.startsWith("myMusicArtists")) {
+                                mapArtistIcon(item.params, item);
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
+                                item.icon = undefined;
+                                item.svg = "album-multi";
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicAlbums")) {
+                                item.icon = "album";
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicGenres")) {
+                                item.icon = "label";
+                                item.cancache = true;
+                                item.id = GENRES_ID;
+                            } else if (c.id == "myMusicPlaylists") {
+                                item.icon = "list";
+                                item.section = SECTION_PLAYLISTS;
+                            } else if (c.id.startsWith("myMusicYears")) {
+                                item.icon = "date_range";
+                                item.cancache = true;
+                            } else if (c.id == "myMusicNewMusic") {
+                                item.icon = "new_releases";
+                            } else if (c.id.startsWith("myMusicMusicFolder")) {
+                                item.icon = "folder";
+                            } else if (c.id.startsWith("myMusicFileSystem")) {
+                                item.icon = "computer";
+                            } else if (c.id == "myMusicRandomAlbums") {
+                                item.svg = "dice-album";
+                                item.icon = undefined;
+                            } else if (c.id.startsWith("myMusicTopTracks")) {
+                                item.icon = "arrow_upward";
+                            } else if (c.id.startsWith("myMusicFlopTracks")) {
+                                item.icon = "arrow_downward";
+                            } else if (c.icon) {
+                                if (c.icon.endsWith("/albums.png")) {
                                     item.icon = "album";
-                                    item.cancache = true;
-                                } else if (c.id.startsWith("myMusicGenres")) {
-                                    item.icon = "label";
-                                    item.cancache = true;
-                                    item.id = GENRES_ID;
-                                } else if (c.id == "myMusicPlaylists" || c.id.startsWith("playlists")) {
-                                    item.icon = "list";
-                                    item.section = SECTION_PLAYLISTS;
-                                } else if (c.id.startsWith("myMusicYears")) {
-                                    item.icon = "date_range";
-                                    item.cancache = true;
-                                } else if (c.id == "myMusicNewMusic") {
-                                    item.icon = "new_releases";
-                                } else if (c.id.startsWith("myMusicMusicFolder")) {
-                                    item.icon = "folder";
-                                } else if (c.id.startsWith("myMusicFileSystem")) {
-                                    item.icon = "computer";
-                                } else if (c.id == "myMusicRandomAlbums") {
-                                    item.svg = "dice-album";
-                                    item.icon = undefined;
-                                } else if (c.id.startsWith("myMusicTopTracks")) {
-                                    item.icon = "arrow_upward";
-                                } else if (c.id.startsWith("myMusicFlopTracks")) {
-                                    item.icon = "arrow_downward";
-                                } else if (c.id == "dynamicplaylist") {
-                                    item.svg = "dice-list";
-                                    item.icon = undefined;
-                                } else if (c.id.startsWith("trackstat")) {
-                                    item.icon = "bar_chart";
-                                } else if (c.id.startsWith("artist")) {
+                                } else if (c.icon.endsWith("/artists.png")) {
                                     item.svg = "artist";
                                     item.icon = undefined;
-                                } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
-                                    if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                        item.limit=undefined==this.newMusicLimit ? 100 :this.newMusicLimit;
-                                    }
-                                    if (c.id.startsWith("artist")) {
-                                        item.svg = "artist";
-                                        item.icon = undefined;
-                                    } else {
-                                        item.icon = c.id.startsWith("new") ? "new_releases" :
-                                                    c.id.startsWith("album") ? "album" :
-                                                    c.id.startsWith("artist") ? "group" :
-                                                    c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
-                                                    c.id.startsWith("genre") ? "label" :
-                                                    c.id.startsWith("playlist") ? "list" :
-                                                    c.id.startsWith("ratedmysql") ? "star" :
-                                                    "music_note";
-                                    }
-                                } else if (c.icon) {
-                                    if (c.icon.endsWith("/albums.png")) {
-                                        item.icon = "album";
-                                    } else if (c.icon.endsWith("/artists.png")) {
-                                        item.svg = "artist";
-                                    } else if (c.icon.endsWith("/genres.png")) {
-                                        item.icon = "label";
-                                    }
+                                } else if (c.icon.endsWith("/genres.png")) {
+                                    item.icon = "label";
                                 }
-                                if (getField(item, "genre_id:")>=0) {
-                                    item['mapgenre']=true;
-                                }
-                                this.serverMyMusic.push(item);
                             }
+                            item.params.push("menu:1");
+                            this.myMusic.push(item);
                         }
                     }
-                    this.serverMyMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                    this.serverMyMusic[0].player=this.playerId();
-                    for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-                    }
-                    if (this.current && TOP_MYMUSIC_ID==this.current.id) {
-                        this.items = this.serverMyMusic;
-                    } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
-                        this.history[1].items = this.serverMyMusic;
-                    }
+                    // Now get standard menu, for extra (e.g. CustomBrowse) entries...
+                    lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
+                        if (data && data.result && data.result.item_loop) {
+                            for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                                var c = loop[idx];
+                                if (c.node=="myMusic" && c.id) {
+                                    if (c.id=="randomplay") {
+                                        this.myMusic.push({ title: i18n("Random Mix"),
+                                                              svg: "dice-multiple",
+                                                              id: RANDOM_MIX_ID,
+                                                              type: "app",
+                                                              weight: c.weight ? parseFloat(c.weight) : 100 });
+                                    } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
+                                        var command = this.buildCommand(c, "go", false);
+                                        var item = { title: c.text,
+                                                     command: command.command,
+                                                     params: command.params,
+                                                     weight: c.weight ? parseFloat(c.weight) : 100,
+                                                     id: MUSIC_ID_PREFIX+c.id,
+                                                     type: "group",
+                                                     icon: "music_note"
+                                                    };
+
+                                        if (c.id == "dynamicplaylist") {
+                                            item.svg = "dice-list";
+                                            item.icon = undefined;
+                                        } else if (c.id.startsWith("trackstat")) {
+                                            item.icon = "bar_chart";
+                                        } else if (c.id.startsWith("artist")) {
+                                            item.svg = "artist";
+                                            item.icon = undefined;
+                                        } else if (c.id.startsWith("playlists")) {
+                                            item.icon = "list";
+                                            item.section = SECTION_PLAYLISTS;
+                                        } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
+                                            if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
+                                                item.limit=undefined==this.newMusicLimit ? 100 :this.newMusicLimit;
+                                            }
+                                            if (c.id.startsWith("artist")) {
+                                                item.svg = "artist";
+                                                item.icon = undefined;
+                                            } else {
+                                                item.icon = c.id.startsWith("new") ? "new_releases" :
+                                                            c.id.startsWith("album") ? "album" :
+                                                            c.id.startsWith("artist") ? "group" :
+                                                            c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
+                                                            c.id.startsWith("genre") ? "label" :
+                                                            c.id.startsWith("playlist") ? "list" :
+                                                            c.id.startsWith("ratedmysql") ? "star" :
+                                                            "music_note";
+                                            }
+                                        } else if (c.icon) {
+                                            if (c.icon.endsWith("/albums.png")) {
+                                                item.icon = "album";
+                                            } else if (c.icon.endsWith("/artists.png")) {
+                                                item.svg = "artist";
+                                                item.icon = undefined;
+                                            } else if (c.icon.endsWith("/genres.png")) {
+                                                item.icon = "label";
+                                            }
+                                        }
+                                        if (getField(item, "genre_id:")>=0) {
+                                            item['mapgenre']=true;
+                                        }
+                                        this.myMusic.push(item);
+                                    }
+                                }
+                            }
+                            this.myMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
+                            for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                            }
+                            if (this.current && TOP_MYMUSIC_ID==this.current.id) {
+                                this.items = this.myMusic;
+                            } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
+                                this.history[1].items = this.myMusic;
+                            }
+                        }
+                        this.fetchingItems=false;
+                    }).catch(err => {
+                        this.fetchingItems = false;
+                        logAndShowError(err);
+                    });
                 }
-                this.fetchingItems=false;
             }).catch(err => {
                 this.fetchingItems = false;
                 logAndShowError(err);
@@ -1992,6 +1991,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.options.pinned.add(this.top[i].id);
                 } else if (this.top[i].id==TOP_CDPLAYER_ID && this.top[i].params.length==0) {
                     this.top[i].params.push("menu:1");
+                }
+            }
+            for (var i=0, len=this.top.length; i<len; ++i) {
+                if (this.top[i].id==TOP_ID_PREFIX+"ps") {
+                    this.top.splice(i, 1);
+                    break;
                 }
             }
             if (this.$store.state.sortHome) {
@@ -2022,8 +2027,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.history.length<1) {
                 this.items = this.top;
             }
-            for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+            for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
             }
             this.saveTopList();
             removeLocalStorage("pinned");
@@ -2089,8 +2094,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
                 if (item.id.startsWith(TOP_ID_PREFIX)) {
-                    for (var i=0, len=this.serverMyMusic.length; i<len; ++i) {
-                        this.serverMyMusic[i].menu=[this.options.pinned.has(this.serverMyMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                    for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                        this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
                 }
             }
@@ -2322,7 +2327,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setBgndCover(this.scrollElement, url, this.$store.state.darkUi);
         },
         enableRatings() {
-            this.showRatingButton = (this.$store.state.ratingsSupport &&
+            this.showRatingButton = (this.$store.state.ratingsSupport && this.items.length>0 &&
                 !(this.current && this.current.id && this.current.id.startsWith("playlist_id:")) &&
                 !(this.current && this.current.actions && this.current.actions.go && this.current.actions.go.cmd &&
                   this.current.actions.go.cmd.length>1 && this.current.actions.go.cmd[0]=="trackstat") &&
@@ -2501,8 +2506,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
 
         bus.$on('browseDisplayChanged', function() {
+            if (this.myMusic.length>0) {
+                this.myMusic[0].needsUpdating=true;
+            }
             this.options.sortFavorites=this.$store.state.sortFavorites;
-            this.options.showPresets=this.$store.state.hidden.has(TOP_PRESETS_ID);
             if (this.$store.state.sortHome) {
                 this.saveTopList();
             }

@@ -62,18 +62,21 @@ function clickHandler(e) {
     bus.$emit('iframe-loaded');
 }
 
-function hideClassicSkinElems(page) {
+function hideClassicSkinElems(page, showAll) {
     if (!page) {
         return;
     }
     var iframe = document.getElementById("classicSkinIframe");
     if (iframe) {
         var toHide = toHide;
-        if ('player'==page) {
-            toHide = new Set(['ALARM', 'PLUGIN_EXTENDED_BROWSEMODES', 'PLUGIN_DSTM', 'PLUGIN_PRESETS_EDITOR']);
-        } else if ('server'==page) {
-            toHide = new Set(['INTERFACE_SETTINGS']);
-        } else if ('search'==page) {
+        if (!showAll) {
+            if ('player'==page) {
+                toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
+            } else if ('server'==page) {
+                toHide = new Set(['INTERFACE_SETTINGS']);
+            }
+        }
+        if ('search'==page) {
             if (iframe.contentDocument.addEventListener) {
                 iframe.contentDocument.addEventListener('click', clickHandler);
             } else if (iframe.contentDocument.attachEvent) {
@@ -106,7 +109,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="classicSkinIframe" v-on:load="hideClassicSkinElems(page)" :src="src" frameborder="0"></iframe>
+    <iframe id="classicSkinIframe" v-on:load="hideClassicSkinElems(page, showAll)" :src="src" frameborder="0"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -121,11 +124,12 @@ Vue.component('lms-iframe-dialog', {
             src: undefined,
             page: undefined,
             snackbar:{show:false, msg:undefined},
-            loaded:false
+            loaded:false,
+            showAll:false // show al settings, or hide some?
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title) {
+        bus.$on('iframe.open', function(page, title, showAll) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -137,6 +141,7 @@ Vue.component('lms-iframe-dialog', {
                                     : "other";
             this.show = true;
             this.loaded = false;
+            this.showAll = showAll;
         }.bind(this));
             bus.$on('iframe-loaded', function() {
             this.loaded = true;

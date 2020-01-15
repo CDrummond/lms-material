@@ -129,6 +129,15 @@ function updateUiSettings(state, val) {
         state.skipSeconds = val.skipSeconds;
         setLocalStorageVal('skipSeconds', state.skipSeconds);
     }
+    if (undefined!=val.disabledBrowseModes) {
+        var diff = new Set([...val.disabledBrowseModes].filter(x => !state.disabledBrowseModes.has(x)));
+        var diff2 = new Set([...state.disabledBrowseModes].filter(x => !val.disabledBrowseModes.has(x)));
+        if (diff.size>0 || diff2.size>0) {
+            state.disabledBrowseModes = val.disabledBrowseModes;
+            setLocalStorageVal('disabledBrowseModes', JSON.stringify(Array.from(state.disabledBrowseModes)));
+            browseDisplayChanged = true;
+        }
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -176,6 +185,7 @@ const store = new Vuex.Store({
         sortHome: IS_IPHONE,
         hidden: new Set(),
         visibleMenus: new Set(),
+        disabledBrowseModes: new Set(),
         swipeVolume: false,
         keyboardControl: true,
         pluginUpdatesAvailable: false,
@@ -360,11 +370,12 @@ const store = new Vuex.Store({
             state.lsAndNotif = convertLsAndNotif(getLocalStorageVal('lsAndNotif', state.lsAndNotif));
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
-            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[\""+TOP_PRESETS_ID+"\"]")));
+            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[]")));
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
+            state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
@@ -424,6 +435,9 @@ const store = new Vuex.Store({
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
+                        }
+                        if (undefined!=prefs.disabledBrowseModes && undefined==getLocalStorageVal('disabledBrowseModes', undefined)) {
+                            opts.disabledBrowseModes=new Set(prefs.disabledBrowseModes);
                         }
                     updateUiSettings(state, opts);
                     } catch(e) {

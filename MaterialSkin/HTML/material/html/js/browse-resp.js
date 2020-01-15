@@ -88,7 +88,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (categories>1 || clamped) {
                     resp.items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:"search.albums", header:true,
                                      allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numAlbums),
-                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Album", "%1 Albums", titleParam);
                 }
@@ -121,7 +121,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (categories>1 || clamped) {
                     resp.items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:"search.tracks", header:true,
                                      allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numTracks),
-                                     menu:[PLAY_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                 } else {
                     resp.subtitle=i18np("1 Track", "%1 Tracks", titleParam);
                 }
@@ -189,6 +189,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var isApps = parent && parent.id == TOP_APPS_ID;
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
+            var isCustomBrowse = command == "custombrowse" ;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
@@ -272,7 +273,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 i.menu=[];
 
-                if (i.type=="artist" || i.type=="album" || i.type=="year" || i.type=="genre" || // CustomBrowse
+                if (i.type=="artist" || i.type=="album" || i.type=="year" || i.type=="genre" || isCustomBrowse ||
                     i.type=="playlist" || i.type=="audio" || i.style=="itemplay" || (i.goAction && (i.goAction == "playControl" || i.goAction == "play"))) {
                     // Convert NUM. TITLE into 0NUM TITLE - e.g 1. Wibble => 01 Wibble
                     /* Removed, as converts titles "22. Acacia Avenue" to "22 <dot> Acacia Avenue"
@@ -284,7 +285,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     */
                     if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
-                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) ) {
+                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;
@@ -352,18 +353,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.icon="favorite";
                         i.image=undefined;
                     }
-                    if (!i.isFavFolder && options.showPresets) {
-                        i.menu.push(SAVE_PRESET_ACTION);
-                    }
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
                     i.menu.push(ADD_TO_FAV_ACTION);
-                    if (options.showPresets) {
-                        i.menu.push(SAVE_PRESET_ACTION);
-                    }
                 }
 
                 if (isPlaylists && i.type=="playlist") {
@@ -757,12 +752,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
-            var menu = options.showPresets
-                        ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SAVE_PRESET_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION]
-                        : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION];
+            var menu = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION];
+            var remoteMenu = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION];
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
+                var isRemote = 1 == parseInt(i.remote);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }
@@ -772,10 +767,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               command: ["playlists", "tracks"],
                               //icon: "list",
                               params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
-                              menu: menu,
+                              menu: isRemote ? remoteMenu : menu,
                               type: "group",
                               section: SECTION_PLAYLISTS,
-                              url:  i.url
+                              url:  i.url,
+                              remotePlaylist: isRemote
                           });
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
@@ -805,6 +801,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         subtitle=i.album;
                     }
                 }
+                var isRemote = undefined!=parent && parent.remotePlaylist;
                 //if (options.ratingsSupport && undefined!=i.rating) {
                 //    subtitle = ratingString(subtitle, i.rating);
                 //}
@@ -816,9 +813,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION],
+                              menu: isRemote ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION],
                               type: "track",
-                              draggable: true
+                              draggable: !isRemote
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
@@ -844,19 +841,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                           });
             }
             resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length);
-        } else if (data && data.result && data.result.presets_loop) {
-            for (var idx=0, loop=data.result.presets_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var title = undefined!=i.text ? i.text.trim() : i.text;
-                resp.items.push({title: (parseInt(i.num)<10 ? "0" : "") + i.num + (undefined!=title && title.length>0 ? (SEPARATOR + title) : ""),
-                                 text: i.text,
-                                 url: i.url,
-                                 menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, EDIT_ACTION, MOVE_PRESET_ACTION],
-                                 section: SECTION_PRESETS,
-                                 num: i.num
-                                 });
-            }
-            resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
         } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?
@@ -909,10 +893,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         resp = data;
     }
 
-    if (0==resp.items.length) {
-        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
-    }
-
     } catch(e) {
         resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e, type: 'text', id:'error'});
         logError(e);
@@ -940,9 +920,6 @@ function parseBrowseUrlResp(data, provider) {
             }
         }
         resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
-    }
-    if (0==resp.items.length) {
-        resp.items.push({title:i18n("Empty"), type: 'text', id:'empty'});
     }
     return resp;
 }

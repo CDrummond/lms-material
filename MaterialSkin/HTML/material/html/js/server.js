@@ -75,20 +75,23 @@ function visibilityOrFocusChanged() {
 }
 
 var lmsListSource = undefined;
-var lmsListId = 0;
+var lmsCommandId = 0;
 
 function lmsCommand(playerid, command, isList) {
+    lmsCommandId++;
+    if (lmsCommandId>65535) {
+        lmsCommandId=1;
+    }
     var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
                     (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
 
-    const URL = "/jsonrpc.js"
-    var data = { id: 1, method: "slim.request", params: [playerid, command]};
+    const URL = "/jsonrpc.js?id="+lmsCommandId;
+    var data = { id: lmsCommandId, method: "slim.request", params: [playerid, command]};
 
     logJsonMessage("REQ", data.params);
     if (canCancel) {
         lmsListSource = axios.CancelToken.source();
-        lmsListId++;
-        return axios.post(URL+"?id="+lmsListId, data, {cancelToken: lmsListSource.token}).finally(() => {
+        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
             lmsListSource = undefined;
         });
     } else {
@@ -267,6 +270,9 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/favorites', request:['favorites', ['changed']]}});
+                    this.cometd.subscribe('/slim/subscribe',
+                                    function(res) { },
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/serverprefs', request:[['prefset']]}});
                     this.updateFavorites();
                 }
             });
@@ -285,6 +291,8 @@ var lmsServer = Vue.component('lms-server', {
                 }
             } else if (msg.channel.indexOf('/slim/playerprefs/')>0) {
                 this.handlePlayerPrefs(msg.channel.split('/').pop(), msg.data);
+            } else if (msg.channel.endsWith('/slim/serverprefs')) {
+                this.handleServerPrefs(msg.data);
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }
@@ -448,7 +456,14 @@ var lmsServer = Vue.component('lms-server', {
                 });
             }
         },
-        handleFavoritesUpdate() {
+        handleServerPrefs(data) {
+            if (data.length<4 || data[0]!="prefset") {
+                return;
+            }
+            if (data[1]=="server" && data[2]=="useUnifiedArtistsList") {
+                bus.$emit("prefset", data[1]+":"+data[2], data[3]);
+            }
+        }, handleFavoritesUpdate() {
             logCometdDebug("FAVORITES");
             // 'Debounce' favorites updates...
             this.cancelFavoritesTimer();

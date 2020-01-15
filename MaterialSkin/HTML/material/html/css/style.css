@@ -200,10 +200,20 @@ a {
  right:-22px !important;
 }
 
+.image-grid-item-icon {
+ display:table-cell;
+ text-align:center;
+ vertical-align:middle;
+}
+
 /* -- */
 .image-grid-k td .image-grid-item-img {
  height:175px !important;
  width:175px !important;
+}
+
+.image-grid-k td .image-grid-item-icon {
+ font-size:140px !important;
 }
 
 .image-grid-k td .image-grid-text {
@@ -220,6 +230,10 @@ a {
  width:170px !important;
 }
 
+.image-grid-j td .image-grid-item-icon {
+ font-size:135px !important;
+}
+
 .image-grid-j td .image-grid-text {
  width:158px;
 }
@@ -228,9 +242,14 @@ a {
  width:178px;
  height:230px;
 }
+
 .image-grid-i td .image-grid-item-img {
  height:165px !important;
  width:165px !important;
+}
+
+.image-grid-i td .image-grid-item-icon {
+ font-size:130px !important;
 }
 
 .image-grid-i td .image-grid-text {
@@ -247,6 +266,10 @@ a {
  width:160px !important;
 }
 
+.image-grid-h td .image-grid-item-icon {
+ font-size:125px !important;
+}
+
 .image-grid-h td .image-grid-text {
  width:148px;
 }
@@ -259,6 +282,10 @@ a {
 .image-grid-g td .image-grid-item-img {
  height:155px !important;
  width:155px !important;
+}
+
+.image-grid-g td .image-grid-item-icon {
+ font-size:120px !important;
 }
 
 .image-grid-g td .image-grid-text {
@@ -275,6 +302,10 @@ a {
  width:150px !important;
 }
 
+.image-grid-f td .image-grid-item-icon {
+ font-size:115px !important;
+}
+
 .image-grid-f td .image-grid-text {
  width:138px;
 }
@@ -287,6 +318,10 @@ a {
 .image-grid-e td .image-grid-item-img {
  height:145px !important;
  width:145px !important;
+}
+
+.image-grid-e td .image-grid-item-icon {
+ font-size:110px !important;
 }
 
 .image-grid-e td .image-grid-text {
@@ -303,6 +338,10 @@ a {
  width:140px !important;
 }
 
+.image-grid-d td .image-grid-item-icon {
+ font-size:105px !important;
+}
+
 .image-grid-d td .image-grid-text {
  width:128px;
 }
@@ -315,6 +354,10 @@ a {
 .image-grid-c td .image-grid-item-img {
  height:135px !important;
  width:135px !important;
+}
+
+.image-grid-c td .image-grid-item-icon {
+ font-size:100px !important;
 }
 
 .image-grid-c td .image-grid-text {
@@ -331,6 +374,10 @@ a {
  width:130px !important;
 }
 
+.image-grid-b td .image-grid-item-icon {
+ font-size:95px !important;
+}
+
 .image-grid-b td .image-grid-text {
  width:118px;
 }
@@ -343,6 +390,10 @@ a {
 .image-grid-a td .image-grid-item-img {
  height:125px !important;
  width:125px !important;
+}
+
+.image-grid-a td .image-grid-item-icon {
+ font-size:90px !important;
 }
 
 .image-grid-a td .image-grid-text {
@@ -891,6 +942,10 @@ progress {
 .settings-list-checkbox {
  margin-left:32px;
  height:24px;
+}
+
+.settings-list-checkbox-action {
+ margin:16px 16px -32px 0px; /* t, r, b, l */
 }
 
 .player-settings-list-checkbox {

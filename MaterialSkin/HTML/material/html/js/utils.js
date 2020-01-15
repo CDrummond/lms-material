@@ -622,7 +622,7 @@ function setUseGrid(command, use) {
 const ALBUM_SORT_KEY = "albumSort";
 const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
 
-function commandAlbumSortKey(command) {
+function commandAlbumSortKey(command, genre) {
     var isArtist = false;
     var isCompilation = false;
     for (var i=0, len=command.params.length; i<len; ++i) {
@@ -641,16 +641,20 @@ function commandAlbumSortKey(command) {
             isCompilation = true;
         }
     }
-    return isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
+    var baseSort = isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
+    if (undefined!=genre && (LMS_COMPOSER_GENRES.has(genre)) || LMS_CONDUCTOR_GENRES.has(genre)) {
+        return baseSort+"C";
+    }
+    return baseSort;
 }
 
-function getAlbumSort(command) {
-    var key=commandAlbumSortKey(command);
-    return getLocalStorageVal(key, ALBUM_SORT_KEY==key ? "album" : "yearalbum");
+function getAlbumSort(command, genre) {
+    var key=commandAlbumSortKey(command, genre);
+    return getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum");
 }
 
-function setAlbumSort(command, sort) {
-    setLocalStorageVal(commandAlbumSortKey(command), sort);
+function setAlbumSort(command, genre, sort) {
+    setLocalStorageVal(commandAlbumSortKey(command, genre), sort);
 }
 
 function forceItemUpdate(vm, item) {

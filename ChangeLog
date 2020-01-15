@@ -1,3 +1,33 @@
+1.3.0
+-----
+ 1. Add 'Move selection here' to context menu allowing items to be moved on
+    iPhone and mobile Firefox.
+ 2. Add 'Play next' to search header context menus.
+ 3. List all genres in 'Randmom Mix' dialog.
+ 4. Display currently selected library in 'Random Mix' dialog.
+ 5. Add continuous play, upcomming track, and historic track options to
+    'Random Mix' dialog.
+ 6. Add support for showing icons in grid.
+ 7. Get list of all browse modes from Slim::Menu::BrowseLibrary, as opposed to
+    hard-coding.
+ 8. Long-press on player 'Extra settings' will show all settings.
+ 9. Long-press on 'Server settings' in 'Information' dialog will show all
+    server settings.
+10. Don't add 'Empty' list item for empty lists, '0 Items' is stated in
+    sub-toolbar.
+11. Cannot edit remote playlists (LMS 8.0 feature).
+12. For Custom Browse, always add play/insert/add actions if these are
+    indicated in the response.
+13. Use different album sort settings for albums under composer or conductor
+    genres.
+14. If queue does not have artist/artist_id but does have
+    trackartist/trackartist_id, then when clicking on a artist link in the
+    queue, pass role_id:TRACKARTIST to album list request.
+15. Remove presets code - these are per-player hadware specific items.
+16. Make browse-modes non-player specific.
+17. Add button on settings dialog to revert to default.
+18. Add library selection to player settings.
+
 1.2.2
 -----
 1. For desktop browsers, auto-focus search field if it is the first item in a

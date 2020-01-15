@@ -15,7 +15,8 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save</b-icon></v-btn>
+    <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>
+    <v-btn flat icon @click.native="revertToDefault" :title="i18n('Revert to default')"><v-icon>settings_backup_restore</b-icon></v-btn>
    </v-toolbar>
   </v-card-title>
   <v-card-text>
@@ -366,47 +367,11 @@ Vue.component('lms-ui-settings', {
         bus.$on('uisettings.open', function(act) {
             this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
-            this.darkUi = this.$store.state.darkUi;
-            this.largeFonts = this.$store.state.largeFonts;
-            this.autoScrollQueue = this.$store.state.autoScrollQueue;
-            this.stopButton = this.$store.state.stopButton;
-            this.browseBackdrop = this.$store.state.browseBackdrop;
-            this.queueBackdrop = this.$store.state.queueBackdrop;
-            this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
-            this.infoBackdrop = this.$store.state.infoBackdrop;
-            this.techInfo = this.$store.state.techInfo;
-            this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
-            this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
-            this.swipeVolume = this.$store.state.swipeVolume;
-            this.keyboardControl = this.$store.state.keyboardControl;
-            this.queueThreeLines = this.$store.state.queueThreeLines;
-            this.lsAndNotif=this.$store.state.lsAndNotif;
-            this.letterOverlay=this.$store.state.letterOverlay;
-            this.sortFavorites = this.$store.state.sortFavorites;
-            this.sortHome = this.$store.state.sortHome;
-            this.showMenuAudio = this.$store.state.showMenuAudio;
-            this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
+            this.readStore();
             this.password = getLocalStorageVal('password', '');
             if (this.allowLayoutAdjust) {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
-            }
-            this.skipSeconds = this.$store.state.skipSeconds;
-            this.volumeStep = volumeStep;
-            this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
-            this.menuIcons = this.$store.state.menuIcons;
-            this.hidden = this.$store.state.hidden;
-
-            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
-            this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
-                            {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
-                            {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
-                            {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)}];
-            if (!disabled.has(TOP_CDPLAYER_ID)) {
-                this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
-            }
-            if (!disabled.has(TOP_REMOTE_ID)) {
-                this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
             this.hasPassword = false;
             lmsCommand("", ["material-skin", "pass-isset"]).then(({data}) => {
@@ -441,6 +406,44 @@ Vue.component('lms-ui-settings', {
         this.initItems();
     },
     methods: {
+        readStore() {
+            this.darkUi = this.$store.state.darkUi;
+            this.largeFonts = this.$store.state.largeFonts;
+            this.autoScrollQueue = this.$store.state.autoScrollQueue;
+            this.stopButton = this.$store.state.stopButton;
+            this.browseBackdrop = this.$store.state.browseBackdrop;
+            this.queueBackdrop = this.$store.state.queueBackdrop;
+            this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
+            this.infoBackdrop = this.$store.state.infoBackdrop;
+            this.techInfo = this.$store.state.techInfo;
+            this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
+            this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
+            this.swipeVolume = this.$store.state.swipeVolume;
+            this.keyboardControl = this.$store.state.keyboardControl;
+            this.queueThreeLines = this.$store.state.queueThreeLines;
+            this.lsAndNotif=this.$store.state.lsAndNotif;
+            this.letterOverlay=this.$store.state.letterOverlay;
+            this.sortFavorites = this.$store.state.sortFavorites;
+            this.sortHome = this.$store.state.sortHome;
+            this.showMenuAudio = this.$store.state.showMenuAudio;
+            this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
+            this.skipSeconds = this.$store.state.skipSeconds;
+            this.volumeStep = this.$store.state.volumeStep;
+            this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
+            this.menuIcons = this.$store.state.menuIcons;
+            this.hidden = this.$store.state.hidden;
+            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
+            this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
+                            {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
+                            {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
+                            {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)}];
+            if (!disabled.has(TOP_CDPLAYER_ID)) {
+                this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
+            }
+            if (!disabled.has(TOP_REMOTE_ID)) {
+                this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
+            }
+        },
         initItems() {
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},
@@ -526,10 +529,40 @@ Vue.component('lms-ui-settings', {
                                      menuIcons:this.menuIcons,
                                      hidden:Array.from(this.hiddenItems()),
                                      skipSeconds:this.skipSeconds,
-                                     disabledBrowseModes:this.disabledBrowseModes()
+                                     disabledBrowseModes:Array.from(this.disabledBrowseModes())
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);
+                }
+            });
+        },
+        revertToDefault() {
+            this.$confirm(i18n("Rever to default settings?"),
+                          {buttonTrueText: i18n('Revert'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
+                        if (data && data.result && data.result._p2) {
+                            try {
+                                var prefs = JSON.parse(data.result._p2);
+                                try {
+                                    prefs.hidden = undefined==prefs.hidden ? undefined : new Set(prefs.hidden);
+                                } catch(e) {
+                                    prefs.hidden = undefined;
+                                }
+                                try {
+                                    prefs.disabledBrowseModes = undefined==prefs.disabledBrowseModes ? undefined : new Set(prefs.disabledBrowseModes);
+                                } catch(e) {
+                                    prefs.disabledBrowseModes = undefined;
+                                }
+                                this.$store.commit('setUiSettings', prefs);
+                                this.readStore();
+                                for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {
+                                    loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
+                                }
+                            } catch(e) {
+                            }
+                        }
+                    });
                 }
             });
         },

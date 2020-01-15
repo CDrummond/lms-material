@@ -1829,10 +1829,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
                 if (data && data.result) {
                     this.myMusic = [];
+                    var stdItems = new Set();
                     // Get basic, configurable, browse modes...
                     if (data && data.result && data.result.modes_loop) {
                         for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                             var c = loop[idx];
+                            stdItems.add(c.id);
                             if (this.$store.state.disabledBrowseModes.has(c.id)) {
                                 continue;
                             }
@@ -1878,6 +1880,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.icon = "arrow_upward";
                             } else if (c.id.startsWith("myMusicFlopTracks")) {
                                 item.icon = "arrow_downward";
+                            } else if (c.icon) {
+                                if (c.icon.endsWith("/albums.png")) {
+                                    item.icon = "album";
+                                } else if (c.icon.endsWith("/artists.png")) {
+                                    item.svg = "artist";
+                                    item.icon = undefined;
+                                } else if (c.icon.endsWith("/genres.png")) {
+                                    item.icon = "label";
+                                }
                             }
                             item.params.push("menu:1");
                             this.myMusic.push(item);
@@ -1886,7 +1897,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     // Now get standard menu, for extra (e.g. CustomBrowse) entries...
                     lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                         if (data && data.result && data.result.item_loop) {
-                            var stdItems = new Set(["myMusicGenres", "myMusicPlaylists", "myMusicYears", "myMusicNewMusic", "myMusicMusicFolder", "myMusicFileSystem", "myMusicRandomAlbums", "myMusicTopTracks", "myMusicFlopTracks"]);
                             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                                 var c = loop[idx];
                                 if (c.node=="myMusic" && c.id) {
@@ -1896,7 +1906,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                               id: RANDOM_MIX_ID,
                                                               type: "app",
                                                               weight: c.weight ? parseFloat(c.weight) : 100 });
-                                    } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("myMusicArtists") && !c.id.startsWith("myMusicAlbums") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
+                                    } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
                                         var command = this.buildCommand(c, "go", false);
                                         var item = { title: c.text,
                                                      command: command.command,
@@ -1940,6 +1950,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                 item.icon = "album";
                                             } else if (c.icon.endsWith("/artists.png")) {
                                                 item.svg = "artist";
+                                                item.icon = undefined;
                                             } else if (c.icon.endsWith("/genres.png")) {
                                                 item.icon = "label";
                                             }

@@ -23,8 +23,10 @@
 14. If queue does not have artist/artist_id but does have
     trackartist/trackartist_id, then when clicking on a artist link in the
     queue, pass role_id:TRACKARTIST to album list request.
-15. Remove presets code - these are per-player hadware specific items.
-16. Make browse-modes non-player specific.
+15. Remove presets code - these are per-player haedware specific items.
+16. Make Material's browse-modes listing under 'My Music' non-player specific.
+    List can be configured via 'cog' icon next to 'My Music' in Material's
+    settings dialog.
 17. Add button on settings dialog to revert to default.
 18. Add library selection to player settings.
 

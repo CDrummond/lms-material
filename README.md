@@ -80,6 +80,29 @@ may specify the initial page in the URL query. Valid values are; `browse`,
 
 * `http://<yourserver>:9000/material/mobile?page=now-playing`
 
+### Actions
+
+You can specify a set 'actions' to be triggered when the page is loaded. This
+is achieved by passing the `action` query parameter one ore more times. This uses
+the following syntax:
+
+* `http://<yourserver>:9000/material/?action=name/comma-separated-params/onplayer`
+
+`name` being the name of the action, `comma-separated-params` is (as its name
+implies) a list of comma-separated parameters to pass to the invoked action,
+`onplayer` allows you to specify that the action will only occur when the indicated
+player is present.
+
+* `http://<yourserver>:9000/material/desktop?action=expandNowPlaying/true` will
+open the desktop-layout with the now-playing page expanded (which is similar to
+`http://<yourserver>:9000/material/now-playing`)
+
+* `http://<yourserver>:9000/material/mobile?action=dlg.open/playersettings,-,alarms`
+will open the player settings dialog, and scroll the 'Alarms' section into view.
+`-` here is used to tell the player settings dialog to act on the currently active
+player. Therefore, to be truly useful the `player=` query parameter should also
+be used. e.g. `http://<yourserver>:9000/material/mobile?player=Bedroom&action=dlg.open/playersettings,-,alarms`
+
 ### Debugging
 
 Material uses LMS's JSONRPC and Cometd interfaces to send commands and receive

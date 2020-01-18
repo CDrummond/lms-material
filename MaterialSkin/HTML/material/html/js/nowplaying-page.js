@@ -326,7 +326,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.largeView = true;
             } else {
                 this.info.showTabs=getLocalStorageBool("showTabs", false);
-                bus.$on('largeView', function(val) {
+                bus.$on('expandNowPlaying', function(val) {
                     if (val) {
                         this.info.show = false;
                     }
@@ -1194,7 +1194,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 this.page = undefined;
             }
-            bus.$emit('largeViewVisible', val);
+            bus.$emit('nowPlayingExpanded', val);
         },
         'landscape': function(val) {
             if (!val) {

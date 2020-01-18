@@ -393,6 +393,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
+    var resp = { actions:[] };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -411,8 +412,11 @@ function parseQueryParams() {
             }
         } else if ("clearcache"==kv[0] && "true"==kv[1]) {
             clearListCache(true);
+        } else if ("action"==kv[0]) {
+            resp.actions.push(kv[1]);
         }
     }
+    return resp;
 }
 
 function isLandscape() {

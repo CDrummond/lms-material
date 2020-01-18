@@ -96,10 +96,10 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && !largeView && !mini && !nowplaying" @click.native="toggleLargeView(true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && !nowPlayingExpanded && !mini && !nowplaying" @click.native="expandNowPlaying(true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && largeView && !mini && !nowplaying" @click.native="toggleLargeView(false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && nowPlayingExpanded && !mini && !nowplaying" @click.native="expandNowPlaying(false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
@@ -155,7 +155,7 @@ Vue.component('lms-toolbar', {
                         startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
                         pluginUpdatesAvailable:undefined, fixedVol:undefined},
                  infoOpen: false,
-                 largeView: false,
+                 nowPlayingExpanded: false,
                  playerVolume: 0,
                  playerMuted: false,
                  playerDvc: true,
@@ -263,8 +263,8 @@ Vue.component('lms-toolbar', {
             }
             this.initItems();
         }.bind(this));
-        bus.$on('largeViewVisible', function(val) {
-            this.largeView = val;
+        bus.$on('nowPlayingExpanded', function(val) {
+            this.nowPlayingExpanded = val;
         }.bind(this));
 
         if (this.desktop) {
@@ -435,11 +435,11 @@ Vue.component('lms-toolbar', {
             }
             bus.$emit('info');
         },
-        toggleLargeView(on) {
+        expandNowPlaying(on) {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            bus.$emit('largeView', on);
+            bus.$emit('expandNowPlaying', on);
         },
         togglePower(player, state) {
             var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;

@@ -29,6 +29,7 @@
     settings dialog.
 17. Add button on settings dialog to revert to default.
 18. Add library selection to player settings.
+19. Add actions query parameter, allowing actions to be triggered.
 
 1.2.2
 -----

@@ -49,7 +49,7 @@ var app = new Vue({
             this.splitter = this.splitterPercent;
             document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         }
-        parseQueryParams();
+        this.query=parseQueryParams();
         this.$store.commit('initUiSettings');
 
         lmsUseLastPlayer = false;
@@ -185,6 +185,14 @@ var app = new Vue({
                 bus.$emit(name+".open", a, b, c);
             });
         }.bind(this));
+        if (this.query.actions.length>0) {
+            this.$nextTick(function () {
+                this.doQueryActions(false);
+            });
+            bus.$on('playerListChanged', function () {
+                this.doQueryActions(true);
+            }.bind(this));
+        }
     },
     computed: {
         darkUi() {
@@ -267,6 +275,36 @@ var app = new Vue({
                         bus.$emit('splitterChanged');
                         this.scrollAnimationFrameReq = undefined;
                     });
+                }
+            }
+        },
+        doQueryActions(actOnPlayers) {
+            for (var i=0; i<this.query.actions.length; ) {
+                if ( (actOnPlayers && this.query.actions[i].startsWith("dlg.")) || (!actOnPlayers && !this.query.actions[i].startsWith("dlg."))) {
+                    var act = this.query.actions[i];
+                    var parts = act.split('/');
+                    var params = [];
+                    if (parts.length>1) {
+                        params = parts[1].split(',');
+                    }
+                    if (parts.length>2) { // Check required player exists
+                        var playerId = parts[2];
+                        var found = false;
+                        for (var j=0, len=this.$store.state.players.length; j<len && !found; ++j) {
+                            if (this.$store.state.players[j].id == playerId || this.$store.state.players[j].name == playerId) {
+                                found = true;
+                            }
+                        }
+                        if (!found) {
+                            i++;
+                            continue;
+                        }
+                    }
+
+                    bus.$emit(parts[0], params.length>0 ? params[0] : undefined, params.length>1 ? params[1] : undefined, params.length>2 ? params[2] : undefined);
+                    this.query.actions.splice(i, 1);
+                } else {
+                    i++;
                 }
             }
         }

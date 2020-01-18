@@ -44,7 +44,7 @@ Vue.component('lms-player-settings', {
      <v-btn @click="setSleep()" flat style="margin-left:-8px"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn>
     </v-list-tile>
     <div class="dialog-padding" v-if="unlockAll"></div>
-    <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('Alarms')}}</v-header>
+    <v-header class="dialog-section-header" v-if="unlockAll" id="alarms">{{i18n('Alarms')}}</v-header>
      <v-list-tile v-if="unlockAll">
       <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
@@ -227,11 +227,29 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
 
-        bus.$on('playersettings.open', function(player) {
+        bus.$on('playersettings.open', function(player, section) {
+            // Check if called via actions URL query. If so, need to map from mac/name to player instance
+            if (typeof player === 'string' || player instanceof String) {
+                if ('-'==player) {
+                    player=undefined;
+                } else {
+                    var found = false;
+                    for (var i=0, len=this.$store.state.players.length; i<len && !found; ++i) {
+                        if (this.$store.state.players[i].id == player || this.$store.state.players[i].name == player) {
+                            player = this.$store.state.players[i];
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        bus.$emit('showError', undefined, i18n("Player not found"));
+                        return;
+                    }
+                }
+            }
             if (undefined==player && this.$store.state.player && !this.show) {
-                this.playerSettings(this.$store.state.player);
+                this.playerSettings(this.$store.state.player, section);
             } else if (undefined!=player && !this.show) {
-                this.playerSettings(player);
+                this.playerSettings(player, section);
             } else if (!this.$store.state.player) {
                 bus.$emit('showError', undefined, i18n("No Player"));
             }
@@ -262,7 +280,7 @@ Vue.component('lms-player-settings', {
         handlePlayerStatus(playerStatus) {
             this.controlSleepTimer(playerStatus.will_sleep_in);
         },
-        playerSettings(player) {
+        playerSettings(player, section) {
             this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.cancelSleepTimer();
             this.dstmItems=[];
@@ -362,6 +380,14 @@ Vue.component('lms-player-settings', {
             });
             this.update(false);
             this.show=true;
+            if (undefined!=section) {
+                this.$nextTick(function () {
+                    var elem = document.getElementById(section);
+                    if (elem) {
+                        elem.scrollIntoView(true);
+                    }
+                });
+            }
         },
         initItems() {
             this.crossfadeItems=[

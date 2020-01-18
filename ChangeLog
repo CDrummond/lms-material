@@ -30,6 +30,8 @@
 17. Add button on settings dialog to revert to default.
 18. Add library selection to player settings.
 19. Add actions query parameter, allowing actions to be triggered.
+20. Remove long-press on back button to go home, not required as we have home
+    button and causes weird behaviour (Issue #209)
 
 1.2.2
 -----

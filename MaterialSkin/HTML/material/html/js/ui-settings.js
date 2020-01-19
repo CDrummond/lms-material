@@ -537,7 +537,7 @@ Vue.component('lms-ui-settings', {
             });
         },
         revertToDefault() {
-            this.$confirm(i18n("Rever to default settings?"),
+            this.$confirm(i18n("Revert to default settings?"),
                           {buttonTrueText: i18n('Revert'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {

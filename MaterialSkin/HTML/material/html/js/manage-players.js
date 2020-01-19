@@ -191,7 +191,7 @@ Vue.component('lms-manage-players', {
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
             PMGR_SET_DEF_PLAYER_ACTION.title=PMGR_UNSET_DEF_PLAYER_ACTION.title=i18n("Default player");
             this.trans = { play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"), next:i18n("Next track"),
-                           decVol:i18n("Decrease volume"), incVol:i18n("Incease volume"), menu:i18n("Menu") };
+                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), menu:i18n("Menu") };
         },
         playerMenu(player, event) {
             this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];

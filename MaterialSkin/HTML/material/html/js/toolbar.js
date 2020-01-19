@@ -402,7 +402,7 @@ Vue.component('lms-toolbar', {
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available'),
-                          fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Incease volume"), showVol:i18n("Show volume"),
+                          fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause")};
         },
         setPlayer(id) {

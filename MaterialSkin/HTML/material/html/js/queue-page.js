@@ -237,7 +237,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+     <v-btn icon :title="i18n('Item %1 Menu', index+1)"><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>
   </RecycleScroller>
@@ -253,7 +253,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+     <v-btn icon :title="i18n('Item %1 Menu', index+1)"><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>
   </RecycleScroller>
@@ -271,7 +271,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+     <v-btn icon :title="i18n('Item %1 Menu', index+1)"><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
    </v-list-tile>
   </template>
@@ -958,9 +958,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.clearSelection();
             }
             this.dragIndex = undefined;
-        },
-        i18n(str) {
-            return i18n(str);
         },
         setBgndCover() {
             setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);

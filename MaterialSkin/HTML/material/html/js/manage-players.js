@@ -23,7 +23,7 @@ Vue.component('lms-manage-players', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">
-    <v-btn flat icon @click.native="close"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
@@ -44,16 +44,16 @@ Vue.component('lms-manage-players', {
           <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-status-icon" v-bind:class="{'active-btn': player.issyncmaster}">link</v-icon><i class="pmgr-synced-players" v-if="player.syncmaster">{{player | syncedPlayers}}</i></v-list-tile-title>
           <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn pmgr-btn-control" @click="playPause(player)">
+         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn pmgr-btn-control" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn pmgr-btn-control" @click="stop(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn pmgr-btn-control" @click="stop(player)" :title="player.name + ' - ' + trans.stop">
            <v-btn icon><v-icon>stop</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" :title="player.name + ' - ' + trans.next">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
@@ -61,11 +61,11 @@ Vue.component('lms-manage-players', {
       </v-flex xs12>
        <v-flex xs12>
        <v-layout>
-        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn" style="margin-left:2px"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn" style="margin-left:2px" :title="player.name + ' - ' + trans.decVol"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
         <v-slider @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider"></v-slider>
-        <v-btn flat icon @click="volumeUp(player)" class="pmgr-btn"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+        <v-btn flat icon @click="volumeUp(player)" class="pmgr-btn" :title="player.name + ' - ' + trans.incVol"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
         <p class="pmgr-vol">{{player.volume}}%</p>
-        <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn"><v-icon>more_vert</v-icon></v-btn>
+        <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
       <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon>{{i18n("Set sleep for all players")}}</v-btn></v-flex>
@@ -98,7 +98,8 @@ Vue.component('lms-manage-players', {
             showAllButtons: true,
             players: [],
             manageGroups: false,
-            menu: { show:false, player:undefined, actions:[], x:0, y:0 }
+            menu: { show:false, player:undefined, actions:[], x:0, y:0 },
+            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined }
         }
     },
     mounted() {
@@ -189,6 +190,8 @@ Vue.component('lms-manage-players', {
             PMGR_POWER_OFF_ACTION.title=i18n("Switch off");
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
             PMGR_SET_DEF_PLAYER_ACTION.title=PMGR_UNSET_DEF_PLAYER_ACTION.title=i18n("Default player");
+            this.trans = { play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"), next:i18n("Next track"),
+                           decVol:i18n("Decrease volume"), incVol:i18n("Incease volume"), menu:i18n("Menu") };
         },
         playerMenu(player, event) {
             this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];

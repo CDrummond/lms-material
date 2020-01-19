@@ -39,7 +39,7 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
       <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
-       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)">power_settings_new</v-icon></v-btn>
+       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
     </v-list-tile>
    </template>
@@ -76,12 +76,12 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-show="desktop || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  <div v-show="!playerDvc && (desktop || wide)" :class="['vol-fixed-label', !desktop || !infoPlugin ? 'vol-fixed-label-noinf' : '', nowplaying ? 'vol-fixed-label-np' : '', mini ? 'vol-fixed-label-mini' : '']">{{trans.fixedVol}}</div>
- <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="desktop || wide" class="vol-full-label" v-bind:class="{'vol-full-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}%</p>
- <v-btn v-show="!(desktop || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn">
+ <v-btn v-show="!(desktop || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
@@ -90,7 +90,7 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp">
+ <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
@@ -103,7 +103,7 @@ Vue.component('lms-toolbar', {
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon><img v-if="pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -151,9 +151,9 @@ Vue.component('lms-toolbar', {
                  showMainMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncShortcut:undefined, info:undefined, infoShortcut:undefined,
-                        connectionLost:undefined, showLarge:undefined, showLargeShortcut:undefined, hideLarge:undefined, 
-                        startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
-                        pluginUpdatesAvailable:undefined, fixedVol:undefined},
+                        connectionLost:undefined, showLarge:undefined, showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined,
+                        groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined, pluginUpdatesAvailable:undefined, fixedVol:undefined,
+                        decVol:undefined, incVol:undefined, showVol:undefined, mainMenu: undefined, play:undefined, pause:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -402,7 +402,8 @@ Vue.component('lms-toolbar', {
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available'),
-                          fixedVol:i18n("Fixed Volume")};
+                          fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Incease volume"), showVol:i18n("Show volume"),
+                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause")};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

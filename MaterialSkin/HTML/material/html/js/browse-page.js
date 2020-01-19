@@ -41,8 +41,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
-   <v-btn flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button"><v-icon>home</v-icon></v-btn>
-   <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
+   <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}</v-flex>
@@ -81,7 +81,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes"><v-card flat align="left" class="image-grid-item">
      <div v-if="idx>=items.length" class="image-grid-item"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
-      <v-btn icon color="primary" v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)">
+      <v-btn icon color="primary" v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
       <img v-if="items[idx].image" :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
@@ -89,7 +89,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img  v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
-      <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" class="image-grid-btn">
+      <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 Menu', items[idx].title)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
@@ -129,7 +129,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn icon @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', items.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
@@ -146,7 +146,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
+    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" :title="i18n('%1 Menu', items[idx].title)">
      <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -183,11 +183,11 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn flat icon v-if="item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index, $event)">
+     <v-btn flat icon v-if="item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index, $event)" :title="ACTIONS[SEARCH_LIB_ACTION].title">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
      </v-btn>
-     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', item.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
@@ -238,7 +238,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile @click="selectLibrary(item.id)">
      <v-list-tile-avatar><v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content>
-     <v-list-tile-action @click="deleteLibrary(item)" v-if="index>0"><v-btn icon><v-icon>delete_outline</v-icon></v-btn></v-list-tile-action>
+     <v-list-tile-action @click="deleteLibrary(item)" v-if="index>0" :title="i18n('Delete %1', item.name)"><v-btn icon><v-icon>delete_outline</v-icon></v-btn></v-list-tile-action>
     </v-list-tile>
    </template>
   </v-list>
@@ -263,7 +263,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
-                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined },
+                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
+                     select:undefined, unselect:undefined, search:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             libraryName: undefined,
@@ -477,10 +478,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                             { key:"artflow",         label:i18n("Artist, Year, Album")},
                             { key:"yearalbum",       label:i18n("Year, Album")},
                             { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"),
-                          addall:i18n("Add selection to queue"), playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"),
-                          deleteall:i18n("Delete all selected items"), invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"),
-                          choosepos:i18n("Choose position") };
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
+                          playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"), deleteall:i18n("Delete all selected items"),
+                          invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
+                          goHome:i18n("Go Home"), goBack:i18n("Go Back") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],

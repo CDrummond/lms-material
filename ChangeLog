@@ -32,6 +32,7 @@
 19. Add actions query parameter, allowing actions to be triggered.
 20. Remove long-press on back button to go home, not required as we have home
     button and causes weird behaviour (Issue #209)
+21. Try to increase accessibility by giving more icon-buttons tooltips.
 
 1.2.2
 -----

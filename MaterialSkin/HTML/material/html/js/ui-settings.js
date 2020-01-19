@@ -12,7 +12,7 @@ Vue.component('lms-ui-settings', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar color="primary" dark app class="lms-toolbar">
-    <v-btn flat icon @click.native="close"><v-icon>arrow_back</b-icon></v-btn>
+    <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>

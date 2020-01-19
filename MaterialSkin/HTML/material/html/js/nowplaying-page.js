@@ -33,27 +33,27 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 <div v-if="desktop && !largeView && !nowplaying" class="np-bar noselect" id="np-bar">
  <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
-   <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton"><v-icon large>skip_previous</v-icon></v-btn>
+   <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
-   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseA"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
+   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseA" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
    <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
-   <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton"><v-icon large>skip_next</v-icon></v-btn>
+   <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
  <v-layout row class="np-controls-desktop" v-else>
   <v-flex xs4>
-   <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" class="np-std-button"><v-icon large>skip_previous</v-icon></v-btn>
+   <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" class="np-std-button" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
-   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause":title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
   </v-flex>
   <v-flex xs4>
-   <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" class="np-std-button" ><v-icon large>skip_next</v-icon></v-btn>
+   <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" class="np-std-button" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
   </v-flex>
  </v-layout>
  <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
@@ -184,23 +184,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
          <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
         </v-flex>
-        <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+        <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
        </v-layout>
       </v-flex>
       <v-flex xs4>
        <v-layout v-if="stopButton" text-xs-center>
         <v-flex xs6>
-         <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseC"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
+         <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseC" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
         </v-flex>
         <v-flex xs6>
          <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
         </v-flex>
        </v-layout>
-       <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+       <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
       </v-flex>
       <v-flex xs4>
        <v-layout text-xs-center>
-        <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+        <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn></v-flex>
         <v-flex xs6>
          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>
@@ -251,23 +251,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
       <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
      </v-flex>
-     <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+     <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
     </v-layout>
    </v-flex>
    <v-flex xs4 class="no-control-adjust">
     <v-layout v-if="stopButton" text-xs-center>
      <v-flex xs6>
-      <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseE"><v-icon large v-if="playerStatus.isplaying">pause</v-icon><v-icon large v-else>play_arrow</v-icon></v-btn>
+      <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseE" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
      </v-flex>
      <v-flex xs6>
       <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
      </v-flex>
     </v-layout>
-    <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+    <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
    </v-flex>
    <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>
-     <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+     <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}"><v-icon large :title="trans.next">skip_next</v-icon></v-btn></v-flex>
      <v-flex xs6>
       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>
@@ -294,9 +294,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
                  trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
-                          repeatAll:undefined, repeatOne:undefined, repeatOff:undefined,
-                          shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          stdFont:undefined, mediumFont:undefined, largerFont:undefined },
+                          repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
+                          stdFont:undefined, mediumFont:undefined, largerFont:undefined, play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
                  showTotal: true,
                  portraitPad: 0,
                  portraitImagePad: 0,
@@ -626,10 +625,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         initItems() {
             this.trans = { close:i18n("Close"), expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
-                           more:i18n("More"), dstm:i18n("Don't Stop The Music"),
-                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
-                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
-                           stdFont:i18n("Standard font size"), mediumFont:i18n("Medium font size"), largeFont:i18n("Large font size") };
+                           more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
+                           repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
+                           shuffleOff:i18n("No shuffle"), stdFont:i18n("Standard font size"), mediumFont:i18n("Medium font size"),
+                           largeFont:i18n("Large font size"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
+                           next:i18n("Next track") };
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");

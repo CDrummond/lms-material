@@ -146,7 +146,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" :title="i18n('%1 Menu', items[idx].title)">
+    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" :title="i18n('%1 Menu', item.title)">
      <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
      </v-btn>

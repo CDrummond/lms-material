@@ -120,6 +120,17 @@ clear this cache, start Material as follows:
 
 * `http://<yourserver>:9000/material/?clearcache=true`
 
+### Customisation
+
+You may install CSS files within your LMS's `prefs/plugin` folder to modify the
+look or layout of Material. Each view (desktop, mobile, mini, or now-playing)
+will look for its own custom css file. These should be named as follows:
+
+* `prefs/plugin/material-skin.desktop.css`
+* `prefs/plugin/material-skin.mini.css`
+* `prefs/plugin/material-skin.mobile.css`
+* `prefs/plugin/material-skin.now-playing.css`
+
 ## Donations
 
 I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...

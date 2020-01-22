@@ -33,6 +33,9 @@
 20. Remove long-press on back button to go home, not required as we have home
     button and causes weird behaviour (Issue #209)
 21. Try to increase accessibility by giving more icon-buttons tooltips.
+22. Support loading of custom CSS files from prefs/plugin;
+    material-skin.desktop.css, material-skin.mini.css,
+    material-skin.mobile.css, and material-skin.now-playing.css
 
 1.2.2
 -----

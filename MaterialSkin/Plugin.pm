@@ -31,7 +31,8 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 
-my $URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
+my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
+my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -77,7 +78,8 @@ sub initPlugin {
             $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
         } );
-        Slim::Web::Pages->addRawFunction($URL_PARSER_RE, \&_svgHandler);
+        Slim::Web::Pages->addRawFunction($SVG_URL_PARSER_RE, \&_svgHandler);
+        Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
 
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
@@ -552,6 +554,25 @@ sub _svgHandler {
         $response->content_type('image/svg+xml');
         $response->header('Connection' => 'close');
         $response->content($svg);
+    } else {
+        $response->code(RC_NOT_FOUND);
+    }
+    $httpClient->send_response($response);
+    Slim::Web::HTTP::closeHTTPSocket($httpClient);
+}
+
+sub _customCssHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin." . basename($request->uri->path) . ".css";
+    if (-e $filePath) {
+        my $css = read_file($filePath);
+        $response->code(RC_OK);
+        $response->content_type('text/css');
+        $response->header('Connection' => 'close');
+        $response->content($css);
     } else {
         $response->code(RC_NOT_FOUND);
     }

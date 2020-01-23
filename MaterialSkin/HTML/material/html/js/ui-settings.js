@@ -167,7 +167,7 @@ Vue.component('lms-ui-settings', {
     <template v-for="(item, index) in showItems">
      <div style="display:flex">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
-      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="browseModesDialog.show=true" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
+      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
      </div>
     </template>
     <div class="dialog-padding"></div>
@@ -279,32 +279,27 @@ Vue.component('lms-ui-settings', {
  </v-card>
 </v-dialog>
 
- <v-dialog v-model="browseModesDialog.show" :width="wide>1 ? 750 : 500" persistent>
+ <v-dialog v-model="browseModesDialog.show" :width="browseModesDialog.wide ? 750 : 500" persistent style="overflow:hidden" v-if="browseModesDialog.show">
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
-    <v-list two-line subheader class="settings-list">
-     <v-layout v-if="wide>1">
-      <v-flex xs6>
-       <template v-for="(item, index) in browseModesDialog.modes">
-        <v-checkbox v-if="index<(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
-       </template>
-      </v-flex>
-      <v-flex xs6>
-       <template v-for="(item, index) in browseModesDialog.modes">
-        <v-checkbox v-if="index>=(browseModesDialog.modes.length/2)" v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
-       </template>
-      </v-flex>
-     </v-layout>
-     <template v-for="(item, index) in browseModesDialog.modes" v-else>
-      <v-checkbox v-model="item.enabled" :label="item.text" class="player-settings-list-checkbox"></v-checkbox>
-     </template>
-    </v-list>
+   <table class="browse-modes-table dialog-main-list">
+    <template v-for="(item, i) in browseModesDialog.modes">
+     <tr v-if="!browseModesDialog.wide || i<browseModesDialog.halfLen">
+      <td>
+       <v-checkbox v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details  class="player-settings-list-checkbox"></v-checkbox>
+      </td>
+      <td v-if="browseModesDialog.wide && i+(browseModesDialog.halfLen)<browseModesDialog.modes.length">
+       <v-checkbox v-model="browseModesDialog.modes[i+(browseModesDialog.halfLen)].enabled" :label="browseModesDialog.modes[i+(browseModesDialog.halfLen)].text" error-count="0" hide-details  class="player-settings-list-checkbox"></v-checkbox>
+      </td>
+     </tr>
+    </template>
+   </table>
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
-    </v-card-actions>
-   <v-card>
+   </v-card-actions>
+  </v-card>
  </v-dialog>
 
 </div>
@@ -351,10 +346,11 @@ Vue.component('lms-ui-settings', {
             showItems: [ ],
             hasPassword: false,
             password: undefined,
-            wide:1,
             browseModesDialog: {
                 show: false,
-                modes:[],
+                wide: false,
+                modes: [],
+                halfLen: 0
             }
         }
     },
@@ -365,7 +361,6 @@ Vue.component('lms-ui-settings', {
     },
     mounted() {
         bus.$on('uisettings.open', function(act) {
-            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
             this.readStore();
             this.password = getLocalStorageVal('password', '');
@@ -388,6 +383,7 @@ Vue.component('lms-ui-settings', {
                         loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
                     }
                     this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
+                    this.browseModesDialog.halfLen=Math.ceil(this.browseModesDialog.modes.length/2);
                 }
             }).catch(err => {
             });
@@ -630,6 +626,10 @@ Vue.component('lms-ui-settings', {
             } else {
                 return str;
             }
+        },
+        showBrowseModesDialog() {
+            this.browseModesDialog.wide = window.innerWidth >= 700;
+            this.browseModesDialog.show=true;
         }
     },
     watch: {

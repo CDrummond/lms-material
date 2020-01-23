@@ -96,7 +96,7 @@ Vue.component('lms-player-settings', {
  <v-dialog v-model="alarmDialog.show" width="500" persistent>
   <v-card>
   <v-card-title>{{alarmDialog.id ? i18n("Edit alarm") : i18n("Add alarm")}}</v-card-title>
-  <v-list two-line subheader class="settings-list">
+  <v-list two-line subheader class="settings-list dialog-main-list">
    <v-list-tile class="settings-compact-row">
     <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
               persistent lazy full-width max-width="290px">

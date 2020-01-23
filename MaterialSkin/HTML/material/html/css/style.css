@@ -949,6 +949,7 @@ progress {
 }
 
 .player-settings-list-checkbox {
+ margin-top:8px;
  margin-left:16px;
  height:24px;
 }
@@ -1326,3 +1327,15 @@ div.v-subheader {
  -ms-user-select:none;
  user-select:none;
 }
+
+.browse-modes-table {
+ min-height:360px;
+}
+
+.dialog-main-list {
+ max-height:calc(100vh - 220px);
+ overflow-y:auto;
+ overflow-x:hidden;
+ display:block;
+}
+

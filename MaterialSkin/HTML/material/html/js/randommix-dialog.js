@@ -11,6 +11,7 @@ Vue.component('lms-randommix', {
  <v-card>
   <v-card-text>
    <v-select :items="mixes" :label="i18n('Mix Type')" v-model="chosenMix" item-text="label" item-value="key"></v-select>
+   <div class="dialog-main-list">
    <v-select chips deletable-chips multiple :items="genres" :label="i18n('Selected Genres')" v-model="chosenGenres">
     <v-list-tile slot="prepend-item" @click="toggleGenres()">
      <v-list-tile-action><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-action>
@@ -22,6 +23,7 @@ Vue.component('lms-randommix', {
    <v-checkbox v-if="showAll" v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
    <v-text-field v-if="showAll" :label="i18n('Historic track count')" v-model="oldTracks" type="number"></v-text-field>
    <v-text-field v-if="showAll" :label="i18n('Upcomming track count')" v-model="newTracks" type="number"></v-text-field>
+   </div>
   </v-card-text>
   <v-card-actions>
    <v-btn flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>

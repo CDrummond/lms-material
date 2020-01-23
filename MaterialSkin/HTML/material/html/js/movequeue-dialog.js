@@ -14,7 +14,7 @@ Vue.component('lms-movequeue-dialog', {
     <v-layout wrap>
      <v-flex xs12>{{i18n("Select the player you wish to move the queue to:")}}</v-flex>
      <v-flex xs12>
-      <v-list class="sleep-list">
+      <v-list class="sleep-list dialog-main-list">
        <template v-for="(p, index) in players" v-if="p.id!=src">
         <v-list-tile @click="moveTo(p)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.isgroup ? 'speaker_group' : 'speaker'}}</v-icon></v-list-tile-avatar>

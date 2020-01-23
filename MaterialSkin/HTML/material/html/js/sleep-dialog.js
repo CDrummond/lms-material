@@ -15,7 +15,7 @@ Vue.component('lms-sleep-dialog', {
      <v-flex xs12 v-if="undefined==player">{{i18n("Set sleep time for all players.")}}</v-flex>
      <v-flex xs12 v-else>{{i18n("Set sleep time for '%1'.", player.name)}}</v-flex>
      <v-flex xs12>
-      <v-list class="sleep-list">
+      <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="setSleep(item.duration)">
          <v-list-tile-title>{{item.label}}</v-list-tile-title>

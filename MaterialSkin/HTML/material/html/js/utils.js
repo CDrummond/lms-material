@@ -300,21 +300,29 @@ function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }
 
-function changeCss(cssFile, index) {
-    var oldlink = document.getElementsByTagName("link").item(index);
-    var newlink = document.createElement("link");
-    newlink.setAttribute("rel", "stylesheet");
-    newlink.setAttribute("type", "text/css");
-    newlink.setAttribute("href", cssFile);
+function changeCss(cssFile, id) {
+    var links = document.getElementsByTagName("link");
+    if (undefined==links) {
+        return;
+    }
+    for (var i=0, len=links.length; i<len; ++i) {
+        if (links[i].getAttribute("id")==id) {
+            var newlink = document.createElement("link");
+            newlink.setAttribute("rel", "stylesheet");
+            newlink.setAttribute("type", "text/css");
+            newlink.setAttribute("href", cssFile);
+            newlink.setAttribute("id", id);
 
-    document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+            document.getElementsByTagName("head").item(0).replaceChild(newlink, links[i]);
+        }
+    }
 }
 
 function setTheme(dark) {
     if (dark) {
-        changeCss("html/css/dark.css?r=" + LMS_MATERIAL_REVISION, 0);
+        changeCss("html/css/dark.css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     } else {
-        changeCss("html/css/light.css?r=" + LMS_MATERIAL_REVISION, 0);
+        changeCss("html/css/light.css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     }
 }
 
@@ -414,6 +422,8 @@ function parseQueryParams() {
             clearListCache(true);
         } else if ("action"==kv[0]) {
             resp.actions.push(kv[1]);
+        } else if("css"==kv[0]) {
+            changeCss("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
         }
     }
     return resp;

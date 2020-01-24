@@ -36,11 +36,13 @@
 22. Support loading of custom CSS files from prefs/plugin;
     material-skin.desktop.css, material-skin.mini.css,
     material-skin.mobile.css, and material-skin.now-playing.css
-23. Set max-height for center portion of some dialogs, so that that area is
+23. Custom CCSS file may also be supplied as part of URL, to allow per-device
+    CSS. '?css=my-phone' will load material-skin.my-phone.css
+24. Set max-height for center portion of some dialogs, so that that area is
     scrollable and 'Close', etc. buttons are always visible.
-24. Correctly handle updating of set of favourites when favourites is empty.
-25. Prevent clicks from causing swipes.
-26. Preserve URL parameters when changing layout.
+25. Correctly handle updating of set of favourites when favourites is empty.
+26. Prevent clicks from causing swipes.
+27. Preserve URL parameters when changing layout.
 
 1.2.2
 -----

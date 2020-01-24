@@ -131,6 +131,11 @@ will look for its own custom css file. These should be named as follows:
 * `prefs/plugin/material-skin.mobile.css`
 * `prefs/plugin/material-skin.now-playing.css`
 
+You may also specify the custom CSS as part of Material's URL, therefore allowing
+per-device CSS changes. e.g.
+
+* `http://<yourserver>:9000/material/?css=my-phone` will use `prefs/plugin/material-skin.my-phone.css` as the custom CSS file.
+
 ## Donations
 
 I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...

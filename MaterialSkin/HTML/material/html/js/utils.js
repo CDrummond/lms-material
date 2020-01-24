@@ -319,11 +319,7 @@ function changeCss(cssFile, id) {
 }
 
 function setTheme(dark) {
-    if (dark) {
-        changeCss("html/css/dark.css?r=" + LMS_MATERIAL_REVISION, "variantcss");
-    } else {
-        changeCss("html/css/light.css?r=" + LMS_MATERIAL_REVISION, "variantcss");
-    }
+    changeCss("html/css/" + (dark ? "dark" : "light") + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
 }
 
 function openWindow(page) {

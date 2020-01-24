@@ -38,6 +38,7 @@
     material-skin.mobile.css, and material-skin.now-playing.css
 23. Set max-height for center portion of some dialogs, so that that area is
     scrollable and 'Close', etc. buttons are always visible.
+24. Correctly handle updating of set of favourites when favourites is empty.
 
 1.2.2
 -----

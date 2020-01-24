@@ -463,7 +463,8 @@ var lmsServer = Vue.component('lms-server', {
             if (data[1]=="server" && data[2]=="useUnifiedArtistsList") {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
             }
-        }, handleFavoritesUpdate() {
+        },
+        handleFavoritesUpdate() {
             logCometdDebug("FAVORITES");
             // 'Debounce' favorites updates...
             this.cancelFavoritesTimer();
@@ -473,20 +474,22 @@ var lmsServer = Vue.component('lms-server', {
         },
         updateFavorites() { // Update set of favorites URLs
             lmsCommand("", ["material-skin", "favorites"]).then(({data}) => {
-                if (data && data.result && data.result.favs_loop) {
-                    var loop = data.result.favs_loop;
+                logJsonMessage("RESP", data);
+                if (data && data.result) {
                     var favs = new Set();
                     var changed = false;
-                    for (var i=0, len=loop.length; i<len; ++i) {
-                        if (loop[i].url) {
-                            var url = loop[i].url;
-                            var lib = url.indexOf("libraryTracks.library=");
-                            if (lib>0) {
-                                url=url.substring(0, lib-1);
-                            }
-                            favs.add(url);
-                            if (!changed && !lmsFavorites.has(url)) {
-                               changed = true;
+                    if (data.result.favs_loop) {
+                        for (var i=0, loop=data.result.favs_loop, len=loop.length; i<len; ++i) {
+                            if (loop[i].url) {
+                                var url = loop[i].url;
+                                var lib = url.indexOf("libraryTracks.library=");
+                                if (lib>0) {
+                                    url=url.substring(0, lib-1);
+                                }
+                                favs.add(url);
+                                if (!changed && !lmsFavorites.has(url)) {
+                                   changed = true;
+                                }
                             }
                         }
                     }

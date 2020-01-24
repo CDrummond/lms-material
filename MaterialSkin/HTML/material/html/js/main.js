@@ -19,7 +19,9 @@ function checkLayout() {
         if (undefined!=changeTo) {
             // Auto-changing view, so don't see default player!
             setLocalStorageVal("useLastPlayer", true);
-            window.location.href = changeTo;
+            var query = window.location.href.indexOf('?');
+            var queryString = query > 0 ? window.location.href.substring(query) : "";
+            window.location.href = changeTo + queryString;
         }
     }
 }

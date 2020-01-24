@@ -26,7 +26,7 @@
      layout = window.innerWidth<600 || /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent) ? "mobile" : "desktop";
    }
    var query = window.location.href.indexOf('?');
-   var queryString = query > 0 ? window.location.href.substring(window.location.href.indexOf('?')) : "";
+   var queryString = query > 0 ? window.location.href.substring(query) : "";
    window.location.href = "/material/" + layout + queryString;
   </script>
  </body>

@@ -40,6 +40,7 @@
     scrollable and 'Close', etc. buttons are always visible.
 24. Correctly handle updating of set of favourites when favourites is empty.
 25. Prevent clicks from causing swipes.
+26. Preserve URL parameters when changing layout.
 
 1.2.2
 -----

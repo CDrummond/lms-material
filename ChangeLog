@@ -39,6 +39,7 @@
 23. Set max-height for center portion of some dialogs, so that that area is
     scrollable and 'Close', etc. buttons are always visible.
 24. Correctly handle updating of set of favourites when favourites is empty.
+25. Prevent clicks from causing swipes.
 
 1.2.2
 -----

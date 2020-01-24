@@ -64,11 +64,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     var item ={
                                   id: "artist_id:"+i.contributor_id,
                                   title: i.contributor,
-                                  command: ["albums"],
-                                  params: ["artist_id:"+ i.contributor_id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER],
                                   image: (infoPlugin && options.artistImages) ? "/imageproxy/mai/artist/" + i.contributor_id + "/image" + LMS_IMAGE_SIZE : undefined,
                                   //icon: options.artistImages ? undefined : "person",
-                                  menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                                  stdItem: STD_ITEM_ARTIST,
                                   type: "group"
                               };
                     if (idx<limit) {
@@ -98,10 +96,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   id: "album_id:"+i.album_id,
                                   artist_id: i.artist_id,
                                   title: i.album,
-                                  command: ["tracks"],
-                                  params: ["album_id:"+ i.album_id, TRACK_TAGS, SORT_KEY+"tracknum"],
                                   image: "/music/" + (""==i.artwork || undefined==i.artwork ? "0" : i.artwork) + "/cover" + LMS_IMAGE_SIZE,
-                                  menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                                  stdItem: STD_ITEM_ALBUM,
                                   type: "group"
                               };
                     if (idx<limit) {
@@ -131,7 +127,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
                                   image: "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
-                                  menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION, MORE_LIB_ACTION],
+                                  stdItem: STD_ITEM_TRACK,
                                   type: "track"
                               };
                     if (idx<limit) {
@@ -159,10 +155,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     var item ={
                                   id: "genre_id:"+i.genre_id,
                                   title: i.genre,
-                                  command: ["artists"],
-                                  params: ["genre_id:"+ i.genre_id],
                                   //icon: "label",
-                                  menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                                  stdItem: STD_ITEM_GENRE,
                                   type: "group"
                               };
                     if (idx<limit) {
@@ -561,7 +555,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }
         } else if (data.result.artists_loop) {
-            var params = [];
             var isComposers = false;
             var isConductors = false;
             var isBands = false;
@@ -570,8 +563,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 for (var i=3, len=data.params[1].length; i<len; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
-                        if (lower.startsWith("role_id:") || (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:"))) {
-                            params.push(data.params[1][i]);
+                        if (lower.startsWith("role_id:")) {
                             if (lower=="role_id:composer") {
                                 isComposers = true;
                             } else if (lower=="role_id:conductor") {
@@ -579,6 +571,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             } else if (lower=="role_id:band") {
                                 isBands = true;
                             }
+                            break;
                         }
                     }
                 }
@@ -595,16 +588,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
-                              command: ["albums"],
                               image: (infoPlugin && options.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
-                              params: ["artist_id:"+ i.id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER],
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                              stdItem: STD_ITEM_ARTIST,
                               type: "group",
                               textkey: key
                           };
-                for (var p=0, plen=params.length; p<plen; ++p) {
-                    artist.params.push(params[p]);
-                }
                 resp.items.push(artist);
             }
             if (isComposers) {
@@ -623,17 +611,13 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             resp.canUseGrid = true;
             var jumpListYear = false;
-            var params = [];
             if (data.params && data.params.length>1) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
-                        if ( (!lmsOptions.noRoleFilter && (lower.startsWith("role_id:"))) ||
-                             (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) ||
-                             lower.startsWith("artist_id:")) {
-                            params.push(data.params[1][i]);
-                        } else if (lower.startsWith("sort:year")) {
+                        if (lower.startsWith("sort:year")) {
                             jumpListYear = true;
+                            break;
                         }
                     }
                 }
@@ -662,17 +646,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               artist_id: i.artist_id,
                               title: title,
                               subtitle: i.artist ? i.artist : undefined,
-                              command: ["tracks"],
                               image: "/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE,
-                              params: ["album_id:"+ i.id, TRACK_TAGS, SORT_KEY+"tracknum"],
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                              stdItem: STD_ITEM_ALBUM,
                               type: "group",
                               origTitle: i.album,
                               textkey: key
                           };
-                for (var p=0, plen=params.length; p<plen; ++p) {
-                    album.params.push(params[p]);
-                }
                 resp.items.push(album);
             }
             resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
@@ -742,18 +721,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.push({
                               id: "genre_id:"+i.id,
                               title: i.genre,
-                              command: ["artists"],
                               //icon: "label",
-                              params: ["genre_id:"+ i.id],
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION],
+                              stdItem: STD_ITEM_GENRE,
                               type: "group",
                               textkey: key
                           });
             }
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
-            var menu = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, DELETE_ACTION, SELECT_ACTION];
-            var remoteMenu = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION];
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
@@ -764,10 +739,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.push({
                               id: "playlist_id:"+i.id,
                               title: i.playlist,
-                              command: ["playlists", "tracks"],
                               //icon: "list",
-                              params: ["playlist_id:"+ i.id, "tags:acdltK"], // "tags:IRad"] -> Will show rating, not album???
-                              menu: isRemote ? remoteMenu : menu,
+                              stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url,
@@ -813,7 +786,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                               //icon: "music_note",
-                              menu: isRemote ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION] : [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION],
+                              stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",
                               draggable: !isRemote
                           });
@@ -832,10 +805,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.push({
                               id: "year:"+i.year,
                               title: i.year,
-                              command: ["albums"],
                               //icon: "date_range",
-                              params: ["year:"+ i.year, "tags:ajlys"],
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION],
+                              stdItem: STD_ITEM_YEAR,
                               type: "group",
                               textkey: key
                           });

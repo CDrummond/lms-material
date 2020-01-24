@@ -89,7 +89,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img  v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
-      <v-btn flat icon v-if="items[idx].menu && items[idx].menu.length>0" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 Menu', items[idx].title)" class="image-grid-btn">
+      <v-btn flat icon v-if="undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0)" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 Menu', items[idx].title)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
@@ -128,7 +128,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
+    <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
      <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', items.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -146,7 +146,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0" :title="i18n('%1 Menu', item.title)">
+    <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 Menu', item.title)">
      <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -182,8 +182,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
-    <v-list-tile-action class="browse-action" v-if="item.menu && item.menu.length>0">
-     <v-btn flat icon v-if="item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index, $event)" :title="ACTIONS[SEARCH_LIB_ACTION].title">
+    <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
+     <v-btn flat icon v-if="undefined==item.stdItem && item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index, $event)" :title="ACTIONS[SEARCH_LIB_ACTION].title">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
      </v-btn>
@@ -208,7 +208,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-list>
   <v-list v-else-if="menu.item">
-   <template v-for="(action, index) in menu.item.menu">
+   <template v-for="(action, index) in menu.itemMenu">
     <v-divider v-if="DIVIDER==action"></v-divider>
     <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
@@ -833,20 +833,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
             } else if (RANDOM_MIX_ID==item.id) {
                 bus.$emit('dlg.open', 'rndmix');
-            } else if (!item.genreArtists && item.command && 1==item.command.length && 1==item.params.length &&
-                       "artists"==item.command[0] && item.params[0].startsWith("genre_id:") &&
-                       this.current && this.current.id==GENRES_ID) {
+            } else if (!item.genreArtists && STD_ITEM_GENRE==item.stdItem && this.current && this.current.id==GENRES_ID) {
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],
-                              params: [item.params[0]],
+                              params: [item.id],
                               svg: "artist",
                               type: "group",
                               id: uniqueId(item.id, 0),
                               genreArtists:true },
                             { title: i18n("Albums"),
                               command: ["albums"],
-                              params: [item.params[0], ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+                              params: [item.id, ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
@@ -855,7 +853,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
-                                        params: ["role_id:COMPOSER", item.params[0]],
+                                        params: ["role_id:COMPOSER", item.id],
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
@@ -864,7 +862,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
                                         command: ["artists"],
-                                        params: ["role_id:CONDUCTOR", item.params[0]],
+                                        params: ["role_id:CONDUCTOR", item.id],
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",
@@ -1279,6 +1277,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemMenu(item, index, event) {
             if (!item.menu) {
+                if (undefined!=item.stdItem){
+                    showMenu(this, {show:true, item:item, itemMenu:STD_ITEMS[item.stdItem].menu, x:event.clientX, y:event.clientY, index:index});
+                }
                 return;
             }
             if (1==item.menu.length && MORE_ACTION==item.menu[0]) {
@@ -1297,7 +1298,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     });
                 }
             } else {
-                showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
+                showMenu(this, {show:true, item:item, itemMenu:item.menu, x:event.clientX, y:event.clientY, index:index});
             }
         },
         clickSubtitle(item, index, event) {
@@ -1562,16 +1563,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (undefined==commandName) {
-                if (item.command && item.command.length>0) {
-                    item.command.forEach(i => {
-                        cmd.command.push(i);
-                    });
-                }
-                if (item.params && item.params.length>0) {
-                    item.params.forEach(i => {
-                        cmd.params.push(i);
-                    });
-                }
+                cmd = buildStdItemCommand(item, this.current);
             }
 
             if (cmd.command.length<1) { // Build SlimBrowse command

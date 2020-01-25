@@ -129,6 +129,11 @@ function updateUiSettings(state, val) {
         state.skipSeconds = val.skipSeconds;
         setLocalStorageVal('skipSeconds', state.skipSeconds);
     }
+    if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
+        state.screensaver = val.screensaver;
+        setLocalStorageVal('screensaver', state.screensaver);
+        bus.$emit('screensaverDisplayChanged');
+    }
     if (undefined!=val.disabledBrowseModes) {
         var diff = new Set([...val.disabledBrowseModes].filter(x => !state.disabledBrowseModes.has(x)));
         var diff2 = new Set([...state.disabledBrowseModes].filter(x => !val.disabledBrowseModes.has(x)));
@@ -193,7 +198,8 @@ const store = new Vuex.Store({
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
-        skipSeconds: 30
+        skipSeconds: 30,
+        screensaver: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -375,6 +381,7 @@ const store = new Vuex.Store({
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
+            state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
@@ -432,7 +439,8 @@ const store = new Vuex.Store({
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
-                                     skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)) };
+                                     skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
+                                     screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

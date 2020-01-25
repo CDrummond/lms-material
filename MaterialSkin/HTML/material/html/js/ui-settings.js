@@ -77,6 +77,15 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="menuIcons"></v-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-divider></v-divider>
+    <v-list-tile>
+     <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
+      <v-list-tile-title>{{i18n('Screensaver')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="screensaver"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
     <v-divider v-if="android"></v-divider>
     <v-list-tile v-if="android">
      <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
@@ -351,7 +360,8 @@ Vue.component('lms-ui-settings', {
                 wide: false,
                 modes: [],
                 halfLen: 0
-            }
+            },
+            screensaver: false
         }
     },
     computed: {
@@ -428,6 +438,7 @@ Vue.component('lms-ui-settings', {
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
             this.hidden = this.$store.state.hidden;
+            this.screensaver = this.$store.state.screensaver;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
@@ -481,6 +492,7 @@ Vue.component('lms-ui-settings', {
                                                   hidden:this.hiddenItems(),
                                                   skipSeconds:this.skipSeconds,
                                                   disabledBrowseModes:this.disabledBrowseModes(),
+                                                  screensaver:this.screensaver
                                                 } );
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -525,7 +537,8 @@ Vue.component('lms-ui-settings', {
                                      menuIcons:this.menuIcons,
                                      hidden:Array.from(this.hiddenItems()),
                                      skipSeconds:this.skipSeconds,
-                                     disabledBrowseModes:Array.from(this.disabledBrowseModes())
+                                     disabledBrowseModes:Array.from(this.disabledBrowseModes()),
+                                     screensaver:this.screensaver
                                    };
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);

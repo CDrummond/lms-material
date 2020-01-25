@@ -1339,3 +1339,38 @@ div.v-subheader {
  display:block;
 }
 
+.screesaver-bgnd {
+ background-color:black!important;
+ width:100%;
+ height:100%;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ z-index:10000;
+}
+
+.screesaver-time {
+ text-align:center;
+ font-weight:var(--bold-weight);
+ font-size:96px;
+ opacity:0.75;
+}
+
+.screesaver-date {
+ text-align:center;
+ font-weight:var(--std-weight);
+ font-size:48px;
+ opacity:0.55;
+}
+
+.screesaver-name {
+ padding-top:calc(var(--vh, 1vh)*8);
+ text-align:center;
+ font-weight:var(--std-weight);
+ font-size:val(--std-font-size);
+ opacity:0.55;
+ position:fixed;
+ width:100%;
+ bottom:32px;
+}
+

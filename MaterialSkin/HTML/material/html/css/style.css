@@ -1164,6 +1164,7 @@ div.v-subheader {
  grid-gap:0px;
  overflow-y:hidden !important;
  font-size:var(--small-font-size);
+ border:none;
 }
 
 .lms-jumplist div {

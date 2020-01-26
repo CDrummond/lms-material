@@ -3,6 +3,7 @@
 1. Add (optional) screensaver that will kick in after 60 seconds if nothing is
    playing on current player.
 2. Slightly reduce size of Material's caches.
+3. Add support for artist actions.
 
 1.3.1
 -----

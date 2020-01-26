@@ -193,7 +193,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var types = new Set();
             var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
             var infoPlugin = undefined;
-
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
             if (data.result.base && data.result.base.actions) {
@@ -210,7 +209,18 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (!i.text || i.showBigArtwork==1) {
-                    data.result.count--;
+                    if (i.url && "musicartistinfo"==command) { // Artist images...
+                        resp.items.push({id: "image:"+resp.items.length,
+                                         title: i.credit,
+                                         type: "image",
+                                         image: resolveImageUrl(i.url, LMS_IMAGE_SIZE),
+                                         src: resolveImageUrl(i.url),
+                                         w: 0,
+                                         h: 0});
+                        resp.canUseGrid = true;
+                    } else {
+                        data.result.count--;
+                    }
                     continue;
                 }
                 if (resp.items.length==data.result.count-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
@@ -820,8 +830,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (i.image) {
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
-                    i.thumb = resolveImageUrl(i.image, LMS_IMAGE_SIZE);
                     i.src = resolveImageUrl(i.image);
+                    i.image = resolveImageUrl(i.image, LMS_IMAGE_SIZE);
                     i.w=0;
                     i.h=0;
                     resp.items.push(i);
@@ -832,6 +842,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
                 resp.canUseGrid = resp.forceGrid = true;
             }
+        } else if (data.result.biography) {
+            resp.items.push({   title: data.result.biography,
+                                type: data.result.biography.startsWith("<") || data.result.biography.indexOf("<br/>")>0 ? "html" : "text",
+                                id: parent.id+".0"
+                            });
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

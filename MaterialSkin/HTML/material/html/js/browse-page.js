@@ -57,7 +57,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>0">
+    <v-icon>extension</v-icon>
+   </v-btn>
+   <v-divider vertical v-if="tbarActions.length>0 && (currentActions.length>0 || (showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -250,6 +253,17 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
+  <v-list v-else-if="menu.currentActions">
+   <template v-for="(item, index) in menu.currentActions">
+    <v-list-tile @click="currentAction(item, index)">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
+      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+  </v-list>
 
  </v-menu>
 </div>
@@ -258,13 +272,14 @@ var lmsBrowse = Vue.component("lms-browse", {
     data() {
         return {
             current: undefined,
+            currentActions: [],
             items: [],
             grid: {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, search:undefined },
+                     select:undefined, unselect:undefined, search:undefined, plugins:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             libraryName: undefined,
@@ -481,7 +496,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), plugins:i18n("Plugins") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -559,6 +574,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.current = this.current;
             prev.currentLibId = this.currentLibId;
             prev.currentBaseActions = this.currentBaseActions;
+            prev.currentActions = this.currentActions;
             prev.headerTitle = this.headerTitle;
             prev.headerSubTitle = this.headerSubTitle;
             prev.tbarActions = this.tbarActions;
@@ -639,6 +655,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var changedView = this.grid.use != resp.useGrid;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
                 this.jumplistActive=0;
+                this.currentActions = [];
+
+                if (this.current.id.startsWith("artist_id:")) {
+                    lmsCommand("", ["material-skin", "actions", this.current.id, "artist:"+this.current.title]).then(({data}) => {
+                        if (data && data.result && data.result.actions_loop) {
+                            this.currentActions = data.result.actions_loop;
+                            this.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
+                        }
+                    }).catch(err => {
+                    });
+                }
 
                 if (item.id.startsWith(SEARCH_ID)) {
                     this.tbarActions=[SEARCH_LIB_ACTION];
@@ -697,7 +724,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
-                } else if (1==this.items.length && "text"==this.items[0].type) {
+                } else if (1==this.items.length && ("text"==this.items[0].type || "html"==this.items[0].type)) {
                     this.headerSubTitle = undefined;
                 } else {
                     this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.length);
@@ -1301,6 +1328,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 showMenu(this, {show:true, item:item, itemMenu:item.menu, x:event.clientX, y:event.clientY, index:index});
             }
         },
+        currentActionsMenu(event) {
+            showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
+        },
+        currentAction(act, index) {
+            if (undefined!=act.do) {
+                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
+            }
+        },
         clickSubtitle(item, index, event) {
             if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
@@ -1461,6 +1496,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle=null;
             this.baseActions=[];
             this.currentBaseActions=[];
+            this.currentActions=[];
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;
@@ -1520,6 +1556,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.baseActions = prev.baseActions;
             this.current = prev.current;
             this.currentBaseActions = prev.currentBaseActions;
+            this.currentActions = prev.currentActions;
             this.headerTitle = prev.headerTitle;
             this.headerSubTitle = prev.headerSubTitle;
             this.tbarActions = prev.tbarActions;

@@ -657,7 +657,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
 
                     // Select track -> More -> Album:AlbumTitle -> Tracks
-                    if (this.tbarActions.length==0 && this.current && this.current.actions && this.current.actions.play) {
+                    if (this.tbarActions.length==0 && this.current && ((this.current.actions && this.current.actions.play) || this.current.stdItem)) {
                         this.tbarActions=[ADD_ACTION, PLAY_ACTION];
                     }
 
@@ -1722,20 +1722,20 @@ var lmsBrowse = Vue.component("lms-browse", {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
                 } else if (item.id) {
                     command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
-
                     if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
-                        item.params.forEach(p => {
-                            if ( (!lmsOptions.noRoleFilter && (p.startsWith("role_id:"))) ||
-                                 (!lmsOptions.noGenreFilter && p.startsWith("genre_id:")) ||
-                                 p.startsWith("artist_id:")) {
-                                if (!item.id.startsWith("artist_id:") || !p.startsWith("artist_id:")) {
-                                    command.command.push(p);
+                        var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==this.current.id ? this.history.length>0 ? this.history[this.history.length-1].current : undefined : this.current).params : item.params;
+                        for (var i=0, loop = params, len=loop.length; i<len; ++i) {
+                            if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
+                                 (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||
+                                 loop[i].startsWith("artist_id:")) {
+                                if (!item.id.startsWith("artist_id:") || !loop[i].startsWith("artist_id:")) {
+                                    command.command.push(loop[i]);
                                 }
-                                if (p.startsWith("artist_id:")) {
+                                if (loop[i].startsWith("artist_id:")) {
                                     command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
                                 }
                             }
-                        });
+                        }
                     } else if (item.id.startsWith("genre_id:")) {
                         command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
                     }

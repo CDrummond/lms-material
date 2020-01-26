@@ -92,11 +92,11 @@ Vue.component('lms-screensaver', {
             if (undefined!==this.fadeInterval) {
                 clearInterval(this.fadeInterval);
                 this.fadeInterval = undefined;
-                this.elem.style.opacity=1.0;
             }
             if (doFade) {
                 this.fade(document.getElementById('screensaver'), false);
             } else {
+                this.elem.style.opacity=1.0;
                 this.show = false;
             }
         },
@@ -108,12 +108,11 @@ Vue.component('lms-screensaver', {
             if (undefined!==this.fadeInterval) {
                 clearInterval(this.fadeInterval);
             }
-            var steps = 10;
-            var val = fadeIn ? 0.0 : 1.0;
             this.elem = elem;
+            var val = fadeIn && elem.style.opacity < 0.25 ? 0 : !fadeIn && elem.opacity>=0.75 ? 1.0 : parseFloat(elem.style.opacity);
             elem.style.opacity = val;
             this.fadeInterval = setInterval(function () {
-                val += fadeIn ? 0.1 : -0.1;
+                val += fadeIn ? 0.025 : -0.1;
                 elem.style.opacity = val; 
                 if (fadeIn ? val >= 1.0 : val<=0.0) {
                     elem.style.opacity = fadeIn ? 1.0 : 0.0;
@@ -136,11 +135,11 @@ Vue.component('lms-screensaver', {
                     this.installedHandlers = true;
                 }
             } else if (this.installedHandlers) {
-                    window.removeEventListener('touchstart', resetScreensaver);
-                    window.removeEventListener('click', resetScreensaver);
-                    window.removeEventListener('wheel', resetScreensaver);
-                    window.removeEventListener('keydown', resetScreensaver);
-                    this.installedHandlers = false;
+                window.removeEventListener('touchstart', resetScreensaver);
+                window.removeEventListener('click', resetScreensaver);
+                window.removeEventListener('wheel', resetScreensaver);
+                window.removeEventListener('keydown', resetScreensaver);
+                this.installedHandlers = false;
             }
         },
         resetTimer() {

@@ -661,8 +661,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.jumplistActive=0;
                 this.currentActions = [];
 
-                if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {
-                    lmsCommand("", ["material-skin", "actions", this.current.id]).then(({data}) => {
+                if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {7
+                    var cmd = ["material-skin", "actions", this.current.id];
+                    if (this.current.id.startsWith("artist_id:")) {
+                        cmd.push("artist:"+this.current.title);
+                    } else {
+                        cmd.push("album:"+this.current.title);
+                    }
+                    lmsCommand("", cmd).then(({data}) => {
                         if (data && data.result && data.result.actions_loop) {
                             this.currentActions = data.result.actions_loop;
                             this.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});

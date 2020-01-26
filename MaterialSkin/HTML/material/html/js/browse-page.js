@@ -57,8 +57,12 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>0">
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>1">
     <v-icon>extension</v-icon>
+   </v-btn>
+   <v-btn @click.stop="currentAction(currentActions[0], 0)" flat icon class="toolbar-button" :title="currentActions[0].title" id="tbar-actions" v-else-if="currentActions.length==1">
+    <img v-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
+    <v-icon v-else>{{currentActions[0].icon}}</v-icon>
    </v-btn>
    <v-divider vertical v-if="tbarActions.length>0 && (currentActions.length>0 || (showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
@@ -657,8 +661,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.jumplistActive=0;
                 this.currentActions = [];
 
-                if (this.current.id.startsWith("artist_id:")) {
-                    lmsCommand("", ["material-skin", "actions", this.current.id, "artist:"+this.current.title]).then(({data}) => {
+                if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {
+                    lmsCommand("", ["material-skin", "actions", this.current.id]).then(({data}) => {
                         if (data && data.result && data.result.actions_loop) {
                             this.currentActions = data.result.actions_loop;
                             this.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});

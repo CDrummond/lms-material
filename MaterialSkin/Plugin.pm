@@ -411,6 +411,8 @@ sub _cliCommand {
     if ($cmd eq 'actions') {
         my $artist_id = $request->getParam('artist_id');
         my $artist = $request->getParam('artist');
+        my $album_id = $request->getParam('album_id');
+        my $album = $request->getParam('album');
 
         my $cnt = 0;
 
@@ -436,6 +438,23 @@ sub _cliCommand {
                             $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "artistphotos", "artist:" . $artist], params => [] });
                         }
                         $request->addResultLoop("actions_loop", $cnt, "weight", 1);
+                        $cnt++;
+                    }
+                    if ($album_id || ($album && ($artist_id || $artist))) {
+                        $request->addResultLoop("actions_loop", $cnt, "title", cstring('', 'PLUGIN_MUSICARTISTINFO_ALBUMREVIEW'));
+                        $request->addResultLoop("actions_loop", $cnt, "icon", "local_library");
+
+                        if ($album_id) {
+                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album_id:" . $album_id], params => [] });
+                        } else {
+                            push @command, "album:" . $album;
+                            if ($artist_id) {
+                                $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist_id:" . $artist_id], params => [] });
+                            } else {
+                                $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist:" . $artist], params => [] });
+                            }
+                        }
+                        $request->addResultLoop("actions_loop", $cnt, "weight", 0);
                         $cnt++;
                     }
                 } elsif ($plugin->{name} eq 'YouTube') {

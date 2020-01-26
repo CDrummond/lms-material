@@ -847,6 +847,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 type: data.result.biography.startsWith("<") || data.result.biography.indexOf("<br/>")>0 ? "html" : "text",
                                 id: parent.id+".0"
                             });
+        } else if (data.result.albumreview) {
+            resp.items.push({   title: data.result.albumreview,
+                                type: data.result.albumreview.startsWith("<") || data.result.albumreview.indexOf("<br/>")>0 ? "html" : "text",
+                                id: parent.id+".0"
+                            });
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

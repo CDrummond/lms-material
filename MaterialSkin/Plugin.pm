@@ -139,7 +139,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes', 'actions']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -376,7 +376,6 @@ sub _cliCommand {
         }
     }
 
-
     if ($cmd eq 'browsemodes') {
         my $useUnifiedArtistsList = $serverprefs->get('useUnifiedArtistsList');
         my $cnt = 0;
@@ -405,6 +404,46 @@ sub _cliCommand {
             }
             $cnt++;
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'actions') {
+        my $artist_id = $request->getParam('artist_id');
+        my $artist = $request->getParam('artist');
+
+        my $cnt = 0;
+        my ($current, $active, $inactive, $hide) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
+        foreach my $plugin (@{$active}) {
+            if ($plugin->{name} eq 'MusicArtistInfo') {
+                if ($artist_id || $artist) {
+                    $request->addResultLoop("actions_loop", $cnt, "title", cstring('', 'PLUGIN_MUSICARTISTINFO_BIOGRAPHY'));
+                    $request->addResultLoop("actions_loop", $cnt, "icon", "menu_book");
+                    if ($artist_id) {
+                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "biography", "html:1"], params=> [ "artist_id:" . $artist_id ] });
+                    } else {
+                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "biography", "html:1"], params=> [ "artist:" . $artist ] });
+                    }
+                    $cnt++;
+                    $request->addResultLoop("actions_loop", $cnt, "title", cstring('', 'PLUGIN_MUSICARTISTINFO_ARTISTPICTURES'));
+                    $request->addResultLoop("actions_loop", $cnt, "icon", "insert_photo");
+                    if ($artist_id) {
+                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "biography", "html:1"], params=> [ "artist_id:" . $artist_id ] });
+                    } else {
+                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "artistphotos"], params=> [ "artist:" . $artist ] });
+                    }
+                    $cnt++;
+                }
+            } elsif ($plugin->{name} eq 'YouTube') {
+                if ($artist_id || $artist) {
+                    $request->addResultLoop("actions_loop", $cnt, "title", cstring('', 'PLUGIN_YOUTUBE_ON_YOUTUBE'));
+                    $request->addResultLoop("actions_loop", $cnt, "svg", "youtube");
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["youtube","items"], params=> [ "want_url:1","item_id:3","search:Iron Maiden","menu:youtube" ] });
+                    $cnt++;
+                }
+            }
+        }
+        $request->setStatusDone();
         return;
     }
 

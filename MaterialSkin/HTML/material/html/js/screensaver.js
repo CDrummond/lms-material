@@ -4,7 +4,12 @@
  * Copyright (c) 2018-2019 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
- 
+
+var screensaver;
+function resetScreensaver(ev) {
+    screensaver.resetTimer();
+}
+
 Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
@@ -30,11 +35,14 @@ Vue.component('lms-screensaver', {
         }
     },
     mounted() {
+        screensaver = this;
         this.playing = false;
         this.enabled = this.$store.state.screensaver;
+        this.toggleHandlers();
         bus.$on('screensaverDisplayChanged', function() {
             if (this.enabled != this.$store.state.screensaver) {
                 this.enabled = this.$store.state.screensaver;
+                this.toggleHandlers();
                 if (this.enabled) {
                     if (!this.playing) {
                         this.control();
@@ -55,16 +63,7 @@ Vue.component('lms-screensaver', {
                 if (this.playing) {
                     this.show = false;
                 } else if (undefined==this.showTimer) {
-                    this.showTimer = setTimeout(function () {
-                        this.show = true;
-                        this.$nextTick(function () {
-                            this.fade(document.getElementById('screensaver'), true);
-                            this.setDate();
-                            this.timeInterval = setInterval(function () {
-                                this.setDate();
-                            }.bind(this), 1000);
-                        });
-                    }.bind(this), 60*1000);
+                    this.resetTimer();
                 }
             }
         },
@@ -126,6 +125,38 @@ Vue.component('lms-screensaver', {
                     clearInterval(interval);
                 }
             }.bind(this), 50);
+        },
+        toggleHandlers() {
+            if (this.enabled) {
+                if (!this.installedHandlers) {
+                    window.addEventListener('touchstart', resetScreensaver);
+                    window.addEventListener('click', resetScreensaver);
+                    window.addEventListener('wheel', resetScreensaver);
+                    window.addEventListener('keydown', resetScreensaver);
+                    this.installedHandlers = true;
+                }
+            } else if (this.installedHandlers) {
+                    window.removeEventListener('touchstart', resetScreensaver);
+                    window.removeEventListener('click', resetScreensaver);
+                    window.removeEventListener('wheel', resetScreensaver);
+                    window.removeEventListener('keydown', resetScreensaver);
+                    this.installedHandlers = false;
+            }
+        },
+        resetTimer() {
+            if (undefined!==this.showTimer) {
+                clearTimeout(this.showTimer);
+            }
+            this.showTimer = setTimeout(function () {
+                this.show = true;
+                this.$nextTick(function () {
+                    this.fade(document.getElementById('screensaver'), true);
+                    this.setDate();
+                    this.timeInterval = setInterval(function () {
+                        this.setDate();
+                    }.bind(this), 1000);
+                });
+            }.bind(this), 60*1000);
         }
     },
     beforeDestroy() {

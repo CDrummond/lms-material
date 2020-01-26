@@ -9,6 +9,7 @@
 -----
 1. Remove right-hand border from jumplist, resolves issue with epiphany.
    (Issue #213)
+2. Serve web-app manifest as application/manifest+json
 
 1.3.0
 -----

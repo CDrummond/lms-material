@@ -103,15 +103,15 @@ Vue.component('lms-toolbar', {
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
     <v-list-tile v-else-if="item.id!=TB_SERVER_SETTINGS.id || unlockAll" @click="menuAction(item.id)">
-     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && pluginUpdatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
-      <v-list-tile-sub-title v-if="TB_INFO.id==item.id && pluginUpdatesAvailable">{{trans.pluginUpdatesAvailable}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
     </v-list-tile>
@@ -152,7 +152,7 @@ Vue.component('lms-toolbar', {
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncShortcut:undefined, info:undefined, infoShortcut:undefined,
                         connectionLost:undefined, showLarge:undefined, showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined,
-                        groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined, pluginUpdatesAvailable:undefined, fixedVol:undefined,
+                        groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined, updatesAvailable:undefined, fixedVol:undefined,
                         decVol:undefined, incVol:undefined, showVol:undefined, mainMenu: undefined, play:undefined, pause:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
@@ -401,7 +401,7 @@ Vue.component('lms-toolbar', {
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
-                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), pluginUpdatesAvailable:i18n('Plugin updates available'),
+                          groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause")};
         },
@@ -612,8 +612,8 @@ Vue.component('lms-toolbar', {
         menuVisible() {
             return this.$store.state.visibleMenus.size>0
         },
-        pluginUpdatesAvailable() {
-            return this.$store.state.pluginUpdatesAvailable
+        updatesAvailable() {
+            return this.$store.state.updatesAvailable.size>0
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

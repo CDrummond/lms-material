@@ -4,6 +4,8 @@
    playing on current player.
 2. Slightly reduce size of Material's caches.
 3. Add support for artist and album actions.
+4. Notify on server updates, and add text stating new version available to
+   information dialog.
 
 1.3.1
 -----

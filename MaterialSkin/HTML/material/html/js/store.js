@@ -193,7 +193,7 @@ const store = new Vuex.Store({
         disabledBrowseModes: new Set(),
         swipeVolume: false,
         keyboardControl: true,
-        pluginUpdatesAvailable: false,
+        updatesAvailable: new Set(),
         queueThreeLines: false,
         openDialogs: [],
         activeDialog: undefined,
@@ -509,8 +509,8 @@ const store = new Vuex.Store({
             }
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
         },
-        setPluginUpdatesAvailable(state, val) {
-            state.pluginUpdatesAvailable = val;
+        setUpdatesAvailable(state, val) {
+            state.updatesAvailable = val;
         },
         setPassword(state, pass) {
             setLocalStorageVal('password', pass);

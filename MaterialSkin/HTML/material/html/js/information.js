@@ -23,6 +23,7 @@ Vue.component('lms-information-dialog', {
 
    <div v-if="server.length>0">
     <p class="about-header">{{i18n('Server')}}</p>
+    <p v-if="updates.server"><b>{{i18n('New version available')}}</b></p>
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
@@ -104,7 +105,7 @@ Vue.component('lms-information-dialog', {
             library: [],
             players: [],
             plugins: {names: new Set(), details: []},
-            updates: {names: new Set(), details: []},
+            updates: {names: new Set(), details: [], server:false},
             pluginStatus:'idle',
             rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
                        {title:undefined, prompt:undefined, command: ["rescan"]},
@@ -127,6 +128,7 @@ Vue.component('lms-information-dialog', {
                 this.update();
             }.bind(this), 2000);
             this.show = true;
+            var scrolled = this.scrollToPlugins();
             lmsCommand("", ["material-skin", "plugins"]).then(({data}) => {
                 var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
                 this.plugins.names.clear();
@@ -138,15 +140,15 @@ Vue.component('lms-information-dialog', {
                     this.plugins.details = data.result.plugins_loop;
                     this.plugins.details.sort(titleSort);
                 }
-                if (!hadPlugins && this.$store.state.pluginUpdatesAvailable) {
-                    this.scrollToPlugins();
-                }
             });
+            this.updates.server = this.$store.state.updatesAvailable.has("server");
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
+                var hadServer = this.updates.server;
                 var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
                 var updates = eval(resp.data);
                 this.updates.names.clear();
                 this.updates.details = [];
+                this.updates.server = updates && updates.server;
                 if (updates && updates.plugins && updates.plugins.length>0) {
                     for (var i=0, len=updates.plugins.length; i<len; ++i) {
                         if (updates.plugins[i]!=null) {
@@ -157,15 +159,21 @@ Vue.component('lms-information-dialog', {
                     this.updates.details.sort(titleSort);
                     this.$forceUpdate();
                 }
-                this.$store.commit('setPluginUpdatesAvailable', this.updates.names.size>0);
-                if (!hadPlugins && this.$store.state.pluginUpdatesAvailable) {
+                var avail = new Set();
+                if (this.updates.server) {
+                    avail.add("server");
+                }
+                if (this.updates.names.size>0) {
+                    avail.add("plugins");
+                }
+                this.$store.commit('setUpdatesAvailable', avail);
+                if (!scrolled) {
                     this.scrollToPlugins();
                 }
             }).catch(err => {
                 this.updates.names.clear();
                 logError(err);
             });
-            this.scrollToPlugins();
         }.bind(this));
 
         bus.$on('langChanged', function() {
@@ -189,12 +197,14 @@ Vue.component('lms-information-dialog', {
             this.rescans[2].prompt=i18n("Rescan for playlist changes?");
         },
         scrollToPlugins() {
-            if (this.$store.state.pluginUpdatesAvailable) {
+            if (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server")) {
                 var plugins = document.getElementById("info-plugins");
                 if (plugins) {
                     plugins.scrollIntoView(true);
+                    return true;
                 }
             }
+            return false;
         },
         update() {
             lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {

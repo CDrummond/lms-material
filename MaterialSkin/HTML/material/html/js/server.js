@@ -603,8 +603,14 @@ var lmsServer = Vue.component('lms-server', {
         checkPluginUpdates() {
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?s=time"+(new Date().getTime())).then((resp) => {
                 var updates = eval(resp.data);
-                this.$store.commit('setPluginUpdatesAvailable', updates && updates.plugins && updates.plugins.length>0 &&
-                                   (updates.plugins.length>1 || updates.plugins[0]!=null));
+                var avail = new Set();
+                if (updates && updates.server) {
+                    avail.add("server");
+                }
+                if (updates && updates.plugins && updates.plugins.length>0 && (updates.plugins.length>1 || updates.plugins[0]!=null)) {
+                    avail.add("plugins");
+                }
+                this.$store.commit('setUpdatesAvailable', avail );
             }).catch(err => {
                 logError(err);
             });

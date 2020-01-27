@@ -1,6 +1,7 @@
 {
-  "name": "LMS Now-Playing",
+  "name": "Logitech Media Server Material now-playing",
   "short_name": "LMS",
+  "description": "A dashboard showing what’s currently playing on your Squeezebox-compatible network music playing devices.",
   "theme_color": "#424242",
   "background_color": "#424242",
   "display": "fullscreen",
@@ -12,6 +13,9 @@
       "sizes": "144x144",
       "type": "image/png"
     }
+  ],
+  "categories": [
+    "music"
   ],
   "splash_pages": null
 }

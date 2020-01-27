@@ -7,13 +7,13 @@
 
 var screensaver;
 function resetScreensaver(ev) {
-    screensaver.resetTimer();
+    screensaver.resetTimer(ev);
 }
 
 Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
- <v-card class="screesaver-bgnd" v-on:mousemove="cancel" v-on:touchstart="cancel" id="screensaver">
+ <v-card class="screesaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
 
    <p class="screesaver-time ellipsis">{{time}}</p>
    <p class="screesaver-date ellipsis">{{date}}</p>
@@ -38,7 +38,9 @@ Vue.component('lms-screensaver', {
         screensaver = this;
         this.playing = false;
         this.enabled = this.$store.state.screensaver;
+        this.control();
         this.toggleHandlers();
+        this.state = 'hidden';
         bus.$on('screensaverDisplayChanged', function() {
             if (this.enabled != this.$store.state.screensaver) {
                 this.enabled = this.$store.state.screensaver;
@@ -53,16 +55,24 @@ Vue.component('lms-screensaver', {
             }
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
-            this.playing = playerStatus.isplaying;
-            this.control();
+            if (playerStatus.isplaying != this.playing) {
+                // Player state changed
+                this.playing = playerStatus.isplaying;
+                this.control();
+            }
+        }.bind(this));
+        bus.$on('hasFocus', function() {
+            if (this.enabled) {
+                this.resetTimer();
+            }
         }.bind(this));
     },
     methods: {
         control() {
             if (this.enabled) {
                 if (this.playing) {
-                    this.show = false;
-                } else if (undefined==this.showTimer) {
+                    this.cancelAll(true);
+                } else {
                     this.resetTimer();
                 }
             }
@@ -71,14 +81,6 @@ Vue.component('lms-screensaver', {
             var date = new Date();
             this.date = date.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', year: undefined });
             this.time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
-        },
-        cancel() {
-            if (this.fadeIn!=false) {
-                this.cancelAll(true);
-            }
-            if (!this.playing) {
-                this.control();
-            }
         },
         cancelAll(doFade) {
             if (undefined!==this.showTimer) {
@@ -89,36 +91,50 @@ Vue.component('lms-screensaver', {
                 clearInterval(this.timeInterval);
                 this.timeInterval = undefined;
             }
+            if (doFade && this.state=='hidding') {
+                return;
+            }
             if (undefined!==this.fadeInterval) {
                 clearInterval(this.fadeInterval);
                 this.fadeInterval = undefined;
+                this.state = this.show ? "shown" : "hidden";
             }
+
             if (doFade) {
                 this.fade(document.getElementById('screensaver'), false);
             } else {
-                this.elem.style.opacity=1.0;
+                if (this.elem) {
+                    this.elem.style.opacity=1.0;
+                }
                 this.show = false;
+                this.state = this.show ? "shown" : "hidden";
             }
         },
         fade(elem, fadeIn) {
-            if (this.fadeIn==fadeIn) {
+            if (undefined==elem) {
+                this.show = false;
                 return;
             }
-            this.fadeIn = fadeIn;
+            if ( (fadeIn && (this.state=='shown' || this.state=='showing')) ||
+                 (!fadeIn && (this.state=='hidden' || this.state=='hidding')) ) {
+                return;
+            }
             if (undefined!==this.fadeInterval) {
                 clearInterval(this.fadeInterval);
             }
             this.elem = elem;
-            var val = fadeIn && elem.style.opacity < 0.25 ? 0 : !fadeIn && elem.opacity>=0.75 ? 1.0 : parseFloat(elem.style.opacity);
+            var val = fadeIn  ? 0 : 1.0;
             elem.style.opacity = val;
+            this.state = fadeIn ? 'showing' : 'hidding';
             this.fadeInterval = setInterval(function () {
                 val += fadeIn ? 0.025 : -0.1;
                 elem.style.opacity = val; 
                 if (fadeIn ? val >= 1.0 : val<=0.0) {
                     elem.style.opacity = fadeIn ? 1.0 : 0.0;
                     if (!fadeIn) {
-                        this.show=false;
+                        this.show = false;
                     }
+                    this.state = fadeIn ? 'shown' : 'hidden';
                     var interval = this.fadeInterval;
                     this.fadeInterval = undefined;
                     clearInterval(interval);
@@ -142,7 +158,8 @@ Vue.component('lms-screensaver', {
                 this.installedHandlers = false;
             }
         },
-        resetTimer() {
+        resetTimer(ev) {
+            this.cancelAll(true);
             if (undefined!==this.showTimer) {
                 clearTimeout(this.showTimer);
             }

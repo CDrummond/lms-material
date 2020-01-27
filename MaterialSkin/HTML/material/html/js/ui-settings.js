@@ -424,7 +424,8 @@ Vue.component('lms-ui-settings', {
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
             this.skipSeconds = this.$store.state.skipSeconds;
-            this.volumeStep = this.$store.state.volumeStep;
+            // NOTE: volumeStep is defined in utils.js
+            this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
             this.hidden = this.$store.state.hidden;

@@ -77,19 +77,27 @@ Vue.component('lms-screensaver', {
                 }
             }
         },
-        setDate() {
+        updateDateAndTime() {
             var date = new Date();
             this.date = date.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', year: undefined });
             this.time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
+
+            if (undefined!==this.updateTimer) {
+                clearTimeout(this.updateTimer);
+            }
+            var next = 60-date.getSeconds();
+            this.updateTimer = setInterval(function () {
+                this.updateDateAndTime();
+            }.bind(this), (next*1000)+25);
         },
         cancelAll(doFade) {
             if (undefined!==this.showTimer) {
                 clearTimeout(this.showTimer);
                 this.showTimer = undefined;
             }
-            if (undefined!==this.timeInterval) {
-                clearInterval(this.timeInterval);
-                this.timeInterval = undefined;
+            if (undefined!==this.updateTimer) {
+                clearTimeout(this.updateTimer);
+                this.updateTimer = undefined;
             }
             if (doFade && this.state=='hidding') {
                 return;
@@ -163,12 +171,9 @@ Vue.component('lms-screensaver', {
             if (!this.playing) {
                 this.showTimer = setTimeout(function () {
                     this.show = true;
+                    this.updateDateAndTime();
                     this.$nextTick(function () {
                         this.fade(document.getElementById('screensaver'), true);
-                        this.setDate();
-                        this.timeInterval = setInterval(function () {
-                            this.setDate();
-                        }.bind(this), 1000);
                     });
                 }.bind(this), 60*1000);
             }

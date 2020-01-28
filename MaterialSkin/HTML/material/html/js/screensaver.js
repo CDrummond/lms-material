@@ -160,19 +160,18 @@ Vue.component('lms-screensaver', {
         },
         resetTimer(ev) {
             this.cancelAll(true);
-            if (undefined!==this.showTimer) {
-                clearTimeout(this.showTimer);
-            }
-            this.showTimer = setTimeout(function () {
-                this.show = true;
-                this.$nextTick(function () {
-                    this.fade(document.getElementById('screensaver'), true);
-                    this.setDate();
-                    this.timeInterval = setInterval(function () {
+            if (!this.playing) {
+                this.showTimer = setTimeout(function () {
+                    this.show = true;
+                    this.$nextTick(function () {
+                        this.fade(document.getElementById('screensaver'), true);
                         this.setDate();
-                    }.bind(this), 1000);
-                });
-            }.bind(this), 60*1000);
+                        this.timeInterval = setInterval(function () {
+                            this.setDate();
+                        }.bind(this), 1000);
+                    });
+                }.bind(this), 60*1000);
+            }
         }
     },
     beforeDestroy() {

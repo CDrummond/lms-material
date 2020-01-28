@@ -153,6 +153,7 @@ Vue.component('lms-screensaver', {
             if (this.enabled) {
                 if (!this.installedHandlers) {
                     window.addEventListener('touchstart', resetScreensaver);
+                    window.addEventListener('mousedown', resetScreensaver);
                     window.addEventListener('click', resetScreensaver);
                     window.addEventListener('wheel', resetScreensaver);
                     window.addEventListener('keydown', resetScreensaver);
@@ -160,6 +161,7 @@ Vue.component('lms-screensaver', {
                 }
             } else if (this.installedHandlers) {
                 window.removeEventListener('touchstart', resetScreensaver);
+                window.removeEventListener('mousedown', resetScreensaver);
                 window.removeEventListener('click', resetScreensaver);
                 window.removeEventListener('wheel', resetScreensaver);
                 window.removeEventListener('keydown', resetScreensaver);

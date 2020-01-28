@@ -4,6 +4,7 @@
    (Issue #213)
 2. Serve web-app manifest as application/manifest+json
 3. Fix setting of volume step.
+4. Add toolti pto 'Stop' button.
 
 1.3.0
 -----

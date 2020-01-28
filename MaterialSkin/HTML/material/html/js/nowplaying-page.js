@@ -39,7 +39,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseA" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
-   <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
+   <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
   </v-flex>
   <v-flex xs3>
    <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
@@ -193,7 +193,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseC" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
         </v-flex>
         <v-flex xs6>
-         <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
+         <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
         </v-flex>
        </v-layout>
        <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
@@ -260,7 +260,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseE" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
      </v-flex>
      <v-flex xs6>
-      <v-btn flat icon @click="doAction(['stop'])"><v-icon large>stop</v-icon></v-btn>
+      <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
      </v-flex>
     </v-layout>
     <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>

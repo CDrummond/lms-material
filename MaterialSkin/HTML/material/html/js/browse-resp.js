@@ -683,16 +683,19 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var duration=0;
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
+            var isSearch = false;
 
-            if (!allowPlayAlbum && data.params[1].length>=4 && data.params[1][0]=="tracks") {
-                for (var p=0, plen=data.params[1].length; p<plen; ++p) {
+            if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
+                for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !isSearch); ++p) {
+console.log(data.params[1][p]);
                     if ((""+data.params[1][p]).startsWith("album_id:")) {
                         allowPlayAlbum = true;
-                        break;
+                    } else if ((""+data.params[1][p]).startsWith("search:")) {
+                        isSearch = true;
                     }
                 }
             }
-
+console.log(isSearch);
             var actions = [PLAY_ACTION];
             if (allowPlayAlbum && data.result.count>1) {
                 actions.push(PLAY_ALBUM_ACTION);
@@ -712,10 +715,16 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                      title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                      //title = i.tracknum + ". " + title; // SlimBrowse format
                 }
-                if (i.trackartist && ( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
+                if (i.trackartist && (isSearch || (( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))))) {
                      title+=SEPARATOR + i.trackartist;
-                } else if (i.artist && ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))) {
+                } else if (i.artist && (isSearch || ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1")))) {
                      title+=SEPARATOR + i.artist;
+                }
+                if (isSearch && i.album) {
+                    title+=SEPARATOR + i.album;
+                    if (i.year && i.year>0) {
+                        title+=" (" + i.year + ")";
+                    }
                 }
                 duration+=parseFloat(i.duration || 0);
                 resp.items.push({
@@ -725,7 +734,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               //icon: "music_note",
                               menu: actions,
                               type: "track",
-                              rating: i.rating
+                              rating: i.rating,
+                              image: isSearch ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);

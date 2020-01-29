@@ -96,7 +96,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   id: "album_id:"+i.album_id,
                                   artist_id: i.artist_id,
                                   title: i.album,
-                                  image: "/music/" + (""==i.artwork || undefined==i.artwork ? "0" : i.artwork) + "/cover" + LMS_IMAGE_SIZE,
+                                  image: i.artwork_url
+                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
+                                        : "/music/" + (""==i.artwork || undefined==i.artwork ? "0" : i.artwork) + "/cover" + LMS_IMAGE_SIZE,
                                   stdItem: STD_ITEM_ALBUM,
                                   type: "group"
                               };
@@ -656,7 +658,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               artist_id: i.artist_id,
                               title: title,
                               subtitle: i.artist ? i.artist : undefined,
-                              image: "/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE,
+                              image: i.artwork_url
+                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
+                                        : "/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE,
                               stdItem: STD_ITEM_ALBUM,
                               type: "group",
                               origTitle: i.album,

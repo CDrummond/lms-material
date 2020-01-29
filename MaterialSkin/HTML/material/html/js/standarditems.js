@@ -10,10 +10,10 @@ const STD_ITEM_ARTIST = 1;
 const STD_ITEM_ALBUM = 2;
 const STD_ITEM_PLAYLIST = 3;
 const STD_ITEM_REMOTE_PLAYLIST = 4;
-const STD_ITEM_YEAR = 4;
+const STD_ITEM_YEAR = 5;
 const STD_ITEM_TRACK = 6;
-const STD_ITEM_PLAYLIST_TRACK = 6;
-const STD_ITEM_REMOTE_PLAYLIST_TRACK = 6;
+const STD_ITEM_PLAYLIST_TRACK = 7;
+const STD_ITEM_REMOTE_PLAYLIST_TRACK = 8;
 
 const STD_ITEMS=[
     {
@@ -23,7 +23,7 @@ const STD_ITEMS=[
     },
     {
         command: ["albums"],
-        params: ["tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER],
+        params: [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER],
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION]
     },
     {
@@ -43,7 +43,7 @@ const STD_ITEMS=[
     },
     {
         command: ["albums"],
-        params: ["tags:ajlys"],
+        params: ["tags:ajlysK"],
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]
     },
     {

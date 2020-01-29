@@ -61,11 +61,6 @@ Vue.component('lms-screensaver', {
                 this.control();
             }
         }.bind(this));
-        bus.$on('hasFocus', function() {
-            if (this.enabled) {
-                this.resetTimer();
-            }
-        }.bind(this));
     },
     methods: {
         control() {

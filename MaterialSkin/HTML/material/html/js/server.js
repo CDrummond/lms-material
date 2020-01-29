@@ -57,7 +57,6 @@ function visibilityOrFocusChanged() {
     lmsLastFocusOrVisibilityChange = (new Date()).getTime();
 
     if (document.hasFocus() || !isHidden()) {
-        bus.$emit('hasFocus');
         // 250ms after we get focus, check that we are connected, if not try to connect
         if (!lmsIsConnected) {
             if (undefined!=lmsConnectionCheckDelay) {

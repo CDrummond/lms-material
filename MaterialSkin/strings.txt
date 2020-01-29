@@ -48,4 +48,4 @@ PLUGIN_MATERIAL_SKIN_PASSWORD
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	EN	Set a password to control access to alarms and server settings.
-	FR	Définisser un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.
+	FR	Définir un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.

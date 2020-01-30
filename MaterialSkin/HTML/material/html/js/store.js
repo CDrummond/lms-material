@@ -81,6 +81,7 @@ function updateUiSettings(state, val) {
         state.nowPlayingTrackNum = val.nowPlayingTrackNum;
         setLocalStorageVal('nowPlayingTrackNum', state.nowPlayingTrackNum);
     }
+    // NOTE: volumeStep is defined in utils.js
     if (undefined!=val.volumeStep && volumeStep!=val.volumeStep) {
         volumeStep = val.volumeStep;
         setLocalStorageVal('volumeStep', volumeStep);
@@ -383,6 +384,8 @@ const store = new Vuex.Store({
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
+            // NOTE: volumeStep is defined in utils.js
+            volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
             setTheme(state.darkUi);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?

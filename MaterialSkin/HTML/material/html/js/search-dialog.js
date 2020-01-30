@@ -83,7 +83,7 @@ Vue.component('lms-search-dialog', {
                 } else if (2==this.category) {
                     command=["albums"]; params=[ALBUM_TAGS, "search:"+str];
                 } else if (3==this.category) {
-                    command=["tracks"]; params=[TRACK_TAGS, "search:"+str];
+                    command=["tracks"]; params=[TRACK_TAGS+"elcy", "search:"+str];
                 } else if (4==this.category) {
                    command=["playlists"]; params=["tags:su", "search:"+str];
                 } else {

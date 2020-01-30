@@ -279,7 +279,9 @@ Vue.component('lms-toolbar', {
                              show: true, color: 'error' };
         }.bind(this));
         bus.$on('showMessage', function(msg) {
-            this.snackbar = {msg: msg, show: true };
+            if (undefined!=msg && msg.length>0 && !msgIsEmpty(msg)) {
+                this.snackbar = {msg: msg, show: true };
+            }
         }.bind(this));
 
         bus.$on('networkStatus', function(connected) {

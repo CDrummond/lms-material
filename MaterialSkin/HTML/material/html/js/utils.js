@@ -426,8 +426,7 @@ function parseQueryParams() {
 }
 
 function isLandscape() {
-console.log(window.innerWidth, window.innerHeight, window.innerHeight*1.4, window.innerWidth > (window.innerHeight*1.4));
-    return window.innerWidth > (window.innerHeight*1.4);
+    return window.innerWidth >= (window.innerHeight*1.5);
 }
 
 function incrementVolume() {
@@ -511,6 +510,10 @@ function ratingString(current, val) {
 
 function isEmpty(str) {
     return undefined==str || str.length<1;
+}
+
+function msgIsEmpty(msg) {
+    return msg=='Empty' || msg==i18n('Empty') || msg=='Empty.' || msg==(i18n('Empty')+'.');
 }
 
 function checkRemoteTitle(item) {

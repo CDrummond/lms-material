@@ -98,7 +98,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   title: i.album,
                                   image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : "/music/" + (""==i.artwork || undefined==i.artwork ? "0" : i.artwork) + "/cover" + LMS_IMAGE_SIZE,
+                                        : ("/music/" + (""==i.artwork || undefined==i.artwork ? "0" : i.artwork) + "/cover" + LMS_IMAGE_SIZE),
                                   stdItem: STD_ITEM_ALBUM,
                                   type: "group"
                               };
@@ -130,7 +130,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   title: i.track,
                                   image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
+                                        : ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE),
                                   stdItem: STD_ITEM_TRACK,
                                   type: "track"
                               };
@@ -662,7 +662,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               subtitle: i.artist ? i.artist : undefined,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : "/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE,
+                                        : ("/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE),
                               stdItem: STD_ITEM_ALBUM,
                               type: "group",
                               origTitle: i.album,
@@ -800,7 +800,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               subtitle: subtitle,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
+                                        : ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE),
                               //icon: "music_note",
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",

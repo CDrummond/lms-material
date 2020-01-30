@@ -512,6 +512,10 @@ function isEmpty(str) {
     return undefined==str || str.length<1;
 }
 
+function msgIsEmpty(msg) {
+    return msg=='Empty' || msg==i18n('Empty') || msg=='Empty.' || msg==(i18n('Empty')+'.');
+}
+
 function checkRemoteTitle(item) {
     return item && item.remote_title && !item.remote_title.startsWith("http:/") && !item.remote_title.startsWith("https:/")
         ? item.remote_title : undefined;

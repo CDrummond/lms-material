@@ -128,7 +128,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     var item ={
                                   id: "track_id:"+i.track_id,
                                   title: i.track,
-                                  image: "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
+                                  image: i.artwork_url
+                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
+                                        : "/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE,
                                   stdItem: STD_ITEM_TRACK,
                                   type: "track"
                               };

@@ -687,7 +687,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !isSearch); ++p) {
-console.log(data.params[1][p]);
                     if ((""+data.params[1][p]).startsWith("album_id:")) {
                         allowPlayAlbum = true;
                     } else if ((""+data.params[1][p]).startsWith("search:")) {
@@ -695,7 +694,6 @@ console.log(data.params[1][p]);
                     }
                 }
             }
-console.log(isSearch);
             var actions = [PLAY_ACTION];
             if (allowPlayAlbum && data.result.count>1) {
                 actions.push(PLAY_ALBUM_ACTION);

@@ -687,6 +687,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (this.command.params[i].startsWith(SORT_KEY)) {
                             var sort=this.command.params[i].split(":")[1];
                             addSort=sort!="new" && sort!="random";
+                        } else if (this.command.params[i].startsWith("search:")) {
+                            addSort=false;
                             break;
                         }
                     }

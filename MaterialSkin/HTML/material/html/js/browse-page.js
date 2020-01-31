@@ -57,8 +57,12 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>1">
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>4 || (currentActions.length>1 && !wide)">
     <v-icon>extension</v-icon>
+   </v-btn>
+   <v-btn v-for="(action, index) in currentActions" @click="currentAction(action, index)" flat icon class="toolbar-button" :title="action.title" id="tbar-actions" v-else-if="currentActions.length>1">
+    <v-icon v-if="undefined==action.svg">{{action.icon}}</v-icon>
+    <img v-else class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
    </v-btn>
    <v-btn @click.stop="currentAction(currentActions[0], 0)" flat icon class="toolbar-button" :title="currentActions[0].title" id="tbar-actions" v-else-if="currentActions.length==1">
     <img v-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
@@ -297,7 +301,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             tbarActions: [],
             settingsMenuActions: [],
             subtitleClickable: false,
-            disabled: new Set()
+            disabled: new Set(),
+            wide: false
         }
     },
     computed: {
@@ -349,6 +354,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.headerAction(action);
             }.bind(this));
         }
+
+        this.wide = window.innerWidth>=800;
+        setTimeout(function () {
+            this.wide = window.innerWidth>=800;
+        }.bind(this), 1000);
+        bus.$on('windowWidthChanged', function() {
+            this.wide = window.innerWidth>=800;
+        }.bind(this));
 
         bus.$on('langChanged', function() {
             this.initItems();

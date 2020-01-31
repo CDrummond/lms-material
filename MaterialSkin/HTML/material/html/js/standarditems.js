@@ -43,7 +43,7 @@ const STD_ITEMS=[
     },
     {
         command: ["albums"],
-        params: ["tags:ajlysK"],
+        params: ["tags:ajlsyEK"],
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]
     },
     {

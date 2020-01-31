@@ -431,9 +431,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             }
         }.bind(this));
-        bus.$on('searchLib', function(command, params, term) {
-            this.enteredTerm = term;
-            this.fetchItems({command: command, params: params}, {cancache:false, title:i18n("Search"), id:"search"==command[0] ? SEARCH_ID : SEARCH_ID+":"+command[0], type:"search", libsearch:true});
+        bus.$on('libSeachResults', function(item, command, resp) {
+            this.handleListResponse(item, command, resp);
         }.bind(this));
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
@@ -656,8 +655,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.settingsMenuActions=[];
                 this.isTop = false;
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
-                var changedView = this.grid.use != resp.useGrid;
+                var prevUseGrid = this.grid.use;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+                var changedView = this.grid.use != prevUseGrid;
                 this.jumplistActive=0;
                 this.currentActions = [];
 
@@ -828,6 +828,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if ((this.items[0].id.startsWith("album_id") && this.items.length<=50) || this.items[0].id.startsWith("track_id")) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                     }
+                    setScrollTop(this.scrollElement, 0);
                 }
                 return;
             }
@@ -1275,7 +1276,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 // Can't use standard add/play-all for search results, so just add each item...
                 var commands=[];
                 var check = item.id.endsWith("tracks") || (SEARCH_ID==item.id && this.items[0].id.startsWith("track")) ? "track_id" : "album_id";
-                var list = item.allSearchResults ? item.allSearchResults : this.items;
+                var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (list[i].id.startsWith(check)) {
                         commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});

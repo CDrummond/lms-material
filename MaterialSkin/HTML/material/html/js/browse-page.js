@@ -1234,7 +1234,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
-                            logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                            logAndShowError(err, i18n("Failed to remove podcast!"), command);
                         });
                     }
                 });

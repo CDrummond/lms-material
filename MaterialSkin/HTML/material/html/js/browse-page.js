@@ -604,12 +604,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.fetchingItems = true;
             axios.get(url).then(({data}) => {
                 var resp = parseBrowseUrlResp(data, provider);
-                this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, resp);
+                this.handleListResponse({title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, resp);
                 this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: []});
+                    this.handleListResponse({title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
                     logError(err);
                 }
             });

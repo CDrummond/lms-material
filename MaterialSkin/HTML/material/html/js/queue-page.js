@@ -282,7 +282,13 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
-    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !selection.has(menu.index))" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="itemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
+    </v-list-tile>
+    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !menu.item.selected)" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -640,10 +646,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (!this.selection.has(index)) {
                     this.selection.add(index);
                     item.selected = true;
-                    var idx = item.actions.indexOf(SELECT_ACTION);
-                    if (idx>-1) {
-                        item.actions[idx]=UNSELECT_ACTION;
-                    }
                     forceItemUpdate(this, item);
                     if (event && event.shiftKey) {
                         if (undefined!=this.selectStart) {
@@ -665,10 +667,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.selection.has(index)) {
                     this.selection.delete(index);
                     item.selected = false;
-                    var idx = item.actions.indexOf(UNSELECT_ACTION);
-                    if (idx>-1) {
-                        item.actions[idx]=SELECT_ACTION;
-                    }
                     forceItemUpdate(this, item);
                 }
             } else if (MOVE_HERE_ACTION==act) {

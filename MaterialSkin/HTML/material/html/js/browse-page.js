@@ -228,7 +228,13 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !selection.has(menu.index))" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="itemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
+    </v-list-tile>
+    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !menu.item.selected)" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -1212,10 +1218,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (!this.selection.has(index)) {
                     this.selection.add(index);
                     item.selected = true;
-                    var idx = item.menu.indexOf(SELECT_ACTION);
-                    if (idx>-1) {
-                        item.menu[idx]=UNSELECT_ACTION;
-                    }
                     forceItemUpdate(this, item);
                     if (event && event.shiftKey) {
                         if (undefined!=this.selectStart) {
@@ -1237,10 +1239,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.selection.has(index)) {
                     this.selection.delete(index);
                     item.selected = false;
-                    var idx = item.menu.indexOf(UNSELECT_ACTION);
-                    if (idx>-1) {
-                        item.menu[idx]=SELECT_ACTION;
-                    }
                     forceItemUpdate(this, item);
                 }
             } else if (MOVE_HERE_ACTION==act) {
@@ -2170,9 +2168,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (var i=0, len=selection.length; i<len; ++i) {
                 var index = selection[i];
                 if (index>-1 && index<this.items.length) {
-                    var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
-                    if (idx>-1) {
-                        this.items[index].menu[idx]=SELECT_ACTION;
+                    if (this.items[index].menu) {
+                        var idx = this.items[index].menu.indexOf(UNSELECT_ACTION);
+                        if (idx>-1) {
+                            this.items[index].menu[idx]=SELECT_ACTION;
+                        }
                     }
                     this.items[index].selected = false;
                 }

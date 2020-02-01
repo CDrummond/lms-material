@@ -506,7 +506,16 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               stdItem: STD_ITEM_ALBUM,
                               type: "group",
                               origTitle: i.album,
-                              textkey: key
+                              textkey: key,
+                              emblem: undefined==i.extid
+                                        ? undefined
+                                        : i.ext.indexOf('spotify:/')>=0
+                                            ? 'spotify'
+                                            : i.ext.indexOf('qobuz:/')>=0
+                                                ? 'qobuz'
+                                                : i.ext.indexOf('tidal:/')>=0
+                                                    ? 'tidal'
+                                                    : undefined
                           };
                 resp.items.push(album);
             }

@@ -424,11 +424,45 @@ a {
 
 .image-grid-select-btn, .image-grid-select-btn:hover {
  position:absolute;
- top:0px !important;
- left:0px !important;
+ top:-1px !important;
+ left:1px !important;
  width:32px !important;
  height:32px !important;
  z-index:2;
+}
+
+.image-grid-item .emblem {
+ position:absolute;
+ top:4px !important;
+ right:8px !important;
+ width:32px !important;
+ height:32px !important;
+ z-index:2;
+ background:#1976d2;
+ border-radius:50% !important;
+ padding:4px;
+}
+
+.image-grid-item .emblem img {
+ width:24px !important;
+ height:24px !important;
+}
+
+.lms-list-sub .emblem img, .lms-list-jump .emblem img {
+ position:absolute;
+ top:0px !important;
+ left:41px !important;
+ width:22px !important;
+ height:22px !important;
+ z-index:2;
+ background:#1976d2;
+ border-radius:50% !important;
+ padding:2px;
+}
+
+.lms-list-sub .emblem img, .lms-list-jump .emblem img {
+ width:18px !important;
+ height:18px !important;
 }
 
 .full-width {

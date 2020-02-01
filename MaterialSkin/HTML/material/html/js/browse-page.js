@@ -104,6 +104,9 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
+     <div class="emblem" v-if="items[idx].emblem">
+      <img :src="items[idx].emblem | svgIcon(darkUi)"></img>
+     </div>
     </v-card></td>
    </table>
   </RecycleScroller>
@@ -144,6 +147,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
+    <div class="emblem" v-if="item.emblem">
+     <img :src="item.emblem | svgIcon(darkUi)"></img>
+    </div>
    </v-list-tile>
   </RecycleScroller>
 
@@ -202,7 +208,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-
+    <div class="emblem" v-if="item.emblem">
+     <img :src="item.emblem | svgIcon(darkUi)"></img>
+    </div>
    </v-list-tile>
   </template>
 
@@ -360,14 +368,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.headerAction(action);
             }.bind(this));
         }
-
-        this.wide = window.innerWidth>=800;
-        setTimeout(function () {
-            this.wide = window.innerWidth>=800;
-        }.bind(this), 1000);
-        bus.$on('windowWidthChanged', function() {
-            this.wide = window.innerWidth>=800;
-        }.bind(this));
 
         bus.$on('langChanged', function() {
             this.initItems();
@@ -2578,7 +2578,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('splitterChanged', function() {
             this.layoutGrid();
         }.bind(this));
+        this.wide = window.innerWidth>=800;
+        setTimeout(function () {
+            this.wide = window.innerWidth>=800;
+        }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
+            this.wide = window.innerWidth>=800;
             this.layoutGrid();
         }.bind(this));
         bus.$on('themeChanged', function() {

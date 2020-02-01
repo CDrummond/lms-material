@@ -311,5 +311,9 @@
  .vol-label {
   right:92px;
  }
+ 
+ .lms-list-sub .emblem img, .lms-list-jump .emblem img {
+  left:33px !important;
+ }
 }
 

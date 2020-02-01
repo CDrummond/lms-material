@@ -57,6 +57,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
+   <v-divider vertical v-if="desktop && currentActions && currentActions.length>0 && settingsMenuActions && settingsMenuActions.length>0"></v-divider>
    <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>4 || (currentActions.length>1 && !wide)">
     <v-icon>extension</v-icon>
    </v-btn>

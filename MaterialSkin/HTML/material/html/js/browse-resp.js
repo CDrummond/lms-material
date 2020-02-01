@@ -495,6 +495,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }
+                var service = undefined==i.extid
+                                        ? undefined
+                                        : i.ext.indexOf('spotify:')>=0
+                                            ? 'spotify'
+                                            : i.ext.indexOf('qobuz:')>=0
+                                                ? 'qobuz'
+                                                : i.ext.indexOf('tidal:')>=0
+                                                    ? 'tidal'
+                                                    : undefined;
                 var album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
@@ -507,15 +516,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               type: "group",
                               origTitle: i.album,
                               textkey: key,
-                              emblem: undefined==i.extid
-                                        ? undefined
-                                        : i.ext.indexOf('spotify:/')>=0
-                                            ? 'spotify'
-                                            : i.ext.indexOf('qobuz:/')>=0
-                                                ? 'qobuz'
-                                                : i.ext.indexOf('tidal:/')>=0
-                                                    ? 'tidal'
-                                                    : undefined
+                              emblem: service
                           };
                 resp.items.push(album);
             }

@@ -291,7 +291,7 @@ sub _cliCommand {
 
     if ($cmd eq 'delete-podcast') {
         my $pos = $request->getParam('pos');
-        if ($pos) {
+        if (defined $pos) {
             my $podPrefs = preferences('plugin.podcast');
             my $feeds = $podPrefs->get('feeds');
             if ($pos < scalar @{$feeds}) {

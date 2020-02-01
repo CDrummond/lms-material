@@ -3,6 +3,7 @@
 1. If items are selected, then toggle selection of item when clicking on
    subtitle.
 2. Fix podcast search listing.
+3. Fix deleting first podcast.
 
 1.3.1
 -----

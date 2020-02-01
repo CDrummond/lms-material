@@ -57,7 +57,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-divider vertical v-if="desktop && currentActions && currentActions.length>0 && settingsMenuActions && settingsMenuActions.length>0"></v-divider>
+   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>4 || (currentActions.length>1 && !wide)">
     <v-icon>extension</v-icon>
    </v-btn>
@@ -69,7 +69,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <img v-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
     <v-icon v-else>{{currentActions[0].icon}}</v-icon>
    </v-btn>
-   <v-divider vertical v-if="tbarActions.length>0 && (currentActions.length>0 || (showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
+   <v-divider vertical v-if="currentActions.length>0"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>

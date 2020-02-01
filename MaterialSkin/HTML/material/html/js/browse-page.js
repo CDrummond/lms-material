@@ -1303,6 +1303,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         clickSubtitle(item, index, event) {
+            if (this.selection.size>0) {
+                this.select(item, index, event);
+                return;
+            }
             if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
                                 {cancache:false, id:item.id, title:item.subtitle});

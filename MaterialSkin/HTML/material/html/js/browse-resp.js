@@ -500,11 +500,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 var service = undefined==i.extid
                                         ? undefined
-                                        : i.ext.indexOf('spotify:')>=0
+                                        : i.extid.indexOf('spotify:')>=0
                                             ? 'spotify'
-                                            : i.ext.indexOf('qobuz:')>=0
+                                            : i.extid.indexOf('qobuz:')>=0
                                                 ? 'qobuz'
-                                                : i.ext.indexOf('tidal:')>=0
+                                                : i.extid.indexOf('tidal:')>=0
                                                     ? 'tidal'
                                                     : undefined;
                 var album = {

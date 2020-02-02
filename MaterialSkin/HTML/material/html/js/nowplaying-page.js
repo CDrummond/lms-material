@@ -267,7 +267,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
    <v-flex xs4 class="no-control-adjust">
     <v-layout text-xs-center>
-     <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}"><v-icon large :title="trans.next">skip_next</v-icon></v-btn></v-flex>
+     <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn></v-flex>
      <v-flex xs6>
       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>

@@ -8,6 +8,8 @@
    information dialog.
 5. When searching all categories, perform individual searches and combine
    results.
+6. When pinning items, store placeholders for tags parameter - so that this can
+   be altered.
 
 1.3.2
 -----

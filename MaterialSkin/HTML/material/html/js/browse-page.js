@@ -905,7 +905,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               genreArtists:true },
                             { title: i18n("Albums"),
                               command: ["albums"],
-                              params: [item.id, ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+                              params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
@@ -1736,17 +1736,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         } else if (mode=="albums") {
                             if (!hasTags) {
-                                p.push(hasArtistId ? ARTIST_ALBUM_TAGS : ALBUM_TAGS);
+                                p.push(hasArtistId ? ARTIST_ALBUM_TAGS_PLACEHOLDER : ALBUM_TAGS_PLACEHOLDER);
                             }
                             if (!hasSort) {
                                 p.push(SORT_KEY+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));
                             }
                         } else if (mode=="playlists") {
                             if (!hasTags) {
-                                p.push(PLAYLIST_TAGS);
+                                p.push(PLAYLIST_TAGS_PLACEHOLDER);
                             }
-                        } else if (!hasTags && (mode=="artists" || mode=="years" || mode=="genres" || mode=="vaalbums")) {
-                            p.push("tags:s");
+                        } else if (!hasTags) {
+                            if (mode=="artists" || mode=="vaalbums") {
+                                p.push(ARTIST_TAGS_PLACEHOLDER);
+                            } else if (mode=="years" || mode=="genres") {
+                                p.push("tags:s");
+                            }
                         }
                         cmd = {command: c, params: p};
                     }
@@ -1852,6 +1856,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                            .replace(TERM_PLACEHOLDER, this.enteredTerm)
+                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
+                           .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
+                           .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
+                           .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS)
                     if (this.$store.state.ratingsSupport && p==TRACK_TAGS) {
                         r=TRACK_TAGS+"R";
                     }

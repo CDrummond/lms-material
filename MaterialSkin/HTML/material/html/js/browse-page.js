@@ -643,12 +643,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.fetchingItems = true;
             axios.get(url).then(({data}) => {
                 var resp = parseBrowseUrlResp(data, provider);
-                this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, resp);
+                this.handleListResponse({title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, resp);
                 this.fetchingItems = false;
             }).catch(err => {
                 this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse({title:i18n("Search"), type:'search'}, {command:[], params:[]}, {items: []});
+                    this.handleListResponse({title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
                     logError(err);
                 }
             });
@@ -744,6 +744,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (this.command.params[i].startsWith(SORT_KEY)) {
                             var sort=this.command.params[i].split(":")[1];
                             addSort=sort!="new" && sort!="random";
+                        } else if (this.command.params[i].startsWith("search:")) {
+                            addSort=false;
                             break;
                         }
                     }
@@ -1280,7 +1282,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({datax}) => {
                             this.refreshList();
                         }).catch(err => {
-                            logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                            logAndShowError(err, i18n("Failed to remove podcast!"), command);
                         });
                     }
                 });
@@ -1360,6 +1362,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         clickSubtitle(item, index, event) {
+            if (this.selection.size>0) {
+                this.select(item, index, event);
+                return;
+            }
             if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
                                 {cancache:false, id:item.id, title:item.subtitle});

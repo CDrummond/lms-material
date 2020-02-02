@@ -402,7 +402,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
             }
-
+            if (1==resp.items.length && 'text'==resp.items[0].type && 'itemNoAction'==resp.items[0].style && msgIsEmpty(resp.items[0].title)) {
+                resp.items=[];
+            }
             if (isApps || isPodcastList) {
                 resp.items.sort(titleSort);
             } else if (isFavorites) {

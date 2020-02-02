@@ -4,6 +4,7 @@
  * Copyright (c) 2018 Craig-2019 Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 const BIO_TAB = 0;
 const REVIEW_TAB = 1;

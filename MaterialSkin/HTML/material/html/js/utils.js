@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 const SEPARATOR = " \u2022 ";
 const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";

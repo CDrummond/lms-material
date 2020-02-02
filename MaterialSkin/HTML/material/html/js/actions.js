@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 const DIVIDER                 = -1;
 const PLAY_ACTION             = 0;

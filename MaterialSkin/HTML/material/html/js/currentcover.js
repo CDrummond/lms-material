@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 const DEFAULT_COVER = "music/0/cover";
 

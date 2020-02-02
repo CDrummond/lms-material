@@ -4,6 +4,8 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
+
 var lmsNumVisibleMenus = 0;
 /* When setttnig a player from players list, should we use the last player, or the
    user's configured default player? useLastPlayer should ONLY be set to true when

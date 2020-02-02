@@ -1,3 +1,11 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+'use strict';
+
 const ENDSWITH_MAP = {
     "/bbciplayer.png":{"svg":"bbc-iplayer"},
     "/bbciplayerextra.png":{"svg":"bbc-iplayer"},

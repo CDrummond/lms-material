@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 const STD_ITEM_GENRE = 0;
 const STD_ITEM_ARTIST = 1;

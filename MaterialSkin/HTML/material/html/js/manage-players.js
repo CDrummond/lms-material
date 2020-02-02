@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
 var PMGR_DELETE_GROUP_ACTION     = {cmd:"delete",   icon:"delete"};

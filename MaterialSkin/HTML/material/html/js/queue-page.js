@@ -4,6 +4,7 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
+'use strict';
 
 const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegltyAKNS" : "tags:cdegltysAKNS";
 

@@ -519,7 +519,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               type: "group",
                               origTitle: i.album,
                               textkey: key,
-                              emblem: service
+                              service: service
                           };
                 resp.items.push(album);
             }

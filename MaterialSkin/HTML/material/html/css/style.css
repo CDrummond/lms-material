@@ -433,14 +433,13 @@ a {
 
 .image-grid-item .emblem {
  position:absolute;
- top:4px !important;
- right:8px !important;
- width:32px !important;
- height:32px !important;
+ top:2px !important;
+ right:6px !important;
+ width:28px !important;
+ height:28px !important;
  z-index:2;
- background:#1976d2;
  border-radius:50% !important;
- padding:4px;
+ padding:2px;
 }
 
 .image-grid-item .emblem img {
@@ -448,21 +447,32 @@ a {
  height:24px !important;
 }
 
-.lms-list-sub .emblem img, .lms-list-jump .emblem img {
+.lms-list-sub .emblem, .lms-list-jump .emblem {
  position:absolute;
  top:0px !important;
- left:41px !important;
- width:22px !important;
- height:22px !important;
+ left:39px !important;
+ width:20px !important;
+ height:20px !important;
  z-index:2;
- background:#1976d2;
  border-radius:50% !important;
- padding:2px;
+ padding:1px;
 }
 
 .lms-list-sub .emblem img, .lms-list-jump .emblem img {
  width:18px !important;
  height:18px !important;
+}
+
+.qobuz {
+ background:#1976d2;
+}
+
+.spotify {
+ background:#1ad05c;
+}
+
+.tidal {
+ background:black;
 }
 
 .full-width {

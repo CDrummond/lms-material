@@ -312,8 +312,8 @@
   right:92px;
  }
  
- .lms-list-sub .emblem img, .lms-list-jump .emblem img {
-  left:33px !important;
+ .lms-list-sub .emblem, .lms-list-jump .emblem {
+  left:31px !important;
  }
 }
 

@@ -308,6 +308,9 @@ function changeCss(cssFile, id) {
     }
     for (var i=0, len=links.length; i<len; ++i) {
         if (links[i].getAttribute("id")==id) {
+            if (links[i].getAttribute("href")==cssFile) {
+                return;
+            }
             var newlink = document.createElement("link");
             newlink.setAttribute("rel", "stylesheet");
             newlink.setAttribute("type", "text/css");

@@ -550,7 +550,7 @@ function shouldAddLibraryId(command) {
 
 // Determine if an item is a 'text' item - i.e. cannot browse into
 function isTextItem(item) {
-    return !item.weblink &&
+    return !item.isPinned && !item.weblink &&
            ( "text"==item.type ||
              // if group is not undefined, its probably a pinned app
              (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1) && /* !item.params && Dynamic playlists have params? */

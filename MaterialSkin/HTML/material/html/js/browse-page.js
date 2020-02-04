@@ -106,7 +106,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
-     <div class="emblem" v-bind:class="items[idx].service" v-if="items[idx].service">
+     <div class="emblem" v-bind:class="items[idx].service" v-if="idx<items.length && items[idx].service">
       <img :src="items[idx].service | svgIcon(darkUi)"></img>
      </div>
     </v-card></td>

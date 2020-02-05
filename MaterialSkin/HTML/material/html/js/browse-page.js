@@ -636,21 +636,27 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        fetchUrlItems(url, provider) {
+        fetchUrlItems(url, provider, item) {
             if (this.fetchingItems) {
                 return;
             }
 
             this.fetchingItems = true;
             axios.get(url).then(({data}) => {
-                var resp = parseBrowseUrlResp(data, provider);
-                this.handleListResponse({title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, resp);
+                this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
                 this.fetchingItems = false;
             }).catch(err => {
-                this.fetchingItems = false;
                 if (!axios.isCancel(err)) {
-                    this.handleListResponse({title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
-                    logError(err);
+                    axios.get('https://cors-anywhere.herokuapp.com/'+url).then(({data}) => {
+                        this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
+                        this.fetchingItems = false;
+                    }).catch(err2 => {
+                        this.fetchingItems = false;
+                        if (!axios.isCancel(err2)) {
+                            this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
+                            logError(err);
+                        }
+                    });
                 }
             });
         },
@@ -704,7 +710,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
                     this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
-                } else if (addAndPlayAllActions(command)) {
+                } else if (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command)) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
                             if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
@@ -878,6 +884,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (isTextItem(item) && !item.id.startsWith(TOP_ID_PREFIX) && !item.id.startsWith(MUSIC_ID_PREFIX)) {
                 if (this.canClickText(item)) {
                     this.doTextClick(item);
+                } else if (item.isPodcast) {
+                    this.fetchUrlItems(item.id, 'rss', item);
                 }
                 return;
             }
@@ -1789,7 +1797,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
-                } else if (item.isFolderItem) {
+                } else if (item.isFolderItem || item.isUrl) {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
                 } else if (item.id) {
                     command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];

@@ -778,6 +778,87 @@ function parseBrowseUrlResp(data, provider) {
             }
         }
         resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
+    } else if ('rss'==provider) {
+        let totalDuration = 0;
+        try {
+            let domParser = new DOMParser();
+            let doc = domParser.parseFromString(data, 'text/xml');
+            let items = doc.querySelectorAll('item');
+            let audioFormats = new Set(["mp3", "m4a", "ogg", "wma"]);
+            for (var i=0, len=items.length; i<len; ++i) {
+                try {
+                    let enclosure = items[i].querySelector('enclosure');
+                    if (undefined==enclosure) {
+                        continue;
+                    }
+                    let type = enclosure.getAttribute('type');
+                    if (undefined!=type) {
+                        type = type.toLowerCase();
+                        if (!type.startsWith("audio/") && !audioFormats.contains(type)) {
+                            continue;
+                        }
+                    }
+                    let title = items[i].querySelector('title').textContent;
+                    let url = enclosure.getAttribute('url');
+                    /*let url = items[i].querySelector('link').textContent;*/
+                    let pubDate = items[i].querySelector('pubDate');
+                    let itunesImage = items[i].querySelector('image');
+                    let itunesDuration = items[i].querySelector('duration');
+                    let imageUrl = undefined;
+                    let duration = 0;
+                    let subtitle = undefined;
+                    if (undefined!=itunesImage) {
+                        imageUrl = itunesImage.getAttribute('href');
+                    }
+                    if (undefined!=itunesDuration) {
+                        if (itunesDuration.textContent.indexOf(':')>0) {
+                            let parts = itunesDuration.textContent.split(':');
+                            if (2==parts.length) {
+                                duration=(parseInt(parts[0]) * 60) + parseInt(parts[1]);
+                            } else if (3==parts.length) {
+                                duration=(parseInt(parts[0]) * 60*60) + (parseInt(parts[1]) * 60) + parseInt(parts[2]);
+                            }
+                        } else {
+                            duration = parseInt(itunesDuration.textContent);
+                        }
+                        totalDuration+=duration;
+                    }
+                    if (0==duration) {
+                        let content = items[i].querySelector('content');
+                        if (undefined!=content) {
+                            let dur = content.getAttribute('duration');
+                            if (undefined!=dur) {
+                                duration = parseInt(dur);
+                            }
+                        }
+                    }
+                    if (undefined!=pubDate) {
+                        subtitle = pubDate.textContent;
+                        if (duration>0) {
+                            subtitle+=" ("+formatSeconds(duration)+")";
+                        }
+                    } else if (duration>0) {
+                        subtitle=formatSeconds(duration);
+                    }
+                    resp.items.push({title:title,
+                                     subtitle:subtitle,
+                                     id:url,
+                                     menu:[PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                     image:imageUrl ? resolveImageUrl(imageUrl, LMS_IMAGE_SIZE) : undefined,
+                                     isUrl:true,
+                                     type: "track"});
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        } catch (e) {
+            console.error('Error in parsing the feed', e)
+        }
+        resp.subtitle = i18np("1 Episode", "%1 Episodes", resp.items.length);
+        if (totalDuration>0) {
+            resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
+        }
     }
+
     return resp;
 }

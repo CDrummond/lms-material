@@ -2446,6 +2446,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if (IS_MOBILE && (undefined==this.jumplist || this.jumplist.length<1)) {
+                if (this.items.length <= (this.grid.allowed ? 50 : 150)) {
+                    return;
+                }
                 this.jumplist = [];
                 var jump = this.items.length/100.0;
                 for (var i=0; i<100; ++i) {

@@ -11,6 +11,9 @@
 6. When pinning items, store placeholders for tags parameter - so that this can
    be altered.
 7. Allow playing of podcast episodes from search reponse.
+8. On mobile devices, only show dotted jump-list if; a grid can be used and
+   there are more than 50 items, or a grid cannot be used and there are more
+   than 150 items.
 
 1.3.2
 -----

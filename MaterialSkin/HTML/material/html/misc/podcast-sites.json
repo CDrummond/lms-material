@@ -3,12 +3,12 @@
     {
       "name":"iTunes",
       "key":"itunes", 
-      "url":"https://itunes.apple.com/search?country=%COUNTRY%&entity=podcast&term=%TERM%",
+      "url":"https://itunes.apple.com/search?country=%COUNTRY%&media=podcast&term=%TERM%",
       "countries":true,
       "resp":{
         "key":"results",
         "mapping":{
-          "title":"trackName",
+          "title":"collectionName",
           "url":"feedUrl",
           "image":["artworkUrl600", "artworkUrl100"]
         }

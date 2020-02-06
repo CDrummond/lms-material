@@ -152,24 +152,35 @@ sub _cliCommand {
             return;
         }
 
-        # curl 'http://192.168.1.16:9000/jsonrpc.js' --data-binary '{"id":1,"method":"slim.request","params":["aa:aa:b5:38:e2:d7",["connect","192.168.1.66"]]}'
-        my $http = Slim::Networking::SimpleAsyncHTTP->new(
-            \&_connectDone,
-            \&_connectError,
-            {
+        main::INFOLOG && $log->is_info && $log->info('Connect player ${id} from ${serverurl} to this server');
+        Slim::Networking::SimpleAsyncHTTP->new(
+            sub {
+                main::INFOLOG && $log->is_info && $log->info('Connect response recieved player');
+                my $http = shift;
+                my $server = $http->params('server');
+                my $res = eval { from_json( $http->content ) };
+
+                if ( $@ || ref $res ne 'HASH' || $res->{error} ) {
+                    $http->error( $@ || 'Invalid JSON response: ' . $http->content );
+                    return _players_error( $http );
+                }
+
+                my @params = @{$res->{params}};
+                my $id = $params[0];
+                my $buddy = Slim::Player::Client::getClient($id);
+                if ($buddy) {
+                    main::INFOLOG && $log->is_info && $log->info('Disconnect player ' . $id . ' from ' . $server);
+                    $buddy->execute(["disconnect", $server]);
+                }
+            },
+            sub {
+                # Ignore errors?
+            }, {
                 timeout => 10,
                 server  => $server,
             }
-        );
+        )->post( $serverurl . 'jsonrpc.js', to_json({ id => 1, method => 'slim.request', params => [ $id, ['connect', Slim::Utils::Network::serverAddr()] ]}));
 
-        my $postdata = to_json({
-            id     => 1,
-            method => 'slim.request',
-            params => [ $id, ['connect', Slim::Utils::Network::serverAddr()] ]
-        });
-
-        main::INFOLOG && $log->is_info && $log->info('Connect player ${id} from ${serverurl} to this server');
-        $http->post( $serverurl . 'jsonrpc.js', $postdata);
         $request->setStatusDone();
         return;
     }
@@ -473,12 +484,12 @@ sub _cliCommand {
     if ($cmd eq 'geturl') {
         my $url = $request->getParam('url');
         if ($url) {
-            main::DEBUGLOG && $log->debug("GET URL: $url");
+            main::DEBUGLOG && $log->debug("Get URL: $url");
             $request->setStatusProcessing();
 
             my $ua = Slim::Utils::Misc::userAgentString();
             $ua =~ s{iTunes/4.7.1}{Mozilla/5.0};
-            my %headers = ( 'User-Agent'   => $ua );
+            my %headers = ( 'User-Agent' => $ua );
 
             Slim::Networking::SimpleAsyncHTTP->new(
                 sub {
@@ -488,7 +499,6 @@ sub _cliCommand {
                     $request->setStatusDone();
                 },
                 sub {
-
                     my $response = shift;
                     my $error  = $response->error;
                     main::DEBUGLOG && $log->debug("Failed to fetch URL: $error");
@@ -587,31 +597,6 @@ sub _cliGroupCommand {
     }
 
     $request->setStatusBadParams()
-}
-
-sub _connectDone {
-    main::INFOLOG && $log->is_info && $log->info('Connect response recieved player');
-    # curl 'http://localhost:9000/jsonrpc.js' --data-binary '{"id":1,"method":"slim.request","params":["aa:aa:b5:38:e2:d7",["disconnect","192.168.1.16"]]}'
-    my $http   = shift;
-    my $server = $http->params('server');
-    my $res = eval { from_json( $http->content ) };
-
-    if ( $@ || ref $res ne 'HASH' || $res->{error} ) {
-        $http->error( $@ || 'Invalid JSON response: ' . $http->content );
-        return _players_error( $http );
-    }
-
-    my @params = @{$res->{params}};
-    my $id = $params[0];
-    my $buddy = Slim::Player::Client::getClient($id);
-    if ($buddy) {
-        main::INFOLOG && $log->is_info && $log->info('Disconnect player ' . $id . ' from ' . $server);
-        $buddy->execute(["disconnect", $server]);
-    }
-}
-
-sub _connectError {
-    # Ignore?
 }
 
 sub _svgHandler {

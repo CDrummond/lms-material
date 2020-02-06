@@ -427,7 +427,7 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'manage');
             } else if (TB_MINI_PLAYER.id==id) {
                 // Height should be 112, but on my system sometimes its too small? Added 6 pix to give some padding...
-                window.open("mini", "MiniPlayer", 'width=600,height=118,status=no,menubar=no,toolbar=no,location=no');
+                window.open("mini", "MiniPlayer", 'width=620,height=118,status=no,menubar=no,toolbar=no,location=no');
             } else {
                 bus.$emit('toolbarAction', id);
             }

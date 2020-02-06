@@ -139,7 +139,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes', 'actions']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes', 'actions', 'geturl']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -468,6 +468,37 @@ sub _cliCommand {
         }
         $request->setStatusDone();
         return;
+    }
+
+    if ($cmd eq 'geturl') {
+        my $url = $request->getParam('url');
+        if ($url) {
+            main::DEBUGLOG && $log->debug("GET URL: $url");
+            $request->setStatusProcessing();
+
+            my $ua = Slim::Utils::Misc::userAgentString();
+            $ua =~ s{iTunes/4.7.1}{Mozilla/5.0};
+            my %headers = ( 'User-Agent'   => $ua );
+
+            Slim::Networking::SimpleAsyncHTTP->new(
+                sub {
+                    main::DEBUGLOG && $log->debug("Fetched URL");
+                    my $response = shift;
+                    $request->addResult("content", $response->content);
+                    $request->setStatusDone();
+                },
+                sub {
+
+                    my $response = shift;
+                    my $error  = $response->error;
+                    main::DEBUGLOG && $log->debug("Failed to fetch URL: $error");
+                    $request->setStatusDone();
+                }, {
+                   timeout => 15
+                }
+                )->get($url, %headers);
+            return;
+        }
     }
 
     $request->setStatusBadParams();

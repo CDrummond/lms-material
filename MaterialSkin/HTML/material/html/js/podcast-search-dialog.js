@@ -8,8 +8,8 @@
 
 const TERM_FIELD = "%TERM%";
 const COUNTRY_FIELD = "%COUNTRY%";
-const GPODDER_URL = "http://gpodder.net/search.json?q="+TERM_FIELD;
-const ITUNES_URL = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsSearch?media=podcast&format=json&country="+COUNTRY_FIELD+"&term="+TERM_FIELD;
+const GPODDER_URL = "https://gpodder.net/search.json?q="+TERM_FIELD;
+const ITUNES_URL = "https://itunes.apple.com/search?country="+COUNTRY_FIELD+"&entity=podcast&term="+TERM_FIELD;
 
 const COUNTRIES = [
     { key:'ae', value:'United Arab Emirates' },

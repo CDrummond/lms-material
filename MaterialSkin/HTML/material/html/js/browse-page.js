@@ -642,22 +642,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItems = true;
-            axios.get(url).then(({data}) => {
-                this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
+            lmsCommand("", ["material-skin", "geturl", "url:"+url]).then(({data}) => {
                 this.fetchingItems = false;
+                this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
             }).catch(err => {
-                if (!axios.isCancel(err)) {
-                    axios.get('https://cors-anywhere.herokuapp.com/'+url).then(({data}) => {
-                        this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
-                        this.fetchingItems = false;
-                    }).catch(err2 => {
-                        this.fetchingItems = false;
-                        if (!axios.isCancel(err2)) {
-                            this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
-                            logError(err);
-                        }
-                    });
-                }
+                this.fetchingItems = false;
+                this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
+                logError(err);
             });
         },
         handleListResponse(item, command, resp) {

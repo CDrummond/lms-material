@@ -762,19 +762,22 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 function parseBrowseUrlResp(data, provider) {
     var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
 
+    if (!data || !data.result || !data.result.content || data.result.content.length<3) {
+        return resp;
+    }
     if ('itunes'==provider) {
-        if (data && data.results) {
-            for (var i=0, loop=data.results, loopLen=loop.length; i<loopLen; ++i) {
+        let body = JSON.parse(data.result.content);
+        if (body.results) {
+            for (var i=0, loop=body.results, loopLen=loop.length; i<loopLen; ++i) {
                 resp.items.push({title: loop[i].trackName, id: loop[i].feedUrl, image: loop[i].artworkUrl100, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
             }
         }
         resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
     } else if ('gpodder'==provider) {
-        if (data) {
-            for (var i=0, loopLen=data.length; i<loopLen; ++i) {
-                if (!data[i].url.startsWith("http://www.striglsmusicnews.com")) {
-                    resp.items.push({title: data[i].title, id: data[i].url, image: data[i].scaled_logo_url, descr: data[i].description, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
-                }
+        let pods = JSON.parse(data.result.content);
+        for (var i=0, loopLen=pods.length; i<loopLen; ++i) {
+            if (!pods[i].url.startsWith("http://www.striglsmusicnews.com")) { // ???
+                resp.items.push({title: pods[i].title, id: pods[i].url, image: pods[i].scaled_logo_url, descr: pods[i].description, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
             }
         }
         resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
@@ -782,7 +785,7 @@ function parseBrowseUrlResp(data, provider) {
         let totalDuration = 0;
         try {
             let domParser = new DOMParser();
-            let doc = domParser.parseFromString(data, 'text/xml');
+            let doc = domParser.parseFromString(data.result.content, 'text/xml');
             let items = doc.querySelectorAll('item');
             let audioFormats = new Set(["mp3", "m4a", "ogg", "wma"]);
             for (var i=0, len=items.length; i<len; ++i) {

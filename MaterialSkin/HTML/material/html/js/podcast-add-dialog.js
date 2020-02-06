@@ -72,15 +72,14 @@ Vue.component('lms-podcast-add-dialog', {
             if (url.length>4) {
                 this.error = undefined;
                 this.cancelErrorTimer();
-                axios.get(url).then(({data}) => {
-                    this.parseResp(data);
+                lmsCommand("", ["material-skin", "geturl", "url:"+url]).then(({data}) => {
+                    if (data.result.content) {
+                        this.parseResp(data.result.content);
+                    } else {
+                        this.showError(i18n("Invalid URL"));
+                    }
                 }).catch(err => {
-                    // CORS error?
-                    axios.get('https://cors-anywhere.herokuapp.com/'+url).then(({data}) => {
-                        this.parseResp(data);
-                    }).catch(err2 => {
-                        this.showError(err2);
-                    });
+                    this.showError(i18n("Invalid URL"));
                 });
             } else {
                 this.showError(i18n("Invalid URL"));

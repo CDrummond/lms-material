@@ -7,7 +7,6 @@
 'use strict';
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
-const SERVICES = ["spotify", "qobuz", "tidal", "deezer"];
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
@@ -499,16 +498,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }
-                var service = undefined;
-
-                if (undefined!=i.extid) {
-                    for (let i=0, len=SERVICES.length; i<len; ++i) {
-                        if (i.extid.indexOf(SERVICES[i]+':')>=0) {
-                            service = SERVICES[i];
-                            break;
-                        }
-                    }
-                }
 
                 var album = {
                               id: "album_id:"+i.id,
@@ -522,7 +511,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               type: "group",
                               origTitle: i.album,
                               textkey: key,
-                              service: service
+                              emblem: getEmblem(i.extid)
                           };
                 resp.items.push(album);
             }

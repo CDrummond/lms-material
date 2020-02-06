@@ -1,0 +1,23 @@
+[
+  {
+    "name":"spotify",
+    "bgnd":"#1ad05c",
+    "extid":"spotify:"
+  },
+  {
+    "name":"qobuz",
+    "bgnd":"#1976d2",
+    "extid":"qobuz:"
+  },
+  {
+    "name":"tidal",
+    "bgnd":"black",
+    "extid":"tidal:"
+  },
+  {
+    "name":"deezer",
+    "bgnd":"#ff9800",
+    "extid":"deezer:"
+  },
+]
+

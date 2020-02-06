@@ -106,8 +106,8 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>more_vert</v-icon>
       </v-btn>
      </div>
-     <div class="emblem" v-bind:class="items[idx].service" v-if="idx<items.length && items[idx].service">
-      <img :src="items[idx].service | svgIcon(darkUi)"></img>
+     <div class="emblem" v-if="idx<items.length && items[idx].emblem" :style="{background: items[idx].emblem.bgnd}">
+      <img :src="items[idx].emblem.name | svgIcon(darkUi)"></img>
      </div>
     </v-card></td>
    </table>
@@ -149,8 +149,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <div class="emblem" v-bind:class="item.service" v-if="item.service">
-     <img :src="item.service | svgIcon(darkUi)"></img>
+    <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+     <img :src="item.emblem.name | svgIcon(darkUi)"></img>
     </div>
    </v-list-tile>
   </RecycleScroller>
@@ -210,8 +210,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
-    <div class="emblem" v-bind:class="item.service" v-if="item.service">
-     <img :src="item.service | svgIcon(darkUi)"></img>
+    <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+     <img :src="item.emblem.name | svgIcon(darkUi)"></img>
     </div>
    </v-list-tile>
   </template>

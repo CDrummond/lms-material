@@ -465,16 +465,20 @@ a {
  height:18px !important;
 }
 
-.qobuz {
- background:#1976d2;
-}
-
 .spotify {
  background:#1ad05c;
 }
 
+.qobuz {
+ background:#1976d2;
+}
+
 .tidal {
  background:black;
+}
+
+.deezer {
+ background:#ff9800;
 }
 
 .full-width {

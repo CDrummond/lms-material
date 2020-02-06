@@ -271,7 +271,7 @@ Vue.component('lms-toolbar', {
         if (this.desktop) {
             bus.$on('playerChanged', function() {
                 // Ensure we update volume when player changes.
-                this.playerVolume.id = undefined;
+                this.playerVolume = undefined;
             }.bind(this));
         }
 

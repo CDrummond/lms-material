@@ -229,6 +229,8 @@ Vue.component('lms-podcast-search-dialog', {
             if (str.length>1) {
                 var url = (this.provider=='itunes' ? ITUNES_URL : GPODDER_URL).replace(COUNTRY_FIELD, this.country).replace(TERM_FIELD, encodeURIComponent(this.term));
                 bus.$emit('searchPodcasts', url, str, this.provider);
+                setLocalStorageVal('podcasts-provider', this.provider);
+                setLocalStorageVal('podcasts-country', this.country);
                 this.show=false;
             }
         },

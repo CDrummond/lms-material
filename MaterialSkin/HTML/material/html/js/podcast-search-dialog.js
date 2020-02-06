@@ -19,7 +19,7 @@ Vue.component('lms-podcast-search-dialog', {
     <v-list-tile>
      <v-text-field :label="i18n('Term')" clearable v-model="term" class="lms-search" @keyup.enter="search()" ref="entry"></v-text-field>
     </v-list-tile>
-    <v-list-tile>
+    <v-list-tile v-if="providers.length>1">
      <v-select :items="providers" :label="i18n('Provider')" v-model="provider" item-text="name" item-value="key"></v-select>
     </v-list-tile>
     <v-list-tile v-if="provider && hasCountry.has(provider)">
@@ -76,10 +76,32 @@ Vue.component('lms-podcast-search-dialog', {
     },
     methods: {
         init() {
-            this.provider = getLocalStorageVal('podcasts-provider', 'itunes');
-            this.country = getLocalStorageVal('podcasts-country', 'us');
-            this.show=true;
-            focusEntry(this);
+            if (this.providers && this.providers.length>0) {
+                this.provider = this.providers[0].key;
+                if (this.providers.length>1) {
+                    let provider = getLocalStorageVal('podcasts-provider', this.providers[0].key);
+                    for (let i=0, len=this.providers.length; i<len; ++i) {
+                        if (provider == this.providers[i].key) {
+                            this.provider=this.providers[i].key;
+                            break;
+                        }
+                    }
+                }
+
+                this.country = 'us';
+                if (this.countries && this.countries.length>0) {
+                    let country = getLocalStorageVal('podcasts-country', this.country);
+                    for (let i=0, len=this.countries.length; i<len; ++i) {
+                        if (country == this.countries[i].key) {
+                            this.country=this.countries[i].key;
+                            break;
+                        }
+                    }
+                }
+
+                this.show=true;
+                focusEntry(this);
+            }
         },
         cancel() {
             this.show=false;

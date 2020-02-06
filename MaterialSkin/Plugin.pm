@@ -112,20 +112,14 @@ sub pluginVersion {
 }
 
 sub initCLI {
-    #                                                            |requires Client
-    #                                                            |  |is a Query
-    #                                                            |  |  |has Tags
-    #                                                            |  |  |  |Function to call
-    #                                                            C  Q  T  F
-    Slim::Control::Request::addDispatch(['material-skin', '_cmd'],
-                                                                [0, 0, 1, \&_cliCommand]
-    );
-    Slim::Control::Request::addDispatch(['material-skin-client', '_cmd'],
-                                                                [1, 0, 1, \&_cliClientCommand]
-    );
-    Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],
-                                                                [1, 0, 1, \&_cliGroupCommand]
-    );
+    #                                                                      |requires Client
+    #                                                                      |  |is a Query
+    #                                                                      |  |  |has Tags
+    #                                                                      |  |  |  |Function to call
+    #                                                                      C  Q  T  F
+    Slim::Control::Request::addDispatch(['material-skin', '_cmd'],        [0, 0, 1, \&_cliCommand]);
+    Slim::Control::Request::addDispatch(['material-skin-client', '_cmd'], [1, 0, 1, \&_cliClientCommand]);
+    Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
 }
 
 sub _cliCommand {
@@ -139,7 +133,9 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes', 'actions', 'geturl']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
+                                                  'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
+                                                  'actions', 'geturl']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -192,13 +188,15 @@ sub _cliCommand {
                                 .'[ {"label":"' . cstring('', 'INFORMATION_VERSION') . '", "text":"' . $::VERSION . ' - ' . $::REVISION . ' @ ' . $::BUILDDATE . '"},'
                                 .  '{"label":"' . cstring('', 'INFORMATION_HOSTNAME') . '", "text":"' . Slim::Utils::Network::hostName() . '"},'
                                 .  '{"label":"' . cstring('', 'INFORMATION_SERVER_IP') . '", "text":"' . Slim::Utils::Network::serverAddr() . '"},'
-                                .  '{"label":"' . cstring('', 'INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverPrefs->get('language') . ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
+                                .  '{"label":"' . cstring('', 'INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverPrefs->get('language') .
+                                      ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
                                 .  '{"label":"' . cstring('', 'INFORMATION_ARCHITECTURE') . '", "text":"' . ($osDetails->{'osArch'} ? $osDetails->{'osArch'} : '?') . '"},'
                                 .  '{"label":"' . cstring('', 'PERL_VERSION') . '", "text":"' . $Config{'version'} . ' - ' . $Config{'archname'} . '"},'
                                 .  '{"label":"Audio::Scan", "text":"' . $Audio::Scan::VERSION . '"},'
                                 .  '{"label":"IO::Socket::SSL", "text":"' . (Slim::Networking::Async::HTTP->hasSSL() ? $IO::Socket::SSL::VERSION : cstring($client, 'BLANK')) . '"}'
 
-                                . ( Slim::Schema::hasLibrary() ? ', {"label":"' . cstring('', 'DATABASE_VERSION') . '", "text":"' . Slim::Utils::OSDetect->getOS->sqlHelperClass->sqlVersionLong( Slim::Schema->dbh ) . '"}' : '')
+                                . ( Slim::Schema::hasLibrary() ? ', {"label":"' . cstring('', 'DATABASE_VERSION') . '", "text":"' .
+                                      Slim::Utils::OSDetect->getOS->sqlHelperClass->sqlVersionLong( Slim::Schema->dbh ) . '"}' : '')
 
                                 .']}');
         $request->setStatusDone();
@@ -458,9 +456,11 @@ sub _cliCommand {
                     } else {
                         push @command, "album:" . $album;
                         if ($artist_id) {
-                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist_id:" . $artist_id], params => [] });
+                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist_id:" . $artist_id],
+                                                                                  params => [] });
                         } else {
-                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist:" . $artist], params => [] });
+                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist:" . $artist],
+                                                                                  params => [] });
                         }
                     }
                     $request->addResultLoop("actions_loop", $cnt, "weight", 0);

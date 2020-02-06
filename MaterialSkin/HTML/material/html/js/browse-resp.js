@@ -765,103 +765,115 @@ function parseBrowseUrlResp(data, provider) {
     if (!data || !data.result || !data.result.content || data.result.content.length<3) {
         return resp;
     }
-    if ('itunes'==provider) {
-        let body = JSON.parse(data.result.content);
-        if (body.results) {
-            for (var i=0, loop=body.results, loopLen=loop.length; i<loopLen; ++i) {
-                resp.items.push({title: loop[i].trackName, id: loop[i].feedUrl, image: loop[i].artworkUrl100, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
-            }
-        }
-        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
-    } else if ('gpodder'==provider) {
-        let pods = JSON.parse(data.result.content);
-        for (var i=0, loopLen=pods.length; i<loopLen; ++i) {
-            if (!pods[i].url.startsWith("http://www.striglsmusicnews.com")) { // ???
-                resp.items.push({title: pods[i].title, id: pods[i].url, image: pods[i].scaled_logo_url, descr: pods[i].description, menu:[ADD_PODCAST_ACTION, MORE_ACTION], isPodcast:true});
-            }
-        }
-        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
-    } else if ('rss'==provider) {
-        let totalDuration = 0;
-        try {
-            let domParser = new DOMParser();
-            let doc = domParser.parseFromString(data.result.content, 'text/xml');
-            let items = doc.querySelectorAll('item');
-            let audioFormats = new Set(["mp3", "m4a", "ogg", "wma"]);
-            for (var i=0, len=items.length; i<len; ++i) {
-                try {
-                    let enclosure = items[i].querySelector('enclosure');
-                    if (undefined==enclosure) {
-                        continue;
-                    }
-                    let type = enclosure.getAttribute('type');
-                    if (undefined!=type) {
-                        type = type.toLowerCase();
-                        if (!type.startsWith("audio/") && !audioFormats.contains(type)) {
+
+    if (typeof provider === 'string' || provider instanceof String) {
+        if ('rss'==provider) {
+            let totalDuration = 0;
+            try {
+                let domParser = new DOMParser();
+                let doc = domParser.parseFromString(data.result.content, 'text/xml');
+                let items = doc.querySelectorAll('item');
+                let audioFormats = new Set(["mp3", "m4a", "ogg", "wma"]);
+                for (var i=0, len=items.length; i<len; ++i) {
+                    try {
+                        let enclosure = items[i].querySelector('enclosure');
+                        if (undefined==enclosure) {
                             continue;
                         }
-                    }
-                    let title = items[i].querySelector('title').textContent;
-                    let url = enclosure.getAttribute('url');
-                    /*let url = items[i].querySelector('link').textContent;*/
-                    let pubDate = items[i].querySelector('pubDate');
-                    let itunesImage = items[i].querySelector('image');
-                    let itunesDuration = items[i].querySelector('duration');
-                    let imageUrl = undefined;
-                    let duration = 0;
-                    let subtitle = undefined;
-                    if (undefined!=itunesImage) {
-                        imageUrl = itunesImage.getAttribute('href');
-                    }
-                    if (undefined!=itunesDuration) {
-                        if (itunesDuration.textContent.indexOf(':')>0) {
-                            let parts = itunesDuration.textContent.split(':');
-                            if (2==parts.length) {
-                                duration=(parseInt(parts[0]) * 60) + parseInt(parts[1]);
-                            } else if (3==parts.length) {
-                                duration=(parseInt(parts[0]) * 60*60) + (parseInt(parts[1]) * 60) + parseInt(parts[2]);
-                            }
-                        } else {
-                            duration = parseInt(itunesDuration.textContent);
-                        }
-                        totalDuration+=duration;
-                    }
-                    if (0==duration) {
-                        let content = items[i].querySelector('content');
-                        if (undefined!=content) {
-                            let dur = content.getAttribute('duration');
-                            if (undefined!=dur) {
-                                duration = parseInt(dur);
+                        let type = enclosure.getAttribute('type');
+                        if (undefined!=type) {
+                            type = type.toLowerCase();
+                            if (!type.startsWith("audio/") && !audioFormats.contains(type)) {
+                                continue;
                             }
                         }
-                    }
-                    if (undefined!=pubDate) {
-                        subtitle = pubDate.textContent;
-                        if (duration>0) {
-                            subtitle+=" ("+formatSeconds(duration)+")";
+                        let title = items[i].querySelector('title').textContent;
+                        let url = enclosure.getAttribute('url');
+                        /*let url = items[i].querySelector('link').textContent;*/
+                        let pubDate = items[i].querySelector('pubDate');
+                        let itunesImage = items[i].querySelector('image');
+                        let itunesDuration = items[i].querySelector('duration');
+                        let imageUrl = undefined;
+                        let duration = 0;
+                        let subtitle = undefined;
+                        if (undefined!=itunesImage) {
+                            imageUrl = itunesImage.getAttribute('href');
                         }
-                    } else if (duration>0) {
-                        subtitle=formatSeconds(duration);
+                        if (undefined!=itunesDuration) {
+                            if (itunesDuration.textContent.indexOf(':')>0) {
+                                let parts = itunesDuration.textContent.split(':');
+                                if (2==parts.length) {
+                                    duration=(parseInt(parts[0]) * 60) + parseInt(parts[1]);
+                                } else if (3==parts.length) {
+                                    duration=(parseInt(parts[0]) * 60*60) + (parseInt(parts[1]) * 60) + parseInt(parts[2]);
+                                }
+                            } else {
+                                duration = parseInt(itunesDuration.textContent);
+                            }
+                            totalDuration+=duration;
+                        }
+                        if (0==duration) {
+                            let content = items[i].querySelector('content');
+                            if (undefined!=content) {
+                                let dur = content.getAttribute('duration');
+                                if (undefined!=dur) {
+                                    duration = parseInt(dur);
+                                }
+                            }
+                        }
+                        if (undefined!=pubDate) {
+                            subtitle = pubDate.textContent;
+                            if (duration>0) {
+                                subtitle+=" ("+formatSeconds(duration)+")";
+                            }
+                        } else if (duration>0) {
+                            subtitle=formatSeconds(duration);
+                        }
+                        resp.items.push({title:title,
+                                         subtitle:subtitle,
+                                         id:url,
+                                         menu:[PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                         image:imageUrl ? resolveImageUrl(imageUrl, LMS_IMAGE_SIZE) : undefined,
+                                         isUrl:true,
+                                         type: "track"});
+                    } catch (e) {
+                        console.error(e);
                     }
-                    resp.items.push({title:title,
-                                     subtitle:subtitle,
-                                     id:url,
-                                     menu:[PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
-                                     image:imageUrl ? resolveImageUrl(imageUrl, LMS_IMAGE_SIZE) : undefined,
-                                     isUrl:true,
-                                     type: "track"});
-                } catch (e) {
-                    console.error(e);
+                }
+            } catch (e) {
+                console.error('Error in parsing the feed', e)
+            }
+            resp.subtitle = i18np("1 Episode", "%1 Episodes", resp.items.length);
+            if (totalDuration>0) {
+                resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
+            }
+        }
+    } else {
+        let body = JSON.parse(data.result.content);
+        let loop = undefined == provider.resp.key ? body : body[provider.resp.key];
+
+        for (var i=0, loopLen=loop.length; i<loopLen; ++i) {
+            let imageUrl = undefined;
+            if (undefined!=provider.resp.mapping.image) {
+                for (let j=0, len=provider.resp.mapping.image.length && undefined==imageUrl; j<len; ++j) {
+                    if (undefined!=loop[i][provider.resp.mapping.image[j]]) {
+                        imageUrl = loop[i][provider.resp.mapping.image[j]];
+                    }
                 }
             }
-        } catch (e) {
-            console.error('Error in parsing the feed', e)
+            let pod = { title:loop[i][provider.resp.mapping.title],
+                        id:loop[i][provider.resp.mapping.url],
+                        image:imageUrl ? resolveImageUrl(imageUrl, LMS_IMAGE_SIZE) : undefined,
+                        descr:undefined==provider.resp.mapping.descr ? undefined : loop[i][provider.resp.mapping.descr],
+                        menu:[ADD_PODCAST_ACTION, MORE_ACTION],
+                        isPodcast:true
+                      };
+console.log(pod.title, pod.id);
+            if (undefined!=pod.title && undefined!=pod.id && !pod.id.startsWith("http://www.striglsmusicnews.com")/*??*/) {
+                resp.items.push(pod);
+            }
         }
-        resp.subtitle = i18np("1 Episode", "%1 Episodes", resp.items.length);
-        if (totalDuration>0) {
-            resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
-        }
+        resp.subtitle=i18np("1 Podcast", "%1 Podcasts", resp.items.length);
     }
-
     return resp;
 }

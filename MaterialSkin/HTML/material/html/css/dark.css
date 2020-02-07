@@ -6,111 +6,37 @@
  */
 
 :root {
- scrollbar-color:#777 #3d3d3d;
- --active-color:#82b1ff;
-}
-
-::-webkit-scrollbar {
- background:#3d3d3d;
-}
-
-::-webkit-scrollbar-thumb {
- background:#777;
-}
-
-::-webkit-scrollbar-corner {
- background:#333;
-}
-
-html, .mini-player {
- background-color:#212121 !important;
-}
-
-.browse-html a, .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
-.primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active {
- color:var(--active-color) !important;
-}
-
-/* Scheduled alarms / Alarm settings */
-div.v-subheader {
- color:white!important;
-}
-
-/* Clickable artist/album in queue */
-.v-list__tile__sub-title, .v-list__tile__sub-title a {
- color: hsla(0,0%,100%,var(--sub-opacity)) !important;
-}
-
-.vue-splitter .splitter {
- background-color:#333 !important;
-}
-
-.np-bar {
- background-color:#212121;
+ --primary-color:#1976d2;
+ --accent-color:#82b1ff;
+ --active-color:var(--accent-color);
+ --scrollbar-thumb-color:#5f5f5f;
+ --scrollbar-track-color:#3f3f3f;
+ --scrollbar-corner-color:#333;
+ --background-color:#424242;
+ --background-shadow-color:rgba(72, 72, 72, 0.9);
+ --dialog-toolbar-color:#1976d2;
+ --bottom-toolbar-color:#212121;
+ --top-toolbar-color:#212121;
+ --sub-toolbar-color:#3f3f3f;
+ --bottom-toolbar-border-color:#212121;
+ --top-toolbar-border-color:#212121;
+ --sub-toolbar-border-color:#333;
+ --dialog-toolbar-border-color:#1976d2;
+ --splitter-color:#333;
+ --pq-current-color:rgba(255, 255, 255, 0.15);
+ --icon-color:white;
+ --dlg-icon-color:white;
+ --list-item-border-color:#5c5c5c;
+ --subheader-color:white;
+ --text-shadow-color:black;
+ --rating-color:#e0e0e0;
+ --text-color:white;
+ --dialog-toolbar-text-color:white;
+ --top-toolbar-text-color:white;
+ --sub-toolbar-text-color:white;
+ --bottom-toolbar-text-color:white;
 }
 
 .np-info-cover {
- background-color:#000;
-}
-
-.np-info-card-cover, .np-info .theme--dark.v-tabs__bar {
- background:rgba(72, 72, 72, 0.9) !important;
-}
-
-.subtoolbar {
- background-color:#424242 !important;
- border-bottom:1px solid #333;
-}
-
-.lms-bottom-nav {
- background-color:#212121 !important;
-}
-
-div.v-rating i.primary--text, div.v-rating i.accent--text {
- color:#e0e0e0 !important;
-}
-
-.vue-recycle-scroller__item-view, .lms-list-item {
- border-bottom: 1px solid #5c5c5c;
-}
-
-.pmgr-grp-title {
- border-top: 1px solid #5c5c5c;
-}
-
-.np-rating-shadow {
- text-shadow: 2px 2px 5px #222;
-}
-
-.lms-jumplist {
- background-color:#424242;
-}
-
-#app .v-icon {
- color: #fff;
-}
-
-#letterOverlay, #volumeOverlay {
- text-shadow: 0px 0px 8px #000;
-}
-
-.active-nav div span, .active-nav div i, .active-btn {
- color: var(--active-color) !important;
-}
-
-.inactive-nav div span, .inactive-nav div i {
- color: #c7c7c7 !important;
-}
-
-.v-tabs__slider-wrapper .accent {
- background-color: var(--active-color) !important;
- border-color: var(--active-color) !important;
-}
-
-.pq-current {
- background-color:rgba(255, 255, 255, 0.15);
-}
-
-.embedded-page {
- background-color:#424242;
+ background-color:black;
 }

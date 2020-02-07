@@ -11,7 +11,7 @@ Vue.component('lms-information-dialog', {
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar color="primary" dark app class="lms-toolbar">
+   <v-toolbar app class="dialog-toolbar">
     <v-btn flat icon @click.native="close()" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')}}</div>

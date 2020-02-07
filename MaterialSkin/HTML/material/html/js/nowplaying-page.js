@@ -31,7 +31,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile>
   </v-list>
  </v-menu>
-<div v-if="desktop && !largeView && !nowplaying" class="np-bar noselect" id="np-bar">
+<div v-if="desktop && !largeView && !nowplaying" class="np-bar noselect" v-bind:class="{'np-bar-mini':mini}" id="np-bar">
  <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
    <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>

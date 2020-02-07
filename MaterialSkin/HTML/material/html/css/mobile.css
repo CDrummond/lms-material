@@ -11,24 +11,9 @@
  --bottom-nav-height:52px;
 }
 
-.lms-toolbar {
- height:var(--main-toolbar-height) !important;
-}
-
-.lms-toolbar > .v-toolbar__content {
- height:var(--main-toolbar-height) !important;
- margin-left:-7px !important;
- margin-right:-8px !important;
-}
-
 .maintoolbar-subtitle {
  margin-top:calc(14px - var(--small-font-size));
  font-size:var(--small-font-size);
-}
-
-.settings-title {
- height:var(--main-toolbar-height) !important;
- max-height:var(--main-toolbar-height) !important;
 }
 
 .subtoolbar {
@@ -51,11 +36,12 @@
  padding:0px !important;
  margin:0px !important;
  height:var(--bottom-nav-height) !important;
- box-shadow: 0px -2px 4px 1px rgba(0,0,0,.1), 0 4px 5px 0 rgba(0,0,0,.07), 0 1px 10px 0 rgba(0,0,0,.06);
+ box-shadow:none;
 }
 
 .lms-footer .lms-bottom-nav {
-  height:var(--bottom-nav-height) !important;
+ height:var(--bottom-nav-height) !important;
+ box-shadow:none;
 }
 
 .lms-bottom-nav {
@@ -283,8 +269,16 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-.inactive-nav img {
+.inactive-nav {
  opacity:0.75;
+}
+
+.inactive-nav div span, .inactive-nav div i {
+ color:var(--bottom-toolbar-text-color) !important;
+}
+
+.active-nav div span, .active-nav div i, .active-btn {
+ color: var(--active-color) !important;
 }
 
 .nav-svg-img {

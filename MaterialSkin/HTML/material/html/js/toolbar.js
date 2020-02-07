@@ -16,7 +16,7 @@ var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 Vue.component('lms-toolbar', {
     template: `
 <div>
-<v-toolbar fixed dense app class="lms-toolbar noselect">
+<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-mini':mini}">
  <v-icon v-if="noPlayer" color="orange darken-2" class="toolbar-button">warning</v-icon>
  <div v-if="noPlayer && otherPlayers.length<1" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
  <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">

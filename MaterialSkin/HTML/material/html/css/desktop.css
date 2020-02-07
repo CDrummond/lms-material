@@ -16,23 +16,8 @@ body {
  min-height:400px;
 }
 
-.lms-toolbar {
- height:var(--main-toolbar-height) !important;
-}
-
-.lms-toolbar > .v-toolbar__content {
- height:var(--main-toolbar-height) !important;
- margin-left:-7px !important;
- margin-right:-8px !important;
-}
-
 .lms-desktop-toolbar-pad {
  height:var(--main-toolbar-height) !important;
-}
-
-.settings-title {
- height:var(--main-toolbar-height) !important;
- max-height:var(--main-toolbar-height) !important;
 }
 
 .list-details {
@@ -81,14 +66,22 @@ body {
  left:calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
 }
 
+.vue-splitter .splitter {
+ background-color:var(--splitter-color) !important;
+}
+
 .np-bar {
  padding:0px 16px 0px 16px; /* t, r, b, l */
  position:fixed;
  bottom:0;
  width:100%;
  height:var(--bottom-toolbar-height) !important;
- box-shadow:0px -2px 4px 1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
  min-width:600px;
+}
+
+.np-bar .v-list__tile__content, .np-bar .v-list__tile__content .v-list__tile__sub-title,
+.np-bar .np-tech-desktop, .np-bar .np-time-desktop, .np-bar div i {
+ color:var(--bottom-toolbar-text-color) !important;
 }
 
 .np-page {

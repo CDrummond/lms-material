@@ -347,19 +347,7 @@ function setBgndCover(elem, coverUrl, isDark) {
         } else {
             elem.style.backgroundImage = "url('"+coverUrl+"')";
         }
-        if (isDark) {
-            //if (coverUrl) {
-                elem.style.boxShadow = "inset 0 0 120vw 120vh rgba(72,72,72,0.9)";
-           // } else {
-           //     elem.style.boxShadow = "";
-           // }
-        } else {
-            //if (coverUrl) {
-                elem.style.boxShadow = "inset 0 0 120vw 120vh rgba(255,255,255,0.9)";
-            //} else {
-            //    elem.style.boxShadow = "";
-           // }
-        }
+        elem.style.boxShadow = "inset 0 0 120vw 120vh var(--background-shadow-color)";
     }
 }
 

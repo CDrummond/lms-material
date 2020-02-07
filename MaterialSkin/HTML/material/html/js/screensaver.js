@@ -14,12 +14,10 @@ function resetScreensaver(ev) {
 Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
- <v-card class="screesaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
-
-   <p class="screesaver-time ellipsis">{{time}}</p>
-   <p class="screesaver-date ellipsis">{{date}}</p>
-   <p class="screesaver-name ellipsis">{{playerName}}</p>
-
+ <v-card class="screensaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
+  <p class="screesaver-time ellipsis">{{time}}</p>
+  <p class="screesaver-date ellipsis">{{date}}</p>
+  <p class="screesaver-name ellipsis">{{playerName}}</p>
  </v-card>
 </v-dialog>
 `,

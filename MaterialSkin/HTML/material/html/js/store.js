@@ -423,7 +423,8 @@ const store = new Vuex.Store({
                 if (data && data.result && data.result._p2) {
                     try {
                         var prefs = JSON.parse(data.result._p2);
-                        var opts = { largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
+                        var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
+                                     largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
@@ -447,11 +448,6 @@ const store = new Vuex.Store({
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver) };
-                        if (undefined==prefs.theme) {
-                            opts.theme = getLocalStorageBool('darkUi', undefined==prefs.darkUi ? true : prefs.darkUi) ? 'dark' : 'light';
-                        } else {
-                            opts.theme = prefs.theme;
-                        }
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

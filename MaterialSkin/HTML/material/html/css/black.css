@@ -41,6 +41,12 @@
  background-color:black;
 }
 
-.v-menu__content, .vol-sheet {
+.v-menu__content {
  border:1px solid var(--dialog-toolbar-border-color);
+}
+
+.v-menu__content, .vol-sheet {
+ border-left:1px solid var(--dialog-toolbar-border-color);
+ border-right:1px solid var(--dialog-toolbar-border-color);
+ border-bottom:1px solid var(--dialog-toolbar-border-color);
 }

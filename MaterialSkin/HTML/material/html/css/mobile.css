@@ -223,10 +223,15 @@
 
 .vol-text {
  font-size:var(--small-font-size);
+ color:var(--text-color);
 }
 
 .vol-btn {
  margin-top:-8px;
+}
+
+.vol-sheet .vol-btn div i {
+ color:var(--text-color) !important;
 }
 
 .vol-sheet .vol-slider {
@@ -242,6 +247,11 @@
  width:100vw;
  max-width:450px;
  z-index:2;
+ background-color:var(--background-color) !important;
+}
+
+.vol-sheet .v-btn__content {
+ color:var(--text-color);
 }
 
 @media only screen and (max-width:500px) {

@@ -41,6 +41,6 @@
  background-color:black;
 }
 
-.v-menu__content {
+.v-menu__content, .vol-sheet {
  border:1px solid var(--dialog-toolbar-border-color);
 }

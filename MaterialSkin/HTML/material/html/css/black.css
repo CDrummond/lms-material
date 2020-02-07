@@ -44,7 +44,3 @@
 .v-menu__content {
  border:1px solid var(--dialog-toolbar-border-color);
 }
-
-.v-progress-linear__background {
- background-color:red!important;
-}

@@ -339,9 +339,9 @@ function fixId(id, prefix) {
     return id;
 }
 
-function setBgndCover(elem, coverUrl, isDark) {
+function setBgndCover(elem, coverUrl) {
     if (elem) {
-        elem.style.backgroundColor = isDark ? "#424242" : "#fff";
+        elem.style.backgroundColor = "var(--background-color)";
         if (undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")) {
             elem.style.backgroundImage = "url()";
         } else {

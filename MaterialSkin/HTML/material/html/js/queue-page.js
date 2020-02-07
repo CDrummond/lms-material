@@ -959,7 +959,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.dragIndex = undefined;
         },
         setBgndCover() {
-            setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined, this.$store.state.darkUi);
+            setBgndCover(this.scrollElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined);
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length) {
                 var resizedUrl = changeImageSizing(this.coverUrl, LMS_IMAGE_SIZE);

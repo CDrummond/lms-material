@@ -964,7 +964,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         setBgndCover() {
             if (this.page && (!this.desktop || this.largeView)) {
-                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined, this.$store.state.darkUi);
+                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
             }
         },
         playPauseButton(showSleepMenu) {

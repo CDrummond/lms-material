@@ -79,8 +79,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile-action>
   </v-list-tile>
  </v-list>
- <v-progress-linear height="5" background-color="white" background-opacity="0.15" id="pos-slider" v-if="darkUi && playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
- <v-progress-linear height="5" background-color="black" background-opacity="0.15" id="pos-slider" v-else-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+ <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
 
  <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -170,7 +169,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
        <v-layout class="np-time-layout">
         <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-        <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+        <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
         <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
         <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
        </v-layout>
@@ -236,7 +235,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
     <v-layout>
      <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-     <v-progress-linear height="5" background-color="black" background-opacity="0.15" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+     <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
      <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
      <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
     </v-layout>

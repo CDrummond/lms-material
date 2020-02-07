@@ -25,11 +25,7 @@ Vue.component('lms-ui-settings', {
     <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
 
     <v-list-tile>
-     <v-list-tile-content @click="darkUi = !darkUi" class="switch-label">
-      <v-list-tile-title>{{i18n('Use dark theme')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Light text on a dark background.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="darkUi"></v-switch></v-list-tile-action>
+     <v-select :items="themes" :label="i18n('Theme')" v-model="theme" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -318,7 +314,8 @@ Vue.component('lms-ui-settings', {
     data() {
         return {
             show: false,
-            darkUi: true,
+            theme: 'dark',
+            themes: [ ],
             largeFonts: false,
             letterOverlay:false,
             showMenuAudio:true,
@@ -414,7 +411,7 @@ Vue.component('lms-ui-settings', {
     },
     methods: {
         readStore() {
-            this.darkUi = this.$store.state.darkUi;
+            this.theme = this.$store.state.theme;
             this.largeFonts = this.$store.state.largeFonts;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
@@ -454,6 +451,11 @@ Vue.component('lms-ui-settings', {
             }
         },
         initItems() {
+            this.themes=[
+                { key:'light', label:i18n('Light')},
+                { key:'dark',  label:i18n('Dark')},
+                { key:'black', label:i18n('Black')}
+                ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
@@ -468,7 +470,7 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
-            this.$store.commit('setUiSettings', { darkUi:this.darkUi,
+            this.$store.commit('setUiSettings', { theme:this.theme,
                                                   largeFonts:this.largeFonts,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
@@ -514,7 +516,7 @@ Vue.component('lms-ui-settings', {
                                 (this.allowLayoutAdjust ? i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.") : "")+"</p>",
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
-                    var settings = { darkUi:this.darkUi,
+                    var settings = { theme:this.theme,
                                      largeFonts:this.largeFonts,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,

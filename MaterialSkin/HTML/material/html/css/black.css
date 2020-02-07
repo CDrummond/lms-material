@@ -1,0 +1,50 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+:root {
+ --primary-color:#1976d2;
+ --accent-color:#82b1ff;
+ --active-color:var(--accent-color);
+ --scrollbar-thumb-color:#5f5f5f;
+ --scrollbar-track-color:#3f3f3f;
+ --scrollbar-corner-color:#333;
+ --background-color:black;
+ --background-shadow-color:rgba(16, 16, 16, 0.8);
+ --dialog-toolbar-color:#333;
+ --bottom-toolbar-color:black;
+ --top-toolbar-color:black;
+ --sub-toolbar-color:black;
+ --bottom-toolbar-border-color:#333;
+ --top-toolbar-border-color:#333;
+ --sub-toolbar-border-color:#333;
+ --dialog-toolbar-border-color:#333;
+ --splitter-color:#333;
+ --pq-current-color:rgba(255, 255, 255, 0.15);
+ --icon-color:white;
+ --dlg-icon-color:white;
+ --list-item-border-color:#333;
+ --subheader-color:white;
+ --text-shadow-color:black;
+ --rating-color:#e0e0e0;
+ --text-color:white;
+ --dialog-toolbar-text-color:white;
+ --top-toolbar-text-color:white;
+ --sub-toolbar-text-color:white;
+ --bottom-toolbar-text-color:white;
+}
+
+.np-info-cover {
+ background-color:black;
+}
+
+.v-menu__content {
+ border:1px solid var(--dialog-toolbar-border-color);
+}
+
+.v-progress-linear__background {
+ background-color:red!important;
+}

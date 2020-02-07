@@ -18,10 +18,11 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
-    if (undefined!=val.darkUi && state.darkUi!=val.darkUi) {
-        state.darkUi = val.darkUi;
-        setLocalStorageVal('darkUi', state.darkUi);
-        setTheme(state.darkUi);
+    if (undefined!=val.theme && state.theme!=val.theme) {
+        state.darkUi = 'light'!=val.theme;
+        state.theme = val.theme;
+        setLocalStorageVal('theme', state.theme);
+        setTheme(state.theme);
         bus.$emit('themeChanged');
     }
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
@@ -166,6 +167,7 @@ const store = new Vuex.Store({
         player: null, // Current player (from list)
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
+        theme: 'dark',
         darkUi: true,
         largeFonts: false,
         letterOverlay:false,
@@ -355,7 +357,7 @@ const store = new Vuex.Store({
         initUiSettings(state) {
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
-            state.darkUi = getLocalStorageBool('darkUi', state.darkUi);
+            state.theme = getLocalStorageVal('theme', getLocalStorageBool('darkUi', true) ? 'dark' : 'light');
             state.largeFonts = getLocalStorageBool('largeFonts', state.largeFonts);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
@@ -388,7 +390,7 @@ const store = new Vuex.Store({
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             // NOTE: volumeStep is defined in utils.js
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
-            setTheme(state.darkUi);
+            setTheme(state.theme);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -421,8 +423,7 @@ const store = new Vuex.Store({
                 if (data && data.result && data.result._p2) {
                     try {
                         var prefs = JSON.parse(data.result._p2);
-                        var opts = { darkUi: getLocalStorageBool('darkUi', undefined==prefs.darkUi ? state.darkUi : prefs.darkUi),
-                                     largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
+                        var opts = { largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
@@ -446,6 +447,11 @@ const store = new Vuex.Store({
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver) };
+                        if (undefined==prefs.theme) {
+                            opts.theme = getLocalStorageBool('darkUi', undefined==prefs.darkUi ? true : prefs.darkUi) ? 'dark' : 'light';
+                        } else {
+                            opts.theme = prefs.theme;
+                        }
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

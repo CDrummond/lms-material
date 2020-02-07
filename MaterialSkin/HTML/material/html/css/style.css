@@ -628,6 +628,10 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
+.subtoolbar .v-btn__content i.active-btn {
+ color:var(--active-color) !important;
+}
+
 .vol-text {
  width:100%;
  text-align:center;

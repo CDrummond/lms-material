@@ -31,6 +31,13 @@
   src: local('Roboto Bold'), local('Roboto-Bold'), url(Roboto-Bold.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Mono'), local('RobotoMono-Regular'), url(Roboto-Regular.ttf) format('truetype');
+}
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;

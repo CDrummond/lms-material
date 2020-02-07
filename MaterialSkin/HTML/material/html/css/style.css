@@ -927,7 +927,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .np-pos {
  font-size:85%;
  font-weight:var(--std-weight);
- font-family:monospace, monospace;
+ font-family:'Roboto Mono', monospace;
  text-align:left;
  vertical-align:middle !important;
  line-height:15px;
@@ -943,14 +943,13 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .np-tech {
  font-size:85%;
  font-weight:var(--std-weight);
- font-family:monospace, monospace;
  text-align:center;
 }
 
 .np-duration {
  font-size:85%;
  font-weight:var(--std-weight);
- font-family:monospace, monospace;
+ font-family:'Roboto Mono', monospace;
  text-align:right;
  vertical-align:middle !important;
  line-height:15px;

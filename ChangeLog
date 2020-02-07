@@ -16,8 +16,8 @@
     than 150 items.
  9. Make Podcast HTTP requests via Perl side to avoid CORS errors.
 10. Don't hard-code list of podcast providers, read from JSON resource file.
-11. Tweak UI a little; remove shadows, and define a set of colours to allow
-    easier customisation.
+11. Tweak UI a little; remove shadows, define a set of colours to allow easier
+    customisation, use Roboto Mono for monospace font.
 
 1.3.2
 -----

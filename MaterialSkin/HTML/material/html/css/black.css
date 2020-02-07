@@ -14,7 +14,7 @@
  --scrollbar-corner-color:#333;
  --background-color:black;
  --background-shadow-color:rgba(16, 16, 16, 0.8);
- --dialog-toolbar-color:#333;
+ --dialog-toolbar-color:black;
  --bottom-toolbar-color:black;
  --top-toolbar-color:black;
  --sub-toolbar-color:black;
@@ -41,8 +41,12 @@
  background-color:black;
 }
 
-.v-menu__content {
- border:1px solid var(--dialog-toolbar-border-color);
+.v-menu__content, .v-dialog, .v-toast {
+ border:1px solid var(--dialog-toolbar-border-color) !important;
+}
+
+.v-dialog--fullscreen {
+ border:none !important;
 }
 
 .v-menu__content, .vol-sheet {

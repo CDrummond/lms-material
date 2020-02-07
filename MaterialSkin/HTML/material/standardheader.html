@@ -11,8 +11,8 @@
 	<link rel="stylesheet" type="text/css" href="[% webroot %]mobile.css"/>
 [% END %]
 <script>
- var val = window.localStorage.getItem("lms-material::darkUi");
- if ('false'==val) {
-  document.querySelector("link[href='[% webroot %]html/css/classic-skin-mods-dark.css?r=[% revision %]']").href = "[% webroot %]html/css/classic-skin-mods-light.css?r=[% revision %]";
+ var val = window.localStorage.getItem("lms-material::theme");
+ if ('dark'!=val && undefined!=val) {
+  document.querySelector("link[href='[% webroot %]html/css/classic-skin-mods-dark.css?r=[% revision %]']").href = "[% webroot %]html/css/classic-skin-mods-"+val+".css?r=[% revision %]";
  }
 </script>

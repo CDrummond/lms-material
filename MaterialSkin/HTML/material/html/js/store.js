@@ -16,22 +16,27 @@ function copyPlayer(p){
     return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip};
 }
 
-function updateUiSettings(state, val) {
+function updateUiSettings(state, val, isUpdate) {
     var browseDisplayChanged = false;
-    var themeChanted = false;
+    var themeChanged = false;
+    var colorChanged = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
         state.theme = val.theme;
         setLocalStorageVal('theme', state.theme);
-        themeChanted = true;
+        themeChanged = true;
     }
     if (undefined!=val.color && state.color!=val.color) {
         state.color = val.color;
         setLocalStorageVal('color', state.color);
-        themeChanted = true;
+        colorChanged = true;
     }
-    if (themeChanted) {
+    if (themeChanged || colorChanged) {
         setTheme(state.theme, state.color);
-        bus.$emit('themeChanged');
+        if (isUpdate && colorChanged) {
+            location.reload();
+        } else {
+            bus.$emit('themeChanged');
+        }
     }
     state.darkUi = 'light'!=state.theme;
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
@@ -362,7 +367,7 @@ const store = new Vuex.Store({
             state.otherPlayers = players;
         },
         setUiSettings(state, val) {
-            updateUiSettings(state, val);
+            updateUiSettings(state, val, true);
         },
         initUiSettings(state) {
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
@@ -466,7 +471,7 @@ const store = new Vuex.Store({
                         if (undefined!=prefs.disabledBrowseModes && undefined==getLocalStorageVal('disabledBrowseModes', undefined)) {
                             opts.disabledBrowseModes=new Set(prefs.disabledBrowseModes);
                         }
-                    updateUiSettings(state, opts);
+                    updateUiSettings(state, opts, false);
                     } catch(e) {
                     }
                 }

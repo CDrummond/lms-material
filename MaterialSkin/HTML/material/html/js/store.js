@@ -18,10 +18,19 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
+    var themeChanted = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
         state.theme = val.theme;
         setLocalStorageVal('theme', state.theme);
-        setTheme(state.theme);
+        themeChanted = true;
+    }
+    if (undefined!=val.color && state.color!=val.color) {
+        state.color = val.color;
+        setLocalStorageVal('color', state.color);
+        themeChanted = true;
+    }
+    if (themeChanted) {
+        setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
     state.darkUi = 'light'!=state.theme;
@@ -168,6 +177,7 @@ const store = new Vuex.Store({
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
         theme: 'dark',
+        color: 'blue',
         darkUi: true,
         largeFonts: false,
         letterOverlay:false,
@@ -358,6 +368,7 @@ const store = new Vuex.Store({
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', getLocalStorageBool('darkUi', true) ? 'dark' : 'light');
+            state.color = getLocalStorageVal('color', state.color);
             state.largeFonts = getLocalStorageBool('largeFonts', state.largeFonts);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
@@ -390,7 +401,7 @@ const store = new Vuex.Store({
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             // NOTE: volumeStep is defined in utils.js
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
-            setTheme(state.theme);
+            setTheme(state.theme, state.color);
             setFontSize(state.largeFonts);
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
@@ -424,6 +435,7 @@ const store = new Vuex.Store({
                     try {
                         var prefs = JSON.parse(data.result._p2);
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
+                                     color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
                                      largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),

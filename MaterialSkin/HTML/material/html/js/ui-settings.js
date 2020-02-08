@@ -28,6 +28,10 @@ Vue.component('lms-ui-settings', {
      <v-select :items="themes" :label="i18n('Theme')" v-model="theme" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
+    <v-list-tile>
+     <v-select :items="colors" :label="i18n('Color')" v-model="color" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
@@ -316,6 +320,8 @@ Vue.component('lms-ui-settings', {
             show: false,
             theme: 'dark',
             themes: [ ],
+            color: 'blue',
+            colors: [ ],
             largeFonts: false,
             letterOverlay:false,
             showMenuAudio:true,
@@ -412,6 +418,7 @@ Vue.component('lms-ui-settings', {
     methods: {
         readStore() {
             this.theme = this.$store.state.theme;
+            this.color = this.$store.state.color;
             this.largeFonts = this.$store.state.largeFonts;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
@@ -456,6 +463,15 @@ Vue.component('lms-ui-settings', {
                 { key:'dark',  label:i18n('Dark')},
                 { key:'black', label:i18n('Black')}
                 ];
+            this.colors=[
+                { key:'red',    label:i18n('Red')},
+                { key:'purple', label:i18n('Purple')},
+                { key:'blue',   label:i18n('Blue')},
+                { key:'green',  label:i18n('Green')},
+                { key:'orange', label:i18n('Orange')},
+                { key:'brown',  label:i18n('Brown')},
+                { key:'grey',   label:i18n('Grey')}
+                ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
@@ -471,6 +487,7 @@ Vue.component('lms-ui-settings', {
             this.show=false;
             setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
             this.$store.commit('setUiSettings', { theme:this.theme,
+                                                  color:this.color,
                                                   largeFonts:this.largeFonts,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
@@ -517,6 +534,7 @@ Vue.component('lms-ui-settings', {
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     var settings = { theme:this.theme,
+                                     color:this.color,
                                      largeFonts:this.largeFonts,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,

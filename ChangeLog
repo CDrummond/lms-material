@@ -20,6 +20,8 @@
     customisation, use Roboto Mono for monospace font.
 12. Add black theme.
 13. Fade in/out now-playing cover image when track changes.
+14. Add colour variants; red, purple, blue (default), green, orange, brown, and
+    grey.
 
 1.3.2
 -----

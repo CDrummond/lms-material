@@ -322,8 +322,9 @@ function changeCss(cssFile, id) {
     }
 }
 
-function setTheme(theme) {
+function setTheme(theme, color) {
     changeCss("html/css/" + theme + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
+    changeCss("html/css/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
 }
 
 function openWindow(page) {

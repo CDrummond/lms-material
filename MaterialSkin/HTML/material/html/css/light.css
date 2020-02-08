@@ -6,15 +6,13 @@
  */
 
 :root {
- --primary-color:#1976d2;
- --accent-color:#82b1ff;
  --active-color:var(--primary-color);
  --scrollbar-thumb-color:#d0d0d0;
  --scrollbar-track-color:#f5f5f5;
  --scrollbar-corner-color:#e0e0e0;
  --background-color:white;
  --background-shadow-color:rgba(255, 255, 255, 0.9);
- --dialog-toolbar-color:#1976d2;
+ --dialog-toolbar-color:var(--primary-color);
  --bottom-toolbar-color:#f5f5f5;
  --top-toolbar-color:#f5f5f5;
  --sub-toolbar-color:#f5f5f5;
@@ -23,7 +21,7 @@
  --sub-toolbar-border-color:#e0e0e0;
  --dialog-toolbar-border-color:#1976d2;
  --splitter-color:#e0e0e0;
- --pq-current-color:rgba(0, 0, 0, 0.075);
+ --dialog-toolbar-border-color:var(--primary-color);
  --icon-color:#333;
  --dlg-icon-color:white;
  --list-item-border-color:#e0e0e0;

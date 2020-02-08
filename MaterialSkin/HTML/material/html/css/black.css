@@ -6,8 +6,6 @@
  */
 
 :root {
- --primary-color:#1976d2;
- --accent-color:#82b1ff;
  --active-color:var(--accent-color);
  --scrollbar-thumb-color:#5f5f5f;
  --scrollbar-track-color:#3f3f3f;

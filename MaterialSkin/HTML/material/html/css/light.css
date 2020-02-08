@@ -19,9 +19,8 @@
  --bottom-toolbar-border-color:#e0e0e0;
  --top-toolbar-border-color:#e0e0e0;
  --sub-toolbar-border-color:#e0e0e0;
- --dialog-toolbar-border-color:#1976d2;
- --splitter-color:#e0e0e0;
  --dialog-toolbar-border-color:var(--primary-color);
+ --splitter-color:#e0e0e0;
  --icon-color:#333;
  --dlg-icon-color:white;
  --list-item-border-color:#e0e0e0;

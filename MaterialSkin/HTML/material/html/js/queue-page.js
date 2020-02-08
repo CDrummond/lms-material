@@ -145,16 +145,18 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
 
         if (data.result.playlist_loop) {
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var title = i.title;
+                let i = loop[idx];
+                let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                 }
 
-                var duration = undefined==i.duration ? undefined : parseInt(i.duration);
+                let duration = undefined==i.duration ? undefined : parseInt(i.duration);
+                let haveRating = showRatings && undefined!=i.rating;
                 resp.items.push({
                               id: "track_id:"+i.id,
-                              title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
+                              title: haveRating ? ratingString(title, i.rating) : title,
+                              origTitle: haveRating ? title : undefined,
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
@@ -632,7 +634,13 @@ var lmsQueue = Vue.component("lms-queue", {
                     bus.$emit('removeFromQueue', indexes);
                 }
             } else if (MORE_ACTION===act) {
-                bus.$emit('trackInfo', item, index, 'queue');
+                if (undefined!=item.origTitle) { // Need to remove ratings stars...
+                    let clone = JSON.parse(JSON.stringify(item));
+                    clone.title = clone.origTitle;
+                    bus.$emit('trackInfo', clone, index, 'queue');
+                } else {
+                    bus.$emit('trackInfo', item, index, 'queue');
+                }
                 if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
                 }

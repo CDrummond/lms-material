@@ -9,6 +9,7 @@
 6. Fix 'Menu' tooltip for some list items.
 7. Store last podcast provider (used in search) in local storage.
 8. Set mini-player to be 620px wide, so as to fix display with epiphany.
+9. Remove ratings stars from title when showing play queue track info.
 
 1.3.1
 -----

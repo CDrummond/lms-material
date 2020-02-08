@@ -13,6 +13,8 @@
 10. When clicking on an artist in the queue, check for artist_id, artist_ids,
     trackartist_id, trackartist_ids, albumartist_id, albumartist_ids in that
     order.
+11. When clicking on an artist in the queue, always ask for albums by using
+    the chosen ID and no role filter.
 
 1.3.1
 -----

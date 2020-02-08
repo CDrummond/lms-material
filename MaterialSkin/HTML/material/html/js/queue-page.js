@@ -62,22 +62,6 @@ function showArtist(id, title) {
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
 }
 
-function showTrackArtist(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:TRACKARTIST"], unescape(title));
-}
-
-function showAlbumArtist(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title));
-}
-
 function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
     if (lmsNumVisibleMenus>0) {
         return;
@@ -129,14 +113,14 @@ function buildSubtitle(i, threeLines) {
     } else if (i.trackartist) {
         let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showTrackArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.trackartist);
         }
     } else if (i.albumartist) {
         let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showAlbumArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</a>");
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.albumartist);
         }

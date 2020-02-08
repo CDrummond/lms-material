@@ -65,9 +65,6 @@ Vue.component('lms-rating-dialog', {
     },
     methods: {
         cancel() {
-            if (this.toSet) {
-                return;
-            }
             this.show=false;
         },
         apply() {
@@ -87,8 +84,10 @@ Vue.component('lms-rating-dialog', {
                 bus.$emit('ratingsSet', this.ids, this.value);
             } else {
                 lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.toSet[0], this.value]).then(({data}) => {
-                    this.toSet.shift();
-                    this.setRating();
+                    if (this.show) {
+                        this.toSet.shift();
+                        this.setRating();
+                    }
                 });
             }
         },

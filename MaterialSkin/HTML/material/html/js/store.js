@@ -19,12 +19,12 @@ function copyPlayer(p){
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
-        state.darkUi = 'light'!=val.theme;
         state.theme = val.theme;
         setLocalStorageVal('theme', state.theme);
         setTheme(state.theme);
         bus.$emit('themeChanged');
     }
+    state.darkUi = 'light'!=state.theme;
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
         state.largeFonts = val.largeFonts;
         setLocalStorageVal('largeFonts', state.largeFonts);

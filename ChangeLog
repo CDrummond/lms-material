@@ -19,6 +19,7 @@
 11. Tweak UI a little; remove shadows, define a set of colours to allow easier
     customisation, use Roboto Mono for monospace font.
 12. Add black theme.
+13. Fade in/out now-playing cover image when track changes.
 
 1.3.2
 -----

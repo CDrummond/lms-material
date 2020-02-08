@@ -149,7 +149,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <div v-else>
   <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
   <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+   <img v-if="!info.show" id="np-cover" :src="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
    <div class="np-details-landscape">
     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
     <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -223,7 +223,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
    <p class="np-text subtext ellipsis" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
    <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': portraitImagePad+'px'}"></img>
+   <img v-if="!info.show" id="np-cover" :src="coverUrl" class="np-image" v-bind:class="{'np-image-large' : !(techInfo || playerStatus.playlist.count>1) && !showRatings}" @contextmenu="showMenu" @click="clickImage(event)" v-bind:style="{'margin-top': portraitImagePad+'px'}"></img>
   </div>
   <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
@@ -576,7 +576,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {
-            this.coverUrl = undefined==coverUrl ? LMS_BLANK_COVER : coverUrl;
+            this.setCover(undefined==coverUrl ? LMS_BLANK_COVER : coverUrl);
             this.setBgndCover();
         }.bind(this));
         bus.$emit('getCurrentCover');
@@ -965,6 +965,40 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         setBgndCover() {
             if (this.page && (!this.desktop || this.largeView)) {
                 setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
+            }
+        },
+        setCover(url) {
+            if (url!=this.coverUrl) {
+                if (LMS_BLANK_COVER==this.coverUrl || (this.desktop && !this.largeView && !this.nowplaying)) {
+                    this.coverUrl = url;
+                    return;
+                }
+
+                let elem = document.getElementById("np-cover");
+                let val = 1.0;
+                var step = 0.1;
+                let interval = undefined;
+                let np = this;
+                function fadeIn() {
+                    val+=step;
+                    if (val >= 1.0) {
+                        clearInterval(interval);
+                        elem.style.opacity = 1.0;
+                    } else {
+                        elem.style.opacity = val;
+                    }
+                }
+                function fadeOut() {
+                    val-=step;
+                    if (val <= 0.1) {
+                        np.coverUrl = url;
+                        clearInterval(interval);
+                        interval = setInterval(fadeIn, 20);
+                    } else {
+                        elem.style.opacity = val;
+                    }
+                }
+                interval = setInterval(fadeOut, 20);
             }
         },
         playPauseButton(showSleepMenu) {

@@ -469,8 +469,7 @@ Vue.component('lms-ui-settings', {
                 { key:'blue',   label:i18n('Blue')},
                 { key:'green',  label:i18n('Green')},
                 { key:'orange', label:i18n('Orange')},
-                { key:'brown',  label:i18n('Brown')},
-                { key:'grey',   label:i18n('Grey')}
+                { key:'brown',  label:i18n('Brown')}
                 ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},

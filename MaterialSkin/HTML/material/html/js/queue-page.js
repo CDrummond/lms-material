@@ -63,14 +63,6 @@ function showArtist(id, title) {
     bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
 }
 
-function showTrackArtist(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:TRACKARTIST"], unescape(title));
-}
-
 function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
     if (lmsNumVisibleMenus>0) {
         return;
@@ -84,31 +76,54 @@ function showComposer(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
+}
+
+function getId(item, idType) {
+    if (undefined!=item[idType]) {
+        return item[idType];
+    }
+    let plural = idType+"s";
+    if (undefined!=item[plural]) {
+        let ids = item[plural].split(",");
+        if (ids.length==1) {
+            return ids[0];
+        }
+    }
+    return undefined;
 }
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
     if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre) && i.composer!=i.artist) {
-        var composer_ids = !IS_MOBILE && i.composer_ids ? i.composer_ids.split(",") : undefined;
-        if (composer_ids && 1==composer_ids.length) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+        let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
         } else {
             subtitle=addPart(subtitle, i.composer);
         }
     }
 
     if (i.artist) {
-        if (!IS_MOBILE && undefined!=i.artist_id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
+        let id = IS_MOBILE ? undefined : getId(i, 'artist_id');
+        if (!IS_MOBILE && undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.artist);
         }
     } else if (i.trackartist) {
-        if (!IS_MOBILE && undefined!=i.trackartist_id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showTrackArtist("+i.trackartist_id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+        let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.trackartist);
+        }
+    } else if (i.albumartist) {
+        let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.albumartist);
         }
     }
 
@@ -146,16 +161,18 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
 
         if (data.result.playlist_loop) {
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var title = i.title;
+                let i = loop[idx];
+                let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
                 }
 
-                var duration = undefined==i.duration ? undefined : parseInt(i.duration);
+                let duration = undefined==i.duration ? undefined : parseInt(i.duration);
+                let haveRating = showRatings && undefined!=i.rating;
                 resp.items.push({
                               id: "track_id:"+i.id,
-                              title: !showRatings || undefined==i.rating ? title : ratingString(title, i.rating),
+                              title: haveRating ? ratingString(title, i.rating) : title,
+                              origTitle: haveRating ? title : undefined,
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
@@ -639,7 +656,13 @@ var lmsQueue = Vue.component("lms-queue", {
                     bus.$emit('removeFromQueue', indexes);
                 }
             } else if (MORE_ACTION===act) {
-                bus.$emit('trackInfo', item, index, 'queue');
+                if (undefined!=item.origTitle) { // Need to remove ratings stars...
+                    let clone = JSON.parse(JSON.stringify(item));
+                    clone.title = clone.origTitle;
+                    bus.$emit('trackInfo', clone, index, 'queue');
+                } else {
+                    bus.$emit('trackInfo', item, index, 'queue');
+                }
                 if (!this.desktop) {
                     this.$store.commit('setPage', 'browse');
                 }

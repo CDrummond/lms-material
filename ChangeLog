@@ -23,14 +23,21 @@
 
 1.3.2
 -----
-1. If items are selected, then toggle selection of item when clicking on
-   subtitle.
-2. Fix podcast search listing.
-3. Fix deleting first podcast.
-4. Don't show list with just 'Empty'
-5. Fix iOS 'Voice Over' for 'Next' button in now-playing portrait view.
-6. Fix 'Menu' tooltip for some list items.
-7. Store last podcast provider (used in search) in local storage.
+ 1. If items are selected, then toggle selection of item when clicking on
+    subtitle.
+ 2. Fix podcast search listing.
+ 3. Fix deleting first podcast.
+ 4. Don't show list with just 'Empty'
+ 5. Fix iOS 'Voice Over' for 'Next' button in now-playing portrait view.
+ 6. Fix 'Menu' tooltip for some list items.
+ 7. Store last podcast provider (used in search) in local storage.
+ 8. Set mini-player to be 620px wide, so as to fix display with epiphany.
+ 9. Remove ratings stars from title when showing play queue track info.
+10. When clicking on an artist in the queue, check for artist_id, artist_ids,
+    trackartist_id, trackartist_ids, albumartist_id, albumartist_ids in that
+    order.
+11. When clicking on an artist in the queue, always ask for albums by using
+    the chosen ID and no role filter.
 
 1.3.1
 -----

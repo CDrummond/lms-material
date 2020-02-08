@@ -67,7 +67,15 @@ function showTrackArtist(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:TRACKARTIST"], unescape(title));
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:TRACKARTIST"], unescape(title));
+}
+
+function showAlbumArtist(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title));
 }
 
 function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
@@ -83,31 +91,54 @@ function showComposer(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
+}
+
+function getId(item, idType) {
+    if (undefined!=item[idType]) {
+        return item[idType];
+    }
+    let plural = idType+"s";
+    if (undefined!=item[plural]) {
+        let ids = item[plural].split(",");
+        if (ids.length==1) {
+            return ids[0];
+        }
+    }
+    return undefined;
 }
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
     if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre) && i.composer!=i.artist) {
-        var composer_ids = !IS_MOBILE && i.composer_ids ? i.composer_ids.split(",") : undefined;
-        if (composer_ids && 1==composer_ids.length) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+composer_ids[0]+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+        let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
         } else {
             subtitle=addPart(subtitle, i.composer);
         }
     }
 
     if (i.artist) {
-        if (!IS_MOBILE && undefined!=i.artist_id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+i.artist_id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
+        let id = IS_MOBILE ? undefined : getId(i, 'artist_id');
+        if (!IS_MOBILE && undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.artist);
         }
     } else if (i.trackartist) {
-        if (!IS_MOBILE && undefined!=i.trackartist_id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showTrackArtist("+i.trackartist_id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+        let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showTrackArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
         } else {
             subtitle=addPart(subtitle, i.trackartist);
+        }
+    } else if (i.albumartist) {
+        let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showAlbumArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</a>");
+        } else {
+            subtitle=addPart(subtitle, i.albumartist);
         }
     }
 

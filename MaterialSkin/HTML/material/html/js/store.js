@@ -16,10 +16,9 @@ function copyPlayer(p){
     return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip};
 }
 
-function updateUiSettings(state, val, isUpdate) {
+function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
     var themeChanged = false;
-    var colorChanged = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
         state.theme = val.theme;
         setLocalStorageVal('theme', state.theme);
@@ -28,15 +27,11 @@ function updateUiSettings(state, val, isUpdate) {
     if (undefined!=val.color && state.color!=val.color) {
         state.color = val.color;
         setLocalStorageVal('color', state.color);
-        colorChanged = true;
+        themeChanged = true;
     }
-    if (themeChanged || colorChanged) {
+    if (themeChanged) {
         setTheme(state.theme, state.color);
-        if (isUpdate && colorChanged) {
-            location.reload();
-        } else {
-            bus.$emit('themeChanged');
-        }
+        bus.$emit('themeChanged');
     }
     state.darkUi = 'light'!=state.theme;
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
@@ -367,7 +362,7 @@ const store = new Vuex.Store({
             state.otherPlayers = players;
         },
         setUiSettings(state, val) {
-            updateUiSettings(state, val, true);
+            updateUiSettings(state, val);
         },
         initUiSettings(state) {
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
@@ -471,7 +466,7 @@ const store = new Vuex.Store({
                         if (undefined!=prefs.disabledBrowseModes && undefined==getLocalStorageVal('disabledBrowseModes', undefined)) {
                             opts.disabledBrowseModes=new Set(prefs.disabledBrowseModes);
                         }
-                    updateUiSettings(state, opts, false);
+                    updateUiSettings(state, opts);
                     } catch(e) {
                     }
                 }

@@ -13,7 +13,7 @@ Vue.component('lms-bottomnav', {
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress="browsePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <img class="nav-svg-img" :src="item.svg | svgIcon(darkUi, activeBtn==index)"></img>
+    <img v-if="showBrowse" class="nav-svg-img" :src="item.svg | svgIcon(darkUi, activeBtn==index)"></img>
    </v-btn>
    <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" v-longpress="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
@@ -30,7 +30,8 @@ Vue.component('lms-bottomnav', {
     props: [],
     data() {
         return {
-            items: []
+            items: [],
+            showBrowse: true
         }
     },
     created() {
@@ -38,7 +39,17 @@ Vue.component('lms-bottomnav', {
             this.initItems();
         }.bind(this));
         this.initItems();
-        
+        bus.$on('themeChanged', function() {
+            // Work-around to force browse SVG icon to redraw
+            if (this.items[0].page==this.$store.state.page) {
+                this.showBrowse = false;
+                setTimeout(function () {
+                    this.showBrowse = true;
+                }.bind(this), 50);
+            }
+            this.initItems();
+        }.bind(this));
+
         if (!IS_MOBILE) {
             bindKey('f1');
             bindKey('f2');

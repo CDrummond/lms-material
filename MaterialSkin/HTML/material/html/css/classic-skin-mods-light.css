@@ -1,91 +1,10 @@
-html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
- background-color:white !important;
-}
-
-html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, #statusarea, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select, b {
- color: black !important;
-}
-
-.browsedbLeftControls > a:nth-of-type(1):before {
- color: black !important;
-}
-.browsedbLeftControls > a:nth-of-type(2):before {
- color: black !important;
-}
-
-hr {
- border:0.5px solid #bbb;
-}
-
 div.prefDesc, p, td[colspan="5"] { /* colspan=5 for additional browse modes */
  color:rgba(0, 0, 0, 0.7) !important;
 }
 
-p input, p label {
- color: black !important;
-}
-
-#prefsSubmit {
- border-top:1px solid #bbb;
-}
-
-tbody tr.odd td {
- background-color:#f9f9f9 !important;
-}
-
-div.even {
- background-color:white !important;
-}
-
-a {
- color: #1976d2;
-}
-
-a:focus {
- border-bottom: 1px solid #1976d2;
-}
-
 select {
- border-bottom: 1px solid black;
+ border-bottom: 1px solid var(--text-color);
  background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%2212px%22%20y%3D%220px%22%20width%3D%2224px%22%20height%3D%225px%22%20viewBox%3D%220%200%206%203%22%20enable-background%3D%22new%200%200%206%203%22%20xml%3Aspace%3D%22preserve%22%20fill%3D%22%23000%22%3E%3Cpolygon%20points%3D%225.992%2C0%202.992%2C3%20-0.008%2C0%20%22/%3E%3C/svg%3E);
-}
-
-input[type="text"], input[type="password"], input[type="stdedit"] {
- color:black;
- background:white !important;
- border-bottom: 1px solid black;
-}
-
-input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus, select:focus {
- border-bottom: 1px solid #1976d2;
-}
-
-textarea {
- border: 1px solid #bbb;
-}
-
-textarea:focus {
- border: 1px solid #1976d2;
-}
-
-/* text enty auto-complete */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
- -webkit-text-fill-color: black;
- -webkit-box-shadow: 0 0 0px 1000px white inset;
- transition: background-color 5000s ease-in-out 0s;
-}
-
-input[type="submit"], input[type="button"] {
- color: black !important;
- background-color: transparent;
 }
 
 input[type="submit"]:hover, input[type="button"]:hover, input[type="submit"]:focus, input[type="button"]:focus {
@@ -96,23 +15,3 @@ input[type="submit"]:active, input[type="button"]:active {
  background-color: #bbb;
 }
 
-input[type=checkbox]:checked:before, input[type=radio]:checked:before {
- color:#316dd3;
-}
-
-[type="checkbox"]:focus:before, [type="radio"]:focus:before {
- border: 1px solid #316dd3;
- border-radius:3px;
-}
-
-::-webkit-scrollbar {
- background:#c0c0c0;
-}
-
-::-webkit-scrollbar-thumb {
- background:#888;
-}
-
-::-webkit-scrollbar-corner {
- background:#ddd;
-}

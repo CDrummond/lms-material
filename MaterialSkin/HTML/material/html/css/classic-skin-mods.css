@@ -169,7 +169,7 @@ input[type="text"], input[type="button"], input[type="submit"], input[type=check
 }
 
 select::-ms-expand {
-  display: none;
+ display: none;
 }
 
 select {
@@ -270,4 +270,112 @@ input[type=radio]:checked:before {
 ::-webkit-scrollbar {
  max-height:10px;
  max-width:10px;
+}
+
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+ background-color:var(--background-color) !important;
+}
+
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, #statusarea, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select, b {
+ color: var(--text-color) !important;
+}
+
+.browsedbLeftControls > a:nth-of-type(1):before {
+ color: var(--text-color) !important;
+}
+.browsedbLeftControls > a:nth-of-type(2):before {
+ color: var(--text-color) !important;
+}
+
+hr {
+ border:0.5px solid var(--top-toolbar-border-color);
+}
+
+p input, p label {
+ color: var(--text-color) !important;
+}
+
+
+#prefsSubmit {
+ border-top:1px solid var(--top-toolbar-border-color);
+}
+
+tbody tr.odd td, div.odd {
+ background-color:var(--top-toolbar-border-color) !important;
+}
+
+div.even {
+ background-color:var(--background-color) !important;
+}
+
+a {
+ color: var(--active-color);
+}
+
+a:focus {
+ border-bottom: 1px solid var(--active-color);
+}
+
+input[type="text"], input[type="password"], input[type="stdedit"] {
+ background:var(--background-color) !important;
+ color:var(--text-color);
+ border-bottom: 1px solid var(--text-color);
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus, select:focus {
+ border-bottom: 1px solid var(--active-color);
+}
+
+textarea {
+ border: 1px solid var(--top-toolbar-border-color);
+}
+
+textarea:focus {
+ border: 1px solid var(--active-color);;
+}
+
+/* text enty auto-complete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+ -webkit-text-fill-color: var(--text-color);
+ -webkit-box-shadow: 0 0 0px 1000px var(--background-color) inset;
+ transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="submit"], input[type="button"] {
+ color: var(--text-color) !important;
+ background-color: transparent;
+ border:none;
+}
+
+input[type=checkbox]:before, input[type=radio]:before {
+ color:var(--text-color);
+}
+
+input[type=checkbox]:checked:before, input[type=radio]:checked:before {
+ color:var(--active-color);
+}
+
+[type="checkbox"]:focus:before, [type="radio"]:focus:before {
+ border: 1px solid var(--active-color);;
+ border-radius:3px;
+}
+
+::-webkit-scrollbar {
+ background:var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+ background:var(--scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-corner {
+ background:var(--scrollbar-corner-color);
 }

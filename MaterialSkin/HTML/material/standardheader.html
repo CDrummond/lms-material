@@ -4,9 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=[% LOCALE %]"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]slimserver.css?r=[% revision %]"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]skin.css?r=[% revision %]" />
-<link rel="stylesheet" type="text/css" href="[% webroot %]html/css/light.css?r=[% revision %]"/>
+<link rel="stylesheet" type="text/css" href="[% webroot %]html/css/dark.css?r=[% revision %]"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/blue.css?r=[% revision %]"/>
-<link rel="stylesheet" type="text/css" href="[% webroot %]html/css/classic-skin-mods-light.css?r=[% revision %]"/>
+<link rel="stylesheet" type="text/css" href="[% webroot %]html/css/classic-skin-mods-dark.css?r=[% revision %]"/>
 <link rel="apple-touch-icon" href="[% webroot %]html/images/apple-touch-icon.png"/>
 [% IF mobileBrowser %]
 	<meta name="viewport" content="width=device-width">
@@ -14,9 +14,11 @@
 [% END %]
 <script>
  let theme = window.localStorage.getItem("lms-material::theme");
- if (undefined!=theme && !theme.startsWith('light')) {
-  document.querySelector("link[href='[% webroot %]html/css/light.css?r=[% revision %]']").href = "[% webroot %]html/css/"+theme+".css?r=[% revision %]";
-  document.querySelector("link[href='[% webroot %]html/css/classic-skin-mods-light.css?r=[% revision %]']").href = "[% webroot %]html/css/classic-skin-mods-dark.css?r=[% revision %]";
+ if (undefined!=theme && !theme.startsWith('dark')) {
+  document.querySelector("link[href='[% webroot %]html/css/dark.css?r=[% revision %]']").href = "[% webroot %]html/css/"+theme+".css?r=[% revision %]";
+ }
+ if (undefined!=theme && theme.startsWith('light')) {
+  document.querySelector("link[href='[% webroot %]html/css/classic-skin-mods-dark.css?r=[% revision %]']").href = "[% webroot %]html/css/classic-skin-mods-light.css?r=[% revision %]";
  }
  let col = window.localStorage.getItem("lms-material::color");
  if ('blue'!=col && undefined!=col) {

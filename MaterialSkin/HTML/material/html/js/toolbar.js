@@ -135,7 +135,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);">
-  <v-icon color="red">error</v-icon>
+  <v-icon class="red">error</v-icon>
  </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>

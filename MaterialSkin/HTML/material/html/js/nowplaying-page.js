@@ -974,15 +974,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     return;
                 }
 
+                if (undefined!=this.fadeInterval) {
+                    clearInterval(this.fadeInterval);
+                    this.fadeInterval = undefined;
+                }
                 let elem = document.getElementById("np-cover");
+                elem.style.opacity = 1.0;
                 let val = 1.0;
                 var step = 0.1;
-                let interval = undefined;
                 let np = this;
                 function fadeIn() {
                     val+=step;
                     if (val >= 1.0) {
-                        clearInterval(interval);
+                        clearInterval(np.fadeInterval);
+                        np.fadeInterval = undefined;
                         elem.style.opacity = 1.0;
                     } else {
                         elem.style.opacity = val;
@@ -992,13 +997,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     val-=step;
                     if (val <= 0.1) {
                         np.coverUrl = url;
-                        clearInterval(interval);
-                        interval = setInterval(fadeIn, 20);
+                        clearInterval(np.fadeInterval)
+                        np.fadeInterval = setInterval(fadeIn, 30);
                     } else {
                         elem.style.opacity = val;
                     }
                 }
-                interval = setInterval(fadeOut, 20);
+                this.fadeInterval = setInterval(fadeOut, 30);
             }
         },
         playPauseButton(showSleepMenu) {

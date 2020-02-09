@@ -14,7 +14,7 @@
 [% END %]
 <script>
  let theme = window.localStorage.getItem("lms-material::theme");
- if ('light'!=theme && undefined!=theme) {
+ if (undefined!=theme && !theme.startsWith('light')) {
   document.querySelector("link[href='[% webroot %]html/css/light.css?r=[% revision %]']").href = "[% webroot %]html/css/"+theme+".css?r=[% revision %]";
   document.querySelector("link[href='[% webroot %]html/css/classic-skin-mods-light.css?r=[% revision %]']").href = "[% webroot %]html/css/classic-skin-mods-dark.css?r=[% revision %]";
  }

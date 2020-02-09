@@ -14,11 +14,11 @@
  --background-color:#424242;
  --background-shadow-color:rgba(72, 72, 72, 0.9);
  --dialog-toolbar-color:var(--primary-color);
- --bottom-toolbar-color:#212121;
- --top-toolbar-color:#212121;
+ --bottom-toolbar-color:var(--primary-color);
+ --top-toolbar-color:var(--primary-color);
  --sub-toolbar-color:#3f3f3f;
- --bottom-toolbar-border-color:#212121;
- --top-toolbar-border-color:#212121;
+ --bottom-toolbar-border-color:var(--primary-color);
+ --top-toolbar-border-color:var(--primary-color);
  --sub-toolbar-border-color:#333;
  --dialog-toolbar-border-color:var(--primary-color);
  --splitter-color:#333;
@@ -34,10 +34,10 @@
  --top-toolbar-text-color:#fff;
  --sub-toolbar-text-color:#fff;
  --bottom-toolbar-text-color:#fff;
- --active-nav-btn-color:var(--accent-color);
- --toolbar-volume-color:var(--primary-color);
- --bottom-position-slider-color:var(--accent-color);
- --inactive-nav-opacity:0.75;
+ --active-nav-btn-color:#fff;
+ --toolbar-volume-color:#fff;
+ --bottom-position-slider-color:#fff;
+ --inactive-nav-opacity:0.5;
 }
 
 .np-info-cover {

@@ -33,7 +33,7 @@ function updateUiSettings(state, val) {
         setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
-    state.darkUi = 'light'!=state.theme;
+    state.darkUi = !state.theme.startsWith('light');
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
         state.largeFonts = val.largeFonts;
         setLocalStorageVal('largeFonts', state.largeFonts);

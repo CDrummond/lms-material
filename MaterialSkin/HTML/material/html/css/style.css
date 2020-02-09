@@ -27,6 +27,16 @@
  border-color:var(--primary-color)!important;
 }
 
+.lms-toolbar .v-slider .primary {
+ background-color:var(--toolbar-volume-color)!important;
+ border-color:var(--toolbar-volume-color)!important;
+}
+
+.np-bar .v-progress-linear .primary {
+ background-color:var(--bottom-position-slider-color)!important;
+ border-color:var(--bottom-position-slider-color)!important;
+}
+
 .v-input__control .accent--text {
  color:var(--accent-color)!important;
  caret-color:var(--accent-color)!important;
@@ -628,7 +638,7 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.subtoolbar .v-btn__content i.active-btn {
+.subtoolbar .v-btn__content i.active-btn, .active-btn {
  color:var(--active-color) !important;
 }
 

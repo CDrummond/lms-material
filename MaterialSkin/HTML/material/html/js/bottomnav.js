@@ -112,7 +112,7 @@ Vue.component('lms-bottomnav', {
     },
     filters: {
         svgIcon: function (name, dark, active) {
-            return "/material/svg/"+name+"?c="+(active ? getComputedStyle(document.documentElement).getPropertyValue('--active-color').replace('#','') : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+            return "/material/svg/"+name+"?c="+(getComputedStyle(document.documentElement).getPropertyValue(active ? '--active-nav-btn-color' : '--bottom-toolbar-text-color').replace('#',''))+"&r="+LMS_MATERIAL_REVISION;
         }
     },
 })

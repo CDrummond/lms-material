@@ -279,15 +279,15 @@
 }
 
 .inactive-nav {
- opacity:0.75;
+ opacity:var(--inactive-nav-opacity);
 }
 
 .inactive-nav div span, .inactive-nav div i {
  color:var(--bottom-toolbar-text-color) !important;
 }
 
-.active-nav div span, .active-nav div i, .active-btn {
- color: var(--active-color) !important;
+.active-nav div span, .active-nav div i {
+ color: var(--active-nav-btn-color) !important;
 }
 
 .nav-svg-img {

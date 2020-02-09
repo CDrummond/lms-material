@@ -459,9 +459,11 @@ Vue.component('lms-ui-settings', {
         },
         initItems() {
             this.themes=[
-                { key:'light', label:i18n('Light')},
-                { key:'dark',  label:i18n('Dark')},
-                { key:'black', label:i18n('Black')}
+                { key:'light',         label:i18n('Light')},
+                { key:'light-colored', label:i18n('Light (colored toolbars)')},
+                { key:'dark',          label:i18n('Dark')},
+                { key:'dark-colored',  label:i18n('Dark (colored toolbars)')},
+                { key:'black',         label:i18n('Black')}
                 ];
             this.colors=[
                 { key:'red',    label:i18n('Red')},

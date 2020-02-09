@@ -80,7 +80,7 @@ body {
 }
 
 .np-bar .v-list__tile__content, .np-bar .v-list__tile__content .v-list__tile__sub-title,
-.np-bar .np-tech-desktop, .np-bar .np-time-desktop, .np-bar div i {
+.np-bar .v-list .v-list__tile__title, .np-bar .np-tech-desktop, .np-bar .np-time-desktop, .np-bar div i {
  color:var(--bottom-toolbar-text-color) !important;
 }
 

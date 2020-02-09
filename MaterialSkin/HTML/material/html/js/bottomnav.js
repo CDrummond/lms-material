@@ -5,7 +5,9 @@
  * MIT license.
  */
 'use strict';
- 
+
+const LIBRARY_SVG = "data:image/svg+xml,%3Csvg width='24' height='24' version='1.1' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H8V4H20M12.5,15A2.5,2.5 0 0,0 15,12.5V7H18V5H14V10.5C13.58,10.19 13.07,10 12.5,10A2.5,2.5 0 0,0 10,12.5A2.5,2.5 0 0,0 12.5,15M4,6H2V20A2,2 0 0,0 4,22H18V20H4' fill='%23000'/%3E%3C/svg%3E%0A";
+
 Vue.component('lms-bottomnav', {
     template: `
 <v-footer class="lms-footer">
@@ -13,7 +15,7 @@ Vue.component('lms-bottomnav', {
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress="browsePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <img v-if="showBrowse" class="nav-svg-img" :src="item.svg | svgIcon(darkUi, activeBtn==index)"></img>
+    <img class="nav-svg-img" :src="activeBtn==index ? libraryActiveSvg : libraryInactiveSvg"></img>
    </v-btn>
    <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" v-longpress="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
@@ -31,7 +33,8 @@ Vue.component('lms-bottomnav', {
     data() {
         return {
             items: [],
-            showBrowse: true
+            libraryActiveSvg: getLocalStorageVal("lib-active-svg", undefined),
+            libraryInactiveSvg: getLocalStorageVal("lib-inactive-svg", undefined)
         }
     },
     created() {
@@ -39,15 +42,9 @@ Vue.component('lms-bottomnav', {
             this.initItems();
         }.bind(this));
         this.initItems();
+        this.colorSvgs();
         bus.$on('themeChanged', function() {
-            // Work-around to force browse SVG icon to redraw
-            if (this.items[0].page==this.$store.state.page) {
-                this.showBrowse = false;
-                setTimeout(function () {
-                    this.showBrowse = true;
-                }.bind(this), 50);
-            }
-            this.initItems();
+            this.colorSvgs();
         }.bind(this));
 
         if (!IS_MOBILE) {
@@ -68,6 +65,9 @@ Vue.component('lms-bottomnav', {
             }.bind(this));
         }
     },
+    mounted() {
+        this.colorSvgs();
+    },
     methods: {
         initItems() {
             this.items = [
@@ -75,6 +75,37 @@ Vue.component('lms-bottomnav', {
                           { text: i18n('Playing'), icon: 'music_note',            page: 'now-playing' },
                           { text: i18n('Queue'),   icon: 'queue_music',           page: 'queue' },
                          ];
+        },
+        colorSvgs(count) {
+            if (undefined==count) {
+                count=0;
+            }
+            let activeColor = getComputedStyle(document.documentElement).getPropertyValue('--active-nav-btn-color');
+            let inactiveColor = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-text-color');
+            // Check if properties have ben set yet, if not tray again a bit later...
+            if (""==activeColor || ""==inactiveColor) {
+                if (undefined!=this.colorTimer) {
+                    clearTimeout(this.colorTimer);
+                }
+                this.colorTimer = undefined;
+                if (count<200) {
+                    this.colorTimer = setTimeout(function () {
+                        this.colorSvgs(count+1);
+                    }.bind(this), 10);
+                }
+                return;
+            }
+
+            let libraryActiveSvg = LIBRARY_SVG.replace('%23000', '%23'+activeColor.replace('#', ''));
+            let libraryInactiveSvg = LIBRARY_SVG.replace('%23000', '%23'+inactiveColor.replace('#', ''));
+            if (libraryActiveSvg!=this.libraryActiveSvg) {
+                this.libraryActiveSvg = libraryActiveSvg;
+                setLocalStorageVal("lib-active-svg", this.libraryActiveSvg);
+            }
+            if (libraryInactiveSvg!=this.libraryInactiveSvg) {
+                this.libraryInactiveSvg = libraryInactiveSvg;
+                setLocalStorageVal("lib-inactive-svg", this.libraryInactiveSvg);
+            }
         },
         setPage(page, longPress) {
             if (this.$store.state.visibleMenus.size>0) {
@@ -105,15 +136,7 @@ Vue.component('lms-bottomnav', {
                 return 1;
             }
             return 2;
-        },
-        darkUi () {
-            return this.$store.state.darkUi
         }
-    },
-    filters: {
-        svgIcon: function (name, dark, active) {
-            return "/material/svg/"+name+"?c="+(getComputedStyle(document.documentElement).getPropertyValue(active ? '--active-nav-btn-color' : '--bottom-toolbar-text-color').replace('#',''))+"&r="+LMS_MATERIAL_REVISION;
-        }
-    },
+    }
 })
 

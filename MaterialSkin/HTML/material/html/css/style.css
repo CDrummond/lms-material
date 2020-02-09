@@ -110,6 +110,11 @@ html, .mini-player {
  color:var(--top-toolbar-text-color) !important;
 }
 
+.lms-toolbar .theme--light.v-btn.v-btn--disabled .v-icon, .lms-toolbar .theme--dark.v-btn.v-btn--disabled .v-icon {
+ color:var(--top-toolbar-text-color) !important;
+ opacity:0.5;
+}
+
 .lms-toolbar .v-btn__content i.red {
  color:#f00 !important;
  background-color:transparent!important;

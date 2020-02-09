@@ -31,13 +31,8 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content>
       <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
-      <!--
-      <div style="display:flex">
-       <div v-for="(item, index) in colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
-      </div>
-      -->
       <div class="color-grid">
-      <div v-for="(item, index) in colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <div v-for="(item, index) in colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
       </div>
      </v-list-tile-content>
     </v-list-tile>
@@ -331,26 +326,7 @@ Vue.component('lms-ui-settings', {
             theme: 'dark',
             themes: [ ],
             color: 'blue',
-            colors: [
-                { key:'red',        color:'#c62828'},
-                { key:'pink',       color:'#c2185b'},
-                { key:'purple',     color:'#9c27b0'},
-                { key:'deeppurple', color:'#512da8'},
-                { key:'indigo',     color:'#303f9f'},
-                { key:'blue',       color:'#1976d2'},
-                { key:'lightblue',  color:'#039be5'},
-                { key:'cyan',       color:'#0097a7'},
-                { key:'teal',       color:'#00796b'},
-                { key:'green',      color:'#43a047'},
-                { key:'lightgreen', color:'#7cb342'},
-                { key:'lime',       color:'#afb42b'},
-                { key:'yellow',     color:'#fbc02d'},
-                { key:'amber',      color:'#ff8f00'},
-                { key:'orange',     color:'#ef6c00'},
-                { key:'deeporange', color:'#f4511e'},
-                { key:'brown',      color:'#8d6e63'},
-                { key:'bluegrey',   color:'#455a64'}
-                ],
+            colors: [ ],
             largeFonts: false,
             letterOverlay:false,
             showMenuAudio:true,
@@ -430,6 +406,15 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+
+            if (this.colors.length<1) {
+                let uisd = this;
+                axios.get("html/misc/colors.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+                    uisd.colors = eval(resp.data);
+                 }).catch(err => {
+                    window.console.error(err);
+                });
+            }
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {

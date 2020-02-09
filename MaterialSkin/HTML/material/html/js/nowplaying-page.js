@@ -974,10 +974,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     return;
                 }
 
-                if (undefined!=this.fadeInterval) {
-                    clearInterval(this.fadeInterval);
-                    this.fadeInterval = undefined;
-                }
+                this.clearFadeInterval();
                 let elem = document.getElementById("np-cover");
                 elem.style.opacity = 1.0;
                 let val = 1.0;
@@ -986,8 +983,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 function fadeIn() {
                     val+=step;
                     if (val >= 1.0) {
-                        clearInterval(np.fadeInterval);
-                        np.fadeInterval = undefined;
+                        np.clearFadeInterval();
                         elem.style.opacity = 1.0;
                     } else {
                         elem.style.opacity = val;
@@ -1004,6 +1000,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
                 this.fadeInterval = setInterval(fadeOut, 30);
+            }
+        },
+        clearFadeInterval() {
+            if (undefined!=this.fadeInterval) {
+                clearInterval(this.fadeInterval);
+                this.fadeInterval = undefined;
             }
         },
         playPauseButton(showSleepMenu) {
@@ -1297,5 +1299,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     beforeDestroy() {
         this.stopPositionInterval();
         this.clearClickTimeout();
+        this.clearFadeInterval();
     }
 });

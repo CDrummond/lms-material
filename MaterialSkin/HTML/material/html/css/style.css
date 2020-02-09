@@ -1571,12 +1571,26 @@ div.v-subheader {
  bottom:32px;
 }
 
+.color-grid {
+ overflow-x:hidden !important;
+ display:grid;
+ grid-template-columns:repeat(auto-fit, minmax(36px, 1fr));
+ grid-auto-rows:min-content;
+ grid-gap:0px;
+ padding:2px !important;
+ margin:0px !important;
+ padding-right:8px !important;
+ padding-right:8px !important;
+ justify-items:center;
+ width:100%;
+}
+
 .color-circle {
  width:28px;
  height:28px;
- border:1px solid var(--text-color);
  border-radius:50%;
  margin-top:4px;
+ margin-bottom:4px;
  margin-left:0px;
  margin-right:12px;
 }
@@ -1585,6 +1599,7 @@ div.v-subheader {
  width:32px;
  height:32px;
  margin-top:2px;
+ margin-bottom:2px;
  margin-right:10px;
  border:4px solid var(--text-color);
 }

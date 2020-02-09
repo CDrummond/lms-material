@@ -19,7 +19,7 @@
 11. Tweak UI a little; remove shadows, define a set of colours to allow easier
     customisation, use Roboto Mono for monospace font.
 12. Fade in/out now-playing cover image when track changes.
-13. Add colour variants; red, purple, blue (default), green, orange, and brown.
+13. Add various colour variants.
 14. Add new themes; light (coloured toolbars), dark (coloured toolbars), and
     black.
 

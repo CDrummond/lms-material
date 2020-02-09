@@ -18,16 +18,20 @@ This guide is on a separate github page, and is authored by Jim Gooch.
 6. Add, delete, rename, and edit playlists
 7. Now playing
 8. Play queue with drag'n'drop editing
-9. UI settings; dark theme, album sort, auto scroll play queue
+9. UI settings; light, coloured, dark, and black themes, 18 different colour
+   schemes, album sort, auto scroll play queue
 10. Player settings; crossfade, replay gain, don't stop the music, alarms
-11. Sync support
-12. Info dialog to show stats, and re-scan music
-13. Manage players; control volume, play/pause, show current track
-14. Group player control; add, edit, delete
-15. Pin apps, etc., to main screen
-16. Swipe left/right to change views with mobile layout
-17. Lock screen controls when used with Chrome on Android
-18. Integrated support for "Music and Artist Information" plugin
+11. Server settings
+12. Sync support
+13. Info dialog to show stats, and re-scan music
+14. Manage players; control volume, play/pause, show current track
+15. Group player control; add, edit, delete
+16. Pin apps, etc., to main screen
+17. Swipe left/right to change views with mobile layout
+18. Lock screen controls when used with Chrome on Android
+19. Integrated support for "Music and Artist Information" plugin
+20. Search for podcasts on iTunes or GPodder
+21. Move queue between players
 
 ## Installation
 

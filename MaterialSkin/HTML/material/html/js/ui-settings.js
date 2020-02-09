@@ -29,7 +29,12 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
     <v-list-tile>
-     <v-select :items="colors" :label="i18n('Color')" v-model="color" item-text="label" item-value="key"></v-select>
+     <v-list-tile-content>
+      <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
+      <div style="display:flex">
+       <div v-for="(item, index) in colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+      </div>
+     </v-list-tile-content>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -321,7 +326,14 @@ Vue.component('lms-ui-settings', {
             theme: 'dark',
             themes: [ ],
             color: 'blue',
-            colors: [ ],
+            colors: [
+                { key:'red',    color:'#c62828'},
+                { key:'purple', color:'#9c27b0'},
+                { key:'blue',   color:'#1976d2'},
+                { key:'green',  color:'#43a047'},
+                { key:'orange', color:'#ef6c00'},
+                { key:'brown',  color:'#8d6e63'},
+                ],
             largeFonts: false,
             letterOverlay:false,
             showMenuAudio:true,
@@ -464,14 +476,6 @@ Vue.component('lms-ui-settings', {
                 { key:'dark',          label:i18n('Dark')},
                 { key:'dark-colored',  label:i18n('Dark (colored toolbars)')},
                 { key:'black',         label:i18n('Black')}
-                ];
-            this.colors=[
-                { key:'red',    label:i18n('Red')},
-                { key:'purple', label:i18n('Purple')},
-                { key:'blue',   label:i18n('Blue')},
-                { key:'green',  label:i18n('Green')},
-                { key:'orange', label:i18n('Orange')},
-                { key:'brown',  label:i18n('Brown')}
                 ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},

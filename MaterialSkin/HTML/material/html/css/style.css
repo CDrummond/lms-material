@@ -1613,3 +1613,19 @@ div.v-subheader {
  margin-right:10px;
  border:4px solid var(--text-color);
 }
+
+img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[lazy='loaded'].np-image {
+ opacity:0;
+ animation-name:npCoverFadeIn;
+ animation-duration:.25s;
+ animation-iteration-count:1;
+ animation-fill-mode:forwards;
+ animation-direction:normal;
+ animation-timing-function:ease-out;
+}
+
+@keyframes npCoverFadeIn {
+ 0% { opacity:0; }
+ 100% { opacity:1; }
+}
+

@@ -73,7 +73,7 @@ Vue.component('lms-screensaver', {
         },
         updateDateAndTime() {
             var date = new Date();
-            this.date = date.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', year: undefined });
+            this.date = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: undefined });
             this.time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
 
             if (undefined!==this.updateTimer) {

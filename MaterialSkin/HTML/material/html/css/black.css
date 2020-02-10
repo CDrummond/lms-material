@@ -57,3 +57,7 @@
  border-right:1px solid var(--dialog-toolbar-border-color);
  border-bottom:1px solid var(--dialog-toolbar-border-color);
 }
+
+.lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+ background-color:var(--list-item-border-color) !important;
+}

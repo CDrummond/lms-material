@@ -290,15 +290,10 @@ Vue.component('lms-toolbar', {
         }.bind(this));
 
         if (!IS_MOBILE) {
-            /* TODO
-            if (this.desktop) {
-                this.addMouseWheelhandler("vol-down-btn");
-                this.addMouseWheelhandler("vol-slider");
-                this.addMouseWheelhandler("vol-up-btn");
-            } else {
-                this.addMouseWheelhandler("vol-btn");
-            }*/
-
+            this.addMouseWheelHandler("vol-down-btn");
+            this.addMouseWheelHandler("vol-slider");
+            this.addMouseWheelHandler("vol-up-btn");
+            this.addMouseWheelHandler("vol-btn");
             bindKey(LMS_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
@@ -361,7 +356,7 @@ Vue.component('lms-toolbar', {
         }
     },
     methods: {
-        addMouseWheelhandler(id) {
+        addMouseWheelHandler(id) {
             var elem = document.getElementById(id);
             if (elem) {
                 elem.addEventListener('mousewheel', function(event) {

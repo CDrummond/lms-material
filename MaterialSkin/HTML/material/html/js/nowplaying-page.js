@@ -559,7 +559,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.setBgndCover();
         }.bind(this));
         bus.$on('layoutChanged', function() {
-            this.setBgndCover();
+            this.setBgndCover(true);
         }.bind(this));
 
         this.landscape = isLandscape();
@@ -958,9 +958,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.showTotal = !this.showTotal;
             setLocalStorageVal("showTotal", this.showTotal);
         },
-        setBgndCover() {
-            if (this.page && (!this.$store.state.desktopLayout || this.largeView)) {
-                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
+        setBgndCover(force) {
+            if (this.page && (!this.$store.state.desktopLayout || this.largeView || force)) {
+                setBgndCover(this.page, (!this.$store.state.desktopLayout || this.largeView) && this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
             }
         },
         playPauseButton(showSleepMenu) {

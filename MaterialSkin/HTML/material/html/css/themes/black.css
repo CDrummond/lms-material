@@ -61,3 +61,8 @@
 .lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
  background-color:var(--list-item-border-color) !important;
 }
+
+.lms-list .lms-list-pad .v-list__tile:hover, .lms-list-sub .lms-list-pad .v-list__tile:hover, .lms-list3 .lms-list-pad .v-list__tile:hover, .lms-list-sub3 .lms-list-pad .v-list__tile:hover {
+ background-color:transparent !important;
+}
+

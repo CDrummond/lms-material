@@ -166,7 +166,7 @@ Vue.component('lms-iframe-dialog', {
                 lmsCommand(this.$store.state.player.id, params).then(({data}) => {
                     bus.$emit('refreshStatus');
                     if ("cmd:load"==params[1] || "loadtracks"==params[1]) {
-                        if (!this.desktop) {
+                        if (!this.$store.state.desktopLayout) {
                             this.$store.commit('setPage', 'now-playing');
                         }
                         this.close();

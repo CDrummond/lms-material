@@ -11,19 +11,18 @@ var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
-var TB_MINI_PLAYER     = {id:"tb:mini",           icon: "open_in_new" };
 
 Vue.component('lms-toolbar', {
     template: `
 <div>
-<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-mini':mini}">
+<v-toolbar fixed dense app class="lms-toolbar noselect">
  <v-icon v-if="noPlayer" color="orange darken-2" class="toolbar-button">warning</v-icon>
  <div v-if="noPlayer && otherPlayers.length<1" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
  <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
-   <div v-if="!desktop && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktop && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
+   <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list">
@@ -44,7 +43,7 @@ Vue.component('lms-toolbar', {
       </v-list-tile-action>
     </v-list-tile>
    </template>
-   <template v-if="!mini && !nowplaying" v-for="(item, index) in otherPlayers">
+   <template v-for="(item, index) in otherPlayers">
     <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile @click="movePlayer(item)">
      <v-list-tile-avatar><v-icon small></v-icon></v-list-tile-avatar>
@@ -54,21 +53,21 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="!mini && !nowplaying && ((players && players.length>1) || playerStatus.sleepTime)"></v-divider>
+   <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime)"></v-divider>
 
-   <v-list-tile v-if="!mini && !nowplaying && multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
+   <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="keyboardControl" class="menu-shortcut player-menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
    </v-list-tile>
 
-   <v-list-tile v-if="!mini && !nowplaying && players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
+   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
-   <v-list-tile v-if="!mini && !nowplaying && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
+   <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
@@ -77,33 +76,33 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="desktop || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (desktop || wide)" :class="['vol-fixed-label', !desktop || !infoPlugin ? 'vol-fixed-label-noinf' : '', nowplaying ? 'vol-fixed-label-np' : '', mini ? 'vol-fixed-label-mini' : '']">{{trans.fixedVol}}</div>
- <v-btn v-show="desktop || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-show="desktop || wide" class="vol-full-label" v-bind:class="{'vol-full-label-np': nowplaying, 'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}%</p>
- <v-btn v-show="!(desktop || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
+ <v-btn v-show="desktopLayout || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-show="desktopLayout || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+ <div v-show="!playerDvc && (desktopLayout || wide)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
+ <v-btn v-show="desktopLayout || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-show="desktopLayout || wide" class="vol-full-label" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}%</p>
+ <v-btn v-show="!(desktopLayout || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
- <div class="vol-label" v-if="!(desktop || wide)" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktop && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+ <div class="vol-label" v-if="!(desktopLayout || wide)" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
+ <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktop && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play">
+ <v-btn icon v-if="!desktopLayout && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktop && infoPlugin && !mini && !nowplaying" @click.native="emitInfo" class="toolbar-button">
+ <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && !nowPlayingExpanded && !mini && !nowplaying" @click.native="expandNowPlaying(true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktop && nowPlayingExpanded && !mini && !nowplaying" @click.native="expandNowPlaying(false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu v-if="connected && !mini && !nowplaying" bottom left v-model="showMainMenu">
+ <v-menu v-if="connected" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
@@ -121,8 +120,8 @@ Vue.component('lms-toolbar', {
     <v-list-tile-avatar v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
    </v-list-tile>
-   <v-divider v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
-   <template v-if="!desktop && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
+   <v-divider v-if="!desktopLayout && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
+   <template v-if="!desktopLayout && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
     <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)">
      <v-list-tile-avatar v-if="menuIcons">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -134,14 +133,13 @@ Vue.component('lms-toolbar', {
    </template>
   </v-list>
  </v-menu>
- <v-btn v-else-if="!mini && !nowplaying" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);">
+ <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);">
   <v-icon class="red">error</v-icon>
  </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
     `,
-    props: ['desktop', 'nowplaying', 'mini'],
     data() {
         return { songInfo:undefined,
                  playlist: { count: "", duration: "" },
@@ -166,14 +164,12 @@ Vue.component('lms-toolbar', {
                }
     },
     mounted() {
-        if (!this.mini && !this.desktop) {
-            setInterval(function () {
-                this.wide = window.innerWidth>=900;
-            }.bind(this), 1000);
-            bus.$on('windowWidthChanged', function() {
-                this.wide = window.innerWidth>=900;
-            }.bind(this));
-        }
+        setInterval(function () {
+            this.wide = window.innerWidth>=900;
+        }.bind(this), 1000);
+        bus.$on('windowWidthChanged', function() {
+            this.wide = window.innerWidth>=900;
+        }.bind(this));
 
         bus.$on('settingsMenuActions', function(actions, page) {
             this.otherMenuItems[page]=[];
@@ -183,20 +179,18 @@ Vue.component('lms-toolbar', {
             this.$forceUpdate();
         }.bind(this));
 
-        if (!this.desktop) {
-            bus.$on('queueStatus', function(count, duration) {
-                if (count>0) {
-                    this.playlist.count = i18np("1 Track", "%1 Tracks", count);
-                } else {
-                    this.playlist.count = "";
-                }
-                if (duration>0) {
-                    this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";
-                } else {
-                    this.playlist.duration="";
-                }
-            }.bind(this));
-        }
+        bus.$on('queueStatus', function(count, duration) {
+            if (count>0) {
+                this.playlist.count = i18np("1 Track", "%1 Tracks", count);
+            } else {
+                this.playlist.count = "";
+            }
+            if (duration>0) {
+                this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";
+            } else {
+                this.playlist.duration="";
+            }
+        }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
@@ -268,12 +262,10 @@ Vue.component('lms-toolbar', {
             this.nowPlayingExpanded = val;
         }.bind(this));
 
-        if (this.desktop) {
-            bus.$on('playerChanged', function() {
-                // Ensure we update volume when player changes.
-                this.playerVolume = undefined;
-            }.bind(this));
-        }
+        bus.$on('playerChanged', function() {
+            // Ensure we update volume when player changes.
+            this.playerVolume = undefined;
+        }.bind(this));
 
         bus.$on('showError', function(err, msg) {
             this.snackbar = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
@@ -298,75 +290,74 @@ Vue.component('lms-toolbar', {
         }.bind(this));
 
         if (!IS_MOBILE) {
+            /* TODO
             if (this.desktop) {
                 this.addMouseWheelhandler("vol-down-btn");
                 this.addMouseWheelhandler("vol-slider");
                 this.addMouseWheelhandler("vol-up-btn");
             } else {
                 this.addMouseWheelhandler("vol-btn");
-            }
+            }*/
 
-            if (!this.mini && !this.nowplaying) {
-                bindKey(LMS_SETTINGS_KEYBOARD, 'mod');
-                bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
-                bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
-                bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
-                bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
-                bindKey(LMS_SYNC_KEYBOARD, 'mod');
-                bindKey('1', 'alt');
-                bindKey('2', 'alt');
-                bindKey('3', 'alt');
-                bindKey('4', 'alt');
-                bindKey('5', 'alt');
-                bindKey('6', 'alt');
-                bindKey('7', 'alt');
-                bindKey('8', 'alt');
-                bindKey('9', 'alt');
-                bindKey('0', 'alt');
-                bus.$on('keyboard', function(key, modifier) {
-                    if (this.$store.state.openDialogs.length>0) {
-                        return;
-                    }
-                    if ('mod'==modifier) {
-                        if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
-                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
-                                                LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
-                                bus.$emit('hideMenu', 'main');
-                            }
-                        } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
-                            if (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1) {
-                                this.menuAction(TB_MANAGE_PLAYERS.id);
-                                bus.$emit('hideMenu', 'player');
-                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
-                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
-                                bus.$emit('hideMenu', 'player');
-                            }
-                        } else if (this.$store.state.visibleMenus.size==0) {
-                            if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
-                                (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
-                                this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
-                                                LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
-                            } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
-                                bus.$emit('dlg.open', 'sync', this.$store.state.player);
-                            }
+            bindKey(LMS_SETTINGS_KEYBOARD, 'mod');
+            bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
+            bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
+            bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
+            bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
+            bindKey(LMS_SYNC_KEYBOARD, 'mod');
+            bindKey('1', 'alt');
+            bindKey('2', 'alt');
+            bindKey('3', 'alt');
+            bindKey('4', 'alt');
+            bindKey('5', 'alt');
+            bindKey('6', 'alt');
+            bindKey('7', 'alt');
+            bindKey('8', 'alt');
+            bindKey('9', 'alt');
+            bindKey('0', 'alt');
+            bus.$on('keyboard', function(key, modifier) {
+                if (this.$store.state.openDialogs.length>0) {
+                    return;
+                }
+                if ('mod'==modifier) {
+                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
+                        if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                            this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
+                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
+                            bus.$emit('hideMenu', 'main');
                         }
-                    } else if ('alt'==modifier && 1==key.length && !isNaN(key)) {
-                        var player = parseInt(key);
-                        if (player==0) {
-                            player=10;
-                        } else {
-                            player=player-1;
+                    } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
+                        if (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1) {
+                            this.menuAction(TB_MANAGE_PLAYERS.id);
+                            bus.$emit('hideMenu', 'player');
+                        } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                            bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                            bus.$emit('hideMenu', 'player');
                         }
-                        if (player<this.$store.state.players.length) {
-                            var id = this.$store.state.players[player].id;
-                            if (id!=this.$store.state.player.id) {
-                                this.setPlayer(id);
-                            }
+                    } else if (this.$store.state.visibleMenus.size==0) {
+                        if (LMS_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
+                            (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
+                            this.menuAction(LMS_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
+                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
+                        } else if (LMS_SYNC_KEYBOARD==key && this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup) {
+                            bus.$emit('dlg.open', 'sync', this.$store.state.player);
                         }
                     }
-                }.bind(this));
-            }
+                } else if ('alt'==modifier && 1==key.length && !isNaN(key)) {
+                    var player = parseInt(key);
+                    if (player==0) {
+                        player=10;
+                    } else {
+                        player=player-1;
+                    }
+                    if (player<this.$store.state.players.length) {
+                        var id = this.$store.state.players[player].id;
+                        if (id!=this.$store.state.player.id) {
+                            this.setPlayer(id);
+                        }
+                    }
+                }
+            }.bind(this));
         }
     },
     methods: {
@@ -394,12 +385,7 @@ Vue.component('lms-toolbar', {
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
-            TB_MINI_PLAYER.title=i18n('Open mini-player');
             this.menuItems = [ TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_INFO ];
-            if (this.desktop && !this.mini & !IS_MOBILE) {
-                this.menuItems.push(DIVIDER);
-                this.menuItems.push(TB_MINI_PLAYER);
-            }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), synchronise:i18n('Synchronise'), syncShortcut:shortcutStr(LMS_SYNC_KEYBOARD),
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
@@ -426,9 +412,6 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'info');
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
-            } else if (TB_MINI_PLAYER.id==id) {
-                // Height should be 112, but on my system sometimes its too small? Added 6 pix to give some padding...
-                window.open("mini", "MiniPlayer", 'width=620,height=118,status=no,menubar=no,toolbar=no,location=no');
             } else {
                 bus.$emit('toolbarAction', id);
             }
@@ -623,6 +606,9 @@ Vue.component('lms-toolbar', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        desktopLayout() {
+            return this.$store.state.desktopLayout
         }
     },
     filters: {

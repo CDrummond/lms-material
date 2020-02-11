@@ -14,7 +14,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
- <v-menu v-if="!mini && !nowplaying" v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
+ <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list v-if="info.show">
    <v-list-tile @click="adjustFont(10)" v-bind:class="{'disabled':infoZoom<=10}"><v-list-tile-title>{{trans.stdFont}}</v-list-tile-title></v-list-tile>
   <v-list-tile @click="adjustFont(15)" v-bind:class="{'disabled':infoZoom==15}"><v-list-tile-title>{{trans.mediumFont}}</v-list-tile-title></v-list-tile>
@@ -31,7 +31,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile>
   </v-list>
  </v-menu>
-<div v-if="desktop && !largeView && !nowplaying" class="np-bar noselect" v-bind:class="{'np-bar-mini':mini}" id="np-bar">
+<div v-if="desktopLayout && !largeView" class="np-bar noselect" id="np-bar">
  <v-layout row class="np-controls-desktop" v-if="stopButton">
   <v-flex xs3>
    <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
@@ -280,7 +280,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 </div></div>
 `,
-    props: [ 'desktop', 'nowplaying', 'mini' ],
     data() {
         return { coverUrl:LMS_BLANK_COVER,
                  playerStatus: {
@@ -320,90 +319,86 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         if (this.infoZoom<10 | this.infoZoom>20) {
             this.infoZoom = 10;
         }
-        if (this.desktop) {
-            if (this.nowplaying) {
-                this.largeView = true;
-            } else {
-                this.info.showTabs=getLocalStorageBool("showTabs", false);
-                bus.$on('expandNowPlaying', function(val) {
-                    if (val) {
-                        this.info.show = false;
-                    }
-                    this.largeView = val;
-                }.bind(this));
-            }
-        } else {
-            bus.$on('info-swipe', function(d) {
-                if (this.info.show) {
-                    if ('l'==d) {
-                        if (this.info.tab==2) {
-                            this.info.tab=0;
-                        } else {
-                            this.info.tab++;
-                        }
-                    } else {
-                        if (this.info.tab==0) {
-                            this.info.tab=2;
-                        } else {
-                            this.info.tab--;
-                        }
-                    }
-                }
-            }.bind(this));
-            bus.$on('pageChanged', function(val) {
-                if (0==this.lastWidth && val=='now-playing') {
-                    this.$nextTick(() => {
-                        this.portraitElem = document.getElementById("np-page");
-                        this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-                        this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
-                        this.calcPortraitPad();
-                    });
-                }
-            }.bind(this));
-            this.portraitElem = document.getElementById("np-page");
-            this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-            this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
-            this.lowHeight = window.innerHeight <= (this.desktop ? 400 : 450);
-            this.calcPortraitPad();
-            var npView = this;
-            window.addEventListener('resize', () => {
-                if (npView.resizeTimeout) {
-                    clearTimeout(npView.resizeTimeout);
-                }
-                npView.resizeTimeout = setTimeout(function () {
-                    // Only update if changed
-                    if (!npView.landscape && !npView.portraitElem) {
-                        npView.portraitElem = document.getElementById("np-page");
-                        npView.lastWidth = npView.portraitElem ? npView.portraitElem.offsetWidth : 0;
-                        npView.lastHeight = npView.portraitElem ? npView.portraitElem.offsetHeight : 0;
-                    }
-                    if (npView.portraitElem &&
-                        (Math.abs(npView.lastWidth-npView.portraitElem.offsetWidth)>4 || Math.abs(npView.lastHeight-npView.portraitElem.offsetHeight))) {
-                        npView.lastWidth = npView.portraitElem.offsetWidth;
-                        npView.lastHeight = npView.portraitElem.offsetHeight;
-                        npView.calcPortraitPad();
-                    }
-                    npView.lowHeight = window.innerHeight <= (npView.desktop ? 400 : 430);
-                    npView.resizeTimeout = undefined;
-                }, 50);
-            }, false);
 
-            // Long-press on 'now playing' nav button whilst in now-playing shows track info
-            bus.$on('nav', function(page, longPress) {
-                if ('now-playing'==page) {
-                    if (longPress) {
-                        if (this.playerStatus && undefined!=this.playerStatus.current.id) {
-                            this.trackInfo();
-                        }
-                    } else if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
-                        this.largeView = false;
-                        this.info.show = !this.info.show;
-                    } else if (this.info.show) {
-                        this.info.show = false;
+        this.info.showTabs=getLocalStorageBool("showTabs", false);
+        bus.$on('expandNowPlaying', function(val) {
+            if (val) {
+                this.info.show = false;
+            }
+            this.largeView = val;
+        }.bind(this));
+
+        bus.$on('info-swipe', function(d) {
+            if (this.info.show) {
+                if ('l'==d) {
+                    if (this.info.tab==2) {
+                        this.info.tab=0;
+                    } else {
+                        this.info.tab++;
+                    }
+                } else {
+                    if (this.info.tab==0) {
+                        this.info.tab=2;
+                    } else {
+                        this.info.tab--;
                     }
                 }
-            }.bind(this));
-        }
+            }
+        }.bind(this));
+        bus.$on('pageChanged', function(val) {
+            if (0==this.lastWidth && val=='now-playing') {
+                this.$nextTick(() => {
+                    this.portraitElem = document.getElementById("np-page");
+                    this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
+                    this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+                    this.calcPortraitPad();
+                });
+            }
+        }.bind(this));
+        this.portraitElem = document.getElementById("np-page");
+        this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
+        this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
+        this.lowHeight = window.innerHeight <= (this.$store.state.desktopLayout ? 400 : 450);
+        this.calcPortraitPad();
+        var npView = this;
+        window.addEventListener('resize', () => {
+            if (npView.resizeTimeout) {
+                clearTimeout(npView.resizeTimeout);
+            }
+            npView.resizeTimeout = setTimeout(function () {
+                // Only update if changed
+                if (!npView.landscape && !npView.portraitElem) {
+                    npView.portraitElem = document.getElementById("np-page");
+                    npView.lastWidth = npView.portraitElem ? npView.portraitElem.offsetWidth : 0;
+                    npView.lastHeight = npView.portraitElem ? npView.portraitElem.offsetHeight : 0;
+                }
+                if (npView.portraitElem &&
+                    (Math.abs(npView.lastWidth-npView.portraitElem.offsetWidth)>4 || Math.abs(npView.lastHeight-npView.portraitElem.offsetHeight))) {
+                    npView.lastWidth = npView.portraitElem.offsetWidth;
+                    npView.lastHeight = npView.portraitElem.offsetHeight;
+                    npView.calcPortraitPad();
+                }
+                npView.lowHeight = window.innerHeight <= (npView.$store.state.desktopLayout ? 400 : 430);
+                npView.resizeTimeout = undefined;
+            }, 50);
+        }, false);
+
+        // Long-press on 'now playing' nav button whilst in now-playing shows track info
+        bus.$on('nav', function(page, longPress) {
+            if ('now-playing'==page) {
+                if (longPress) {
+                    if (this.playerStatus && undefined!=this.playerStatus.current.id) {
+                        this.trackInfo();
+                    }
+                } else if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                    this.largeView = false;
+                    this.info.show = !this.info.show;
+                } else if (this.info.show) {
+                    this.info.show = false;
+                }
+            }
+        }.bind(this));
+
         this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {
             var playStateChanged = false;
@@ -563,6 +558,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('themeChanged', function() {
             this.setBgndCover();
         }.bind(this));
+        bus.$on('layoutChanged', function() {
+            this.setBgndCover();
+        }.bind(this));
 
         this.landscape = isLandscape();
         this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
@@ -602,19 +600,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.showTotal = getLocalStorageBool('showTotal', true);
-        if (!IS_MOBILE && !this.mini && !this.nowplaying) {
+        if (!IS_MOBILE) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
-            if (this.desktop) {
-                bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod+shift');
-            }
+            bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod+shift');
             bus.$on('keyboard', function(key, modifier) {
-                if (this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.desktop && this.$store.state.page!="now-playing")) {
+                if (this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.$store.state.desktopLayout && this.$store.state.page!="now-playing")) {
                     return;
                 }
                 if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog')) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
-                } else if ('mod+shift'==modifier && LMS_EXPAND_NP_KEYBOARD==key) {
+                } else if ('mod+shift'==modifier && LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout) {
                     this.info.show = false;
                     this.largeView = !this.largeView;
                 }
@@ -922,7 +918,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     elem.style.backgroundImage = "url('"+(this.$store.state.infoBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : "") +"')";
                 }
             });
-            if (this.desktop && !this.showTabs) {
+            if (this.$store.state.desktopLayout && !this.showTabs) {
                 this.fetchLyrics();
                 this.fetchBio();
                 this.fetchReview();
@@ -963,7 +959,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             setLocalStorageVal("showTotal", this.showTotal);
         },
         setBgndCover() {
-            if (this.page && (!this.desktop || this.largeView)) {
+            if (this.page && (!this.$store.state.desktopLayout || this.largeView)) {
                 setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
             }
         },
@@ -1253,6 +1249,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         zoomInfoClass() {
             return "np-info-text-"+this.infoZoom;
+        },
+        desktopLayout() {
+            return this.$store.state.desktopLayout
         }
     },
     beforeDestroy() {

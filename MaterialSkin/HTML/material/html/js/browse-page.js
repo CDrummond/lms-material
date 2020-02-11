@@ -52,13 +52,13 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <v-btn flat icon v-if="showRatingButton && items.length>1" @click.stop="setAlbumRating()" class="toolbar-button" :title="trans.albumRating"><v-icon>stars</v-icon></v-btn>
-   <template v-if="desktop" v-for="(action, index) in settingsMenuActions">
+   <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktop && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
+   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktopLayout && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
    <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>4 || (currentActions.length>1 && !wide)">
     <v-icon>extension</v-icon>
    </v-btn>
@@ -292,7 +292,6 @@ var lmsBrowse = Vue.component("lms-browse", {
  </v-menu>
 </div>
       `,
-    props: [ 'desktop' ],
     data() {
         return {
             current: undefined,
@@ -336,6 +335,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
+        },
+        desktopLayout() {
+            return this.$store.state.desktopLayout
         }
     },
     created() {
@@ -355,21 +357,19 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.previousScrollPos=0;
         this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
 
-        if (!this.desktop) {
-            // Clicking on 'browse' nav button whilst in browse page goes back.
-            bus.$on('nav', function(page, longPress) {
-                if ('browse'==page && this.history.length>0) {
-                    if (longPress) {
-                        this.goHome();
-                    } else {
-                        this.goBack();
-                    }
+        // Clicking on 'browse' nav button whilst in browse page goes back.
+        bus.$on('nav', function(page, longPress) {
+            if ('browse'==page && this.history.length>0) {
+                if (longPress) {
+                    this.goHome();
+                } else {
+                    this.goBack();
                 }
-            }.bind(this));
-            bus.$on('settingsMenuAction:browse', function(action) {
-                this.headerAction(action);
-            }.bind(this));
-        }
+            }
+        }.bind(this));
+        bus.$on('settingsMenuAction:browse', function(action) {
+            this.headerAction(action);
+        }.bind(this));
 
         bus.$on('langChanged', function() {
             this.initItems();
@@ -412,7 +412,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('trackInfo', function(item, index, page) {
-            if (!this.desktop) {
+            if (!this.$store.state.desktopLayout) {
                 this.$store.commit('setPage', 'browse');
             }
             if (this.history.length>=50) {
@@ -422,7 +422,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('browse', function(cmd, params, title) {
-            if (!this.desktop) {
+            if (!this.$store.state.desktopLayout) {
                 this.$store.commit('setPage', 'browse');
             }
             this.goHome();
@@ -459,7 +459,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.enteredTerm = term;
             this.fetchUrlItems(url, provider);
         }.bind(this));
-        if (!IS_MOBILE && !this.mini && !this.nowplaying) {
+        if (!IS_MOBILE) {
             bindKey('home');
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');
             bindKey(LMS_PLAY_KEYBOARD, 'mod+shift');
@@ -468,7 +468,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
             bindKey('left', 'mod');
             bus.$on('keyboard', function(key, modifier) {
-                if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.desktop && this.$store.state.page!="browse")) {
+                if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.$store.state.desktopLayout && this.$store.state.page!="browse")) {
                     return;
                 }
                 if ('mod'==modifier) {
@@ -1257,7 +1257,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
-                    if (!this.desktop) {
+                    if (!this.$store.state.desktopLayout) {
                         this.$store.commit('setPage', 'now-playing');
                     }
                 }).catch(err => {
@@ -1310,7 +1310,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
                     this.clearSelection();
-                    if (!this.desktop) {
+                    if (!this.$store.state.desktopLayout) {
                         if (act===PLAY_ACTION || act===PLAY_ALL_ACTION) {
                             this.$store.commit('setPage', 'now-playing');
                         } else if (act===ADD_ACTION || act===ADD_ALL_ACTION) {
@@ -1423,7 +1423,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         headerAction(act, event) {
-            if (this.$store.state.visibleMenus.size>0 && (this.desktop || this.settingsMenuActions.indexOf(act)<0)) {
+            if (this.$store.state.visibleMenus.size>0 && (this.$store.state.desktopLayout || this.settingsMenuActions.indexOf(act)<0)) {
                 return;
             }
             if (USE_LIST_ACTION==act) {
@@ -1567,7 +1567,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 return;
             }
-            if (this.prevPage && !this.desktop) {
+            if (this.prevPage && !this.$store.state.desktopLayout) {
                 var nextPage = ""+this.prevPage;
                 this.$nextTick(function () { this.$nextTick(function () { this.$store.commit('setPage', nextPage); }); });
             }
@@ -2266,7 +2266,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
-                    if (npAfterLast && 0==commands.length && !this.desktop) {
+                    if (npAfterLast && 0==commands.length && !this.$store.state.desktopLayout) {
                         this.$store.commit('setPage', 'now-playing');
                     }
                     this.doCommands(commands, npAfterLast);

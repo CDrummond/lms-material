@@ -11,18 +11,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <title>Logitech Media Server</title>
-  <link href="html/css/themes/dark.css?r=[% material_revision %]" rel="stylesheet" id="variantcss"> 
-  <link href="html/css/colors/blue.css?r=[% material_revision %]" rel="stylesheet" id="colorcss">
-  <link href="html/font/font.css?r=49" rel="stylesheet">
-  <link href="html/lib/vuetify.min.css?r=1.5.16" rel="stylesheet">
-  <link href="html/lib/vue-virtual-scroller.css?r=1.0.0-rc2" rel="stylesheet">
-  <link href="html/lib/photoswipe/photoswipe.min.css?r=4.1.2" rel="stylesheet">
-  <link href="html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2" rel="stylesheet">
-  <link href="html/css/style.css?r=[% material_revision %]" rel="stylesheet">
-  <link href="html/css/desktop.css?r=[% material_revision %]" rel="stylesheet">
-  <link href="/material/customcss/now-playing?r=[% material_revision %]" rel="stylesheet" id="customcss">
-  <link href="html/nowplaying.webmanifest?r=[% material_revision %]" rel="manifest">
-
+  <link rel="manifest" href="html/material.webmanifest?r=[% material_revision %]">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -31,41 +20,9 @@
   <link href="html/images/icon-ios.png?r=[% material_revision %]" rel="apple-touch-icon" sizes="128x128">
  </head>
  <body>
-  <div id="app" v-cloak>
-   <v-app class="lms-app" :dark="darkUi">
-    <lms-currentcover></lms-currentcover>
-    <lms-server></lms-server>
-    <lms-toolbar :desktop="true" :nowplaying="true"></lms-toolbar>
-    <lms-now-playing :desktop="true" :nowplaying="true"></lms-now-playing>
-    <lms-dstm-dialog v-if="dialogs.dstm"></lms-dstm-dialog>
-    <lms-screensaver></lms-screensaver>
-   </v-app>
-  </div>
-  <script>const LMS_MATERIAL_REVISION="[% material_revision %]";</script>
-  <script src="html/lib/axios.min.js?r=0.19.0"></script>
-  <script src="html/lib/libcometd.min.js?r=4.0.3mod2"></script>
-  <script src="html/lib/idb-keyval-iife.min.js?r=3.1.0p50"></script>
-  <script src="html/lib/vue.min.js?r=2.6.10"></script>
-  <script src="html/lib/vuetify.min.js?r=1.5.16"></script>
-  <script src="html/lib/vuex.min.js?r=3.1.1"></script>
-  <script src="html/lib/vue-lazyload.js?r=1.2.6"></script>
-  <script src="html/lib/longpress.min.js?r=[% material_revision %]"></script>
-  <script src="html/lib/vue-splitter.js?r=1.3.0"></script>
-  <script src="html/lib/vue-touch-events.min.js?r=2.1.0"></script>
-  <script src="html/lib/mousetrap.min.js?r=a4098"></script>
-  <script src="html/js/actions.js?r=[% material_revision %]"></script>
-  <script src="html/js/constants.js?r=[% material_revision %]"></script>
-  <script src="html/js/emblems.js?r=[% material_revision %]"></script>
-  <script src="html/js/currentcover.js?r=[% material_revision %]"></script>
-  <script src="html/js/utils.js?r=[% material_revision %]"></script>
-  <script src="html/js/toolbar.js?r=[% material_revision %]"></script>
-  <script src="html/js/nowplaying-page.js?r=[% material_revision %]"></script>
-  <script src="html/js/dstm-dialog.js?r=[% material_revision %]"></script>
-  <script src="html/js/server.js?r=[% material_revision %]"></script>
-  <script src="html/js/screensaver.js?r=[% material_revision %]"></script>
-  <script src="html/js/i18n.js?r=[% material_revision %]"></script>
-  <script src="html/js/store.js?r=[% material_revision %]"></script>
-  <script src="html/js/main.js?r=[% material_revision %]"></script>
+  <script>
+   var query = window.location.href.indexOf('?');
+   window.location.href = window.location.href.replace('/now-playing', '/') + (query>0 ? "&" : "?")+"layout=desktop&action=expandNowPlaying/true";
+  </script>
  </body>
 </html>
-

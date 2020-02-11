@@ -319,7 +319,6 @@ Vue.component('lms-ui-settings', {
 
 </div>
 `,
-    props: [ 'desktop' ],
     data() {
         return {
             show: false,
@@ -359,7 +358,7 @@ Vue.component('lms-ui-settings', {
             lsAndNotifPlaySilence: false,
             android: IS_ANDROID,
             menuIcons: true,
-            allowLayoutAdjust: window.location.href.indexOf('auto=false')<0,
+            allowLayoutAdjust: window.location.href.indexOf('?layout=')<0 && window.location.href.indexOf('&layout=')<0,
             sortHome: IS_IPHONE,
             showItems: [ ],
             hasPassword: false,
@@ -522,14 +521,12 @@ Vue.component('lms-ui-settings', {
                                                   disabledBrowseModes:this.disabledBrowseModes(),
                                                   screensaver:this.screensaver
                                                 } );
+
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
-                if ( (!this.desktop && "desktop"==this.layout) || (this.desktop && "mobile"==this.layout) ) {
-                    window.location.href = this.layout;
-                } else {
-                    setAutoLayout(this.layout == "auto");
-                }
+                bus.$emit('changeLayout', "desktop"==this.layout ? true : "mobile"==this.layout ? false : undefined);
             }
+
             if (this.password != getLocalStorageVal('password', '-')) {
                 this.$store.commit('setPassword', this.password);
             }
@@ -638,7 +635,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr(LMS_ADD_ITEM_ACTION_KEYBOARD, true)+SEPARATOR+i18n("Add favorite or podcast"),
                          shortcutStr(ACTIONS[ADD_FAV_FOLDER_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_FAV_FOLDER_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")];
-            if (this.desktop) {
+            if (this.$store.state.desktopLayout) {
                 list.push(shortcutStr(LMS_EXPAND_NP_KEYBOARD, true)+SEPARATOR+i18n("Expand now playing"));
             }
             list.push(shortcutStr(LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"));
@@ -655,7 +652,7 @@ Vue.component('lms-ui-settings', {
             list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
             list.push(shortcutStr(LMS_SYNC_KEYBOARD)+SEPARATOR+i18n("Synchronise"));
             list.push(i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player"));
-            if (!this.desktop) {
+            if (!this.$store.state.desktopLayout) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));
                 list.push("F2"+SEPARATOR+i18n("Playing"));
                 list.push("F3"+SEPARATOR+i18n("Queue"));

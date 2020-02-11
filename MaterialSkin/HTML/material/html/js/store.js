@@ -172,6 +172,7 @@ function convertLsAndNotif(val) {
 
 const store = new Vuex.Store({
     state: {
+        desktopLayout: false,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
@@ -540,6 +541,13 @@ const store = new Vuex.Store({
                 }
             }).catch(err => {
             });
+        },
+        setDesktopLayout(state, desktopLayout) {
+            if (desktopLayout!=state.desktopLayout) {
+                state.desktopLayout = desktopLayout;
+                setLayout(desktopLayout);
+                bus.$emit('layoutChanged');
+            }
         }
     }
 })

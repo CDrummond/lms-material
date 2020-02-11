@@ -327,6 +327,11 @@ function setTheme(theme, color) {
     changeCss("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
 }
 
+function setLayout(useDesktop) {
+    changeCss("html/css/" + (useDesktop ? "desktop" : "mobile") + ".css?r=" + LMS_MATERIAL_REVISION, "layoutcss");
+    changeCss("/material/customcss/" + (useDesktop ? "desktop" : "mobile") + "?r=[% material_revision %]", "customcss");
+}
+
 function openWindow(page) {
     window.open(page, '_blank');
 }
@@ -390,7 +395,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[] };
+    var resp = { actions:[], layout:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -413,7 +418,9 @@ function parseQueryParams() {
             resp.actions.push(kv[1]);
         } else if("css"==kv[0]) {
             changeCss("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
-        }
+        } else if ("layout"==kv[0]) {
+            resp.layout=kv[1];
+        } 
     }
     return resp;
 }

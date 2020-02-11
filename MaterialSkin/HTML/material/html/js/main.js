@@ -8,28 +8,16 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
-var autoLayout = false;
+const MIN_DESKTOP_WIDTH = 600;
+var usingDesktopLayout = false;
+var autoLayout = true;
 function checkLayout() {
     if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109
         var changeTo=undefined;
-        if (window.innerWidth<600 && window.location.href.indexOf("/desktop")>1) {
-            changeTo = "mobile";
-        } else if (window.innerWidth>=600 && /*(!IS_MOBILE || window.innerHeight>=600) &&*/ window.location.href.indexOf("/mobile")>1) {
-            changeTo = "desktop";
-        }
-        if (undefined!=changeTo) {
-            // Auto-changing view, so don't see default player!
-            setLocalStorageVal("useLastPlayer", true);
-            var query = window.location.href.indexOf('?');
-            var queryString = query > 0 ? window.location.href.substring(query) : "";
-            window.location.href = changeTo + queryString;
+        if ( (window.innerWidth<MIN_DESKTOP_WIDTH && usingDesktopLayout) || (window.innerWidth>=MIN_DESKTOP_WIDTH && !usingDesktopLayout)) {
+            bus.$emit('changeLayout');
         }
     }
-}
-
-function setAutoLayout(al) {
-    autoLayout = al;
-    checkLayout();
 }
 
 function checkEntryFocus() {
@@ -47,18 +35,32 @@ var app = new Vue({
                             dstm: false, savequeue: false } }
     },
     created() {
-        if (window.location.href.indexOf("/desktop")>1) {
-            this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
-            this.splitter = this.splitterPercent;
-            document.documentElement.style.setProperty('--splitter-pc', this.splitter);
-        }
+        this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
+        this.splitter = this.splitterPercent;
+        document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         this.query=parseQueryParams();
         this.$store.commit('initUiSettings');
 
+        let chosenLayout = undefined;
+        if (undefined!=this.query.layout) {
+            chosenLayout = this.query.layout;
+        } else {
+            chosenLayout = getLocalStorageVal("layout", undefined);
+        }
+
+        if (chosenLayout=='desktop') {
+            this.setLayout(true);
+        } else if (chosenLayout=='mobile') {
+            this.setLayout(false);
+        } else {
+            this.setLayout();
+            bus.$on('changeLayout', function(forceDesktop) {
+                this.setLayout(forceDesktop);
+            }.bind(this));
+        }
+
         lmsUseLastPlayer = false;
-        if (window.location.href.indexOf('/mini')>=0) {
-            lmsUseLastPlayer = true;
-        } else if (pageWasReloaded()) {
+        if (pageWasReloaded()) {
             lmsUseLastPlayer = true;
         } else {
             lmsUseLastPlayer = getLocalStorageBool('useLastPlayer', lmsUseLastPlayer);
@@ -126,10 +128,6 @@ var app = new Vue({
                 }
             }
         });
-
-        if (window.location.href.indexOf('/mini')<0 && window.location.href.indexOf('/now-playing')<0 && window.location.href.indexOf('auto=false')<0 ) {
-            setAutoLayout(getLocalStorageVal("layout", "auto") == "auto");
-        }
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
@@ -207,6 +205,9 @@ var app = new Vue({
         },
         page() {
             return this.$store.state.page;
+        },
+        desktopLayout() {
+            return this.$store.state.desktopLayout
         }
     },
     methods: {
@@ -217,7 +218,7 @@ var app = new Vue({
             this.swipe(ev, 'r');
         },
         swipe(ev, direction) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || this.$store.state.desktopLayout) {
                 return;
             }
             if (this.$store.state.page=='now-playing') {
@@ -269,6 +270,9 @@ var app = new Vue({
             }
         },
         splitterResized(val) {
+            if (!this.$store.state.desktopLayout) {
+                return;
+            }
             var f = Math.floor(val/2)*2;
             if (f!=this.splitter) {
                 setLocalStorageVal("splitter", f);
@@ -311,10 +315,15 @@ var app = new Vue({
                     i++;
                 }
             }
+        },
+        setLayout(forceDesktop) {
+            autoLayout = undefined==forceDesktop;
+            usingDesktopLayout = undefined==forceDesktop ? window.innerWidth>=MIN_DESKTOP_WIDTH : forceDesktop;
+            this.$store.commit('setDesktopLayout', usingDesktopLayout);
         }
     },
     components: {
-        VueSplitter: window.location.href.indexOf("/desktop")>1 ? VueSplitter : undefined
+        VueSplitter: VueSplitter
     },
     store,
     lmsServer

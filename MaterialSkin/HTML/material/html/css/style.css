@@ -78,10 +78,6 @@ html, .mini-player {
  border-top:1px solid var(--bottom-toolbar-border-color);
 }
 
-.np-bar-mini {
- border-top:none!important;
-}
-
 .dialog-toolbar {
  height:var(--main-toolbar-height) !important;
  color:var(--dialog-toolbar-text-color) !important;
@@ -92,10 +88,6 @@ html, .mini-player {
 
 .dialog-toolbar .v-btn__content i {
  color:var(--dialog-toolbar-text-color) !important;
-}
-
-.lms-toolbar-mini {
- border-bottom:none!important;
 }
 
 .lms-toolbar {
@@ -683,11 +675,6 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
-.vol-full-label-np {
- text-align:right !important;
- padding-right:4px !important;
-}
-
 .vol-fixed-label {
  margin:-8px 0px 0px 0px;
  padding:0px;
@@ -710,14 +697,6 @@ div.v-subheader {
 
 .vol-fixed-label-noinf {
  right:190px;
-}
-
-.vol-fixed-label-np {
- right:110px;
-}
-
-.vol-fixed-label-mini {
- right:92px;
 }
 
 .v-menu__content {

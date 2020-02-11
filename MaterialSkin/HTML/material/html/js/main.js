@@ -9,22 +9,6 @@
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
 const MIN_DESKTOP_WIDTH = 600;
-var usingDesktopLayout = false;
-var autoLayout = true;
-function checkLayout() {
-    if (autoLayout && !IS_MOBILE) { // auto-layout broken on iPad #109
-        var changeTo=undefined;
-        if ( (window.innerWidth<MIN_DESKTOP_WIDTH && usingDesktopLayout) || (window.innerWidth>=MIN_DESKTOP_WIDTH && !usingDesktopLayout)) {
-            bus.$emit('changeLayout');
-        }
-    }
-}
-
-function checkEntryFocus() {
-    if (IS_MOBILE && (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA")) {
-        ensureVisible(document.activeElement);
-    }
-}
 
 var app = new Vue({
     el: '#app',
@@ -35,6 +19,7 @@ var app = new Vue({
                             dstm: false, savequeue: false } }
     },
     created() {
+        this.autoLayout = true;
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
@@ -54,9 +39,6 @@ var app = new Vue({
             this.setLayout(false);
         } else {
             this.setLayout();
-            bus.$on('changeLayout', function(forceDesktop) {
-                this.setLayout(forceDesktop);
-            }.bind(this));
         }
 
         var storedTrans = getLocalStorageVal('translation', undefined);
@@ -127,6 +109,7 @@ var app = new Vue({
         let lastWinHeight = window.innerHeight;
         let lastWinWidth = window.innerWidth;
         let timeout = undefined;
+        let lmsApp = this;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         window.addEventListener('resize', () => {
             if (timeout) {
@@ -142,10 +125,14 @@ var app = new Vue({
                 timeout = undefined;
                 if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
                     lastWinWidth = window.innerWidth;
-                    checkLayout();
+                    lmsApp.checkLayout();
                     bus.$emit('windowWidthChanged');
                 }
-                checkEntryFocus();
+
+                // Check entries are visible
+                if (IS_MOBILE && (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA")) {
+                    ensureVisible(document.activeElement);
+                }
             }, 50);
         }, false);
 
@@ -308,10 +295,16 @@ var app = new Vue({
                 }
             }
         },
+        checkLayout() {
+            if (this.autoLayout &&
+                 ( (window.innerWidth<MIN_DESKTOP_WIDTH && this.$store.state.desktopLayout) ||
+                     (window.innerWidth>=MIN_DESKTOP_WIDTH && !this.$store.state.desktopLayout)) ) {
+                this.setLayout();
+            }
+        },
         setLayout(forceDesktop) {
-            autoLayout = undefined==forceDesktop;
-            usingDesktopLayout = undefined==forceDesktop ? window.innerWidth>=MIN_DESKTOP_WIDTH : forceDesktop;
-            this.$store.commit('setDesktopLayout', usingDesktopLayout);
+            this.autoLayout = undefined==forceDesktop;
+            this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=MIN_DESKTOP_WIDTH : forceDesktop);
         }
     },
     components: {

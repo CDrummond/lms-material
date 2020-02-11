@@ -64,6 +64,21 @@ sub initPlugin {
         #    $params->{'material_revision'} = $class->pluginVersion();
         #    return Slim::Web::HTTP::filltemplatefile('index.html', $params);
         #} );
+        Slim::Web::Pages->addPageFunction( 'desktop', sub {
+            my ($client, $params) = @_;
+            $params->{'material_revision'} = $class->pluginVersion();
+            return Slim::Web::HTTP::filltemplatefile('desktop.html', $params);
+        } );
+        Slim::Web::Pages->addPageFunction( 'now-playing', sub {
+            my ($client, $params) = @_;
+            $params->{'material_revision'} = $class->pluginVersion();
+            return Slim::Web::HTTP::filltemplatefile('now-playing.html', $params);
+        } );
+        Slim::Web::Pages->addPageFunction( 'mobile', sub {
+            my ($client, $params) = @_;
+            $params->{'material_revision'} = $class->pluginVersion();
+            return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
+        } );
 
         Slim::Web::Pages->addRawFunction($ROOT_URL_PARSER_RE, sub {
             my ( $httpClient, $response ) = @_;

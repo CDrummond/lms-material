@@ -59,14 +59,6 @@ var app = new Vue({
             }.bind(this));
         }
 
-        lmsUseLastPlayer = false;
-        if (pageWasReloaded()) {
-            lmsUseLastPlayer = true;
-        } else {
-            lmsUseLastPlayer = getLocalStorageBool('useLastPlayer', lmsUseLastPlayer);
-            removeLocalStorage('useLastPlayer');
-        }
-
         var storedTrans = getLocalStorageVal('translation', undefined);
         if (storedTrans!=undefined) {
             setTranslation(JSON.parse(storedTrans));

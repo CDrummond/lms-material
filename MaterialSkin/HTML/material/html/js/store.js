@@ -7,10 +7,6 @@
 'use strict';
 
 var lmsNumVisibleMenus = 0;
-/* When setttnig a player from players list, should we use the last player, or the
-   user's configured default player? useLastPlayer should ONLY be set to true when
-   switching mobile/desktop or when mini-player is launched */
-var lmsUseLastPlayer = false;
 
 function copyPlayer(p){
     return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip};
@@ -281,9 +277,7 @@ const store = new Vuex.Store({
             }
 
             if (players && !state.player) {
-                // If 'lmsUseLastPlayer' is set then order is last, default, first in list. Otherwise it is
-                // default, last, first in list
-                if (!lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
+                if (!state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
                             state.player = copyPlayer(state.players[i]);
@@ -304,17 +298,6 @@ const store = new Vuex.Store({
                         }
                     }
                 }
-                if (lmsUseLastPlayer && !state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
-                    for (var i=0, len=state.players.length; i<len; ++i) {
-                        if (state.players[i].id === state.defaultPlayer) {
-                            state.player = copyPlayer(state.players[i]);
-                            setLocalStorageVal('player', state.player.id);
-                            break;
-                        }
-                    }
-                }
-                // Reset 'lmsUseLastPlayer' - after initial load/reload we can then use defualt (if set)
-                lmsUseLastPlayer = false;
                 if (!state.player && state.players.length>0) {
                     // Auto-select a player:
                     //  1. First powered on standard player

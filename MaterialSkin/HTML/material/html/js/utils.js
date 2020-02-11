@@ -749,25 +749,6 @@ function getField(item, field) {
     return -1;
 }
 
-function pageWasReloaded() {
-    if (!window.performance) {
-        return false;
-    }
-
-    // Attempt to user newer API (https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type)
-    if ('getEntriesByType' in performance) {
-        var entries = performance.getEntriesByType("navigation");
-        for (var i=0, len=entries.length; i < len; i++) {
-            if ("reload"==entries[i].type) {
-                return true;
-            }
-        }
-    }
-
-    // Fallback to older (deprecated) API
-    return performance.navigation.type == performance.navigation.TYPE_RELOAD;
-}
-
 function addAndPlayAllActions(cmd) {
     if (cmd.command[0]=="albums") {
         for (var i=0, len=cmd.params.length; i<len; ++i) {

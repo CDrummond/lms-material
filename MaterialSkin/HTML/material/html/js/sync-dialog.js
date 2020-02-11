@@ -90,20 +90,45 @@ Vue.component('lms-sync-dialog', {
             this.show=false;
         },
         sync() {
-            this.show=false;
             var newSync = new Set();
             this.chosenPlayers.forEach(p => { newSync.add(p); } );
 
+            // Build list of commands to execute...
+            var commands = [];
+            // ...first remove any previosly synced players that will no longer ge synced
             this.origSync.forEach(p => {
                 if (!newSync.has(p)) {
-                    lmsCommand(p, ["sync", "-"]);
+                    commands.push({player:p, command:["sync", "-"]});
                 }
             });
-
+            // ...now add any new players
             newSync.forEach(p => {
-                lmsCommand(this.player.id, ["sync", p]);
+                if (!this.origSync.has(p)) {
+                    commands.push({player:this.player.id, command:["sync", p]});
+                }
             });
-            bus.$emit('syncChanged');
+            if (0==commands.length) {
+                // No changes!
+                this.show=false;
+            } else {
+                this.doCommands(commands);
+            }
+        },
+        doCommands(commands) {
+            if (!this.show) {
+                return;
+            }
+            if (0==commands.length) {
+                this.show=false;
+                bus.$emit('refreshStatus');
+                bus.$emit('syncChanged');
+            } else {
+                let command = commands.shift();
+                logJsonMessage("SYNC", command);
+                lmsCommand(command.player, command.command).then(({data}) => {
+                    this.doCommands(commands);
+                });
+            }
         },
         togglePlayers() {
             if (this.chosenPlayers.length==this.players.length) {

@@ -117,7 +117,6 @@ Vue.component('lms-iframe-dialog', {
  <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
 </div>
 `,
-    props: [ 'desktop' ],
     data() {
         return {
             show: false,

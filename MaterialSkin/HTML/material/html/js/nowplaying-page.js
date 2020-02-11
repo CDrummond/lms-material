@@ -959,8 +959,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             setLocalStorageVal("showTotal", this.showTotal);
         },
         setBgndCover(force) {
-            if (this.page && (!this.$store.state.desktopLayout || this.largeView || force)) {
-                setBgndCover(this.page, (!this.$store.state.desktopLayout || this.largeView) && this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
+            if (this.page && (!this.$store.state.desktopLayout || this.largeView)) {
+                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
+            } else if (this.page && force && this.$store.state.desktopLayout && !this.largeView) {
+                // Switched from mobile to desktop, and bottom bar should not have cover
+                this.page.style.backgroundImage = 'none';
+                this.page.style.boxShadow = 'none';
             }
         },
         playPauseButton(showSleepMenu) {

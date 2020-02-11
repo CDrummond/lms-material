@@ -3,30 +3,29 @@
  1. Add (optional) screensaver that will kick in after 60 seconds if nothing is
     playing on current player.
  2. Slightly reduce size of Material's caches.
- 3. Add support for artist and album actions.
- 4. Notify on server updates, and add text stating new version available to
+ 3. Notify on server updates, and add text stating new version available to
     information dialog.
- 5. When searching all categories, perform individual searches and combine
+ 4. When searching all categories, perform individual searches and combine
     results.
- 6. When pinning items, store placeholders for tags parameter - so that this can
+ 5. When pinning items, store placeholders for tags parameter - so that this can
     be altered.
- 7. Allow playing of podcast episodes from search reponse.
- 8. On mobile devices, only show dotted jump-list if; a grid can be used and
+ 6. Allow playing of podcast episodes from search reponse.
+ 7. On mobile devices, only show dotted jump-list if; a grid can be used and
     there are more than 50 items, or a grid cannot be used and there are more
     than 150 items.
- 9. Make Podcast HTTP requests via Perl side to avoid CORS errors.
-10. Don't hard-code list of podcast providers, read from JSON resource file.
-11. Tweak UI a little; remove shadows, define a set of colours to allow easier
+ 8. Make Podcast HTTP requests via Perl side to avoid CORS errors.
+ 9. Don't hard-code list of podcast providers, read from JSON resource file.
+10. Tweak UI a little; remove shadows, define a set of colours to allow easier
     customisation, use Roboto Mono for monospace font.
-12. Fade in/out now-playing cover image when track changes.
-13. Add various colour variants.
-14. Add new themes; light (coloured toolbars), dark (coloured toolbars), and
+11. Fade in/out now-playing cover image when track changes.
+12. Add various colour variants.
+13. Add new themes; light (coloured toolbars), dark (coloured toolbars), and
     black.
-15. Fade-in image on now-playing screen.
-16. Merge mobile and desktop layour HTML files, so that page does not need to be
+14. Fade-in image on now-playing screen.
+15. Merge mobile and desktop layour HTML files, so that page does not need to be
     reloaded when layout changes.
-17. Remove mini player.
-18. Make now-playing HTML a redirect to desktop HTML but trigger large
+16. Remove mini player.
+17. Make now-playing HTML a redirect to desktop HTML but trigger large
     now-playing view.
 
 1.3.3

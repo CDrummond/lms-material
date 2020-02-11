@@ -679,7 +679,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.jumplistActive=0;
                 this.currentActions = [];
 
-                if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {7
+                /*if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {7
                     var cmd = ["material-skin", "actions", this.current.id];
                     if (this.current.id.startsWith("artist_id:")) {
                         cmd.push("artist:"+this.current.title);
@@ -693,7 +693,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }).catch(err => {
                     });
-                }
+                }*/
 
                 if (item.id.startsWith(SEARCH_ID)) {
                     this.tbarActions=[SEARCH_LIB_ACTION];

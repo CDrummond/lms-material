@@ -2333,7 +2333,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             const JUMP_LIST_WIDTH = 32;
             const VIEW_RIGHT_PADDING = 4;
             var changed = false;
-            var listWidth = this.pageElement.scrollWidth- ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (this.filteredJumplist.length>1 && this.items.length>10 ? JUMP_LIST_WIDTH :0) + VIEW_RIGHT_PADDING);
+            var viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
+            var listWidth = viewWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (this.filteredJumplist.length>1 && this.items.length>10 ? JUMP_LIST_WIDTH :0) + VIEW_RIGHT_PADDING);
 
             // Calculate what grid item size we should use...
             var size = 0;
@@ -2595,6 +2596,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('splitterChanged', function() {
             this.layoutGrid();
+        }.bind(this));
+        bus.$on('layoutChanged', function() {
+            this.layoutGrid(true);
         }.bind(this));
         this.wide = window.innerWidth>=800;
         setTimeout(function () {

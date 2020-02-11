@@ -38,13 +38,11 @@
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
-    <vue-splitter v-if="desktopLayout" :margin="20" :percent="splitterPercent" @resize="splitterResized">
-     <div slot="left-pane"><lms-browse></lms-browse></div>
-     <div slot="right-pane"><lms-queue></lms-queue></div>
+    <vue-splitter :margin="desktopLayout ? 20 : 0" :percent="desktopLayout ? splitterPercent : 0" @resize="splitterResized">
+     <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
+     <div slot="right-pane"><lms-queue v-show="desktopLayout || page=='queue'"></lms-queue></div>
     </vue-splitter>
-    <lms-browse v-if="!desktopLayout" v-show="page=='browse'"></lms-browse>
     <lms-now-playing v-show="desktopLayout || page=='now-playing'"></lms-now-playing>
-    <lms-queue v-if="!desktopLayout" v-show="page=='queue'"></lms-queue>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>
     <lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>
     <lms-player-settings v-if="dialogs.playersettings"></lms-player-settings>

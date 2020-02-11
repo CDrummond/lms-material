@@ -320,3 +320,6 @@
  }
 }
 
+.vue-splitter .splitter {
+ max-width:0px!important;
+}

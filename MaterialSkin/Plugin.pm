@@ -68,13 +68,16 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($ROOT_URL_PARSER_RE, sub {
             my ( $httpClient, $response ) = @_;
             return unless $httpClient->connected;
-
             my $request = $response->request;
+            my $ua = $request->header('user-agent');
             my $dir = dirname(__FILE__);
             my $filePath = dirname(__FILE__) . "/HTML/material/index.html";
             my $ver = $class->pluginVersion();
             my $data = read_file($filePath);
             $data =~ s/\[% material_revision %\]/$ver/g;
+            if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1) {
+                $data =~ s/icon\.png/icon-ios\.png/g;
+            }
             $response->code(RC_OK);
             $response->content_type('text/html');
             $response->header('Connection' => 'close');

@@ -8,8 +8,6 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
-const MIN_DESKTOP_WIDTH = 600;
-
 var app = new Vue({
     el: '#app',
     data() {
@@ -297,14 +295,14 @@ var app = new Vue({
         },
         checkLayout() {
             if (this.autoLayout &&
-                 ( (window.innerWidth<MIN_DESKTOP_WIDTH && this.$store.state.desktopLayout) ||
-                     (window.innerWidth>=MIN_DESKTOP_WIDTH && !this.$store.state.desktopLayout)) ) {
+                 ( (window.innerWidth<LMS_MIN_DESKTOP_WIDTH && this.$store.state.desktopLayout) ||
+                     (window.innerWidth>=LMS_MIN_DESKTOP_WIDTH && !this.$store.state.desktopLayout)) ) {
                 this.setLayout();
             }
         },
         setLayout(forceDesktop) {
             this.autoLayout = undefined==forceDesktop;
-            this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=MIN_DESKTOP_WIDTH : forceDesktop);
+            this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
         }
     },
     components: {

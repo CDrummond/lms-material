@@ -29,11 +29,8 @@
     now-playing view.
 18. Open 'Text files from music folder' in an embedded iframe.
 19. Only add padding to bottom of lists for iOS.
-
-1.3.3
------
-1. When changing sync groups, perform commands synchronously and refresh
-   player status after complete.
+20. When changing sync groups, perform commands synchronously and refresh
+    player status after complete.
 
 1.3.2
 -----

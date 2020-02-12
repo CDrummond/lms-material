@@ -11,22 +11,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <title>LMS</title>
+  <link href="html/font/font.css?r=49" rel="stylesheet">
+  <link href="html/lib/vuetify.min.css?r=1.5.16" rel="stylesheet">
+  <link href="html/lib/vue-virtual-scroller.css?r=1.0.0-rc2" rel="stylesheet">
+  <link href="html/lib/photoswipe/photoswipe.min.css?r=4.1.2" rel="stylesheet">
+  <link href="html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2" rel="stylesheet">
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   print("<link href=\"html/css/themes/dark.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
-  print("  <link href=\"html/font/font.css?r=49\" rel=\"stylesheet\">\n");
-  print("  <link href=\"html/lib/vuetify.min.css?r=1.5.16\" rel=\"stylesheet\">\n");
-  print("  <link href=\"html/lib/vue-virtual-scroller.css?r=1.0.0-rc2\" rel=\"stylesheet\">\n");
-  print("  <link href=\"html/lib/photoswipe/photoswipe.min.css?r=4.1.2\" rel=\"stylesheet\">\n");
-  print("  <link href=\"html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
-  print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">\n");
-  print("  <link href=\"/material/customcss/mobile?r=$version\" rel=\"stylesheet\" id=\"customcss\">\n");
-  print("  <link href=\"html/material.webmanifest?r=$version\" rel=\"manifest\">\n");
-  print("  <link href=\"html/images/icon.png?r=$version\" rel=\"icon shortcut\" sizes=\"128x128\">\n");
-  print("  <link href=\"html/images/icon.png?r=$version\" rel=\"apple-touch-icon\" sizes=\"128x128\" id=\"iconpng\">");
+  print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">");
   [% END %]
+  <link href="/material/customcss/mobile" rel="stylesheet" id="customcss">
+  <link href="html/material.webmanifest" rel="manifest">
+  <link href="html/images/icon.png" rel="icon shortcut" sizes="128x128">
+  <link href="html/images/icon.png" rel="apple-touch-icon" sizes="128x128" id="iconpng">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -128,7 +128,7 @@
   print("  <script src=\"html/js/utils.js?r=$version\"></script>\n");
   print("  <script>\n");
   print("  if (!IS_IOS) {\n");
-  print("    changeLink(\"html/images/icon-ios.png?r=$version\", \"iconpng\", [[\"rel\", \"apple-touch-icon\"], [\"sizes\", \"128x128\"]]);\n");
+  print("    changeLink(\"html/images/icon-ios.png\", \"iconpng\", [[\"rel\", \"apple-touch-icon\"], [\"sizes\", \"128x128\"]]);\n");
   print("  }\n");
   print("  </script>");
   print("  <script src=\"html/js/mediasession.js?r=$version\"></script>\n");

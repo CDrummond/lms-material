@@ -335,7 +335,7 @@ function setTheme(theme, color) {
 
 function setLayout(useDesktop) {
     changeLink("html/css/" + (useDesktop ? "desktop" : "mobile") + ".css?r=" + LMS_MATERIAL_REVISION, "layoutcss");
-    changeLink("/material/customcss/" + (useDesktop ? "desktop" : "mobile") + "?r=[% material_revision %]", "customcss");
+    changeLink("/material/customcss/" + (useDesktop ? "desktop" : "mobile"), "customcss");
 }
 
 function openWindow(page) {

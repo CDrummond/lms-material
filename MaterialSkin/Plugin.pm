@@ -33,7 +33,6 @@ my $serverprefs = preferences('server');
 
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
-my $ROOT_URL_PARSER_RE = qr{^\/material\/$}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -59,46 +58,17 @@ sub initPlugin {
         require Plugins::MaterialSkin::Settings;
 		Plugins::MaterialSkin::Settings->new();
 
-        #Slim::Web::Pages->addPageFunction( $ROOT_URL_PARSER_RE, sub {
-        #    my ($client, $params) = @_;
-        #    $params->{'material_revision'} = $class->pluginVersion();
-        #    return Slim::Web::HTTP::filltemplatefile('index.html', $params);
-        #} );
         Slim::Web::Pages->addPageFunction( 'desktop', sub {
             my ($client, $params) = @_;
-            $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('desktop.html', $params);
         } );
         Slim::Web::Pages->addPageFunction( 'now-playing', sub {
             my ($client, $params) = @_;
-            $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('now-playing.html', $params);
         } );
         Slim::Web::Pages->addPageFunction( 'mobile', sub {
             my ($client, $params) = @_;
-            $params->{'material_revision'} = $class->pluginVersion();
             return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
-        } );
-
-        Slim::Web::Pages->addRawFunction($ROOT_URL_PARSER_RE, sub {
-            my ( $httpClient, $response ) = @_;
-            return unless $httpClient->connected;
-            my $request = $response->request;
-            my $ua = $request->header('user-agent');
-            my $dir = dirname(__FILE__);
-            my $filePath = dirname(__FILE__) . "/HTML/material/index.html";
-            my $ver = $class->pluginVersion();
-            my $data = read_file($filePath);
-            $data =~ s/\[% material_revision %\]/$ver/g;
-            if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1) {
-                $data =~ s/icon\.png/icon-ios\.png/g;
-            }
-            $response->code(RC_OK);
-            $response->content_type('text/html');
-            $response->header('Connection' => 'close');
-            $response->content($data);
-            $httpClient->send_response($response);
-            Slim::Web::HTTP::closeHTTPSocket($httpClient);
         } );
 
         Slim::Web::Pages->addRawFunction($SVG_URL_PARSER_RE, \&_svgHandler);

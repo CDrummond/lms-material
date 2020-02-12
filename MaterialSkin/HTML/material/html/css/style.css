@@ -1497,6 +1497,10 @@ div.v-subheader {
  padding:0px;
 }
 
+.iframe-text {
+ background-color:#ddd;
+}
+
 .transparent {
  opacity:0;
 }

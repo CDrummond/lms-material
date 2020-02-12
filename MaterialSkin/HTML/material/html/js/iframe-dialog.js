@@ -60,16 +60,15 @@ function clickHandler(e) {
             e.preventDefault();
         }
     }
-    bus.$emit('iframe-loaded');
 }
 
 function hideClassicSkinElems(page, showAll) {
     if (!page) {
         return;
     }
-    var iframe = document.getElementById("classicSkinIframe");
+    var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
-        var toHide = toHide;
+        let toHide = undefined;
         if (!showAll) {
             if ('player'==page) {
                 toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
@@ -87,7 +86,7 @@ function hideClassicSkinElems(page, showAll) {
         if (undefined!=toHide) {
             var select = iframe.contentDocument.getElementById("choose_setting");
             if (undefined!=select) {
-                for (var i=select.length-1; i>=0; i--) {
+                for (let i=select.length-1; i>=0; i--) {
                     if (toHide.has(select.options[i].value)) {
                         select.remove(i);
                     }
@@ -95,6 +94,7 @@ function hideClassicSkinElems(page, showAll) {
             }
         }
     }
+    bus.$emit('iframe-loaded');
 }
 
 Vue.component('lms-iframe-dialog', {
@@ -110,7 +110,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="classicSkinIframe" v-on:load="hideClassicSkinElems(page, showAll)" :src="src" frameborder="0"></iframe>
+    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page, showAll)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>

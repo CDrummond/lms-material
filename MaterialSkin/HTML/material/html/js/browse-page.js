@@ -933,7 +933,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;
             } else if (item.weblink) {
-                window.open(item.weblink);
+                if (this.current && this.current.actions && this.current.actions.go && this.current.actions.go.params &&
+                    this.current.actions.go.params.folder && this.current.actions.go.cmd && this.current.actions.go.cmd.length>=2 &&
+                    this.current.actions.go.cmd[0]=="musicartistinfo" && this.current.actions.go.cmd[1]=="localfiles") {
+                    bus.$emit('dlg.open', 'iframe', item.weblink, item.title);
+                } else {
+                    window.open(item.weblink);
+                }
             } else {
                 var command = this.buildCommand(item);
                 if (command.command.length>2 && command.command[1]=="playlist") {

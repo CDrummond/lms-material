@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <title>LMS</title>
   <link href="html/font/font.css?r=49" rel="stylesheet">
+  <!--CSS start-->
   <link href="html/lib/vuetify.min.css?r=1.5.16" rel="stylesheet">
   <link href="html/lib/vue-virtual-scroller.css?r=1.0.0-rc2" rel="stylesheet">
   <link href="html/lib/photoswipe/photoswipe.min.css?r=4.1.2" rel="stylesheet">
@@ -23,6 +24,7 @@
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">");
   [% END %]
+  <!--CSS end-->
   <link href="/material/customcss/mobile" rel="stylesheet" id="customcss">
   <link href="html/material.webmanifest" rel="manifest">
   <link href="html/images/icon.png" rel="icon shortcut" sizes="128x128">
@@ -101,6 +103,7 @@
     </div>
    </v-app>
   </div>
+  <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.0"></script>
   <script src="html/lib/libcometd.min.js?r=4.0.3mod2"></script>
   <script src="html/lib/idb-keyval-iife.min.js?r=3.1.0p50"></script>
@@ -126,11 +129,6 @@
   print("  <script src=\"html/js/emblems.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/currentcover.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/utils.js?r=$version\"></script>\n");
-  print("  <script>\n");
-  print("  if (!IS_IOS) {\n");
-  print("    changeLink(\"html/images/icon-ios.png\", \"iconpng\", [[\"rel\", \"apple-touch-icon\"], [\"sizes\", \"128x128\"]]);\n");
-  print("  }\n");
-  print("  </script>");
   print("  <script src=\"html/js/mediasession.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/toolbar.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/bottomnav.js?r=$version\"></script>\n");
@@ -164,6 +162,12 @@
   print("  <script src=\"html/js/store.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/main.js?r=$version\"></script>\n");
   [% END %]
+  <!--JS end-->
+  <script>
+  if (!IS_IOS) {
+    changeLink("html/images/icon-ios.png", "iconpng", [["rel", "apple-touch-icon"], ["sizes", "128x128"]]);
+  }
+  </script>
  </body>
 </html>
 

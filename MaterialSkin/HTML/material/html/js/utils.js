@@ -301,7 +301,7 @@ function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }
 
-function changeLink(href, id, attribs) {
+function changeLink(href, id) {
     var links = document.getElementsByTagName("link");
     if (undefined==links) {
         return;
@@ -312,14 +312,8 @@ function changeLink(href, id, attribs) {
                 return;
             }
             var newlink = document.createElement("link");
-            if (attribs==undefined){
-                newlink.setAttribute("rel", "stylesheet");
-                newlink.setAttribute("type", "text/css");
-            } else {
-                for (var a=0, alen=attribs.length; a<alen; ++a) {
-                    newlink.setAttribute(attribs[a][0], attribs[a][1]);
-                }
-            }
+            newlink.setAttribute("rel", "stylesheet");
+            newlink.setAttribute("type", "text/css");
             newlink.setAttribute("href", href);
             newlink.setAttribute("id", id);
             document.getElementsByTagName("head").item(0).replaceChild(newlink, links[i]);

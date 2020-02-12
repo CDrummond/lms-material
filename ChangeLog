@@ -22,10 +22,10 @@
 13. Add new themes; light (coloured toolbars), dark (coloured toolbars), and
     black.
 14. Fade-in image on now-playing screen.
-15. Merge mobile and desktop layour HTML files, so that page does not need to be
+15. Merge mobile and desktop layout HTML files, so that page does not need to be
     reloaded when layout changes.
 16. Remove mini player.
-17. Make now-playing HTML a redirect to desktop HTML but trigger large
+17. Make now-playing HTML a redirect to desktop HTML and auto trigger large
     now-playing view.
 18. Open 'Text files from music folder' in an embedded iframe.
 19. Only add padding to bottom of lists for iOS.

@@ -33,6 +33,7 @@ my $serverprefs = preferences('server');
 
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
+my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -73,6 +74,7 @@ sub initPlugin {
 
         Slim::Web::Pages->addRawFunction($SVG_URL_PARSER_RE, \&_svgHandler);
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
+        Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
 
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
@@ -649,6 +651,21 @@ sub _customCssHandler {
     }
     $httpClient->send_response($response);
     Slim::Web::HTTP::closeHTTPSocket($httpClient);
+}
+
+sub _iconHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $ua = $request->header('user-agent');
+    my $icon = "icon.png";
+    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) {
+        $icon ="icon-ios.png";
+    }
+    my $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $icon;
+    $response->code(RC_OK);
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
 }
 
 1;

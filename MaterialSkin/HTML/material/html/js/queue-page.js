@@ -293,7 +293,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-action>
    </v-list-tile>
   </template>
-  <v-list-tile class="lms-list-pad"></v-list-tile>
+  <v-list-tile v-if="IS_IOS" class="lms-list-pad"></v-list-tile>
  </v-list>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

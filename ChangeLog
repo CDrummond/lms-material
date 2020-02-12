@@ -28,6 +28,7 @@
 17. Make now-playing HTML a redirect to desktop HTML but trigger large
     now-playing view.
 18. Open 'Text files from music folder' in an embedded iframe.
+19. Only add padding to bottom of lists for iOS.
 
 1.3.3
 -----

@@ -24,6 +24,10 @@ body {
  margin-left:-4px !important;
 }
 
+.list-details-queue {
+ padding-left:8px !important;
+}
+
 .subtoolbar {
  height:var(--sub-toolbar-height) !important;
  white-space:nowrap;
@@ -64,10 +68,6 @@ body {
  position:fixed;
  top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 36px));
  left:calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
-}
-
-.vue-splitter .splitter {
- background-color:var(--splitter-color) !important;
 }
 
 .np-bar {

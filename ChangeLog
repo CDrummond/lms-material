@@ -31,6 +31,7 @@
 19. Only add padding to bottom of lists for iOS.
 20. When changing sync groups, perform commands synchronously and refresh
     player status after complete.
+21. Change splitter library to split.js
 
 1.3.2
 -----

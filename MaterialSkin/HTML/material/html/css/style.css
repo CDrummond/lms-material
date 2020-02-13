@@ -1612,3 +1612,22 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  100% { opacity:1; }
 }
 
+.wrapper {
+ display: flex;
+}
+
+.gutter {
+ border-left:1px solid var(--background-color);
+ border-right:1px solid var(--background-color);
+ background-color:var(--splitter-color);
+ background-repeat: no-repeat;
+ background-position: 50%;
+}
+
+.gutter:hover {
+ background-color:var(--primary-color);
+}
+
+.gutter.gutter-horizontal {
+ cursor: col-resize;
+}

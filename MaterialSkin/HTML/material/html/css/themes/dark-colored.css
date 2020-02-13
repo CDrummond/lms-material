@@ -43,3 +43,7 @@
 .np-info-cover {
  background-color:#000;
 }
+
+.lms-toolbar .v-input--slider .v-slider__track {
+ background:rgba(255, 255, 255, 0.3333);
+}

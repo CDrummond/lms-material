@@ -1625,6 +1625,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 .gutter:hover {
+ border:none;
  background-color:var(--primary-color);
 }
 

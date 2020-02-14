@@ -120,6 +120,13 @@ Vue.component('lms-toolbar', {
     <v-list-tile-avatar v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
    </v-list-tile>
+   <v-divider v-if="customActions && customActions.length>0"></v-divider>
+   <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
+    <v-list-tile @click="performCustomAction(action)">
+     <v-list-tile-avatar v-if="menuIcons"></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
    <v-divider v-if="!desktopLayout && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
    <template v-if="!desktopLayout && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
     <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)">
@@ -146,6 +153,7 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined,
                                  current: { title:undefined, artist:undefined, album:undefined } },
                  menuItems: [],
+                 customActions:undefined,
                  showPlayerMenu: false,
                  showMainMenu: false,
                  otherMenuItems:{},
@@ -288,6 +296,12 @@ Vue.component('lms-toolbar', {
                 }.bind(this), 1500);
             }
         }.bind(this));
+        bus.$on('customActions', function() {
+            if (undefined==this.customActions) {
+                this.customActions = getCustomActions();
+            }
+        }.bind(this));
+        this.customActions = getCustomActions();
 
         if (!IS_MOBILE) {
             this.addMouseWheelHandler("vol-down-btn");

@@ -34,6 +34,7 @@ my $serverprefs = preferences('server');
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
+my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -75,6 +76,7 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($SVG_URL_PARSER_RE, \&_svgHandler);
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
         Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
+        Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
 
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
@@ -130,7 +132,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl']) ) {
+                                                  'actions', 'geturl', 'command']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -506,6 +508,16 @@ sub _cliCommand {
         }
     }
 
+
+    if ($cmd eq 'command') {
+        my $act = $request->getParam('cmd');
+        if ($act) {
+            $request->setStatusDone();
+            system("$act");
+            return;
+        }
+    }
+
     $request->setStatusBadParams();
 }
 
@@ -641,16 +653,13 @@ sub _customCssHandler {
     my $request = $response->request;
     my $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin." . basename($request->uri->path) . ".css";
     if (-e $filePath) {
-        my $css = read_file($filePath);
         $response->code(RC_OK);
-        $response->content_type('text/css');
-        $response->header('Connection' => 'close');
-        $response->content($css);
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
     } else {
         $response->code(RC_NOT_FOUND);
+        $httpClient->send_response($response);
+        Slim::Web::HTTP::closeHTTPSocket($httpClient);
     }
-    $httpClient->send_response($response);
-    Slim::Web::HTTP::closeHTTPSocket($httpClient);
 }
 
 sub _iconHandler {
@@ -666,6 +675,22 @@ sub _iconHandler {
     my $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $icon;
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+}
+
+sub _customActionsHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin.actions.json";
+    if (-e $filePath) {
+        $response->code(RC_OK);
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/json', $filePath, '', 'noAttachment' );
+    } else {
+        $response->code(RC_NOT_FOUND);
+        $httpClient->send_response($response);
+        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+    }
 }
 
 1;

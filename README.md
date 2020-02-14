@@ -134,6 +134,53 @@ per-device CSS changes. e.g.
 
 * `http://<yourserver>:9000/material/?css=my-phone` will use `prefs/plugin/material-skin.my-phone.css` as the custom CSS file.
 
+### Custom menu entries
+
+Material will look for `material-skin.actions.json` within your LMS's `prefs/plugin`
+folder. If found, then Material will add the actions listed in the `system` section
+to the main menu, actions in `allplayers` to all players, or you may create a section
+matching a specific player's MAC address. This file has the following format:
+
+```
+{
+  "system":[
+    {
+      "title":"A page to embed in Material",
+      "iframe":"http://address/to/embed"
+    },
+    {
+      "title":"A page to launch in a new window/tab",
+      "weblink":"http://some/site"
+    }
+    {
+      "title":"A command to run on the LMS server",
+      "command":"ls /tmp/ &"
+    }
+  ],
+  "allplayers":[
+    {
+      "title":"A command to run on the LMS server",
+      "command":"echo \"Player MAC:$ID Player Name:$NAME\""
+    }
+  ]
+  "ab:cd:de:01:02:03":[
+    ...
+  ]
+}
+```
+
+`iframe` URLs are loaded within Material (as happens for server settings, etc),
+and `wrblink` URLs are loaded in a new window (or tab).
+
+`$ID` will be replaced by the player's ID (its MAC address), and `$NAME` will
+be replaced by the player's name. NOTE: No validation takes place, and commands
+are invoked as is. Use `&` to run a command in the background - otherwise you
+could stall LMS.
+
+If you have multiple players, then player actions will be accessible from the
+'Manage players' dialog, otherwise they will be listed at the bottom of the
+'Player settings' dialog.
+
 ## Donations
 
 I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...

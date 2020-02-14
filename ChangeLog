@@ -32,6 +32,10 @@
 20. When changing sync groups, perform commands synchronously and refresh
     player status after complete.
 21. Change splitter library to split.js
+22. Read JSON file from server to appent custom entries to main menu, player's
+    menu in 'Manager players' dialog, or as a list of actions at bottom of
+    player settings dialog (if there is only 1 player). See README.md on github
+    page for format.
 
 1.3.2
 -----

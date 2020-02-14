@@ -88,6 +88,13 @@ Vue.component('lms-manage-players', {
      <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
+   <v-divider v-if="menu.customActions && menu.customActions.length>0"></v-divider>
+   <template v-if="menu.customActions && menu.customActions.length>0" v-for="(action, index) in menu.customActions">
+    <v-list-tile @click="performCustomAction(action, menu.player)">
+     <v-list-tile-avatar v-if="menuIcons"></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
   </v-list>
  </v-menu>
 </v-dialog>
@@ -99,7 +106,7 @@ Vue.component('lms-manage-players', {
             showAllButtons: true,
             players: [],
             manageGroups: false,
-            menu: { show:false, player:undefined, actions:[], x:0, y:0 },
+            menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
             trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined }
         }
     },
@@ -207,6 +214,7 @@ Vue.component('lms-manage-players', {
             }
             this.menu.actions.push(DIVIDER);
             this.menu.actions.push(player.id == this.$store.state.defaultPlayer ? PMGR_UNSET_DEF_PLAYER_ACTION : PMGR_SET_DEF_PLAYER_ACTION);
+            this.menu.customActions = getCustomActions(player.id);
             this.menu.show = true;
         },
         createGroup() {

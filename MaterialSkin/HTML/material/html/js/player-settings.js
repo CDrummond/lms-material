@@ -89,6 +89,13 @@ Vue.component('lms-player-settings', {
      <v-list-tile class="settings-note" v-if="unlockAll"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
      <v-btn v-longpress="showAllSettings" flat v-if="unlockAll"><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
      <div class="dialog-padding"></div>
+
+     <div class="dialog-padding" v-if="customActions && customActions.length>0"></div>
+     <v-header class="dialog-section-header" v-if="customActions && customActions.length>0">{{i18n('Actions')}}</v-header>
+     <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
+      <v-list-tile><v-btn @click="performCustomAction(action, {id:playerId, name:playerName})" flat>{{action.title}}</v-btn></v-list-tile>
+     </template>
+     <div class="dialog-padding" v-if="customActions && customActions.length>0"></div>
     </v-list>
    </v-card-text>
   </v-card>
@@ -196,7 +203,8 @@ Vue.component('lms-player-settings', {
             playerId: undefined,
             trans:{dstm:undefined},
             libraries:[],
-            library:undefined
+            library:undefined,
+            customActions:undefined
         }
     },
     computed: {
@@ -290,6 +298,7 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerOrigName = player.name;
+            this.customActions = this.$store.state.players.length==1 ? getCustomActions(player) : undefined;
             if (this.$store.state.dstmPlugin) {
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {

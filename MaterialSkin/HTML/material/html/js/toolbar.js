@@ -39,7 +39,7 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
       <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
-       <v-layout v-if="!IS_MOBILE && desktopLayout && players.length>1">
+       <v-layout v-if="!IS_MOBILE && desktopLayout">
         <v-flex xs6 style="margin-left:6px">
          <v-btn icon class="hide-for-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
         </v-flex>

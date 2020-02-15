@@ -297,3 +297,13 @@ body {
  }
 }
 
+/* Give more space for 'Open mini-player icon */
+.toolbar-player-list-desktop {
+ min-width:320px!important;
+}
+.v-menu__content .toolbar-player-list-desktop .v-list__tile .menu-shortcut-player {
+ min-width:54px!important;
+}
+.v-menu__content .toolbar-player-list-desktop .v-list__tile .player-menu-shortcut {
+ min-width:80px!important;
+}

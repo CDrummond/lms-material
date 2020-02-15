@@ -25,7 +25,7 @@ Vue.component('lms-toolbar', {
    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
   </v-toolbar-title>
        
-  <v-list class="toolbar-player-list">
+  <v-list class="toolbar-player-list" v-bind:class="{'toolbar-player-list-desktop': !IS_MOBILE && desktopLayout}">
    <template v-for="(item, index) in players">
     <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
@@ -40,7 +40,7 @@ Vue.component('lms-toolbar', {
       <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
        <v-layout v-if="!IS_MOBILE && desktopLayout">
-        <v-flex xs6 style="margin-left:6px">
+        <v-flex xs6>
          <v-btn icon class="hide-for-mini" small :title="trans.openmini" @click="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
         </v-flex>
         <v-flex xs6 style="margin-left:2px">

@@ -24,7 +24,8 @@
 14. Fade-in image on now-playing screen.
 15. Merge mobile and desktop layout HTML files, so that page does not need to be
     reloaded when layout changes.
-16. Remove mini player.
+16. Make mini player HTML a redirect to desktop HTML. Shrinking the height of
+    desktop will recreate the mini look.
 17. Make now-playing HTML a redirect to desktop HTML and auto trigger large
     now-playing view.
 18. Open 'Text files from music folder' in an embedded iframe.
@@ -36,6 +37,8 @@
     menu in 'Manager players' dialog, or as a list of actions at bottom of
     player settings dialog (if there is only 1 player). See README.md on github
     page for format.
+23. Require window height to be at least 250px before allowing to show expanded
+    now player, or desktop context info.
 
 1.3.2
 -----

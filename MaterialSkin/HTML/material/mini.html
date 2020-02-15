@@ -1,0 +1,21 @@
+<!--
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+-->
+ 
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>LMS</title>
+ </head>
+ <body>
+  <script>
+   var query = window.location.href.indexOf('?');
+   window.location.href = window.location.href.replace('/mini', '/') + (query>0 ? "&" : "?")+"layout=desktop";
+  </script>
+ </body>
+</html>

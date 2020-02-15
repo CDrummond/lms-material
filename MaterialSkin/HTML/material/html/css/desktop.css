@@ -278,3 +278,22 @@ body {
  top:var(--main-toolbar-height);
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
+
+@media screen and (max-height: 180px) {
+ .hide-for-mini {
+  display:none;
+ }
+ .application--wrap {
+  background-color:var(--top-toolbar-color)
+ }
+ .lms-toolbar {
+  border-bottom:none;
+ }
+ .np-bar, .lms-bottom-nav {
+  border-top:none;
+ }
+ .v-dialog__content .v-dialog .screensaver-bgnd {
+  display:none;
+ }
+}
+

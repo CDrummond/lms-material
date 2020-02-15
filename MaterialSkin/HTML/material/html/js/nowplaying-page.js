@@ -322,10 +322,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         this.info.showTabs=getLocalStorageBool("showTabs", false);
         bus.$on('expandNowPlaying', function(val) {
-            if (val) {
-                this.info.show = false;
+            if (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
+                if (val) {
+                    this.info.show = false;
+                }
+                this.largeView = val;
             }
-            this.largeView = val;
         }.bind(this));
 
         bus.$on('info-swipe', function(d) {
@@ -380,6 +382,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 npView.lowHeight = window.innerHeight <= (npView.$store.state.desktopLayout ? 400 : 430);
                 npView.resizeTimeout = undefined;
+                console.log(window.innerHeight);
+                if (window.innerHeight<LMS_MIN_NP_LARGE_INFO_HEIGHT) {
+                    npView.largeView = false;
+                    npView.info.show = false;
+                }
             }, 50);
         }, false);
 
@@ -589,8 +596,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         bus.$on('info', function() {
-            this.largeView = false;
-            this.info.show = !this.info.show;
+            if (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show) {
+                this.largeView = false;
+                this.info.show = !this.info.show;
+            }
         }.bind(this));
 
         bus.$on('prefset', function(pref, value) {
@@ -607,10 +616,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.$store.state.desktopLayout && this.$store.state.page!="now-playing")) {
                     return;
                 }
-                if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog')) {
+                if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog') && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show)) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
-                } else if ('mod+shift'==modifier && LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout) {
+                } else if ('mod+shift'==modifier && LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
                     this.info.show = false;
                     this.largeView = !this.largeView;
                 }
@@ -671,7 +680,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         showMenu(event) {
             event.preventDefault();
             this.clearClickTimeout();
-            if (this.info.show || (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving))) {
+            if (this.info.show || (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving)) && window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
                 this.touch = undefined;
                 this.menu.show = false;
                 this.menu.x = event.clientX;

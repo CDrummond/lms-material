@@ -44,8 +44,8 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
    <template v-for="(item, index) in otherPlayers">
-    <v-subheader v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
-    <v-list-tile @click="movePlayer(item)">
+    <v-subheader class="hide-for-mini" v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
+    <v-list-tile class="hide-for-mini" @click="movePlayer(item)">
      <v-list-tile-avatar><v-icon small></v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
@@ -78,7 +78,7 @@ Vue.component('lms-toolbar', {
  <v-spacer></v-spacer>
  <v-btn v-show="desktopLayout || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-show="desktopLayout || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (desktopLayout || wide)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
+ <div v-show="!playerDvc && (desktopLayout || wide)" class="hide-for-mini" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
  <v-btn v-show="desktopLayout || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="desktopLayout || wide" class="vol-full-label" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}%</p>
  <v-btn v-show="!(desktopLayout || wide)" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
@@ -87,22 +87,22 @@ Vue.component('lms-toolbar', {
   <v-icon v-else>volume_off</v-icon>
  </v-btn>
  <div class="vol-label" v-if="!(desktopLayout || wide)" v-bind:class="{'dimmed':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}%</div>
- <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button" id="inf">
+ <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage && !infoOpen" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktopLayout && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play">
+ <v-btn icon v-if="!desktopLayout && ( (isNowPlayingPage && (infoOpen || !infoPlugin)) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button">
+ <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button hide-for-mini">
   <v-icon>info_outline</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button">
+ <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
   <v-icon>fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button">
+ <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
   <v-icon>fullscreen_exit</v-icon>
  </v-btn>
- <v-menu v-if="connected" bottom left v-model="showMainMenu">
+ <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">

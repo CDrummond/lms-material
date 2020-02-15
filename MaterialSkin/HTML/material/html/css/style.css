@@ -292,6 +292,10 @@ div.v-subheader {
  cursor:pointer;
 }
 
+.defcursor {
+ cursor:default!important;
+}
+
 .image-grid-btn, .image-grid-btn:hover {
  position:absolute;
  width:32px !important;

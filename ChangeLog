@@ -3,6 +3,7 @@
 1. Slightly reduce size of 'Scroll queue to current track' icon.
 2. Make current track's background slightly darker for light themes.
 3. Use toolbar text colour for LMS rescan circular progress.
+4. Use default cursor when hover over empty grid item.
 
 1.4.0
 -----

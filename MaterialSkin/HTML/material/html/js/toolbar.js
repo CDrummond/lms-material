@@ -84,6 +84,7 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
+ <v-btn v-show="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon>refresh</v-icon></v-btn>
  <v-btn v-show="desktopLayout || wide" :disabled="!playerStatus.ison || noPlayer" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-show="desktopLayout || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  <div v-show="!playerDvc && (desktopLayout || wide)" class="hide-for-mini" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
@@ -176,7 +177,8 @@ Vue.component('lms-toolbar', {
                  playerDvc: true,
                  snackbar:{ show: false, msg: undefined},
                  connected: true,
-                 wide: false
+                 wide: false,
+                 updateProgress: {show:false, text:undefined}
                }
     },
     mounted() {
@@ -193,6 +195,16 @@ Vue.component('lms-toolbar', {
                 this.$set(this.otherMenuItems[page], i, actions[i]);
             }
             this.$forceUpdate();
+        }.bind(this));
+
+        bus.$on('scanProgress', function(text) {
+            if (undefined!=text) {
+                this.updateProgress.show=true;
+                this.updateProgress.text=text=='?' ? i18n("In progress") : text;
+            } else if (this.updateProgress.show) {
+                this.updateProgress.show=false;
+                this.updateProgress.text=undefined;
+            }
         }.bind(this));
 
         bus.$on('queueStatus', function(count, duration) {

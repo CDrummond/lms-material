@@ -263,14 +263,26 @@ Vue.component('lms-information-dialog', {
                     }
                     this.players.sort(playerSort);
 
-                    this.scanning = undefined==data.result.lastscan || 1==data.result.scanning;
+                    let wasScanning = this.scanning;
+                    this.scanning = undefined==data.result.lastscan || 1==data.result.scanning || 1==data.result.scan;
+                    let progressInfo = undefined;
+                    if (this.scanning && undefined!=data.result.progressname) {
+                        progressInfo = data.result.progressname+
+                            (undefined!=data.result.progressdone && undefined!=data.result.progresstotal
+                                ? ' ('+parseInt(data.result.progressdone)+'/'+parseInt(data.result.progresstotal)+')'
+                                : '');
+                    }
                     this.library=[ i18n("Total genres: %1", data.result["info total genres"]),
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    i18n("Total albums: %1", data.result["info total albums"]),
                                    i18n("Total songs: %1", data.result["info total songs"]),
                                    i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true)),
-                                   i18n("Last scan: %1", this.scanning ? i18n("In progress") : formatDate(data.result.lastscan))];
+                                   undefined!=progressInfo ? progressInfo : i18n("Last scan: %1", this.scanning ? i18n("In progress") : formatDate(data.result.lastscan))];
 
+                    // Noticed a scan has started, so get server class to also poll for changes - so that icon in main toolbar is updated...
+                    if (this.scanning && !wasScanning) {
+                        bus.$emit('refreshServerStatus');
+                    }
                     if (data.result.lastscanfailed) {
                         this.library.push("Last scan failure: %1", data.result.lastscanfailed);
                     }

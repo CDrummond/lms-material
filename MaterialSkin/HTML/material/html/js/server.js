@@ -230,6 +230,15 @@ var lmsServer = Vue.component('lms-server', {
                 }.bind(this), timeout<250 ? 250 : timeout);
             }
         },
+        scheduleNextServerStatus: function(timeout) {
+            this.cancelServerStatusTimer();
+            if (timeout>0) {
+                logCometdDebug("Schedule next server status poll in: "+timeout+"ms");
+                this.serverStatusTimer = setTimeout(function () {
+                    this.refreshServerStatus();
+                }.bind(this), timeout);
+            }
+        },
         reConnectToCometD() {
             if (!lmsIsConnected && this.cometd) {
                 this.cometd.connectNow();
@@ -307,6 +316,21 @@ var lmsServer = Vue.component('lms-server', {
                 lmsLastScan = data.lastscan;
                 clearListCache();
             }
+
+            if (undefined!=data.rescan && 1==parseInt(data.rescan)) {
+                bus.$emit("scanProgress", (undefined==data.progressname ? '?' : data.progressname)+
+                            (undefined!=data.progressdone && undefined!=data.progresstotal
+                                ? ' ('+parseInt(data.progressdone)+'/'+parseInt(data.progresstotal)+')'
+                                : ''));
+                // Scan in progress, so poll every 3 seconds for updates...
+                this.scheduleNextServerStatus(3000);
+                this.scanInProgress = true;
+            } else if (this.scanInProgress) {
+                bus.$emit("scanProgress", undefined);
+                this.scheduleNextServerStatus(0);
+                this.scanInProgress = false;
+            }
+
             if (data.players_loop) {
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
@@ -589,6 +613,12 @@ var lmsServer = Vue.component('lms-server', {
                 this.playerStatusTimer = undefined;
             }
         },
+        cancelServerStatusTimer() {
+            if (undefined!==this.serverStatusTimer) {
+                clearTimeout(this.serverStatusTimer);
+                this.serverStatusTimer = undefined;
+            }
+        },
         cancelFavoritesTimer() {
             if (undefined!==this.favoritesTimer) {
                 clearTimeout(this.favoritesTimer);
@@ -799,6 +829,7 @@ var lmsServer = Vue.component('lms-server', {
     beforeDestroy() {
         this.cancelConnectionFailureTimer();
         this.cancelPlayerStatusTimer();
+        this.cancelServerStatusTimer();
         this.cancelFavoritesTimer();
         this.cancelMoveTimer();
         this.cancelUpdatesTimer();

@@ -648,7 +648,7 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.subtoolbar .v-btn__content i.active-btn, .active-btn {
+.subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn {
  color:var(--active-color) !important;
 }
 
@@ -827,6 +827,10 @@ div.v-subheader {
 
 .np-info-card-cover, .np-info .theme--light.v-tabs__bar, .np-info .theme--dark.v-tabs__bar {
  background:var(--background-shadow-color) !important;
+}
+
+.np-info-card-cover div.v-btn__content i {
+ color:var(--text-color)!important;
 }
 
 .np-title {

@@ -302,12 +302,12 @@ var lmsServer = Vue.component('lms-server', {
             logCometdMessage("SERVER", data);
             var players = [];
             var otherPlayers = [];
+            var ids = new Set();
             if (lmsLastScan!=data.lastscan) {
                 lmsLastScan = data.lastscan;
                 clearListCache();
             }
             if (data.players_loop) {
-                var ids = new Set();
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
                     if (1==parseInt(i.connected)) { // Only list/use connected players...
@@ -322,26 +322,26 @@ var lmsServer = Vue.component('lms-server', {
                         ids.add(i.playerid);
                     }
                 }
-                if (data.other_players_loop) {
-                    for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
-                        var i = data.other_players_loop[idx];
-                        if (!ids.has(i.playerid)) {
-                            otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
-                        }
+             }
+            if (data.other_players_loop) {
+                for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
+                    var i = data.other_players_loop[idx];
+                    if (!ids.has(i.playerid)) {
+                        otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
                     }
                 }
-                this.$store.commit('setPlayers', players.sort(playerSort));
-                this.$store.commit('setOtherPlayers', otherPlayers.sort(otherPlayerSort));
+            }
+            this.$store.commit('setPlayers', players.sort(playerSort));
+            this.$store.commit('setOtherPlayers', otherPlayers.sort(otherPlayerSort));
 
-                if (0==this.subscribedPlayers.size) {
-                    // Upon reconnect, will will need to re-sub to current player...
-                    if (this.subscribeAll) {
-                        for (var i=0, len=players.length; i<len; ++i) {
-                            this.subscribe(players[i].id);
-                        }
-                    } else if (this.$store.state.player && this.$store.state.player.id) {
-                        this.subscribe(this.$store.state.player.id);
+            if (0==this.subscribedPlayers.size) {
+                // Upon reconnect, will will need to re-sub to current player...
+                if (this.subscribeAll) {
+                    for (var i=0, len=players.length; i<len; ++i) {
+                        this.subscribe(players[i].id);
                     }
+                } else if (this.$store.state.player && this.$store.state.player.id) {
+                    this.subscribe(this.$store.state.player.id);
                 }
             }
             return otherPlayers;

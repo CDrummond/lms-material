@@ -30,7 +30,7 @@ Vue.component('lms-toolbar', {
     <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
-     <v-list-tile-avatar v-if="players && players.length>1 || otherPlayers.length>0">
+     <v-list-tile-avatar v-if="(players && players.length>1) || otherPlayers.length>0">
       <v-icon small v-if="players && players.length>1">{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
       <v-icon small v-else></v-icon>
      </v-list-tile-avatar>

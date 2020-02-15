@@ -4,6 +4,7 @@
 2. Make current track's background slightly darker for light themes.
 3. Use toolbar text colour for LMS rescan circular progress.
 4. Use default cursor when hover over empty grid item.
+5. Only show progress total if its >= progress done.
 
 1.4.0
 -----

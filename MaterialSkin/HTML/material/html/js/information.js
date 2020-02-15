@@ -267,10 +267,11 @@ Vue.component('lms-information-dialog', {
                     this.scanning = undefined==data.result.lastscan || 1==data.result.scanning || 1==data.result.scan;
                     let progressInfo = undefined;
                     if (this.scanning && undefined!=data.result.progressname) {
-                        progressInfo = data.result.progressname+
-                            (undefined!=data.result.progressdone && undefined!=data.result.progresstotal
-                                ? ' ('+parseInt(data.result.progressdone)+'/'+parseInt(data.result.progresstotal)+')'
-                                : '');
+                        let total = undefined!=data.result.progresstotal ? parseInt(data.result.progresstotal) : undefined;
+                        let done = undefined!=data.result.progressdone ? parseInt(data.result.progressdone) : undefined;
+                        progressInfo = data.result.progressname+(undefined!=done && undefined!=total
+                                                                    ? ' ('+done+(total>=done ? '/'+total : '')+')'
+                                                                    : '');
                     }
                     this.library=[ i18n("Total genres: %1", data.result["info total genres"]),
                                    i18n("Total artists: %1", data.result["info total artists"]),

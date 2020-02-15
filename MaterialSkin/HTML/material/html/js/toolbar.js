@@ -53,21 +53,21 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime)"></v-divider>
+   <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime)" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)">
+   <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="keyboardControl" class="menu-shortcut player-menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
    </v-list-tile>
 
-   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)">
+   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
-   <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)">
+   <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>

@@ -32,6 +32,10 @@
  border-color:var(--toolbar-volume-color)!important;
 }
 
+.lms-toolbar .v-progress-circular__overlay {
+ stroke:var(--top-toolbar-text-color)!important;
+}
+
 .np-bar .v-progress-linear .primary {
  background-color:var(--bottom-position-slider-color)!important;
  border-color:var(--bottom-position-slider-color)!important;

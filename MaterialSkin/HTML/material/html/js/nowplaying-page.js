@@ -382,7 +382,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 npView.lowHeight = window.innerHeight <= (npView.$store.state.desktopLayout ? 400 : 430);
                 npView.resizeTimeout = undefined;
-                console.log(window.innerHeight);
                 if (window.innerHeight<LMS_MIN_NP_LARGE_INFO_HEIGHT) {
                     npView.largeView = false;
                     npView.info.show = false;

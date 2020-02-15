@@ -3,7 +3,7 @@
 1. Slightly reduce size of 'Scroll queue to current track' icon.
 2. Make current track's background slightly darker for light themes.
 3. Use toolbar text colour for LMS rescan circular progress.
-4. Use default cursor when hover over empty grid item.
+4. Use default cursor when hover over empty grid items.
 5. Only show progress total if its >= progress done.
 6. Fix colours of icons in info view.
 
@@ -712,7 +712,8 @@
     track_id
  5. Fix Custom Browse "New Albums" and "New Artists", by only asking for a max
     of either the configured "New Music Limit" or 100 items.
- 6. Indent "Information" dialog contents, to be consistent with settings dialogs.
+ 6. Indent "Information" dialog contents, to be consistent with settings
+    dialogs.
  7. Attempt to match Custom Browse categories with icons.
  8. Add search categories: All, Artists, Albums, Tracks, or Playlists
  9. If coverid/arwork is empty in search results, use default image.

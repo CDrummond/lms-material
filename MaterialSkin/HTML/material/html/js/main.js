@@ -24,6 +24,10 @@ var app = new Vue({
         this.query=parseQueryParams();
         this.$store.commit('initUiSettings');
 
+        if (this.query.player) {
+            document.title += SEPARATOR + unescape(this.query.player);
+        }
+
         let chosenLayout = undefined;
         if (undefined!=this.query.layout) {
             chosenLayout = this.query.layout;

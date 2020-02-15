@@ -395,13 +395,14 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], layout:undefined };
+    var resp = { actions:[], layout:undefined, player:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
         if ("player"==kv[0]) {
             setLocalStorageVal("player", kv[1]);
             removeLocalStorage("defaultPlayer");
+            resp.player=kv[1];
         } else if ("page"==kv[0]) {
             if (kv[1]=="browse" || kv[1]=="now-playing" || kv[1]=="queue") {
                 setLocalStorageVal("page", kv[1]);

@@ -39,7 +39,15 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
       <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
-       <v-btn icon><v-icon v-if="item.canpoweroff" style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)">power_settings_new</v-icon></v-btn>
+       <v-layout v-if="!IS_MOBILE && desktopLayout && players.length>1">
+        <v-flex xs6 style="margin-left:6px">
+         <v-btn icon class="hide-for-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
+        </v-flex>
+        <v-flex xs6 style="margin-left:2px">
+         <v-btn icon v-if="item.canpoweroff" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon>power_settings_new</v-icon></v-btn>
+        </v-flex>
+       </v-layout>
+       <v-btn v-else-if="item.canpoweroff" icon style="float:right" v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon>power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
     </v-list-tile>
    </template>
@@ -160,7 +168,7 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, synchronise:undefined, syncShortcut:undefined, info:undefined, infoShortcut:undefined,
                         connectionLost:undefined, showLarge:undefined, showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined,
                         groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined, updatesAvailable:undefined, fixedVol:undefined,
-                        decVol:undefined, incVol:undefined, showVol:undefined, mainMenu: undefined, play:undefined, pause:undefined},
+                        decVol:undefined, incVol:undefined, showVol:undefined, mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -401,7 +409,7 @@ Vue.component('lms-toolbar', {
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost...'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
-                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause")};
+                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -442,6 +450,11 @@ Vue.component('lms-toolbar', {
             lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
                 bus.$emit('refreshStatus', player.id);
             });
+        },
+        openMiniPlayer(player) {
+            // Height should be 112, but on my system sometimes its too small? Added 6 pix to give some padding...
+            window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
+                        'width=650,height=118,status=no,menubar=no,toolbar=no,location=no');
         },
         volumeDown(toggleMute) {
             if (this.$store.state.visibleMenus.size>0) {

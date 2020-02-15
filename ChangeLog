@@ -39,6 +39,8 @@
     page for format.
 23. Require window height to be at least 250px before allowing to show expanded
     now player, or desktop context info.
+24. Show 'Open mini-player' icon next to power icon in player menu. Each player
+    can be launched in its own mini-player window.
 
 1.3.2
 -----

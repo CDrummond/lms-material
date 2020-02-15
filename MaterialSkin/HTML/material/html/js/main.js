@@ -316,6 +316,7 @@ var app = new Vue({
                     var that = this;
                     this.splitter = Split([that.$refs.left, that.$refs.right], {
                         sizes: [this.splitterPercent, 100-this.splitterPercent],
+                        minSize: Math.floor(LMS_MIN_DESKTOP_WIDTH/2),
                         gutterSize: 3,
                         gutterAlign: 'center',
                         snapOffset: 5,

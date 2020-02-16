@@ -145,7 +145,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
-     <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', items.title)">
+     <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', item.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>

@@ -153,7 +153,8 @@ def fixClassisSkinMods():
             lines=f.readlines()
             for line in lines:
                 if "html/css/" in line:
-                    line=line.replace(".css?", ".min.css?")
+                    # mods.css is specal here as as its in skin.css and this does not have version info
+                    line=line.replace(".css?", ".min.css?").replace("mods.css", "mods.min.css")
                 fixedLines.append(line)
 
         with open(path, "w") as f:

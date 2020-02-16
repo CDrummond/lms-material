@@ -6,6 +6,7 @@
 4. Use default cursor when hover over empty grid items.
 5. Only show progress total if its >= progress done.
 6. Fix colours of icons in info view.
+7. Fix loading of classic skin mods on release builds.
 
 1.4.0
 -----

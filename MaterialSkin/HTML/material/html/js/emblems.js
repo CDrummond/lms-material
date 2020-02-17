@@ -17,7 +17,6 @@ function initEmblems() {
 }
 
 function getEmblem(extid) {
-extid="wimp:123";
     if (undefined!=extid) {
         for (let i=0, len=emblems.length; i<len; ++i) {
             if (extid.indexOf(emblems[i].extid)>=0) {

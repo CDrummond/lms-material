@@ -107,7 +107,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-btn>
      </div>
      <div class="emblem" v-if="idx<items.length && items[idx].emblem" :style="{background: items[idx].emblem.bgnd}">
-      <img :src="items[idx].emblem.name | svgIcon(darkUi)"></img>
+      <img :src="items[idx].emblem | emblem()"></img>
      </div>
     </v-card></td>
    </table>
@@ -2638,6 +2638,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        },
+        emblem: function (e) {
+            return "/material/svg/"+e.name+"?c="+e.color.substr(1)+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (act, showShortcut) {
             return showShortcut && ACTIONS[act].key

@@ -2,21 +2,25 @@
   {
     "name":"spotify",
     "bgnd":"#1ad05c",
+    "color":"#000",
     "extid":"spotify:"
   },
   {
     "name":"qobuz",
-    "bgnd":"#1976d2",
+    "bgnd":"#fff",
+    "color":"#000",
     "extid":"qobuz:"
   },
   {
     "name":"tidal",
-    "bgnd":"black",
+    "bgnd":"#fff",
+    "color":"#000",
     "extid":"wimp:"
   },
   {
     "name":"deezer",
-    "bgnd":"#ff9800",
+    "bgnd":"#000",
+    "color":"#fff",
     "extid":"deezer:"
   },
 ]

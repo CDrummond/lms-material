@@ -8,6 +8,7 @@
 6. Allow activation of Dynamic Playlists listed from More -> Artist:NAME ->
    More -> Dynamic Playlists
 7. Fix showing search results when there are less 11 results for a category.
+8. Append "?r=MaterialVerison" on classic skin mods changes.
 
 1.4.1
 -----

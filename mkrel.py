@@ -144,7 +144,7 @@ def fixUtils():
          f.write(text)
 
 
-def fixClassisSkinMods():
+def fixClassisSkinMods(version):
     info("...updating Classic Skin mods")
     for entry in ["skin.css", "standardheader.html", "html/js/iframe-dialog.js"]:
         fixedLines = []
@@ -152,6 +152,7 @@ def fixClassisSkinMods():
         with open(path, "r") as f:
             lines=f.readlines()
             for line in lines:
+                line=line.replace("?r=MATERIAL_VERSION", "?r=%s" % version)
                 if "html/css/" in line:
                     # mods.css is specal here as as its in skin.css and this does not have version info
                     line=line.replace(".css?", ".min.css?").replace("mods.css", "mods.min.css")
@@ -298,7 +299,7 @@ def fixHtml(version):
 def minify(version):
     info("Minifying")
     fixUtils()
-    fixClassisSkinMods()
+    fixClassisSkinMods(version)
     minifyJs()
     minifyCss()
     removeUnminified()

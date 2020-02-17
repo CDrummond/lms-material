@@ -133,7 +133,7 @@ Vue.component('lms-search-dialog', {
                         var all = [];
                         var numItems = this.results[i].resp.items.length;
                         var clamped = numItems>LMS_INITIAL_SEARCH_RESULTS
-                        var limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : len;
+                        var limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
                         var titleParam = clamped ? limit+" / "+numItems : numItems;
 
                         total+=numItems;

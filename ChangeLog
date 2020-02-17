@@ -7,6 +7,7 @@
 5. Fix missing covers when browse albums via More -> Artist:NAME
 6. Allow activation of Dynamic Playlists listed from More -> Artist:NAME ->
    More -> Dynamic Playlists
+7. Fix showing search results when there are less 11 results for a category.
 
 1.4.1
 -----

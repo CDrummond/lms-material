@@ -1867,8 +1867,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                            .replace(TERM_PLACEHOLDER, this.enteredTerm)
-                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
+                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS)
                     if (this.$store.state.ratingsSupport && p==TRACK_TAGS) {

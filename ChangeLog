@@ -4,6 +4,7 @@
 2. Better Qobuz emblem.
 3. Better colours for emblems.
 4. When paring SlimBrowse key:value pairs check that value is not empty.
+5. Fix missing covers when browse albums via More -> Artist:NAME
 
 1.4.1
 -----

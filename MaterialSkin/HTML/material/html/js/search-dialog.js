@@ -22,7 +22,7 @@ Vue.component('lms-search-dialog', {
    </v-list>
   </v-form>
   <v-card-actions>
-   <div v-if="searching">{{i18n('Searching...')}}</div>
+   <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
    <v-btn flat v-else @click.native="advanced()" id="advanced-search-btn">{{i18n('Advanced')}}</v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>

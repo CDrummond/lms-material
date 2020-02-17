@@ -1666,7 +1666,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var addedParams = new Set();
                     if (command.params) {
                         for (var key in command.params) {
-                            if (command.params[key]!=undefined && command.params[key]!=null) {
+                            if (command.params[key]!=undefined && command.params[key]!=null && (""+command.params[key]).length>0) {
                                 var param = key+":"+command.params[key];
                                 cmd.params.push(param);
                                 addedParams.add(param);
@@ -1677,9 +1677,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                         /*var isMore = "more" == commandName;*/
                         for(var key in item[command.itemsParams]) {
                             if (/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
-                                var param = key+":"+item[command.itemsParams][key];
-                                if (!addedParams.has(param)) {
-                                    cmd.params.push(param);
+                                let val = item[command.itemsParams][key];
+                                if (val!=undefined && val!=null && (""+val).length>0) {
+                                    let param = key+":"+item[command.itemsParams][key];
+                                    if (!addedParams.has(param)) {
+                                        cmd.params.push(param);
+                                    }
                                 }
                             }
                         }
@@ -1839,12 +1842,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var haveLibId = false;
                 for (var i=0, len=cmd.params.length; i<len; ++i) {
                     if (cmd.params[i].startsWith("library_id:")) {
-                        haveLibId = true;
-                        cmd.libraryId = cmd.params[i].split(":")[1];
-                        break;
+                        let id = cmd.params[i].split(":")[1];
+                        if (undefined!=id && (""+id)!="") {
+                            haveLibId = true;
+                            cmd.libraryId = id;
+                            break;
+                        }
                     }
                 }
-                if (!haveLibId) { // Command does not have libraey_id. Use lib from parent command (if set), or user's chosen library
+                if (!haveLibId) { // Command does not have library_id. Use lib from parent command (if set), or user's chosen library
                     var libId = this.currentLibId ? this.currentLibId : this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                     if (libId) {
                         cmd.params.push("library_id:"+libId);

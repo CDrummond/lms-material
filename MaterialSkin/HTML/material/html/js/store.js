@@ -25,11 +25,11 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('color', state.color);
         themeChanged = true;
     }
+    state.darkUi = !state.theme.startsWith('light');
     if (themeChanged) {
         setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
-    state.darkUi = !state.theme.startsWith('light');
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
         state.largeFonts = val.largeFonts;
         setLocalStorageVal('largeFonts', state.largeFonts);
@@ -352,6 +352,7 @@ const store = new Vuex.Store({
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', getLocalStorageBool('darkUi', true) ? 'dark' : 'light');
+            state.darkUi = !state.theme.startsWith('light');
             state.color = getLocalStorageVal('color', state.color);
             state.largeFonts = getLocalStorageBool('largeFonts', state.largeFonts);
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);

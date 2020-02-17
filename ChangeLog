@@ -10,6 +10,7 @@
  8. Update Dutch translation.
  9. Fix "%1 Menu"
 10. Fix colour of rating stars in bottom toolbar of desktop layout.
+11. Fix initialisation of light themes.
 
 1.4.0
 -----

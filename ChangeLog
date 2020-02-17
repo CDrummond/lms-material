@@ -1,14 +1,15 @@
 1.4.1
 -----
-1. Slightly reduce size of 'Scroll queue to current track' icon.
-2. Make current track's background slightly darker for light themes.
-3. Use toolbar text colour for LMS rescan circular progress.
-4. Use default cursor when hover over empty grid items.
-5. Only show progress total if its >= progress done.
-6. Fix colours of icons in info view.
-7. Fix loading of classic skin mods on release builds.
-8. Update Dutch translation.
-9. Fix "%1 Menu"
+ 1. Slightly reduce size of 'Scroll queue to current track' icon.
+ 2. Make current track's background slightly darker for light themes.
+ 3. Use toolbar text colour for LMS rescan circular progress.
+ 4. Use default cursor when hover over empty grid items.
+ 5. Only show progress total if its >= progress done.
+ 6. Fix colours of icons in info view.
+ 7. Fix loading of classic skin mods on release builds.
+ 8. Update Dutch translation.
+ 9. Fix "%1 Menu"
+10. Fix colour of rating stars in bottom toolbar of desktop layout.
 
 1.4.0
 -----

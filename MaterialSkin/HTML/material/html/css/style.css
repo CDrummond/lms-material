@@ -864,7 +864,7 @@ div.v-subheader {
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {
- color:var(--rating-color) !important;
+ color:var(--text-color) !important;
 }
 
 @media only screen and (max-height:800px) {

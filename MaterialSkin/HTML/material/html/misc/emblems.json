@@ -1,8 +1,8 @@
 [
   {
     "name":"spotify",
-    "bgnd":"#1ad05c",
-    "color":"#000",
+    "bgnd":"#1dd35e",
+    "color":"#fff",
     "extid":"spotify:"
   },
   {
@@ -13,13 +13,13 @@
   },
   {
     "name":"tidal",
-    "bgnd":"#fff",
-    "color":"#000",
+    "bgnd":"#000",
+    "color":"#fff",
     "extid":"wimp:"
   },
   {
     "name":"deezer",
-    "bgnd":"#000",
+    "bgnd":"#fb8715",
     "color":"#fff",
     "extid":"deezer:"
   },

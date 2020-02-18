@@ -12,6 +12,7 @@
  8. Append "?r=MaterialVersion" on classic skin mods changes.
  9. Fix long-press on 'Show extra settings' not passing player ID/MAC.
 10. Strip off .html when doing redirects.
+11. Hide failed MAI images.
 
 1.4.1
 -----

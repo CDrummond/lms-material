@@ -796,6 +796,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
+                        logJsonMessage("RESP", data);
                         if (data && data.result && (data.result.lyrics || data.result.error)) {
                             this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
                         }
@@ -823,6 +824,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.tabs[BIO_TAB].count = ids.length;
                     for (var i=0, len=ids.length; i<len; ++i) {
                         lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"]).then(({data}) => {
+                            logJsonMessage("RESP", data);
                             if (data && data.result && (data.result.biography || data.result.error)) {
                                 if (data.result.artist) {
                                     this.info.tabs[BIO_TAB].found = true;
@@ -832,7 +834,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                     } else {
                                         this.info.tabs[BIO_TAB].text+="<br/><br/>";
                                     }
-                                    this.info.tabs[BIO_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? replaceNewLines(data.result.biography) : data.result.error);
+                                    this.info.tabs[BIO_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? addImgErrorHandler(replaceNewLines(data.result.biography)) : data.result.error);
                                 }
                             }
                             this.info.tabs[BIO_TAB].count--;
@@ -854,8 +856,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                     } else {
                         lmsCommand("", command).then(({data}) => {
+                            logJsonMessage("RESP", data);
                             if (data && data.result && (data.result.biography || data.result.error)) {
-                                this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                                this.info.tabs[BIO_TAB].text=data.result.biography ? addImgErrorHandler(replaceNewLines(data.result.biography)) : data.result.error;
+console.log(this.info.tabs[BIO_TAB].text);
                                 this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
                             }
                         }).catch(error => {
@@ -902,8 +906,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
+                        logJsonMessage("RESP", data);
                         if (data && data.result && (data.result.albumreview || data.result.error)) {
-                            this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
+                            this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? addImgErrorHandler(replaceNewLines(data.result.albumreview)) : data.result.error;
                             this.info.tabs[REVIEW_TAB].isMsg=undefined==data.result.albumreview;
                         }
                     }).catch(error => {
@@ -1033,6 +1038,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         setRating() {
             // this.rating.value is updated *before* this setRating click handler is called, so we can use its model value to update LMS
             lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, this.rating.value]).then(({data}) => {
+                logJsonMessage("RESP", data);
                 bus.$emit('refreshStatus');
                 bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
             });

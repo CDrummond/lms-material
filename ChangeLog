@@ -3,12 +3,13 @@
 1. Fix silly typo that broke some actions.
 2. Better Qobuz emblem.
 3. Better colours for emblems.
-4. When paring SlimBrowse key:value pairs check that value is not empty.
+4. When parsing SlimBrowse key:value pairs check that value is not empty.
 5. Fix missing covers when browse albums via More -> Artist:NAME
 6. Allow activation of Dynamic Playlists listed from More -> Artist:NAME ->
    More -> Dynamic Playlists
-7. Fix showing search results when there are less 11 results for a category.
-8. Append "?r=MaterialVerison" on classic skin mods changes.
+7. Fix showing search results when there are 10, or less, results for a
+   category.
+8. Append "?r=MaterialVersion" on classic skin mods changes.
 9. Fix long-press on 'Show extra settings' not passing player ID/MAC.
 
 1.4.1

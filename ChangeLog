@@ -13,6 +13,8 @@
  9. Fix long-press on 'Show extra settings' not passing player ID/MAC.
 10. Strip off .html when doing redirects.
 11. Don't show NaN% as volume in desktop layout if no players.
+12. Better volume slider for powered off players using dark/light coloured
+    desktop layout.
 
 1.4.1
 -----

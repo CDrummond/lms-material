@@ -562,10 +562,10 @@ Vue.component('lms-player-settings', {
             }
         },
         showAllSettings(longPress) {
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'), longPress);
             if (longPress) {
                 this.close();
             }
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'), longPress);
         }
     },
     filters: {

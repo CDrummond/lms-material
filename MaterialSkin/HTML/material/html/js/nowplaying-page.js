@@ -834,7 +834,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                     } else {
                                         this.info.tabs[BIO_TAB].text+="<br/><br/>";
                                     }
-                                    this.info.tabs[BIO_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? addImgErrorHandler(replaceNewLines(data.result.biography)) : data.result.error);
+                                    this.info.tabs[BIO_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? replaceNewLines(data.result.biography) : data.result.error);
                                 }
                             }
                             this.info.tabs[BIO_TAB].count--;
@@ -858,8 +858,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         lmsCommand("", command).then(({data}) => {
                             logJsonMessage("RESP", data);
                             if (data && data.result && (data.result.biography || data.result.error)) {
-                                this.info.tabs[BIO_TAB].text=data.result.biography ? addImgErrorHandler(replaceNewLines(data.result.biography)) : data.result.error;
-console.log(this.info.tabs[BIO_TAB].text);
+                                this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
                                 this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
                             }
                         }).catch(error => {
@@ -908,7 +907,7 @@ console.log(this.info.tabs[BIO_TAB].text);
                     lmsCommand("", command).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (data && data.result && (data.result.albumreview || data.result.error)) {
-                            this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? addImgErrorHandler(replaceNewLines(data.result.albumreview)) : data.result.error;
+                            this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
                             this.info.tabs[REVIEW_TAB].isMsg=undefined==data.result.albumreview;
                         }
                     }).catch(error => {

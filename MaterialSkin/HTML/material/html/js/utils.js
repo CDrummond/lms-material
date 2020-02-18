@@ -301,10 +301,6 @@ function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }
 
-function addImgErrorHandler(str) {
-    return str ? str.replace(/<img\s*/g, "<img onerror=\"this.style.display='none'\" ") : str;
-}
-
 function changeLink(href, id) {
     var links = document.getElementsByTagName("link");
     if (undefined==links) {

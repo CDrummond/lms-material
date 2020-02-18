@@ -82,6 +82,7 @@ div#browsedbList {
 #prefsSubmit {
  color:transparent!important;
  background-color:transparent!important;
+ border-top:1px solid var(--list-item-border-color);
 }
 
 div#topGraphicMenu3 {
@@ -293,11 +294,6 @@ hr {
 
 p input, p label {
  color: var(--text-color) !important;
-}
-
-
-#prefsSubmit {
- border-top:1px solid var(--top-toolbar-border-color);
 }
 
 tbody tr.odd td, div.odd {

@@ -15,7 +15,7 @@
  <body>
   <script>
    var query = window.location.href.indexOf('?');
-   window.location.href = window.location.href.replace('/mini', '/') + (query>0 ? "&" : "?")+"layout=desktop";
+   window.location.href = window.location.href.replace('/mini', '/').replace('.html', '') + (query>0 ? "&" : "?")+"layout=desktop";
   </script>
  </body>
 </html>

@@ -314,7 +314,7 @@ var app = new Vue({
             if (this.$store.state.desktopLayout) {
                 this.$nextTick(function () {
                     var that = this;
-                    this.splitter = Split(["#left", "#right"], {
+                    this.splitter = Split(["#browse-view", "#queue-view"], {
                         sizes: [this.splitterPercent, 100-this.splitterPercent],
                         minSize: Math.floor(LMS_MIN_DESKTOP_WIDTH/2),
                         gutterSize: 3,

@@ -43,8 +43,8 @@
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
     <div class="wrapper hide-for-mini">
-     <lms-browse id="left" v-show="desktopLayout || page=='browse'"></lms-browse>
-     <lms-queue id="right" v-show="desktopLayout || page=='queue'"></lms-queue>
+     <lms-browse id="browse-view" v-show="desktopLayout || page=='browse'"></lms-browse>
+     <lms-queue id="queue-view" v-show="desktopLayout || page=='queue'"></lms-queue>
     </div>
     <lms-now-playing v-show="desktopLayout || page=='now-playing'"></lms-now-playing>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>

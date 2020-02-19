@@ -89,7 +89,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
-  <RecycleScroller buffer="500" :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
+  <RecycleScroller :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
    <table slot-scope="{item, index}" :class="[grid.few ? '' : 'full-width', GRID_SIZES[grid.size].clz]">
     <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes"><v-card flat align="left" class="image-grid-item">
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
@@ -97,7 +97,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn icon v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
-      <img v-if="items[idx].image" :key="items[idx].image" v-lazy="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+      <img v-if="items[idx].image" :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
       <v-icon v-else-if="items[idx].icon" class="image-grid-item-img image-grid-item-icon">{{items[idx].icon}}</v-icon>
       <img v-else-if="items[idx].svg" class="image-grid-item-img" src="items[idx].svg | svgIcon(darkUi)"></img>
       <div class="image-grid-text">{{items[idx].title}}</div>
@@ -128,7 +128,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
-     <img :key="item.image" v-lazy="item.image"></img>
+     <img :key="item.image" :src="item.image"></img>
     </v-list-tile-avatar>
     <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
      <v-icon>{{item.icon}}</v-icon>
@@ -2537,22 +2537,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             this.dragIndex = undefined;
-        },
-        windowResize() {
-            if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
-                if (timeout) {
-                    clearTimeout(timeout);
-                }
-                timeout = setTimeout(() => {
-                    this.filterJumplist();
-                }, 50);
-            }
         }
     },
     mounted() {
         this.pageElement = document.getElementById("browse-view");
-        let timeout = undefined;
-        window.addEventListener('resize', this.windowResize, false);
         // Get server prefs  for:
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?
@@ -2661,8 +2649,5 @@ var lmsBrowse = Vue.component("lms-browse", {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'browse', shown:newVal});
         }
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.windowResize);
     }
 });

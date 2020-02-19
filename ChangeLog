@@ -1,9 +1,7 @@
 1.4.3
 -----
 1. Fix colours for grid select buttons.
-2. Increase view recyler buffer for grid.
-3. Fix emblems on large lists when using dark themes.
-4. Lazy load browse and queue images.
+2. Fix emblems on large lists when using dark themes.
 
 1.4.2
 -----

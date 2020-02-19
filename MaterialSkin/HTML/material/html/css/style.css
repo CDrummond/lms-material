@@ -22,7 +22,7 @@
  color:var(--active-color) !important;
 }
 
-.v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary {
+.v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary, .image-grid-select-btn {
  background-color:var(--primary-color)!important;
  border-color:var(--primary-color)!important;
 }
@@ -541,6 +541,10 @@ div.v-subheader {
  width:32px !important;
  height:32px !important;
  z-index:2;
+}
+
+.image-grid-select-btn i {
+ color:white!important;
 }
 
 .image-grid-item .emblem {

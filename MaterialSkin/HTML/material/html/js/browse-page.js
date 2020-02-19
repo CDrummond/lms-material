@@ -94,7 +94,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes"><v-card flat align="left" class="image-grid-item">
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
-      <v-btn icon color="primary" v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title">
+      <v-btn icon v-if="selection.size>0" class="image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title">
        <v-icon>{{items[idx].selected ? 'check_box' : 'check_box_outline_blank'}}</v-icon>
       </v-btn>
       <img v-if="items[idx].image" :key="items[idx].image" :src="items[idx].image" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>

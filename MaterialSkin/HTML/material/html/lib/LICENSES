@@ -30,11 +30,6 @@ PhotoSwipe:
     URL: https://github.com/dimsemenov/PhotoSwipe
     License: MIT
 
-split.js
-    Version: 1.5.11
-    URL: https://github.com/nathancahill/split
-    License: MIT
-
 vue
     Version: 2.6.10
     URL: https://github.com/vuejs/vue

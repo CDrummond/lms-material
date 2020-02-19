@@ -1631,20 +1631,3 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .wrapper {
  display: flex;
 }
-
-.gutter {
- border-left:1px solid var(--background-color);
- border-right:1px solid var(--background-color);
- background-color:var(--splitter-color);
- background-repeat: no-repeat;
- background-position: 50%;
-}
-
-.gutter:hover {
- border:none;
- background-color:var(--primary-color);
-}
-
-.gutter.gutter-horizontal {
- cursor: col-resize;
-}

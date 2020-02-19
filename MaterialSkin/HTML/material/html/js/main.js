@@ -18,9 +18,9 @@ var app = new Vue({
     },
     created() {
         this.autoLayout = true;
-        this.splitterPercent = parseFloat(getLocalStorageVal("splitter", "50"));
-        this.splitterLastUpdate = Math.round(this.splitterPercent);
-        document.documentElement.style.setProperty('--splitter-pc', this.splitterPercent);
+        this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
+        this.splitter = this.splitterPercent;
+        document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         this.query=parseQueryParams();
         this.$store.commit('initUiSettings');
 
@@ -251,18 +251,15 @@ var app = new Vue({
                 }
             }
         },
-        splitterResized(val, finished) {
+        splitterResized(val) {
             if (!this.$store.state.desktopLayout) {
                 return;
             }
-            this.splitterPercent = val;
-            if (finished) {
-                setLocalStorageVal("splitter", this.splitterPercent);
-                document.documentElement.style.setProperty('--splitter-pc', this.splitterPercent);
-            }
-            let rounded = Math.round(this.splitterPercent);
-            if (finished || Math.abs(rounded-this.splitterLastUpdate)>=3) {
-                this.splitterLastUpdate = rounded;
+            var f = Math.floor(val/2)*2;
+            if (f!=this.splitter) {
+                setLocalStorageVal("splitter", f);
+                document.documentElement.style.setProperty('--splitter-pc', f);
+                this.splitter=f;
                 if (!this.splitterChangedAnimationFrameReq) {
                     this.scrollAnimationFrameReq = window.requestAnimationFrame(() => {
                         bus.$emit('splitterChanged');
@@ -311,28 +308,10 @@ var app = new Vue({
         setLayout(forceDesktop) {
             this.autoLayout = undefined==forceDesktop;
             this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
-            if (this.$store.state.desktopLayout) {
-                this.$nextTick(function () {
-                    var that = this;
-                    this.splitter = Split(["#browse-view", "#queue-view"], {
-                        sizes: [this.splitterPercent, 100-this.splitterPercent],
-                        minSize: Math.floor(LMS_MIN_DESKTOP_WIDTH/2),
-                        gutterSize: 3,
-                        gutterAlign: 'center',
-                        snapOffset: 5,
-                        onDrag: function(sizes) {
-                            that.splitterResized(that.splitter.getSizes()[0], false);
-                        },
-                        onDragEnd: function(sizes) {
-                            that.splitterResized(sizes[0], true);
-                        }
-                    });
-                });
-            } else if (undefined!=this.splitter) {
-                this.splitter.destroy(true, true);
-                this.splitter = undefined;
-            }
         }
+    },
+    components: {
+        VueSplitter: VueSplitter
     },
     store,
     lmsServer

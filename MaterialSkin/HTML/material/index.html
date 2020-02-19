@@ -42,10 +42,10 @@
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
-    <div class="wrapper hide-for-mini">
-     <lms-browse id="browse-view" v-show="desktopLayout || page=='browse'"></lms-browse>
-     <lms-queue id="queue-view" v-show="desktopLayout || page=='queue'"></lms-queue>
-    </div>
+    <vue-splitter :margin="desktopLayout ? 20 : 0" :percent="desktopLayout ? splitterPercent : 0" @resize="splitterResized">
+     <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
+     <div slot="right-pane"><lms-queue v-show="desktopLayout || page=='queue'"></lms-queue></div>
+    </vue-splitter>
     <lms-now-playing v-show="desktopLayout || page=='now-playing'"></lms-now-playing>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>
     <lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>
@@ -115,7 +115,7 @@
   <script src="html/lib/vue-virtual-scroller.min.js?r=1.0.0-rc2"></script>
   <script src="html/lib/photoswipe/photoswipe.min.js?r=4.1.2"></script>
   <script src="html/lib/photoswipe/photoswipe-ui-default.min.js?r=4.1.2"></script>
-  <script src="html/lib/split.min.js?r=1.5.11"></script>
+  <script src="html/lib/vue-splitter.js?r=1.3.0"></script>
   <script src="html/lib/vue-touch-events.min.js?r=2.1.0"></script>
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
   [% PERL %]

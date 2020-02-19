@@ -350,7 +350,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerSubTitle=null;
         this.tbarActions=[];
         this.settingsMenuActions=[];
-        this.mediaDirs=[];
         this.options={artistImages: getLocalStorageBool('artistImages', false),
                       pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
@@ -2558,7 +2557,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?
         //   Filter album/tracks on role?
-        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,mediadirs,useLocalImageproxy"]).then(({data}) => {
+        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy"]).then(({data}) => {
             if (data && data.result) {
                 var separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
                 if (separateArtists!=getLocalStorageBool('separateArtists', false)) {
@@ -2573,7 +2572,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined!=data.result.browseagelimit) {
                     this.newMusicLimit = parseInt(data.result.browseagelimit);
                 }
-                this.mediaDirs=data.result.mediadirs;
                 // useMySqueezeboxImageProxy defined in utils.js
                 useMySqueezeboxImageProxy = undefined==data.result.useLocalImageproxy || 0 == parseInt(data.result.useLocalImageproxy);
             }

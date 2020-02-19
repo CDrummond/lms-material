@@ -2539,11 +2539,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.dragIndex = undefined;
         },
-    },
-    mounted() {
-        this.pageElement = document.getElementById("browse-view");
-        let timeout = undefined;
-        window.addEventListener('resize', () => {
+        windowResize() {
             if (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use) {
                 if (timeout) {
                     clearTimeout(timeout);
@@ -2552,7 +2548,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.filterJumplist();
                 }, 50);
             }
-        }, false);
+        }
+    },
+    mounted() {
+        this.pageElement = document.getElementById("browse-view");
+        let timeout = undefined;
+        window.addEventListener('resize', this.windowResize, false);
         // Get server prefs  for:
         //   All Artists + Album Artists, or just Artists?
         //   Filer albums/tracks on genre?
@@ -2662,5 +2663,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'browse', shown:newVal});
         }
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.windowResize);
     }
 });

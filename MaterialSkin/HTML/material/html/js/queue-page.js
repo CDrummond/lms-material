@@ -461,12 +461,7 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         this.scrollElement = document.getElementById("queue-list");
-        this.scrollElement.addEventListener('scroll', () => {
-            this.menu.show = false;
-            if (!this.scrollAnimationFrameReq) {
-                this.scrollAnimationFrameReq = window.requestAnimationFrame(this.handleScroll);
-            }
-        });
+        this.scrollElement.addEventListener('scroll', this.scrollHandler);
 
         this.setBgndCover();
         this.$nextTick(function () {
@@ -555,20 +550,27 @@ var lmsQueue = Vue.component("lms-queue", {
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
                           invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music")};
         },
-        handleScroll() {
-            this.scrollAnimationFrameReq = undefined;
-            if (this.fetchingItems || this.listSize<=this.items.length) {
-                return;
-            }
-            const scrollY = this.scrollElement.scrollTop;
-            const visible = this.scrollElement.clientHeight;
-            const pageHeight = this.scrollElement.scrollHeight;
-            const pad = (visible*2.5);
+        scrollHandler() {
+            this.menu.show = false;
+            if (!this.scrollAnimationFrameReq) {
+                this.scrollAnimationFrameReq = window.requestAnimationFrame(() => {
+                    if (!this.scrollAnimationFrameReq) {
+                        return;
+                    }
+                    this.scrollAnimationFrameReq = undefined;
+                    if (this.fetchingItems || this.listSize<=this.items.length) {
+                        return;
+                    }
+                    const scrollY = this.scrollElement.scrollTop;
+                    const visible = this.scrollElement.clientHeight;
+                    const pageHeight = this.scrollElement.scrollHeight;
+                    const pad = (visible*2.5);
+                    const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
 
-            const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-            if (bottomOfPage || pageHeight < visible) {
-                this.fetchItems();
+                    if (bottomOfPage || pageHeight < visible) {
+                        this.fetchItems();
+                    }
+                });
             }
         },
         save() {
@@ -1059,6 +1061,8 @@ var lmsQueue = Vue.component("lms-queue", {
             clearTimeout(this.updateTimer);
             this.updateTimer = undefined;
         }
+        this.scrollAnimationFrameReq = undefined;
+        window.removeEventListener('scroll', this.scrollHandler);
     }
 });
 

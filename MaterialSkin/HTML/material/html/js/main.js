@@ -314,7 +314,7 @@ var app = new Vue({
             if (this.$store.state.desktopLayout) {
                 this.$nextTick(function () {
                     var that = this;
-                    this.splitter = Split([that.$refs.left, that.$refs.right], {
+                    this.splitter = Split(["#left", "#right"], {
                         sizes: [this.splitterPercent, 100-this.splitterPercent],
                         minSize: Math.floor(LMS_MIN_DESKTOP_WIDTH/2),
                         gutterSize: 3,
@@ -329,7 +329,7 @@ var app = new Vue({
                     });
                 });
             } else if (undefined!=this.splitter) {
-                this.splitter.destroy();
+                this.splitter.destroy(true, true);
                 this.splitter = undefined;
             }
         }

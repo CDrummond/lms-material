@@ -2,6 +2,7 @@
 -----
 1. Fix colours for grid select buttons.
 2. Increase view recyler buffer for grid.
+3. Fix emblems on large lists when using dark themes.
 
 1.4.2
 -----

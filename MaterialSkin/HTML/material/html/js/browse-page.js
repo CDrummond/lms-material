@@ -105,9 +105,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn flat icon v-if="undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0)" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 Menu', items[idx].title)" class="image-grid-btn">
        <v-icon>more_vert</v-icon>
       </v-btn>
-     </div>
-     <div class="emblem" v-if="idx<items.length && items[idx].emblem" :style="{background: items[idx].emblem.bgnd}">
-      <img :src="items[idx].emblem | emblem()"></img>
+      <div class="emblem" v-if="items[idx].emblem" :style="{background: items[idx].emblem.bgnd}">
+       <img :src="items[idx].emblem | emblem()"></img>
+      </div>
      </div>
     </v-card></td>
    </table>
@@ -150,7 +150,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
     </v-list-tile-action>
     <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-     <img :src="item.emblem.name | svgIcon(darkUi)"></img>
+     <img :src="item.emblem | emblem()"></img>
     </div>
    </v-list-tile>
   </RecycleScroller>
@@ -211,7 +211,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-btn>
     </v-list-tile-action>
     <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-     <img :src="item.emblem.name | svgIcon(darkUi)"></img>
+     <img :src="item.emblem | emblem()"></img>
     </div>
    </v-list-tile>
   </template>

@@ -42,3 +42,7 @@
 .np-info-cover {
  background-color:#000;
 }
+
+.menu-btn:hover {
+ background-color:rgba(128, 128, 128, 0.5);
+}

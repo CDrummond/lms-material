@@ -22,7 +22,7 @@
  color:var(--active-color) !important;
 }
 
-.v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary, .image-grid-select-btn {
+.v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary {
  background-color:var(--primary-color)!important;
  border-color:var(--primary-color)!important;
 }
@@ -300,16 +300,16 @@ div.v-subheader {
  position:absolute;
  width:32px !important;
  height:32px !important;
- bottom:24px !important;
- right:-14px !important;
+ bottom:30px !important;
+ right:-10px !important;
 }
 
 .image-grid-item-few .image-grid-btn, .image-grid-item-few .image-grid-btn:hover {
  position:absolute;
  width:32px !important;
  height:32px !important;
- bottom:24px !important;
- right:-22px !important;
+ bottom:30px !important;
+ right:-14px !important;
 }
 
 .image-grid-item-icon {
@@ -536,15 +536,9 @@ div.v-subheader {
 
 .image-grid-select-btn, .image-grid-select-btn:hover {
  position:absolute;
- top:-1px !important;
- left:1px !important;
- width:32px !important;
- height:32px !important;
+ top:2px !important;
+ left:6px !important;
  z-index:2;
-}
-
-.image-grid-select-btn i {
- color:white!important;
 }
 
 .image-grid-item .emblem {
@@ -1630,4 +1624,40 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .wrapper {
  display: flex;
+}
+
+.menu-btn {
+ width:32px;
+ height:32px;
+ border-radius:50%;
+ line-height:32px;
+ text-align:center;
+ font-family: "Material Icons";
+ font-size:24px;
+ text-decoration:none;
+}
+
+.menu-btn:after {
+ content:"\e5d4";
+}
+
+.check-btn {
+ width:32px;
+ height:32px;
+ border-radius:50%;
+ line-height:32px;
+ text-align:center;
+ font-family: "Material Icons";
+ font-size:24px;
+ text-decoration:none;
+ color:white;
+ background-color:var(--primary-color)!important;
+}
+
+.check-btn:after {
+ content:"\e835";
+}
+
+.check-btn-checked:after {
+ content:"\e834";
 }

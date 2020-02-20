@@ -350,8 +350,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerSubTitle=null;
         this.tbarActions=[];
         this.settingsMenuActions=[];
-        this.options={artistImages: getLocalStorageBool('artistImages', false),
-                      pinned: new Set(),
+        this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
         this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
@@ -2567,8 +2566,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         // Artist images?
         lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2 != null) {
-                this.options.artistImages = 1==data.result._p2;
-                setLocalStorageVal('artistImages', this.options.artistImages);
+                lmsOptions.artistImages = 1==data.result._p2;
+                setLocalStorageVal('artistImages', lmsOptions.artistImages);
             }
         });
 

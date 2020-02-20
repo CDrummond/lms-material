@@ -37,7 +37,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var menu = undefined;
             var types = new Set();
             var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
-            var infoPlugin = undefined;
+
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
             if (data.result.base && data.result.base.actions) {
@@ -172,10 +172,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             i.icon="album";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
-                            if (undefined==infoPlugin) {
-                                infoPlugin=getLocalStorageBool('infoPlugin');
-                            }
-                            if (i.presetParams.icon=="html/images/artists.png" || !(infoPlugin && options.artistImages)) {
+                            if (i.presetParams.icon=="html/images/artists.png" || !(lmsOptions.infoPlugin && lmsOptions.artistImages)) {
                                 i.svg="artist";
                                 i.image=undefined;
                             }
@@ -434,8 +431,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
 
-            var infoPlugin = getLocalStorageBool('infoPlugin');
-            resp.canUseGrid = infoPlugin && options.artistImages;
+            resp.canUseGrid = lmsOptions.infoPlugin && lmsOptions.artistImages;
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
@@ -445,7 +441,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
-                              image: (infoPlugin && options.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
+                              image: (lmsOptions.infoPlugin && lmsOptions.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: STD_ITEM_ARTIST,
                               type: "group",
                               textkey: key

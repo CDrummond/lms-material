@@ -459,6 +459,7 @@ function cacheKey(command, params, start, batchSize) {
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
            (command && (command[0]=="artists" || command[0]=="albums") ? (lmsOptions.noGenreFilter ? ":1" : ":0") : "") +
            (command && command[0]=="albums" ? (lmsOptions.noRoleFilter ? ":1" : ":0") : "") +
+           (command && command[0]=="artists" ? (lmsOptions.infoPlugin && lmsOptions.artistImages ? ":1" : ":0") : "") +
            ":"+start+":"+batchSize;
 }
 

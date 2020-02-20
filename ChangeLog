@@ -5,6 +5,7 @@
 3. Revert to previous splitter library, as new one caused views to be recreated
    when switching desktop/mobile.
 4. Modify splitter code to work better on touch devices.
+5. Include artist image toggle in cache key.
 
 1.4.2
 -----

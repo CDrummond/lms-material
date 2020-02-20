@@ -396,6 +396,7 @@ const store = new Vuex.Store({
                 state.infoPlugin = false;
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
             });
+            lmsOptions.infoPlugin = state.infoPlugin;
 
             // Don't Stop The Music installed?
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
@@ -481,6 +482,7 @@ const store = new Vuex.Store({
         },
         setInfoPlugin(state, val) {
             state.infoPlugin = val;
+            lmsOptions.infoPlugin = val;
             setLocalStorageVal('infoPlugin', val);
         },
         setPage(state, val) {

@@ -7,8 +7,6 @@
 'use strict';
 
 const PLAYER_STATUS_TAGS = "tags:cdegloyrstABKNST";
-var lmsOptions = {noGenreFilter: getLocalStorageBool('noGenreFilter', false),
-                  noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];

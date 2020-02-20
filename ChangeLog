@@ -4,6 +4,7 @@
 2. Fix emblems on large lists when using dark themes.
 3. Revert to previous splitter library, as new one caused views to be recreated
    when switching desktop/mobile.
+4. Modify splitter code to work better on touch devices.
 
 1.4.2
 -----

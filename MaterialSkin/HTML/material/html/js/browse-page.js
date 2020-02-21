@@ -91,7 +91,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
   <RecycleScroller :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
    <table slot-scope="{item, index}" :class="[grid.few ? '' : 'full-width', GRID_SIZES[grid.size].clz]">
-    <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes"><v-card flat align="left" class="image-grid-item">
+    <td align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes">
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
       <div v-if="selection.size>0" class="check-btn image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':items[idx].selected}"></div>
@@ -105,7 +105,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <img :src="items[idx].emblem | emblem()"></img>
       </div>
      </div>
-    </v-card></td>
+    </td>
    </table>
   </RecycleScroller>
  </div></div>

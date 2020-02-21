@@ -253,10 +253,6 @@ div.v-subheader {
  border-spacing:0px !important;
 }
 
-.lms-image-grid table td .v-card {
- background-color:rgba(0,0,0,0) !important
-}
-
 .lms-image-grid .vue-recycle-scroller__item-view {
  border-bottom: 0px;
 }
@@ -278,17 +274,18 @@ div.v-subheader {
 }
 
 .image-grid-text {
+ text-align:left;
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
- padding-left:2px;
  margin-top:-2px;
+ margin-left:-12px;
 }
 
 .image-grid-item {
+ position:relative;
  padding:0px;
- margin:0px 4px 0px 4px; /* t, r, b, l */
- background-color:rgba(0,0,0,0) !important;
+ background-color:transparent !important;
  cursor:pointer;
 }
 
@@ -302,14 +299,6 @@ div.v-subheader {
  height:32px !important;
  bottom:30px !important;
  right:-10px !important;
-}
-
-.image-grid-item-few .image-grid-btn, .image-grid-item-few .image-grid-btn:hover {
- position:absolute;
- width:32px !important;
- height:32px !important;
- bottom:30px !important;
- right:-14px !important;
 }
 
 .image-grid-item-icon {
@@ -544,10 +533,9 @@ div.v-subheader {
 .image-grid-item .emblem {
  position:absolute;
  top:2px !important;
- right:6px !important;
+ right:8px !important;
  width:28px !important;
  height:28px !important;
- z-index:2;
  border-radius:50% !important;
  padding:2px;
  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);

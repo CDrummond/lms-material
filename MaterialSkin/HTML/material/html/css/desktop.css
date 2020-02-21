@@ -320,3 +320,11 @@ body {
 .v-menu__content .toolbar-player-list-desktop .v-list__tile .player-menu-shortcut {
  min-width:80px!important;
 }
+
+.right-pane, .left-pane {
+ min-width:370px!important;
+}
+
+.left-pane {
+ min-width:280px!important;
+}

@@ -129,13 +129,6 @@ Vue.component('lms-toolbar', {
     <v-list-tile-avatar v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
    </v-list-tile>
-   <v-divider v-if="customActions && customActions.length>0"></v-divider>
-   <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-    <v-list-tile @click="performCustomAction(action)">
-     <v-list-tile-avatar v-if="menuIcons"></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-   </template>
    <v-divider v-if="!desktopLayout && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
    <template v-if="!desktopLayout && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
     <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)">
@@ -145,6 +138,13 @@ Vue.component('lms-toolbar', {
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
      <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
+    </v-list-tile>
+   </template>
+   <v-divider v-if="customActions && customActions.length>0"></v-divider>
+   <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
+    <v-list-tile @click="performCustomAction(action)">
+     <v-list-tile-avatar v-if="menuIcons"></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
   </v-list>

@@ -686,8 +686,8 @@ div.v-subheader {
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- height:var(--small-font-size) !important;
- line-height:var(--small-font-size) !important;
+ height:calc(var(--small-font-size) + 4px) !important;
+ line-height:calc(var(--small-font-size) + 4px) !important;
  top:36px;
  right:235px;
  width:200px;

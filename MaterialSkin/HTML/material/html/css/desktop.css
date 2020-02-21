@@ -305,6 +305,9 @@ body {
  .v-dialog__content .v-dialog .screensaver-bgnd {
   display:none;
  }
+ .vol-fixed-label {
+  right:105px;
+ }
 }
 
 /* Give more space for 'Open mini-player icon */

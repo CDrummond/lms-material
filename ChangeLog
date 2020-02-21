@@ -6,7 +6,8 @@
    when switching desktop/mobile.
 4. Modify splitter code to work better on touch devices.
 5. Include artist image toggle in cache key.
-6. Fix clipping of 'Fixed Volume" text.
+6. Fix clipping of 'Fixed Volume' text.
+7. Show 'Fixed Volume' text on mini-player.
 
 1.4.2
 -----

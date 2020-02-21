@@ -89,8 +89,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
-  <RecycleScroller :items="grid.rows" :item-size="GRID_SIZES[grid.size].ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
-   <div slot-scope="{item, index}" :class="[grid.few ? 'image-grid-few' : 'image-grid-full-width', GRID_SIZES[grid.size].clz]">
+  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
+   <div slot-scope="{item, index}" :class="[grid.few ? 'image-grid-few' : 'image-grid-full-width']">
     <div align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes">
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
@@ -293,7 +293,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             current: undefined,
             currentActions: [],
             items: [],
-            grid: {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true},
+            grid: {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
@@ -349,7 +349,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+        this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
 
         // Clicking on 'browse' nav button whilst in browse page goes back.
         bus.$on('nav', function(page, longPress) {
@@ -668,7 +668,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var prevUseGrid = this.grid.use;
-                this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+                this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
                 var changedView = this.grid.use != prevUseGrid;
                 this.jumplistActive=0;
                 this.currentActions = [];
@@ -1531,7 +1531,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;
-            this.grid = {allowed:false, use:false, numColumns:0, size:GRID_SIZES.length-1, rows:[], few:false, haveSubtitle:true};
+            this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
             this.command = undefined;
             this.showRatingButton = false;
             this.subtitleClickable = false;
@@ -2300,7 +2300,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
                     var index = this.grid.use                                // Add 50 to take into account text size
-                                    ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (GRID_SIZES[this.grid.size].ih-subMod))*this.grid.numColumns
+                                    ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (this.grid.ih-subMod))*this.grid.numColumns
                                     : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
                     if (this.$store.state.letterOverlay) {
                         if (index>=0 && index<this.items.length) {
@@ -2332,41 +2332,55 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
+        calcSizes(quantity, listWidth) {
+            var width = GRID_MIN_WIDTH;
+            var height = GRID_MIN_HEIGHT;
+            var steps = 0;
+            while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=GRID_MAX_WIDTH) {
+                width += GRID_STEP;
+                height += GRID_STEP;
+                steps++;
+            }
+
+            var haveSubtitle = false;
+            // How many columns?
+            var numColumns = Math.max(Math.min(Math.floor(listWidth/width), this.items.length), 1);
+            return {w: width, h: height, s: steps, nc: numColumns}
+        },
         layoutGrid(force) {
             if (!this.grid.use) {
                 return;
             }
 
-            const ITEM_BORDER = 8;
             const JUMP_LIST_WIDTH = 32;
             const VIEW_RIGHT_PADDING = 4;
             var changed = false;
+            var haveSubtitle = false;
             var viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             var listWidth = viewWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (this.filteredJumplist.length>1 && this.items.length>10 ? JUMP_LIST_WIDTH :0) + VIEW_RIGHT_PADDING);
 
             // Calculate what grid item size we should use...
-            var size = 0;
-            for (var i=1; i<GRID_SIZES.length && listWidth>((GRID_SIZES[i].iw+ITEM_BORDER)*2); ++i) {
-                size = i;
+            var sz = undefined;
+            for (var i=4; i>=1; --i) {
+                sz = this.calcSizes(i, listWidth);
+                if (sz.nc>=i) {
+                    break;
+                }
             }
-
-            var haveSubtitle = false;
-            // How many columns?
-            var numColumns = Math.max(Math.min(Math.floor(listWidth/(GRID_SIZES[size].iw+ITEM_BORDER)), this.items.length), 1);
-            if (force || numColumns != this.grid.numColumns) { // Need to re-layout...
+            if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
-                for (var i=0; i<this.items.length; i+=numColumns) {
+                for (var i=0; i<this.items.length; i+=sz.nc) {
                     var indexes=[]
-                    for (var j=0; j<numColumns; ++j) {
+                    for (var j=0; j<sz.nc; ++j) {
                         indexes.push(i+j);
                         if (!haveSubtitle && (i+j)<this.items.length && this.items[i+j].subtitle) {
                             haveSubtitle = true;
                         }
                     }
-                    this.grid.rows.push({id:"row."+i+"."+numColumns, indexes:indexes});
+                    this.grid.rows.push({id:"row."+i+"."+sz.nc, indexes:indexes});
                 }
-                this.grid.numColumns = numColumns;
+                this.grid.numColumns = sz.nc;
             } else { // Need to check if have subtitles...
                 for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
                     if (this.items[i].subtitle) {
@@ -2379,11 +2393,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.haveSubtitle = haveSubtitle;
                 changed = true;
             }
-            if (this.grid.size != size) {
-                this.grid.size = size;
+            if (this.grid.ih != sz.h) {
+                this.grid.ih = sz.h;
                 changed = true;
+                document.documentElement.style.setProperty('--image-grid-factor', sz.s);
             }
-            var few = 1==this.grid.rows.length && (1==this.items.length || ((this.items.length*GRID_SIZES[size].iw)*1.20)<listWidth);
+            var few = 1==this.grid.rows.length && (1==this.items.length || ((this.items.length*sz.w)*1.20)<listWidth);
             if (this.grid.few != few) {
                 this.grid.few = few;
                 changed = true;
@@ -2437,7 +2452,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(item) {
             var pos = this.grid.use
-                        ? Math.floor(item.index/this.grid.numColumns)*(GRID_SIZES[this.grid.size].ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
+                        ? Math.floor(item.index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
                         : item.index*LMS_LIST_ELEMENT_SIZE;
             setScrollTop(this.scrollElement, pos>0 ? pos : 0);
         },

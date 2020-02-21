@@ -8,6 +8,7 @@
 5. Include artist image toggle in cache key.
 6. Fix clipping of 'Fixed Volume' text.
 7. Show 'Fixed Volume' text on mini-player.
+8. Better grid size calculation.
 
 1.4.2
 -----

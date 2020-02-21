@@ -61,17 +61,11 @@ var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Cham
 var LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);
 
 // Browse page
-const GRID_SIZES = [ {iw:133, ih:185, clz:"image-grid-a"},
-                     {iw:138, ih:190, clz:"image-grid-b"},
-                     {iw:143, ih:195, clz:"image-grid-c"},
-                     {iw:148, ih:200, clz:"image-grid-d"},
-                     {iw:153, ih:205, clz:"image-grid-e"},
-                     {iw:158, ih:210, clz:"image-grid-f"},
-                     {iw:163, ih:215, clz:"image-grid-g"},
-                     {iw:168, ih:220, clz:"image-grid-h"},
-                     {iw:173, ih:225, clz:"image-grid-i"},
-                     {iw:178, ih:230, clz:"image-grid-j"},
-                     {iw:183, ih:235, clz:"image-grid-k"} ];
+const GRID_MIN_WIDTH = 139;
+const GRID_MIN_HEIGHT = 195;
+const GRID_MAX_WIDTH = 208; // 183
+const GRID_MAX_HEIGHT = 260;  // 235
+const GRID_STEP = 5;
 
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";

@@ -49,6 +49,8 @@
  background:rgba(255, 255, 255, 0.3333);
 }
 
-.menu-btn:hover {
- background-color:rgba(128, 128, 128, 0.5);
+@media (hover: hover) {
+ .menu-btn:hover {
+  background-color:rgba(128, 128, 128, 0.5);
+ }
 }

@@ -43,6 +43,8 @@
  background-color:#fff;
 }
 
-.menu-btn:hover {
- background-color:rgba(184, 184, 184, 0.5);
+@media (hover: hover) {
+ .menu-btn:hover {
+  background-color:rgba(184, 184, 184, 0.5);
+ }
 }

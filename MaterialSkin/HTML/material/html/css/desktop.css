@@ -72,9 +72,11 @@ body {
  background-color:var(--splitter-color) !important;
 }
 
-.vue-splitter .splitter:hover {
- border:none;
- background-color:var(--primary-color)!important;
+@media (hover: hover) {
+ .vue-splitter .splitter:hover {
+  border:none;
+  background-color:var(--primary-color)!important;
+ }
 }
 
 .np-bar {

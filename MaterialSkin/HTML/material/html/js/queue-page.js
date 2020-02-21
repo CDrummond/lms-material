@@ -231,7 +231,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktopLayout || wide>0"></v-divider>
-   <template v-if="desktopLayout || wide>1" v-for="(action, index) in settingsMenuActions">
+   <template v-if="wide>1" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
@@ -491,14 +491,13 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         bus.$on('windowWidthChanged', function() {
-            var wide = window.innerWidth >= 520 ? 2 : window.innerWidth>=340 ? 1 : 0;
-            if (wide!=this.wide) {
-                this.wide = wide;
-                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
-            }
+            this.updateMenu();
         }.bind(this));
-        this.wide = window.innerWidth >= 520 ? 2 : window.innerWidth>=340 ? 1 : 0;
-        bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+        bus.$on('splitterChanged', function() {
+            this.updateMenu();
+        }.bind(this));
+        this.wide=5;
+        this.updateMenu();
 
         bus.$on('noPlayers', function() {
             this.updateSettingsMenu();
@@ -549,6 +548,13 @@ var lmsQueue = Vue.component("lms-queue", {
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
                           invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music")};
+        },
+        updateMenu() {
+            var wide = this.scrollElement.clientWidth >= 520 ? 2 : this.scrollElement.clientWidth>=340 ? 1 : 0;
+            if (wide!=this.wide) {
+                this.wide = wide;
+                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+            }
         },
         scrollHandler() {
             this.menu.show = false;

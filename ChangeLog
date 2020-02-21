@@ -1,14 +1,17 @@
 1.4.3
 -----
-1. Fix colours for grid select buttons.
-2. Fix emblems on large lists when using dark themes.
-3. Revert to previous splitter library, as new one caused views to be recreated
-   when switching desktop/mobile.
-4. Modify splitter code to work better on touch devices.
-5. Include artist image toggle in cache key.
-6. Fix clipping of 'Fixed Volume' text.
-7. Show 'Fixed Volume' text on mini-player.
-8. Better grid size calculation.
+ 1. Fix colours for grid select buttons.
+ 2. Fix emblems on large lists when using dark themes.
+ 3. Revert to previous splitter library, as new one caused views to be
+    recreated when switching desktop/mobile.
+ 4. Modify splitter code to work better on touch devices.
+ 5. Include artist image toggle in cache key.
+ 6. Fix clipping of 'Fixed Volume' text.
+ 7. Show 'Fixed Volume' text on mini-player.
+ 8. Better grid size calculation.
+ 9. Set min widths for browse and queue views for desktop layout.
+10. If desktop queue view is too narrow, then move some actions into main
+    menu - as happens for mobile layout.
 
 1.4.2
 -----

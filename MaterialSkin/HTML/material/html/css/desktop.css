@@ -291,7 +291,7 @@ body {
 
 @media screen and (max-height: 180px) {
  .hide-for-mini {
-  display:none;
+  display:none!important;
  }
  .application--wrap {
   background-color:var(--top-toolbar-color)

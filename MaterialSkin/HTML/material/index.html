@@ -42,7 +42,7 @@
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
-    <vue-splitter :margin="desktopLayout ? 20 : 0" :percent="desktopLayout ? splitterPercent : 0" @resize="splitterResized">
+    <vue-splitter :margin="desktopLayout ? 20 : 0" :percent="desktopLayout ? splitterPercent : 0" @resize="splitterResized" class="hide-for-mini">
      <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
      <div slot="right-pane"><lms-queue v-show="desktopLayout || page=='queue'"></lms-queue></div>
     </vue-splitter>

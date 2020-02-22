@@ -447,7 +447,7 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn {
+.subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn, .np-controls div.v-btn__content i.active-btn {
  color:var(--active-color) !important;
 }
 

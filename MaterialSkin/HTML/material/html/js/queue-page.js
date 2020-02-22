@@ -780,6 +780,7 @@ var lmsQueue = Vue.component("lms-queue", {
         select(item, index, event) {
             if (this.selection.size>0) {
                 this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
+                this.$forceUpdate();
             }
         },
         getDuration() {

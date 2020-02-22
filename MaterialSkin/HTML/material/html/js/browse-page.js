@@ -2211,6 +2211,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         select(item, index, event) {
             if (this.selection.size>0) {
                 this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
+                this.$forceUpdate();
             }
         },
         deleteSelectedItems(act) {

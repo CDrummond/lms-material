@@ -1,6 +1,7 @@
 1.4.4
 -----
 1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.
+2. Update Frech translation - thanks to Franck Berry.
 
 1.4.3
 -----
@@ -530,7 +531,7 @@
  3. Fix dimmer browse icon using dark theme mobile layout.
  4. Prevent queue flicker when toggle power state of player.
  5. When fetching lyrics, only use ID if its not negative.
- 6. Update Frech translation - thaks to Franck Berry.
+ 6. Update Frech translation - thanks to Franck Berry.
  7. Swap when expand/collapse button is shown. Previously the icon/label was
     used to indicate state.
  8. Mark "On song change" and "Volume gain" for translation.

@@ -13,6 +13,7 @@
 10. If desktop queue view is too narrow, then move some actions into main
     menu - as happens for mobile layout.
 11. Fix updating selection when use checkboxes.
+12. Increase mini-player height to prevent clipping of cover.
 
 1.4.2
 -----

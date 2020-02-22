@@ -464,9 +464,8 @@ Vue.component('lms-toolbar', {
             });
         },
         openMiniPlayer(player) {
-            // Height should be 112, but on my system sometimes its too small? Added 6 pix to give some padding...
             window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
-                        'width=650,height=118,status=no,menubar=no,toolbar=no,location=no');
+                        'width=650,height=126,status=no,menubar=no,toolbar=no,location=no');
         },
         volumeDown(toggleMute) {
             if (this.$store.state.visibleMenus.size>0) {

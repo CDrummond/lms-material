@@ -135,29 +135,36 @@ Vue.component('lms-search-dialog', {
                         var clamped = numItems>LMS_INITIAL_SEARCH_RESULTS
                         var limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
                         var titleParam = clamped ? limit+" / "+numItems : numItems;
+                        var filter = undefined;
 
                         total+=numItems;
                         if (1==this.results[i].command.cat) {
-                            items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:"search.artists", header:true,
+                            filter = FILTER_PREFIX+"artist";
+                            items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
                         } else if (2==this.results[i].command.cat) {
-                            items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:"search.albums", header:true,
+                            filter = FILTER_PREFIX+"album";
+                            items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
                                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                         } else if (3==this.results[i].command.cat) {
-                            items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:"search.tracks", header:true,
+                            filter = FILTER_PREFIX+"track";
+                            items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                         } else if (4==this.results[i].command.cat) {
-                            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:"search.playlists", header:true,
+                            filter = FILTER_PREFIX+"playlist";
+                            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems)});
                         }
                         for (var idx=0, loop=this.results[i].resp.items; idx<numItems; ++idx) {
+                            var item = loop[idx];
+                            item.filter=filter;
                             if (idx<limit) {
-                                items.push(loop[idx]);
+                                items.push(item);
                             }
                             if (clamped) {
-                                all.push(loop[idx]);
+                                all.push(item);
                             }
                         }
                     }

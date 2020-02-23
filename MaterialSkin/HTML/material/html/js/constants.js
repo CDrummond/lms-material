@@ -93,6 +93,7 @@ const ARTIST_ALBUM_TAGS = "tags:jlsyEK";
 const TRACK_TAGS = "tags:distACE";
 const PLAYLIST_TAGS = "tags:sux";
 const SORT_KEY = "sort:";
+const FILTER_PREFIX = "filter:";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;
 const SECTION_RADIO = 3;

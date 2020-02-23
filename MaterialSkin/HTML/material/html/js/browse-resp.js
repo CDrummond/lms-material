@@ -581,7 +581,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               type: "track",
                               rating: i.rating,
                               image: isSearch ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
-                              filter: "filter:"+i.disc
+                              filter: FILTER_PREFIX+i.disc
                           });
             }
             if (discs.size>1) {
@@ -589,7 +589,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 for (let k of discs.keys()) {
                     let disc = discs.get(k);
                     resp.items.splice(disc.pos+d, 0, {title: i18n("Disc %1", k)+SEPARATOR+i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
-                                                      id:"filter:"+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                                                      id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                     d++;
                 }
             }

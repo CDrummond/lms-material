@@ -1243,7 +1243,6 @@ div.v-subheader {
 .browse-header {
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
- opacity:var(--sub-opacity);
 }
 
 .queue-action {

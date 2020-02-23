@@ -1,3 +1,8 @@
+1.5.0
+-----
+1. When LSM is set to list a multi-CD album as 1 album, then visually split up
+   the CDs' track listings, and allow to play individual CDs.
+
 1.4.4
 -----
 1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.

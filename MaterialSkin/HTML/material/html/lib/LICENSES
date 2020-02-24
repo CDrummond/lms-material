@@ -50,6 +50,7 @@ vue-virtual-scroller:
     Version: 1.0.0-rc2
     URL: https://github.com/Akryum/vue-virtual-scroller
     License: MIT
+    Notes: Added 'debounce' - manually applied pull 337
 
 vuetify-confirm:
     Version: pre 0.2.0

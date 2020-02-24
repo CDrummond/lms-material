@@ -3,7 +3,6 @@
 1. When LMS is set to list a multi-CD album as 1 album, then visually split up
    the CDs' track listings, and allow to play individual CDs.
 2. Add a play icon over cover-art of current track.
-3. Debounce grid scrolling.
 
 1.4.4
 -----

@@ -1242,6 +1242,10 @@ div.v-subheader {
 }
 
 .browse-header {
+ border-bottom:1px solid var(--primary-color);
+}
+
+.browse-header .v-list__tile__title {
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
 }

@@ -119,7 +119,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
  <v-list class="bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
   <RecycleScroller v-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
-   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)">
+   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header}">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -134,7 +134,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-avatar>
 
     <!-- TODO: Do we have search fields with large lists?? -->
-    <v-list-tile-content v-if="item.header" @click="click(item, index, $event)"><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-content v-if="item.header" @click="click(item, index, $event)"><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
@@ -160,7 +160,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-list-tile>
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
-   <v-list-tile v-else-if="item.header" class="lms-list-item" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title class="browse-header">{{item.title}}</v-list-tile-title></v-list-tile-content>
+   <v-list-tile v-else-if="item.header" class="lms-list-item browse-header" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 Menu', item.title)">
      <v-btn icon @click.stop="itemMenu(item, index, $event)">
       <v-icon>more_vert</v-icon>

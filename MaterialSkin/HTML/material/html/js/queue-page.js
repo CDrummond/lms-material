@@ -257,6 +257,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon :title="i18n('Item %1 Menu', index+1)"><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
+    <div class="pq-current-indicator" v-if="index==currentIndex"></div>
    </v-list-tile>
   </RecycleScroller>
   <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key">
@@ -273,6 +274,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon :title="i18n('Item %1 Menu', index+1)"><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
+    <div class="pq-current-indicator" v-if="index==currentIndex"></div>
    </v-list-tile>
   </RecycleScroller>
   <template v-else v-for="(item, index) in items">
@@ -291,6 +293,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
      <v-btn icon :title="i18n('Item %1 Menu', index+1)"><v-icon>more_vert</v-icon></v-btn>
     </v-list-tile-action>
+    <div class="pq-current-indicator" v-if="index==currentIndex"></div>
    </v-list-tile>
   </template>
   <v-list-tile v-if="IS_IOS" class="lms-list-pad"></v-list-tile>

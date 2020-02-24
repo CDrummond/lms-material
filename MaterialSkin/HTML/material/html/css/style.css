@@ -844,6 +844,41 @@ progress {
  font-weight:var(--bold-weight);
 }
 
+.pq-current-indicator {
+ position:absolute;
+ top:6px !important;
+ left:38px !important;
+ z-index:2;
+ width:16px;
+ height:16px;
+ border-radius:50%;
+ line-height:16px;
+ text-align:center;
+ font-family: "Material Icons";
+ font-size:16px;
+ text-decoration:none;
+ color:var(--primary-color);
+ background-color:white
+}
+
+.lms-list-sub3 .pq-current-indicator {
+ left:56px !important;
+}
+
+@media only screen and (max-width:800px) {
+ .pq-current-indicator {
+  left:30px !important;
+ }
+
+ .lms-list-sub3 .pq-current-indicator {
+  left:50px !important;
+ }
+}
+
+.pq-current-indicator:after {
+ content:"\e037";
+}
+
 .pq-text {
  padding-left:4px;
  padding-top:12px; /* TODO:This should not be required! */

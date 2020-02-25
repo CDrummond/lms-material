@@ -4,6 +4,9 @@
 2. Update French translation - thanks to Franck Berry.
 3. Bolder header titles.
 4. Coloured bottom border for headers.
+5. Fix messed up grid when navigate back to grid of artists from a grid of
+   albums.
+6. Use consistent grid size.
 
 1.4.3
 -----

@@ -2345,8 +2345,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             var haveSubtitle = false;
             // How many columns?
-            var numColumns = Math.max(Math.min(Math.floor(listWidth/width), this.items.length), 1);
-            return {w: width, h: height, s: steps, nc: numColumns}
+            var maxColumns = Math.floor(listWidth/width);
+            var numColumns = Math.max(Math.min(maxColumns, this.items.length), 1);
+            return {w: width, h: height, s: steps, mc:maxColumns, nc: numColumns}
         },
         layoutGrid(force) {
             if (!this.grid.use) {
@@ -2364,7 +2365,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var sz = undefined;
             for (var i=4; i>=1; --i) {
                 sz = this.calcSizes(i, listWidth);
-                if (sz.nc>=i) {
+                if (sz.mc>=i) {
                     break;
                 }
             }
@@ -2396,6 +2397,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.grid.ih != sz.h) {
                 this.grid.ih = sz.h;
+                changed = true;
+                document.documentElement.style.setProperty('--image-grid-factor', sz.s);
+            } else if (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--image-grid-factor'))!=sz.s) {
                 changed = true;
                 document.documentElement.style.setProperty('--image-grid-factor', sz.s);
             }

@@ -2614,7 +2614,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.layoutGrid();
         }.bind(this));
         bus.$on('layoutChanged', function() {
-            this.layoutGrid(true);
+            this.$nextTick(function () {
+                this.layoutGrid(true);
+            });
         }.bind(this));
         this.wide = window.innerWidth>=800;
         setTimeout(function () {

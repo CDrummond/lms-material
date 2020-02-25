@@ -1276,7 +1276,8 @@ div.v-subheader {
  min-width:28px !important;
 }
 
-.browse-header {
+.browse-header .v-list__tile__title {
+ color:var(--active-color);
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
 }

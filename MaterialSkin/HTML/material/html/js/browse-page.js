@@ -58,11 +58,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktopLayout && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
-   <v-btn @click.stop="headerAction(MORE_LIB_ACTION, $event)" flat icon class="toolbar-button" :title="ACTIONS[MORE_LIB_ACTION].title" id="tbar-actions" v-if="current && current.id && (current.id.startsWith('artist_id:') || current.id.startsWith('album_id:'))">
+   <v-btn @click.stop="headerAction(MORE_LIB_ACTION, $event)" flat icon class="toolbar-button" :title="ACTIONS[MORE_LIB_ACTION].title" id="tbar-actions" v-if="current && (current.stdItem==STD_ITEM_ARTIST || current.stdItem==STD_ITEM_ALBUM)">
     <img class="svg-img" :src="ACTIONS[MORE_LIB_ACTION].svg | svgIcon(darkUi)"></img>
    </v-btn>
-   <v-divider vertical v-if="current && current.id && (current.id.startsWith('artist_id:') || current.id.startsWith('album_id:'))"></v-divider>
+   <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktopLayout && settingsMenuActions && settingsMenuActions.length>0) || (current && (current.stdItem==STD_ITEM_ARTIST || current.stdItem==STD_ITEM_ALBUM)))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -1017,9 +1016,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (item.id) {
                 var params=[item.id, "menu:1", "html:1"];
                 if (item.id.startsWith("artist_id:")) {
-                    this.fetchItems({command: ["artistinfo", "items"], params: params}, item, page);
+                    this.fetchItems({command: ["artistinfo", "items"], params: params}, {id:item.id, title:item.title}, page);
                 } else if (item.id.startsWith("album_id:")) {
-                    this.fetchItems({command: ["albuminfo", "items"], params: params}, item, page);
+                    this.fetchItems({command: ["albuminfo", "items"], params: params}, {id:item.id, title:item.title}, page);
                 } else if (item.id.startsWith("track_id:")) {
                     this.fetchItems({command: ["trackinfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("genre_id:")) {

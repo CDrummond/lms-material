@@ -59,18 +59,10 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
    <v-divider vertical v-if="tbarActions.length>0 && ((showRatingButton && items.length>1) || (desktopLayout && settingsMenuActions && settingsMenuActions.length>0))"></v-divider>
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>4 || (currentActions.length>1 && !wide)">
-    <v-icon>extension</v-icon>
+   <v-btn @click.stop="headerAction(MORE_LIB_ACTION, $event)" flat icon class="toolbar-button" :title="ACTIONS[MORE_LIB_ACTION].title" id="tbar-actions" v-if="current && current.id && (current.id.startsWith('artist_id:') || current.id.startsWith('album_id:'))">
+    <img class="svg-img" :src="ACTIONS[MORE_LIB_ACTION].svg | svgIcon(darkUi)"></img>
    </v-btn>
-   <v-btn v-for="(action, index) in currentActions" @click="currentAction(action, index)" flat icon class="toolbar-button" :title="action.title" id="tbar-actions" v-else-if="currentActions.length>1">
-    <v-icon v-if="undefined==action.svg">{{action.icon}}</v-icon>
-    <img v-else class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
-   </v-btn>
-   <v-btn @click.stop="currentAction(currentActions[0], 0)" flat icon class="toolbar-button" :title="currentActions[0].title" id="tbar-actions" v-else-if="currentActions.length==1">
-    <img v-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
-    <v-icon v-else>{{currentActions[0].icon}}</v-icon>
-   </v-btn>
-   <v-divider vertical v-if="currentActions.length>0"></v-divider>
+   <v-divider vertical v-if="current && current.id && (current.id.startsWith('artist_id:') || current.id.startsWith('album_id:'))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -298,7 +290,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, search:undefined, plugins:undefined },
+                     select:undefined, unselect:undefined, search:undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             libraryName: undefined,
@@ -514,7 +506,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"), plugins:i18n("Plugins") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -671,23 +663,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
                 var changedView = this.grid.use != prevUseGrid;
                 this.jumplistActive=0;
-                this.currentActions = [];
-
-                /*if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {7
-                    var cmd = ["material-skin", "actions", this.current.id];
-                    if (this.current.id.startsWith("artist_id:")) {
-                        cmd.push("artist:"+this.current.title);
-                    } else {
-                        cmd.push("album:"+this.current.title);
-                    }
-                    lmsCommand("", cmd).then(({data}) => {
-                        if (data && data.result && data.result.actions_loop) {
-                            this.currentActions = data.result.actions_loop;
-                            this.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
-                        }
-                    }).catch(err => {
-                    });
-                }*/
 
                 if (item.id.startsWith(SEARCH_ID)) {
                     this.tbarActions=[SEARCH_LIB_ACTION];
@@ -1356,14 +1331,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 showMenu(this, {show:true, item:item, itemMenu:item.menu, x:event.clientX, y:event.clientY, index:index});
             }
         },
-        currentActionsMenu(event) {
-            showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
-        },
-        currentAction(act, index) {
-            if (undefined!=act.do) {
-                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
-            }
-        },
         clickSubtitle(item, index, event) {
             if (this.selection.size>0) {
                 this.select(item, index, event);
@@ -1528,7 +1495,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle=null;
             this.baseActions=[];
             this.currentBaseActions=[];
-            this.currentActions=[];
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;
@@ -1588,7 +1554,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.baseActions = prev.baseActions;
             this.current = prev.current;
             this.currentBaseActions = prev.currentBaseActions;
-            this.currentActions = prev.currentActions;
             this.headerTitle = prev.headerTitle;
             this.headerSubTitle = prev.headerSubTitle;
             this.tbarActions = prev.tbarActions;

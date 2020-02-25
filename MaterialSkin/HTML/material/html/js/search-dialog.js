@@ -101,9 +101,9 @@ Vue.component('lms-search-dialog', {
                 if (this.commands.length<1) {
                     return;
                 }
-                var libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
+                let libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                 if (libId) {
-                    for (var i=0, len=this.commands.length; i<len; ++i) {
+                    for (let i=0, len=this.commands.length; i<len; ++i) {
                         this.commands[i].params.push("library_id:"+libId);
                     }
                 }
@@ -116,7 +116,7 @@ Vue.component('lms-search-dialog', {
                 return;
             }
             if (0==this.commands.length) {
-                var item = {cancache:false, title:i18n("Search") + SEPARATOR + this.str, id:SEARCH_ID, type:"search", libsearch:true};
+                let item = {cancache:false, title:i18n("Search") + SEPARATOR + this.str, id:SEARCH_ID, type:"search", libsearch:true};
                 if (0==this.results.length) {
                     bus.$emit('libSeachResults', item, {command:[], params:[]}, {items: [], baseActions:[], canUseGrid: false, jumplist:[] });
                 } else if (1==this.results.length) {
@@ -127,15 +127,15 @@ Vue.component('lms-search-dialog', {
                 } else {
                     this.results.sort(function(a, b) { return a.command.cat<b.command.cat ? -1 : 1; });
                     item.id = SEARCH_ID+":all";
-                    var items=[];
-                    var total=0;
-                    for (var i=0, len=this.results.length; i<len; ++i) {
-                        var all = [];
-                        var numItems = this.results[i].resp.items.length;
-                        var clamped = numItems>LMS_INITIAL_SEARCH_RESULTS
-                        var limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
-                        var titleParam = clamped ? limit+" / "+numItems : numItems;
-                        var filter = undefined;
+                    let items=[];
+                    let total=0;
+                    for (let i=0, len=this.results.length; i<len; ++i) {
+                        let all = [];
+                        let numItems = this.results[i].resp.items.length;
+                        let clamped = numItems>LMS_INITIAL_SEARCH_RESULTS
+                        let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
+                        let titleParam = clamped ? limit+" / "+numItems : numItems;
+                        let filter = undefined;
 
                         total+=numItems;
                         if (1==this.results[i].command.cat) {
@@ -157,14 +157,14 @@ Vue.component('lms-search-dialog', {
                             items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems)});
                         }
-                        for (var idx=0, loop=this.results[i].resp.items; idx<numItems; ++idx) {
-                            var item = loop[idx];
-                            item.filter=filter;
+                        for (let idx=0, loop=this.results[i].resp.items; idx<numItems; ++idx) {
+                            let itm = loop[idx];
+                            itm.filter=filter;
                             if (idx<limit) {
-                                items.push(item);
+                                items.push(itm);
                             }
                             if (clamped) {
-                                all.push(item);
+                                all.push(itm);
                             }
                         }
                     }
@@ -176,9 +176,9 @@ Vue.component('lms-search-dialog', {
                 this.searching=false;
                 this.show = false;
             } else {
-                var command = this.commands.shift();
+                let command = this.commands.shift();
                 lmsList("", command.command, command.params, 0, LMS_SEARCH_LIMIT, false).then(({data}) => {
-                    var resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true)});
+                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true)});
                     if (resp.items.length>0) {
                         this.results.push({command:command, params:command.params, resp:resp});
                     }

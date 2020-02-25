@@ -1241,11 +1241,8 @@ div.v-subheader {
  min-width:28px !important;
 }
 
-.browse-header {
- border-bottom:1px solid var(--primary-color);
-}
-
 .browse-header .v-list__tile__title {
+ color:var(--active-color);
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
 }

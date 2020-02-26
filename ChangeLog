@@ -6,6 +6,7 @@
 4. Fix messed up grid when navigate back from a grid of large items.
 5. Use consistent grid size.
 6. Use theme colour for 'Save settings' button.
+7. Allow custom actions to be hidden via settings password.
 
 1.4.3
 -----

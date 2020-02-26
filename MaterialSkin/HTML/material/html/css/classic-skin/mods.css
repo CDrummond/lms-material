@@ -255,17 +255,13 @@ input[type=radio]:checked:before {
 }
 
 #saveSettings {
- color: white !important;
- background-color: #316dd3;
+ color: var(--dialog-toolbar-text-color) !important;
+ background-color: var(--primary-color) !important;
  margin-top:8px;
 }
 
-#saveSettings:hover, #saveSettings:focus {
- background-color: #417de3;
-}
-
 #saveSettings:active {
- background-color: #518df3;
+ opacity:0.8;
 }
 
 ::-webkit-scrollbar {
@@ -327,7 +323,7 @@ textarea {
 }
 
 textarea:focus {
- border: 1px solid var(--active-color);;
+ border: 1px solid var(--active-color);
 }
 
 /* text enty auto-complete */
@@ -360,7 +356,7 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
 }
 
 [type="checkbox"]:focus:before, [type="radio"]:focus:before {
- border: 1px solid var(--active-color);;
+ border: 1px solid var(--active-color);
  border-radius:3px;
 }
 

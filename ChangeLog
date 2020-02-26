@@ -97,10 +97,11 @@
     player settings dialog (if there is only 1 player). See README.md on github
     page for format.
 23. Require window height to be at least 250px before allowing to show expanded
-    now player, or desktop context info.
+    now playing, or desktop context info.
 24. Show 'Open mini-player' icon next to power icon in player menu. Each player
     can be launched in its own mini-player window.
-25. Fix case where there are no players on current LMS, but there are on others.
+25. Fix case where there are no players on current LMS, but there are on
+    others.
 26. Show circular progress in main toolbar when library is being rescanned.
     Clicking will show scan info.
 

@@ -57,7 +57,7 @@ force one or the other.
 * `http://<yourserver>:9000/material/?layout=mobile` will force mobile layout
 * `http://<yourserver>:9000/material/?layout=desktop` will force desktop layout
 
-You can also launch Material straight into its desktop now-playnig screen, using:
+You can also launch Material straight into its desktop now-playing screen, using:
 
 * `http://<yourserver>:9000/material/now-playing`
 

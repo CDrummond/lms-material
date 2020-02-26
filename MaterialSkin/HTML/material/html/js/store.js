@@ -411,6 +411,7 @@ const store = new Vuex.Store({
             lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
                 if (1==parseInt(data.result.ok)) {
                     state.unlockAll = true;
+                    bus.$emit('lockChanged');
                 }
             }).catch(err => {
             });
@@ -520,10 +521,14 @@ const store = new Vuex.Store({
         },
         setPassword(state, pass) {
             setLocalStorageVal('password', pass);
+            let unlockAllBefore = state.unlockAll;
             state.unlockAll = false;
             lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length ? "-" : pass)]).then(({data}) => {
                 if (1==parseInt(data.result.ok)) {
                     state.unlockAll = true;
+                    if (state.unlockAll!=unlockAllBefore) {
+                        bus.$emit('lockChanged');
+                    }
                 }
             }).catch(err => {
             });

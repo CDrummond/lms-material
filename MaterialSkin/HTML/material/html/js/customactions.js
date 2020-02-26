@@ -17,28 +17,33 @@ function initCustomActions() {
     });
 }
 
-function getCustomActions(id) {
+function getCustomActions(id, lockedActions) {
+    let actions = [];
     if (undefined==id) {
         if (customActions && customActions.system) {
-            return customActions.system;
+            for (let i=0, len=customActions.system.length; i<len; ++i) {
+                if (lockedActions || !customActions.system[i].locked) {
+                    actions.push(customActions.system[i]);
+                }
+            }
         }
     } else {
-        let actions = [];
         if (customActions && customActions.allplayers) {
             for (let i=0, len=customActions.allplayers.length; i<len; ++i) {
-                actions.push(customActions.allplayers[i]);
+                if (lockedActions || !customActions.allplayers[i].locked) {
+                    actions.push(customActions.allplayers[i]);
+                }
             }
         }
         if (customActions && customActions[id]) {
             for (let i=0, len=customActions[id].length; i<len; ++i) {
-                actions.push(customActions[id][i]);
+                if (lockedActions || !customActions[id][i].locked) {
+                    actions.push(customActions[id][i]);
+                }
             }
         }
-        if (actions.length>0) {
-            return actions;
-        }
     }
-    return undefined;
+    return actions.length>0 ? actions : undefined;
 }
 
 function performCustomAction(action, player) {

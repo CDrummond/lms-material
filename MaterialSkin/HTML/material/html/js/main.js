@@ -177,6 +177,10 @@ var app = new Vue({
                 this.doQueryActions(true);
             }.bind(this));
         }
+
+        bus.$on('changeLayout', function(layout) {
+            this.setLayout(layout);
+        }.bind(this));
     },
     computed: {
         darkUi() {

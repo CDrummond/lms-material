@@ -214,7 +214,7 @@ Vue.component('lms-manage-players', {
             }
             this.menu.actions.push(DIVIDER);
             this.menu.actions.push(player.id == this.$store.state.defaultPlayer ? PMGR_UNSET_DEF_PLAYER_ACTION : PMGR_SET_DEF_PLAYER_ACTION);
-            this.menu.customActions = getCustomActions(player.id);
+            this.menu.customActions = getCustomActions(player.id, this.$store.state.unlockAll);
             this.menu.show = true;
         },
         createGroup() {

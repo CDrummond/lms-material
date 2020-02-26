@@ -310,7 +310,7 @@ Vue.component('lms-toolbar', {
                 this.connected = true;
                 this.cancelDisconnectedTimer();
             } else if (this.connected && !this.disconnectedTimer) {
-                // Delay showing wanring for 1.5s
+                // Delay showing warning for 1.5s
                 this.disconnectedTimer = setInterval(function () {
                     this.connected = false;
                 }.bind(this), 1500);
@@ -318,10 +318,13 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         bus.$on('customActions', function() {
             if (undefined==this.customActions) {
-                this.customActions = getCustomActions();
+                this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
             }
         }.bind(this));
-        this.customActions = getCustomActions();
+        bus.$on('lockChanged', function() {
+            this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+        }.bind(this));
+        this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
 
         if (!IS_MOBILE) {
             this.addMouseWheelHandler("vol-down-btn");

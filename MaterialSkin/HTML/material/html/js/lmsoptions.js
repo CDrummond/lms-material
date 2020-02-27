@@ -6,7 +6,9 @@
  */
 'use strict';
 
-var lmsOptions = {infoPlugin: getLocalStorageBool('infoPlugin', false),
+var lmsOptions = {newMusicLimit: 100,
+                  useMySqueezeboxImageProxy: getLocalStorageBool('useMySqueezeboxImageProxy', true),
+                  infoPlugin: getLocalStorageBool('infoPlugin', false),
                   artistImages: getLocalStorageBool('artistImages', false),
                   noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                   noRoleFilter: getLocalStorageBool('noRoleFilter', false)};

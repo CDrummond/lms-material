@@ -361,6 +361,7 @@ const store = new Vuex.Store({
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
+            lmsOptions.infoPlugin = state.infoPlugin;
             state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
@@ -388,16 +389,48 @@ const store = new Vuex.Store({
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
             setTheme(state.theme, state.color);
             setFontSize(state.largeFonts);
+
+            // Get server prefs  for:
+            //   All Artists + Album Artists, or just Artists?
+            //   Filer albums/tracks on genre?
+            //   Filter album/tracks on role?
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy"]).then(({data}) => {
+                if (data && data.result) {
+                    var separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
+                    if (separateArtists!=getLocalStorageBool('separateArtists', false)) {
+                        setLocalStorageVal('separateArtists', separateArtists);
+                        clearListCache(true);
+                    }
+
+                    lmsOptions.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
+                    setLocalStorageVal('noGenreFilter', lmsOptions.noGenreFilter);
+                    lmsOptions.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
+                    setLocalStorageVal('noRoleFilter', lmsOptions.noRoleFilter);
+                    if (undefined!=data.result.browseagelimit) {
+                        lmsOptions.newMusicLimit = parseInt(data.result.browseagelimit);
+                    }
+                    // useMySqueezeboxImageProxy defined in utils.js
+                    lmsOptions.useMySqueezeboxImageProxy = undefined==data.result.useLocalImageproxy || 0 == parseInt(data.result.useLocalImageproxy);
+                    setLocalStorageVal('useMySqueezeboxImageProxy', lmsOptions.useMySqueezeboxImageProxy);
+                }
+            });
+            // Artist images?
+            lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
+                if (data && data.result && data.result._p2 != null) {
+                    lmsOptions.artistImages = 1==data.result._p2;
+                    setLocalStorageVal('artistImages', lmsOptions.artistImages);
+                }
+            });
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
                 state.infoPlugin = data && data.result && data.result._can ? true : false;
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
+                lmsOptions.infoPlugin = state.infoPlugin;
             }).catch(err => {
                 state.infoPlugin = false;
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
+                lmsOptions.infoPlugin = state.infoPlugin;
             });
-            lmsOptions.infoPlugin = state.infoPlugin;
-
             // Don't Stop The Music installed?
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
                 state.dstmPlugin = data && data.result && data.result._p2 && "disabled"!=data.result._p2;
@@ -480,11 +513,6 @@ const store = new Vuex.Store({
                 setLocalStorageVal('library', state.library);
                 bus.$emit('libraryChanged');
             }
-        },
-        setInfoPlugin(state, val) {
-            state.infoPlugin = val;
-            lmsOptions.infoPlugin = val;
-            setLocalStorageVal('infoPlugin', val);
         },
         setPage(state, val) {
             if (val!=state.page) {

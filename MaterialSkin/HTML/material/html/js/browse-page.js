@@ -2001,7 +2001,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                             item.section = SECTION_PLAYLISTS;
                                         } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                             if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                                item.limit=undefined==this.newMusicLimit ? 100 :this.newMusicLimit;
+                                                item.limit=lmsOptions.newMusicLimit;
                                             }
                                             if (c.id.startsWith("artist")) {
                                                 item.svg = "artist";
@@ -2556,36 +2556,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     },
     mounted() {
         this.pageElement = document.getElementById("browse-view");
-        // Get server prefs  for:
-        //   All Artists + Album Artists, or just Artists?
-        //   Filer albums/tracks on genre?
-        //   Filter album/tracks on role?
-        lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy"]).then(({data}) => {
-            if (data && data.result) {
-                var separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
-                if (separateArtists!=getLocalStorageBool('separateArtists', false)) {
-                    setLocalStorageVal('separateArtists', separateArtists);
-                    clearListCache(true);
-                }
-
-                lmsOptions.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
-                setLocalStorageVal('noGenreFilter', lmsOptions.noGenreFilter);
-                lmsOptions.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
-                setLocalStorageVal('noRoleFilter', lmsOptions.noRoleFilter);
-                if (undefined!=data.result.browseagelimit) {
-                    this.newMusicLimit = parseInt(data.result.browseagelimit);
-                }
-                // useMySqueezeboxImageProxy defined in utils.js
-                useMySqueezeboxImageProxy = undefined==data.result.useLocalImageproxy || 0 == parseInt(data.result.useLocalImageproxy);
-            }
-        });
-        // Artist images?
-        lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 != null) {
-                lmsOptions.artistImages = 1==data.result._p2;
-                setLocalStorageVal('artistImages', lmsOptions.artistImages);
-            }
-        });
 
         this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], TOP_REMOTE_ID);
         this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);

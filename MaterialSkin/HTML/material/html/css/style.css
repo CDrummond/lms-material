@@ -1062,6 +1062,7 @@ progress {
 
 .pmgr-container {
  padding:0px;
+ max-width:900px;
 }
 
 .pmgr-sync {

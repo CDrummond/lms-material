@@ -362,6 +362,14 @@ Vue.component('lms-manage-players', {
                 }
             });
         },
+        updateAll() {
+            if (!this.show) {
+                return;
+            }
+            for (let i=0, len=this.players.length; i<len; ++i) {
+                bus.$emit('refreshStatus', this.players[i].id);
+            }
+        },
         updatePlayer(player) {
             if (!this.show) {
                 return;

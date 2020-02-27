@@ -1,14 +1,15 @@
 1.4.4
 -----
-1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.
-2. Update French translation - thanks to Franck Berry.
-3. Bolder and coloured header titles.
-4. Fix messed up grid when navigate back from a grid of large items.
-5. Use consistent grid size.
-6. Use theme colour for 'Save settings' button.
-7. Allow custom actions to be hidden via settings password.
-8. Update layout when changed via settings dialog.
-9. Update all players in 'Manage players' dialog when sync changed.
+ 1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.
+ 2. Update French translation - thanks to Franck Berry.
+ 3. Bolder and coloured header titles.
+ 4. Fix messed up grid when navigate back from a grid of large items.
+ 5. Use consistent grid size.
+ 6. Use theme colour for 'Save settings' button.
+ 7. Allow custom actions to be hidden via settings password.
+ 8. Update layout when changed via settings dialog.
+ 9. Update all players in 'Manage players' dialog when sync changed.
+10. Update British English translation.
 
 1.4.3
 -----

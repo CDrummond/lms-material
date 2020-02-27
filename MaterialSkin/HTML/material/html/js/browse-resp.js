@@ -856,7 +856,6 @@ function parseBrowseUrlResp(data, provider) {
                         menu:[ADD_PODCAST_ACTION, MORE_ACTION],
                         isPodcast:true
                       };
-console.log(pod.title, pod.id);
             if (undefined!=pod.title && undefined!=pod.id && !pod.id.startsWith("http://www.striglsmusicnews.com")/*??*/) {
                 resp.items.push(pod);
             }

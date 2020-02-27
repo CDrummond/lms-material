@@ -16,6 +16,7 @@
 6. Use theme colour for 'Save settings' button.
 7. Allow custom actions to be hidden via settings password.
 8. Update layout when changed via settings dialog.
+9. Update all players in 'Manage players' dialog when sync changed.
 
 1.4.3
 -----

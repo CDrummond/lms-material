@@ -349,23 +349,22 @@ div.v-subheader {
 .image-grid-select-btn, .image-grid-select-btn:hover {
  position:absolute;
  top:2px !important;
- left:6px !important;
+ left:4px !important;
 }
 
 .image-grid-item .emblem {
  position:absolute;
  top:2px !important;
- right:8px !important;
- width:28px !important;
- height:28px !important;
+ right:4px !important;
+ width:32px !important;
+ height:32px !important;
  border-radius:50% !important;
- padding:2px;
- box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+ padding:3px;
 }
 
 .image-grid-item .emblem img {
- width:24px !important;
- height:24px !important;
+ width:26px !important;
+ height:26px !important;
 }
 
 .lms-list-sub .emblem, .lms-list-jump .emblem {

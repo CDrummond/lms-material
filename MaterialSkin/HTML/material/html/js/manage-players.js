@@ -18,6 +18,46 @@ var PMGR_UNSET_DEF_PLAYER_ACTION = {cmd:"usdp",     icon:"check_box", active:tru
 
 var nameMap = {};
 
+function getSyncMasterName(player) {
+    if (undefined==player.syncmaster || player.syncmaster.length<1) {
+        return player.name;
+    }
+    let name = nameMap[player.syncmaster];
+    return undefined==name ? "" : name;
+}
+
+function playerSyncSort(a, b) {
+    if (a.isgroup!=b.isgroup) {
+        return a.isgroup ? 1 : -1;
+    }
+
+    var masterA = getSyncMasterName(a).toLowerCase();
+    var masterB = getSyncMasterName(b).toLowerCase();
+    if (masterA < masterB) {
+        return -1;
+    }
+    if (masterA > masterB) {
+        return 1;
+    }
+    if (masterA.length>0) {
+        if (a.issyncmaster && !b.issyncmaster) {
+            return -1;
+        }
+        if (!a.issyncmaster && b.issyncmaster) {
+            return 1;
+        }
+    }
+    var nameA = a.name.toLowerCase();
+    var nameB = b.name.toLowerCase();
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+    return 0;
+}
+
 Vue.component('lms-manage-players', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
@@ -32,29 +72,29 @@ Vue.component('lms-manage-players', {
   <div class="ios-vcard-text-workaround">
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
-     <div v-for="(player, index) in players" :key="player.id" style="width:100%">
+     <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
       <v-flex xs12 v-if="0==index && !player.isgroup && (manageGroups || players[players.length-1].isgroup)" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
-         <v-list-tile-avatar v-if="player.image" :tile="true" v-bind:class="{'dimmed': !player.ison}">
+         <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon><v-icon v-if="player.issyncmaster || player.syncmaster" class="player-status-icon" v-bind:class="{'active-btn': player.issyncmaster}">link</v-icon><i class="pmgr-synced-players" v-if="player.syncmaster">{{player | syncedPlayers}}</i></v-list-tile-title>
-          <v-list-tile-sub-title v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
+          <v-list-tile-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon" class="pmgr-btn pmgr-btn-control" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
+         <v-list-tile-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton" class="pmgr-btn pmgr-btn-control" @click="stop(player)" :title="player.name + ' - ' + trans.stop">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="stop(player)" :title="player.name + ' - ' + trans.stop">
            <v-btn icon><v-icon>stop</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" :title="player.name + ' - ' + trans.next">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" :title="player.name + ' - ' + trans.next">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
@@ -62,16 +102,16 @@ Vue.component('lms-manage-players', {
       </v-flex xs12>
        <v-flex xs12>
        <v-layout>
-        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn" style="margin-left:2px" :title="player.name + ' - ' + trans.decVol"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn pmgr-vol-dec-btn" :title="player.name + ' - ' + trans.decVol"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
         <v-slider @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider"></v-slider>
         <v-btn flat icon @click="volumeUp(player)" class="pmgr-btn" :title="player.name + ' - ' + trans.incVol"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
-        <p class="pmgr-vol">{{player.volume}}%</p>
+        <p class="pmgr-vol" v-bind:class="{'pmgr-vol-small':!showAllButtons}">{{player.volume}}%</p>
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon>{{i18n("Set sleep for all players")}}</v-btn></v-flex>
+      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon><span class="ellipsis">{{i18n("Set sleep for all players")}}</span></v-btn></v-flex>
       <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat class="pmgr-button" @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon>{{i18n('Create group player')}}</v-btn></v-flex>
+      <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat class="pmgr-button" @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon><span class="ellipsis">{{i18n('Create group player')}}</span></v-btn></v-flex>
      </div>
     </v-layout>
    </v-container>
@@ -409,8 +449,11 @@ Vue.component('lms-manage-players', {
             if (!found) {
                 this.players.push(player);
             }
-            this.players.sort(playerSort);
+            this.players.sort(playerSyncSort);
         },
+        isMainPlayer(player) {
+            return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves<1;
+        }
     },
     computed: {
         currentPlayer() {
@@ -431,27 +474,6 @@ Vue.component('lms-manage-players', {
         },
         menuIcons() {
             return this.$store.state.menuIcons
-        }
-    },
-    filters: {
-        syncedPlayers(player) {
-            var names=[];
-            for (var i=0, len=player.syncslaves.length; i<len; ++i) {
-                if (player.syncslaves[i]!=player.id) {
-                    var name = nameMap[player.syncslaves[i]];
-                    if (name) {
-                        names.push(name);
-                    }
-                }
-            }
-            if (!player.issyncmaster) {
-                var name = nameMap[player.syncmaster];
-                if (name) {
-                    names.push(name);
-                }
-            }
-            names.sort();
-            return names.join(", ");
         }
     },
     watch: {

@@ -214,6 +214,11 @@ div.v-subheader {
 
 .pmgr-button {
  margin-left:0px;
+ max-width:calc(100vw - 38px);
+}
+
+.pmgr-button .v-btn__content {
+ max-width:calc(100vw - 60px);
 }
 
 /* Add a little padding at the bottom of lists */
@@ -1059,6 +1064,27 @@ progress {
  padding:0px;
 }
 
+.pmgr-sync {
+ margin-left:56px;
+ margin-top:-32px!important;
+}
+
+.pmgr-sync .v-list__tile {
+ height:48px !important;
+}
+
+.pmgr-sync .pmgr-button {
+ margin-left:-56px;
+}
+
+.pmgr-sync .pmgr-vol-dec-btn {
+ margin-left:2px!important;
+}
+
+.pmgr-vol-dec-btn {
+ margin-left:58px!important;
+}
+
 .pmgr-divider {
  margin-top:4px;
  margin-bottom:4px;
@@ -1082,12 +1108,19 @@ progress {
 }
 
 .pmgr-vol {
- width:82px;
+ min-width:82px!important;
+ max-width:82px!important;
  padding-top:0px;
  margin-top:-6px;
  height:32px;
  text-align:center;
  vertical-align:middle;
+ margin-left:0px;
+}
+
+.pmgr-vol-small {
+ min-width:48px!important;
+ max-width:48px!important;
 }
 
 .pmgr-title {

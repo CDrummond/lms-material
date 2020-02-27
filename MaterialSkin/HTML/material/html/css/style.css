@@ -350,7 +350,6 @@ div.v-subheader {
  position:absolute;
  top:2px !important;
  left:6px !important;
- z-index:2;
 }
 
 .image-grid-item .emblem {
@@ -375,7 +374,6 @@ div.v-subheader {
  left:39px !important;
  width:20px !important;
  height:20px !important;
- z-index:2;
  border-radius:50% !important;
  padding:1px;
  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
@@ -855,7 +853,6 @@ progress {
  position:absolute;
  top:6px !important;
  left:38px !important;
- z-index:2;
  width:16px;
  height:16px;
  border-radius:50%;

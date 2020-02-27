@@ -850,31 +850,31 @@ progress {
 
 .pq-current-indicator {
  position:absolute;
- top:6px !important;
- left:38px !important;
- width:16px;
- height:16px;
+ top:2px !important;
+ left:34px !important;
+ width:22px;
+ height:22px;
  border-radius:50%;
- line-height:16px;
+ line-height:22px;
  text-align:center;
  font-family: "Material Icons";
- font-size:16px;
+ font-size:22px;
  text-decoration:none;
  color:var(--primary-color);
  background-color:white
 }
 
 .lms-list-sub3 .pq-current-indicator {
- left:56px !important;
+ left:52px !important;
 }
 
 @media only screen and (max-width:800px) {
  .pq-current-indicator {
-  left:30px !important;
+  left:26px !important;
  }
 
  .lms-list-sub3 .pq-current-indicator {
-  left:50px !important;
+  left:46px !important;
  }
 }
 

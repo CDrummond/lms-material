@@ -10,6 +10,7 @@
  8. Update layout when changed via settings dialog.
  9. Update all players in 'Manage players' dialog when sync changed.
 10. Update British English translation.
+11. Don't select player when open mini player.
 
 1.4.3
 -----

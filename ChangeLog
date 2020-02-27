@@ -11,9 +11,11 @@
 1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.
 2. Update French translation - thanks to Franck Berry.
 3. Bolder and coloured header titles.
-4. Fix messed up grid when navigate back to grid of artists from a grid of
-   albums.
+4. Fix messed up grid when navigate back from a grid of large items.
 5. Use consistent grid size.
+6. Use theme colour for 'Save settings' button.
+7. Allow custom actions to be hidden via settings password.
+8. Update layout when changed via settings dialog.
 
 1.4.3
 -----
@@ -104,10 +106,11 @@
     player settings dialog (if there is only 1 player). See README.md on github
     page for format.
 23. Require window height to be at least 250px before allowing to show expanded
-    now player, or desktop context info.
+    now playing, or desktop context info.
 24. Show 'Open mini-player' icon next to power icon in player menu. Each player
     can be launched in its own mini-player window.
-25. Fix case where there are no players on current LMS, but there are on others.
+25. Fix case where there are no players on current LMS, but there are on
+    others.
 26. Show circular progress in main toolbar when library is being rescanned.
     Clicking will show scan info.
 

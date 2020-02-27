@@ -57,7 +57,7 @@ force one or the other.
 * `http://<yourserver>:9000/material/?layout=mobile` will force mobile layout
 * `http://<yourserver>:9000/material/?layout=desktop` will force desktop layout
 
-You can also launch Material straight into its desktop now-playnig screen, using:
+You can also launch Material straight into its desktop now-playing screen, using:
 
 * `http://<yourserver>:9000/material/now-playing`
 
@@ -146,7 +146,8 @@ matching a specific player's MAC address. This file has the following format:
   "system":[
     {
       "title":"A page to embed in Material",
-      "iframe":"http://address/to/embed"
+      "iframe":"http://address/to/embed",
+      "locked":true
     },
     {
       "title":"A page to launch in a new window/tab",
@@ -170,7 +171,10 @@ matching a specific player's MAC address. This file has the following format:
 ```
 
 `iframe` URLs are loaded within Material (as happens for server settings, etc),
-and `wrblink` URLs are loaded in a new window (or tab).
+and `weblink` URLs are loaded in a new window (or tab).
+
+`"locked":true` will hide the action until the password entered in Material's
+settings page matches that set in the Material Skin server settings.
 
 `$ID` will be replaced by the player's ID (its MAC address), and `$NAME` will
 be replaced by the player's name. NOTE: No validation takes place, and commands

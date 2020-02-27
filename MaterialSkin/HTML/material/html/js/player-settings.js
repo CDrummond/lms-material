@@ -298,7 +298,7 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerOrigName = player.name;
-            this.customActions = this.$store.state.players.length==1 ? getCustomActions(player) : undefined;
+            this.customActions = this.$store.state.players.length==1 ? getCustomActions(player, this.$store.state.unlockAll) : undefined;
             if (this.$store.state.dstmPlugin) {
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {

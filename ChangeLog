@@ -6,6 +6,7 @@
 3. Add 'More' action to subtoolbar for artist and albums.
 4. Group synced players in 'Manage players' dialog.
 5. Set max-width for list in 'Manage players' dialog.
+6. Center-align text in grid view.
 
 1.4.4
 -----

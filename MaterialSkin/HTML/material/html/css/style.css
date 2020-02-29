@@ -293,13 +293,13 @@ div.v-subheader {
 }
 
 .image-grid-text {
- text-align:left;
+ text-align:center;
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
  margin-top:-2px;
- margin-left:-12px;
- width:calc(123px + (5px * var(--image-grid-factor))) !important;
+ margin-left:0px;
+ width:calc(120px + (5px * var(--image-grid-factor))) !important;
 }
 
 .image-grid-item {

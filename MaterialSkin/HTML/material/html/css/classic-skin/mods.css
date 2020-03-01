@@ -1,3 +1,7 @@
+:root {
+ --dialog-list-max-width:800px;
+}
+
 #sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon, .largeAttribute {
  display:none;
 }
@@ -17,6 +21,14 @@ div#browsedbList {
  margin-left:-8px;
  margin-right:-8px;
 }
+
+#advSearchForm, #browsedbHeader, #browsedbList, #settingsForm, #setup_chooser, #topGraphicMenu3 {
+ width:100%!important;
+ max-width:var(--dialog-list-max-width)!important;
+ margin-left:auto!important;
+ margin-right:auto!important;
+}
+
 /* hide add/play/fav and next-page images */
 .browsedbLeftControls > a > img {
  display:none;
@@ -61,11 +73,10 @@ div#browsedbList {
 }
 
 #choose_setting {
- position:fixed;
- top:8px;
- left:18px;
- margin-left:-8px;
- margin-bottom:8px;
+ margin-left:-4px;
+ margin-top:-22px;
+ margin-bottom:16px;
+ margin-right:0px;
  font-size:16px !important;
  font-weight:500 !important;
  border-radius: 0px;
@@ -98,6 +109,11 @@ div#topGraphicBox, tbody, td.even, td.odd, div.odd, div.even {
  border-bottom:1px solid var(--list-item-border-color);
 }
 
+hr {
+ border:0.5px solid var(--list-item-border-color);
+ margin-right:8px;
+}
+
 .browsedbLeftControls > a {
  padding-top:8px;
 }
@@ -109,10 +125,6 @@ html {
 
 body {
  margin-top:0px;
-}
-
-hr {
- margin-right:8px;
 }
 
 td input { /* Fix entry/combo alignment in additional browse modes */
@@ -132,10 +144,6 @@ td input[type=checkbox] { /* Fix checkbox in Performance / Custom pre-caching sp
  vertical-align: text-bottom !important;
 }
 
-.prefDesc, .prefs {
- margin-right:14px;
-}
-
 div.prefDesc, p {
  font-size:14px!important;
 }
@@ -145,7 +153,6 @@ table {
 }
 
 div#innerSettingsBlock {
- width:calc(100vw - 36px)!important;
  padding: 0px 21px 0px 7px;
 }
 
@@ -290,10 +297,6 @@ html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentP
 }
 .browsedbLeftControls > a:nth-of-type(2):before {
  color: var(--text-color) !important;
-}
-
-hr {
- border:0.5px solid var(--top-toolbar-border-color);
 }
 
 p input, p label {

@@ -90,8 +90,16 @@ div#topGraphicMenu3 {
  background:transparent!important;
 }
 
-div#topGraphicBox, td.even, td.odd {
+div#topGraphicBox, tbody, td.even, td.odd, div.odd, div.even {
  background:transparent!important;
+}
+
+.browsedbListItem {
+ border-bottom:1px solid var(--list-item-border-color);
+}
+
+.browsedbLeftControls > a {
+ padding-top:8px;
 }
 
 html {
@@ -290,10 +298,6 @@ hr {
 
 p input, p label {
  color: var(--text-color) !important;
-}
-
-tbody tr.odd td, div.odd {
- background-color:var(--top-toolbar-border-color) !important;
 }
 
 div.even {

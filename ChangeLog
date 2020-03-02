@@ -8,6 +8,7 @@
 5. Set max-width for list in 'Manage players' dialog.
 6. Center-align text in grid view.
 7. Better layout for embedded config pages.
+8. Update axios, vue, vuetify, and vuex libraries.
 
 1.4.4
 -----

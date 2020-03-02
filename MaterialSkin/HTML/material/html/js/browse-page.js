@@ -86,7 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':items[idx].selected}"></div>
-      <div v-else-if="grid.hoverBtns && (undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0))" class="grid-btns">
+      <div v-else-if="grid.hoverBtns && (undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0 && items[idx].menu[0]==PLAY_ACTION))" class="grid-btns">
        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, items[idx], idx, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, items[idx], idx, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
       </div>

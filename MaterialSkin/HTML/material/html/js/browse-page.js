@@ -86,7 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':items[idx].selected}"></div>
-      <div v-else="grid.hoverBtns" class="grid-btns">
+      <div v-else-if="grid.hoverBtns" class="grid-btns">
        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, items[idx], idx, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, items[idx], idx, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
       </div>
@@ -2371,8 +2371,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (!haveSubtitle && (i+j)<this.items.length && this.items[i+j].subtitle) {
                             haveSubtitle = true;
                         }
-                        if (!hoverBtns && (i+j)<this.items.length && this.items[i+j].stdItem==STD_ITEM_ARTIST || this.items[i+j].stdItem==STD_ITEM_ALBUM || this.items[i+j].menu[0]==PLAY_ACTION) {
-                            hoverBtns = false;
+                        if (!hoverBtns && (i+j)<this.items.length &&
+                            (this.items[i+j].stdItem==STD_ITEM_ARTIST || this.items[i+j].stdItem==STD_ITEM_ALBUM || this.items[i+j].stdItem==STD_ITEM_TRACK ||
+                            (this.items[i+j].menu && this.items[i+j].menu[0]==PLAY_ACTION))) {
+                            hoverBtns = true;
                         }
                     }
                     this.grid.rows.push({id:"row."+i+"."+sz.nc, indexes:indexes});
@@ -2383,7 +2385,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (this.items[i].subtitle) {
                         haveSubtitle = true;
                     }
-                    if (this.items[i].stdItem==STD_ITEM_ARTIST || this.items[i].stdItem==STD_ITEM_ALBUM || this.items[i].menu[0]==PLAY_ACTION) {
+                    if (this.items[i].stdItem==STD_ITEM_ARTIST || this.items[i].stdItem==STD_ITEM_ALBUM || this.items[i].stdItem==STD_ITEM_TRACK ||
+                       (this.items[i].menu && this.items[i].menu[0]==PLAY_ACTION)) {
                         hoverBtns = true;
                     }
                 }

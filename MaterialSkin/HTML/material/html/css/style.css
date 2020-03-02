@@ -346,7 +346,7 @@ div.v-subheader {
  margin-bottom:auto !important;
 }
 
-.image-grid-select-btn, .image-grid-select-btn:hover {
+.image-grid-select-btn, .grid-btns, .image-grid-select-btn:hover {
  position:absolute;
  top:2px !important;
  left:4px !important;
@@ -1500,7 +1500,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  display: flex;
 }
 
-.menu-btn {
+.grid-btn {
  width:32px;
  height:32px;
  border-radius:50%;
@@ -1515,15 +1515,35 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  content:"\e5d4";
 }
 
+.image-grid-item .grid-btns {
+ visibility: hidden;
+}
+
+.image-grid-item:hover .grid-btns {
+ visibility: visible;
+}
+
+.add-btn, .play-btn {
+ margin-right:2px;
+ float:left;
+ color:rgba(255, 255, 255, 0.7);
+ background-color:rgba(64, 64, 64, 0.75)!important;
+}
+
+.add-btn:hover, .play-btn:hover {
+ color:white;
+ background-color:rgba(16, 16, 16, 0.75)!important;
+}
+
+.add-btn:after {
+ content:"\e148";
+}
+
+.play-btn:after {
+ content:"\e039";
+}
+
 .check-btn {
- width:32px;
- height:32px;
- border-radius:50%;
- line-height:32px;
- text-align:center;
- font-family: "Material Icons";
- font-size:24px;
- text-decoration:none;
  color:white;
  background-color:var(--primary-color)!important;
 }

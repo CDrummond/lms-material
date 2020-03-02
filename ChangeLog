@@ -10,6 +10,11 @@
 7. Better layout for embedded config pages.
 8. Update axios, vue, vuetify, and vuex libraries.
 
+1.4.5
+-----
+1. Work around artistinfo failures from 'More' by passing artist_id of parent
+   command.
+
 1.4.4
 -----
  1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.

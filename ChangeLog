@@ -1,3 +1,8 @@
+1.4.5
+-----
+1. Work around artistinfo failures from 'More' by passing artist_id of parent
+   command.
+
 1.4.4
 -----
  1. Fix colour of active repeat/shuffle/dstm buttons in now-playing.

@@ -1758,6 +1758,28 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                         cmd = {command: c, params: p};
                     }
+                } else if (this.command && this.command.params && cmd.command[0]=="artistinfo" || cmd.command[0]=="albuminfo") {
+                    // artistinfo and albuminfo when called from 'More' pass down (e.g.) 'item_id:5' this seems to somtimes fail
+                    // (actually most times with epiphany) due to 'connectionID' changing?
+                    // See https://forums.slimdevices.com/showthread.php?111749-quot-artistinfo-quot-JSONRPC-call-sometimes-fails
+                    // Passing artist_id and album_id should work-around this.
+                    var haveArtistId = false;
+                    var haveAlbumId = false;
+                    for (var i=0, len=cmd.params.length; i<len; ++i) {
+                        if (cmd.params[i].startsWith("artist_id:")) {
+                            haveArtistId = true;
+                        } else if (cmd.params[i].startsWith("album_id:")) {
+                            haveAlbumId = true;
+                        }
+                    }
+                    if (!haveArtistId || !haveAlbumId) {
+                        for (var i=0, len=this.command.params.length; i<len; ++i) {
+                            if ( (!haveArtistId && this.command.params[i].startsWith("artist_id:")) ||
+                                 (!haveAlbumId && this.command.params[i].startsWith("album_id:")) ) {
+                                cmd.params.push(this.command.params[i]);
+                            }
+                        }
+                    }
                 }
             }
 

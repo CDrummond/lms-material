@@ -16,7 +16,7 @@
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
  --image-grid-factor:0;
- --dialog-list-max-width:800px;
+ --dialog-list-max-width:900px;
 }
 
 .browse-html a, .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,

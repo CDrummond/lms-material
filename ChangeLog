@@ -9,7 +9,7 @@
 6. Center-align text in grid view.
 7. Better layout for embedded config pages.
 8. Update axios, vue, vuetify, and vuex libraries.
-9. Show add/play buttons on hover of grid items on desktop browsers.
+9. Show add/play buttons on hover of browse items on desktop browsers.
 
 1.4.5
 -----

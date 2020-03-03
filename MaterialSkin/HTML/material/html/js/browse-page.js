@@ -86,7 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div v-if="idx>=items.length" class="image-grid-item defcursor"></div>
      <div v-else class="image-grid-item" v-bind:class="{'image-grid-item-few': grid.few}" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':items[idx].selected}"></div>
-      <div v-else-if="grid.hoverBtns && (undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0 && items[idx].menu[0]==PLAY_ACTION))" class="grid-btns">
+      <div v-else-if="hoverBtns && (undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0 && items[idx].menu[0]==PLAY_ACTION))" class="grid-btns">
        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, items[idx], idx, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, items[idx], idx, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
       </div>
@@ -136,6 +136,10 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
+     <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu[0]==PLAY_ACTION))" class="list-btns">
+      <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
+      <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+     </div>
      <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', item.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
@@ -193,6 +197,10 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
+     <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu[0]==PLAY_ACTION))" class="list-btns">
+      <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
+      <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+     </div>
      <v-btn flat icon v-if="undefined==item.stdItem && item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index, $event)" :title="ACTIONS[SEARCH_LIB_ACTION].title">
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
@@ -288,8 +296,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             current: undefined,
             currentActions: [],
             items: [],
-            grid: {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, hoverBtns:false},
+            grid: {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
+            hoverBtns: false,
             dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
@@ -344,7 +353,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, hoverBtns:false};
+        this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
 
         // Clicking on 'browse' nav button whilst in browse page goes back.
         bus.$on('nav', function(page, longPress) {
@@ -594,6 +603,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.settingsMenuActions = this.settingsMenuActions;
             prev.pos = this.scrollElement.scrollTop;
             prev.grid = this.grid;
+            prev.hoverBtns = this.hoverBtns;
             prev.command = this.command;
             prev.showRatingButton = this.showRatingButton;
             prev.subtitleClickable = this.subtitleClickable;
@@ -663,9 +673,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var prevUseGrid = this.grid.use;
-                this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, hoverBtns:false};
+                this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
                 var changedView = this.grid.use != prevUseGrid;
                 this.jumplistActive=0;
+                this.hoverBtns = !IS_MOBILE && this.items.length>0 &&
+                                 (this.items[0].stdItem==STD_ITEM_ARTIST || this.items[0].stdItem==STD_ITEM_ALBUM || this.items[0].stdItem==STD_ITEM_TRACK ||
+                                 (this.items[0].menu && this.items[0].menu[0]==PLAY_ACTION));
 
                 if (item.id.startsWith(SEARCH_ID)) {
                     this.tbarActions=[SEARCH_LIB_ACTION];
@@ -1501,7 +1514,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;
-            this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, hoverBtns:false};
+            this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+            this.hoverBtns = false;
             this.command = undefined;
             this.showRatingButton = false;
             this.subtitleClickable = false;
@@ -1554,6 +1568,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.jumplist = prev.jumplist;
             this.filteredJumplist = [];
             this.grid = prev.grid;
+            this.hoverBtns = prev.hoverBtns;
             this.baseActions = prev.baseActions;
             this.current = prev.current;
             this.currentBaseActions = prev.currentBaseActions;
@@ -2349,7 +2364,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             const VIEW_RIGHT_PADDING = 4;
             var changed = false;
             var haveSubtitle = false;
-            var hoverBtns = false;
             var viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             var listWidth = viewWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (this.filteredJumplist.length>1 && this.items.length>10 ? JUMP_LIST_WIDTH :0) + VIEW_RIGHT_PADDING);
 
@@ -2371,34 +2385,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (!haveSubtitle && (i+j)<this.items.length && this.items[i+j].subtitle) {
                             haveSubtitle = true;
                         }
-                        if (!hoverBtns && (i+j)<this.items.length &&
-                            (this.items[i+j].stdItem==STD_ITEM_ARTIST || this.items[i+j].stdItem==STD_ITEM_ALBUM || this.items[i+j].stdItem==STD_ITEM_TRACK ||
-                            (this.items[i+j].menu && this.items[i+j].menu[0]==PLAY_ACTION))) {
-                            hoverBtns = true;
-                        }
                     }
                     this.grid.rows.push({id:"row."+i+"."+sz.nc, indexes:indexes});
                 }
                 this.grid.numColumns = sz.nc;
             } else { // Need to check if have subtitles...
-                for (var i=0; i<this.items.length && !haveSubtitle && !hoverBtns; ++i) {
+                for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
                     if (this.items[i].subtitle) {
                         haveSubtitle = true;
-                    }
-                    if (this.items[i].stdItem==STD_ITEM_ARTIST || this.items[i].stdItem==STD_ITEM_ALBUM || this.items[i].stdItem==STD_ITEM_TRACK ||
-                       (this.items[i].menu && this.items[i].menu[0]==PLAY_ACTION)) {
-                        hoverBtns = true;
                     }
                 }
             }
 
-            if (IS_MOBILE) {
-                hoveBtns = false;
-            }
-            if (this.grid.hoverBtns != hoverBtns) {
-                this.grid.hoverBtns = hoverBtns;
-                changed = true;
-            }
             if (this.grid.haveSubtitle != haveSubtitle) {
                 this.grid.haveSubtitle = haveSubtitle;
                 changed = true;

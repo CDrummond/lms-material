@@ -1515,12 +1515,23 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  content:"\e5d4";
 }
 
-.image-grid-item .grid-btns {
+.image-grid-item .grid-btns, .v-list__tile .list-btns {
  visibility: hidden;
 }
 
-.image-grid-item:hover .grid-btns {
+.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns {
  visibility: visible;
+}
+
+.list-btns {
+ position:absolute;
+ top:8px !important;
+ right:48px !important;
+z-index:2;
+}
+
+.v-list__tile__action .v-btn--icon {
+ margin: -2px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 
 .add-btn, .play-btn {

@@ -6,6 +6,7 @@
  */
 
 :root {
+ --pq-current-color:rgba(48,63,159,0.2);
  --primary-color:#303f9f;
  --accent-color:#666ad1;
 }

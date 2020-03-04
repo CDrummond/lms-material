@@ -1531,7 +1531,7 @@ z-index:2;
 }
 
 .v-list__tile__action .v-btn--icon {
- margin: -2px; /* Is -6px in vuetify, but list-btns messses this up? */
+ margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 
 .add-btn, .play-btn {

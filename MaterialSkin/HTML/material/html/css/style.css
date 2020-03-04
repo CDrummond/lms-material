@@ -1529,7 +1529,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  right:38px !important;
 }
 
-.v-list__tile__action .v-btn--icon {
+.lms-list .v-list__tile__action .v-btn--icon, .lms-list-sub .v-list__tile__action .v-btn--icon {
  margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 

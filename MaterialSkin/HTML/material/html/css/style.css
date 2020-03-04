@@ -1526,8 +1526,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .list-btns {
  position:absolute;
  top:8px !important;
- right:48px !important;
-z-index:2;
+ right:38px !important;
 }
 
 .v-list__tile__action .v-btn--icon {
@@ -1539,6 +1538,10 @@ z-index:2;
  float:left;
  color:rgba(255, 255, 255, 0.7);
  background-color:rgba(64, 64, 64, 0.75)!important;
+}
+
+.list-btns .add-btn, .list-btns .play-btn {
+ margin-right:10px;
 }
 
 .add-btn:hover, .play-btn:hover {

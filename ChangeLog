@@ -2,6 +2,8 @@
 -----
 1. Work around artistinfo failures from 'More' by passing artist_id of parent
    command.
+2. Fix activation of queue actions moved to main menu when using desktop
+   layout.
 
 1.4.4
 -----

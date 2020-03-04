@@ -22,7 +22,7 @@ div#browsedbList {
  margin-right:-8px;
 }
 
-#advSearchForm, #browsedbHeader, #browsedbList, #settingsForm, #setup_chooser, #topGraphicMenu3 {
+#advSearchForm, #browsedbHeader, #browsedbList {
  width:100%!important;
  max-width:var(--dialog-list-max-width)!important;
  margin-left:auto!important;
@@ -73,10 +73,11 @@ div#browsedbList {
 }
 
 #choose_setting {
- margin-left:-4px;
- margin-top:-22px;
- margin-bottom:16px;
- margin-right:0px;
+ position:fixed;
+ top:8px;
+ left:18px;
+ margin-left:-8px;
+ margin-bottom:8px;
  font-size:16px !important;
  font-weight:500 !important;
  border-radius: 0px;
@@ -153,6 +154,7 @@ table {
 }
 
 div#innerSettingsBlock {
+ width:calc(100vw - 36px)!important;
  padding: 0px 21px 0px 7px;
 }
 

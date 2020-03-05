@@ -702,7 +702,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (data && data.result && data.result.actions_loop) {
                             this.currentActions = data.result.actions_loop;
                         }
-                        for (var i=0, loop=this.onlineServices, len=loop.length; i<len; ++i) {
+                        for (var i=0, loop=this.onlineServices.sort(), len=loop.length; i<len; ++i) {
                             var emblem = getEmblem(loop[i]+':');
                             this.currentActions.push({title:'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
                                                       weight:1, svg:emblem ? emblem.name : undefined, id:loop[i]});

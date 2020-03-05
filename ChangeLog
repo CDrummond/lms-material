@@ -5,6 +5,7 @@
 2. Fix activation of queue actions moved to main menu when using desktop
    layout.
 3. Update German translation - thanks to dolodobendan 
+4. If custom actions file not found, return empty JSON response.
 
 1.4.4
 -----

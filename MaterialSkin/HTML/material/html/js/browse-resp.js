@@ -728,6 +728,47 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 type: data.result.albumreview.startsWith("<") || data.result.albumreview.indexOf("<br/>")>0 ? "html" : "text",
                                 id: parent.id+".0"
                             });
+        } else if (data.result.loop_loop) {
+            for (var idx=0, loop=data.result.loop_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                if ("text"===i.type || "textarea"===i.type) {
+                    resp.items.push({
+                                  title: i.name ? i.name : i.title,
+                                  type: "text",
+                                  id: i.id
+                               });
+                } else if ("search"===i.type) {
+                    resp.items.push({
+                                  title: i.name,
+                                  command: [i.cmd ? i.cmd : parent.command[0], "items"],
+                                  image: resolveImage(i.icon, i.image, LMS_IMAGE_SIZE),
+                                  icon: "search",
+                                  params: ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER],
+                                  type: "xmlsearch", // Hack, so that we don't think this is library search...
+                                  id: parent.url+i.cmd+i.id
+                               });
+                } else if (i.hasitems>0) {
+                    resp.items.push({
+                                  title: i.name,
+                                  command: parent.command,
+                                  image: resolveImage(i.icon, i.image, LMS_IMAGE_SIZE),
+                                  params: ["item_id:"+i.id, "want_url:1"],
+                                  type: "group",
+                                  url: i.url,
+                                  actions: i.isaudio === 1 ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION] : undefined,
+                                  id: "item_id:"+i.id
+                               });
+                } else if (i.isaudio === 1) {
+                    resp.items.push({
+                                  title: i.name,
+                                  url: i.url,
+                                  image: resolveImage(i.icon, i.image, LMS_IMAGE_SIZE),
+                                  type: "track",
+                                  actions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                  id: "item_id:"+i.id
+                               });
+                }
+            }
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

@@ -3,7 +3,8 @@
  1. When LMS is set to list a multi-CD album as 1 album, then visually split up
     the CDs' track listings, and allow to play individual CDs.
  2. Add a play icon over cover-art of current track.
- 3. Add 'More' action to subtoolbar for artist and albums.
+ 3. Add 'More' action to subtoolbar for artist and albums to acces online
+    services and artist/album info.
  4. Group synced players in 'Manage players' dialog.
  5. Set max-width for list in 'Manage players' dialog.
  6. Center-align text in grid view.

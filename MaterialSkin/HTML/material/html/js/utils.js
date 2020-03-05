@@ -814,3 +814,8 @@ function isPlaylist(filename) {
 function focusEntry(ui) {
     ui.$nextTick(() => { ui.$nextTick(() => { ui.$refs.entry.focus()}); });
 }
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+

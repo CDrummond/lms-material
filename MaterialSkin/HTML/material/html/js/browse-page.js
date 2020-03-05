@@ -1387,7 +1387,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
             } else {
                 this.fetchItems({command:["browseonlineartist", "items"], params:["service_id:"+act.id, this.current.id]},
-                                {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title});
+                                {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:["browseonlineartist", "items"], params:["service_id:"+act.id]});
             }
         },
         clickSubtitle(item, index, event) {

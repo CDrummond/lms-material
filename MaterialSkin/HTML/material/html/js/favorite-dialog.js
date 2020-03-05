@@ -112,7 +112,7 @@ Vue.component('lms-favorite', {
                             command.push("hasitems:1");
                         }
                     }
-                    lmsCommand(this.playerId, command).then(({datax})=> {
+                    lmsCommand(this.playerId, command).then(({data})=> {
                         bus.$emit('refreshFavorites');
                     });
                 });
@@ -129,7 +129,7 @@ Vue.component('lms-favorite', {
                 if (data && data.result && data.result.exists==1) {
                     bus.$emit('showMessage', i18n("Already in favorites"));
                 } else {
-                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, this.item.id]).then(({datax})=> {
+                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, this.item.id]).then(({data})=> {
                         bus.$emit('refreshFavorites');
                     });
                 }

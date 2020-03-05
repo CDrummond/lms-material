@@ -1047,8 +1047,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.dialog.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, str)); });
                             this.fetchItems({command: command, params: params}, this.dialog.item);
                         } else {
-                            lmsCommand(this.playerId(), command).then(({datax}) => {
-                                logJsonMessage("RESP", datax);
+                            lmsCommand(this.playerId(), command).then(({data}) => {
+                                logJsonMessage("RESP", data);
                                 this.refreshList();
                             }).catch(err => {
                                 logAndShowError(err, this.dialog.command.length>2 && this.dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
@@ -1117,8 +1117,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (item.id.startsWith("playlist_id:")) {
                             this.clearSelection();
                             var command = ["playlists", "delete", item.id];
-                            lmsCommand(this.playerId(), command).then(({datax}) => {
-                                logJsonMessage("RESP", datax);
+                            lmsCommand(this.playerId(), command).then(({data}) => {
+                                logJsonMessage("RESP", data);
                                 this.refreshList();
                             }).catch(err => {
                                 logAndShowError(err, i18n("Failed to delete playlist!"), command);
@@ -1130,8 +1130,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
-                        lmsCommand(this.playerId(), ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({datax}) => {
-                            logJsonMessage("RESP", datax);
+                        lmsCommand(this.playerId(), ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({data}) => {
+                            logJsonMessage("RESP", data);
                             this.refreshList();
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to remove '%1'!", item.title), command);
@@ -1192,8 +1192,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (res) {
                         this.clearSelection();
                         var command = ["favorites", "delete", id];
-                        lmsCommand(this.playerId(), command).then(({datax}) => {
-                            logJsonMessage("RESP", datax);
+                        lmsCommand(this.playerId(), command).then(({data}) => {
+                            logJsonMessage("RESP", data);
                             if (SECTION_FAVORITES==this.current.section) {
                                 this.refreshList();
                             }
@@ -1292,7 +1292,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('dlg.open', 'podcastsearch');
             } else if (ADD_PODCAST_ACTION==act) {
                 if (item.isPodcast) {
-                    lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({datax}) => {
+                    lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({data}) => {
                         this.history[this.history.length-1].needsRefresh = true;
                         bus.$emit('showMessage', i18n("Added '%1'", item.title));
                     }).catch(err => {
@@ -1304,7 +1304,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (REMOVE_PODCAST_ACTION==act) {
                     this.$confirm(i18n("Remove '%1'?", item.title), {buttonTrueText: i18n("Remove"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
-                        lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({datax}) => {
+                        lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({data}) => {
                             this.refreshList();
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to remove podcast!"), command);
@@ -2597,7 +2597,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
                                            this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
                                     : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
-                    lmsCommand(this.playerId(), command).then(({datax}) => {
+                    lmsCommand(this.playerId(), command).then(({data}) => {
                         this.refreshList();
                     });
                 }
@@ -2611,9 +2611,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], TOP_REMOTE_ID);
         this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
         this.onlineServices=[];
-        lmsCommand("", ["browseonlineartist", "services"]).then(({datax}) => {
-            if (datax && datax.result && datax.result.services) {
-                this.onlineServices=datax.result.services;
+        lmsCommand("", ["browseonlineartist", "services"]).then(({data}) => {
+            if (data && data.result && data.result.services) {
+                this.onlineServices=data.result.services;
             }
         });
 

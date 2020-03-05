@@ -102,7 +102,7 @@ Vue.component('lms-podcast-add-dialog', {
             if (url.length<1 || name.length<1) {
                 return;
             }
-            lmsCommand("", ["material-skin", "add-podcast", "url:"+url, "name:"+name]).then(({datax}) => {
+            lmsCommand("", ["material-skin", "add-podcast", "url:"+url, "name:"+name]).then(({data}) => {
                 bus.$emit('refreshList', SECTION_PODCASTS);
                 this.show=false;
             }).catch(err => {

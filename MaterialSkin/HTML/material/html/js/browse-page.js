@@ -59,14 +59,14 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
 
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.length>1">
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.show && currentActions.items.length>1">
     <img class="svg-img" :src="ACTIONS[MORE_LIB_ACTION].svg | svgIcon(darkUi)"></img>
    </v-btn>
-   <v-btn @click.stop="currentAction(currentActions[0], 0)" flat icon class="toolbar-button" :title="currentActions[0].title" id="tbar-actions" v-else-if="currentActions.length==1">
-    <img v-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
-    <v-icon v-else>{{currentActions[0].icon}}</v-icon>
+   <v-btn @click.stop="currentAction(currentActions.items[0], 0)" flat icon class="toolbar-button" :title="currentActions.items[0].title" id="tbar-actions" v-else-if="currentActions.show && currentActions.items.length==1">
+    <img v-if="currentActions.items[0].svg" class="svg-img" :src="currentActions.items[0].svg | svgIcon(darkUi)"></img>
+    <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
    </v-btn>
-   <v-divider vertical v-if="currentActions.length>0 || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1)"></v-divider>
+   <v-divider vertical v-if="currentActions.show || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1)"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -303,7 +303,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     data() {
         return {
             current: undefined,
-            currentActions: [],
+            currentActions: {show:false, items:[]},
             items: [],
             grid: {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
@@ -689,65 +689,74 @@ var lmsBrowse = Vue.component("lms-browse", {
                                  (this.items[0].stdItem==STD_ITEM_ARTIST || this.items[0].stdItem==STD_ITEM_ALBUM || this.items[0].stdItem==STD_ITEM_TRACK ||
                                  (this.items[0].menu && (this.items[0].menu[0]==PLAY_ACTION || this.items[0].menu[0]==PLAY_ALL_ACTION)));
 
-                this.currentActions = [];
-
+                // Get list of actions (e.g. biography, online services) to show in subtoolbar
+                this.currentActions = {show:this.items.length>0, items:[]};
+                var listingArtistAlbums = this.current.id.startsWith("artist_id:");
                 if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {
                     var cmd = ["material-skin", "actions", this.current.id];
-                    if (this.current.id.startsWith("artist_id:")) {
+                    if (listingArtistAlbums) {
                         cmd.push("artist:"+this.current.title);
                     } else {
                         cmd.push("album:"+this.current.title);
                     }
                     lmsCommand("", cmd).then(({data}) => {
                         if (data && data.result && data.result.actions_loop) {
-                            this.currentActions = data.result.actions_loop;
+                            this.currentActions.items = data.result.actions_loop;
                         }
-                        if (this.current.id.startsWith("artist_id:")) {
+                        if (listingArtistAlbums) {
                             for (var i=0, loop=this.onlineServices, len=loop.length; i<len; ++i) {
                                 var emblem = getEmblem(loop[i]+':');
-                                this.currentActions.push({title:'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                          weight:1, svg:emblem ? emblem.name : undefined, id:loop[i]});
+                                this.currentActions.items.push({title:'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
+                                                                weight:1, svg:emblem ? emblem.name : undefined, id:loop[i]});
                             }
                         }
-                        this.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+                        this.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+                        // Artist from online service, but no albums? Add links to services...
+                        if (listingArtistAlbums && this.items.length==0) {
+                            for (var i=0, loop=this.currentActions.items, len=loop.length; i<len; ++i) {
+                                this.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
+                            }
+                        }
                     }).catch(err => {
                     });
                 }
 
-                if (item.id.startsWith(SEARCH_ID)) {
-                    this.tbarActions=[SEARCH_LIB_ACTION];
-                } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
-                    this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
-                } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
-                    this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
-                } else if (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command)) {
-                    if (this.current && this.current.menu) {
-                        for (var i=0, len=this.current.menu.length; i<len; ++i) {
-                            if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                                break;
+                if (this.items.length>0) {
+                    if (item.id.startsWith(SEARCH_ID)) {
+                        this.tbarActions=[SEARCH_LIB_ACTION];
+                    } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
+                        this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
+                    } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
+                        this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
+                    } else if (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command)) {
+                        if (this.current && this.current.menu) {
+                            for (var i=0, len=this.current.menu.length; i<len; ++i) {
+                                if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
+                                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    // Select track -> More -> Album:AlbumTitle -> Tracks
-                    if (this.tbarActions.length==0 && this.current && ((this.current.actions && this.current.actions.play) || this.current.stdItem)) {
-                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                    }
+                        // Select track -> More -> Album:AlbumTitle -> Tracks
+                        if (this.tbarActions.length==0 && this.current && ((this.current.actions && this.current.actions.play) || this.current.stdItem)) {
+                            this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                        }
 
-                    // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                    if (this.tbarActions.length==0 && this.items.length>1 && this.items[0].menu && this.items[0].menu.length>0 &&
-                        (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
-                        // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
-                        !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||
-                                                            this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
-                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                        // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
-                        if (this.items[0].params && this.items[0].params.item_id) {
-                            var parts = this.items[0].params.item_id.split(".");
-                            if (parts.length>1) {
-                                parts.pop();
-                                this.current.allid = "item_id:"+parts.join(".");
+                        // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
+                        if (this.tbarActions.length==0 && this.items.length>1 && this.items[0].menu && this.items[0].menu.length>0 &&
+                            (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
+                            // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+                            !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||
+                                                                this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
+                            this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                            // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
+                            if (this.items[0].params && this.items[0].params.item_id) {
+                                var parts = this.items[0].params.item_id.split(".");
+                                if (parts.length>1) {
+                                    parts.pop();
+                                    this.current.allid = "item_id:"+parts.join(".");
+                                }
                             }
                         }
                     }
@@ -755,7 +764,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (resp.canUseGrid && !resp.forceGrid) {
                     this.settingsMenuActions.unshift(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);
                 }
-                if (this.command.command.length>0 && this.command.command[0]=="albums") {
+                if (this.command.command.length>0 && this.command.command[0]=="albums" && this.items.length>0) {
                     var addSort=true;
                     for (var i=0, len=this.command.params.length; i<len; ++i) {
                         if (this.command.params[i].startsWith(SORT_KEY)) {
@@ -773,7 +782,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
-                } else if (1==this.items.length && ("text"==this.items[0].type || "html"==this.items[0].type)) {
+                } else if ( (1==this.items.length && ("text"==this.items[0].type || "html"==this.items[0].type)) ||
+                            (listingArtistAlbums && 0==this.items.length) /*Artist from online service*/ ) {
                     this.headerSubTitle = undefined;
                 } else {
                     this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.length);
@@ -879,6 +889,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (item.isPinned && undefined!=item.url) { // Radio
                 this.itemMenu(item, index, event);
+                return;
+            }
+            if (item.currentAction) {
+                this.currentAction(item, index);
                 return;
             }
             if ("image"==item.type) {
@@ -1382,7 +1396,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         currentActionsMenu(event) {
-            showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
+            showMenu(this, {show:true, currentActions:this.currentActions.items, x:event.clientX, y:event.clientY});
         },
         currentAction(act, index) {
             if (undefined!=act.do) {
@@ -1556,7 +1570,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.headerSubTitle=null;
             this.baseActions=[];
             this.currentBaseActions=[];
-            this.currentActions=[];
+            this.currentActions={show:false, items:[]};
             this.tbarActions=[];
             this.settingsMenuActions=[];
             this.isTop = true;

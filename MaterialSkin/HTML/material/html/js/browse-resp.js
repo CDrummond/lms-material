@@ -797,6 +797,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
         }
+
+        if (0==resp.items.length) {
+            resp.canUseGrid = false;
+        }
     } else if (data && data.iscache) { // From cache
         resp = data;
     }

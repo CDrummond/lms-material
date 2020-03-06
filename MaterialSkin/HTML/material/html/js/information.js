@@ -40,7 +40,7 @@ Vue.component('lms-information-dialog', {
     <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
     <v-list>
      <template v-for="(item, index) in rescans">
-      <v-list-tile @click="initiateScan(item)">
+      <v-list-tile @click="lmsCommand('', item.cmd)">
        <v-list-tile-title>{{item.name}}</v-list-tile-title>
       </v-list-tile>
      </template>
@@ -286,13 +286,6 @@ Vue.component('lms-information-dialog', {
                 clearInterval(this.timer);
                 this.timer = undefined;
             }
-        },
-        initiateScan(item) {
-            this.$confirm(item.name, {buttonTrueText: i18n('Rescan'), buttonFalseText: i18n('Cancel')}).then(res => {
-                if (res) {
-                    lmsCommand("", item.cmd)
-                }
-            });
         },
         pluginInfo(plugin) {
             bus.$emit('dlg.open', 'iteminfo', plugin);

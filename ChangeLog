@@ -6,6 +6,8 @@
    layout.
 3. Update German translation - thanks to dolodobendan 
 4. If custom actions file not found, return empty JSON response.
+5. Immediately action the 'Enable alarms' action - to be consistent with the
+   individual alarm toggles.
 
 1.4.4
 -----

@@ -47,7 +47,7 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header" v-if="unlockAll" id="alarms">{{i18n('Alarms')}}</v-header>
      <v-list-tile v-if="unlockAll">
-      <v-list-tile-content @click="alarms.on = !alarms.on" class="switch-label">
+      <v-list-tile-content @click="toggleAllAlarms()" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
@@ -453,7 +453,6 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
             lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
-            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
 
             if (this.playerOrigName!=this.playerName) {
@@ -474,6 +473,10 @@ Vue.component('lms-player-settings', {
                     });
                 }
            });
+        },
+        toggleAllAlarms() {
+            this.alarms.on = !this.alarms.on;
+            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
         },
         toggleAlarm(alarm) {
              lmsCommand(this.playerId, ["alarm", "update", "enabled:"+(alarm.enabled ? 0 : 1), "id:"+alarm.id]).then(({data}) => {

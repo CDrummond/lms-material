@@ -136,7 +136,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command']) ) {
+                                                  'actions', 'geturl', 'command', 'scantypes']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -521,6 +521,26 @@ sub _cliCommand {
             return;
         }
     }
+
+    if ($cmd eq 'scantypes') {
+        my $cnt = 0;
+        my $scanTypes = Slim::Music::Import->getScanTypes();
+        foreach ( map {
+                {
+                        name => $scanTypes->{$_}->{name},
+                        cmd => $scanTypes->{$_}->{cmd},
+                        value => $_
+                }
+        } sort keys %$scanTypes ) {
+            $request->setResultLoopHash('item_loop', $cnt++, {
+                    name => cstring('', $_->{name}),
+                    cmd  => $_->{cmd} });
+        }
+
+        $request->setStatusDone();
+        return;
+    }
+
 
     $request->setStatusBadParams();
 }

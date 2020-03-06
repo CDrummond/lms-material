@@ -12,6 +12,7 @@
  8. Update axios, vue, vuetify, and vuex libraries.
  9. Show add/play buttons on hover of browse items on desktop browsers.
 10. Add colour to current queue track.
+11. Get list of rescan options from LMS.
 
 1.4.5
 -----

@@ -40,8 +40,8 @@ Vue.component('lms-information-dialog', {
     <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
     <v-list>
      <template v-for="(item, index) in rescans">
-      <v-list-tile @click="initiateScan(item.prompt, item.command)">
-       <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      <v-list-tile @click="initiateScan(item)">
+       <v-list-tile-title>{{item.name}}</v-list-tile-title>
       </v-list-tile>
      </template>
     </v-list>
@@ -108,9 +108,7 @@ Vue.component('lms-information-dialog', {
             plugins: {names: new Set(), details: []},
             updates: {names: new Set(), details: [], server:false},
             pluginStatus:'idle',
-            rescans: [ {title:undefined, prompt:undefined, command: ["wipecache"]},
-                       {title:undefined, prompt:undefined, command: ["rescan"]},
-                       {title:undefined, prompt:undefined, command: ["rescan", "playlists"]} ],
+            rescans: [ ],
             scanning: false
         }
     },
@@ -122,6 +120,11 @@ Vue.component('lms-information-dialog', {
                     if (inf && inf.server) {
                         this.server=inf.server;
                     }
+                }
+            });
+            lmsCommand("", ["material-skin", "scantypes"]).then(({data}) => {
+                if (data && data.result && data.result.item_loop) {
+                   this.rescans=data.result.item_loop;
                 }
             });
             this.update();
@@ -177,11 +180,6 @@ Vue.component('lms-information-dialog', {
             });
         }.bind(this));
 
-        bus.$on('langChanged', function() {
-            this.initItems();
-        }.bind(this));
-        this.initItems();
-
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'info') {
                 this.show=false;
@@ -189,14 +187,6 @@ Vue.component('lms-information-dialog', {
         }.bind(this));
     },
     methods: {
-        initItems() {
-            this.rescans[0].title=i18n("Full rescan");
-            this.rescans[0].prompt=i18n("Clear library, and rescan everything?");
-            this.rescans[1].title=i18n("Update rescan");
-            this.rescans[1].prompt=i18n("Look for new, and modified, files?");
-            this.rescans[2].title=i18n("Update playlists");
-            this.rescans[2].prompt=i18n("Rescan for playlist changes?");
-        },
         scrollToPlugins() {
             if (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server")) {
                 var plugins = document.getElementById("info-plugins");
@@ -297,10 +287,10 @@ Vue.component('lms-information-dialog', {
                 this.timer = undefined;
             }
         },
-        initiateScan(prompt, command) {
-            this.$confirm(prompt, {buttonTrueText: i18n('Rescan'), buttonFalseText: i18n('Cancel')}).then(res => {
+        initiateScan(item) {
+            this.$confirm(item.name, {buttonTrueText: i18n('Rescan'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
-                    lmsCommand("", command)
+                    lmsCommand("", item.cmd)
                 }
             });
         },

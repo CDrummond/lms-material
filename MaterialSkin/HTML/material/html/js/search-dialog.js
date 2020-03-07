@@ -66,8 +66,7 @@ Vue.component('lms-search-dialog', {
             this.categories=[ { label:i18n("All"), value: 0},
                               { label:i18n("Artists"), value: 1 },
                               { label:i18n("Albums"), value: 2 },
-                              { label:i18n("Tracks"), value: 3 },
-                              { label:i18n("Playlists"), value: 4 } ];
+                              { label:i18n("Tracks"), value: 3 } ];
         },
         cancel() {
             if (this.searching) {
@@ -94,9 +93,6 @@ Vue.component('lms-search-dialog', {
                 }
                 if (0==this.category || 3==this.category) {
                     this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy", "search:"+this.str]});
-                }
-                if (0==this.category || 4==this.category) {
-                   this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
                 }
                 if (this.commands.length<1) {
                     return;
@@ -152,10 +148,6 @@ Vue.component('lms-search-dialog', {
                             items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                        } else if (4==this.results[i].command.cat) {
-                            filter = FILTER_PREFIX+"playlist";
-                            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
-                                        allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems)});
                         }
                         for (let idx=0, loop=this.results[i].resp.items; idx<numItems; ++idx) {
                             let itm = loop[idx];

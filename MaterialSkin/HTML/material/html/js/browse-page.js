@@ -706,7 +706,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (listingArtistAlbums) {
                             for (var i=0, loop=this.onlineServices, len=loop.length; i<len; ++i) {
                                 var emblem = getEmblem(loop[i]+':');
-                                this.currentActions.items.push({title:'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
+                                this.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
                                                                 weight:1, svg:emblem ? emblem.name : undefined, id:loop[i]});
                             }
                         }

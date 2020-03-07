@@ -17,6 +17,7 @@
 13. Reduce now-playing image fade induration from 25ms to 15ms.
 14. Remove 'Palylists' from search dialog. This only search playlist names, not
     content.
+15. Fix toggling of all alarams via icon.
 
 1.4.5
 -----
@@ -25,6 +26,9 @@
 2. Fix activation of queue actions moved to main menu when using desktop
    layout.
 3. Update German translation - thanks to dolodobendan 
+4. If custom actions file not found, return empty JSON response.
+5. Immediately action the 'Enable alarms' action - to be consistent with the
+   individual alarm toggles.
 
 1.4.4
 -----

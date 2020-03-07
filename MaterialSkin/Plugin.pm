@@ -707,13 +707,14 @@ sub _customActionsHandler {
 
     my $request = $response->request;
     my $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin.actions.json";
+    $response->code(RC_OK);
     if (-e $filePath) {
-        $response->code(RC_OK);
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/json', $filePath, '', 'noAttachment' );
     } else {
-        $response->code(RC_NOT_FOUND);
-        $httpClient->send_response($response);
-        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+        $response->code(RC_OK);
+        $response->content_type('application/json');
+        $response->header('Connection' => 'close');
+        $response->content("{}");
     }
 }
 

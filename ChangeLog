@@ -14,6 +14,7 @@
 10. Add colour to current track in queue.
 11. Get list of rescan options from LMS.
 12. Remove confirmation dialog when asking to rescan.
+13. Reduce now-playing image fade induration from 25ms to 15ms.
 
 1.4.5
 -----

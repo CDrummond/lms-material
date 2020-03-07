@@ -1484,7 +1484,7 @@ div.v-subheader {
 img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[lazy='loaded'].np-image {
  opacity:0;
  animation-name:npCoverFadeIn;
- animation-duration:.25s;
+ animation-duration:.15s;
  animation-iteration-count:1;
  animation-fill-mode:forwards;
  animation-direction:normal;

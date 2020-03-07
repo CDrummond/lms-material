@@ -1,3 +1,7 @@
+1.4.6
+-----
+1. Fix toggling of all alarams via icon.
+
 1.4.5
 -----
 1. Work around artistinfo failures from 'More' by passing artist_id of parent

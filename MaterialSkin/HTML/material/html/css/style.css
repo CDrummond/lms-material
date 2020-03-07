@@ -1540,8 +1540,8 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  background-color:rgba(64, 64, 64, 0.75)!important;
 }
 
-.list-btns .add-btn, .list-btns .play-btn {
- margin-right:10px;
+.list-btns .play-btn {
+ margin-right:8px;
 }
 
 .add-btn:hover, .play-btn:hover {

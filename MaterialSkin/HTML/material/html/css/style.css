@@ -1574,16 +1574,16 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  content:"\e834";
 }
 
-.vlib-menu > div, .vlib-menu .v-list__tile__title {
+.vlib-menu > div {
  white-space:normal!important;
- overflow:unset!important;
- text-overflow:unset!important;
 }
 
-.vlib-menu .v-list__tile {
- height:unset!important;
- min-height:48px!important;
- max-height:72px!important;
+.vlib-menu .v-list__tile__title {
+ white-space:normal!important;
+ overflow: hidden;
+ display: -webkit-box;
+ -webkit-box-orient: vertical;
+ -webkit-line-clamp: 2;
 }
 
 .vlib-menu .v-list__tile__title {

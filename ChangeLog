@@ -18,7 +18,7 @@
 14. Remove 'Palylists' from search dialog. This only search playlist names, not
     content.
 15. Fix toggling of all alarams via icon.
-16. Allow text of virtual libraries menu to extend onto multiple lines.
+16. Allow text of virtual libraries menu to extend onto 2 lines.
 17. Add more text to confirmation dialog when deleting a virtual library.
 
 1.4.5

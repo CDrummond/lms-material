@@ -268,7 +268,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list v-else-if="menu.libraries">
+  <v-list class="vlib-menu" v-else-if="menu.libraries">
    <template v-for="(item, index) in menu.libraries">
     <v-list-tile @click="selectLibrary(item.id)">
      <v-list-tile-avatar><v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>

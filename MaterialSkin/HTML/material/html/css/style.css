@@ -1569,3 +1569,20 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .check-btn-checked:after {
  content:"\e834";
 }
+
+.vlib-menu > div, .vlib-menu .v-list__tile__title {
+ white-space:normal!important;
+ overflow:unset!important;
+ text-overflow:unset!important;
+}
+
+.vlib-menu .v-list__tile {
+ height:unset!important;
+ min-height:48px!important;
+ max-height:72px!important;
+}
+
+.vlib-menu .v-list__tile__title {
+ height:unset!important;
+ min-height:24px;
+}

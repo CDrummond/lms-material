@@ -690,7 +690,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                  (this.items[0].menu && (this.items[0].menu[0]==PLAY_ACTION || this.items[0].menu[0]==PLAY_ALL_ACTION)));
 
                 // Get list of actions (e.g. biography, online services) to show in subtoolbar
-                this.currentActions = {show:this.items.length>0, items:[]};
+                this.currentActions.items=[];
                 var listingArtistAlbums = this.current.id.startsWith("artist_id:");
                 if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {
                     var cmd = ["material-skin", "actions", this.current.id];
@@ -720,6 +720,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }).catch(err => {
                     });
                 }
+                this.currentActions.show = this.items.length>0 && this.currentActions.items.length>0;
 
                 if (this.items.length>0) {
                     if (item.id.startsWith(SEARCH_ID)) {

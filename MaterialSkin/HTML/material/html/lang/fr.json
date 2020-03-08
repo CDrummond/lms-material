@@ -89,7 +89,6 @@
 "Default player":"Platine par défaut",
 "Delete":"Supprimer",
 "Delete %1":"Supprimer %1",
-"Delete '%1' (and all its contents)?":"Supprimer '%1' (et tout son contenu) ?",
 "Delete '%1'?":"Supprimer '%1' ?",
 "Delete alarm?":"Supprimer l'alarme ?",
 "Delete all selected items":"Supprimer tous les éléments sélectionnés",
@@ -197,7 +196,6 @@
 "Move to parent folder":"Déplacer dans le dossier parent",
 "Mute":"Couper le son",
 "My Music":"Ma Musique",
-"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"REMARQUE: La mise en page de l'application n'est pas enregistrée, car il s'agit d'un paramètre propre à chaque périphérique de contrôle.",
 "Name":"Nom",
 "New version available":"Nouvelle version disponible",
 "Next track":"Morceau suivant",
@@ -439,5 +437,8 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Disc %1":""
+"Disc %1":"",
+"NOTE:'Application layout' is not saved, as this is a per-device setting.":"",
+"This will remove the 'virtual library', but will not delete the actual music files contained within.":"",
+"This will remove the folder, and any favorites contained within.":""
 }

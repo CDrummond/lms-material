@@ -533,8 +533,7 @@ Vue.component('lms-ui-settings', {
         },
         saveAsDefault() {
             this.$confirm(i18n("Save the current settings as default for new users?")+
-                                "<br/><br/><p style=\"font-weight:200\">"+
-                                (this.allowLayoutAdjust ? i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.") : "")+"</p>",
+                                (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     var settings = { theme:this.theme,

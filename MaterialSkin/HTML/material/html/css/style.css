@@ -19,6 +19,10 @@
  --dialog-list-max-width:900px;
 }
 
+.note {
+ font-weight:200;
+}
+
 .browse-html a, .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active {
  color:var(--active-color) !important;

@@ -1203,7 +1203,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     return;
                 }
                 this.$confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
-                                                           : i18n("Delete '%1' (and all its contents)?", item.title),
+                                                           : i18n("Delete '%1'?", item.title)+addNote(i18n("This will remove the folder, and any favorites contained within.")),
                               {buttonTrueText: act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete"), buttonFalseText: i18n('Cancel')}).then(res => {
                     if (res) {
                         this.clearSelection();
@@ -1445,7 +1445,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$store.commit('setLibrary', id);
         },
         deleteLibrary(lib) {
-            this.$confirm(i18n("Delete '%1'?", lib.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+            this.$confirm(i18n("Delete '%1'?", lib.name)+addNote(i18n("This will remove the 'virtual library', but will not delete the actual music files contained within.")), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand("", ["material-skin", "delete-vlib", "id:"+lib.id]).then(({data}) => {
                         if (this.$store.state.library==lib.id) {

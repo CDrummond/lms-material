@@ -19,6 +19,7 @@
     content.
 15. Fix toggling of all alarams via icon.
 16. Allow text of virtual libraries menu to extend onto multiple lines.
+17. Add more text to confirmation dialog when deleting a virtual library.
 
 1.4.5
 -----

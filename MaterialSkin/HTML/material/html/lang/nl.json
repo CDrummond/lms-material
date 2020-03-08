@@ -89,7 +89,6 @@
 "Default player":"Standaard speler",
 "Delete":"Wissen",
 "Delete %1":"Verwijder %1",
-"Delete '%1' (and all its contents)?":"Verwijder '%1' (en de volledige inhoud)",
 "Delete '%1'?":"'%1' wissen?",
 "Delete alarm?":"Wekker wissen?",
 "Delete all selected items":"Verwijder alle geselecteerde items",
@@ -197,7 +196,6 @@
 "Move to parent folder":"Verplaatsen naar bovenliggende map",
 "Mute":"Dempen",
 "My Music":"Mijn Muziek",
-"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"'Applicatie layout' is niet opgeslagen, aangezien deze instelling apparaat specifiek is.",
 "Name":"Naam",
 "New version available":"Nieuwe versie beschikbaar",
 "Next track":"Volgende nummer",
@@ -439,5 +437,8 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen:",
-"Disc %1":""
+"Disc %1":"",
+"NOTE:'Application layout' is not saved, as this is a per-device setting.":"",
+"This will remove the 'virtual library', but will not delete the actual music files contained within.":"",
+"This will remove the folder, and any favorites contained within.":""
 }

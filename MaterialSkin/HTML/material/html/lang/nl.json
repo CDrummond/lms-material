@@ -439,6 +439,7 @@
 "%1 days":"%1 dagen:",
 "Disc %1":"",
 "NOTE:'Application layout' is not saved, as this is a per-device setting.":"",
+"No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"",
 "This will remove the 'virtual library', but will not delete the actual music files contained within.":"",
 "This will remove the folder, and any favorites contained within.":""
 }

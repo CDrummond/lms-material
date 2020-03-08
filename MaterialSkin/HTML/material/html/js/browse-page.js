@@ -714,6 +714,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
                         // Artist from online service, but no albums? Add links to services...
                         if (listingArtistAlbums && this.items.length==0) {
+                            this.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
                             for (var i=0, loop=this.currentActions.items, len=loop.length; i<len; ++i) {
                                 this.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
                             }

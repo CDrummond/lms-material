@@ -690,7 +690,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                  (this.items[0].menu && (this.items[0].menu[0]==PLAY_ACTION || this.items[0].menu[0]==PLAY_ALL_ACTION)));
 
                 // Get list of actions (e.g. biography, online services) to show in subtoolbar
-                this.currentActions.items=[];
+                this.currentActions={show:false, items:[]};
                 var listingArtistAlbums = this.current.id.startsWith("artist_id:");
                 if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {
                     var cmd = ["material-skin", "actions", this.current.id];
@@ -700,6 +700,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         cmd.push("album:"+this.current.title);
                     }
                     lmsCommand("", cmd).then(({data}) => {
+                        logJsonMessage("RESP", data);
                         if (data && data.result && data.result.actions_loop) {
                             this.currentActions.items = data.result.actions_loop;
                         }
@@ -717,10 +718,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 this.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
                             }
                         }
+                        this.currentActions.show = this.items.length>0 && this.currentActions.items.length>0;
                     }).catch(err => {
                     });
                 }
-                this.currentActions.show = this.items.length>0 && this.currentActions.items.length>0;
 
                 if (this.items.length>0) {
                     if (item.id.startsWith(SEARCH_ID)) {
@@ -2511,6 +2512,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         checkFeature(command, id) {
             lmsCommand("", command).then(({data}) => {
+                logJsonMessage("RESP", data);
                 if (data && data.result && undefined!=data.result._can) {
                     var can = 1==data.result._can;
                     if (can && this.disabled.has(id)) {
@@ -2629,6 +2631,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
         this.onlineServices=[];
         lmsCommand("", ["browseonlineartist", "services"]).then(({data}) => {
+            logJsonMessage("RESP", data);
             if (data && data.result && data.result.services) {
                 this.onlineServices=data.result.services;
             }

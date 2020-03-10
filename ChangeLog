@@ -23,6 +23,7 @@
 18. Don't toggle between 'i' and play/pause button when showing track info in
     mobile layout.
 19. Use active colour for 'i' and full-screen buttons when they are active.
+20. Update web page's title to contain current song.
 
 1.4.5
 -----

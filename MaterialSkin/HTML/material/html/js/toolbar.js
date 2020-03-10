@@ -252,6 +252,12 @@ Vue.component('lms-toolbar', {
                 } else {
                     this.songInfo=undefined;
                 }
+                if (!IS_MOBILE) {
+                    var title = undefined==this.songInfo ? "" : (this.songInfo + " :: ") + "Logitech Media Server";
+                    if (title!=document.title) {
+                        document.title = title;
+                    }
+                }
             }
 
             this.playerDvc = playerStatus.dvc;

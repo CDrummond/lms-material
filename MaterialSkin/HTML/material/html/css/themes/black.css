@@ -69,3 +69,7 @@
   background-color:rgba(128, 128, 128, 0.5);
  }
 }
+
+.lms-toolbar .v-btn__content i.active-btn {
+ color:var(--active-color) !important;
+}

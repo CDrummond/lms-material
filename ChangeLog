@@ -20,6 +20,9 @@
 15. Fix toggling of all alarms via icon.
 16. Allow text of virtual libraries menu to extend onto 2 lines.
 17. Add more text to confirmation dialog when deleting a virtual library.
+18. Don't toggle between 'i' and play/pause button when showing track info in
+    mobile layout.
+19. Use active colour for 'i' and full-screen buttons when they are active.
 
 1.4.5
 -----

@@ -470,7 +470,7 @@ sub _cliCommand {
             }
             if (Slim::Utils::PluginManager->isEnabled('Plugins::YouTube::Plugin')) {
                 if ($artist) {
-                    $request->addResultLoop("actions_loop", $cnt, "title", cstring('', 'PLUGIN_YOUTUBE_ON_YOUTUBE'));
+                    $request->addResultLoop("actions_loop", $cnt, "title", "YouTube");
                     $request->addResultLoop("actions_loop", $cnt, "svg", "youtube");
                     $request->addResultLoop("actions_loop", $cnt, "do", { command => ["youtube","items"], params=> ["want_url:1", "item_id:3", "search:" . $artist, "menu:youtube"] });
                     $request->addResultLoop("actions_loop", $cnt, "weight", 2);

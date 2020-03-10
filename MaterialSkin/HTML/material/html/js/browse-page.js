@@ -708,7 +708,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             for (var i=0, loop=this.onlineServices, len=loop.length; i<len; ++i) {
                                 var emblem = getEmblem(loop[i]+':');
                                 this.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                                weight:1, svg:emblem ? emblem.name : undefined, id:loop[i]});
+                                                                weight:2, svg:emblem ? emblem.name : undefined, id:loop[i]});
                             }
                         }
                         this.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });

@@ -61,10 +61,22 @@ function performCustomAction(action, player) {
             window.open(action.weblink.replace("$ID", player.id).replace("$NAME", player.name));
         }
     } else if (action.command) {
-        if (undefined==player) {
-            lmsCommand("", ["material-skin", "command", "cmd:"+action.command]);
+        if (undefined!=action.prompt) {
+            bus.$confirm(action.prompt).then(res => {
+                if (res) {
+                    if (undefined==player) {
+                        lmsCommand("", ["material-skin", "command", "cmd:"+action.command]);
+                    } else {
+                        lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
+                    }
+                }
+            });
         } else {
-            lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
+            if (undefined==player) {
+                lmsCommand("", ["material-skin", "command", "cmd:"+action.command]);
+            } else {
+                lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
+            }
         }
     }
 }

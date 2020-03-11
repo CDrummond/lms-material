@@ -27,6 +27,7 @@
 21. In portrait now-playing, allow 3 lines for 'remote_title'
 22. Add option for larger icons.
 23. Add shutdown and restart actions to server settings dialog.
+24. Add "prompt" parameter to custom actions.
 
 1.4.5
 -----

@@ -155,7 +155,8 @@ matching a specific player's MAC address. This file has the following format:
     }
     {
       "title":"A command to run on the LMS server",
-      "command":"ls /tmp/ &"
+      "command":"ls /tmp/ &",
+      "prompt":"Do this command?"
     }
   ],
   "allplayers":[
@@ -171,10 +172,14 @@ matching a specific player's MAC address. This file has the following format:
 ```
 
 `iframe` URLs are loaded within Material (as happens for server settings, etc),
-and `weblink` URLs are loaded in a new window (or tab).
+and `weblink` URLs are loaded in a new window (or tab). `command` is a command
+to run on the LMS server.
 
 `"locked":true` will hide the action until the password entered in Material's
 settings page matches that set in the Material Skin server settings.
+
+Set `"prompt"` to a query string to confirm with the user whether to perform the
+action or not.
 
 `$ID` will be replaced by the player's ID (its MAC address), and `$NAME` will
 be replaced by the player's name. NOTE: No validation takes place, and commands

@@ -166,7 +166,6 @@
 "Keyboard shortcuts":"Sneltoetsen",
 "LMS support forums":"LMS support forum",
 "Large font size":"Grote lettergrootte",
-"Larger fonts":"Grotere lettertypen",
 "Last scan: %1":"Laatste scan: %1",
 "Library":"Mediacollectie",
 "Light":"Licht",
@@ -390,7 +389,6 @@
 "Use cover of current track as background.":"Gebruik afbeelding van huidig nummer als achtergrond.",
 "Use desktop layout":"Gebruik desktop layout",
 "Use group player's power settings to control power of all members.":"Gebruik stroominstellingen van spelers groep om stroominstelling van alle groepsleden te regelen.",
-"Use larger font sizes.":"Gebruik grotere lettertypen",
 "Use mobile layout":"Gebruik mobiele layout",
 "Use three lines (title, artist, album) to show track details.":"Gebruik drie regels (titel, artiest, album) om nummer informatie weer te geven",
 "User guide":"Handleiding",
@@ -438,8 +436,14 @@
 "1 day":"1 dag",
 "%1 days":"%1 dagen:",
 "Disc %1":"",
+"Larger fonts and icons":"",
 "NOTE:'Application layout' is not saved, as this is a per-device setting.":"",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"",
+"Restart":"",
+"Restart Logitech Media Server?":"",
+"Shutdown":"",
+"Stop Logitech Media Server?":"",
 "This will remove the 'virtual library', but will not delete the actual music files contained within.":"",
-"This will remove the folder, and any favorites contained within.":""
+"This will remove the folder, and any favorites contained within.":"",
+"Use larger font sizes and larger icons.":""
 }

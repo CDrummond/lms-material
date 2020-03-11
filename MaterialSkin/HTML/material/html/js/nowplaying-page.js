@@ -114,8 +114,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
     <div style="width:32px"></div>
     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-    <div style="width:32px"></div>
-    <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
   </v-card>
@@ -140,8 +138,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
     <div style="width:32px"></div>
     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-    <div style="width:32px"></div>
-    <v-btn flat icon @click="info.show = false" :title="trans.close"><v-icon>close</v-icon></v-btn>
     <v-spacer></v-spacer>
    </v-card-actions>
   </v-card>
@@ -292,7 +288,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
-                 trans: { close: undefined, expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
+                 trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                           stdFont:undefined, mediumFont:undefined, largerFont:undefined, play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
                  showTotal: true,
@@ -626,7 +622,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     methods: {
         initItems() {
-            this.trans = { close:i18n("Close"), expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
+            this.trans = { expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),

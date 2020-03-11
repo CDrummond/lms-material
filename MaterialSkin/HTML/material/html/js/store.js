@@ -30,10 +30,19 @@ function updateUiSettings(state, val) {
         setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
+    var elemSizesChanged = false;
     if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
         state.largeFonts = val.largeFonts;
         setLocalStorageVal('largeFonts', state.largeFonts);
-        setFontSize(state.largeFonts);
+        elemSizesChanged = true;
+    }
+    if (undefined!=val.largeIcons && state.largeIcons!=val.largeIcons) {
+        state.largeIcons = val.largeIcons;
+        setLocalStorageVal('largeIcons', state.largeIcons);
+        elemSizesChanged = true;
+    }
+    if (elemSizesChanged) {
+        setElemSizes(state.largeFonts, state.largeIcons);
     }
     if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
         state.sortFavorites = val.sortFavorites;
@@ -177,6 +186,7 @@ const store = new Vuex.Store({
         color: 'blue',
         darkUi: true,
         largeFonts: false,
+        largeIcons: false,
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
@@ -355,6 +365,7 @@ const store = new Vuex.Store({
             state.darkUi = !state.theme.startsWith('light');
             state.color = getLocalStorageVal('color', state.color);
             state.largeFonts = getLocalStorageBool('largeFonts', state.largeFonts);
+            state.largeIcons = getLocalStorageBool('largeIcons', state.largeIcons)
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
@@ -388,7 +399,9 @@ const store = new Vuex.Store({
             // NOTE: volumeStep is defined in utils.js
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
             setTheme(state.theme, state.color);
-            setFontSize(state.largeFonts);
+            if (state.largeFonts || state.largeIcons) {
+                setElemSizes(state.largeFonts, state.largeIcons);
+            }
 
             // Get server prefs  for:
             //   All Artists + Album Artists, or just Artists?

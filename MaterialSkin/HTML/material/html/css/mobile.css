@@ -216,7 +216,7 @@
  height:18px !important;
  line-height:18px !important;
  top:38px;
- right:100px;
+ right:calc(100px + ((var(--icon-size) - 24px)*4));
  z-index:-1;
  opacity:var(--sub-opacity);
 }
@@ -312,7 +312,7 @@
  }
 
  .vol-label {
-  right:92px;
+  right:calc(92px + ((var(--icon-size) - 24px)*4));
  }
  
  .lms-list-sub .emblem, .lms-list-jump .emblem {

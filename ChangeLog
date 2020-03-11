@@ -30,6 +30,7 @@
 24. Add 'prompt' parameter to custom actions.
 25. Remove 'Close' button from info view in now-playing - click on toolbar icon
     to close.
+26. Use white icon, in toolbar, for update when using coloured toolbars.
 
 1.4.5
 -----

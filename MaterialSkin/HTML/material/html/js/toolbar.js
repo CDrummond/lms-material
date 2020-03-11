@@ -12,6 +12,8 @@ var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
 
+var lmsUpdateToolbarBtnColor = LMS_UPDATE_SVG;
+
 Vue.component('lms-toolbar', {
     template: `
 <div>
@@ -112,7 +114,7 @@ Vue.component('lms-toolbar', {
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true, true)"></img><v-icon v-else>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -331,6 +333,11 @@ Vue.component('lms-toolbar', {
             this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
         }.bind(this));
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+        lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
+        bus.$on('themeChanged', function() {
+            lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
+            console.log(lmsUpdateToolbarBtnColor);
+        }.bind(this));
 
         if (!IS_MOBILE) {
             this.addMouseWheelHandler("vol-down-btn");
@@ -644,7 +651,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.visibleMenus.size>0
         },
         updatesAvailable() {
-            return this.$store.state.updatesAvailable.size>0
+            return true || this.$store.state.updatesAvailable.size>0
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -669,8 +676,8 @@ Vue.component('lms-toolbar', {
             }
             return (isNaN(value) ? 0 : (value<0 ? -1*value : value))+"%";
         },
-        svgIcon: function (name, dark, update) {
-            return "/material/svg/"+name+"?c="+(update ? LMS_UPDATE_SVG : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, update, toolbar) {
+            return "/material/svg/"+name+"?c="+(update ? toolbar ? lmsUpdateToolbarBtnColor : LMS_UPDATE_SVG : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcut : str;

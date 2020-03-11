@@ -24,6 +24,7 @@
     mobile layout.
 19. Use active colour for 'i' and full-screen buttons when they are active.
 20. Update web page's title to contain current song.
+21. In portrait now-playing, allow 3 lines for 'remote_title'
 
 1.4.5
 -----

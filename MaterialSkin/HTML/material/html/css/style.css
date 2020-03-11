@@ -1585,3 +1585,12 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  height:unset!important;
  min-height:24px;
 }
+
+.ellipsis3 {
+ white-space:normal!important;
+ overflow: hidden;
+ display: -webkit-box;
+ -webkit-box-orient: vertical;
+ -webkit-line-clamp: 3;
+}
+

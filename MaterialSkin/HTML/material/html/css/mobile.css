@@ -203,6 +203,7 @@
 }
 
 .vol-label {
+ position:relative;
  margin:-8px 0px 0px 0px;
  padding:0px;
  font-size:calc(var(--small-font-size)/1.75);
@@ -212,11 +213,10 @@
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
+ top:40px;
  width:36px !important;
  height:18px !important;
  line-height:18px !important;
- top:38px;
- right:calc(106px + ((var(--icon-size) - 24px)*3));
  z-index:-1;
  opacity:var(--sub-opacity);
 }
@@ -309,10 +309,6 @@
 
  .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
   padding:0 8px !important;
- }
-
- .vol-label {
-  right:calc(98px + ((var(--icon-size) - 24px)*3));
  }
  
  .lms-list-sub .emblem, .lms-list-jump .emblem {

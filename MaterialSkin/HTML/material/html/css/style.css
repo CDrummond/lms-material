@@ -506,14 +506,14 @@ div.v-subheader {
  height:calc(var(--small-font-size) + 4px) !important;
  line-height:calc(var(--small-font-size) + 4px) !important;
  top:36px;
- right:calc(235px + ((var(--icon-size) - 24px)*4));
+ right:calc(235px + ((var(--icon-size) - 24px)*5));
  width:200px;
  z-index:-1;
  opacity:var(--sub-opacity);
 }
 
 .vol-fixed-label-noinf {
- right:calc(190px + ((var(--icon-size) - 24px)*4));
+ right:calc(190px + ((var(--icon-size) - 24px)*5));
 }
 
 .v-menu__content {

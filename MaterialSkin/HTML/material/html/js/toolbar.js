@@ -444,7 +444,9 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'playersettings');
             } else if (TB_SERVER_SETTINGS.id==id) {
                 if (this.$store.state.unlockAll) {
-                    bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title);
+                    bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title, undefined,
+                               [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver']},
+                                {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver']}]);
                 }
             } else if (TB_INFO.id==id) {
                 bus.$emit('dlg.open', 'info');

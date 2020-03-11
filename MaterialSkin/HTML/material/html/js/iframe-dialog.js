@@ -106,6 +106,8 @@ Vue.component('lms-iframe-dialog', {
     <v-toolbar app class="dialog-toolbar">
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
+     <v-spacer></v-spacer>
+     <v-btn flat v-for="(act, index) in actions" icon @click.native="doAction(act)" :title="act.title"><v-icon>{{act.icon}}</b-icon></v-btn>
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
@@ -125,11 +127,12 @@ Vue.component('lms-iframe-dialog', {
             page: undefined,
             snackbar:{show:false, msg:undefined},
             loaded:false,
-            showAll:false // show al settings, or hide some?
+            showAll:false, // show all settings, or hide some?
+            actions: []
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, showAll) {
+        bus.$on('iframe.open', function(page, title, showAll, actions) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -142,6 +145,7 @@ Vue.component('lms-iframe-dialog', {
             this.show = true;
             this.loaded = false;
             this.showAll = showAll;
+            this.actions = undefined==actions ? [] : actions;
         }.bind(this));
             bus.$on('iframe-loaded', function() {
             this.loaded = true;
@@ -191,6 +195,14 @@ Vue.component('lms-iframe-dialog', {
             } else {
                 return str;
             }
+        },
+        doAction(act) {
+            this.$confirm(act.text).then(res => {
+                if (res) {
+                    lmsCommand("server"==this.page ? "" : this.$store.state.player.id, act.cmd);
+                    this.close();
+                }
+            });
         }
     },
     watch: {

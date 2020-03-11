@@ -163,10 +163,10 @@ var app = new Vue({
             this.$store.commit('dialogOpen', {name:name, shown:val});
         }.bind(this));
 
-        bus.$on('dlg.open', function(name, a, b, c) {
+        bus.$on('dlg.open', function(name, a, b, c, d) {
             this.dialogs[name] = true; // Mount
             this.$nextTick(function () {
-                bus.$emit(name+".open", a, b, c);
+                bus.$emit(name+".open", a, b, c, d);
             });
         }.bind(this));
         if (this.query.actions.length>0) {

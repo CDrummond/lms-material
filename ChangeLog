@@ -4,7 +4,7 @@
     the CDs' track listings, and allow to play individual CDs.
  2. Add a play icon over cover-art of current track in queue.
  3. Add 'More' action to subtoolbar for artist and albums to acces online
-    services, biography, artist phontos, and album review.
+    services, biography, artist photos, and album review.
  4. Group synced players in 'Manage players' dialog.
  5. Set max-width for list in 'Manage players' dialog.
  6. Center-align text in grid view.
@@ -27,7 +27,9 @@
 21. In portrait now-playing, allow 3 lines for 'remote_title'
 22. Add option for larger icons.
 23. Add shutdown and restart actions to server settings dialog.
-24. Add "prompt" parameter to custom actions.
+24. Add 'prompt' parameter to custom actions.
+25. Remove 'Close' button from info view in now-playing - click on toolbar icon
+    to close.
 
 1.4.5
 -----

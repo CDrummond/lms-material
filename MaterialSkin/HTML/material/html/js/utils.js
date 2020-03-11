@@ -778,11 +778,11 @@ function addAndPlayAllActions(cmd) {
     return true;
 }
 
-function setElemSizes(largeFont, largeIcons) {
-    document.documentElement.style.setProperty('--std-font-size', largeFont ? '19px' : '16px');
-    document.documentElement.style.setProperty('--small-font-size', largeFont ? '18px' : '14px');
-    document.documentElement.style.setProperty('--icon-size', largeIcons ? '28px' : '24px');
-    document.documentElement.style.setProperty('--toolbar-button-margin', largeIcons ? '2px' : '4px');
+function setElemSizes(larger) {
+    document.documentElement.style.setProperty('--std-font-size', larger ? '19px' : '16px');
+    document.documentElement.style.setProperty('--small-font-size', larger ? '18px' : '14px');
+    document.documentElement.style.setProperty('--icon-size', larger ? '28px' : '24px');
+    document.documentElement.style.setProperty('--toolbar-button-margin', larger ? '2px' : '4px');
 }
 
 function bindKey(key, modifier) {

@@ -30,19 +30,10 @@ function updateUiSettings(state, val) {
         setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
-    var elemSizesChanged = false;
-    if (undefined!=val.largeFonts && state.largeFonts!=val.largeFonts) {
-        state.largeFonts = val.largeFonts;
-        setLocalStorageVal('largeFonts', state.largeFonts);
-        elemSizesChanged = true;
-    }
-    if (undefined!=val.largeIcons && state.largeIcons!=val.largeIcons) {
-        state.largeIcons = val.largeIcons;
-        setLocalStorageVal('largeIcons', state.largeIcons);
-        elemSizesChanged = true;
-    }
-    if (elemSizesChanged) {
-        setElemSizes(state.largeFonts, state.largeIcons);
+    if (undefined!=val.largerElements && state.largerElements!=val.largerElements) {
+        state.largerElements = val.largerElements;
+        setLocalStorageVal('largerElements', state.largerElements);
+        setElemSizes(state.largerElements);
     }
     if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
         state.sortFavorites = val.sortFavorites;
@@ -185,8 +176,7 @@ const store = new Vuex.Store({
         theme: 'dark',
         color: 'blue',
         darkUi: true,
-        largeFonts: false,
-        largeIcons: false,
+        largerElements: false,
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
@@ -364,8 +354,7 @@ const store = new Vuex.Store({
             state.theme = getLocalStorageVal('theme', getLocalStorageBool('darkUi', true) ? 'dark' : 'light');
             state.darkUi = !state.theme.startsWith('light');
             state.color = getLocalStorageVal('color', state.color);
-            state.largeFonts = getLocalStorageBool('largeFonts', state.largeFonts);
-            state.largeIcons = getLocalStorageBool('largeIcons', state.largeIcons)
+            state.largerElements = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', state.largerElements));
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
@@ -399,8 +388,8 @@ const store = new Vuex.Store({
             // NOTE: volumeStep is defined in utils.js
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
             setTheme(state.theme, state.color);
-            if (state.largeFonts || state.largeIcons) {
-                setElemSizes(state.largeFonts, state.largeIcons);
+            if (state.largerElements) {
+                setElemSizes(state.largerElements);
             }
 
             // Get server prefs  for:
@@ -469,7 +458,7 @@ const store = new Vuex.Store({
                         var prefs = JSON.parse(data.result._p2);
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
-                                     largeFonts: getLocalStorageBool('largeFonts', undefined==prefs.largeFonts ? state.largeFonts : prefs.largeFonts),
+                                     largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),

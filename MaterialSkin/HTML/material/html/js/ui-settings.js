@@ -44,20 +44,11 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="largeFonts = !largeFonts" class="switch-label">
-      <v-list-tile-title>{{i18n('Larger fonts')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use larger font sizes.')}}</v-list-tile-title>
+     <v-list-tile-content @click="largerElements = !largerElements" class="switch-label">
+      <v-list-tile-title>{{i18n('Larger fonts and icons')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-tile-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="largeFonts"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="largeIcons = !largeIcons" class="switch-label">
-      <v-list-tile-title>{{i18n('Larger icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Increase icon size.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="largeIcons"></v-switch></v-list-tile-action>
+     <v-list-tile-action><v-switch v-model="largerElements"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -335,8 +326,7 @@ Vue.component('lms-ui-settings', {
             themes: [ ],
             color: 'blue',
             colors: [ ],
-            largeFonts: false,
-            largeIcons:false,
+            largerElements: false,
             letterOverlay:false,
             showMenuAudio:true,
             sortFavorites:true,
@@ -442,8 +432,7 @@ Vue.component('lms-ui-settings', {
         readStore() {
             this.theme = this.$store.state.theme;
             this.color = this.$store.state.color;
-            this.largeFonts = this.$store.state.largeFonts;
-            this.largeIcons = this.$store.state.largeIcons;
+            this.largerElements = this.$store.state.largerElements;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -505,8 +494,7 @@ Vue.component('lms-ui-settings', {
             setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
             this.$store.commit('setUiSettings', { theme:this.theme,
                                                   color:this.color,
-                                                  largeFonts:this.largeFonts,
-                                                  largeIcons:this.largeIcons,
+                                                  largerElements:this.largerElements,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
@@ -550,8 +538,7 @@ Vue.component('lms-ui-settings', {
                 if (res) {
                     var settings = { theme:this.theme,
                                      color:this.color,
-                                     largeFonts:this.largeFonts,
-                                     largeIcons:this.largeIcons,
+                                     largerElements:this.largerElements,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,

@@ -336,7 +336,6 @@ Vue.component('lms-toolbar', {
         lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
         bus.$on('themeChanged', function() {
             lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
-            console.log(lmsUpdateToolbarBtnColor);
         }.bind(this));
 
         if (!IS_MOBILE) {

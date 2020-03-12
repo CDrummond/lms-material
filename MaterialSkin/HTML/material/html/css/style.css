@@ -510,6 +510,7 @@ div.v-subheader {
  width:200px;
  z-index:-1;
  opacity:var(--sub-opacity);
+ color:var(--top-toolbar-text-color);
 }
 
 .vol-fixed-label-noinf {

@@ -320,3 +320,13 @@
 .vue-splitter .splitter {
  max-width:0px!important;
 }
+
+@media only screen and (max-width:800px) {
+ .pq-current-indicator {
+  left:27px !important;
+ }
+
+ .lms-list-sub3 .pq-current-indicator {
+  left:46px !important;
+ }
+}

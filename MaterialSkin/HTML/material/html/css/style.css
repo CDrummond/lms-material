@@ -858,7 +858,7 @@ progress {
 .pq-current-indicator {
  position:absolute;
  top:4px !important;
- left:32px !important;
+ left:35px !important;
  width:20px;
  height:20px;
  line-height:16px;
@@ -874,16 +874,6 @@ progress {
 
 .lms-list-sub3 .pq-current-indicator {
  left:54px !important;
-}
-
-@media only screen and (max-width:800px) {
- .pq-current-indicator {
-  left:26px !important;
- }
-
- .lms-list-sub3 .pq-current-indicator {
-  left:46px !important;
- }
 }
 
 .pq-current-indicator:after {

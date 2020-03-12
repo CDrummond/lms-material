@@ -476,7 +476,8 @@ Vue.component('lms-ui-settings', {
                 { key:'light-colored', label:i18n('Light (colored toolbars)')},
                 { key:'dark',          label:i18n('Dark')},
                 { key:'dark-colored',  label:i18n('Dark (colored toolbars)')},
-                { key:'black',         label:i18n('Black')}
+                { key:'black',         label:i18n('Black')},
+                { key:'black-colored', label:i18n('Black (colored toolbars)')}
                 ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},

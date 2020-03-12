@@ -1,0 +1,72 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+:root {
+ --active-color:var(--accent-color);
+ --active-toolbar-color:#fff;
+ --scrollbar-thumb-color:#5f5f5f;
+ --scrollbar-track-color:#3f3f3f;
+ --scrollbar-corner-color:#333;
+ --background-color:#000;
+ --background-shadow-color:rgba(0, 0, 0, 0.8);
+ --dialog-toolbar-color:#000;
+ --bottom-toolbar-color:var(--primary-color);
+ --top-toolbar-color:var(--primary-color);
+ --sub-toolbar-color:#000;
+ --bottom-toolbar-border-color:var(--primary-color);
+ --top-toolbar-border-color:var(--primary-color);
+ --sub-toolbar-border-color:#333;
+ --dialog-toolbar-border-color:#333;
+ --splitter-color:#333;
+ --icon-color:#fff;
+ --dlg-icon-color:#fff;
+ --list-item-border-color:#333;
+ --subheader-color:#fff;
+ --text-shadow-color:#000;
+ --text-color:#fff;
+ --dialog-toolbar-text-color:#fff;
+ --top-toolbar-text-color:#fff;
+ --sub-toolbar-text-color:#fff;
+ --bottom-toolbar-text-color:#fff;
+ --active-nav-btn-color:#fff;
+ --toolbar-volume-color:#fff;
+ --bottom-position-slider-color:#fff;
+ --inactive-nav-opacity:0.5;
+}
+
+.np-info-cover {
+ background-color:#000;
+}
+
+.v-menu__content, .v-dialog, .v-toast {
+ border:1px solid var(--dialog-toolbar-border-color) !important;
+}
+
+.v-dialog--fullscreen {
+ border:none !important;
+}
+
+.v-menu__content, .vol-sheet {
+ border-left:1px solid var(--dialog-toolbar-border-color);
+ border-right:1px solid var(--dialog-toolbar-border-color);
+ border-bottom:1px solid var(--dialog-toolbar-border-color);
+}
+
+.lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+ background-color:var(--list-item-border-color) !important;
+}
+
+.lms-list .lms-list-pad .v-list__tile:hover, .lms-list-sub .lms-list-pad .v-list__tile:hover, .lms-list3 .lms-list-pad .v-list__tile:hover, .lms-list-sub3 .lms-list-pad .v-list__tile:hover {
+ background-color:transparent !important;
+}
+
+@media (hover: hover) {
+ .menu-btn:hover {
+  background-color:rgba(128, 128, 128, 0.5);
+ }
+}
+

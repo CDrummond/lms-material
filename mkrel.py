@@ -163,6 +163,29 @@ def fixClassisSkinMods(version):
                 f.write(line)
 
 
+def trim(path):
+    fixedLines = []
+    inTemplate = False
+    with open(path, "r") as f:
+        lines=f.readlines()
+        for line in lines:
+            backTicks=line.count("`")
+            if 1==backTicks:
+                if inTemplate:
+                    inTemplate = False
+                else:
+                    inTemplate = True
+            if inTemplate:
+                fixed = re.sub("^\\s+", "", line.rstrip())
+                fixedLines.append(fixed)
+            else:
+                fixedLines.append(line)
+
+    with open(path, "w") as f:
+        for line in fixedLines:
+            f.write(line)
+
+
 def minifyJs():
     info("...JS")
     scripts=[]
@@ -177,6 +200,7 @@ def minifyJs():
                     script=line[start:end]
                     if not script in scripts:
                         jsCommand.append("%s/js/%s" % (HTML_FOLDER, script))
+                        trim("%s/js/%s" % (HTML_FOLDER, script))
                         scripts.append(script)
     subprocess.call(jsCommand, shell=False)
 

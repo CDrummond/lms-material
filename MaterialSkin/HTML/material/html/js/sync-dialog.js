@@ -13,7 +13,7 @@ Vue.component('lms-sync-dialog', {
   <v-card-text>
    <v-container grid-list-md>
     <v-layout wrap>
-     <v-flex xs12>{{i18n("Select which players you would like to synchronise with '%1'.", player.name)}}</v-flex>
+     <v-flex xs12>{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
      <v-flex xs12>
       <v-select chips deletable-chips multiple :items="players" :label="i18n('Synchronise players')" v-model="chosenPlayers" item-text="label" item-value="id">
        <v-list-tile slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">

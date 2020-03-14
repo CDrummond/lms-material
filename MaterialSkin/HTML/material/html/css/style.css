@@ -598,9 +598,13 @@ div.v-subheader {
 }
 
 .np-playpause {
- margin:2px !important;
- width:48px !important;
- height:48px !important;
+ margin:0px 2px 2px 2px !important;
+ width:52px !important;
+ height:52px !important;
+}
+
+.np-playpause div i {
+ font-size:52px !important;
 }
 
 .np-std-button {
@@ -740,9 +744,13 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .np-slider {
  margin:5px 0 !important; /* v-progress-linear has margin: 1rem 0; */
- height:10px !important;
+ height:24px !important;
  border-top:0px solid transparent !important;
  border-bottom:5px solid transparent !important;
+}
+
+.np-slider .v-progress-linear__bar__determinate {
+ height:5px;
 }
 
 .np-time-layout {

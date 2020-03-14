@@ -167,7 +167,7 @@
  width:calc(100vw);
  margin-left:auto;
  margin-right:auto;
- padding:104px 8px 104px 8px; /* t, r, b, l */
+ padding:104px 8px 112px 8px; /* t, r, b, l */
  z-index:-1;
 }
 

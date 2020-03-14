@@ -28,7 +28,13 @@ const ENDSWITH_MAP = {
     "/toptracks.png":{"svg":"trophy"},
     "/account.png":{"icon":"person"},
     "/artists.png":{"svg":"artist"},
-    "/whatsnew.png":{"icon":"new_releases"}
+    "/whatsnew.png":{"icon":"new_releases"},
+    "/albums.png":{"icon:":"album"},
+    "/playlists.png":{"icon:":"list"},
+    "/musicfolder.png":{"icon:":"folder"},
+    "/newmusic.png":{"icon:":"new_releases"},
+    "/years.png":{"icon:":"date_range"},
+    "/genres.png":{"icon:":"label"}
 };
 
 const INDEXOF_MAP = {

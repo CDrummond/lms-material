@@ -2343,11 +2343,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.doCommands(commands, true);
             this.clearSelection();
         },
-        doCommands(commands, playWhenAdd, clearSent) {
+        doCommands(commands, npAfterLast, clearSent) {
             if (commands.length>0) {
-                if (playWhenAdd && !clearSent) {
+                if (!clearSent && PLAY_ACTION==commands[0].act) {
                     lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {
-                        this.doCommands(commands, playWhenAdd, true);
+                        this.doCommands(commands, npAfterLast, true);
                     });
                     return;
                 }
@@ -2360,10 +2360,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
-                    if (playWhenAdd && 0==commands.length && !this.$store.state.desktopLayout) {
+                    if (npAfterLast && 0==commands.length && !this.$store.state.desktopLayout) {
                         this.$store.commit('setPage', 'now-playing');
                     }
-                    this.doCommands(commands, playWhenAdd, clearSent);
+                    this.doCommands(commands, npAfterLast, clearSent);
                 }).catch(err => {
                     logError(err, command.command);
                 });

@@ -292,10 +292,11 @@
 }
 
 .nav-svg-img {
- width:22px !important;
- height:28px !important;
- padding-bottom:2px;
- vertical-align:middle;
+ width:var(--icon-size) !important;
+ height:calc(var(--icon-size) + 4px) !important;
+ padding-top:0px;
+ padding-bottom:calc(28px - var(--icon-size));
+ margin-bottom:0px;
 }
 
 @media only screen and (max-width:800px) {

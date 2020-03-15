@@ -31,250 +31,252 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile>
   </v-list>
  </v-menu>
-<div v-if="desktopLayout && !largeView" class="np-bar noselect" id="np-bar">
- <v-layout row class="np-controls-desktop" v-if="stopButton">
-  <v-flex xs3>
-   <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
-  </v-flex>
-  <v-flex xs3>
-   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseA" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-  </v-flex>
-  <v-flex xs3>
-   <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
-  </v-flex>
-  <v-flex xs3>
-   <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
-  </v-flex>
- </v-layout>
- <v-layout row class="np-controls-desktop" v-else>
-  <v-flex xs4>
-   <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" class="np-std-button" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
-  </v-flex>
-  <v-flex xs4>
-   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause":title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
-  </v-flex>
-  <v-flex xs4>
-   <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" class="np-std-button" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
-  </v-flex>
- </v-layout>
- <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
- <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
-  <v-list-tile style>
-   <v-list-tile-content>
-    <v-list-tile-title v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-list-tile-title>
-    <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
-
-   </v-list-tile-content>
-   <v-list-tile-action>
-    <div v-if="(techInfo || ratingsSupported) && wide>0"><div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings && (landscape && wide>0)" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
-    <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop" @click="toggleTime()">{{formattedTime}}</div>
-    <div v-else class="np-tech-desktop">&nbsp;</div>
-    <div v-if="((techInfo || ratingsSupported) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
-    <div v-else class="np-time-desktop" @click="toggleTime()">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
-   </v-list-tile-action>
-  </v-list-tile>
- </v-list>
- <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
-
- <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
-  <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
-   <template v-for="(tab, index) in info.tabs">
-    <v-tab :key="index">{{tab.title}}</v-tab>
-    <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-     <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
-      <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
-     </v-card>
-    </v-tab-item>
-   </template>
-  </v-tabs>
-  <div v-else>
-   <v-layout row>
-    <template v-for="(tab, index) in info.tabs">
-     <v-flex xs4>
-      <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
-       <v-card-title><p>{{tab.title}}</p></v-card-title>
-       <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
-      </v-card>
-     </v-flex>
-    </template>
-   </v-layout>
-  </div>
-  <v-card class="np-info-card-cover">
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat icon v-if="info.showTabs" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
-    <v-btn flat icon v-else @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
-    <div style="width:32px"></div>
-    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon class="active-btn">link</v-icon></v-btn>
-    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-    <div style="width:32px"></div>
-    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-    <v-spacer></v-spacer>
-   </v-card-actions>
-  </v-card>
- </div>
-</div>
-<div class="np-page bgnd-cover" v-else id="np-page">
- <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
-  <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
-   <template v-for="(tab, index) in info.tabs">
-    <v-tab :key="index">{{tab.title}}</v-tab>
-    <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-     <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
-      <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
-     </v-card>
-    </v-tab-item>
-   </template>
-  </v-tabs>
-  <v-card class="np-info-card-cover">
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon class="active-btn">link</v-icon></v-btn>
-    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-    <div style="width:32px"></div>
-    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-    <v-spacer></v-spacer>
-   </v-card-actions>
-  </v-card>
- </div>
- <div v-else>
-  <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
-  <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
-   <div class="np-details-landscape">
-    <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
-    <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
-    <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
-    <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
-    <div class="np-text-landscape" v-else>&nbsp;</div>
-    <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
-     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
-     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
-    </div>
-    <div v-if="wide>1">
-
-     <v-layout text-xs-center row wrap class="np-controls-wide">
-      <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
-      <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
-       <v-layout class="np-time-layout">
-        <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-        <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
-        <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
-        <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
-       </v-layout>
-      </v-flex>
-      <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
-      <v-flex xs4>
-       <v-layout text-xs-center>
-        <v-flex xs6>
-         <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-         <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
-         <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
-         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
-         <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
-        </v-flex>
-        <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
-       </v-layout>
-      </v-flex>
-      <v-flex xs4>
-       <v-layout v-if="stopButton" text-xs-center>
-        <v-flex xs6>
-         <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseC" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-        </v-flex>
-        <v-flex xs6>
-         <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
-        </v-flex>
-       </v-layout>
-       <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
-      </v-flex>
-      <v-flex xs4>
-       <v-layout text-xs-center>
-        <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn></v-flex>
-        <v-flex xs6>
-         <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-         <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>
-         <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">shuffle</v-icon></v-btn>
-         <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>shuffle</v-icon></v-btn>
-        </v-flex>
-       </v-layout>
-      </v-flex>
-     </v-layout>
-
-    </div>
-   </div>
-  </div>
-  <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-   <div v-bind:style="{height: portraitPad+'px'}"></div>
-   <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
-   <p class="np-text" v-else>&nbsp;</p>
-   <p class="np-text subtext ellipsis" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
-   <p class="np-text" v-else>&nbsp;</p>
-   <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
-   <p class="np-text subtext ellipsis3" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
-   <p class="np-text" v-else>&nbsp;</p>
-   <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
-  </div>
-  <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
-   <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
-    <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
-    <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
+ 
+ <div v-if="desktopLayout && !largeView" class="np-bar noselect" id="np-bar">
+  <v-layout row class="np-controls-desktop" v-if="stopButton">
+   <v-flex xs3>
+    <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
    </v-flex>
-   <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
-
-   <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
-    <v-layout>
-     <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-     <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
-     <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
-     <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
-    </v-layout>
+   <v-flex xs3>
+    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseA" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
    </v-flex>
-   <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
-
-   <v-flex xs4 class="no-control-adjust">
-    <v-layout text-xs-center>
-     <v-flex xs6>
-      <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-      <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
-      <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
-      <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
-      <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
-     </v-flex>
-     <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
-    </v-layout>
+   <v-flex xs3>
+    <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
    </v-flex>
-   <v-flex xs4 class="no-control-adjust">
-    <v-layout v-if="stopButton" text-xs-center>
-     <v-flex xs6>
-      <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseE" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-     </v-flex>
-     <v-flex xs6>
-      <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
-     </v-flex>
-    </v-layout>
-    <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
-   </v-flex>
-   <v-flex xs4 class="no-control-adjust">
-    <v-layout text-xs-center>
-     <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn></v-flex>
-     <v-flex xs6>
-      <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-      <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>
-      <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">shuffle</v-icon></v-btn>
-      <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>shuffle</v-icon></v-btn>
-     </v-flex>
-    </v-layout>
+   <v-flex xs3>
+    <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
+  <v-layout row class="np-controls-desktop" v-else>
+   <v-flex xs4>
+    <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" class="np-std-button" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
+   </v-flex>
+   <v-flex xs4>
+    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause":title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+   </v-flex>
+   <v-flex xs4>
+    <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" class="np-std-button" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
+   </v-flex>
+  </v-layout>
+  <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
+  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
+   <v-list-tile style>
+    <v-list-tile-content>
+     <v-list-tile-title v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-list-tile-title>
+     <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action>
+     <div v-if="(techInfo || ratingsSupported) && wide>0"><div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings && (landscape && wide>0)" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
+     <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop" @click="toggleTime()">{{formattedTime}}</div>
+     <div v-else class="np-tech-desktop">&nbsp;</div>
+     <div v-if="((techInfo || ratingsSupported) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-else class="np-time-desktop" @click="toggleTime()">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+    </v-list-tile-action>
+   </v-list-tile>
+  </v-list>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+
+  <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
+   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
+    <template v-for="(tab, index) in info.tabs">
+     <v-tab :key="index">{{tab.title}}</v-tab>
+     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
+      <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
+      </v-card>
+     </v-tab-item>
+    </template>
+   </v-tabs>
+   <div v-else>
+    <v-layout row>
+     <template v-for="(tab, index) in info.tabs">
+      <v-flex xs4>
+       <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+        <v-card-title><p>{{tab.title}}</p></v-card-title>
+        <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
+       </v-card>
+      </v-flex>
+     </template>
+    </v-layout>
+   </div>
+   <v-card class="np-info-card-cover">
+    <v-card-actions>
+     <v-spacer></v-spacer>
+     <v-btn flat icon v-if="info.showTabs" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
+     <v-btn flat icon v-else @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
+     <div style="width:32px"></div>
+     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon class="active-btn">link</v-icon></v-btn>
+     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
+     <div style="width:32px"></div>
+     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
+     <v-spacer></v-spacer>
+    </v-card-actions>
+   </v-card>
+  </div>
  </div>
-</div></div>
+ 
+ <div class="np-page bgnd-cover" v-else id="np-page">
+  <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
+   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
+    <template v-for="(tab, index) in info.tabs">
+     <v-tab :key="index">{{tab.title}}</v-tab>
+     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
+      <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+       <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
+      </v-card>
+     </v-tab-item>
+    </template>
+   </v-tabs>
+   <v-card class="np-info-card-cover">
+    <v-card-actions>
+     <v-spacer></v-spacer>
+     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon class="active-btn">link</v-icon></v-btn>
+     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
+     <div style="width:32px"></div>
+     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
+     <v-spacer></v-spacer>
+    </v-card-actions>
+   </v-card>
+  </div>
+  <div v-else>
+   <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
+   <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
+    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <div class="np-details-landscape">
+     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
+     <div class="np-text-landscape" v-else>&nbsp;</div>
+     <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
+     <div class="np-text-landscape" v-else>&nbsp;</div>
+     <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
+     <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
+     <div class="np-text-landscape" v-else>&nbsp;</div>
+     <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
+      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
+     </div>
+     <div v-if="wide>1">
+
+      <v-layout text-xs-center row wrap class="np-controls-wide">
+       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
+       <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
+        <v-layout class="np-time-layout">
+         <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
+         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+         <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
+         <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
+        </v-layout>
+       </v-flex>
+       <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
+       <v-flex xs4>
+        <v-layout text-xs-center>
+         <v-flex xs6>
+          <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+          <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
+          <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
+          <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
+          <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
+         </v-flex>
+         <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+        </v-layout>
+       </v-flex>
+       <v-flex xs4>
+        <v-layout v-if="stopButton" text-xs-center>
+         <v-flex xs6>
+          <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseC" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
+         </v-flex>
+         <v-flex xs6>
+          <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
+         </v-flex>
+        </v-layout>
+        <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+       </v-flex>
+       <v-flex xs4>
+        <v-layout text-xs-center>
+         <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+         <v-flex xs6>
+          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>shuffle</v-icon></v-btn>
+         </v-flex>
+        </v-layout>
+       </v-flex>
+      </v-layout>
+
+     </div>
+    </div>
+   </div>
+   <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
+    <div v-bind:style="{height: portraitPad+'px'}"></div>
+    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+    <p class="np-text" v-else>&nbsp;</p>
+    <p class="np-text subtext ellipsis" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
+    <p class="np-text" v-else>&nbsp;</p>
+    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album">{{playerStatus.current.album}}</p>
+    <p class="np-text subtext ellipsis3" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
+    <p class="np-text" v-else>&nbsp;</p>
+    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
+   </div>
+   <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
+    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
+     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
+    </v-flex>
+    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
+
+    <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
+     <v-layout>
+      <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
+      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+      <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
+      <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
+     </v-layout>
+    </v-flex>
+    <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
+
+    <v-flex xs4 class="no-control-adjust">
+     <v-layout text-xs-center>
+      <v-flex xs6>
+       <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="repAltBtn.icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+       <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat_one</v-icon></v-btn>
+       <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">repeat</v-icon></v-btn>
+       <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
+       <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>repeat</v-icon></v-btn>
+      </v-flex>
+      <v-flex xs6><v-btn flat icon v-longpress:true="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn></v-flex>
+     </v-layout>
+    </v-flex>
+    <v-flex xs4 class="no-control-adjust">
+     <v-layout v-if="stopButton" text-xs-center>
+      <v-flex xs6>
+       <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseE" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon large>{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
+      </v-flex>
+      <v-flex xs6>
+       <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop"><v-icon large>stop</v-icon></v-btn>
+      </v-flex>
+     </v-layout>
+     <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="playerStatus.isplaying ? trans.pause : trans.play"><v-icon x-large>{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+    </v-flex>
+    <v-flex xs4 class="no-control-adjust">
+     <v-layout text-xs-center>
+      <v-flex xs6><v-btn flat icon v-longpress:true="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn></v-flex>
+      <v-flex xs6>
+       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="shuffle-albums active-btn"">shuffle</v-icon></v-btn>
+       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="active-btn">shuffle</v-icon></v-btn>
+       <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton}"><v-icon>shuffle</v-icon></v-btn>
+      </v-flex>
+     </v-layout>
+    </v-flex>
+   </v-layout>
+  </div>
+ </div>
+</div>
 `,
     data() {
         return { coverUrl:LMS_BLANK_COVER,

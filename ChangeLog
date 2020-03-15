@@ -34,6 +34,7 @@
 27. Add 'Back (coloured toolbars)' to theme options.
 28. Larger play/pause button.
 29. Map more LMS icons to material icons.
+30. Only ask LMS for player-specific 'My Music' entries if there is a player.
 
 1.4.5
 -----

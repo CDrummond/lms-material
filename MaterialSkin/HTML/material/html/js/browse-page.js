@@ -2036,93 +2036,102 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                     // Now get standard menu, for extra (e.g. CustomBrowse) entries...
-                    lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
-                        if (data && data.result && data.result.item_loop) {
-                            for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                                var c = loop[idx];
-                                if (c.node=="myMusic" && c.id) {
-                                    if (c.id=="randomplay") {
-                                        this.myMusic.push({ title: i18n("Random Mix"),
-                                                              svg: "dice-multiple",
-                                                              id: RANDOM_MIX_ID,
-                                                              type: "app",
-                                                              weight: c.weight ? parseFloat(c.weight) : 100 });
-                                    } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
-                                        var command = this.buildCommand(c, "go", false);
-                                        var item = { title: c.text,
-                                                     command: command.command,
-                                                     params: command.params,
-                                                     weight: c.weight ? parseFloat(c.weight) : 100,
-                                                     id: MUSIC_ID_PREFIX+c.id,
-                                                     type: "group",
-                                                     icon: "music_note"
-                                                    };
+                    if (!this.playerId()) { // No player, then can't get playre specific items just yet
+                        this.processMyMusicMenu();
+                        this.myMusic[0].needsUpdating=true; // Still needs updating to get the rest of this...
+                        this.fetchingItems = false;
+                    } else {
+                        lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
+                            if (data && data.result && data.result.item_loop) {
+                                for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                                    var c = loop[idx];
+                                    if (c.node=="myMusic" && c.id) {
+                                        if (c.id=="randomplay") {
+                                            this.myMusic.push({ title: i18n("Random Mix"),
+                                                                  svg: "dice-multiple",
+                                                                  id: RANDOM_MIX_ID,
+                                                                  type: "app",
+                                                                  weight: c.weight ? parseFloat(c.weight) : 100 });
+                                        } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
+                                            var command = this.buildCommand(c, "go", false);
+                                            var item = { title: c.text,
+                                                         command: command.command,
+                                                         params: command.params,
+                                                         weight: c.weight ? parseFloat(c.weight) : 100,
+                                                         id: MUSIC_ID_PREFIX+c.id,
+                                                         type: "group",
+                                                         icon: "music_note"
+                                                        };
 
-                                        if (c.id == "dynamicplaylist") {
-                                            item.svg = "dice-list";
-                                            item.icon = undefined;
-                                        } else if (c.id.startsWith("trackstat")) {
-                                            item.icon = "bar_chart";
-                                        } else if (c.id.startsWith("artist")) {
-                                            item.svg = "artist";
-                                            item.icon = undefined;
-                                        } else if (c.id.startsWith("playlists")) {
-                                            item.icon = "list";
-                                            item.section = SECTION_PLAYLISTS;
-                                        } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
-                                            if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                                item.limit=lmsOptions.newMusicLimit;
-                                            }
-                                            if (c.id.startsWith("artist")) {
+                                            if (c.id == "dynamicplaylist") {
+                                                item.svg = "dice-list";
+                                                item.icon = undefined;
+                                            } else if (c.id.startsWith("trackstat")) {
+                                                item.icon = "bar_chart";
+                                            } else if (c.id.startsWith("artist")) {
                                                 item.svg = "artist";
                                                 item.icon = undefined;
-                                            } else {
-                                                item.icon = c.id.startsWith("new") ? "new_releases" :
-                                                            c.id.startsWith("album") ? "album" :
-                                                            c.id.startsWith("artist") ? "group" :
-                                                            c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
-                                                            c.id.startsWith("genre") ? "label" :
-                                                            c.id.startsWith("playlist") ? "list" :
-                                                            c.id.startsWith("ratedmysql") ? "star" :
-                                                            "music_note";
+                                            } else if (c.id.startsWith("playlists")) {
+                                                item.icon = "list";
+                                                item.section = SECTION_PLAYLISTS;
+                                            } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
+                                                if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
+                                                    item.limit=lmsOptions.newMusicLimit;
+                                                }
+                                                if (c.id.startsWith("artist")) {
+                                                    item.svg = "artist";
+                                                    item.icon = undefined;
+                                                } else {
+                                                    item.icon = c.id.startsWith("new") ? "new_releases" :
+                                                                c.id.startsWith("album") ? "album" :
+                                                                c.id.startsWith("artist") ? "group" :
+                                                                c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
+                                                                c.id.startsWith("genre") ? "label" :
+                                                                c.id.startsWith("playlist") ? "list" :
+                                                                c.id.startsWith("ratedmysql") ? "star" :
+                                                                "music_note";
+                                                }
+                                            } else if (c.icon) {
+                                                if (c.icon.endsWith("/albums.png")) {
+                                                    item.icon = "album";
+                                                } else if (c.icon.endsWith("/artists.png")) {
+                                                    item.svg = "artist";
+                                                    item.icon = undefined;
+                                                } else if (c.icon.endsWith("/genres.png")) {
+                                                    item.icon = "label";
+                                                }
                                             }
-                                        } else if (c.icon) {
-                                            if (c.icon.endsWith("/albums.png")) {
-                                                item.icon = "album";
-                                            } else if (c.icon.endsWith("/artists.png")) {
-                                                item.svg = "artist";
-                                                item.icon = undefined;
-                                            } else if (c.icon.endsWith("/genres.png")) {
-                                                item.icon = "label";
+                                            if (getField(item, "genre_id:")>=0) {
+                                                item['mapgenre']=true;
                                             }
+                                            this.myMusic.push(item);
                                         }
-                                        if (getField(item, "genre_id:")>=0) {
-                                            item['mapgenre']=true;
-                                        }
-                                        this.myMusic.push(item);
                                     }
                                 }
+                                this.processMyMusicMenu();
                             }
-                            this.myMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
-                            for (var i=0, len=this.myMusic.length; i<len; ++i) {
-                                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-                            }
-                            if (this.current && TOP_MYMUSIC_ID==this.current.id) {
-                                this.items = this.myMusic;
-                            } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
-                                this.history[1].items = this.myMusic;
-                            }
-                        }
-                        this.fetchingItems=false;
-                    }).catch(err => {
-                        this.fetchingItems = false;
-                        logAndShowError(err);
-                    });
+                            this.fetchingItems=false;
+                        }).catch(err => {
+                            this.fetchingItems = false;
+                            logAndShowError(err);
+                        });
+                    }
                 }
             }).catch(err => {
                 this.fetchingItems = false;
                 logAndShowError(err);
             });
+        },
+        processMyMusicMenu() {
+            this.myMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
+            for (var i=0, len=this.myMusic.length; i<len; ++i) {
+                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+            }
+            if (this.current && TOP_MYMUSIC_ID==this.current.id) {
+                this.items = this.myMusic;
+            } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
+                this.history[1].items = this.myMusic;
+            }
         },
         updateTopList(items) {
             this.top=items;

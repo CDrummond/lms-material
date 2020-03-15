@@ -1338,7 +1338,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (isFilter ? list[i].filter==check : list[i].id.startsWith(check)) {
-                        commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==i ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});
+                        commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==commands.length ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});
                     } else if (commands.length>0) {
                         break;
                     }
@@ -2343,8 +2343,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.doCommands(commands, true);
             this.clearSelection();
         },
-        doCommands(commands, npAfterLast) {
+        doCommands(commands, playWhenAdd, clearSent) {
             if (commands.length>0) {
+                if (playWhenAdd && !clearSent) {
+                    lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {
+                        this.doCommands(commands, playWhenAdd, true);
+                    });
+                    return;
+                }
                 var cmd = commands.shift();
                 var command = this.buildFullCommand(cmd.item, cmd.act);
                 if (command.command.length===0) {
@@ -2354,10 +2360,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
                     logJsonMessage("RESP", data);
-                    if (npAfterLast && 0==commands.length && !this.$store.state.desktopLayout) {
+                    if (playWhenAdd && 0==commands.length && !this.$store.state.desktopLayout) {
                         this.$store.commit('setPage', 'now-playing');
                     }
-                    this.doCommands(commands, npAfterLast);
+                    this.doCommands(commands, playWhenAdd, clearSent);
                 }).catch(err => {
                     logError(err, command.command);
                 });

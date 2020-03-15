@@ -1338,7 +1338,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (isFilter ? list[i].filter==check : list[i].id.startsWith(check)) {
-                        commands.push({act:INSERT_ALL_ACTION==act ? INSERT_ACTION : (PLAY_ALL_ACTION==act && 0==commands.length ? PLAY_ACTION : ADD_ACTION), item:list[i], idx:i});
+                        if (INSERT_ALL_ACTION==act) {
+                            commands.unshift({act:INSERT_ACTION, item:list[i], idx:i});
+                        } else {
+                            commands.push({act:PLAY_ALL_ACTION==act && 0==commands.length ? PLAY_ACTION : ADD_ACTION, item:list[i], idx:i});
+                        }
                     } else if (commands.length>0) {
                         break;
                     }

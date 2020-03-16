@@ -457,7 +457,8 @@ div.v-subheader {
 }
 
 .subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn,
-.np-controls div.v-btn__content i.active-btn, .np-controls-wide div.v-btn__content i.active-btn {
+.np-controls div.v-btn__content i.active-btn, .np-controls-wide div.v-btn__content i.active-btn,
+.lms-jumplist div.active-btn {
  color:var(--active-color) !important;
 }
 

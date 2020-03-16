@@ -1,7 +1,7 @@
 1.5.1
 -----
 1. Fix 'Play all' and 'Play next' from header.
-2. Don't hide 'Interface' from server settings, just reduce options.
+2. Don't hide 'Interface' from server settings, just hide some options.
 3. Fix icon mapping of some icons.
 
 1.5.0

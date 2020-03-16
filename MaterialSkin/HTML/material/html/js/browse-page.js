@@ -970,6 +970,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.headerSubTitle = i18n("Select category");
                 setScrollTop(this.scrollElement, 0);
                 this.isTop = false;
+                this.jumplist = this.filteredJumplist = [];
             } else if (item.weblink) {
                 if (this.current && this.current.actions && this.current.actions.go && this.current.actions.go.params &&
                     this.current.actions.go.params.folder && this.current.actions.go.cmd && this.current.actions.go.cmd.length>=2 &&

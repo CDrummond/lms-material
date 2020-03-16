@@ -29,12 +29,13 @@ const ENDSWITH_MAP = {
     "/account.png":{"icon":"person"},
     "/artists.png":{"svg":"artist"},
     "/whatsnew.png":{"icon":"new_releases"},
-    "/albums.png":{"icon:":"album"},
-    "/playlists.png":{"icon:":"list"},
-    "/musicfolder.png":{"icon:":"folder"},
-    "/newmusic.png":{"icon:":"new_releases"},
-    "/years.png":{"icon:":"date_range"},
-    "/genres.png":{"icon:":"label"}
+    "/albums.png":{"icon":"album"},
+    "/playlists.png":{"icon":"list"},
+    "/musicfolder.png":{"icon":"folder"},
+    "/newmusic.png":{"icon":"new_releases"},
+    "/years.png":{"icon":"date_range"},
+    "/genres.png":{"icon":"label"},
+    "/favorites.png":{"icon":"favorite"}
 };
 
 const INDEXOF_MAP = {

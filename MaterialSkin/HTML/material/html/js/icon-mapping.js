@@ -35,7 +35,13 @@ const ENDSWITH_MAP = {
     "/newmusic.png":{"icon":"new_releases"},
     "/years.png":{"icon":"date_range"},
     "/genres.png":{"icon":"label"},
-    "/favorites.png":{"icon":"favorite"}
+    "/favorites.png":{"icon":"favorite"},
+    "/alarm.png":{"icon":"alarm"},
+    "/plugin.png":{"icon":"extension"},
+    "/playlistadd.png":{"icon":"playlist_add"},
+    "/playlistclear.png":{"svg":"queue-clear"},
+    "/playlistedit.png":{"icon":"edit"},
+    "/playlistsave.png":{"icon":"save"}
 };
 
 const INDEXOF_MAP = {

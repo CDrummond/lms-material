@@ -4,6 +4,8 @@
 2. Don't hide 'Interface' from server settings, just hide some options.
 3. Fix icon mapping of some icons.
 4. Hide jumplist when showing Artists/Album/etc. selection of genre.
+5. When listing for Artists, Composers, or Conductors of a genre ask for
+   textkey.
 
 1.5.0
 -----

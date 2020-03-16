@@ -935,7 +935,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],
-                              params: [item.id],
+                              params: [item.id, "tags:s"],
                               svg: "artist",
                               type: "group",
                               id: uniqueId(item.id, 0),
@@ -951,7 +951,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
-                                        params: ["role_id:COMPOSER", item.id],
+                                        params: ["role_id:COMPOSER", item.id, "tags:s"],
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
@@ -960,7 +960,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
                                         command: ["artists"],
-                                        params: ["role_id:CONDUCTOR", item.id],
+                                        params: ["role_id:CONDUCTOR", item.id, "tags:s"],
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",

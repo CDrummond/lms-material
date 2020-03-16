@@ -1,0 +1,70 @@
+[% PROCESS settings/header.html %]
+
+	[% WRAPPER setting title="SETUP_SKIN" desc="SETUP_SKIN_DESC" %]
+		<select class="stdedit" name="pref_skin" id="skin">
+
+		[% FOREACH option = skinoptions.keys %]
+
+			<option [% IF prefs.pref_skin == option %]selected [% END %]value="[% option %]">[% skinoptions.$option %]</option>
+
+		[%- END -%]
+
+		</select>
+	[% END %]
+
+	<input type="hidden" name="pref_showArtist" value="[% prefs.pref_showArtist %]">
+	<input type="hidden" name="pref_showYear" value="[% prefs.pref_showYear %]">
+
+	<input type="hidden" name="pref_titleFormatWeb" value="[% prefs.pref_titleFormatWeb %]">
+	[% FOREACH format = prefs.pref_titleFormat %]
+		<input type="hidden" name="pref_titleFormat[% loop.index %]" value="[% format %]">
+	[% END %]
+
+	<input type="hidden" name="pref_itemsPerPage" value="[% prefs.pref_itemsPerPage %]">
+	<input type="hidden" name="pref_refreshRate" value="[% prefs.pref_refreshRate %]">
+	<input type="hidden" name="pref_thumbSize" value="[% prefs.pref_thumbSize %]">
+
+	[% WRAPPER settingSection %]
+		[% WRAPPER settingGroup title="SETUP_LONGDATEFORMAT" desc="SETUP_LONGDATEFORMAT_DESC" %]
+			<select class="stdedit" name="pref_longdateFormat" id="longdateFormat">
+
+			[% FOREACH option = longdateoptions.keys %]
+
+				<option [% IF prefs.pref_longdateFormat == option %]selected [% END %]value="[% option %]">[% longdateoptions.$option %]</option>
+
+			[%- END -%]
+
+			</select>
+		[% END %]
+
+		[% WRAPPER settingGroup title="SETUP_SHORTDATEFORMAT" desc="SETUP_SHORTDATEFORMAT_DESC" %]
+			<select class="stdedit" name="pref_shortdateFormat" id="shortdateFormat">
+
+			[% FOREACH option = shortdateoptions.keys %]
+
+				<option [% IF prefs.pref_shortdateFormat == option %]selected [% END %]value="[% option %]">[% shortdateoptions.$option %]</option>
+
+			[%- END -%]
+
+			</select>
+		[% END %]
+
+		[% WRAPPER settingGroup title="SETUP_TIMEFORMAT" desc="SETUP_TIMEFORMAT_DESC" %]
+			<select class="stdedit" name="pref_timeFormat" id="timeFormat">
+
+			[% FOREACH option = timeoptions.keys %]
+
+				<option [% IF prefs.pref_timeFormat == option %]selected [% END %]value="[% option %]">[% timeoptions.$option %]</option>
+
+			[%- END -%]
+
+			</select>
+		[% END %]
+	[% END %]
+
+	[% WRAPPER setting title="SETUP_DISPLAYTEXTTIMEOUT" desc="SETUP_DISPLAYTEXTTIMEOUT_DESC"%]
+		<input type=text class="stdedit sliderInput_1_100" name="pref_displaytexttimeout" id="displaytexttimeout" value="[% prefs.pref_displaytexttimeout || 0 %]" size="15">
+	[% END %]
+
+[% PROCESS settings/footer.html %]
+

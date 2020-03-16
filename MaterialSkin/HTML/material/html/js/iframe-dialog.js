@@ -72,8 +72,6 @@ function hideClassicSkinElems(page, showAll) {
         if (!showAll) {
             if ('player'==page) {
                 toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
-            } else if ('server'==page) {
-                toHide = new Set(['INTERFACE_SETTINGS']);
             }
         }
         if ('search'==page) {

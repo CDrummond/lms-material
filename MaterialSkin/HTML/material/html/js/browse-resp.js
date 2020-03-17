@@ -286,7 +286,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     if (isRadiosTop && i['icon-id']) {
                         if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu=='language') {
-                            i['icon-id']='language.png';
+                            i['icon-id']='/language.png';
                         }
                         mapIcon(i, "radio");
                     }

@@ -55,6 +55,7 @@ var app = new Vue({
             }
         }
 
+        initIconMap();
         initEmblems();
         initCustomActions();
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {

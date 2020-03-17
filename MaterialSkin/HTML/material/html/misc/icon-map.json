@@ -34,9 +34,28 @@
     "/playlistadd.png":{"icon":"playlist_add"},
     "/playlistclear.png":{"svg":"queue-clear"},
     "/playlistedit.png":{"icon":"edit"},
-    "/playlistsave.png":{"icon":"save"}
+    "/playlistsave.png":{"icon":"save"},
+
+    "/LastMix/html/icon.png":{"svg":"lastfm"},
+    "/WalkWithMe/html/images/icon.png":{"icon":"directions_walk"},
+    "/Podcast/html/images/icon.png":{"icon":"rss_feed"},
+    "/qobuz.png":{"svg":"qobuz"},
+    "/RadioParadise/html/icon.png":{"svg":"island"},
+    "/PlayHistory/html/images/icon.png":{"icon":"history"},
+    "/youtube.png":{"svg":"youtube"},
+    "/Phishin/html/icon.png":{"svg":"fish"},
+    "/Wefunk/html/images/logo.png":{"icon":"radio"},
+    "/SqueezeCloud/html/images/icon.png":{"svg":"soundcloud"},
+    "/MixCloud/html/images/icon.png":{"svg":"mixcloud"},
+    "/Bandcamp/html/images/logo.png":{"svg":"bandcamp"},
+    "/BookmarkHistory/html/images/icon.png":{"icon":"bookmark_border"},
+    "/cplus.png":{"svg":"cplus"},
+
+    "/tidal.png":{"svg":"tidal"},
+    "/deezer.png":{"svg":"deezer"}
   },
   "indexOf":{
-    "www.jazzfm.com":{"svg":"saxophone"}
+    "www.jazzfm.com":{"svg":"saxophone"},
+    "/Spotty/html/images/":{"svg":"spotify"}
   }
 }

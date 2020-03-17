@@ -35,7 +35,6 @@
     "/playlistclear.png":{"svg":"queue-clear"},
     "/playlistedit.png":{"icon":"edit"},
     "/playlistsave.png":{"icon":"save"},
-
     "/LastMix/html/icon.png":{"svg":"lastfm"},
     "/WalkWithMe/html/images/icon.png":{"icon":"directions_walk"},
     "/Podcast/html/images/icon.png":{"icon":"rss_feed"},
@@ -50,9 +49,22 @@
     "/Bandcamp/html/images/logo.png":{"svg":"bandcamp"},
     "/BookmarkHistory/html/images/icon.png":{"icon":"bookmark_border"},
     "/cplus.png":{"svg":"cplus"},
-
     "/tidal.png":{"svg":"tidal"},
-    "/deezer.png":{"svg":"deezer"}
+    "/deezer.png":{"svg":"deezer"},
+    "/cbc.png":{"svg":"cbc"},
+    "/tuneinradio.png":{"svg":"tunein"},
+    "/amazon.png":{"svg":"amazon"},
+    "/jazzradio.png":{"svg":"saxophone"},
+    "/rockradio.png":{"svg":"guitar-electric"},
+    "/lma.png":{"svg":"bank"},
+    "/accuradio.png":{"icon":"volume_up"},
+    "/radionomy.png":{"icon":"surround_sound"},
+    "/somafm.png":{"svg":"radio-fm"},
+    "/skyfm.png":{"icon":"radio"},
+    "/classicalradio.png":{"svg":"music-clef-treble"},
+    "/absolute.png":{"icon":"music_note"},
+    "/difm.png":{"svg":"piano"},
+    "/mp3tunes.png":{"svg":"file-music-outline"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

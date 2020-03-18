@@ -1,16 +1,17 @@
 1.5.1
 -----
-1. Fix 'Play all' and 'Play next' from header.
-2. Don't hide 'Interface' from server settings, just hide some options.
-3. Fix icon mapping of some icons.
-4. Hide jumplist when showing Artists/Album/etc. selection of genre.
-5. When listing for Artists, Composers, or Conductors of a genre ask for
-   textkey.
-6. Fix colour of active jumplist item.
-7. Map application icons to symbolic icons.
-8. Show volume overlay when use keyboard to change volume.
-9. If a list of items has some with, and some without, images then don't assign
-   a blank image to those without.
+ 1. Fix 'Play all' and 'Play next' from header.
+ 2. Don't hide 'Interface' from server settings, just hide some options.
+ 3. Fix icon mapping of some icons.
+ 4. Hide jumplist when showing Artists/Album/etc. selection of genre.
+ 5. When listing for Artists, Composers, or Conductors of a genre ask for
+    textkey.
+ 6. Fix colour of active jumplist item.
+ 7. Map application icons to symbolic icons.
+ 8. Show volume overlay when use keyboard to change volume.
+ 9. If a list of items has some with, and some without, images then don't assign
+    a blank image to those without.
+10. Fix SVG icons when in grid.
 
 1.5.0
 -----

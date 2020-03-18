@@ -1354,7 +1354,7 @@ div.v-subheader {
  color:var(--dlg-icon-color);
 }
 
-#letterOverlay, #volumeOverlay {
+#letterOverlay, #volumeOverlay, #keyboardVolumeOverlay {
  z-index:2;
  position:fixed;
  left:0;
@@ -1365,6 +1365,10 @@ div.v-subheader {
  pointer-events:none;
  opacity:0.5;
  text-shadow: 0px 0px 8px var(--text-shadow-color);
+}
+
+#volumeOverlay, #keyboardVolumeOverlay {
+ opacity:0.75!important;
 }
 
 .embedded-page {

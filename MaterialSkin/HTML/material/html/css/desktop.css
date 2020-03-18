@@ -214,7 +214,7 @@ body {
  position:fixed;
  top:var(--main-toolbar-height);
  left:0px;
- height:auto;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -222,14 +222,14 @@ body {
 }
 
 .np-info-text-desktop {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 100px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 103px));
  overflow:auto;
  max-width:1000px;
  margin:auto;
 }
 
 .np-info-text-full-desktop {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 89px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 95px));
  overflow:auto;
  max-width:1000px;
  margin:auto;

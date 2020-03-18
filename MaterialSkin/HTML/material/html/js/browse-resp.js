@@ -392,11 +392,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             item.image = defArtistImage;
                         } else {
                             // Found an item without and image and not marked as an artist or album, no
-                            // default iamge set - so disable grid usage.
+                            // default image set - so disable grid usage.
                             // See: https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=944597&viewfull=1#post944597
                             resp.canUseGrid = false;
-                            // Set a blank image, so as to preserve indentation..
-                            item.image = LMS_BLANK_IMAGE;
+                            break;
                         }
                     }
                 }

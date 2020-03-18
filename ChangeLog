@@ -9,6 +9,8 @@
 6. Fix colour of active jumplist item.
 7. Map application icons to symbolic icons.
 8. Show volume overlay when use keyboard to change volume.
+9. If a list of items has some with, and some without, images then don't assign
+   a blank image to those without.
 
 1.5.0
 -----

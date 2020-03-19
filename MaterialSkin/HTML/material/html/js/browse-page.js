@@ -1395,7 +1395,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             item.moremenu = resp.items;
                             showMenu(this, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
                         } else {
-                            logAndShowError(undefined, i18n("No  entries found"), command.command);
+                            logAndShowError(undefined, i18n("No entries found"), command.command);
                         }
                     });
                 }

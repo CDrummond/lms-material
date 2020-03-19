@@ -40,7 +40,7 @@
     "/WalkWithMe/html/images/icon.png":{"icon":"directions_walk"},
     "/Podcast/html/images/icon.png":{"icon":"rss_feed"},
     "/qobuz.png":{"svg":"qobuz"},
-    "/RadioParadise/html/icon.png":{"svg":"island"},
+    "/RadioParadise/html/icon.png":{"svg":"radioparadise"},
     "/PlayHistory/html/images/icon.png":{"icon":"history"},
     "/youtube.png":{"svg":"youtube"},
     "/Phishin/html/icon.png":{"svg":"fish"},

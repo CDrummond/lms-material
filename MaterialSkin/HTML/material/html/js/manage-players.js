@@ -109,7 +109,7 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon><span class="ellipsis">{{i18n("Set sleep for all players")}}</span></v-btn></v-flex>
+      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon><span class="ellipsis">{{i18n("Set sleep time for all players")}}</span></v-btn></v-flex>
       <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat class="pmgr-button" @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon><span class="ellipsis">{{i18n('Create group player')}}</span></v-btn></v-flex>
      </div>

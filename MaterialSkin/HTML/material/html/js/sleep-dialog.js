@@ -13,8 +13,8 @@ Vue.component('lms-sleep-dialog', {
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
-     <v-flex xs12 v-if="undefined==player">{{i18n("Set sleep time for all players.")}}</v-flex>
-     <v-flex xs12 v-else>{{i18n("Set sleep time for '%1'.", player.name)}}</v-flex>
+     <v-flex xs12 v-if="undefined==player">{{i18n("Set sleep time for all players")}}</v-flex>
+     <v-flex xs12 v-else>{{i18n("Set sleep time for '%1'", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">

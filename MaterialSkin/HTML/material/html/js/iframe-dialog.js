@@ -195,7 +195,7 @@ Vue.component('lms-iframe-dialog', {
             }
         },
         doAction(act) {
-            this.$confirm(act.text).then(res => {
+            this.$confirm(act.text, {buttonTrueText: act.confirm, buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand("server"==this.page ? "" : this.$store.state.player.id, act.cmd);
                     this.close();

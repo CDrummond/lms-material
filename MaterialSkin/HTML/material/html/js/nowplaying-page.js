@@ -71,7 +71,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
-     <div v-if="(techInfo || ratingsSupported) && wide>0"><div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div><v-rating v-if="showRatings && (landscape && wide>0)" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating></div>
+     <div v-if="(techInfo || ratingsSupported) && wide>0">
+      <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div>
+      <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+     </div>
      <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop" @click="toggleTime()">{{formattedTime}}</div>
      <div v-else class="np-tech-desktop">&nbsp;</div>
      <div v-if="((techInfo || ratingsSupported) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>

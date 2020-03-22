@@ -510,7 +510,7 @@ div.v-subheader {
  height:calc(var(--small-font-size) + 4px) !important;
  line-height:calc(var(--small-font-size) + 4px) !important;
  top:36px;
- right:calc(235px + ((var(--icon-size) - 24px)*5));
+ right:calc(243px + ((var(--icon-size) - 24px)*5));
  width:200px;
  z-index:-1;
  opacity:var(--sub-opacity);
@@ -518,7 +518,7 @@ div.v-subheader {
 }
 
 .vol-fixed-label-noinf {
- right:calc(190px + ((var(--icon-size) - 24px)*5));
+ right:calc(198px + ((var(--icon-size) - 24px)*5));
 }
 
 .v-menu__content {

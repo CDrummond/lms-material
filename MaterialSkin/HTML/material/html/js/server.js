@@ -805,9 +805,19 @@ var lmsServer = Vue.component('lms-server', {
         window.addEventListener("focus", visibilityOrFocusChanged);
 
         if (!IS_MOBILE) {
+            Mousetrap.addKeycodes({ // Codes from https://github.com/wesbos/keycodes/blob/gh-pages/scripts.js
+                174: 'decvol',
+                175: 'incvol',
+                182: 'decvolfirefox',
+                183: 'incvolfirefox'
+            })
             bindKey('up', 'alt');
             bindKey('down', 'alt');
             bindKey('space');
+            bindKey('decvol');
+            bindKey('incvol');
+            bindKey('decvolfirefox');
+            bindKey('incvolfirefox');
             bindKey('left', 'alt');
             bindKey('right', 'alt');
             bus.$on('keyboard', function(key, modifier) {
@@ -815,9 +825,13 @@ var lmsServer = Vue.component('lms-server', {
                     return;
                 }
                 var command = undefined;
-                if ('alt'!=modifier) {
+                if (undefined==modifier) {
                     if (key=='space') {
                         command=[this.isPlaying ? 'pause' : 'play']
+                    } else if (key=='incvol' || key=='incvolfirefox') {
+                        this.adjustVolume(true);
+                    } else if (key=='decvol' || key=='decvolfirefox') {
+                        this.adjustVolume(false);
                     }
                 } else {
                     if (key=='up') {

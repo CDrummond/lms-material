@@ -12,6 +12,7 @@
  9. If a list of items has some with, and some without, images then don't assign
     a blank image to those without.
 10. Fix SVG icons when in grid.
+11. Dim some buttons if nothing in queue.
 
 1.5.0
 -----

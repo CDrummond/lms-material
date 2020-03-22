@@ -232,13 +232,13 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <v-divider vertical v-if="desktopLayout || wide>0"></v-divider>
    <template v-if="wide>1" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index">
+    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && items.length<1}">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn :title="trans.save | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.save | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
  <v-list class="lms-list-sub bgnd-cover" id="queue-list" v-bind:class="{'lms-list-sub3':threeLines}">
@@ -585,7 +585,6 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         save() {
             if (this.items.length<1) {
-                bus.$emit('showMessage', i18n('Queue is empty'));
                 return;
             }
             bus.$emit('dlg.open', 'savequeue', ""+(undefined==this.playlistName ? "" : this.playlistName));
@@ -721,17 +720,13 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.dialog={show: true, title: ACTIONS[PQ_ADD_URL_ACTION].title, hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add'};
                 focusEntry(this);
             } else if (act==PQ_SCROLL_ACTION) {
-                if (this.items.length<1) {
-                    bus.$emit('showMessage', i18n('Nothing playing'));
-                } else {
+                if (this.items.length>=1) {
                     this.scrollToCurrent(true);
                 }
             } else if (act==PQ_MOVE_QUEUE_ACTION) {
                 if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
                     return;
-                } else if (this.items.length<1) {
-                    bus.$emit('showMessage', i18n('Queue is empty'));
-                } else {
+                } else if (this.items.length>=1) {
                     bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
                 }
             }

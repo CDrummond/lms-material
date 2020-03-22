@@ -1099,7 +1099,7 @@ progress {
 }
 
 .pmgr-vol-slider {
- margin-top:-12px;
+ margin-top:-10px;
  margin-left:8px;
  margin-right:8px;
  height:20px;
@@ -1116,8 +1116,8 @@ progress {
 }
 
 .pmgr-vol {
- min-width:82px!important;
- max-width:82px!important;
+ min-width:76px!important;
+ max-width:76px!important;
  padding-top:0px;
  margin-top:-6px;
  height:32px;

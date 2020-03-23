@@ -298,7 +298,7 @@
 @media only screen and (max-width:800px) {
  .lms-toolbar > .v-toolbar__content {
   margin-left:-14px !important;
-  margin-right:-16px !important;
+  margin-right:-12px !important;
  }
 
  .subtoolbar {

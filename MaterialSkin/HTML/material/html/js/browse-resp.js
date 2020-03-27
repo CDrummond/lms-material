@@ -444,7 +444,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               image: (lmsOptions.infoPlugin && lmsOptions.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: STD_ITEM_ARTIST,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              emblem: getEmblem(i.extid)
                           };
                 resp.items.push(artist);
             }

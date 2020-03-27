@@ -16,6 +16,7 @@
 12. Fix rating not showing unless 'landscape'
 13. Update translations.
 14. Add Danish translation - thanks to Jens Svalgaard Kohrt
+15. Only use browser's language setting if it starts with 'en'
 
 1.5.0
 -----

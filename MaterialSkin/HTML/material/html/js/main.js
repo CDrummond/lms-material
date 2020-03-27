@@ -62,7 +62,13 @@ var app = new Vue({
             if (data && data.result && data.result._p2) {
                 var lang = data.result._p2.toLowerCase();
                 if (lang == 'en') {
-                    lang = (window.navigator.userLanguage || window.navigator.language).toLowerCase();
+                    // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
+                    // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
+                    // with browser (e.g.) 'de'
+                    var browserLang = (window.navigator.userLanguage || window.navigator.language).toLowerCase();
+                    if (browserLang.startsWith('en')) {
+                        lang = browserLang;
+                    }
                 }
                 if (lang == 'en' || lang == 'en-us') {
                     if (storedTrans!=undefined) {

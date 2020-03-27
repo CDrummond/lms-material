@@ -701,6 +701,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     lmsCommand("", cmd).then(({data}) => {
                         logJsonMessage("RESP", data);
+                        // check this response is for curent listing
+                        if (!data || !data.params || data.params.length<2 || data.params[1].length<3 || data.params[1][2]!=this.current.id) {
+                            return;
+                        }
                         if (data && data.result && data.result.actions_loop) {
                             this.currentActions.items = data.result.actions_loop;
                         }

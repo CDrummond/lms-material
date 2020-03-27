@@ -9,8 +9,8 @@
  6. Fix colour of active jumplist item.
  7. Map application icons to symbolic icons.
  8. Show volume overlay when use keyboard to change volume.
- 9. If a list of items has some with, and some without, images then don't assign
-    a blank image to those without.
+ 9. If a list of items has some with, and some without, images then don't
+    assign a blank image to those without.
 10. Fix SVG icons when in grid.
 11. Dim some buttons if nothing in queue, or no player conected.
 12. Fix rating not showing unless 'landscape'
@@ -18,6 +18,8 @@
 14. Add Danish translation - thanks to Jens Svalgaard Kohrt
 15. Only use browser's language setting if it starts with 'en'
 16. Add 'Random Albums' choice when listing a genre.
+17. Artist/album actions are queired synchronously, so check recieved response
+    is for the current item.
 
 1.5.0
 -----

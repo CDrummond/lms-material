@@ -127,7 +127,7 @@ html, .mini-player {
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
  margin-left:-7px !important;
- margin-right:-8px !important;
+ margin-right:-4px !important;
 }
 
 .v-list__tile__title, .v-select__selection, .v-select__selection--comma , .v-btn__content, html{
@@ -570,7 +570,7 @@ div.v-subheader {
 }
 
 .toolbar-button {
- margin:var(--toolbar-button-margin) 4px 4px 4px; !important;
+ margin:var(--toolbar-button-margin) 6px 4px 6px; !important;/* t, r, b, l */
  min-height:36px !important;
  min-width:36px !important;
 }

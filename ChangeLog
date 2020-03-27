@@ -17,6 +17,7 @@
 13. Update translations.
 14. Add Danish translation - thanks to Jens Svalgaard Kohrt
 15. Only use browser's language setting if it starts with 'en'
+16. Add 'Random Albums' choice when listing a genre.
 
 1.5.0
 -----

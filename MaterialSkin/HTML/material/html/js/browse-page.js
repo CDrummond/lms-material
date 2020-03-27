@@ -946,7 +946,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
-                              id: uniqueId(item.id, 1)}];
+                              id: uniqueId(item.id, 1)},
+                            { title: i18n("Random Albums"),
+                              command: ["albums"],
+                              params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              svg: "dice-album",
+                              type: "group",
+                              id: uniqueId(item.id, 2)}];
                 this.inGenre = item.title;
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
@@ -955,7 +962,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
-                                        id: uniqueId(item.id, 2)});
+                                        id: uniqueId(item.id, 3)});
                 }
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
@@ -964,7 +971,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",
-                                        id: uniqueId(item.id, 3)});
+                                        id: uniqueId(item.id, 4)});
                 }
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Select category");

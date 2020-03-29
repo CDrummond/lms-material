@@ -2572,8 +2572,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     return;
                 }
                 this.jumplist = [];
-                var jump = this.items.length/100.0;
-                for (var i=0; i<100; ++i) {
+                var jump = this.items.length/10.0;
+                for (var i=0; i<10; ++i) {
                     this.jumplist.push({key:'\u2022', index: Math.round(i*jump)});
                 }
             }

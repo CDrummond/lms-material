@@ -523,24 +523,29 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'scantypes') {
-        my $cnt = 0;
-        my $scanTypes = Slim::Music::Import->getScanTypes();
-        foreach ( map {
-                {
-                        name => $scanTypes->{$_}->{name},
-                        cmd => $scanTypes->{$_}->{cmd},
-                        value => $_
-                }
-        } sort keys %$scanTypes ) {
-            $request->setResultLoopHash('item_loop', $cnt++, {
-                    name => cstring('', $_->{name}),
-                    cmd  => $_->{cmd} });
+        my @ver = split(/\./, $::VERSION);
+        if (int($ver[0])<8) {
+            $request->setResultLoopHash('item_loop', 0, { name => cstring('', 'SETUP_STANDARDRESCAN'), cmd  => ['rescan'] });
+            $request->setResultLoopHash('item_loop', 1, { name => cstring('', 'SETUP_WIPEDB'), cmd  => ['wipecache'] });
+            $request->setResultLoopHash('item_loop', 2, { name => cstring('', 'SETUP_PLAYLISTRESCAN'), cmd  => ['rescan', 'playlists'] });
+        } else {
+            my $cnt = 0;
+            my $scanTypes = Slim::Music::Import->getScanTypes();
+            foreach ( map {
+                    {
+                            name => $scanTypes->{$_}->{name},
+                            cmd => $scanTypes->{$_}->{cmd},
+                            value => $_
+                    }
+            } sort keys %$scanTypes ) {
+                $request->setResultLoopHash('item_loop', $cnt++, {
+                        name => cstring('', $_->{name}),
+                        cmd  => $_->{cmd} });
+            }
         }
-
         $request->setStatusDone();
         return;
     }
-
 
     $request->setStatusBadParams();
 }

@@ -75,7 +75,7 @@ function visibilityOrFocusChanged() {
             }
             lmsConnectionCheckDelay = setTimeout(function () {
                 lmsConnectionCheckDelay = undefined;
-                if (!lmsIsConnected) {
+                if (undefined!=lmsIsConnected && !lmsIsConnected) {
                     bus.$emit("reconnect");
                 }
             }, 250);

@@ -127,7 +127,7 @@ html, .mini-player {
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
  margin-left:-7px !important;
- margin-right:-4px !important;
+ margin-right:-8px !important;
 }
 
 .v-list__tile__title, .v-select__selection, .v-select__selection--comma , .v-btn__content, html{

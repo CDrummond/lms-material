@@ -21,6 +21,7 @@
 17. Artist/album actions are queired synchronously, so check recieved response
     is for the current item.
 18. Add emblems to artist images.
+19. Allow drag'n'drop from file manager onto play queue.
 
 1.5.0
 -----

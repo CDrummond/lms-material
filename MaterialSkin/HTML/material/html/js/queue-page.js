@@ -469,6 +469,13 @@ var lmsQueue = Vue.component("lms-queue", {
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener('scroll', this.scrollHandler);
 
+        if (!IS_MOBILE) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                this.scrollElement.addEventListener(eventName, (ev) => { ev.stopPropagation(); ev.preventDefault();}, false);
+            });
+            this.scrollElement.addEventListener('drop', this.droppedFileHandler, false);
+        }
+
         this.setBgndCover();
         this.$nextTick(function () {
             setScrollTop(this.scrollElement, 0);
@@ -585,6 +592,55 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                 });
             }
+        },
+        droppedFileHandler(ev) {
+            let dt = ev.dataTransfer
+            let files = dt.files;
+            if (files.length>0) {
+                lmsCommand("", ["pref", "plugin.dndplay:maxfilesize", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        let maxSize = parseInt(data.result._p2)*1024*1024;
+                        let toAdd = [];
+                        for (let i = 0, file; file = files[i]; i++) {
+                            if (file.type.match('audio') && file.size<=maxSize) { // || file.name.match(SqueezeJS.DnD.validTypeExtensions)) {
+                                toAdd.push(file);
+                            }
+                        }
+                        if (toAdd.length>0) {
+                            if (ev.shiftKey && this.items.length > 0) {
+                                lmsCommand(this.$store.state.player.id, ["playlist", "clear"]).then(({data}) => {
+                                    this.addFiles(toAdd, 'play');
+                                });
+                            } else {
+                                this.addFiles(toAdd, 'play');
+                            }
+                        }
+                    }
+                });
+            }
+        },
+        addFiles(files, action) {
+            let file = files.shift();
+            if (!file) {
+                return;
+            }
+            lmsCommand(this.$store.state.player.id, ['playlist', action+'match', 'name:'+file.name, 'size:'+(file.size || 0), 'timestamp:'+Math.floor(file.lastModified/1000), 'type:'+(file.type || 'unk')]).then(({data}) => {
+                if (data && data.result && data.result.upload) {
+                    let formData = new FormData();
+                    formData.append('action', action);
+                    formData.append('name', file.name);
+                    formData.append('size', file.size);
+                    formData.append('type', file.type);
+                    formData.append('timestamp', Math.floor(file.lastModified / 1000));
+                    formData.append('key', data.result.upload);
+                    formData.append('uploadfile', file);
+                    axios.post('/plugins/dndplay/upload', formData, {headers:{'Content-Type': 'multipart/form-data'}}).then(({data}) => {
+                        this.addFiles(files, 'add');
+                    });
+                } else {
+                    this.addFiles(files, 'add');
+                }
+            });
         },
         save() {
             if (this.items.length<1) {

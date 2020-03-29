@@ -4,6 +4,7 @@
 2. If showing dots for jumplist, only show 10 dots - therefore each jump is 10%
 3. Fix retrieval of rescan options on LMS 7.x
 4. Store album-sorts in defaults.
+5. Fix setting window titlebar back to "Logitech Media Server" when no song.
 
 1.5.1
 -----

@@ -155,6 +155,11 @@ function updateUiSettings(state, val) {
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
+    if (val.sorts) {
+        for (let [key, value] of Object.entries(val.sorts)) {
+            setLocalStorageVal(key, value);
+        }
+    }
 }
 
 function convertLsAndNotif(val) {
@@ -487,6 +492,16 @@ const store = new Vuex.Store({
                         }
                         if (undefined!=prefs.disabledBrowseModes && undefined==getLocalStorageVal('disabledBrowseModes', undefined)) {
                             opts.disabledBrowseModes=new Set(prefs.disabledBrowseModes);
+                        }
+                        if (undefined!=prefs.sorts) {
+                            for (let [key, value] of Object.entries(prefs.sorts)) {
+                                if (undefined==getLocalStorageVal(key, undefined)) {
+                                    if (undefined==opts.sorts) {
+                                        opts.sorts={};
+                                    }
+                                    opts.sorts[key]=value;
+                                }
+                            }
                         }
                     updateUiSettings(state, opts);
                     } catch(e) {

@@ -566,6 +566,15 @@ Vue.component('lms-ui-settings', {
                                      disabledBrowseModes:Array.from(this.disabledBrowseModes()),
                                      screensaver:this.screensaver
                                    };
+                    for (var key in window.localStorage) {
+                        if (key.startsWith(LS_PREFIX+ALBUM_SORT_KEY) || key.startsWith(LS_PREFIX+ARTIST_ALBUM_SORT_KEY)) {
+                            if (undefined==settings.sorts) {
+                                settings.sorts={}
+                            }
+                            settings.sorts[key.substring(LS_PREFIX.length)]=window.localStorage.getItem(key);
+                        }
+                    }
+
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);
                 }

@@ -3,6 +3,7 @@
 1. Add 'libcometd' to debug options.
 2. If showing dots for jumplist, only show 10 dots - therefore each jump is 10%
 3. Fix retrieval of rescan options on LMS 7.x
+4. Store album-sorts in defaults.
 
 1.5.1
 -----

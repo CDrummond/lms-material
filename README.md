@@ -111,7 +111,8 @@ received, start Material as follows:
 
 * `http://<yourserver>:9000/material/?debug=json` for JSONRPC
 * `http://<yourserver>:9000/material/?debug=cometd` for Cometd
-* `http://<yourserver>:9000/material/?debug=json,cometd` for both
+* `http://<yourserver>:9000/material/?debug=libcometd` to enable debugging from libcometd
+* `http://<yourserver>:9000/material/?debug=json,cometd,libcometed` for all
 
 ### Cache
 

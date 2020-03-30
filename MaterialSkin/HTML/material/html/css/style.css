@@ -1073,20 +1073,16 @@ progress {
 }
 
 .pmgr-sync {
- margin-left:56px;
- margin-top:-32px!important;
+ margin-top:-28px!important;
 }
 
 .pmgr-sync .v-list__tile {
+ margin-left:56px;
  height:48px !important;
 }
 
-.pmgr-sync .pmgr-button {
- margin-left:-56px;
-}
-
 .pmgr-sync .pmgr-vol-dec-btn {
- margin-left:2px!important;
+ margin-left:56px;
 }
 
 .pmgr-vol-dec-btn {

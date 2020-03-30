@@ -5,6 +5,7 @@
 3. Fix retrieval of rescan options on LMS 7.x
 4. Store album-sorts in defaults.
 5. Fix setting window titlebar back to "Logitech Media Server" when no song.
+6. Fix layout in 'Manage players' dialog.
 
 1.5.1
 -----

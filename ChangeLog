@@ -7,6 +7,7 @@
 5. Fix setting window titlebar back to "Logitech Media Server" when no song.
 6. Fix layout in 'Manage players' dialog.
 7. Dim play buttons in 'Manage players' dialog if player has no track.
+8. Fix colour of power icons in menus.
 
 1.5.1
 -----

@@ -6,6 +6,7 @@
 4. Store album-sorts in defaults.
 5. Fix setting window titlebar back to "Logitech Media Server" when no song.
 6. Fix layout in 'Manage players' dialog.
+7. Dim play buttons in 'Manage players' dialog if player has no track.
 
 1.5.1
 -----

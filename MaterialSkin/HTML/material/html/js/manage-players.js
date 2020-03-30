@@ -85,16 +85,16 @@ Vue.component('lms-manage-players', {
           <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
           <v-list-tile-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
+         <v-list-tile-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="stop(player)" :title="player.name + ' - ' + trans.stop">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="stop(player)" v-bind:class="{'disabled':!player.hasTrack}" :title="player.name + ' - ' + trans.stop">
            <v-btn icon><v-icon>stop</v-icon></v-btn>
          </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" :title="player.name + ' - ' + trans.next">
+         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" v-bind:class="{'disabled':!player.hasTrack}" :title="player.name + ' - ' + trans.next">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
@@ -349,7 +349,7 @@ Vue.component('lms-manage-players', {
             });
         },
         playPause(player) {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
+            if (!this.show || this.$store.state.visibleMenus.size>0 || !player.hasTrack) {
                 return;
             }
             lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
@@ -357,7 +357,7 @@ Vue.component('lms-manage-players', {
             });
         },
         stop(player) {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
+            if (!this.show || this.$store.state.visibleMenus.size>0 || !player.hasTrack) {
                 return;
             }
             lmsCommand(player.id, ['stop']).then(({data}) => {
@@ -365,7 +365,7 @@ Vue.component('lms-manage-players', {
             });
         },
         prevTrack(player) {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
+            if (!this.show || this.$store.state.visibleMenus.size>0 || !player.hasTrack) {
                 return;
             }
             lmsCommand(player.id, ['button', 'jump_rew']).then(({data}) => {
@@ -373,7 +373,7 @@ Vue.component('lms-manage-players', {
             });
         },
         nextTrack(player) {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
+            if (!this.show || this.$store.state.visibleMenus.size>0 || !player.hasTrack) {
                 return;
             }
             lmsCommand(player.id, ['playlist', 'index', '+1']).then(({data}) => {
@@ -434,6 +434,7 @@ Vue.component('lms-manage-players', {
 
             player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :
                                                  (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
+            player.hasTrack = true;
             if (player.current.title) {
                 if (player.current.artist) {
                     player.track=player.current.title+SEPARATOR+player.current.artist;
@@ -444,6 +445,7 @@ Vue.component('lms-manage-players', {
                 player.track=player.current.artist;
             } else {
                 player.track="...";
+                player.hasTrack = false;
             }
             
             var found = false;

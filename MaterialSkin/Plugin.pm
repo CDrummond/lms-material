@@ -135,7 +135,6 @@ sub _cliCommand {
     }
 
     my $cmd = $request->getParam('_cmd');
-    my $client = $request->client();
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
@@ -191,17 +190,17 @@ sub _cliCommand {
         my $osDetails = Slim::Utils::OSDetect::details();
         my $serverPrefs = preferences('server');
         $request->addResult('info', '{"server":'
-                                .'[ {"label":"' . cstring($client, 'INFORMATION_VERSION') . '", "text":"' . $::VERSION . ' - ' . $::REVISION . ' @ ' . $::BUILDDATE . '"},'
-                                .  '{"label":"' . cstring($client, 'INFORMATION_HOSTNAME') . '", "text":"' . Slim::Utils::Network::hostName() . '"},'
-                                .  '{"label":"' . cstring($client, 'INFORMATION_SERVER_IP') . '", "text":"' . Slim::Utils::Network::serverAddr() . '"},'
-                                .  '{"label":"' . cstring($client, 'INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverPrefs->get('language') .
+                                .'[ {"label":"' . string('INFORMATION_VERSION') . '", "text":"' . $::VERSION . ' - ' . $::REVISION . ' @ ' . $::BUILDDATE . '"},'
+                                .  '{"label":"' . string('INFORMATION_HOSTNAME') . '", "text":"' . Slim::Utils::Network::hostName() . '"},'
+                                .  '{"label":"' . string('INFORMATION_SERVER_IP') . '", "text":"' . Slim::Utils::Network::serverAddr() . '"},'
+                                .  '{"label":"' . string('INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverPrefs->get('language') .
                                       ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
-                                .  '{"label":"' . cstring($client, 'INFORMATION_ARCHITECTURE') . '", "text":"' . ($osDetails->{'osArch'} ? $osDetails->{'osArch'} : '?') . '"},'
-                                .  '{"label":"' . cstring($client, 'PERL_VERSION') . '", "text":"' . $Config{'version'} . ' - ' . $Config{'archname'} . '"},'
+                                .  '{"label":"' . string('INFORMATION_ARCHITECTURE') . '", "text":"' . ($osDetails->{'osArch'} ? $osDetails->{'osArch'} : '?') . '"},'
+                                .  '{"label":"' . string('PERL_VERSION') . '", "text":"' . $Config{'version'} . ' - ' . $Config{'archname'} . '"},'
                                 .  '{"label":"Audio::Scan", "text":"' . $Audio::Scan::VERSION . '"},'
-                                .  '{"label":"IO::Socket::SSL", "text":"' . (Slim::Networking::Async::HTTP->hasSSL() ? $IO::Socket::SSL::VERSION : cstring($client, 'BLANK')) . '"}'
+                                .  '{"label":"IO::Socket::SSL", "text":"' . (Slim::Networking::Async::HTTP->hasSSL() ? $IO::Socket::SSL::VERSION : string('BLANK')) . '"}'
 
-                                . ( Slim::Schema::hasLibrary() ? ', {"label":"' . cstring($client, 'DATABASE_VERSION') . '", "text":"' .
+                                . ( Slim::Schema::hasLibrary() ? ', {"label":"' . string('DATABASE_VERSION') . '", "text":"' .
                                       Slim::Utils::OSDetect->getOS->sqlHelperClass->sqlVersionLong( Slim::Schema->dbh ) . '"}' : '')
 
                                 .']}');
@@ -409,7 +408,7 @@ sub _cliCommand {
                 }
             }
             $request->addResultLoop("modes_loop", $cnt, "id", $node->{'id'});
-            $request->addResultLoop("modes_loop", $cnt, "text", cstring($client, $node->{'name'}));
+            $request->addResultLoop("modes_loop", $cnt, "text", string($node->{'name'}));
             $request->addResultLoop("modes_loop", $cnt, "weight", $node->{'weight'});
             $request->addResultLoop("modes_loop", $cnt, "params", $node->{'params'});
             if ($node->{'jiveIcon'}) {
@@ -431,10 +430,10 @@ sub _cliCommand {
 
         my $cnt = 0;
 
-        if (!$artist || !($artist eq cstring($client, 'VARIOUSARTISTS'))) {
+        if (!$artist || !($artist eq string('VARIOUSARTISTS'))) {
             if (Slim::Utils::PluginManager->isEnabled('Plugins::MusicArtistInfo::Plugin')) {
                 if ($artist_id || $artist) {
-                    $request->addResultLoop("actions_loop", $cnt, "title", cstring($client, 'PLUGIN_MUSICARTISTINFO_BIOGRAPHY'));
+                    $request->addResultLoop("actions_loop", $cnt, "title", string('PLUGIN_MUSICARTISTINFO_BIOGRAPHY'));
                     $request->addResultLoop("actions_loop", $cnt, "icon", "menu_book");
                     if ($artist_id) {
                         $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "biography", "html:1", "artist_id:" . $artist_id], params => [] });
@@ -443,7 +442,7 @@ sub _cliCommand {
                     }
                     $request->addResultLoop("actions_loop", $cnt, "weight", 0);
                     $cnt++;
-                    $request->addResultLoop("actions_loop", $cnt, "title", cstring($client, 'PLUGIN_MUSICARTISTINFO_ARTISTPICTURES'));
+                    $request->addResultLoop("actions_loop", $cnt, "title", string('PLUGIN_MUSICARTISTINFO_ARTISTPICTURES'));
                     $request->addResultLoop("actions_loop", $cnt, "icon", "insert_photo");
                     if ($artist_id) {
                         $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "artistphotos", "artist_id:" . $artist_id], params => [] });
@@ -454,7 +453,7 @@ sub _cliCommand {
                     $cnt++;
                 }
                 if ($album_id || ($album && ($artist_id || $artist))) {
-                    $request->addResultLoop("actions_loop", $cnt, "title", cstring($client, 'PLUGIN_MUSICARTISTINFO_ALBUMREVIEW'));
+                    $request->addResultLoop("actions_loop", $cnt, "title", string('PLUGIN_MUSICARTISTINFO_ALBUMREVIEW'));
                     $request->addResultLoop("actions_loop", $cnt, "icon", "local_library");
 
                     if ($album_id) {
@@ -529,9 +528,9 @@ sub _cliCommand {
     if ($cmd eq 'scantypes') {
         my @ver = split(/\./, $::VERSION);
         if (int($ver[0])<8) {
-            $request->setResultLoopHash('item_loop', 0, { name => cstring($client, 'SETUP_STANDARDRESCAN'), cmd  => ['rescan'] });
-            $request->setResultLoopHash('item_loop', 1, { name => cstring($client, 'SETUP_WIPEDB'), cmd  => ['wipecache'] });
-            $request->setResultLoopHash('item_loop', 2, { name => cstring($client, 'SETUP_PLAYLISTRESCAN'), cmd  => ['rescan', 'playlists'] });
+            $request->setResultLoopHash('item_loop', 0, { name => string('SETUP_STANDARDRESCAN'), cmd  => ['rescan'] });
+            $request->setResultLoopHash('item_loop', 1, { name => string('SETUP_WIPEDB'), cmd  => ['wipecache'] });
+            $request->setResultLoopHash('item_loop', 2, { name => string('SETUP_PLAYLISTRESCAN'), cmd  => ['rescan', 'playlists'] });
         } else {
             my $cnt = 0;
             my $scanTypes = Slim::Music::Import->getScanTypes();
@@ -543,7 +542,7 @@ sub _cliCommand {
                     }
             } sort keys %$scanTypes ) {
                 $request->setResultLoopHash('item_loop', $cnt++, {
-                        name => cstring($client, $_->{name}),
+                        name => string($_->{name}),
                         cmd  => $_->{cmd} });
             }
         }

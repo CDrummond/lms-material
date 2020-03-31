@@ -151,14 +151,12 @@ sub _cliCommand {
             return;
         }
 
-        my $server;     # XXXX - what is this supposed to be? It's used as a parameter to below call, but not defined...
-
-        main::INFOLOG && $log->is_info && $log->info('Connect player ${id} from ${serverurl} to this server');
+        main::INFOLOG && $log->is_info && $log->info('Connect player ' . $id . ' from ' . $serverurl . ' to this server');
         Slim::Networking::SimpleAsyncHTTP->new(
             sub {
                 main::INFOLOG && $log->is_info && $log->info('Connect response recieved player');
                 my $http = shift;
-                my $server = $http->params('server');
+                my $serverurl = $http->params('serverurl');
                 my $res = eval { from_json( $http->content ) };
 
                 if ( $@ || ref $res ne 'HASH' || $res->{error} ) {
@@ -170,15 +168,15 @@ sub _cliCommand {
                 my $id = $params[0];
                 my $buddy = Slim::Player::Client::getClient($id);
                 if ($buddy) {
-                    main::INFOLOG && $log->is_info && $log->info('Disconnect player ' . $id . ' from ' . $server);
-                    $buddy->execute(["disconnect", $server]);
+                    main::INFOLOG && $log->is_info && $log->info('Disconnect player ' . $id . ' from ' . $serverurl);
+                    $buddy->execute(["disconnect", $serverurl]);
                 }
             },
             sub {
                 # Ignore errors?
             }, {
                 timeout => 10,
-                server  => $server,
+                serverurl  => $serverurl,
             }
         )->post( $serverurl . 'jsonrpc.js', to_json({ id => 1, method => 'slim.request', params => [ $id, ['connect', Slim::Utils::Network::serverAddr()] ]}));
 

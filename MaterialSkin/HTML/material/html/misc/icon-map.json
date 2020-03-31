@@ -2,7 +2,7 @@
   "endsWith":{
     "/bbciplayer.png":{"svg":"bbc-iplayer"},
     "/bbciplayerextra.png":{"svg":"bbc-iplayer"},
-    "/radiopresets.png":{"icon":"favorite"},
+    "/radiopresets.png":{"icon":"favorite_border"},
     "/radiolocal.png":{"icon":"my_location"},
     "/language.png":{"icon":"language"},
     "/radiomusic.png":{"icon":"music_video"},

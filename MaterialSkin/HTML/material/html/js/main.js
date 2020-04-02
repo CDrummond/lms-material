@@ -61,6 +61,10 @@ var app = new Vue({
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 var lang = data.result._p2.toLowerCase();
+
+                // Set page to LMS's language
+                axios.defaults.headers.common['Accept-Language'] = lang;
+                document.querySelector('html').setAttribute('lang', lang);
                 if (lang == 'en') {
                     // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
                     // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
@@ -84,8 +88,6 @@ var app = new Vue({
                         var trans = eval(resp.data);
                         setLocalStorageVal('translation', JSON.stringify(trans));
                         setTranslation(trans);
-                        axios.defaults.headers.common['Accept-Language'] = lang;
-                        document.querySelector('html').setAttribute('lang', lang);
                         bus.$emit('langChanged');
                      }).catch(err => {
                         window.console.error(err);

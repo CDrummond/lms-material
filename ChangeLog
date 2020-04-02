@@ -10,6 +10,9 @@
  8. Fix colour of power icons in menus.
  9. Add monochrome pandora and iheartradio icons.
 10. Always set axios/html language to LMS's.
+11. Don't just use user-agent to detect mobile device, check if
+    window.orientation is defined and window has 'ontouchstart' - should
+    (hopefully) help with detecting iPadOS.
 
 1.5.1
 -----

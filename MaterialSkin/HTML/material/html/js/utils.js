@@ -289,11 +289,11 @@ function removeLocalStorage(key) {
     window.localStorage.removeItem(LS_PREFIX+key);
 }
 
-const IS_MOBILE  = /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window);
 const IS_ANDROID = /Android/i.test(navigator.userAgent);
 const IS_IOS     = /iPhone|iPad/i.test(navigator.userAgent);
 const IS_IPHONE  = /iPhone/i.test(navigator.userAgent);
-const IS_MAC     = /Mac/i.test(navigator.userAgent);
+const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
 
 function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
@@ -795,7 +795,7 @@ function bindKey(key, modifier) {
 }
 
 function shortcutStr(key, shift) {
-    if (IS_MAC) {
+    if (IS_APPLE) {
         return shift ? i18n("⌘+Shift+%1", key) : i18n("⌘+%1", key);
     }
     return shift ? i18n("Ctrl+Shift+%1", key) : i18n("Ctrl+%1", key);

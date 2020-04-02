@@ -1854,20 +1854,28 @@ var lmsBrowse = Vue.component("lms-browse", {
             // If this *was* playall/addall, then need to convert back and set ID to parent
             if (origCommand && (ACTIONS[PLAY_ALL_ACTION].cmd==origCommand || ACTIONS[ADD_ALL_ACTION].cmd==origCommand)) {
                 var c={command:[], params:[]};
-                cmd.command.forEach(p=> {
-                    if (p=="play" || p=="add") {
-                        c.command.push(origCommand);
-                    } else {
-                        c.command.push(p);
-                    }
-                });
+                var usedCurrentAllId = false;
                 cmd.params.forEach(p=> {
                     if (p.startsWith("item_id:")) {
                         c.params.push(undefined==this.current.allid ? this.current.id : this.current.allid);
+                        if (undefined!=this.current.allid) {
+                            usedCurrentAllId=true;
+                        }
                     } else {
                         c.params.push(p);
                     }
                 });
+                if (usedCurrentAllId) {
+                    c.command=cmd.command;
+                } else {
+                    cmd.command.forEach(p=> {
+                        if (p=="play" || p=="add") {
+                            c.command.push(origCommand);
+                        } else {
+                            c.command.push(p);
+                        }
+                    });
+                }
                 cmd=c;
             }
             return cmd;

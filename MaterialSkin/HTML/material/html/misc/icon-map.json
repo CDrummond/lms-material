@@ -13,7 +13,7 @@
     "/podcasts.png":{"icon":"rss_feed"},
     "/radiosearch.png":{"icon":"search"},
     "/radiofeeds.png":{"svg":"radio-tower"},
-    "/picks.png":{"icon":"stars"},
+    "/picks.png":{"icon":"star_outline"},
     "/album.png":{"icon":"album"},
     "/search.png":{"icon":"search"},
     "/playlist-collab.png":{"icon":"list_alt"},

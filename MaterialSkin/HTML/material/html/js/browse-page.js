@@ -739,7 +739,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (this.current && this.current.menu) {
                             for (var i=0, len=this.current.menu.length; i<len; ++i) {
                                 if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                    if (this.current.id.split(".").length>1) {
+                                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                                    } else {
+                                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                    }
                                     break;
                                 }
                             }
@@ -757,14 +761,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                             !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||
                                                                 this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
                             this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                            // If first item's id is xx.yy.zz then use xx.yy as playall/addall id
-                            if (this.items[0].params && this.items[0].params.item_id) {
-                                var parts = this.items[0].params.item_id.split(".");
-                                if (parts.length>1) {
-                                    parts.pop();
-                                    this.current.allid = "item_id:"+parts.join(".");
-                                }
-                            }
                         }
                     }
                 }
@@ -1342,14 +1338,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                         });
                     }
                 });
-            } else if ((ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) && (item.id.startsWith("search:") || item.id.startsWith(FILTER_PREFIX))) {
+            } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) {
                 // Can't use standard add/play-all for filtered items or search results, so just add each item...
                 var commands = [];
+                var useAll = this.current && item.id == this.current.id; // If called from header - then act on all items
                 var isFilter = item.id.startsWith(FILTER_PREFIX); // MultiCD's have a 'filter' so we can play a single CD
                 var check = isFilter ? item.id : (SEARCH_ID==item.id && this.items[0].id.startsWith("track") ? "track_id" : "album_id");
                 var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : this.items;
                 for (var i=0, len=list.length; i<len; ++i) {
-                    if (isFilter ? list[i].filter==check : list[i].id.startsWith(check)) {
+                    if (useAll || (isFilter ? list[i].filter==check : list[i].id.startsWith(check))) {
                         if (INSERT_ALL_ACTION==act) {
                             commands.unshift({act:INSERT_ACTION, item:list[i], idx:i});
                         } else {
@@ -1359,7 +1356,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         break;
                     }
                 }
-                bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
+                bus.$emit('showMessage', useAll || isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
                 this.doCommands(commands, PLAY_ALL_ACTION==act);
             } else {
                 var command = this.buildFullCommand(item, act);
@@ -1372,9 +1369,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('refreshStatus');
                     this.clearSelection();
                     if (!this.$store.state.desktopLayout) {
-                        if (act===PLAY_ACTION || act===PLAY_ALL_ACTION) {
+                        if (act===PLAY_ACTION) {
                             this.$store.commit('setPage', 'now-playing');
-                        } else if (act===ADD_ACTION || act===ADD_ALL_ACTION) {
+                        } else if (act===ADD_ACTION) {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
                         } else if (act==="insert") {
                             bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", item.title));
@@ -1678,15 +1675,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
         },
         buildCommand(item, commandName, doReplacements) {
-            var origCommand = undefined;
-
-            // Faking addall/playall, so build add/play command for first item...
-            if (ACTIONS[PLAY_ALL_ACTION].cmd==commandName || ACTIONS[ADD_ALL_ACTION].cmd==commandName) {
-                item = this.items[0];
-                origCommand = commandName;
-                commandName = ACTIONS[PLAY_ALL_ACTION].cmd==commandName ? "play" : "add";
-            }
-
             var cmd = {command: [], params: [] };
 
             if (undefined===item || null===item) {
@@ -1851,33 +1839,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 cmd=this.replaceCommandTerms(cmd);
             }
 
-            // If this *was* playall/addall, then need to convert back and set ID to parent
-            if (origCommand && (ACTIONS[PLAY_ALL_ACTION].cmd==origCommand || ACTIONS[ADD_ALL_ACTION].cmd==origCommand)) {
-                var c={command:[], params:[]};
-                var usedCurrentAllId = false;
-                cmd.params.forEach(p=> {
-                    if (p.startsWith("item_id:")) {
-                        c.params.push(undefined==this.current.allid ? this.current.id : this.current.allid);
-                        if (undefined!=this.current.allid) {
-                            usedCurrentAllId=true;
-                        }
-                    } else {
-                        c.params.push(p);
-                    }
-                });
-                if (usedCurrentAllId) {
-                    c.command=cmd.command;
-                } else {
-                    cmd.command.forEach(p=> {
-                        if (p=="play" || p=="add") {
-                            c.command.push(origCommand);
-                        } else {
-                            c.command.push(p);
-                        }
-                    });
-                }
-                cmd=c;
-            }
             return cmd;
         },
         buildFullCommand(item, act) {
@@ -2367,8 +2328,16 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.doCommands(commands, true);
             this.clearSelection();
         },
-        doCommands(commands, npAfterLast, clearSent) {
+        doCommands(commands, npAfterLast, clearSent, actionedCount) {
             if (commands.length>0) {
+                if (undefined==actionedCount) {
+                    actionedCount = 0;
+                } else {
+                    actionedCount++;
+                    if (0==actionedCount%20 && commands.length>2) {
+                        bus.$emit('refreshStatus');
+                    }
+                }
                 if (!clearSent && PLAY_ACTION==commands[0].act) {
                     lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {
                         this.doCommands(commands, npAfterLast, true);
@@ -2387,7 +2356,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (npAfterLast && 0==commands.length && !this.$store.state.desktopLayout) {
                         this.$store.commit('setPage', 'now-playing');
                     }
-                    this.doCommands(commands, npAfterLast, clearSent);
+                    this.doCommands(commands, npAfterLast, clearSent, actionedCount);
                 }).catch(err => {
                     logError(err, command.command);
                 });

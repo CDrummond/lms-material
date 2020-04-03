@@ -13,8 +13,7 @@
 11. Don't just use user-agent to detect mobile device, check if
     window.orientation is defined and window has 'ontouchstart' - should
     (hopefully) help with detecting iPadOS.
-12. When using add/play buttons from toolbar, if can use parent ID then just
-    use add/play on that not addall/playall.
+12. When clicking on add/play from sub-toolbar, add each listed item one by one.
 
 1.5.1
 -----

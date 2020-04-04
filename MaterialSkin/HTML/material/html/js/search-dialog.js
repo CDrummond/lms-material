@@ -175,6 +175,8 @@ Vue.component('lms-search-dialog', {
                         this.results.push({command:command, params:command.params, resp:resp});
                     }
                     this.doSearch();
+                }).catch(err => {
+                    this.doSearch();
                 });
             }
         },

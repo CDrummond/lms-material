@@ -739,11 +739,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (this.current && this.current.menu) {
                             for (var i=0, len=this.current.menu.length; i<len; ++i) {
                                 if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                                    if (this.current.id.split(".").length>1) {
-                                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                                    } else {
-                                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                                    }
+                                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
                                     break;
                                 }
                             }

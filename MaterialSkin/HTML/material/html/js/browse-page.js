@@ -761,6 +761,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                             !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||
                                                                 this.command.command[0]=="albuminfo") || this.command.command[0]=="genreinfo")) {
                             this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+
+                            // add-all/play-all is SLOW, but youtube allows add/play on modified version of parentID - where we make this
+                            // from removing the last art of the ID of the first item...
+                            if (this.command.command[0]=="youtube" && this.items[0].params && this.items[0].params.item_id) {
+                                var parts = this.items[0].params.item_id.split(".");
+                                if (parts.length==2) {
+                                    parts.pop();
+                                    this.current.allid = "item_id:"+parts.join(".");
+                                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                }
+                            }
                         }
                     }
                 }
@@ -1506,6 +1517,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 showMenu(this, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0, albumSorts:albumSorts});
             } else if (VLIB_ACTION==act) {
                 this.showLibMenu(event);
+            } else if (undefined!=this.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
+                this.itemAction(act, {swapid:this.current.allid, id:this.items[0].id, title:this.current.title,
+                                      goAction:this.items[0].goAction, params:this.items[0].params, section:this.items[0].section});
             } else {
                 this.itemAction(act, this.current);
             }
@@ -1836,7 +1850,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (undefined==doReplacements || doReplacements) {
-                cmd=this.replaceCommandTerms(cmd);
+                cmd=this.replaceCommandTerms(cmd, item);
             }
 
             return cmd;
@@ -1887,7 +1901,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return command;
         },
-        replaceCommandTerms(cmd) {
+        replaceCommandTerms(cmd, item) {
             if (shouldAddLibraryId(cmd)) {
                 // Check if command already has library_id
                 var haveLibId = false;
@@ -1912,22 +1926,22 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             // Replace sort and search terms
             if (cmd.params.length>0) {
-                var modifiedParams = [];
                 var albumSort=getAlbumSort(cmd, this.inGenre);
-                cmd.params.forEach(p => {
-                    var r=p.replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                           .replace(TERM_PLACEHOLDER, this.enteredTerm)
-                           .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
-                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
-                           .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
-                           .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS)
-                    if (this.$store.state.ratingsSupport && p==TRACK_TAGS) {
-                        r=TRACK_TAGS+"R";
+                for (var i=0, len=cmd.params.length; i<len; ++i) {
+                    if (this.$store.state.ratingsSupport && cmd.params[i]==TRACK_TAGS) {
+                        cmd.params[i]=TRACK_TAGS+"R";
+                    } else if (item && item.swapid && cmd.params[i]==item.id) {
+                        cmd.params[i]=item.swapid;
+                    } else {
+                        cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                                                   .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                                                   .replace(TERM_PLACEHOLDER, this.enteredTerm)
+                                                   .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
+                                                   .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
+                                                   .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
+                                                   .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                     }
-                    modifiedParams.push(r);
-                });
-                cmd.params = modifiedParams;
+                }
             }
             return cmd;
         },

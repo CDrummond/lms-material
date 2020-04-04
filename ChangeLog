@@ -19,6 +19,8 @@
 14. If there is an error during 1 part of search then still advance to next.
 15. Click on title (or subtitle on touch devices) in grid view will now show
     menu.
+16. If adding library tracks to queue, use single command to specify a list of
+    track IDs.
 
 1.5.1
 -----

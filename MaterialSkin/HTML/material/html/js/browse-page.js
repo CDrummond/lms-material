@@ -35,8 +35,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn v-else-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems(DELETE_ACTION)"><v-icon>delete</v-icon></v-btn>
    <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_FROM_FAV_ACTION)"><v-icon>delete_outline</v-icon></v-btn>
    <v-divider vertical v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
-   <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="addSelectedItems()"><v-icon>add_circle_outline</v-icon></v-btn>
-   <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="playSelectedItems()"><v-icon>play_circle_outline</v-icon></v-btn>
+   <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION)"><v-icon>add_circle_outline</v-icon></v-btn>
+   <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION)"><v-icon>play_circle_outline</v-icon></v-btn>
    <v-divider vertical></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -499,9 +499,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     for (var i=0, len=this.tbarActions.length; i<len; ++i) {
                         if (ACTIONS[this.tbarActions[i]].skey==key) {
                             if (LMS_PLAY_KEYBOARD==key && this.selection.size>0) {
-                                this.playSelectedItems();
+                                this.actionSelectedItems(PLAY_ACTION);
                             } else if (LMS_APPEND_KEYBOARD==key && this.selection.size>0) {
-                                this.addSelectedItems();
+                                this.actionSelectedItems(ADD_ACTION);
                             } else {
                                 this.headerAction(this.tbarActions[i], undefined);
                             }
@@ -1350,25 +1350,28 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) {
-                // Can't use standard add/play-all for filtered items or search results, so just add each item...
-                var commands = [];
-                var useAll = this.current && item.id == this.current.id; // If called from header - then act on all items
-                var isFilter = item.id.startsWith(FILTER_PREFIX); // MultiCD's have a 'filter' so we can play a single CD
-                var check = isFilter ? item.id : (SEARCH_ID==item.id && this.items[0].id.startsWith("track") ? "track_id" : "album_id");
-                var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : this.items;
-                for (var i=0, len=list.length; i<len; ++i) {
-                    if (useAll || (isFilter ? list[i].filter==check : list[i].id.startsWith(check))) {
-                        if (INSERT_ALL_ACTION==act) {
-                            commands.unshift({act:INSERT_ACTION, item:list[i], idx:i});
-                        } else {
-                            commands.push({act:PLAY_ALL_ACTION==act && 0==commands.length ? PLAY_ACTION : ADD_ACTION, item:list[i], idx:i});
+                if (this.current && item.id == this.current.id) { // Called from subtoolbar => act on all items
+                    this.doList(this.items, act);
+                     bus.$emit('showMessage', i18n("Adding tracks..."));
+                } else { // Need to filter items...
+                    var itemList = [];
+                    var isFilter = item.id.startsWith(FILTER_PREFIX); // MultiCD's have a 'filter' so we can play a single CD
+                    var check = isFilter ? item.id : (SEARCH_ID==item.id && this.items[0].id.startsWith("track") ? "track_id" : "album_id");
+                    var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : this.items;
+                    for (var i=0, len=list.length; i<len; ++i) {
+                        if ((isFilter ? list[i].filter==check : list[i].id.startsWith(check))) {
+                            if (INSERT_ALL_ACTION==act) {
+                                itemList.unshift(list[i]);
+                            } else {
+                                itemList.push(list[i]);
+                            }
+                        } else if (itemList.length>0) {
+                            break;
                         }
-                    } else if (commands.length>0) {
-                        break;
                     }
+                    this.doList(itemList, act);
+                    bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
                 }
-                bus.$emit('showMessage', useAll || isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
-                this.doCommands(commands, PLAY_ALL_ACTION==act);
             } else {
                 var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {
@@ -2322,31 +2325,58 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        addSelectedItems() {
-            var commands=[];
+        actionSelectedItems(act) {
             var selection = Array.from(this.selection);
+            var itemList = [];
             selection.sort(function(a, b) { return a<b ? -1 : 1; });
             for (var i=0, len=selection.length; i<len; ++i) {
-                var idx = selection[i];
-                if (idx>-1 && idx<this.items.length) {
-                    commands.push({act:ADD_ACTION, item:this.items[idx], idx:idx});
-                }
+                itemList.push(this.items[i]);
             }
-            this.doCommands(commands, false);
+            this.doList(itemList, act);
             this.clearSelection();
         },
-        playSelectedItems() {
-            var commands=[];
-            var selection = Array.from(this.selection);
-            selection.sort(function(a, b) { return a<b ? -1 : 1; });
-            for (var i=0, len=selection.length; i<len; ++i) {
-                var idx = selection[i];
-                if (idx>-1 && idx<this.items.length) {
-                    commands.push({act:0==i ? PLAY_ACTION : ADD_ACTION, item:this.items[idx], idx:idx});
+        doList(list, act) {
+            act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act ? PLAY_ACTION : act;
+            // Perform an action on a list of items. If these are tracks, then we can use 1 command...
+            if (list[0].id.startsWith("track_id:")) {
+                var ids="";
+                for (var i=0, len=list.length; i<len; ++i) {
+                    if (ids.length<1) {
+                        ids+=list[i].id;
+                    } else {
+                        ids+=","+list[i].id.split(":")[1];
+                    }
                 }
+                var command = this.buildFullCommand({id:ids}, act);
+                if (command.command.length===0) {
+                    bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
+                    return;
+                }
+                if (PLAY_ACTION==act) {
+                    lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {
+                        lmsCommand(this.playerId(), command.command).then(({data}) => {
+                            logJsonMessage("RESP", data);
+                            if (!this.$store.state.desktopLayout) {
+                                this.$store.commit('setPage', 'now-playing');
+                            }
+                        }).catch(err => {
+                            logError(err, command.command);
+                        });
+                    });
+                } else {
+                    lmsCommand(this.playerId(), command.command).then(({data}) => {
+                        logJsonMessage("RESP", data);
+                    }).catch(err => {
+                        logError(err, command.command);
+                    });
+                }
+            } else {
+                var commands = [];
+                for (var i=0, len=list.length; i<len; ++i) {
+                    commands.push({act:PLAY_ACTION==act ? (0==i ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
+                }
+                this.doCommands(commands, PLAY_ACTION==act);
             }
-            this.doCommands(commands, true);
-            this.clearSelection();
         },
         doCommands(commands, npAfterLast, clearSent, actionedCount) {
             if (commands.length>0) {

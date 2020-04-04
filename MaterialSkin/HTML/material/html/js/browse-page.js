@@ -754,8 +754,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.tbarActions=[ADD_ACTION, PLAY_ACTION];
                         }
 
-                        // No menu actions? If first item is playable, add a PlayAll/AddAll to toolbar...
-                        if (this.tbarActions.length==0 && this.items.length>1 && this.items[0].menu && this.items[0].menu.length>0 &&
+                        // No menu actions? If first item is an audio trakc, add a PlayAll/AddAll to toolbar...
+                        if (this.tbarActions.length==0 && this.items.length>1 && isAudioTrack(this.items[0]) && this.items[0].menu && this.items[0].menu.length>0 &&
                             (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
                             // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
                             !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||
@@ -763,7 +763,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
 
                             // add-all/play-all is SLOW, but youtube allows add/play on modified version of parentID - where we make this
-                            // from removing the last art of the ID of the first item...
+                            // from removing the last part of the ID of the first item...
                             if (this.command.command[0]=="youtube" && this.items[0].params && this.items[0].params.item_id) {
                                 var parts = this.items[0].params.item_id.split(".");
                                 if (parts.length==2) {
@@ -913,9 +913,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.showImage(index);
                 return;
             }
-            if ("audio"==item.type  || "track"==item.type ||
-                ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
-                (item.goAction && (item.goAction == "playControl" || item.goAction == "play"))) {
+            if (isAudioTrack(item)) {
                 if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, index, event);
                 }

@@ -778,6 +778,12 @@ function addAndPlayAllActions(cmd) {
     return true;
 }
 
+function isAudioTrack(item) {
+    return "audio"==item.type  || "track"==item.type ||
+                ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
+                (item.goAction && (item.goAction == "playControl" || item.goAction == "play"));
+}
+
 function setElemSizes(larger) {
     document.documentElement.style.setProperty('--std-font-size', larger ? '19px' : '16px');
     document.documentElement.style.setProperty('--small-font-size', larger ? '18px' : '14px');

@@ -21,6 +21,8 @@
     menu.
 16. If adding library tracks to queue, use single command to specify a list of
     track IDs.
+17. If adding add/play actions to toolbar, only add for app lists when first
+    item is a playable track.
 
 1.5.1
 -----

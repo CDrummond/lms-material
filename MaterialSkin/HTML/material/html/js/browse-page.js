@@ -2384,7 +2384,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     actionedCount = 0;
                 } else {
                     actionedCount++;
-                    if (commands.length>10 && (25==actionedCount || 50==actionedCount || 0===actionedCount%100)) {
+                    if (commands.length>10 && (2==actionedCount || 25==actionedCount || 50==actionedCount || 0===actionedCount%100)) {
                         bus.$emit('refreshStatus');
                     }
                 }

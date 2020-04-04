@@ -86,17 +86,18 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
+ <div v-if="updateProgress.show && wide>1" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-progress-circular size=20 width=2 indeterminate></v-progress-circular></v-btn>
- <v-btn v-show="desktopLayout || wide" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="desktopLayout || wide" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (desktopLayout || wide)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
- <v-btn v-show="desktopLayout || wide" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-show="desktopLayout || wide" class="vol-full-label" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
- <v-btn v-show="!(desktopLayout || wide)" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
+ <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-show="desktopLayout || wide>0" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+ <div v-show="!playerDvc && (desktopLayout || wide>0)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
+ <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-show="desktopLayout || wide>0" class="vol-full-label" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
+ <v-btn v-show="!(desktopLayout || wide>0)" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
-  <div class="vol-label" v-if="!(desktopLayout || wide)" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}</div>
+  <div class="vol-label" v-if="!(desktopLayout || wide>0)" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}</div>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
@@ -179,16 +180,16 @@ Vue.component('lms-toolbar', {
                  playerDvc: true,
                  snackbar:{ show: false, msg: undefined},
                  connected: true,
-                 wide: false,
+                 wide: 0,
                  updateProgress: {show:false, text:undefined}
                }
     },
     mounted() {
         setInterval(function () {
-            this.wide = window.innerWidth>=900;
+            this.wide = window.innerWidth>=1050 ? 2 : window.innerWidth>=900 ? 1 : 0;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.wide = window.innerWidth>=900;
+            this.wide = window.innerWidth>=1050 ? 2 : window.innerWidth>=900 ? 1 : 0;
         }.bind(this));
 
         bus.$on('settingsMenuActions', function(actions, page) {

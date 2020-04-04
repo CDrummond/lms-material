@@ -17,7 +17,8 @@
     listed item one by one.
 13. If there is sufficient space, show LMS update text in toolbar.
 14. If there is an error during 1 part of search then still advance to next.
-15. Click on title (not subtitle) in grid view will now show menu.
+15. Click on title (or subtitle on touch devices) in grid view will now show
+    menu.
 
 1.5.1
 -----

@@ -1397,6 +1397,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.doTextClick(item.moremenu[index], true);
         },
         itemMenu(item, index, event) {
+            if (this.menu.show && item.id==this.menu.item.id) {
+                this.menu.show=false;
+                return;
+            }
             if (!item.menu) {
                 if (undefined!=item.stdItem){
                     showMenu(this, {show:true, item:item, itemMenu:STD_ITEMS[item.stdItem].menu, x:event.clientX, y:event.clientY, index:index});
@@ -1438,7 +1442,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index, event);
                 return;
             }
-            if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+            if (IS_MOBILE && this.grid.use) {
+                this.itemMenu(item, index, event);
+            } else if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
                                 {cancache:false, id:item.id, title:item.subtitle});
             } else {

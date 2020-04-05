@@ -886,7 +886,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.items = item.allSearchResults;
                     this.headerSubTitle = item.subtitle;
                     this.current = item;
-                    if ((this.items[0].id.startsWith("album_id") && this.items.length<=50) || this.items[0].id.startsWith("track_id")) {
+                    if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                     }
                     setScrollTop(this.scrollElement, 0);

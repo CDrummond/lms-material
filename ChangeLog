@@ -23,6 +23,7 @@
     track IDs.
 17. If adding add/play actions to toolbar, only add for app lists when first
     item is a playable track.
+18. Use "playlistcontrol, cmd:delete, album_id:XXX" to remove album from queue.
 
 1.5.1
 -----

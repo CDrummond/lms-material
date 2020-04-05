@@ -715,17 +715,7 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (REMOVE_ACTION===act) {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_REMOVE_ALBUM_ACTION==act) {
-                var indexes = [];
-                for (var i=this.items.length-1; i>=0; --i) {
-                    if (this.items[i].album_id==item.album_id) {
-                        indexes.push(i);
-                    }
-                }
-                if (indexes.length==this.listSize) {
-                    bus.$emit('playerCommand', ["playlist", "clear"]);
-                } else {
-                    bus.$emit('removeFromQueue', indexes);
-                }
+                bus.$emit('playerCommand', ["playlistcontrol", "cmd:delete", "album_id:"+item.album_id]);
             } else if (MORE_ACTION===act) {
                 if (undefined!=item.origTitle) { // Need to remove ratings stars...
                     let clone = JSON.parse(JSON.stringify(item));

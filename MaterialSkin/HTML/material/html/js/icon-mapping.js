@@ -45,7 +45,18 @@ function mapIconType(item, type) {
 }
 
 function mapIcon(item, fallbackIcon) {
-    if (!mapIconType(item, "icon-id") && !mapIconType(item, "icon") && undefined!=fallbackIcon) {
-        item.icon=fallbackIcon; item.image=undefined;
+    if (mapIconType(item, "icon-id")) {
+        return true;
     }
+    if (mapIconType(item, "icon")) {
+        return true;
+    }
+    if (item.image && item.image.startsWith("html/images/") && mapIconType(item, "image")) {
+        return true;
+    }
+    if (undefined!=fallbackIcon) {
+        item.icon=fallbackIcon; item.image=undefined;
+        return true;
+    }
+    return false;
 }

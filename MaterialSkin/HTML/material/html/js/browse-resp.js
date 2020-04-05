@@ -732,6 +732,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.loop_loop) {
             for (var idx=0, loop=data.result.loop_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
+                mapIcon(i);
                 if ("text"===i.type || "textarea"===i.type) {
                     resp.items.push({
                                   title: i.name ? i.name : i.title,
@@ -753,6 +754,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   title: i.name,
                                   command: parent.command,
                                   image: resolveImage(i.icon, i.image, LMS_IMAGE_SIZE),
+                                  icon: i.icon,
+                                  svg: i.svg,
                                   params: ["item_id:"+i.id, "want_url:1"],
                                   type: "group",
                                   url: i.url,
@@ -764,6 +767,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                   title: i.name,
                                   url: i.url,
                                   image: resolveImage(i.icon, i.image, LMS_IMAGE_SIZE),
+                                  icon: i.icon,
+                                  svg: i.svg,
                                   type: "track",
                                   actions: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                                   id: "item_id:"+i.id

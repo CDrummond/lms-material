@@ -29,9 +29,7 @@ body {
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- padding-top:2px;
- padding-right:4px;
- padding-bottom:0px;
+ padding:2px 4px 0px 12px;
 }
 
 .lms-list {

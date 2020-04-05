@@ -24,7 +24,7 @@
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- padding:2px 4px 0px 12px;
+ padding:2px 4px 0px 10px;
  z-index:1;
  float:left;
 }
@@ -297,33 +297,31 @@
 
 @media only screen and (max-width:800px) {
  .lms-toolbar > .v-toolbar__content {
-  margin-left:-14px !important;
-  margin-right:-16px !important;
+  margin-left:-16px !important;
+  margin-right:-12px !important;
  }
 
  .subtoolbar {
-  padding:2px 0px 0px 4px;
+  padding:2px 0px 0px 6px;
  }
 
  .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
-  padding:0 8px !important;
+  padding:0 12px !important;
  }
  
  .lms-list-sub .emblem, .lms-list-jump .emblem {
+  left:35px !important;
+ }
+
+ .pq-current-indicator {
   left:31px !important;
+ }
+
+ .lms-list-sub3 .pq-current-indicator {
+  left:50px !important;
  }
 }
 
 .vue-splitter .splitter {
  max-width:0px!important;
-}
-
-@media only screen and (max-width:800px) {
- .pq-current-indicator {
-  left:27px !important;
- }
-
- .lms-list-sub3 .pq-current-indicator {
-  left:46px !important;
- }
 }

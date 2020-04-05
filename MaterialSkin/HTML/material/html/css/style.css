@@ -126,7 +126,7 @@ html, .mini-player {
 
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
- margin-left:-7px !important;
+ margin-left:-10px !important;
  margin-right:-8px !important;
 }
 

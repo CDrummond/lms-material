@@ -751,7 +751,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
 
                         // No menu actions? If first item is an audio trsck, add a PlayAll/AddAll to toolbar. This will add each item individually
-                        if (this.tbarActions.length==0 && this.items.length>1 && isAudioTrack(this.items[0]) && this.items[0].menu && this.items[0].menu.length>0 &&
+                        if (this.tbarActions.length==0 && this.items.length>1 && this.items.length<=200 && isAudioTrack(this.items[0]) && this.items[0].menu && this.items[0].menu.length>0 &&
                             (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
                             // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
                             !(this.command.command.length>0 && (/*this.command.command[0]=="trackinfo" || */this.command.command[0]=="artistinfo" ||

@@ -2,6 +2,8 @@
 -----
 1. Adjust toolbar margins slightly, to improve icon alignment.
 2. Map icons from loop_loop
+3. Draw samll update icon top-right of main menu icon when updates available, as
+   opposed to replacing menu icon.
 
 1.5.2
 -----

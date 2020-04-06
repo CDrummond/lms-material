@@ -1157,6 +1157,15 @@ progress {
  vertical-align:middle;
 }
 
+.svg-update-img {
+ position:absolute;
+ top:1px;
+ right:0px;
+ width:16px !important;
+ height:16px !important;
+ vertical-align:middle;
+}
+
 div.v-subheader {
  font-size:var(--std-font-size);
 }

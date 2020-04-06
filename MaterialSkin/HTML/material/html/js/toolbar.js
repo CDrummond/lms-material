@@ -43,7 +43,7 @@ Vue.component('lms-toolbar', {
       <v-list-tile-action>
        <v-layout v-if="!IS_MOBILE && desktopLayout">
         <v-flex xs6>
-         <v-btn icon class="hide-for-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
+         <v-btn icon class="hide-for-mini open-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
         </v-flex>
         <v-flex xs6 style="margin-left:2px">
          <v-btn icon v-if="item.canpoweroff" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>

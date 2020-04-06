@@ -5,6 +5,8 @@
 3. Draw samll update icon top-right of main menu icon when updates available, as
    opposed to replacing menu icon.
 4. Set open-mini player button to 24px to ensure circle.
+5. Remove initial i'http://' from add URL to queue dialog to help with pasting
+   URLs.
 
 1.5.2
 -----

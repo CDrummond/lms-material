@@ -766,7 +766,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (act==PQ_ADD_URL_ACTION) {
-                this.dialog={show: true, title: ACTIONS[PQ_ADD_URL_ACTION].title, hint: i18n("URL"), ok: i18n("Add"), value:"http://", action:'add'};
+                this.dialog={show: true, title: ACTIONS[PQ_ADD_URL_ACTION].title, hint: i18n("URL"), ok: i18n("Add"), value:"", action:'add'};
                 focusEntry(this);
             } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length>=1) {

@@ -8,6 +8,8 @@
 5. Remove initial i'http://' from add URL to queue dialog to help with pasting
    URLs.
 6. Allow showing of plugin images as browse background.
+7. If listing a radio app's entries and all images are the same, then hide
+   images. e.g. iHeartRadio and RadioNet
 
 1.5.2
 -----

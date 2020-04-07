@@ -37,6 +37,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var menu = undefined;
             var types = new Set();
             var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
+            var radioImages = new Set();
 
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
@@ -289,6 +290,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             i['icon-id']='/language.png';
                         }
                         mapIcon(i, "radio");
+                    } else {
+                        radioImages.add(i.image);
                     }
                 } else if (isBmf) {
                     i.icon = i.type=="playlist"
@@ -379,6 +382,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 id: parent.id+".0"
                                });
                 resp.canUseGrid = false;
+            } else if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) {
+                // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
+                for (var i=0, len=resp.items.length; i<len; ++i) {
+                    resp.items[i].image = undefined;
+                }
             } else if (haveWithoutIcons && haveWithIcons) {
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);

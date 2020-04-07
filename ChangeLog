@@ -10,7 +10,8 @@
 6. Allow showing of plugin images as browse background.
 7. If listing a radio app's entries and all images are the same, then hide
    images. e.g. iHeartRadio and RadioNet
-8. Add monochrome radionet icon.
+8. Add monochrome radio.net icon.
+9. Enable hover add/play buttons for playlists and playlist tracks.
 
 1.5.2
 -----

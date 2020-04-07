@@ -2535,7 +2535,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         setBgndCover() {
-            var url = this.$store.state.browseBackdrop && this.current && this.current.image && !this.current.image.startsWith("/plugins/") ? this.current.image : undefined;
+            var url = this.$store.state.browseBackdrop && this.current && this.current.image ? this.current.image : undefined;
 
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);

@@ -7,6 +7,7 @@
 4. Set open-mini player button to 24px to ensure circle.
 5. Remove initial i'http://' from add URL to queue dialog to help with pasting
    URLs.
+6. Allow showing of plugin images as browse background.
 
 1.5.2
 -----

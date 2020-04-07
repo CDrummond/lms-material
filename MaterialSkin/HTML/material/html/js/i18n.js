@@ -16,7 +16,7 @@ function i18n(str, val, val2) {
     if (undefined==translation || !(str in translation) || translation[str]==="") {
         return undefined==val ? str : undefined==val2 ? str.replace("%1", val) : str.replace("%1", val).replace("%2", val2);
     }
-    return undefined==val ? translation[str] : translation[str].replace("%1", val);
+    return undefined==val ? translation[str] : undefined==val2 ? translation[str].replace("%1", val) : translation[str].replace("%1", val).replace("%2", val2);
 }
 
 function i18np(singular, plural, val) {

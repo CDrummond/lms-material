@@ -1,17 +1,18 @@
 1.5.3
 -----
-1. Adjust toolbar margins slightly, to improve icon alignment.
-2. Map icons from loop_loop
-3. Draw small update icon top-right of main menu icon when updates available, as
-   opposed to replacing menu icon.
-4. Set width and height of open-mini player button to 24px to ensure circle.
-5. Remove initial 'http://' from add 'URL to queue' dialog to help with pasting
-   URLs.
-6. Allow showing of plugin images as browse background.
-7. If listing a radio app's entries and all images are the same, then hide
-   images. e.g. iHeartRadio and RadioNet
-8. Add monochrome radio.net icon.
-9. Enable hover add/play buttons for playlists and playlist tracks.
+ 1. Adjust toolbar margins slightly, to improve icon alignment.
+ 2. Map icons from loop_loop
+ 3. Draw small update icon top-right of main menu icon when updates available,
+    as opposed to replacing menu icon.
+ 4. Set width and height of open-mini player button to 24px to ensure circle.
+ 5. Remove initial 'http://' from add 'URL to queue' dialog to help with pasting
+    URLs.
+ 6. Allow showing of plugin images as browse background.
+ 7. If listing a radio app's entries and all images are the same, then hide
+    images. e.g. iHeartRadio and RadioNet
+ 8. Add monochrome radio.net icon.
+ 9. Enable hover add/play buttons for playlists and playlist tracks.
+10. Fix translations where there are 2 placeholders.
 
 1.5.2
 -----

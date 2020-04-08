@@ -606,7 +606,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     d++;
                 }
             }
-            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-(discs.size>1 ? discs.size : 0));
             if (!(parent && parent.id && parent.id.startsWith("search:"))) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
             }

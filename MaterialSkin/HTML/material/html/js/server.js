@@ -8,18 +8,6 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdegloyrstABKNST";
 
-window.nativeObj = function NativeClass(){};
-function updateNative(status) {
-    if (undefined==window.nativeObj || undefined!=window.nativeObj.updateStatus) {
-        return;
-    }
-
-    try {
-        window.nativeObj.updateStatus(status);
-    } catch (e) {
-    }
-}
-
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];
     
@@ -455,7 +443,6 @@ var lmsServer = Vue.component('lms-server', {
 
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             if (isCurrent) {
-                updateNative(player);
                 this.scheduleNextPlayerStatusUpdate(data.mode === "play"
                                                         ? data.waitingToPlay
                                                             ? 1000 // Just starting to play? Poll in 1 second

@@ -7,7 +7,7 @@
 'use strict';
 
 var B_ALBUM_SORTS=[ ];
-var NO_ADD_ALL = new Set(['radioparadise', 'artistinfo', 'albuminfo', 'genreinfo']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+var NO_ADD_ALL = new Set(['radioparadise', 'lastmix', 'playhistory', 'wefunk', 'artistinfo', 'albuminfo', 'genreinfo']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `

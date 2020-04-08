@@ -409,7 +409,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }
             resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
-            if (data.result.window && data.result.window.textarea) {
+            if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
                 var text = replaceNewLines(data.result.window.textarea);
                     if (text.length>5) {
                     resp.items.unshift({

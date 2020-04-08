@@ -3,7 +3,7 @@
     "/bbciplayer.png":{"svg":"bbc-iplayer"},
     "/bbciplayerextra.png":{"svg":"bbc-iplayer"},
     "/radiopresets.png":{"icon":"favorite_border"},
-    "/radiolocal.png":{"icon":"my_location"},
+    "/radiolocal.png":{"icon":"location_on"},
     "/language.png":{"icon":"language"},
     "/radiomusic.png":{"icon":"music_video"},
     "/radiosports.png":{"icon":"sports_soccer"},

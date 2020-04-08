@@ -2324,7 +2324,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var itemList = [];
             selection.sort(function(a, b) { return a<b ? -1 : 1; });
             for (var i=0, len=selection.length; i<len; ++i) {
-                itemList.push(this.items[i]);
+                itemList.push(this.items[selection[i]]);
             }
             this.doList(itemList, act);
             this.clearSelection();
@@ -2349,6 +2349,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (PLAY_ACTION==act) {
                     lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {
                         lmsCommand(this.playerId(), command.command).then(({data}) => {
+                            bus.$emit('refreshStatus');
                             logJsonMessage("RESP", data);
                             if (!this.$store.state.desktopLayout) {
                                 this.$store.commit('setPage', 'now-playing');

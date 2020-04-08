@@ -18,6 +18,8 @@
 13. Restrict add/play all to predefined set of apps.
 14. Correctly report total track count for multi-CD album when listed as 1 album
     in LMS.
+15. Fix ctrl-left causing curent track to go to start - should be checking for
+    alt+left.
 
 1.5.2
 -----

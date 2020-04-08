@@ -820,7 +820,7 @@ var lmsServer = Vue.component('lms-server', {
                     } else if (key=='decvol' || key=='decvolfirefox') {
                         this.adjustVolume(false);
                     }
-                } else {
+                } else if ('alt'==modifier) {
                     if (key=='up') {
                         this.adjustVolume(true);
                     } else if (key=='down') {

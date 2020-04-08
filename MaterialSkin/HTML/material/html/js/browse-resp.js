@@ -374,15 +374,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.canUseGrid = true;
             }
 
-            if (0==resp.items.length && data.result.window && data.result.window.textarea) {
-                var text = replaceNewLines(data.result.window.textarea);
-                resp.items.push({
-                                title: text,
-                                type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",
-                                id: parent.id+".0"
-                               });
-                resp.canUseGrid = false;
-            } else if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) {
+            if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 for (var i=0, len=resp.items.length; i<len; ++i) {
                     resp.items[i].image = undefined;
@@ -415,6 +407,18 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.items.sort(titleSort);
             } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
+            }
+            resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+            if (data.result.window && data.result.window.textarea) {
+                var text = replaceNewLines(data.result.window.textarea);
+                    if (text.length>5) {
+                    resp.items.unshift({
+                                    title: text,
+                                    type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",
+                                    id: parent.id+".textarea"
+                                   });
+                    resp.canUseGrid = false;
+                }
             }
         } else if (data.result.artists_loop) {
             var isComposers = false;

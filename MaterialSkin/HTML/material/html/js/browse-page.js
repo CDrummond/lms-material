@@ -7,7 +7,7 @@
 'use strict';
 
 var B_ALBUM_SORTS=[ ];
-var NO_ADD_ALL = new Set(['radioparadise', 'lastmix', 'playhistory', 'wefunk', 'artistinfo', 'albuminfo', 'genreinfo']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -753,7 +753,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                         // No menu actions? If first item is an audio trsck, add a PlayAll/AddAll to toolbar. This will add each item individually
                         if (this.tbarActions.length==0 && this.items.length>1 && this.items.length<=200 && isAudioTrack(this.items[0]) && this.items[0].menu &&
-                            this.items[0].menu.length>0 && this.command.command.length>0 && !NO_ADD_ALL.has(this.command.command[0]) &&
+                            this.items[0].menu.length>0 && this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) &&
                             (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
                             this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
 

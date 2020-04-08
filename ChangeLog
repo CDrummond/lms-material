@@ -15,6 +15,7 @@
 10. Fix translations where there are 2 placeholders.
 11. Fix adding/playing selection.
 12. Show textarea at top of list, if its in response and more than 5 characters.
+13. Restrict add/play all to predefined set of apps.
 
 1.5.2
 -----

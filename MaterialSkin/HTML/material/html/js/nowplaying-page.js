@@ -147,7 +147,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-card>
   </div>
   <div v-else>
-   <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
+   <div v-show="overlayVolume>-1 && playerStatus.dvc && playerStatus.ison" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
@@ -287,6 +287,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     isplaying: false,
                     sleepTimer: false,
                     dvc: true,
+                    ison: true,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
@@ -444,6 +445,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.dvc!=this.playerStatus.dvc) {
                 this.playerStatus.dvc = playerStatus.dvc;
+            }
+            if (playerStatus.ison!=this.playerStatus.ison) {
+                this.playerStatus.ison = playerStatus.ison;
             }
             var artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
             var artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;
@@ -1064,13 +1068,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         touchStart(event) {
-            if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0) {
+            if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0 && this.playerStatus.dvc && this.playerStatus.ison) {
                 this.touch={x:event.touches[0].clientX, y:event.touches[0].clientY, moving:false};
                 this.lastSentVolume=-1;
             }
         },
         touchEnd() {
-            if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume) {
+            if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume && this.playerStatus.dvc && this.playerStatus.ison) {
                 bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
             }
             this.touch=undefined;
@@ -1079,7 +1083,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.cancelSendVolumeTimer();
         },
         touchMoving(event) {
-            if (undefined!=this.touch) {
+            if (undefined!=this.touch && this.playerStatus.dvc && this.playerStatus.ison) {
                 if (Math.abs(event.touches[0].clientX-this.touch.x)<48) {
                     if (!this.touch.moving && Math.abs(event.touches[0].clientY-this.touch.y)>10) {
                         this.touch.moving=true;

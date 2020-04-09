@@ -474,6 +474,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             bindKey(LMS_APPEND_KEYBOARD, 'mod+shift');
             bindKey(LMS_ADD_ITEM_ACTION_KEYBOARD, 'mod');
             bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
+            bindKey('pageup');
+            bindKey('pagedown');
             bindKey('left', 'mod');
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.$store.state.desktopLayout && this.$store.state.page!="browse")) {
@@ -512,6 +514,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (!modifier) {
                     if ('home'==key) {
                         this.goHome();
+                    } else if ('pageup'==key) {
+                        this.scrollElement.scrollBy(0, -1*this.scrollElement.clientHeight);
+                    } else if ('pagedown'==key) {
+                        this.scrollElement.scrollBy(0, this.scrollElement.clientHeight);
                     }
                 }
             }.bind(this));

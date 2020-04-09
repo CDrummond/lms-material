@@ -18,8 +18,10 @@
 13. Restrict add/play all to predefined set of apps.
 14. Correctly report total track count for multi-CD album when listed as 1 album
     in LMS.
-15. Fix ctrl-left causing curent track to go to start - should be checking for
+15. Fix ctrl+left causing current track to go to start - should be checking for
     alt+left.
+16. Use page up/down to scroll browse and queue views - alt + page up/down for
+    queue in desktop layout (either with or without alt for mobile layout)
 
 1.5.2
 -----

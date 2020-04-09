@@ -699,7 +699,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 // Get list of actions (e.g. biography, online services) to show in subtoolbar
                 this.currentActions={show:false, items:[]};
                 var listingArtistAlbums = this.current.id.startsWith("artist_id:");
-                if (this.current.id.startsWith("artist_id:") || this.current.id.startsWith("album_id:")) {
+                if ((this.current.id.startsWith("artist_id:") && this.command.command[0]=="albums") || (this.current.id.startsWith("album_id:") && this.command.command[0]=="tracks")) {
                     var cmd = ["material-skin", "actions", this.current.id];
                     if (listingArtistAlbums) {
                         cmd.push("artist:"+this.current.title);

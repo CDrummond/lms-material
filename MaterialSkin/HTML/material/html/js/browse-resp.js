@@ -742,12 +742,22 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 id: parent.id+".0"
                             });
         } else if (data.result.loop_loop) {
+            var numImages = 0;
             for (var idx=0, loop=data.result.loop_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var mappedIcon = mapIcon(i);
                 i.title = i.name ? i.name : i.title;
                 if ("text"===i.type || "textarea"===i.type) {
-                    i.type="text";
+                    if (i.title.length<50 && i.image) {
+                        i.type = "image";
+                        i.src = resolveImageUrl(i.image);
+                        i.image = resolveImageUrl(i.image, LMS_IMAGE_SIZE);
+                        i.w=0;
+                        i.h=0;
+                        numImages++;
+                    } else {
+                        i.type="text";
+                    }
                 } else if ("search"===i.type) {
                     i.command = [i.cmd ? i.cmd : parent.command[0], "items"];
                     i.params = ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER];
@@ -769,6 +779,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.id = "item_id:"+i.id;
                 }
                 resp.items.push(i);
+            }
+            if (numImages>0 && numImages==resp.items.length) {
+                resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
+                resp.canUseGrid = resp.forceGrid = true;
             }
         }
 

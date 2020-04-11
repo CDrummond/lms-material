@@ -747,11 +747,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var i = loop[idx];
                 var mappedIcon = mapIcon(i);
                 i.title = i.name ? i.name : i.title;
+                i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
                 if ("text"===i.type || "textarea"===i.type) {
                     if (i.title.length<50 && i.image) {
                         i.type = "image";
                         i.src = resolveImageUrl(i.image);
-                        i.image = resolveImageUrl(i.image, LMS_IMAGE_SIZE);
                         i.w=0;
                         i.h=0;
                         numImages++;
@@ -768,12 +768,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 } else if (i.hasitems>0) {
                     i.command = parent.command;
                     i.params = ["item_id:"+i.id, "want_url:1"];
-                    i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
                     i.type = "group";
                     i.actions = i.isaudio === 1 ? [PLAY_ACTION, INSERT_ACTION, ADD_ACTION] : undefined;
                     i.id = "item_id:"+i.id;
                 } else if (i.isaudio === 1) {
-                    i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
                     i.type = "track";
                     i.actions = [PLAY_ACTION, INSERT_ACTION, ADD_ACTION];
                     i.id = "item_id:"+i.id;

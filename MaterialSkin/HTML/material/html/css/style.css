@@ -576,12 +576,15 @@ div.v-subheader {
 }
 
 .lms-list-sub > .browse-text > div {
- font-size:var(--std-font-size)!important;
- font-weight:200!important;
  min-height:var(--list-elem-height)!important;
  height:auto!important;
  padding-top:8px!important;
  padding-bottom:8px!important;
+}
+
+.lms-list-sub .browse-text {
+ font-size:var(--std-font-size)!important;
+ font-weight:200!important;
 }
 
 .browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {

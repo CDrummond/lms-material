@@ -164,7 +164,12 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
-   <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
+   <v-list-tile v-else-if="item.type=='text'" class="lms-list-item">
+    <v-list-tile-avatar v-if="item.image" :tile="true">
+     <img :key="item.image" v-lazy="item.image"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-content class="browse-text">{{item.title}}</v-list-tile-content>
+   </v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item browse-header" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 Menu', item.title)">
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)" class="list-btns">

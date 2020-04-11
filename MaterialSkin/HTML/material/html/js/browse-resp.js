@@ -38,6 +38,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var types = new Set();
             var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
             var radioImages = new Set();
+            var numImages = 0;
 
             resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
 
@@ -57,13 +58,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
-                                         title: i.credit,
+                                         title: i.title ? i.title : i.name ? i.name : i.credits ? i.credits : undefined,
                                          type: "image",
                                          image: resolveImageUrl(i.url, LMS_IMAGE_SIZE),
                                          src: resolveImageUrl(i.url),
                                          w: 0,
                                          h: 0});
                         resp.canUseGrid = true;
+                        numImages++;
                     } else {
                         data.result.count--;
                     }
@@ -408,7 +410,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }
-            resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+            if (numImages>0 && numImages==resp.items.length) {
+                resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
+            } else {
+                resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+            }
             if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
                 var text = replaceNewLines(data.result.window.textarea);
                     if (text.length>5) {
@@ -717,6 +723,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.data, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (i.image) {
+                    i.title = i.title ? i.title : i.name ? i.name : i.credits ? i.credits : undefined;
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
                     i.src = resolveImageUrl(i.image);

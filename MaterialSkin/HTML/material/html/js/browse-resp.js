@@ -749,15 +749,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 i.title = i.name ? i.name : i.title;
                 i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
                 if ("text"===i.type || "textarea"===i.type) {
-                    if (i.title.length<50 && i.image) {
-                        i.type = "image";
-                        i.src = resolveImageUrl(i.image);
-                        i.w=0;
-                        i.h=0;
+                    if (i.title.length<75 && i.image) { // Possible image?
                         numImages++;
-                    } else {
-                        i.type="text";
                     }
+                    i.type="text";
                 } else if ("search"===i.type) {
                     i.command = [i.cmd ? i.cmd : parent.command[0], "items"];
                     i.params = ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER];
@@ -781,6 +776,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             if (numImages>0 && numImages==resp.items.length) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
                 resp.canUseGrid = resp.forceGrid = true;
+                for (var idx=0, loop=resp.items, loopLen=loop.length; idx<loopLen; ++idx) {
+                    resp.items[idx].type = "image";
+                    resp.items[idx].src = resolveImageUrl(i.image);
+                    resp.items[idx].w=0;
+                    resp.items[idx].h=0;
+                }
             }
         }
 

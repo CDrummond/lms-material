@@ -88,16 +88,16 @@ Vue.component('lms-toolbar', {
  <v-spacer></v-spacer>
  <div v-if="updateProgress.show && wide>1" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-progress-circular size=20 width=2 indeterminate></v-progress-circular></v-btn>
- <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="desktopLayout || wide>0" :disabled="!playerDvc || !playerStatus.ison || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+ <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-show="desktopLayout || wide>0" :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  <div v-show="!playerDvc && (desktopLayout || wide>0)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
- <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-show="desktopLayout || wide>0" class="vol-full-label" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
- <v-btn v-show="!(desktopLayout || wide>0)" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
+ <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-show="desktopLayout || wide>0" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
+ <v-btn v-show="!(desktopLayout || wide>0)" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
-  <div class="vol-label" v-if="!(desktopLayout || wide>0)" v-bind:class="{'disabled':!playerStatus.ison || noPlayer}">{{playerStatus.volume|displayVolume}}</div>
+  <div class="vol-label" v-if="!(desktopLayout || wide>0)" v-bind:class="{'disabled':noPlayer}">{{playerStatus.volume|displayVolume}}</div>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
@@ -487,7 +487,7 @@ Vue.component('lms-toolbar', {
                         'width=650,height=126,status=no,menubar=no,toolbar=no,location=no');
         },
         volumeDown(toggleMute) {
-            if (this.$store.state.visibleMenus.size>0 || !this.playerStatus.ison || this.noPlayer) {
+            if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {
                 return;
             }
             if (toggleMute && this.playerDvc) {
@@ -497,7 +497,7 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeUp(toggleMute) {
-            if (this.$store.state.visibleMenus.size>0 || !this.playerStatus.ison || this.noPlayer) {
+            if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {
                 return;
             }
             if (toggleMute && this.playerDvc) {
@@ -507,7 +507,7 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeClick(toggleMute) {
-            if (this.$store.state.visibleMenus.size>0 || !this.playerStatus.ison || this.noPlayer) {
+            if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {
                 return;
             }
             if (toggleMute && this.playerDvc) {
@@ -522,13 +522,13 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
         },
         toggleMute() {
-            if (!this.playerStatus.ison || this.noPlayer || !this.playerDvc) {
+            if (this.noPlayer || !this.playerDvc) {
                 return;
             }
             bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
         },
         playPauseButton(long) {
-            if (this.$store.state.visibleMenus.size>0 || !this.playerStatus.ison || this.noPlayer) {
+            if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {
                 return;
             }
             if (long) {
@@ -538,7 +538,7 @@ Vue.component('lms-toolbar', {
             }
         },
         showSleep() {
-            if (this.$store.state.visibleMenus.size>0 || !this.playerStatus.ison || this.noPlayer) {
+            if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {
                 return;
             }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);

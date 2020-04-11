@@ -22,10 +22,11 @@
     alt+left.
 16. Use page up/down to scroll browse and queue views - alt + page up/down for
     queue in desktop layout (either with or without alt for mobile layout)
-17. Don't swipe to change volume on powered off player.
-18. If loop_loop contains text items with images and text length of 50 chars or
+17. If loop_loop contains text items with images and text length of 50 chars or
     less, then treat as a list of images.
-19. Show images for text items in loop_loop.
+18. Show images for text items in loop_loop.
+19. Don't disable volume controls for powered off players, as it is possible to
+    alter the volume of these.
 
 1.5.2
 -----

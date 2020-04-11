@@ -27,6 +27,8 @@
 18. Show images for text items in loop_loop.
 19. Don't disable volume controls for powered off players, as it is possible to
     alter the volume of these.
+20. If set to show meni when click on an audio item, then show menu if click on
+    header (e.g. used to split CDs).
 
 1.5.2
 -----

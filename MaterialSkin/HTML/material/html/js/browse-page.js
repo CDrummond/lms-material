@@ -900,6 +900,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                     }
                     setScrollTop(this.scrollElement, 0);
+                } else if (this.$store.state.showMenuAudio) {
+                    this.itemMenu(item, index, event);
                 }
                 return;
             }

@@ -30,7 +30,9 @@
 20. If set to show meni when click on an audio item, then show menu if click on
     header (e.g. used to split CDs).
 21. Add "menu:1" to browseonlineartist API call.
-
+22. Remove Material's artist fallback image, as it also gets shown in the
+    'My Music' section using other UIs.
+ 
 1.5.2
 -----
  1. Add 'libcometd' to debug options.

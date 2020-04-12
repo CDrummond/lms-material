@@ -29,6 +29,7 @@
     alter the volume of these.
 20. If set to show meni when click on an audio item, then show menu if click on
     header (e.g. used to split CDs).
+21. Add "menu:1" to browseonlineartist API call.
 
 1.5.2
 -----

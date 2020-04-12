@@ -33,6 +33,7 @@
 22. Remove Material's artist fallback image, as it also gets shown in the
     'My Music' section using other UIs.
 23. Darker scrollbars for Black themes.
+24. Read image title from title, name, caption, or credits.
 
 1.5.2
 -----

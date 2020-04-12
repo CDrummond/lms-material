@@ -8,6 +8,10 @@
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
 
+function itemText(i) {
+    return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
+}
+
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
@@ -58,7 +62,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
-                                         title: i.title ? i.title : i.name ? i.name : i.credits ? i.credits : undefined,
+                                         title: itemText(i),
                                          type: "image",
                                          image: resolveImageUrl(i.url, LMS_IMAGE_SIZE),
                                          src: resolveImageUrl(i.url),
@@ -723,7 +727,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.data, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (i.image) {
-                    i.title = i.title ? i.title : i.name ? i.name : i.credits ? i.credits : undefined;
+                    i.title = itemText(i);
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
                     i.src = resolveImageUrl(i.image);
@@ -753,7 +757,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.loop_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var mappedIcon = mapIcon(i);
-                i.title = i.name ? i.name : i.title;
+                i.title = itemText(i);
                 i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
                 if ("text"===i.type || "textarea"===i.type) {
                     if (i.title.length<75 && i.image) { // Possible image?

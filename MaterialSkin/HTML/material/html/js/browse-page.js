@@ -164,6 +164,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
+   <v-list-tile v-else-if="item.type=='text' && !item.image" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item">
     <v-list-tile-avatar v-if="item.image" :tile="true">
      <img :key="item.image" v-lazy="item.image"></img>

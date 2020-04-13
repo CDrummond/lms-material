@@ -69,7 +69,6 @@ function clickHandler(e) {
 }
 
 function hideClassicSkinElems(page, showAll) {
-console.log("HCE", page, showAll);
     if (!page) {
         return;
     }

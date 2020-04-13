@@ -17,20 +17,26 @@ function clickHandler(e) {
 
     if (undefined!=href && !href.startsWith("advanced_search.html")) {
         if (href.indexOf("command=playlist&subcommand=loadtracks&track.id")>0 ||
-            href.indexOf("command=playlist&subcommand=addtracks&track.id")>0) {
+            href.indexOf("command=playlist&subcommand=addtracks&track.id")>0 ||
+            href.indexOf("command=playlist&subcommand=loadtracks&album.id")>0 ||
+            href.indexOf("command=playlist&subcommand=addtracks&album.id")>0) {
             var parts = href.split("&");
             var cmd = ["playlistcontrol"];
+            var album = false;
             for (var i=0, len=parts.length; i<len; ++i) {
                 if (parts[i].startsWith("subcommand")) {
                     cmd.push("addtracks"==parts[i].split("=")[1] ? "cmd:add" : "cmd:load");
                 } else if (parts[i].startsWith("track.id")) {
                     cmd.push("track_id:"+parts[i].split("=")[1]);
+                } else if (parts[i].startsWith("album.id")) {
+                    cmd.push("album_id:"+parts[i].split("=")[1]);
+                    album = true;
                 }
             }
             cmd.push("library_id:"+LMS_DEFAULT_LIBRARY);
-            bus.$emit("search-action", "playlist", cmd);
+            bus.$emit("search-action", "playlist", cmd, album);
             e.preventDefault();
-        } else if (href.indexOf("command=playlist&subcommand=loadtracks&searchRef")>0 ||
+        } else if (href.indexOf("command=playlist&subcommand=loadtracks&searchRef")>0 ||  = searchTrackRes
                    href.indexOf("command=playlist&subcommand=addtracks&searchRef")>0) {
             var parts = href.split("&");
             var cmd = ["playlist"];
@@ -42,7 +48,7 @@ function clickHandler(e) {
                 }
             }
             cmd.push("library_id:"+LMS_DEFAULT_LIBRARY);
-            bus.$emit("search-action", "playlist", cmd);
+            bus.$emit("search-action", "playlist", cmd, href.indexOf("searchRef=searchAlbumsResults")>0);
             e.preventDefault();
         } else if (href.indexOf("songinfo.html?item=")>0) {
             var id = href.split("item=")[1].split("&")[0];
@@ -156,7 +162,7 @@ Vue.component('lms-iframe-dialog', {
                 this.close();
             }
         }.bind(this));
-        bus.$on('search-action', function(cmd, params, title) {
+        bus.$on('search-action', function(cmd, params, title, isAlbum) {
             if ("info"==cmd) {
                 bus.$emit('trackInfo', {id: "track_id:"+params, title:title}, undefined, undefined);
                 this.close();
@@ -172,9 +178,9 @@ Vue.component('lms-iframe-dialog', {
                         }
                         this.close();
                     } else if ("cmd:add"==params[1]) {
-                        this.snackbar={show:true, msg:i18n("Appended track to the play queue")};
+                        this.snackbar={show:true, msg:isAlbum ? i18n("Appended album to the play queue") : i18n("Appended track to the play queue")};
                     } else {
-                        this.snackbar={show:true, msg:i18n("Appended all tracks to the play queue")};
+                        this.snackbar={show:true, msg:isAlbum ? i18n("Appended all albums to the play queue") : i18n("Appended all tracks to the play queue")};
                     }
                 }).catch(err => {
                     logError(err);

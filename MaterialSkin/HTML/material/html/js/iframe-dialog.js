@@ -69,6 +69,7 @@ function clickHandler(e) {
 }
 
 function hideClassicSkinElems(page, showAll) {
+console.log("HCE", page, showAll);
     if (!page) {
         return;
     }
@@ -85,6 +86,10 @@ function hideClassicSkinElems(page, showAll) {
                 iframe.contentDocument.addEventListener('click', clickHandler);
             } else if (iframe.contentDocument.attachEvent) {
                 iframe.contentDocument.attachEvent('onclick', clickHandler);
+            }
+            var res = iframe.contentDocument.getElementById("browsedbList");
+            if (res) {
+                res.scrollIntoView(true);
             }
         }
         if (undefined!=toHide) {

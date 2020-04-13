@@ -5,6 +5,7 @@
 3. Fix showing podcast information - revert change to show images for text
    items.
 4. Fix adding/playing albums from advanced search results.
+5. Scroll advanced seach to results.
 
 1.5.3
 -----

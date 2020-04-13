@@ -1,7 +1,7 @@
 1.5.4
 -----
 1. Fix "0 Items" when showing lyrics in browse view.
-
+2. Poll server status every 2 seconds during scans.
 
 1.5.3
 -----

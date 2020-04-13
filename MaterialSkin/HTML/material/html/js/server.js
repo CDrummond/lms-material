@@ -322,8 +322,8 @@ var lmsServer = Vue.component('lms-server', {
                             (undefined!=done && undefined!=total
                                 ? ' ('+done+(total>=done ? '/'+total : '')+')'
                                 : ''));
-                // Scan in progress, so poll every 3 seconds for updates...
-                this.scheduleNextServerStatus(3000);
+                // Scan in progress, so poll every 2 seconds for updates...
+                this.scheduleNextServerStatus(2000);
                 this.scanInProgress = true;
             } else if (this.scanInProgress) {
                 bus.$emit("scanProgress", undefined);

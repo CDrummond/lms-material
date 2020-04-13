@@ -36,7 +36,7 @@ function clickHandler(e) {
             cmd.push("library_id:"+LMS_DEFAULT_LIBRARY);
             bus.$emit("search-action", "playlist", cmd, album);
             e.preventDefault();
-        } else if (href.indexOf("command=playlist&subcommand=loadtracks&searchRef")>0 ||  = searchTrackRes
+        } else if (href.indexOf("command=playlist&subcommand=loadtracks&searchRef")>0 ||
                    href.indexOf("command=playlist&subcommand=addtracks&searchRef")>0) {
             var parts = href.split("&");
             var cmd = ["playlist"];

@@ -417,18 +417,18 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             if (numImages>0 && numImages==resp.items.length) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
             } else {
-                resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
-            }
-            if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
-                var text = replaceNewLines(data.result.window.textarea);
+                if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
+                    var text = replaceNewLines(data.result.window.textarea);
                     if (text.length>5) {
-                    resp.items.unshift({
-                                    title: text,
-                                    type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",
-                                    id: parent.id+".textarea"
-                                   });
-                    resp.canUseGrid = false;
+                        resp.items.unshift({
+                                        title: text,
+                                        type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",
+                                        id: parent.id+".textarea"
+                                       });
+                        resp.canUseGrid = false;
+                    }
                 }
+                resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
             }
         } else if (data.result.artists_loop) {
             var isComposers = false;

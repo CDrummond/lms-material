@@ -292,7 +292,7 @@
 "Select which players you would like to synchronise with '%1':":"Vælg hvilke afspillere du vil synkronisere med '%1':",
 "Selected Genres":"Valgte genrer",
 "Server":"Server",
-"Server connection lost...":"Forbindelse til serveren afbrudt...",
+"Server connection lost!":"Forbindelse til serveren afbrudt!",
 "Server is being restarted.":"Serveren bliver genstartet.",
 "Server settings":"Serverindstillinger",
 "Set Defaults":"Sæt standardindstillinger",

@@ -268,7 +268,7 @@
 "Select the player you wish to move the queue to:":"Player auswählen, auf den die Warteschlange übertragen werden soll:",
 "Select which players you would like to synchronise with '%1':":"Player auswählen, die mit '%1' synchronisiert werden sollen:",
 "Selected Genres":"Gewählte Stilrichtungen",
-"Server connection lost...":"Verbindung zum Server unterbrochen...",
+"Server connection lost!":"Verbindung zum Server unterbrochen!",
 "Server is being restarted.":"Der Server wird neu gestartet",
 "Server settings":"Server-Einstellungen",
 "Set Defaults":"Speichern",

@@ -15,6 +15,7 @@
     artist name in album listing.
 12. Fix showing of track num in now playing.
 13. Show track numbers as "disc.track" if a track has disccount>2
+14. Show library name in browse view.
 
 1.5.3
 -----

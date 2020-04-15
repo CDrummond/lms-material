@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegloyrstABKNST";
+const PLAYER_STATUS_TAGS = "tags:cdegiloqrstyABKNST";
 
 window.nativeObj = function NativeClass(){};
 function updateNative(status) {

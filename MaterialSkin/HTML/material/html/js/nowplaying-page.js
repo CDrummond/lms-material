@@ -288,7 +288,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     sleepTimer: false,
                     dvc: true,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
-                               album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined },
+                               album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined, disc:0 },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
@@ -437,6 +437,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (playerStatus.current.tracknum!=this.playerStatus.current.tracknum) {
                 this.playerStatus.current.tracknum = playerStatus.current.tracknum;
+                trackChanged = true;
+            }
+            let disc = playerStatus.current.disccount>1 ? playerStatus.current.disc : 0;
+            if (disc!=this.playerStatus.current.disc) {
+                this.playerStatus.current.disc = disc;
                 trackChanged = true;
             }
             if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
@@ -1247,7 +1252,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         title() {
             if (this.$store.state.nowPlayingTrackNum && this.playerStatus.current.tracknum) {
-                return (this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+SEPARATOR+this.playerStatus.current.title;
+                return (this.playerStatus.current.disc>0 ? this.playerStatus.current.disc+"." : "")+(this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
         },

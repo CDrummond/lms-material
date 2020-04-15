@@ -14,6 +14,7 @@
 11. Enable artist/album actions when clickinng of artist/album text in queue, or
     artist name in album listing.
 12. Fix showing of track num in now playing.
+13. Show track numbers as "disc.track" if a track has disccount>2
 
 1.5.3
 -----

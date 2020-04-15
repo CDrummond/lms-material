@@ -437,7 +437,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$store.commit('setPage', 'browse');
             }
             this.goHome();
-            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:"<>", title:title});
+            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title});
         }.bind(this));
 
         bus.$on('refreshList', function(section) {
@@ -1455,7 +1455,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.itemMenu(item, index, event);
             } else if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
-                                {cancache:false, id:item.id, title:item.subtitle});
+                                {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle});
             } else {
                 this.click(item, index, event);
             }

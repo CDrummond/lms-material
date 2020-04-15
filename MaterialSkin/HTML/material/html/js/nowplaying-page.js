@@ -62,7 +62,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
    <v-list-tile style>
     <v-list-tile-content>
-     <v-list-tile-title v-if="playerStatus.current.title">{{playerStatus.current.title}}</v-list-tile-title>
+     <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
      <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</v-list-tile-sub-title>
@@ -151,7 +151,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
-     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{playerStatus.current.title | limitStr}}</div>
+     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.title">{{title | limitStr}}</div>
      <div class="np-text-landscape" v-else>&nbsp;</div>
      <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1': lowHeight}" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
      <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -216,7 +216,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-bind:style="{height: portraitPad+'px'}"></div>
-    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title">{{title}}</p>
     <p class="np-text" v-else>&nbsp;</p>
     <p class="np-text subtext ellipsis" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
     <p class="np-text" v-else>&nbsp;</p>

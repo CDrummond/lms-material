@@ -13,6 +13,7 @@
 10. If have selection and click on header, then toggle selected state of items.
 11. Enable artist/album actions when clickinng of artist/album text in queue, or
     artist name in album listing.
+12. Fix showing of track num in now playing.
 
 1.5.3
 -----

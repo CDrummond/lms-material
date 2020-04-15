@@ -1,15 +1,16 @@
 1.5.4
 -----
-1. Fix "0 Items" when showing lyrics in browse view.
-2. Poll server status every 2 seconds during scans.
-3. Fix showing podcast information - revert change to show images for text
-   items.
-4. Fix adding/playing albums from advanced search results.
-5. Scroll advanced seach results into view.
-6. Add native callback, allowing to pass player status to native application.
-7. Hide button to delete virtual library unless settings are unlocked.
-8. Restore library ID when go back.
-9. Assign icon to Audiobooks category.
+ 1. Fix "0 Items" when showing lyrics in browse view.
+ 2. Poll server status every 2 seconds during scans.
+ 3. Fix showing podcast information - revert change to show images for text
+    items.
+ 4. Fix adding/playing albums from advanced search results.
+ 5. Scroll advanced seach results into view.
+ 6. Add native callback, allowing to pass player status to native application.
+ 7. Hide button to delete virtual library unless settings are unlocked.
+ 8. Restore library ID when go back.
+ 9. Assign icon to Audiobooks category.
+10. If have selection and click on header, then toggle selected state of items.
 
 1.5.3
 -----

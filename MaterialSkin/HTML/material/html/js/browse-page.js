@@ -898,6 +898,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                     }
                     setScrollTop(this.scrollElement, 0);
+                } else if (this.selection.size>0) {
+                    this.select(item, index, event);
                 } else if (this.$store.state.showMenuAudio) {
                     this.itemMenu(item, index, event);
                 }
@@ -2305,7 +2307,27 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         select(item, index, event) {
             if (this.selection.size>0) {
-                this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
+                if (item.header) {
+                    var haveSel = false;
+                    var haveUnsel = false;
+
+                    for (var i=index+1, len=this.items.length; i<len && this.items[i].filter==item.id && (!haveSel || !haveUnsel); ++i) {
+                        if (this.selection.has(i)) {
+                            haveSel = true;
+                        } else {
+                            haveUnsel = true;
+                        }
+                    }
+                    for (var i=index+1, len=this.items.length; i<len && this.items[i].filter==item.id; ++i) {
+                        if (haveUnsel && !this.selection.has(i)) {
+                            this.itemAction(SELECT_ACTION, this.items[i], i, event);
+                        } else if (!haveUnsel && haveSel && this.selection.has(i)) {
+                            this.itemAction(UNSELECT_ACTION, this.items[i], i, event);
+                        }
+                    }
+                } else {
+                    this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
+                }
                 this.$forceUpdate();
             }
         },

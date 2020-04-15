@@ -1676,6 +1676,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.current = prev.current;
             this.currentBaseActions = prev.currentBaseActions;
             this.currentActions = prev.currentActions;
+            this.currentLibId = prev.currentLibId;
             this.headerTitle = prev.headerTitle;
             this.headerSubTitle = prev.headerSubTitle;
             this.tbarActions = prev.tbarActions;

@@ -8,6 +8,7 @@
 5. Scroll advanced seach results into view.
 6. Add native callback, allowing to pass player status to native application.
 7. Hide button to delete virtual library unless settings are unlocked.
+8. Restore library ID when go back.
 
 1.5.3
 -----

@@ -2008,6 +2008,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.icon = undefined;
                                 item.svg = "album-multi";
                                 item.cancache = true;
+                            } else if (c.id.startsWith("myMusicAlbumsAudiobooks")) {
+                                item.icon = "local_library";
+                                item.cancache = true;
                             } else if (c.id.startsWith("myMusicAlbums")) {
                                 item.icon = "album";
                                 item.cancache = true;

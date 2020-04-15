@@ -274,7 +274,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile @click="selectLibrary(item.id)">
      <v-list-tile-avatar><v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content>
-     <v-list-tile-action @click="deleteLibrary(item)" v-if="index>0" :title="i18n('Delete %1', item.name)"><v-btn icon><v-icon>delete_outline</v-icon></v-btn></v-list-tile-action>
+     <v-list-tile-action @click="deleteLibrary(item)" v-if="index>0 && unlockAll" :title="i18n('Delete %1', item.name)"><v-btn icon><v-icon>delete_outline</v-icon></v-btn></v-list-tile-action>
     </v-list-tile>
    </template>
   </v-list>
@@ -348,6 +348,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        unlockAll() {
+            return this.$store.state.unlockAll
         }
     },
     created() {

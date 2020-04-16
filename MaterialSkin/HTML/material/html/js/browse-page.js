@@ -67,7 +67,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <img v-if="currentActions.items[0].svg" class="svg-img" :src="currentActions.items[0].svg | svgIcon(darkUi)"></img>
     <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
    </v-btn>
-   <v-divider vertical v-if="currentActions.show || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1)"></v-divider>
+   <v-divider vertical v-if="tbarActions.length>0 && (currentActions.show || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>

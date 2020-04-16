@@ -16,6 +16,8 @@
 12. Fix showing of track num in now playing.
 13. Show disc and track numbers as "disc.track" if a track has disccount>2
 14. Show library name in browse view.
+15. Fix browse view subtoolbar divider showing under certain circumstances when
+    it should not.
 
 1.5.3
 -----

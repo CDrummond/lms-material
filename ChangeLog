@@ -19,6 +19,8 @@
 15. Fix browse view subtoolbar divider showing under certain circumstances when
     it should not.
 16. Use "Empty" as subtitle if list response has no items.
+17. Remove code to reset splitter to 50% on click, as it sometimes gets
+    mistakenly activated.
 
 1.5.3
 -----

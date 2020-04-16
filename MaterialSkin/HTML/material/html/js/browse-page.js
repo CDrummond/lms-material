@@ -810,7 +810,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             (listingArtistAlbums && 0==this.items.length) /*Artist from online service*/ ) {
                     this.headerSubTitle = undefined;
                 } else {
-                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.length);
+                    this.headerSubTitle=0==this.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", this.items.length);
                 }
                 this.$nextTick(function () {
                     if (changedView) {
@@ -1578,7 +1578,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {
-                    this.headerSubTitle=i18np("1 Item", "%1 Items", this.items.length);
+                    this.headerSubTitle=0==this.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", this.items.length);
                 }
                 this.$nextTick(function () {
                     setScrollTop(this.scrollElement, pos>0 ? pos : 0);

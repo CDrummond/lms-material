@@ -428,7 +428,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.canUseGrid = false;
                     }
                 }
-                resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+                resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
             }
         } else if (data.result.artists_loop) {
             var isComposers = false;

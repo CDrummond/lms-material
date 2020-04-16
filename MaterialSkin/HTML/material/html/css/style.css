@@ -1531,7 +1531,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  content:"\e5d4";
 }
 
-.image-grid-item .grid-btns, .v-list__tile .list-btns,
+.image-grid-item .grid-btns, .v-list__tile .list-btns {
+ visibility: hidden;
+}
+
 .image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns {
  visibility: visible;
 }

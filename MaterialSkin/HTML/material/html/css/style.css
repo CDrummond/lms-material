@@ -1623,3 +1623,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  width:calc(var(--icon-size) + 12px);
 }
 
+.subtoolbar-subtitle small {
+ opacity:0.5;
+ font-size:100%;
+}

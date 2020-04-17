@@ -21,6 +21,8 @@
 16. Use "Empty" as subtitle if list response has no items.
 17. Remove code to reset splitter to 50% on click, as it sometimes gets
     mistakenly activated.
+18. Don't show online service emblems for artists - as there might be more than
+    one service.
 
 1.5.3
 -----

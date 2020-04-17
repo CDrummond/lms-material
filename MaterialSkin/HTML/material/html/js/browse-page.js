@@ -2009,7 +2009,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                          type: "group",
                                          icon: "music_note"
                                         };
-                            if (c.id.startsWith("myMusicArtists")) {
+                            if (c.id.startsWith("myMusicArtistsAudiobooks")) {
+                                item.icon = "edit";
+                                item.cancache = true;
+                            } else if (c.id.startsWith("myMusicArtists")) {
                                 mapArtistIcon(item.params, item);
                                 item.cancache = true;
                             } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {

@@ -119,7 +119,7 @@ received, start Material as follows:
 Material caches artist and album lists, to speed up subsequent listings. To
 clear this cache, start Material as follows:
 
-* `http://<yourserver>:9000/material/?clearcache=true`
+* `http://<yourserver>:9000/material/?clearcache`
 
 ### Customisation
 
@@ -190,6 +190,32 @@ could stall LMS.
 If you have multiple players, then player actions will be accessible from the
 'Manage players' dialog, otherwise they will be listed at the bottom of the
 'Player settings' dialog.
+
+### Native applications
+
+Material can send status updates to native Android (and iOS?) applications. To
+enable this in material, pass the `native` query parameter, e.g.:
+
+* `http://<yourserver>:9000/material/?native`
+
+Your Android app then needs something like the following:
+
+```
+public class MainActivity extends AppCompatActivity {
+    ...
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ....
+        webView.loadUrl("http://<yourserver>:9000/material/?native");
+        webView.addJavascriptInterface(this, "NativeReceiver");
+    }
+
+    @JavascriptInterface
+    public void updateStatus(String status){
+        // 'status' is JSON string
+    }
+}
+```
 
 ## Donations
 

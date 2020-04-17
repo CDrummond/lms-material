@@ -6,7 +6,7 @@
     items.
  4. Fix adding/playing albums from advanced search results.
  5. Scroll advanced seach results into view.
- 6. Add native callback, allowing to pass player status to native application.
+ 6. Add native callback, allowing to pass player status to native applications.
  7. Hide button to delete virtual library unless settings are unlocked.
  8. Restore library ID when go back.
  9. Assign icon to Audiobooks and Authors categories.

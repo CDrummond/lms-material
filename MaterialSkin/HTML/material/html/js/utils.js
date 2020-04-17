@@ -39,7 +39,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), layout:undefined, player:undefined };
+    var resp = { actions:[], debug:new Set(), layout:undefined, player:undefined, native:false };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -56,7 +56,7 @@ function parseQueryParams() {
             for (var j=0, len=parts.length; j<len; ++j) {
                 resp.debug.add(parts[j]);
             }
-        } else if ("clearcache"==kv[0] && "true"==kv[1]) {
+        } else if ("clearcache"==kv[0]) {
             clearListCache(true);
         } else if ("action"==kv[0]) {
             resp.actions.push(kv[1]);
@@ -64,6 +64,8 @@ function parseQueryParams() {
             changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
+        } else if("native") {
+            resp.native=true;
         }
     }
     return resp;

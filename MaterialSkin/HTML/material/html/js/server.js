@@ -8,15 +8,12 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstyABKNST";
 
-window.nativeObj = function NativeClass(){};
 function updateNative(status) {
-    if (undefined==window.nativeObj || undefined==window.nativeObj.updateStatus) {
-        return;
-    }
-
-    try {
-        window.nativeObj.updateStatus(status);
-    } catch (e) {
+    if (queryParams.native) {
+        try {
+            NativeReceiver.updateStatus(JSON.stringify(status));
+        } catch (e) {
+        }
     }
 }
 

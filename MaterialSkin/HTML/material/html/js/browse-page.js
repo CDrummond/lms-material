@@ -1774,6 +1774,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
 
                 // Convert local browse commands into their non-SlimBrowse equivalents, so that sort and tags can be applied
+
                 if (cmd.command.length==2 && "browselibrary"==cmd.command[0] && "items"==cmd.command[1]) {
                     var p=[];
                     var c=[];
@@ -1782,6 +1783,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var hasSort = false;
                     var hasTags = false;
                     var hasArtistId = false;
+                    var hasLibraryId = false;
 
                     for (var i=0, params=cmd.params, len=params.length; i<len; ++i) {
                         if (params[i].startsWith("mode:")) {
@@ -1813,6 +1815,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     hasSort = true;
                                 } else if (params[i].startsWith("artist_id:")) {
                                     hasArtistId = true;
+                                } else if (params[i].startsWith("library_id:")) {
+                                    hasLibraryId = true;
                                 }
                             }
                         }
@@ -1839,7 +1843,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         } else if (!hasTags) {
                             if (mode=="artists" || mode=="vaalbums") {
-                                p.push(ARTIST_TAGS_PLACEHOLDER);
+                                p.push(hasLibraryId ? BASE_ARTIST_TAGS_PLACEHOLDER : ARTIST_TAGS_PLACEHOLDER);
                             } else if (mode=="years" || mode=="genres") {
                                 p.push("tags:s");
                             }
@@ -1960,6 +1964,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                    .replace(TERM_PLACEHOLDER, this.enteredTerm)
                                                    .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                                    .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
+                                                   .replace(BASE_ARTIST_TAGS_PLACEHOLDER, BASE_ARTIST_TAGS)
                                                    .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                                    .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                     }

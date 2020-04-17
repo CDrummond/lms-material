@@ -2056,6 +2056,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 }
                             }
                             item.params.push("menu:1");
+                            if (getField(item, "genre_id:")>=0) {
+                                item['mapgenre']=true;
+                            }
                             this.myMusic.push(item);
                         }
                     }

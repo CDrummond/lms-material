@@ -23,6 +23,9 @@
     mistakenly activated.
 18. Don't show online service emblems for artists - as there might be more than
     one service.
+19. Add genre mapping for browse modes fetched via ['material-skin',
+    'browsemodes'] command. Required for pinned items, where we need to save
+    genre name, not id.
 
 1.5.3
 -----

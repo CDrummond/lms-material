@@ -8,24 +8,81 @@
 
 const SEPARATOR = " \u2022 ";
 const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
+const LS_PREFIX="lms-material::";
+const LMS_LIST_CACHE_PREFIX = "cache:list:";
+const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window);
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
+const IS_IOS     = /iPhone|iPad/i.test(navigator.userAgent);
+const IS_IPHONE  = /iPhone/i.test(navigator.userAgent);
+const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
+const RATINGS=["",         // 0
+               "<i class=\"rstar\">star_half</i>", // 0.5
+               "<i class=\"rstar\">star</i>",  // 1
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 1.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 2
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 2.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 3
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 3.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 4
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
+               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
 
 var bus = new Vue();
-var debug = undefined;
+var queryParams = parseQueryParams();
+var canUseCache = true;
+var volumeStep = 5;
+
+function parseQueryParams() {
+    var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
+    var hash = queryString.indexOf('#');
+    if (hash>0) {
+        queryString=queryString.substring(0, hash);
+    }
+    var query = queryString.split('&');
+    var resp = { actions:[], debug:new Set(), layout:undefined, player:undefined };
+
+    for (var i = query.length - 1; i >= 0; i--) {
+        var kv = query[i].split('=');
+        if ("player"==kv[0]) {
+            setLocalStorageVal("player", kv[1]);
+            removeLocalStorage("defaultPlayer");
+            resp.player=kv[1];
+        } else if ("page"==kv[0]) {
+            if (kv[1]=="browse" || kv[1]=="now-playing" || kv[1]=="queue") {
+                setLocalStorageVal("page", kv[1]);
+            }
+        } else if ("debug"==kv[0]) {
+            var parts = kv[1].split(",");
+            for (var j=0, len=parts.length; j<len; ++j) {
+                resp.debug.add(parts[j]);
+            }
+        } else if ("clearcache"==kv[0] && "true"==kv[1]) {
+            clearListCache(true);
+        } else if ("action"==kv[0]) {
+            resp.actions.push(kv[1]);
+        } else if("css"==kv[0]) {
+            changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
+        } else if ("layout"==kv[0]) {
+            resp.layout=kv[1];
+        }
+    }
+    return resp;
+}
 
 function logJsonMessage(type, msg) {
-    if (debug && (debug.has("json") || debug.has("true"))) {
+    if (queryParams.debug.has("json")) {
         console.log("[" + new Date().toLocaleTimeString()+"] JSON "+type+(msg ? (": "+JSON.stringify(msg)) : ""));
     }
 }
 
 function logCometdMessage(type, msg) {
-    if (debug && (debug.has("cometd") || debug.has("true"))) {
+    if (queryParams.debug.has("cometd")) {
         console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+type+(msg ? (": "+JSON.stringify(msg)) : ""));
     }
 }
 
 function logCometdDebug(msg) {
-    if (debug && (debug.has("cometd") || debug.has("true"))) {
+    if (queryParams.debug.has("cometd")) {
         console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+msg);
     }
 }
@@ -269,8 +326,6 @@ function setScrollTop(el, val) {
     });
 }
 
-const LS_PREFIX="lms-material::";
-
 function getLocalStorageBool(key, def) {
     var val = window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? "true" == val : def;
@@ -288,12 +343,6 @@ function setLocalStorageVal(key, val) {
 function removeLocalStorage(key) {
     window.localStorage.removeItem(LS_PREFIX+key);
 }
-
-const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window);
-const IS_ANDROID = /Android/i.test(navigator.userAgent);
-const IS_IOS     = /iPhone|iPad/i.test(navigator.userAgent);
-const IS_IPHONE  = /iPhone/i.test(navigator.userAgent);
-const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
 
 function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
@@ -355,8 +404,6 @@ function setBgndCover(elem, coverUrl) {
     }
 }
 
-var volumeStep = 5;
-
 function adjustVolume(vol, inc) {
     if (1==volumeStep) {
         if (inc) {
@@ -386,44 +433,6 @@ function adjustVolume(vol, inc) {
     return Math.floor((vol-volumeStep)/volumeStep)*volumeStep;
 }
 
-function parseQueryParams() {
-    var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
-    var hash = queryString.indexOf('#');
-    if (hash>0) {
-        queryString=queryString.substring(0, hash);
-    }
-    var query = queryString.split('&');
-    var resp = { actions:[], layout:undefined, player:undefined };
-
-    for (var i = query.length - 1; i >= 0; i--) {
-        var kv = query[i].split('=');
-        if ("player"==kv[0]) {
-            setLocalStorageVal("player", kv[1]);
-            removeLocalStorage("defaultPlayer");
-            resp.player=kv[1];
-        } else if ("page"==kv[0]) {
-            if (kv[1]=="browse" || kv[1]=="now-playing" || kv[1]=="queue") {
-                setLocalStorageVal("page", kv[1]);
-            }
-        } else if ("debug"==kv[0]) {
-            var parts = kv[1].split(",");
-            debug = new Set();
-            for (var j=0, len=parts.length; j<len; ++j) {
-                debug.add(parts[j]);
-            }
-        } else if ("clearcache"==kv[0] && "true"==kv[1]) {
-            clearListCache(true);
-        } else if ("action"==kv[0]) {
-            resp.actions.push(kv[1]);
-        } else if("css"==kv[0]) {
-            changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
-        } else if ("layout"==kv[0]) {
-            resp.layout=kv[1];
-        } 
-    }
-    return resp;
-}
-
 function isLandscape() {
     return window.innerWidth >= (window.innerHeight*1.5);
 }
@@ -451,7 +460,6 @@ function ensureVisible(elem, attempt) {
     }
 }
 
-const LMS_LIST_CACHE_PREFIX = "cache:list:";
 function cacheKey(command, params, start, batchSize) {
     return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
@@ -461,7 +469,6 @@ function cacheKey(command, params, start, batchSize) {
            ":"+start+":"+batchSize;
 }
 
-var canUseCache = true;
 function clearListCache(force) {
     // Delete old local-storage cache
     for (var key in window.localStorage) {
@@ -481,18 +488,6 @@ function clearListCache(force) {
         canUseCache = false;
     });
 }
-
-const RATINGS=["",         // 0
-               "<i class=\"rstar\">star_half</i>", // 0.5
-               "<i class=\"rstar\">star</i>",  // 1
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 1.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 2
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 2.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 3
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 3.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 4
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
 
 function ratingString(current, val) {
     var str = "";

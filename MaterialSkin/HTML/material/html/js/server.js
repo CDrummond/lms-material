@@ -260,7 +260,7 @@ var lmsServer = Vue.component('lms-server', {
             logCometdDebug("CONNECT");
             this.cometd = new org.cometd.CometD();
             this.cometd.setMaxBackoff(10000); // Max seconds between retries
-            this.cometd.init({url: '/cometd', logLevel:debug && debug.has('libcometd') ? 'debug' : 'off'});
+            this.cometd.init({url: '/cometd', logLevel:queryParams.debug.has('libcometd') ? 'debug' : 'off'});
             this.cometd.addListener('/meta/connect', (message) => {
                 var connected = eval(message).successful;
                 if (connected!=lmsIsConnected) {

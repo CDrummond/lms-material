@@ -21,16 +21,15 @@ var app = new Vue({
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
-        this.query=parseQueryParams();
         this.$store.commit('initUiSettings');
 
-        if (this.query.player) {
-            document.title += SEPARATOR + unescape(this.query.player);
+        if (queryParams.player) {
+            document.title += SEPARATOR + unescape(queryParams.player);
         }
 
         let chosenLayout = undefined;
-        if (undefined!=this.query.layout) {
-            chosenLayout = this.query.layout;
+        if (undefined!=queryParams.layout) {
+            chosenLayout = queryParams.layout;
         } else {
             chosenLayout = getLocalStorageVal("layout", undefined);
         }
@@ -178,7 +177,7 @@ var app = new Vue({
                 bus.$emit(name+".open", a, b, c, d);
             });
         }.bind(this));
-        if (this.query.actions.length>0) {
+        if (queryParams.actions.length>0) {
             this.$nextTick(function () {
                 this.doQueryActions(false);
             });
@@ -282,9 +281,9 @@ var app = new Vue({
             }
         },
         doQueryActions(actOnPlayers) {
-            for (var i=0; i<this.query.actions.length; ) {
-                if ( (actOnPlayers && this.query.actions[i].startsWith("dlg.")) || (!actOnPlayers && !this.query.actions[i].startsWith("dlg."))) {
-                    var act = this.query.actions[i];
+            for (var i=0; i<queryParams.actions.length; ) {
+                if ( (actOnPlayers && queryParams.actions[i].startsWith("dlg.")) || (!actOnPlayers && !queryParams.actions[i].startsWith("dlg."))) {
+                    var act = queryParams.actions[i];
                     var parts = act.split('/');
                     var params = [];
                     if (parts.length>1) {
@@ -305,7 +304,7 @@ var app = new Vue({
                     }
 
                     bus.$emit(parts[0], params.length>0 ? params[0] : undefined, params.length>1 ? params[1] : undefined, params.length>2 ? params[2] : undefined);
-                    this.query.actions.splice(i, 1);
+                    queryParams.actions.splice(i, 1);
                 } else {
                     i++;
                 }

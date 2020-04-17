@@ -1615,7 +1615,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  font-size:var(--icon-size);
 }
 
-.v-btn, .v-btn--icon {
+.v-btn {
+ height:calc(var(--icon-size) + 12px);
+}
+
+.v-btn--icon {
  width:calc(var(--icon-size) + 12px);
 }
 

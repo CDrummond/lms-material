@@ -82,7 +82,7 @@ may specify the initial page in the URL query. Valid values are; `browse`,
 
 ### Actions
 
-You can specify a set 'actions' to be triggered when the page is loaded. This
+You can specify a set of 'actions' to be triggered when the page is loaded. This
 is achieved by passing the `action` query parameter one or more times. This uses
 the following syntax:
 
@@ -102,6 +102,18 @@ will open the player settings dialog, and scroll the 'Alarms' section into view.
 `-` is used to tell the player settings dialog to act on the currently active
 player. Therefore, to be truly useful the `player=` query parameter should also
 be used. e.g. `http://<yourserver>:9000/material/?layout=mobile&player=Bedroom&action=dlg.open/playersettings,-,alarms`
+
+### Hidding elements
+
+You can specify a set of elements that can be hidden. This is achieved by passing
+the `hide` query parameter and specifying a comma-separated list of items. Currently
+only `mini` (to hide the mini player launch button), `notif` (to hide the lock screen
+and notification control settings), and `launchPlayer` (to hide the launch player
+setting) may be specified. e.g.
+
+* `http://<yourserver>:9000/material/?hide=mini,notif`
+
+This query parameter is only intended to be used by applications wishing to embed Material.
 
 ### Debugging
 
@@ -222,3 +234,4 @@ public class MainActivity extends AppCompatActivity {
 I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url)
+

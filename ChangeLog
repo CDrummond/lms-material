@@ -26,8 +26,9 @@
 19. Add genre mapping for browse modes fetched via ['material-skin',
     'browsemodes'] command. Required for pinned items, where we need to save
     genre name, not id.
-20. If a growse mode is for artists with a library_id specified, then dont set
+20. If a browse mode is for artists with a library_id specified, then dont set
     E and Q in tags.
+21. Add optional 'hide' query parameter, to allow elements to be hidden.
 
 1.5.3
 -----

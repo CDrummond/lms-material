@@ -41,7 +41,7 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
       <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
-       <v-layout v-if="!IS_MOBILE && desktopLayout">
+       <v-layout v-if="!IS_MOBILE && desktopLayout && showMiniLauncherButton">
         <v-flex xs6>
          <v-btn icon class="hide-for-mini open-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
         </v-flex>
@@ -181,10 +181,12 @@ Vue.component('lms-toolbar', {
                  snackbar:{ show: false, msg: undefined},
                  connected: true,
                  wide: 0,
-                 updateProgress: {show:false, text:undefined}
+                 updateProgress: {show:false, text:undefined},
+                 showMiniLauncherButton: !queryParams.hide.has('mini')
                }
     },
     mounted() {
+    console.log(queryParams.hide.size);
         setInterval(function () {
             this.wide = window.innerWidth>=1050 ? 2 : window.innerWidth>=900 ? 1 : 0;
         }.bind(this), 1000);

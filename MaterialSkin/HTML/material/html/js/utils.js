@@ -39,7 +39,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), layout:undefined, player:undefined, native:false };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, native:false };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -64,8 +64,13 @@ function parseQueryParams() {
             changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
-        } else if("native") {
+        } else if("native"==kv[0]) {
             resp.native=true;
+        } else if ("hide"==kv[0]) {
+            var parts = kv[1].split(",");
+            for (var j=0, len=parts.length; j<len; ++j) {
+                resp.hide.add(parts[j]);
+            }
         }
     }
     return resp;

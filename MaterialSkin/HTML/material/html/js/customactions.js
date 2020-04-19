@@ -54,7 +54,7 @@ function performCustomAction(action, player) {
             bus.$emit('dlg.open', 'iframe', action.iframe.replace("$ID", player.id).replace("$NAME", player.name),
                       action.title.replace("$NAME", player.name));
         }
-    } else  if (action.weblink) {
+    } else if (action.weblink) {
         if (undefined==player) {
             window.open(action.weblink);
         } else {

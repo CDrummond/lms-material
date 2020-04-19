@@ -29,6 +29,9 @@
 20. If a browse mode is for artists with a library_id specified, then dont set
     E and Q in tags.
 21. Add optional 'hide' query parameter, to allow elements to be hidden.
+22. Add optional 'appSettings' query parameter. This should be a URL that an app
+    embedding material will trap in order to produce its settings dialog. If set
+    then a cog icon will be added to the toolbar of Material's settings dialog.
 
 1.5.3
 -----

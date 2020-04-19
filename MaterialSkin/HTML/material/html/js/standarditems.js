@@ -19,7 +19,7 @@ const STD_ITEM_REMOTE_PLAYLIST_TRACK = 8;
 const STD_ITEMS=[
     {
         command: ["artists"],
-        params: [],
+        params: [ARTIST_TAGS, 'include_online_only_artists:1'],
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION, MORE_LIB_ACTION]
     },
     {

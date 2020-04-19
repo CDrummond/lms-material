@@ -958,7 +958,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.addHistory();
                 this.items=[{ title: i18n("Artists"),
                               command: ["artists"],
-                              params: [item.id, "tags:s"],
+                              params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
                               svg: "artist",
                               type: "group",
                               id: uniqueId(item.id, 0),
@@ -981,7 +981,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
                                         command: ["artists"],
-                                        params: ["role_id:COMPOSER", item.id, "tags:s"],
+                                        params: ["role_id:COMPOSER", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
@@ -990,7 +990,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
                                         command: ["artists"],
-                                        params: ["role_id:CONDUCTOR", item.id, "tags:s"],
+                                        params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",
@@ -1786,6 +1786,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var hasLibraryId = false;
 
                     for (var i=0, params=cmd.params, len=params.length; i<len; ++i) {
+                    console.log(i, params[i]);
                         if (params[i].startsWith("mode:")) {
                             mode = params[i].split(":")[1];
                             if (mode.startsWith("myMusicArtists")) {
@@ -1843,13 +1844,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         } else if (!hasTags) {
                             if (mode=="artists" || mode=="vaalbums") {
-                                p.push(hasLibraryId ? BASE_ARTIST_TAGS_PLACEHOLDER : ARTIST_TAGS_PLACEHOLDER);
+                                p.push(ARTIST_TAGS_PLACEHOLDER);
+                                if (!hasLibraryId) {
+                                    p.push('include_online_only_artists:1');
+                                }
                             } else if (mode=="years" || mode=="genres") {
                                 p.push("tags:s");
                             }
                         }
                         cmd = {command: c, params: p};
                     }
+                    console.log(JSON.stringify(cmd));
                 } else if (this.command && this.command.params && cmd.command[0]=="artistinfo" || cmd.command[0]=="albuminfo") {
                     // artistinfo and albuminfo when called from 'More' pass down (e.g.) 'item_id:5' this seems to somtimes fail
                     // (actually most times with epiphany) due to 'connectionID' changing?
@@ -1964,7 +1969,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                    .replace(TERM_PLACEHOLDER, this.enteredTerm)
                                                    .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                                    .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
-                                                   .replace(BASE_ARTIST_TAGS_PLACEHOLDER, BASE_ARTIST_TAGS)
                                                    .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                                    .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                     }

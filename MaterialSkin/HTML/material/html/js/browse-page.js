@@ -1272,7 +1272,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             } else if (act===ADD_RANDOM_ALBUM_ACTION) {
                 var params = [];
-                item.params.forEach(p => { params.push(p); });
+                buildStdItemCommand(item, this.current).params.forEach(p => { params.push(p); });
                 params.push(SORT_KEY+"random");
                 lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
                     var resp = parseBrowseResp(data, this.current, this.options);

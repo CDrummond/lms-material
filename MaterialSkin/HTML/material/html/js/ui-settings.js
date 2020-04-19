@@ -16,6 +16,7 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
+    <v-btn v-if="appSettings!=undefined" flat icon :href="appSettings" :title="i18n('Application settings')"><v-icon>settings</b-icon></v-btn>
     <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>
     <v-btn flat icon @click.native="revertToDefault" :title="i18n('Revert to default')"><v-icon>settings_backup_restore</b-icon></v-btn>
    </v-toolbar>
@@ -370,7 +371,8 @@ Vue.component('lms-ui-settings', {
             },
             screensaver: false,
             showLsAndNotif: IS_ANDROID && !queryParams.hide.has('notif'),
-            showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer')
+            showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
+            appSettings: queryParams.appSettings
         }
     },
     computed: {

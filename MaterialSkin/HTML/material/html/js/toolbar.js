@@ -186,7 +186,6 @@ Vue.component('lms-toolbar', {
                }
     },
     mounted() {
-    console.log(queryParams.hide.size);
         setInterval(function () {
             this.wide = window.innerWidth>=1050 ? 2 : window.innerWidth>=900 ? 1 : 0;
         }.bind(this), 1000);

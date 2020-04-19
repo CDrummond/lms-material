@@ -40,8 +40,8 @@
 "Append random album to queue":"Ajouter un album aléatoire à la liste de lecture en cours",
 "Append to queue":"Ajouter à la liste de lecture en cours",
 "Appended '%1' to the play queue":"'%1' ajouté à la liste de lecture en cours",
-"Appended all tracks to the play queue":"Ajouter tous les morceaux à la liste de lecture",
-"Appended track to the play queue":"Morceaux ajouté à la file d'attente de lecture",
+"Appended all tracks to the play queue":"Tous les morceaux ont été ajoutés à la liste de lecture en cours",
+"Appended track to the play queue":"Morceau ajouté à la liste de lecture en cours",
 "Application layout":"Mise en page de l'application",
 "Apply":"Appliquer",
 "Apps":"Applications",
@@ -446,7 +446,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Appended album to the play queue":"",
-"Appended all albums to the play queue":"",
-"Application settings":""
+"Appended album to the play queue":"Album ajouté à la liste de lecture en cours",
+"Appended all albums to the play queue":"Tous les albums ont été ajoutés à la liste de lecture en cours",
+"Application settings":"Configuration de l'application"
 }

@@ -399,6 +399,9 @@ var lmsQueue = Vue.component("lms-queue", {
             this.playlistName=playerStatus.playlist.name;
             if (playerStatus.playlist.timestamp!=this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1) ||
                 (playerStatus.playlist.timestamp<=0 && this.items.length>0) || this.listSize!=playerStatus.playlist.count) {
+                if (playerStatus.playlist.current!=this.currentIndex) {
+                    this.autoScrollRequired = true;
+                }
                 this.currentIndex = playerStatus.playlist.current;
                 this.timestamp = playerStatus.playlist.timestamp;
                 this.updateItems();

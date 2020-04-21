@@ -5,6 +5,9 @@
 3. Display volume overlay if change volume via incrementVolume() or
    decrementVolume() fuctions. (These are called by lms-material-app when
    hardware volume buttons are used)
+4. If current item has a 'remote_title' element and no 'album' element, then
+   allow title (or remote_title) and artist/composer to span up to 3 lines each
+   in now-playing.
 
 1.5.4
 -----

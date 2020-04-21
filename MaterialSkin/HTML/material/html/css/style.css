@@ -680,6 +680,10 @@ div.v-subheader {
  -webkit-line-clamp: 1;
 }
 
+.np-text-landscape-3 {
+ -webkit-line-clamp: 3;
+}
+
 .np-rating-shadow {
  text-shadow: 2px 2px 5px var(--text-shadow-color);
 }

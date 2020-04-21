@@ -26,18 +26,21 @@ Vue.component('lms-volumeoverlay', {
                 if (!this.$store.state.player || this.$store.state.visibleMenus.size>0 || (this.$store.state.openDialogs.length>0 && this.$store.state.openDialogs[0]!='info-dialog'))  {
                     return;
                 }
-                if ('alt'==modifier  && (key=='up' || key=='down')) {
+                if ('alt'==modifier && (key=='up' || key=='down')) {
                     this.startTimeout();
                 }
             }.bind(this));
-            bus.$on('playerStatus', function(playerStatus) {
-                this.dvc = playerStatus.dvc;
-                var vol = Math.abs(playerStatus.volume);
-                if (vol!=this.volume) {
-                    this.volume = vol;
-                }
-            }.bind(this));
         }
+        bus.$on('adjustVolume', function(inc, steps) {
+            this.startTimeout();
+        }.bind(this));
+        bus.$on('playerStatus', function(playerStatus) {
+            this.dvc = playerStatus.dvc;
+            var vol = Math.abs(playerStatus.volume);
+            if (vol!=this.volume) {
+                this.volume = vol;
+            }
+        }.bind(this));
     },
     methods: {
         startTimeout() {

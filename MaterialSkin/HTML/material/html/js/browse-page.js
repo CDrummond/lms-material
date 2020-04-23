@@ -1786,7 +1786,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var hasLibraryId = false;
 
                     for (var i=0, params=cmd.params, len=params.length; i<len; ++i) {
-                    console.log(i, params[i]);
                         if (params[i].startsWith("mode:")) {
                             mode = params[i].split(":")[1];
                             if (mode.startsWith("myMusicArtists")) {
@@ -1854,7 +1853,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                         cmd = {command: c, params: p};
                     }
-                    console.log(JSON.stringify(cmd));
                 } else if (this.command && this.command.params && cmd.command[0]=="artistinfo" || cmd.command[0]=="albuminfo") {
                     // artistinfo and albuminfo when called from 'More' pass down (e.g.) 'item_id:5' this seems to somtimes fail
                     // (actually most times with epiphany) due to 'connectionID' changing?

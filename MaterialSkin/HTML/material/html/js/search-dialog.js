@@ -79,7 +79,7 @@ Vue.component('lms-search-dialog', {
         },
         advanced() {
             this.cancel();
-            bus.$emit('dlg.open', 'iframe', '/material/advanced_search.html?player='+this.$store.state.player.id, i18n('Advanced search'));
+            bus.$emit('dlg.open', 'iframe', '/material/advanced_search.html?player='+this.$store.state.player.id, i18n('Advanced search')+SEPARATOR+this.$store.state.player.name);
         },
         search() {
             this.str = this.term.trim();

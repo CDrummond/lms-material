@@ -8,7 +8,7 @@
 4. If current item has a 'remote_title' element and no 'album' element, then
    allow title (or remote_title) and artist/composer to span up to 3 lines each
    in now-playing.
-5. Show player name in player settings titlebar.
+5. Show player name in player settings and advanced search titlebars.
 6. Use javascript, not CSS, to hide, and re-style, elements from classic skin
    advanced search results.
 

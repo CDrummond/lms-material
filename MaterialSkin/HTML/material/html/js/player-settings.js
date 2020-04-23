@@ -16,7 +16,7 @@ Vue.component('lms-player-settings', {
    <v-card-title class="settings-title">
     <v-toolbar app class="dialog-toolbar">
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{TB_PLAYER_SETTINGS.title}}</v-toolbar-title>
+    <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
    </v-toolbar>
   </v-card-title>
 
@@ -565,7 +565,7 @@ Vue.component('lms-player-settings', {
             }
         },
         showAllSettings(longPress) {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings'), longPress);
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, longPress);
             if (longPress) {
                 this.close();
             }

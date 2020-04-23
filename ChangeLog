@@ -8,6 +8,7 @@
 4. If current item has a 'remote_title' element and no 'album' element, then
    allow title (or remote_title) and artist/composer to span up to 3 lines each
    in now-playing.
+5. Show player name in player settings titlebar.
 
 1.5.4
 -----

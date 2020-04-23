@@ -9,6 +9,8 @@
    allow title (or remote_title) and artist/composer to span up to 3 lines each
    in now-playing.
 5. Show player name in player settings titlebar.
+6. Use javascript, not CSS, to hide, and re-style, elements from classic skin
+   advanced search results.
 
 1.5.4
 -----

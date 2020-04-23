@@ -34,7 +34,7 @@ function clickHandler(e) {
                 }
             }
             cmd.push("library_id:"+LMS_DEFAULT_LIBRARY);
-            bus.$emit("search-action", "playlist", cmd, album);
+            bus.$emit("search-action", "playlist", cmd, undefined, album);
             e.preventDefault();
         } else if (href.indexOf("command=playlist&subcommand=loadtracks&searchRef")>0 ||
                    href.indexOf("command=playlist&subcommand=addtracks&searchRef")>0) {
@@ -48,7 +48,7 @@ function clickHandler(e) {
                 }
             }
             cmd.push("library_id:"+LMS_DEFAULT_LIBRARY);
-            bus.$emit("search-action", "playlist", cmd, href.indexOf("searchRef=searchAlbumsResults")>0);
+            bus.$emit("search-action", "playlist", cmd, undefined, href.indexOf("searchRef=searchAlbumsResults")>0);
             e.preventDefault();
         } else if (href.indexOf("songinfo.html?item=")>0) {
             var id = href.split("item=")[1].split("&")[0];
@@ -64,6 +64,21 @@ function clickHandler(e) {
             var title = decodeURIComponent(href.split("linktitle=Album%20(")[1].split(")&")[0]);
             bus.$emit("search-action", "browse", {command:["tracks"], params:["album_id:"+id, TRACK_TAGS, SORT_KEY+"tracknum", "library_id:"+LMS_DEFAULT_LIBRARY]}, title);
             e.preventDefault();
+        }
+    }
+}
+
+function fixSearchControls(elem) {
+    var elems = elem.querySelectorAll('.browsedbLeftControls a');
+    if (undefined!=elems) {
+        for (var i=0, len=elems.length; i<len; ++i) {
+            if (undefined==elems[i].href || elems[i].href.indexOf("command=playlist&subcommand=")<0) {
+                elems[i].style.display="none";
+            } else if (elems[i].href.indexOf("subcommand=addtracks")>0) {
+                elems[i].classList.add("addtracks");
+            } else if (elems[i].href.indexOf("subcommand=loadtracks")>0) {
+                elems[i].classList.add("loadtracks");
+            }
         }
     }
 }
@@ -86,9 +101,11 @@ function hideClassicSkinElems(page, showAll) {
             } else if (iframe.contentDocument.attachEvent) {
                 iframe.contentDocument.attachEvent('onclick', clickHandler);
             }
+
             var res = iframe.contentDocument.getElementById("browsedbList");
             if (res) {
                 res.scrollIntoView(true);
+                fixSearchControls(res);
             }
         }
         if (undefined!=toHide) {

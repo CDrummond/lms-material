@@ -34,7 +34,7 @@ div#browsedbList {
  display:none;
 }
 /* Set play icon */
-.browsedbLeftControls > a:nth-of-type(1):before {
+.browsedbLeftControls > a.loadtracks:before {
  font-family: "Material Icons";
  font-size:24px;
  content:"\e039";
@@ -42,7 +42,7 @@ div#browsedbList {
  text-decoration:none;
 }
 /* Set add icon */
-.browsedbLeftControls > a:nth-of-type(2):before {
+.browsedbLeftControls > a.addtracks:before {
  font-family: "Material Icons";
  font-size:24px;
  content:"\e148";
@@ -50,16 +50,12 @@ div#browsedbList {
  text-decoration:none;
 }
 @media (hover: none) and (pointer: coarse) { /* Touch devices */
- .browsedbLeftControls > a:nth-of-type(1):before {
+ .browsedbLeftControls > a.loadtracks:before {
   margin-right:12px;
  }
- .browsedbLeftControls > a:nth-of-type(2):before {
+ .browsedbLeftControls > a.addtracks:before {
   margin-right:8px;
  }
-}
-/* Hide favorite button */
-.browsedbLeftControls > a:nth-of-type(3) {
- display:none;
 }
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;
@@ -294,10 +290,7 @@ html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentP
  color: var(--text-color) !important;
 }
 
-.browsedbLeftControls > a:nth-of-type(1):before {
- color: var(--text-color) !important;
-}
-.browsedbLeftControls > a:nth-of-type(2):before {
+.browsedbLeftControls > a:before {
  color: var(--text-color) !important;
 }
 

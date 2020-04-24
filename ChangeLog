@@ -11,6 +11,8 @@
 5. Show player name in player settings and advanced search titlebars.
 6. Use javascript, not CSS, to hide, and re-style, elements from classic skin
    advanced search results.
+7. Replace statically.io with gitcdn.link for serving user documentation, as
+   statically is showing errors.
 
 1.5.4
 -----

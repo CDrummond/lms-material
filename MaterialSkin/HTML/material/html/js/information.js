@@ -17,7 +17,7 @@ Vue.component('lms-information-dialog', {
      <div>{{i18n('Information')}}</div>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon @click.native="openWindow('https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html')" :title="i18n('User guide')"><v-icon>help_outline</b-icon></v-btn>
+    <v-btn flat icon @click.native="openWindow('https://gitcdn.link/repo/d6jg/material-documentation/master/html/Material%20Skin.html')" :title="i18n('User guide')"><v-icon>help_outline</b-icon></v-btn>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">

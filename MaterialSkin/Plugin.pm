@@ -474,9 +474,28 @@ sub _cliCommand {
                     $request->addResultLoop("actions_loop", $cnt, "title", "YouTube");
                     $request->addResultLoop("actions_loop", $cnt, "svg", "youtube");
                     $request->addResultLoop("actions_loop", $cnt, "do", { command => ["youtube","items"], params=> ["want_url:1", "item_id:3", "search:" . $artist, "menu:youtube"] });
-                    $request->addResultLoop("actions_loop", $cnt, "weight", 2);
+                    $request->addResultLoop("actions_loop", $cnt, "weight", 10);
                     $cnt++;
                 }
+            }
+
+            if ($artist_id && !$album_id) {
+                my $role_id = $request->getParam('role_id');
+                my $genre_id = $request->getParam('genre_id');
+                $request->addResultLoop("actions_loop", $cnt, "title", string('ALL_SONGS'));
+                $request->addResultLoop("actions_loop", $cnt, "icon", "music_note");
+
+                if ($role_id && $genre_id) {
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id, "rold_id:" . $role_id, "genre_id:" . $genre_id] });
+                } elsif ($role_id) {
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id, "rold_id:" . $role_id] });
+                } elsif ($genre_id) {
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id, "genre_id:" . $genre_id] });
+                } else {
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id] });
+                }
+                $request->addResultLoop("actions_loop", $cnt, "weight", 3);
+                $cnt++;
             }
         }
         $request->setStatusDone();

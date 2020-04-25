@@ -7,7 +7,7 @@
 'use strict';
 
 var B_ALBUM_SORTS=[ ];
-var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer', 'tracks']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -712,6 +712,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var cmd = ["material-skin", "actions", this.current.id];
                     if (listingArtistAlbums) {
                         cmd.push("artist:"+this.current.title);
+                        var field = getField(this.command, "role_id:");
+                        if (field>=0) {
+                            cmd.push(this.command.params[field]);
+                        }
+                        field = getField(this.command, "genre_id:");
+                        if (field>=0) {
+                            cmd.push(this.command.params[field]);
+                        }
                     } else {
                         cmd.push("album:"+this.current.title);
                     }
@@ -728,7 +736,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             for (var i=0, loop=this.onlineServices, len=loop.length; i<len; ++i) {
                                 var emblem = getEmblem(loop[i]+':');
                                 this.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                                weight:2, svg:emblem ? emblem.name : undefined, id:loop[i]});
+                                                                weight:10, svg:emblem ? emblem.name : undefined, id:loop[i]});
                             }
                         }
                         this.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });

@@ -754,7 +754,11 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (this.items.length>0) {
                     if (item.id.startsWith(SEARCH_ID)) {
-                        this.tbarActions=[SEARCH_LIB_ACTION];
+                        if (this.items[0].id.startsWith("track_id:")) {
+                            this.tbarActions=[SEARCH_LIB_ACTION, ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                        } else {
+                            this.tbarActions=[SEARCH_LIB_ACTION];
+                        }
                     } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
                         this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                     } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {

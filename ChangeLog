@@ -14,6 +14,7 @@
 7. Replace statically.io with gitcdn.link for serving user documentation, as
    statically is showing errors.
 8. Add 'All Songs' entry to 'More' menu of artist album list.
+9. Add add/play all actions to search track results.
 
 1.5.4
 -----

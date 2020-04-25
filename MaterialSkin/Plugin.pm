@@ -486,13 +486,13 @@ sub _cliCommand {
                 $request->addResultLoop("actions_loop", $cnt, "icon", "music_note");
 
                 if ($role_id && $genre_id) {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id, "rold_id:" . $role_id, "genre_id:" . $genre_id] });
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id, "rold_id:" . $role_id, "genre_id:" . $genre_id] });
                 } elsif ($role_id) {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id, "rold_id:" . $role_id] });
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id, "rold_id:" . $role_id] });
                 } elsif ($genre_id) {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id, "genre_id:" . $genre_id] });
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id, "genre_id:" . $genre_id] });
                 } else {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyACE", "artist_id:" . $artist_id] });
+                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id] });
                 }
                 $request->addResultLoop("actions_loop", $cnt, "weight", 3);
                 $cnt++;

@@ -75,9 +75,11 @@ function fixSearchControls(elem) {
             if (undefined==elems[i].href || elems[i].href.indexOf("command=playlist&subcommand=")<0) {
                 elems[i].style.display="none";
             } else if (elems[i].href.indexOf("subcommand=addtracks")>0) {
-                elems[i].classList.add("addtracks");
-            } else if (elems[i].href.indexOf("subcommand=loadtracks")>0) {
+                elems[i].href=elems[i].href.replace("subcommand=addtracks", "subcommand=loadtracks");
                 elems[i].classList.add("loadtracks");
+            } else if (elems[i].href.indexOf("subcommand=loadtracks")>0) {
+                elems[i].href=elems[i].href.replace("subcommand=loadtracks", "subcommand=addtracks");
+                elems[i].classList.add("addtracks");
             }
         }
     }

@@ -16,6 +16,8 @@
  8. Add 'All Songs' entry to 'More' menu of artist album list.
  9. Add add/play all actions to search track results.
 10. Show emblems on tracks from seach results or 'All Songs'
+11. Switch order of add/play buttons in advanced search results, to be
+    consistent with the rest of Material.
 
 1.5.4
 -----

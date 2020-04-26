@@ -97,7 +97,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="showLaunchPlayer">
      <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
       <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n('Lock screen and notification controls will be disabled whilst player is active.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}}{{showLsAndNotif ? (' ' +i18n('Lock screen and notification controls will be disabled whilst player is active.')) : ''}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
     </v-list-tile>

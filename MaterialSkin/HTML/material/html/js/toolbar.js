@@ -634,7 +634,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.infoPlugin
         },
         showPlayerMenuEntry () {
-            return IS_ANDROID && this.$store.state.showPlayerMenuEntry
+            return IS_ANDROID && this.$store.state.showPlayerMenuEntry && !queryParams.hide.has('launchPlayer')
         },
         isNowPlayingPage() {
             return this.$store.state.page == 'now-playing'

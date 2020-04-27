@@ -1,3 +1,9 @@
+1.5.6
+-----
+1. If current item has a 'remote_title' element and its id is negative, then
+   allow title (or remote_title) and artist/composer to span up to 3 lines each
+   in now-playing.
+
 1.5.5
 -----
  1. Fix 'Append random album to queue'

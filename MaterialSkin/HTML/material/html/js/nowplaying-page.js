@@ -412,7 +412,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             var playStateChanged = false;
             var trackChanged = false;
 
-            this.threeLines = playerStatus.current.remote_title && !playerStatus.current.album;
+            this.threeLines = playerStatus.current.remote_title && (""+playerStatus.current.id)[0]=='-';
 
             // Have other items changed
             if (playerStatus.isplaying!=this.playerStatus.isplaying) {

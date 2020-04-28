@@ -44,14 +44,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="showScale">
      <v-list-tile-content @click="largerElements = !largerElements" class="switch-label">
       <v-list-tile-title>{{i18n('Larger fonts and icons')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="largerElements"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="showScale"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
@@ -372,6 +372,7 @@ Vue.component('lms-ui-settings', {
             screensaver: false,
             showLsAndNotif: IS_ANDROID && !queryParams.hide.has('notif'),
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
+            showScale: !queryParams.hide.has('scale'),
             appSettings: queryParams.appSettings
         }
     },

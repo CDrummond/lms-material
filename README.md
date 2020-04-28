@@ -107,13 +107,15 @@ be used. e.g. `http://<yourserver>:9000/material/?layout=mobile&player=Bedroom&a
 
 You can specify a set of elements that can be hidden. This is achieved by passing
 the `hide` query parameter and specifying a comma-separated list of items. Currently
-only `mini` (to hide the mini player launch button), `notif` (to hide the lock screen
-and notification control settings), and `launchPlayer` (to hide the launch player
-setting) may be specified. e.g.
+only `mini` (to hide the mini player launch button), `notif` (to hide the lock
+screen and notification control settings), `launchPlayer` (to hide the launch
+player setting), and `scale` (to hade option for larger elements) may be
+specified. e.g.
 
 * `http://<yourserver>:9000/material/?hide=mini,notif`
 
-This query parameter is only intended to be used by applications wishing to embed Material.
+This query parameter is only intended to be used by applications wishing to embed
+Material such as [the Material Skin android app.](https://github.com/CDrummond/lms-material-app)
 
 ### Debugging
 

@@ -30,7 +30,7 @@ function updateUiSettings(state, val) {
         setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
-    if (undefined!=val.largerElements && state.largerElements!=val.largerElements) {
+    if (undefined!=val.largerElements && state.largerElements!=val.largerElements && !queryParams.hide.has('scale')) {
         state.largerElements = val.largerElements;
         setLocalStorageVal('largerElements', state.largerElements);
         setElemSizes(state.largerElements);
@@ -359,7 +359,7 @@ const store = new Vuex.Store({
             state.theme = getLocalStorageVal('theme', getLocalStorageBool('darkUi', true) ? 'dark' : 'light');
             state.darkUi = !state.theme.startsWith('light');
             state.color = getLocalStorageVal('color', state.color);
-            state.largerElements = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', state.largerElements));
+            state.largerElements = queryParams.hide.has('scale') ? false : getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', state.largerElements));
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);

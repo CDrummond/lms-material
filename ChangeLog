@@ -6,6 +6,7 @@
 2. Revert back to statically.io
 3. Fix size of player status icons (default, sleep, synced).
 4. Fix 'hung' state if close 'Manage players' dialog whilst it has a menu open.
+5. Update vue-virtual-scroller, vue-touch-events, vue-lazyload, vuex
 
 1.5.5
 -----

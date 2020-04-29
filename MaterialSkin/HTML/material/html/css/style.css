@@ -1190,7 +1190,7 @@ div.v-subheader {
 }
 
 .player-status-icon {
- font-size:16px;
+ font-size:16px !important;
  line-height:22px;
  vertical-align:middle;
  padding-left:4px;

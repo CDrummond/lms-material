@@ -4,6 +4,7 @@
    allow title (or remote_title) and artist/composer to span up to 3 lines each
    in now-playing.
 2. Revert back to statically.io
+3. Fix size of player status icons (default, sleep, synced).
 
 1.5.5
 -----

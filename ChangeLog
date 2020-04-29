@@ -5,6 +5,7 @@
    in now-playing.
 2. Revert back to statically.io
 3. Fix size of player status icons (default, sleep, synced).
+4. Fix 'hung' state if close 'Manage players' dialog whilst it has a menu open.
 
 1.5.5
 -----

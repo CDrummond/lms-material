@@ -289,6 +289,7 @@ Vue.component('lms-manage-players', {
             }
         },
         close() {
+            this.menu.show=false;
             this.show=false;
         },
         i18n(str) {

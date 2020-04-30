@@ -8,6 +8,7 @@
 4. Fix 'hung' state if close 'Manage players' dialog whilst it has a menu open.
 5. Update vue-virtual-scroller, vue-touch-events, vue-lazyload, and vuex.
 6. Update iOS/iPhone/iPad checks.
+7. Take into account safe-area-inset-bottom for iOS.
 
 1.5.5
 -----

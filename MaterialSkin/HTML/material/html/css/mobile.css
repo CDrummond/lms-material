@@ -8,7 +8,8 @@
 :root {
  --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
- --bottom-nav-height:52px;
+ --bottom-nav-pad:env(safe-area-inset-bottom);
+ --bottom-nav-height:calc(var(--bottom-nav-pad) + 52px);
 }
 
 .maintoolbar-subtitle {
@@ -40,15 +41,15 @@
 }
 
 .lms-footer .lms-bottom-nav {
+ position:fixed;
+ bottom:calc(var(--bottom-nav-height) + 8px - var(--bottom-nav-pad)) !important;
  height:var(--bottom-nav-height) !important;
  box-shadow:none;
 }
 
 .lms-bottom-nav {
- position:relative !important;
  padding:0px !important;
  margin:0px !important;
- top:calc(-1 * (var(--bottom-nav-height) + 8px)) !important;
  transition:none !important;
 }
 
@@ -57,7 +58,7 @@
  height:var(--bottom-nav-height) !important;
  max-width:250px !important;
  transition:none !important;
- padding:0px !important;
+ padding:0px 0px var(--bottom-nav-pad) 0px !important;
 }
 
 /* Work-around issue where when swiping to switch views, a previously active nav button would have a

@@ -718,7 +718,9 @@ sub _iconHandler {
     my $request = $response->request;
     my $ua = $request->header('user-agent');
     my $icon = "icon.png";
-    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) {
+    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 ||
+       # Detect iPadOS??? https://forums.developer.apple.com/thread/119186
+       (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
         $icon ="icon-ios.png";
     }
     my $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $icon;

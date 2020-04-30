@@ -9,6 +9,8 @@
 5. Update vue-virtual-scroller, vue-touch-events, vue-lazyload, and vuex.
 6. Update iOS/iPhone/iPad checks.
 7. Take into account safe-area-inset-bottom for iOS.
+8. Update user-agent checking code in perl code to (hopefully) detect iPadOS and
+   serve correct icon.
 
 1.5.5
 -----

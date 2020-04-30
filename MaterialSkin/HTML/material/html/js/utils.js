@@ -10,10 +10,10 @@ const SEPARATOR = " \u2022 ";
 const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
 const LS_PREFIX="lms-material::";
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
-const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window);
+const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const IS_ANDROID = /Android/i.test(navigator.userAgent);
-const IS_IOS     = /iPhone|iPad/i.test(navigator.userAgent);
-const IS_IPHONE  = /iPhone/i.test(navigator.userAgent);
+const IS_IOS     = (/iPhone|iPad/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+const IS_IPHONE  = /iPhone/i.test(navigator.userAgent) && !window.MSStream;
 const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
 const RATINGS=["",         // 0
                "<i class=\"rstar\">star_half</i>", // 0.5

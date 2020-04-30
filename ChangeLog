@@ -11,6 +11,8 @@
 7. Take into account safe-area-inset-bottom for iOS.
 8. Update user-agent checking code in perl code to (hopefully) detect iPadOS and
    serve correct icon.
+9. If '?ios' is added to URL query, add 12px padding to bottom navigation, to
+   work-around issue with non-home button iOS devices.
 
 1.5.5
 -----

@@ -73,6 +73,8 @@ function parseQueryParams() {
             }
         } else if ("appSettings"==kv[0]) {
             resp.appSettings=kv[1];
+        } else if ("ios"==kv[0]) {
+            document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         }
     }
     return resp;

@@ -9,6 +9,7 @@
 const BIO_TAB = 0;
 const REVIEW_TAB = 1;
 const LYRICS_TAB = 2;
+const REQ_ID_TAG = "material-skin-mai-req:";
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
@@ -292,7 +293,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
-                         tabs: [ { title:undefined, text:undefined }, { title:undefined, text:undefined }, { title:undefined, text:undefined } ] },
+                         tabs: [ { title:undefined, text:undefined, reqId:0 }, { title:undefined, text:undefined, reqId:0 }, { title:undefined, text:undefined, reqId:0 } ] },
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                           stdFont:undefined, mediumFont:undefined, largerFont:undefined, play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
@@ -777,7 +778,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[LYRICS_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[LYRICS_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[LYRICS_TAB].songtitle=this.infoTrack.title;
-                var command = ["musicartistinfo", "lyrics", "html:1"];
+                this.info.tabs[LYRICS_TAB].reqId++;
+                if (this.info.tabs[LYRICS_TAB].reqId>65535) {
+                    this.info.tabs[LYRICS_TAB].reqId = 0;
+                }
+                var command = ["musicartistinfo", "lyrics", "html:1", REQ_ID_TAG+this.info.tabs[LYRICS_TAB].reqId];
                 if (this.infoTrack.track_id!=undefined && !(""+this.infoTrack.track_id).startsWith("-")) {
                     command.push("track_id:"+this.infoTrack.track_id);
                 } else {
@@ -788,12 +793,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                 }
-                if (3==command.length) { // No details?
+                if (4==command.length) { // No details?
                     this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
                         logJsonMessage("RESP", data);
-                        if (data && data.result && (data.result.lyrics || data.result.error)) {
+                        if (data && data.result && this.isCurrent(data, LYRICS_TAB) && (data.result.lyrics || data.result.error)) {
                             this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
                         }
                     }).catch(error => {
@@ -812,48 +817,53 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[BIO_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[BIO_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[BIO_TAB].artist_ids=this.infoTrack.artist_ids;
-
+                this.info.tabs[BIO_TAB].reqId++;
+                if (this.info.tabs[BIO_TAB].reqId>65535) {
+                    this.info.tabs[BIO_TAB].reqId = 0;
+                }
                 var ids = this.infoTrack.artist_ids ? this.infoTrack.artist_ids.split(",") : [];
                 if (ids.length>1) {
                     this.info.tabs[BIO_TAB].first = true;
                     this.info.tabs[BIO_TAB].found = false;
                     this.info.tabs[BIO_TAB].count = ids.length;
                     for (var i=0, len=ids.length; i<len; ++i) {
-                        lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"]).then(({data}) => {
+                        lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1", REQ_ID_TAG+this.info.tabs[BIO_TAB].reqId]).then(({data}) => {
                             logJsonMessage("RESP", data);
-                            if (data && data.result && (data.result.biography || data.result.error)) {
-                                if (data.result.artist) {
-                                    this.info.tabs[BIO_TAB].found = true;
-                                    if (this.info.tabs[BIO_TAB].first) {
-                                        this.info.tabs[BIO_TAB].text="";
-                                        this.info.tabs[BIO_TAB].first = false;
-                                    } else {
-                                        this.info.tabs[BIO_TAB].text+="<br/><br/>";
+                            if (data && this.isCurrent(data, BIO_TAB)) {
+                                if (data.result && (data.result.biography || data.result.error)) {
+                                    if (data.result.artist) {
+                                        this.info.tabs[BIO_TAB].found = true;
+                                        if (this.info.tabs[BIO_TAB].first) {
+                                            this.info.tabs[BIO_TAB].text="";
+                                            this.info.tabs[BIO_TAB].first = false;
+                                        } else {
+                                            this.info.tabs[BIO_TAB].text+="<br/><br/>";
+                                        }
+                                        this.info.tabs[BIO_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? replaceNewLines(data.result.biography) : data.result.error);
                                     }
-                                    this.info.tabs[BIO_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? replaceNewLines(data.result.biography) : data.result.error);
                                 }
-                            }
-                            this.info.tabs[BIO_TAB].count--;
-                            if (0 == this.info.tabs[BIO_TAB].count && !this.info.tabs[BIO_TAB].found) {
-                                this.info.tabs[BIO_TAB].text = i18n("No artist found");
-                            } else {
-                                this.info.tabs[BIO_TAB].isMsg=false;
+                                this.info.tabs[BIO_TAB].count--;
+                                if (0 == this.info.tabs[BIO_TAB].count && !this.info.tabs[BIO_TAB].found) {
+                                    this.info.tabs[BIO_TAB].text = i18n("No artist found");
+                                } else {
+                                    this.info.tabs[BIO_TAB].isMsg=false;
+                                }
                             }
                         });
                     }
                 } else {
-                    var command = ["musicartistinfo", "biography", "html:1"];
+                    var command = ["musicartistinfo", "biography", "html:1", REQ_ID_TAG+this.info.tabs[BIO_TAB].reqId];
                     if (this.infoTrack.artist_id!=undefined) {
                         command.push("artist_id:"+this.infoTrack.artist_id);
                     } else {
                         command.push("artist:"+this.infoTrack.artist);
                     }
-                    if (3==command.length) { // No details?
+                    if (4==command.length) { // No details?
                         this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                     } else {
                         lmsCommand("", command).then(({data}) => {
                             logJsonMessage("RESP", data);
-                            if (data && data.result && (data.result.biography || data.result.error)) {
+                            if (data && data.result && this.isCurrent(data, REVIEW_TAB) && (data.result.biography || data.result.error)) {
                                 this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
                                 this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
                             }
@@ -878,7 +888,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[REVIEW_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[REVIEW_TAB].album=this.infoTrack.album;
                 this.info.tabs[REVIEW_TAB].album_id=this.infoTrack.album_id;
-                var command = ["musicartistinfo", "albumreview", "html:1"];
+                this.info.tabs[REVIEW_TAB].reqId++;
+                if (this.info.tabs[REVIEW_TAB].reqId>65535) {
+                    this.info.tabs[REVIEW_TAB].reqId = 0;
+                }
+                var command = ["musicartistinfo", "albumreview", "html:1", REQ_ID_TAG+this.info.tabs[REVIEW_TAB].reqId];
                 if (this.infoTrack.album_id!=undefined) {
                     command.push("album_id:"+this.infoTrack.album_id);
                 } else {
@@ -897,12 +911,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
 
-                if (3==command.length) { // No details?
+                if (4==command.length) { // No details?
                     this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
                     lmsCommand("", command).then(({data}) => {
                         logJsonMessage("RESP", data);
-                        if (data && data.result && (data.result.albumreview || data.result.error)) {
+                        if (data && data.result && this.isCurrent(data, REVIEW_TAB) && (data.result.albumreview || data.result.error)) {
                             this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
                             this.info.tabs[REVIEW_TAB].isMsg=undefined==data.result.albumreview;
                         }
@@ -915,6 +929,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[REVIEW_TAB].isMsg=true;
                 this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
             }
+        },
+        isCurrent(data, tab) {
+            for (var i=3, len=data.params[1].length; i<len; ++i) {
+                if (data.params[1][i]==(REQ_ID_TAG+this.info.tabs[tab].reqId)) {
+                    return true;
+                }
+            }
+            return false;
         },
         showInfo() {
             if (!this.info.show || !this.infoTrack) {

@@ -1,18 +1,19 @@
 1.5.6
 -----
-1. If current item has a 'remote_title' element and its id is negative, then
-   allow title (or remote_title) and artist/composer to span up to 3 lines each
-   in now-playing.
-2. Revert back to statically.io
-3. Fix size of player status icons (default, sleep, synced).
-4. Fix 'hung' state if close 'Manage players' dialog whilst it has a menu open.
-5. Update vue-virtual-scroller, vue-touch-events, vue-lazyload, and vuex.
-6. Update iOS/iPhone/iPad checks.
-7. Take into account safe-area-inset-bottom for iOS.
-8. Update user-agent checking code in perl code to (hopefully) detect iPadOS and
-   serve correct icon.
-9. If '?ios' is added to URL query, add 12px padding to bottom navigation, to
-   work-around issue with non-home button iOS devices.
+ 1. If current item has a 'remote_title' element and its id is negative, then
+    allow title (or remote_title) and artist/composer to span up to 3 lines each
+    in now-playing.
+ 2. Revert back to statically.io
+ 3. Fix size of player status icons (default, sleep, synced).
+ 4. Fix 'hung' state if close 'Manage players' dialog whilst it has a menu open.
+ 5. Update vue-virtual-scroller, vue-touch-events, vue-lazyload, and vuex.
+ 6. Update iOS/iPhone/iPad checks.
+ 7. Take into account safe-area-inset-bottom for iOS.
+ 8. Update user-agent checking code in perl code to (hopefully) detect iPadOS
+    and serve correct icon.
+ 9. If '?ios' is added to URL query, add 12px padding to bottom navigation, to
+    work-around issue with non-home button iOS devices.
+10. Ensure MAI responses are for the current request.
 
 1.5.5
 -----

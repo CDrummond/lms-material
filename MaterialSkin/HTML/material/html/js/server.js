@@ -82,42 +82,21 @@ function visibilityOrFocusChanged() {
     }
 }
 
-var lmsListSource = undefined;
-var lmsCommandId = 0;
-
-function lmsCommand(playerid, command, isList, commandId) {
-    var id = commandId;
-    if (undefined==id) {
-        lmsCommandId++;
-        if (lmsCommandId>65535) {
-            lmsCommandId=1;
-        }
-        id = lmsCommandId;
-    }
-    var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
-                    (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
-
+function lmsCommand(playerid, command, commandId) {
     const URL = "/jsonrpc.js";
-    var data = { id: id, method: "slim.request", params: [playerid, command]};
+    var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
 
     logJsonMessage("REQ", data.params);
-    if (canCancel) {
-        lmsListSource = axios.CancelToken.source();
-        return axios.post(URL, data, {cancelToken: lmsListSource.token}).finally(() => {
-            lmsListSource = undefined;
-        });
-    } else {
-        return axios.post(URL, data);
-    }
+    return axios.post(URL, data);
 }
 
-async function lmsListFragment(playerid, command, params, start, fagmentSize, batchSize, accumulated) {
+async function lmsListFragment(playerid, command, params, start, fagmentSize, batchSize, commandId, accumulated) {
     var cmdParams = command.slice();
     cmdParams = [].concat(cmdParams, [start, fagmentSize]);
     if (params && params.length>0) {
         cmdParams = [].concat(cmdParams, params);
     }
-    return lmsCommand(playerid, cmdParams).then(({data}) => {
+    return lmsCommand(playerid, cmdParams, commandId).then(({data}) => {
         logJsonMessage("RESP", data);
         if (data && data.result && data.result.item_loop) {
             if (undefined==accumulated) {
@@ -130,7 +109,7 @@ async function lmsListFragment(playerid, command, params, start, fagmentSize, ba
                     resolve({data:accumulated});
                 });
             } else {
-                return lmsListFragment(playerid, command, params, start+fagmentSize, fagmentSize, batchSize, accumulated);
+                return lmsListFragment(playerid, command, params, start+fagmentSize, fagmentSize, batchSize, commandId, accumulated);
             }
         } else {
             return new Promise(function(resolve, reject) {
@@ -140,11 +119,11 @@ async function lmsListFragment(playerid, command, params, start, fagmentSize, ba
     });
 }
 
-async function lmsList(playerid, command, params, start, batchSize, cancache) {
+async function lmsList(playerid, command, params, start, batchSize, cancache, commandId) {
     var count = undefined===batchSize ? LMS_BATCH_SIZE : batchSize;
 
     if (command.length>1 && command[0]=="custombrowse" && (command[1]=="browsejive" || command[1]=="browse") && count>999) {
-        return lmsListFragment(playerid, command, params, 0, 999, count);
+        return lmsListFragment(playerid, command, params, 0, 999, count, commandId);
     }
 
     var cmdParams = command.slice();
@@ -155,14 +134,14 @@ async function lmsList(playerid, command, params, start, batchSize, cancache) {
     if (cancache && canUseCache) { // canUseCache defined in utils.js
         return idbKeyval.get(cacheKey(command, params, start, batchSize)).then(val => {
             if (undefined==val) {
-                return lmsCommand(playerid, cmdParams);
+                return lmsCommand(playerid, cmdParams, commandId);
             }
             return new Promise(function(resolve, reject) {
                 resolve({data:val});
             });
         });
     } else {
-        return lmsCommand(playerid, cmdParams, true);
+        return lmsCommand(playerid, cmdParams, commandId);
     }
 }
 

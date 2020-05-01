@@ -795,7 +795,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (3==command.length) { // No details?
                     this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
-                    lmsCommand("", command, false, this.info.tabs[LYRICS_TAB].reqId).then(({data}) => {
+                    lmsCommand("", command, this.info.tabs[LYRICS_TAB].reqId).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (data && data.result && this.isCurrent(data, LYRICS_TAB) && (data.result.lyrics || data.result.error)) {
                             this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
@@ -826,7 +826,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.tabs[BIO_TAB].found = false;
                     this.info.tabs[BIO_TAB].count = ids.length;
                     for (var i=0, len=ids.length; i<len; ++i) {
-                        lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], false, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
+                        lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], this.info.tabs[BIO_TAB].reqId).then(({data}) => {
                             logJsonMessage("RESP", data);
                             if (data && this.isCurrent(data, BIO_TAB)) {
                                 if (data.result && (data.result.biography || data.result.error)) {
@@ -860,7 +860,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (3==command.length) { // No details?
                         this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                     } else {
-                        lmsCommand("", command, false, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
+                        lmsCommand("", command, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
                             logJsonMessage("RESP", data);
                             if (data && data.result && this.isCurrent(data, BIO_TAB) && (data.result.biography || data.result.error)) {
                                 this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
@@ -913,7 +913,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (3==command.length) { // No details?
                     this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
-                    lmsCommand("", command, false, this.info.tabs[REVIEW_TAB].reqId).then(({data}) => {
+                    lmsCommand("", command, this.info.tabs[REVIEW_TAB].reqId).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (data && data.result && this.isCurrent(data, REVIEW_TAB) && (data.result.albumreview || data.result.error)) {
                             this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
@@ -930,7 +930,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         isCurrent(data, tab) {
-        console.log("CHECK", data.id, this.info.tabs[tab].reqId, tab, data.id==this.info.tabs[tab].reqId);
             return data.id==this.info.tabs[tab].reqId;
         },
         showInfo() {

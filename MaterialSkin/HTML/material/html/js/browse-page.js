@@ -360,6 +360,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     created() {
+        this.reqId = 0;
         this.myMusic=[];
         this.history=[];
         this.fetchingItems = false;
@@ -638,6 +639,16 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.prevPage = undefined;
             this.history.push(prev);
         },
+        nextReqId() {
+            this.reqId++;
+            if (this.reqId>65535) {
+                this.reqId=1;
+            }
+            return this.reqId;
+        },
+        isCurrentReq(data) {
+            return data.id==this.reqId;
+        },
         fetchItems(command, item, prevPage) {
             if (this.fetchingItems) {
                 return;
@@ -645,19 +656,19 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             this.fetchingItems = true;
             var count = item.limit ? item.limit : LMS_BATCH_SIZE;
-            lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache).then(({data}) => {
-                this.options.ratingsSupport=this.$store.state.ratingsSupport;
-                var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined);
-                this.handleListResponse(item, command, resp);
-                this.prevPage = prevPage;
-                this.fetchingItems = false;
-                this.enableRatings();
+            lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache, this.nextReqId()).then(({data}) => {
+                if (this.isCurrentReq(data)) {
+                    this.options.ratingsSupport=this.$store.state.ratingsSupport;
+                    var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined);
+                    this.handleListResponse(item, command, resp);
+                    this.prevPage = prevPage;
+                    this.fetchingItems = false;
+                    this.enableRatings();
+                }
             }).catch(err => {
                 this.fetchingItems = false;
-                if (!axios.isCancel(err)) {
-                    this.handleListResponse(item, command, {items: []});
-                    logError(err, command.command, command.params, 0, count);
-                }
+                this.handleListResponse(item, command, {items: []});
+                logError(err, command.command, command.params, 0, count);
             });
         },
         fetchUrlItems(url, provider, item) {
@@ -873,9 +884,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             var command = this.buildCommand(item);
             if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1] || "jiveplaylistparameters"==command.command[1])) {
                 this.fetchingItems = true;
-                lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE).then(({data}) => {
-                    this.fetchingItems = false;
-                    this.handleTextClickResponse(item, command, data, isMoreMenu);
+                lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, undefined, this.nextReqId()).then(({data}) => {
+                    if (this.isCurrentReq(data)) {
+                        this.fetchingItems = false;
+                        this.handleTextClickResponse(item, command, data, isMoreMenu);
+                    }
                 }).catch(err => {
                     this.fetchingItems = false;
                     logError(err, command.command, command.params);
@@ -1598,9 +1611,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 this.fetchingItems = false;
             }).catch(err => {
-                if (!axios.isCancel(err)) {
-                    logAndShowError(err, undefined, this.command.command, this.command.params);
-                }
+                logAndShowError(err, undefined, this.command.command, this.command.params);
                 this.fetchingItems = false;
             });
         },
@@ -1614,12 +1625,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if (this.fetchingItems) {
-                if (lmsListSource) {
-                    this.fetchingItems = false;
-                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                } else {
-                    return;
-                }
+                this.nextReqId();
+                this.fetchingItems = false;
             }
             this.selection = new Set();
             var prev = this.history.length>0 ? this.history[0].pos : 0;
@@ -1670,10 +1677,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         goBack(refresh) {
             if (this.fetchingItems) {
-                if (lmsListSource) {
-                    this.fetchingItems = false;
-                    lmsListSource.cancel(i18n('Operation cancelled by the user.'));
-                }
+                this.nextReqId();
+                this.fetchingItems = false;
                 return;
             }
             if (this.prevPage && !this.$store.state.desktopLayout) {
@@ -2159,7 +2164,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 }
                                 this.processMyMusicMenu();
                             }
-                            this.fetchingItems=false;
+                            this.fetchingItems = false;
                         }).catch(err => {
                             this.fetchingItems = false;
                             logAndShowError(err);

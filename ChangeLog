@@ -14,6 +14,9 @@
  9. If '?ios' is added to URL query, add 12px padding to bottom navigation, to
     work-around issue with non-home button iOS devices.
 10. Ensure MAI responses are for the current request.
+11. Cancelling axios reqests sometimes leads to add behaviour, so instead use
+    unique ID for each list request. Instead of cancelling, change ID, so
+    'cancelled' response is ignored.
 
 1.5.5
 -----

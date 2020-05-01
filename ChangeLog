@@ -17,6 +17,7 @@
 11. Cancelling axios reqests sometimes leads to add behaviour, so instead use
     unique ID for each list request. Instead of cancelling, change ID, so
     'cancelled' response is ignored.
+12. Place artist biography pictures on alternating right/left side.
 
 1.5.5
 -----

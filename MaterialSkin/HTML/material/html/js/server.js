@@ -85,16 +85,20 @@ function visibilityOrFocusChanged() {
 var lmsListSource = undefined;
 var lmsCommandId = 0;
 
-function lmsCommand(playerid, command, isList) {
-    lmsCommandId++;
-    if (lmsCommandId>65535) {
-        lmsCommandId=1;
+function lmsCommand(playerid, command, isList, commandId) {
+    var id = commandId;
+    if (undefined==id) {
+        lmsCommandId++;
+        if (lmsCommandId>65535) {
+            lmsCommandId=1;
+        }
+        id = lmsCommandId;
     }
     var canCancel = (isList && command.length>0 && command[0]!="libraries" && command[0]!="favorites") ||
                     (!isList && command.length>1 && (command[0]=='menu' || command[1]=='items'));
 
-    const URL = "/jsonrpc.js?id="+lmsCommandId;
-    var data = { id: lmsCommandId, method: "slim.request", params: [playerid, command]};
+    const URL = "/jsonrpc.js";
+    var data = { id: id, method: "slim.request", params: [playerid, command]};
 
     logJsonMessage("REQ", data.params);
     if (canCancel) {

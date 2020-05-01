@@ -9,7 +9,6 @@
 const BIO_TAB = 0;
 const REVIEW_TAB = 1;
 const LYRICS_TAB = 2;
-const REQ_ID_TAG = "material-skin-mai-req:";
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
@@ -782,7 +781,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.info.tabs[LYRICS_TAB].reqId>65535) {
                     this.info.tabs[LYRICS_TAB].reqId = 0;
                 }
-                var command = ["musicartistinfo", "lyrics", "html:1", REQ_ID_TAG+this.info.tabs[LYRICS_TAB].reqId];
+                var command = ["musicartistinfo", "lyrics", "html:1"];
                 if (this.infoTrack.track_id!=undefined && !(""+this.infoTrack.track_id).startsWith("-")) {
                     command.push("track_id:"+this.infoTrack.track_id);
                 } else {
@@ -793,10 +792,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         command.push("artist:"+this.infoTrack.artist);
                     }
                 }
-                if (4==command.length) { // No details?
+                if (3==command.length) { // No details?
                     this.info.tabs[LYRICS_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
-                    lmsCommand("", command).then(({data}) => {
+                    lmsCommand("", command, false, this.info.tabs[LYRICS_TAB].reqId).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (data && data.result && this.isCurrent(data, LYRICS_TAB) && (data.result.lyrics || data.result.error)) {
                             this.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
@@ -827,7 +826,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.tabs[BIO_TAB].found = false;
                     this.info.tabs[BIO_TAB].count = ids.length;
                     for (var i=0, len=ids.length; i<len; ++i) {
-                        lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1", REQ_ID_TAG+this.info.tabs[BIO_TAB].reqId]).then(({data}) => {
+                        lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], false, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
                             logJsonMessage("RESP", data);
                             if (data && this.isCurrent(data, BIO_TAB)) {
                                 if (data.result && (data.result.biography || data.result.error)) {
@@ -852,18 +851,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         });
                     }
                 } else {
-                    var command = ["musicartistinfo", "biography", "html:1", REQ_ID_TAG+this.info.tabs[BIO_TAB].reqId];
+                    var command = ["musicartistinfo", "biography", "html:1"];
                     if (this.infoTrack.artist_id!=undefined) {
                         command.push("artist_id:"+this.infoTrack.artist_id);
                     } else {
                         command.push("artist:"+this.infoTrack.artist);
                     }
-                    if (4==command.length) { // No details?
+                    if (3==command.length) { // No details?
                         this.info.tabs[BIO_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                     } else {
-                        lmsCommand("", command).then(({data}) => {
+                        lmsCommand("", command, false, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
                             logJsonMessage("RESP", data);
-                            if (data && data.result && this.isCurrent(data, REVIEW_TAB) && (data.result.biography || data.result.error)) {
+                            if (data && data.result && this.isCurrent(data, BIO_TAB) && (data.result.biography || data.result.error)) {
                                 this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
                                 this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
                             }
@@ -892,7 +891,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.info.tabs[REVIEW_TAB].reqId>65535) {
                     this.info.tabs[REVIEW_TAB].reqId = 0;
                 }
-                var command = ["musicartistinfo", "albumreview", "html:1", REQ_ID_TAG+this.info.tabs[REVIEW_TAB].reqId];
+                var command = ["musicartistinfo", "albumreview", "html:1"];
                 if (this.infoTrack.album_id!=undefined) {
                     command.push("album_id:"+this.infoTrack.album_id);
                 } else {
@@ -911,10 +910,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
 
-                if (4==command.length) { // No details?
+                if (3==command.length) { // No details?
                     this.info.tabs[REVIEW_TAB].text=this.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
                 } else {
-                    lmsCommand("", command).then(({data}) => {
+                    lmsCommand("", command, false, this.info.tabs[REVIEW_TAB].reqId).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (data && data.result && this.isCurrent(data, REVIEW_TAB) && (data.result.albumreview || data.result.error)) {
                             this.info.tabs[REVIEW_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
@@ -931,12 +930,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         isCurrent(data, tab) {
-            for (var i=3, len=data.params[1].length; i<len; ++i) {
-                if (data.params[1][i]==(REQ_ID_TAG+this.info.tabs[tab].reqId)) {
-                    return true;
-                }
-            }
-            return false;
+        console.log("CHECK", data.id, this.info.tabs[tab].reqId, tab, data.id==this.info.tabs[tab].reqId);
+            return data.id==this.info.tabs[tab].reqId;
         },
         showInfo() {
             if (!this.info.show || !this.infoTrack) {

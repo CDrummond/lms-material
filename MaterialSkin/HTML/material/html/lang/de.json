@@ -1,6 +1,7 @@
 {
 "%1 Menu":"%1 Menü",
 "%1 minutes":"%1 Minuten",
+"%1 of %2":"%1 von %2",
 "%1 seconds":"%1 Sekunden",
 "%1 until sleep":"%1 bis zum Schlafmodus",
 "(Currently only 'SB Player' is supported.)":"(Im Moment wird nur 'SB Player' unterstützt.)",
@@ -205,7 +206,6 @@
 "On song change":"Bei Titelwechsel",
 "Only showing %1 items":"Nur %1 Einträge anzeigen",
 "Open mini-player":"Mini-Player öffnen",
-"Operation cancelled by the user.":"Operation durch Anwender unterbrochen.",
 "Options":"Optionen",
 "Overwrite":"Überschreiben",
 "Pin to home screen":"In Hauptmenü anzeigen",

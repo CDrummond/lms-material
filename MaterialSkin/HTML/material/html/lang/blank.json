@@ -1,6 +1,7 @@
 {
 "%1 Menu":"",
 "%1 minutes":"",
+"%1 of %2":"",
 "%1 seconds":"",
 "%1 until sleep":"",
 "(Currently only 'SB Player' is supported.)":"",
@@ -219,7 +220,6 @@
 "On song change":"",
 "Only showing %1 items":"",
 "Open mini-player":"",
-"Operation cancelled by the user.":"",
 "Options":"",
 "Overwrite":"",
 "Pause":"",

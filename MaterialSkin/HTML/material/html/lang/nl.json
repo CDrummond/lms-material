@@ -1,6 +1,7 @@
 {
 "%1 Menu":"%1 Menu",
 "%1 minutes":"%1 minuten",
+"%1 of %2":"%1 van %2",
 "%1 seconds":"%1 seconden",
 "%1 until sleep":"%1 tot slapen",
 "(Currently only 'SB Player' is supported.)":"(Momenteel wordt alleen 'SB Player' ondersteund.)",
@@ -216,7 +217,6 @@
 "On song change":"Bij veranderen van nummer",
 "Only showing %1 items":"Geeft maar %1 items weer",
 "Open mini-player":"Open mini-speler",
-"Operation cancelled by the user.":"Actie geannuleerd door de gebruiker.",
 "Options":"Opties",
 "Overwrite":"Overschrijven",
 "Pause":"Pause",

@@ -1,6 +1,7 @@
 {
 "%1 Menu":"%1 Меню",
 "%1 minutes":"%1 минут",
+"%1 of %2":"%1 из %2",
 "%1 seconds":"%1 секунд",
 "%1 until sleep":"%1 до сна",
 "(Currently only 'SB Player' is supported.)":"(Поддерживается только 'SB Player')",
@@ -215,7 +216,6 @@
 "On song change":"При смене песни",
 "Only showing %1 items":"Показывать только %1",
 "Open mini-player":"Открыть мини плеер",
-"Operation cancelled by the user.":"Опереция прервана пользователем",
 "Options":"Опции",
 "Overwrite":"Перезаписать",
 "Pause":"Пауза",

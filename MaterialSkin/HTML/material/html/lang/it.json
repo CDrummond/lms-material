@@ -1,5 +1,6 @@
 {
 "%1 minutes":"%1 minuti",
+"%1 of %2":"%1 di %2",
 "%1 until sleep":"%1 fino allo spegnimento",
 "(Currently only 'SB Player' is supported.)":"(Al momento solo 'SB Player' è supportato.)",
 "About":"Informazioni",
@@ -139,7 +140,6 @@
 "On song change":"Al cambio di brano",
 "Only showing %1 items":"Mostro solo %1 elementi",
 "Open mini-player":"Apri mini-player",
-"Operation cancelled by the user.":"Operazione cancellata dall'utente.",
 "Options":"Opzioni",
 "Pin to home screen":"Aggiungi alla schermata home",
 "Pinned '%1' to home screen.":"Aggiunto '%1' alla schermata home",

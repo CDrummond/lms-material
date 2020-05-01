@@ -1166,13 +1166,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (undefined==str || str.length<80) {
                 return str;
             }
-            return str.substring(0, 80) + "...";
+            return str.substring(0, 80) + "\u2026";
         },
         trackCount(current, total, sep) {
             if (undefined==current || undefined==total || total<2) {
                 return "";
             }
-            return (undefined==sep ? "" : sep)+(current+1)+" / " + total;
+            return (undefined==sep ? "" : sep)+i18n("%1 of %2", (current+1), total);
         }
     },
     watch: {

@@ -1,6 +1,7 @@
 {
 "%1 Menu":"Menu %1",
 "%1 minutes":"%1 minutes",
+"%1 of %2":"%1 de %2",
 "%1 seconds":"%1 secondes",
 "%1 until sleep":"%1 jusqu'à mise en veille",
 "(Currently only 'SB Player' is supported.)":"(Actuellement, seul 'SB Player' est supporté.)",
@@ -40,9 +41,12 @@
 "Append random album to queue":"Ajouter un album aléatoire à la liste de lecture en cours",
 "Append to queue":"Ajouter à la liste de lecture en cours",
 "Appended '%1' to the play queue":"'%1' ajouté à la liste de lecture en cours",
+"Appended album to the play queue":"Album ajouté à la liste de lecture en cours",
+"Appended all albums to the play queue":"Tous les albums ont été ajoutés à la liste de lecture en cours",
 "Appended all tracks to the play queue":"Tous les morceaux ont été ajoutés à la liste de lecture en cours",
 "Appended track to the play queue":"Morceau ajouté à la liste de lecture en cours",
 "Application layout":"Mise en page de l'application",
+"Application settings":"Configuration de l'application",
 "Apply":"Appliquer",
 "Apps":"Applications",
 "Artist Biography":"Biographie d'artiste",
@@ -216,7 +220,6 @@
 "On song change":"Transition entre morceaux",
 "Only showing %1 items":"Afficher seulement %1 éléments",
 "Open mini-player":"Ouvrir le mini-lecteur",
-"Operation cancelled by the user.":"Opération annulée par l'utilisateur",
 "Options":"Options",
 "Overwrite":"Ecraser",
 "Pause":"Pause",
@@ -445,8 +448,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Appended album to the play queue":"Album ajouté à la liste de lecture en cours",
-"Appended all albums to the play queue":"Tous les albums ont été ajoutés à la liste de lecture en cours",
-"Application settings":"Configuration de l'application"
+"%1 days":"%1 jours"
 }

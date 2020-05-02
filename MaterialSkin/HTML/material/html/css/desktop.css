@@ -133,9 +133,9 @@ body {
 
 .np-details-desktop {
  position:fixed;
- left:calc(242px + (var(--icon-size) - 24px));
+ left:calc(250px + (var(--icon-size) - 24px));
  bottom:20px;
- width:calc(100vw - calc(238px + (var(--icon-size) - 24px)));
+ width:calc(100vw - calc(254px + (var(--icon-size) - 24px)));
  height:54px;
  padding:0px;
  background:transparent!important;
@@ -188,9 +188,9 @@ body {
 
 .np-slider-desktop {
  position:fixed;
- left:calc(242px + (var(--icon-size) - 24px));
+ left:calc(250px + (var(--icon-size) - 24px));
  bottom:6px;
- width:calc(100vw - calc(246px + (var(--icon-size) - 24px)));
+ width:calc(100vw - calc(262px + (var(--icon-size) - 24px)));
  height:10px !important;
  margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
 }

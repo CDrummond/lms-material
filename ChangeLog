@@ -18,6 +18,9 @@
     unique ID for each list request. Instead of cancelling, change ID, so
     'cancelled' response is ignored.
 12. Place artist biography pictures on alternating right/left side.
+13. Larger dot for jumplist when no letters.
+14. Use "track of total" and not "track / total"
+15. Increase left/right margin around details on desktop botton bar.
 
 1.5.5
 -----

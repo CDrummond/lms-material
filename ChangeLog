@@ -1,3 +1,7 @@
+1.5.8
+-----
+1. Reduce inline image margins.
+
 1.5.7
 -----
 1. Don't use a constant for library name, fetch via JSONRPC call.

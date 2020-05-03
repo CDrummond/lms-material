@@ -90,7 +90,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-tab :key="index">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
       <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
-       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
+       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-tab-item>
     </template>
@@ -101,7 +101,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs4>
        <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
         <v-card-title><p>{{tab.title}}</p></v-card-title>
-        <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
+        <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
        </v-card>
       </v-flex>
      </template>
@@ -130,7 +130,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-tab :key="index">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
       <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
-       <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '']" v-html="tab.text"></v-card-text>
+       <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-tab-item>
     </template>

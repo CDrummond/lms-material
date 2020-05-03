@@ -592,18 +592,29 @@ div.v-subheader {
  max-height:300px !important;
  margin-left:auto;
  margin-right:auto;
- margin-bottom:var(--std-font-size);
+ margin-bottom:0px !important;
  display:block;
+}
+
+/* Ensure larger bottom border for album review image */
+.browse-text img, .np-info-review img, .np-info-review img, .np-info-review img, .np-info-review img {
+ margin-bottom:var(--std-font-size)!important;
 }
 
 .text .odd {
  float:right;
- margin-left:16px;
 }
 
 .text .even {
  float:left;
- margin-right:16px;
+}
+
+.text .odd a img {
+ margin-left:8px;
+}
+
+.text .even a img {
+ margin-right:8px;
 }
 
 /* Biographies, etc, from More > Artist information > ... */

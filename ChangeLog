@@ -21,8 +21,8 @@
 13. Larger dot for jumplist when no letters.
 14. Use "track of total" and not "track / total"
 15. Increase left/right margin around details on desktop botton bar.
-16. If invoked from Android Material app, then show server name in settings,
-    information, and server settings dialog toolbars.
+16. Show library name in toolbar title of settings, information, and server
+    settings dialogs.
 
 1.5.5
 -----

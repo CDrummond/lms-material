@@ -121,7 +121,8 @@
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\";</script>\n");
+  my $libraryName=Slim::Utils::Misc::getLibraryName();
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\";const LMS_LIBRARY_NAME=\"$libraryName\";</script>\n");
   print("  <script src=\"html/lib/vuetify-confirm.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/actions.js?r=$version\"></script>\n");

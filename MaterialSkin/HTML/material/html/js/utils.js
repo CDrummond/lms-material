@@ -39,7 +39,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, native:false, appSettings:undefined, serverName:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, native:false, appSettings:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -75,8 +75,6 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
-        } else if ("serverName"==kv[0]) {
-            resp.serverName=decodeURIComponent(kv[1]);
         }
     }
     return resp;

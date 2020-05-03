@@ -1489,6 +1489,33 @@ div.v-subheader {
  bottom:32px;
 }
 
+@media screen and (max-width: 450px) {
+ .screesaver-time {
+  font-size:64px;
+ }
+ .screesaver-date {
+  font-size:32px;
+ }
+}
+
+@media screen and (max-width: 320px) {
+ .screesaver-time {
+  font-size:48px;
+ }
+ .screesaver-date {
+  font-size:24px;
+ }
+}
+
+@media screen and (max-width: 200px) {
+ .screesaver-time {
+  font-size:32px;
+ }
+ .screesaver-date {
+  font-size:16px;
+ }
+}
+
 .color-grid {
  overflow-x:hidden !important;
  display:grid;

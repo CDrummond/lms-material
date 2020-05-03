@@ -3,6 +3,7 @@
 1. Reduce inline image margins.
 2. Query server for library name each time dialog is open, so that we catch any
    changes.
+3. Adjust screensaver text size with view width.
 
 1.5.7
 -----

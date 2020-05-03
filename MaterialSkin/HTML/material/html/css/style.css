@@ -1505,6 +1505,9 @@ div.v-subheader {
  .screesaver-date {
   font-size:24px;
  }
+ .screesaver-name {
+  font-size:val(--small-font-size);
+ }
 }
 
 @media screen and (max-width: 200px) {

@@ -452,9 +452,14 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'playersettings');
             } else if (TB_SERVER_SETTINGS.id==id) {
                 if (this.$store.state.unlockAll) {
-                    bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+(undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)), undefined,
+                    lmsCommand("", ["material-skin", "server"]).then(({data}) => {
+                        if (data && data.result) {
+                            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+(undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname)), undefined,
                                [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
                                 {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+                        }
+                    }).catch(err => {
+                    });
                 }
             } else if (TB_INFO.id==id) {
                 bus.$emit('dlg.open', 'info');

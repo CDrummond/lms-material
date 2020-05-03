@@ -109,7 +109,8 @@ Vue.component('lms-information-dialog', {
             updates: {names: new Set(), details: [], server:false},
             pluginStatus:'idle',
             rescans: [ ],
-            scanning: false
+            scanning: false,
+            serverName: ""
         }
     },
     mounted() {
@@ -126,6 +127,12 @@ Vue.component('lms-information-dialog', {
                 if (data && data.result && data.result.item_loop) {
                    this.rescans=data.result.item_loop;
                 }
+            });
+            lmsCommand("", ["material-skin", "server"]).then(({data}) => {
+                if (data && data.result) {
+                    this.serverName=undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname);
+                }
+            }).catch(err => {
             });
             this.update();
             this.timer = setInterval(function () {
@@ -318,7 +325,7 @@ Vue.component('lms-information-dialog', {
             }
         },
         openSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+(undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)));
+            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName);
         }
     },
     beforeDestroy() {
@@ -338,9 +345,6 @@ Vue.component('lms-information-dialog', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
-        },
-        serverName() {
-            return undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)
         }
     },
     filters: {

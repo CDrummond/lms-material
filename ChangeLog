@@ -1,6 +1,8 @@
 1.5.8
 -----
 1. Reduce inline image margins.
+2. Query server for library name each time dialog is open, so that we catch any
+   changes.
 
 1.5.7
 -----

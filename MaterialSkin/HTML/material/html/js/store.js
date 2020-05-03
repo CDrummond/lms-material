@@ -216,8 +216,7 @@ const store = new Vuex.Store({
         activeDialog: undefined,
         unlockAll: false,
         skipSeconds: 30,
-        screensaver: false,
-        serverName: undefined
+        screensaver: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -453,13 +452,6 @@ const store = new Vuex.Store({
                 if (1==parseInt(data.result.ok)) {
                     state.unlockAll = true;
                     bus.$emit('lockChanged');
-                }
-            }).catch(err => {
-            });
-
-            lmsCommand("", ["material-skin", "server"]).then(({data}) => {
-                if (data && data.result && data.result.libraryname != null) {
-                    state.serverName=data.result.libraryname;
                 }
             }).catch(err => {
             });

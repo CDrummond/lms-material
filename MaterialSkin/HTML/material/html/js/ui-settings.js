@@ -373,7 +373,8 @@ Vue.component('lms-ui-settings', {
             showLsAndNotif: IS_ANDROID && !queryParams.hide.has('notif'),
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
             showScale: !queryParams.hide.has('scale'),
-            appSettings: queryParams.appSettings
+            appSettings: queryParams.appSettings,
+            serverName: ""
         }
     },
     computed: {
@@ -382,9 +383,6 @@ Vue.component('lms-ui-settings', {
         },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        serverName() {
-            return undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)
         }
     },
     mounted() {
@@ -415,7 +413,12 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
-
+            lmsCommand("", ["material-skin", "server"]).then(({data}) => {
+                if (data && data.result) {
+                    this.serverName=undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname);
+                }
+            }).catch(err => {
+            });
             if (this.colors.length<1) {
                 let uisd = this;
                 axios.get("html/misc/colors.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {

@@ -137,6 +137,7 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
                 return lmsCommand(playerid, cmdParams, commandId);
             }
             return new Promise(function(resolve, reject) {
+                val.id=undefined==commandId ? 0 : commandId;
                 resolve({data:val});
             });
         });

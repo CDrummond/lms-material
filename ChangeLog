@@ -4,6 +4,7 @@
 2. Query server for library name each time dialog is open, so that we catch any
    changes.
 3. Adjust screensaver text size with view width.
+4. Fix reading list of items from cache - ID was not bing set.
 
 1.5.7
 -----

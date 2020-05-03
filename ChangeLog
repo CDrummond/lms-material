@@ -1,3 +1,7 @@
+1.5.7
+-----
+1. Don't use a constant for library name, fetch via JSONRPC call.
+
 1.5.6
 -----
  1. If current item has a 'remote_title' element and its id is negative, then

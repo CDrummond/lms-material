@@ -14,7 +14,7 @@ Vue.component('lms-information-dialog', {
    <v-toolbar app class="dialog-toolbar">
     <v-btn flat icon @click.native="close()" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
-     <div>{{i18n('Information')+SEPARATOR+LMS_LIBRARY_NAME}}</div>
+     <div>{{i18n('Information')+serverName}}</div>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn flat icon @click.native="openWindow('https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html')" :title="i18n('User guide')"><v-icon>help_outline</b-icon></v-btn>
@@ -318,7 +318,7 @@ Vue.component('lms-information-dialog', {
             }
         },
         openSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+SEPARATOR+LMS_LIBRARY_NAME);
+            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+(undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)));
         }
     },
     beforeDestroy() {
@@ -338,6 +338,9 @@ Vue.component('lms-information-dialog', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        serverName() {
+            return undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)
         }
     },
     filters: {

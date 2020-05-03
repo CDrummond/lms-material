@@ -138,7 +138,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command', 'scantypes']) ) {
+                                                  'actions', 'geturl', 'command', 'scantypes', 'server']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -567,6 +567,11 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'server') {
+        $request->addResult("libraryname", Slim::Utils::Misc::getLibraryName());
+        $request->setStatusDone();
+        return;
+    }
     $request->setStatusBadParams();
 }
 

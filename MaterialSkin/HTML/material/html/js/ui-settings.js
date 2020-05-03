@@ -14,7 +14,7 @@ Vue.component('lms-ui-settings', {
   <v-card-title class="settings-title">
    <v-toolbar app class="dialog-toolbar">
     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
-    <v-toolbar-title>{{TB_UI_SETTINGS.title+SEPARATOR+LMS_LIBRARY_NAME}}</v-toolbar-title>
+    <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn v-if="appSettings!=undefined" flat icon :href="appSettings" :title="i18n('Application settings')"><img :src="'app-settings' | svgIcon(true)"></img></v-btn>
     <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>
@@ -382,6 +382,9 @@ Vue.component('lms-ui-settings', {
         },
         darkUi() {
             return this.$store.state.darkUi
+        },
+        serverName() {
+            return undefined==this.$store.state.serverName ? "" : (SEPARATOR+this.$store.state.serverName)
         }
     },
     mounted() {

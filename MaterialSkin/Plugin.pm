@@ -37,6 +37,7 @@ my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
+my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -83,7 +84,7 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
         Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
         Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
-
+        Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
     }
@@ -748,6 +749,34 @@ sub _customActionsHandler {
         $response->header('Connection' => 'close');
         $response->content("{}");
     }
+}
+
+use Data::Dumper;
+sub _manifestHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $filePath = dirname(__FILE__) . "/HTML/material/html/material.webmanifest";
+
+    if (defined $request->{_headers}->{'referer'}) {
+        # See if we have any query params, if so add to start_url...
+        my $referer = $request->{_headers}->{'referer'};
+        my $queryPos = index($referer, '?');
+        if ($queryPos !=-1) {
+            my $query = substr($referer, $queryPos);
+            my $manifest = read_file($filePath);
+            $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/$query\"/g;
+            $response->code(RC_OK);
+            $response->content_type('application/manifest+json');
+            $response->header('Connection' => 'close');
+            $response->content($manifest);
+            return;
+        }
+    }
+
+    $response->code(RC_OK);
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "application/manifest+json", $filePath, '', 'noAttachment' );
 }
 
 1;

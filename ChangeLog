@@ -1,3 +1,7 @@
+1.5.9
+-----
+1. If we have any query parameters, then add these to the webmanifest start_url.
+
 1.5.8
 -----
 1. Reduce inline image margins.

@@ -5,6 +5,7 @@
    changes.
 3. Adjust screensaver text size with view width.
 4. Fix reading list of items from cache - ID was not bing set.
+5. Remove env(safe-area-inset-bottom), not used.
 
 1.5.7
 -----

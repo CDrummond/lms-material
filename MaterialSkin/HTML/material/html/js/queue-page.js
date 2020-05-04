@@ -508,7 +508,9 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         bus.$on('windowWidthChanged', function() {
-            this.updateMenu();
+            this.$nextTick(function () {
+                this.updateMenu();
+            });
         }.bind(this));
         bus.$on('splitterChanged', function() {
             this.updateMenu();

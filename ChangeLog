@@ -1,6 +1,7 @@
 1.5.9
 -----
 1. If we have any query parameters, then add these to the webmanifest start_url.
+2. When changing window width, wait until next tick to control queue menu items.
 
 1.5.8
 -----

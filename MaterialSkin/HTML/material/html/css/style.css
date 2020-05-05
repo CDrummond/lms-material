@@ -587,12 +587,12 @@ div.v-subheader {
  font-weight:200!important;
 }
 
-.browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
- max-width:300px !important;
+.browse-html img, .browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
+ max-width:100% !important;
  max-height:300px !important;
  margin-left:auto;
  margin-right:auto;
- margin-bottom:0px !important;
+ margin-bottom:8px;
  display:block;
 }
 
@@ -611,10 +611,12 @@ div.v-subheader {
 
 .text .odd a img {
  margin-left:8px;
+ margin-bottom:0px
 }
 
 .text .even a img {
  margin-right:8px;
+ margin-bottom:0px
 }
 
 /* Biographies, etc, from More > Artist information > ... */

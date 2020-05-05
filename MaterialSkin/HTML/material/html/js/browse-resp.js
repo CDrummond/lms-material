@@ -12,6 +12,16 @@ function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
 }
 
+function removeDiactrics(key) {
+    if (undefined!=key && key.length==1) {
+        var code = key.charCodeAt(0);
+        if (code>127) { // Non-ASCII...
+            return key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+    }
+    return key;
+}
+
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
@@ -19,7 +29,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
     try {
     if (data && data.result) {
         logJsonMessage("RESP", data);
-        var textKeys = new Set();
         if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;
@@ -359,10 +368,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
                 i.section = parent ? parent.section : undefined;
 
-                var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
+                var key = removeDiactrics(i.textkey);
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
                 }
                 if (isFavorites) {
                     i.draggable = true;
@@ -458,10 +466,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.canUseGrid = lmsOptions.infoPlugin && lmsOptions.artistImages;
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
+                var key = removeDiactrics(i.textkey);
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
@@ -515,10 +522,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (i.year && i.year>0) {
                     title+=" (" + i.year + ")";
                 }
-                var key = jumpListYear ? (""+i.year) : i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
+                var key = jumpListYear ? (""+i.year) : removeDiactrics(i.textkey);
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
                 }
 
                 var album = {
@@ -627,10 +633,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
+                var key = removeDiactrics(i.textkey);
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "genre_id:"+i.id,
@@ -645,11 +650,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.playlists_loop) {
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                var key = i.textkey;
+                var key = removeDiactrics(i.textkey);
                 var isRemote = 1 == parseInt(i.remote);
-                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
@@ -714,9 +718,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "year:"+i.year,

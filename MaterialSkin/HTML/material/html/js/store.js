@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettinhs", "info", "iframe", "manage"]);
+const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
 
 var lmsNumVisibleMenus = 0;
 

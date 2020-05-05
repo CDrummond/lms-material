@@ -19,6 +19,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
     try {
     if (data && data.result) {
         logJsonMessage("RESP", data);
+        var textKeys = new Set();
         if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;
@@ -359,8 +360,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 i.section = parent ? parent.section : undefined;
 
                 var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 if (isFavorites) {
                     i.draggable = true;
@@ -457,8 +459,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
@@ -513,8 +516,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     title+=" (" + i.year + ")";
                 }
                 var key = jumpListYear ? (""+i.year) : i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
 
                 var album = {
@@ -624,8 +628,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "genre_id:"+i.id,
@@ -642,8 +647,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var i = loop[idx];
                 var key = i.textkey;
                 var isRemote = 1 == parseInt(i.remote);
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
@@ -708,8 +714,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || (resp.jumplist[resp.jumplist.length-1].key!=key && !textKeys.has(key)))) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "year:"+i.year,

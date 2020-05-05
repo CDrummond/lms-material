@@ -4,6 +4,8 @@
 2. When changing window width, wait until next tick to control queue menu items.
 3. Set max height/width for images in album review.
 4. If passed "?native" in URL query, then inform native app of toolbar colour.
+5. When creating jumplists, only add first occurance of keys. LMS seems to have
+   odd unicode sorting behaviour where sometimes we see "A, B, C, Č, C, D"
 
 1.5.8
 -----

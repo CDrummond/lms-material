@@ -850,10 +850,12 @@ function emitToolbarColor(colorVar) {
                 return;
             }
             lastToolbarColor=c;
-            try {
-                NativeReceiver.updateNavbarColor(c);
-            } catch (e) {
-            }
+            bus.$nextTick(function () {
+                try {
+                    NativeReceiver.updateNavbarColor(lastToolbarColor);
+                } catch (e) {
+                }
+            });
         }
     }
 }

@@ -6,6 +6,8 @@
  */
 'use strict';
 
+const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettinhs", "info", "iframe", "manage"]);
+
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
@@ -559,7 +561,19 @@ const store = new Vuex.Store({
                     }
                 }
             }
+
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
+
+            if (queryParams.native) {
+                let colorVar = "--top-toolbar-color";
+                for (var i=state.openDialogs.length; i>=0; --i) {
+                    if (FULLSCREEN_DIALOGS.has(state.openDialogs[i])) {
+                        colorVar = "--dialog-toolbar-color";
+                        break;
+                    }
+                }
+                emitToolbarColor(colorVar);
+            }
         },
         setUpdatesAvailable(state, val) {
             state.updatesAvailable = val;

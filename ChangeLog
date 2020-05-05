@@ -3,6 +3,7 @@
 1. If we have any query parameters, then add these to the webmanifest start_url.
 2. When changing window width, wait until next tick to control queue menu items.
 3. Set max height/width for images in album review.
+4. If passed "?native" in URL query, then inform native app of toolbar colour.
 
 1.5.8
 -----

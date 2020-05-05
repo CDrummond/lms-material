@@ -64,7 +64,7 @@ function parseQueryParams() {
             changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
-        } else if("native"==kv[0]) {
+        } else if ("native"==kv[0]) {
             resp.native=true;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
@@ -383,6 +383,7 @@ function changeLink(href, id) {
 function setTheme(theme, color) {
     changeLink("html/css/themes/" + theme + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
+    emitToolbarColor("--top-toolbar-color");
 }
 
 function setLayout(useDesktop) {
@@ -837,3 +838,22 @@ function addNote(str) {
     return "<br/><br/><div class='note'>"+str+"</div>";
 }
 
+let lastToolbarColor = undefined;
+function emitToolbarColor(colorVar) {
+    if (queryParams.native) {
+        let c = getComputedStyle(document.documentElement).getPropertyValue(colorVar);
+        if (c!=lastToolbarColor) {
+            if (undefined==c || 0==c.length) {
+                setTimeout(function() {
+                    emitToolbarColor(colorVar);
+                }, 100);
+                return;
+            }
+            lastToolbarColor=c;
+            try {
+                NativeReceiver.updateNavbarColor(c);
+            } catch (e) {
+            }
+        }
+    }
+}

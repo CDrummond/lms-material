@@ -9,7 +9,7 @@
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstyABKNST";
 
 function updateNative(status) {
-    if (queryParams.native) {
+    if (queryParams.nativeStatus) {
         try {
             NativeReceiver.updateStatus(JSON.stringify(status));
         } catch (e) {

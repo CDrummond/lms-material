@@ -207,10 +207,11 @@ If you have multiple players, then player actions will be accessible from the
 
 ### Native applications
 
-Material can send status updates to native Android (and iOS?) applications. To
-enable this in material, pass the `native` query parameter, e.g.:
+Material can send status updates, and current toolbar colors, to native Android
+(and iOS?) applications. To enable this in material, pass the `nativeStatus` and
+`nativeColors` query parameters, e.g.:
 
-* `http://<yourserver>:9000/material/?native`
+* `http://<yourserver>:9000/material/?nativeColors&nativeStatus`
 
 Your Android app then needs something like the following:
 
@@ -230,6 +231,14 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 ```
+
+### iOS fullscreen without home buttom
+
+If using Material as a webapp on an iOS device that has no home-screen button,
+then the black bar at the bottom can over-write part of Material's navigation
+bar. To work around this pass `ios` in the URL query. e.g.
+
+* `http://<yourserver>:9000/material/?ios`
 
 ## Donations
 

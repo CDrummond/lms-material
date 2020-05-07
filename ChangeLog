@@ -10,6 +10,7 @@
    albumartist - likewise with band_ids.
 7. If fail to fetch biography and albumartist text is within artist text, then
    try to fetch biography of albumartist.
+8. Back button navigates back in browse page.
 
 1.5.8
 -----

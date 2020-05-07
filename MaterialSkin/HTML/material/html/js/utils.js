@@ -459,6 +459,10 @@ function decrementVolume() {
     bus.$emit("adjustVolume", false);
 }
 
+function navigateBack() {
+    bus.$emit('navigateBack');
+}
+
 function isVisible(elem) {
     var rect = elem.getBoundingClientRect();
     var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);

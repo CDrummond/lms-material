@@ -464,10 +464,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.artist_ids = artist_ids;
                 trackChanged = true;
             }
-            if (playerStatus.current.albumartist!=this.playerStatus.current.albumartist ||
-                playerStatus.current.albumartist_ids!=this.playerStatus.current.albumartist_ids ) {
-                this.playerStatus.current.albumartist = playerStatus.current.albumartist;
-                this.playerStatus.current.albumartist_ids = playerStatus.current.albumartist_ids;
+            var albumartist = playerStatus.current.albumartist ? playerStatus.current.albumartist : playerStatus.current.band;
+            var albumartist_ids = playerStatus.current.albumartist_ids ? playerStatus.current.albumartist_ids : playerStatus.current.band_ids;
+            if (albumartist!=this.playerStatus.current.albumartist || albumartist_ids!=this.playerStatus.current.albumartist_ids) {
+                this.playerStatus.current.albumartist = albumartist;
+                this.playerStatus.current.albumartist_ids = albumartist_ids;
                 trackChanged = true;
             }
             if (playerStatus.current.album!=this.playerStatus.current.albumName ||
@@ -816,6 +817,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.tabs[BIO_TAB].artist=this.infoTrack.artist;
                 this.info.tabs[BIO_TAB].artist_id=this.infoTrack.artist_id;
                 this.info.tabs[BIO_TAB].artist_ids=this.infoTrack.artist_ids;
+                this.info.tabs[BIO_TAB].albumartist=this.infoTrack.albumartist;
+                this.info.tabs[BIO_TAB].albumartist_ids=this.infoTrack.albumartist_ids;
                 this.info.tabs[BIO_TAB].reqId++;
                 if (this.info.tabs[BIO_TAB].reqId>65535) {
                     this.info.tabs[BIO_TAB].reqId = 0;
@@ -863,8 +866,33 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         lmsCommand("", command, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
                             logJsonMessage("RESP", data);
                             if (data && data.result && this.isCurrent(data, BIO_TAB) && (data.result.biography || data.result.error)) {
-                                this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
-                                this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
+                                // If failt with artist, try albumartist (if this is within artist)
+                                if (undefined==data.result.biography && this.info.tabs[BIO_TAB].albumartist &&
+                                    this.info.tabs[BIO_TAB].artist.indexOf(this.info.tabs[BIO_TAB].albumartist)>=0) {
+                                    var command = ["musicartistinfo", "biography", "html:1"];
+                                    if (this.infoTrack.albumartist_ids!=undefined) {
+                                        command.push("artist_id:"+this.infoTrack.albumartist_ids.split(", ")[0].trim());
+                                    } else if (this.infoTrack.albumartist!=undefined) {
+                                        command.push("artist:"+this.infoTrack.albumartist);
+                                    }
+                                    if (3==command.length) {
+                                        this.info.tabs[BIO_TAB].text=data.result.error;
+                                        this.info.tabs[BIO_TAB].isMsg=true;
+                                    } else {
+                                        lmsCommand("", command, this.info.tabs[BIO_TAB].reqId).then(({data}) => {
+                                            logJsonMessage("RESP", data);
+                                            if (data && data.result && this.isCurrent(data, BIO_TAB) && (data.result.biography || data.result.error)) {
+                                                this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                                                this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
+                                            }
+                                        }).catch(error => {
+                                            this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
+                                        });
+                                    }
+                                } else {
+                                    this.info.tabs[BIO_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                                    this.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
+                                }
                             }
                         }).catch(error => {
                             this.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");

@@ -5,6 +5,10 @@
 3. Set max height/width for images in album review.
 4. If passed "?native" in URL query, then inform native app of toolbar colour.
 5. Remove diactrics when creating jumplists.
+6. In now playing, if status has band and not albumartist then use that for
+   albumartist - likewise with band_ids.
+7. If fail to fetch biography and albumartist text is within artist text, then
+   try to fetch biography of albumartist.
 
 1.5.8
 -----

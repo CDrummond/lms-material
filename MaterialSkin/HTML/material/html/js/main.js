@@ -17,7 +17,6 @@ var app = new Vue({
                             dstm: false, savequeue: false } }
     },
     created() {
-        this.nowPlayingExpanded = false; // Need to keep track so can ignore back button whilst open
         this.autoLayout = true;
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;
@@ -156,7 +155,7 @@ var app = new Vue({
         window.addEventListener('popstate', function(event) {
             if (event.state && event.state.noBackExitsApp) {
                 window.history.pushState({ noBackExitsApp: true }, '');
-                bus.$emit('navigateBack');
+                bus.$emit('esc');
             }
         }, false);
 
@@ -190,17 +189,6 @@ var app = new Vue({
 
         bus.$on('changeLayout', function(layout) {
             this.setLayout(layout);
-        }.bind(this));
-
-        bus.$on('nowPlayingExpanded', function(val) {
-            this.nowPlayingExpanded = val;
-        }.bind(this));
-        bus.$on('navigateBack', function() {
-            if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
-                bus.$emit('esc');
-            } else if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') {
-                bus.$emit('nav', 'browse', false);
-            }
         }.bind(this));
     },
     computed: {

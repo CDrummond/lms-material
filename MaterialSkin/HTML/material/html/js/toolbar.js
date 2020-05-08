@@ -281,6 +281,7 @@ Vue.component('lms-toolbar', {
 
         bus.$on('esc', function() {
             this.showPlayerMenu = false;
+            this.showMainMenu = false;
         }.bind(this));
         bus.$on('hideMenu', function(name) {
             if (name=='main') {

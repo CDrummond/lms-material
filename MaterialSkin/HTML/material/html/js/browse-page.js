@@ -419,8 +419,16 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
 
+        this.nowPlayingExpanded = false; // Keep track so that we know when to ignore 'esc'=>goback
+        bus.$on('nowPlayingExpanded', function(val) {
+            this.nowPlayingExpanded = val;
+        }.bind(this));
         bus.$on('esc', function() {
-            this.menu.show = false;
+            if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
+                this.menu.show = false;
+            } else if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') {
+                this.goBack();
+            }
         }.bind(this));
 
         bus.$on('prefset', function(pref, value) {

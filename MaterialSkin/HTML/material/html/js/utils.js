@@ -460,7 +460,7 @@ function decrementVolume() {
 }
 
 function navigateBack() {
-    bus.$emit('navigateBack');
+    bus.$emit('esc');
 }
 
 function isVisible(elem) {

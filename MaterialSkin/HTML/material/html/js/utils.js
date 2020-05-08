@@ -385,7 +385,7 @@ function changeLink(href, id) {
 function setTheme(theme, color) {
     changeLink("html/css/themes/" + theme + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
-    emitToolbarColor("--top-toolbar-color");
+    emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
 }
 
 function setLayout(useDesktop) {
@@ -844,21 +844,22 @@ function addNote(str) {
     return "<br/><br/><div class='note'>"+str+"</div>";
 }
 
-let lastToolbarColor = undefined;
-function emitToolbarColor(colorVar) {
+let lastToolbarColors = {top: undefined, bot:undefined};
+function emitToolbarColors(top, bot) {
     if (queryParams.nativeColors) {
-        let c = getComputedStyle(document.documentElement).getPropertyValue(colorVar);
-        if (c!=lastToolbarColor) {
-            if (undefined==c || 0==c.length) {
+        let t = getComputedStyle(document.documentElement).getPropertyValue(top);
+        let b = getComputedStyle(document.documentElement).getPropertyValue(bot);
+        if (t!=lastToolbarColors.top && b!=lastToolbarColors.bot) {
+            if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
                 setTimeout(function() {
-                    emitToolbarColor(colorVar);
+                    emitToolbarColors(top, bot);
                 }, 100);
                 return;
             }
-            lastToolbarColor=c;
+            lastToolbarColors={top:t, bot:b};
             bus.$nextTick(function () {
                 try {
-                    NativeReceiver.updateNavbarColor(lastToolbarColor);
+                    NativeReceiver.updateToolbarColors(lastToolbarColors.top, lastToolbarColors.bot);
                 } catch (e) {
                 }
             });

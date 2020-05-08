@@ -3,8 +3,8 @@
 1. If we have any query parameters, then add these to the webmanifest start_url.
 2. When changing window width, wait until next tick to control queue menu items.
 3. Set max height/width for images in album review.
-4. If passed "?nativeColors" in URL query, then inform native app of toolbar
-   colour.
+4. If passed "?nativeColors" in URL query, then inform native app of toolbar and
+   bottom navbar colours.
 5. Remove diactrics when creating jumplists.
 6. In now playing, if status has band and not albumartist then use that for
    albumartist - likewise with band_ids.

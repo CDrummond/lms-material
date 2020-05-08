@@ -565,14 +565,16 @@ const store = new Vuex.Store({
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
 
             if (queryParams.nativeColors) {
-                let colorVar = "--top-toolbar-color";
+                let topColorVar = "--top-toolbar-color";
+                let botColorVar = "--bottom-toolbar-color";
                 for (var i=state.openDialogs.length; i>=0; --i) {
                     if (FULLSCREEN_DIALOGS.has(state.openDialogs[i])) {
-                        colorVar = "--dialog-toolbar-color";
+                        topColorVar = "--dialog-toolbar-color";
+                        botColorVar = "--background-color";
                         break;
                     }
                 }
-                emitToolbarColor(colorVar);
+                emitToolbarColors(topColorVar, botColorVar);
             }
         },
         setUpdatesAvailable(state, val) {

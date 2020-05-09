@@ -77,6 +77,9 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+        } else if ("agn"==kv[0]) {
+            document.documentElement.style.setProperty('--bottom-nav-pad', '-3px');
+            document.documentElement.style.setProperty('--bottom-nav-height', '47px');
         }
     }
     return resp;

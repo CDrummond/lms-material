@@ -1,10 +1,10 @@
 1.6.0
 -----
 1. Don't colour toolbars of fullscreen dialogs for dark and light themes, only
-   colour if usig coloured toolbars.
+   colour if using coloured toolbars.
 2. Use separate checkbox for coloured toolbars option.
 3. Add 'Darker' theme variant.
-4. Remove botom nav resizing for android gesture navigation.
+4. Remove bottom nav resizing for android gesture navigation.
 
 1.5.9
 -----

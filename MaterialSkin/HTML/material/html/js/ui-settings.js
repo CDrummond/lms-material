@@ -39,6 +39,15 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <v-list-tile>
+     <v-list-tile-content @click="colorToolbars = !colorToolbars" class="switch-label">
+      <v-list-tile-title>{{i18n('Color toolbars')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="colorToolbars"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
     <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -327,6 +336,7 @@ Vue.component('lms-ui-settings', {
             themes: [ ],
             color: 'blue',
             colors: [ ],
+            colorToolbars: false,
             largerElements: false,
             letterOverlay:false,
             showMenuAudio:true,
@@ -443,7 +453,9 @@ Vue.component('lms-ui-settings', {
     },
     methods: {
         readStore() {
-            this.theme = this.$store.state.theme;
+            var themeParts = this.$store.state.theme ? this.$store.state.theme.split('-') : ['dark'];
+            this.theme = themeParts[0];
+            this.colorToolbars = 'colored'==themeParts[1];
             this.color = this.$store.state.color;
             this.largerElements = this.$store.state.largerElements;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
@@ -486,11 +498,8 @@ Vue.component('lms-ui-settings', {
         initItems() {
             this.themes=[
                 { key:'light',         label:i18n('Light')},
-                { key:'light-colored', label:i18n('Light (colored toolbars)')},
                 { key:'dark',          label:i18n('Dark')},
-                { key:'dark-colored',  label:i18n('Dark (colored toolbars)')},
-                { key:'black',         label:i18n('Black')},
-                { key:'black-colored', label:i18n('Black (colored toolbars)')}
+                { key:'black',         label:i18n('Black')}
                 ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},
@@ -506,7 +515,7 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
-            this.$store.commit('setUiSettings', { theme:this.theme,
+            this.$store.commit('setUiSettings', { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                                   color:this.color,
                                                   largerElements:this.largerElements,
                                                   autoScrollQueue:this.autoScrollQueue,
@@ -550,7 +559,7 @@ Vue.component('lms-ui-settings', {
                                 (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
                           {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
-                    var settings = { theme:this.theme,
+                    var settings = { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                      color:this.color,
                                      largerElements:this.largerElements,
                                      autoScrollQueue:this.autoScrollQueue,

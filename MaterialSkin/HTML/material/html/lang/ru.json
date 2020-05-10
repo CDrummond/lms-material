@@ -57,7 +57,6 @@
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Автоматически сортировать элементы на главном экране. Требуется для iPhone, т.к он не поддерживает перетаскивание",
 "Basic options":"Бызовые опции",
 "Black":"Черный",
-"Black (colored toolbars)":"Темный (цветные панели инструментов)",
 "Browse":"Отображение",
 "Browse modes":"Режимы просмотра",
 "Browse music library":"Просмотреть библиотеку",
@@ -85,7 +84,6 @@
 "Ctrl+Shift+%1":"Ctrl+Shift+%1",
 "Current play queue":"Текущая очередь",
 "Dark":"Темный",
-"Dark (colored toolbars)":"Темный (цветные панели инструментов)",
 "Days":"Дней",
 "Decrease volume":"Уменьшить громкость",
 "Default player":"Проигрыватель по умолчанию",
@@ -173,7 +171,6 @@
 "Last scan: %1":"Последнее сканирование: %1",
 "Library":"Библиотека",
 "Light":"Светлый",
-"Light (colored toolbars)":"Светлый (цветные панели инструментов)",
 "Loading...":"Загрузука...",
 "Lock screen and notification":"Экран блокировки и уведомление",
 "Lock screen and notification controls will be disabled whilst player is active.":"Блокировка экрана и управление уведомлениями будут отключены, пока идет проигрывание.",
@@ -446,7 +443,9 @@
 "Appended album to the play queue":"",
 "Appended all albums to the play queue":"",
 "Application settings":"",
+"Color toolbars":"",
 "No entries found":"",
+"Use chosen color for toolbars.":"",
 "⌘+%1":"",
 "⌘+Shift+%1":""
 }

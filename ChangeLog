@@ -2,6 +2,7 @@
 -----
 1. Don't colour toolbars of fullscreen dialogs for dark and light themes, only
    colour if usig coloured toolbars.
+2. Use separate checkbox for coloured toolbars option.
 
 1.5.9
 -----

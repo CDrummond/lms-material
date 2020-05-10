@@ -57,7 +57,6 @@
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Automatisch sorteren van items op startpagina. Verplicht voor iPhone aangezien drag-en-drop niet wordt ondersteund.",
 "Basic options":"Basis opties",
 "Black":"Zwart",
-"Black (colored toolbars)":"Zwart (gekleurde taakbalken)",
 "Browse":"Bladeren",
 "Browse modes":"Bladermodi",
 "Browse music library":"Bladeren in muziek collectie",
@@ -85,7 +84,6 @@
 "Ctrl+Shift+%1":"Ctrl+Shift+%1",
 "Current play queue":"Huidige afspeellijst",
 "Dark":"Donker",
-"Dark (colored toolbars)":"Donker (gekleurde taakbalken)",
 "Days":"Dagen",
 "Decrease volume":"Volume verlagen",
 "Default player":"Standaard speler",
@@ -173,7 +171,6 @@
 "Last scan: %1":"Laatste scan: %1",
 "Library":"Mediacollectie",
 "Light":"Licht",
-"Light (colored toolbars)":"Licht (gekleurde taakbalken)",
 "Loading...":"Laden...",
 "Lock screen and notification":"Vergrendel scherm en notificaties",
 "Lock screen and notification controls will be disabled whilst player is active.":"Vergrendelscherm en notificatie bediening worden uitgeschakeld als een speler actief is.",
@@ -448,5 +445,7 @@
 "%1 days":"%1 dagen",
 "Appended album to the play queue":"",
 "Appended all albums to the play queue":"",
-"Application settings":""
+"Application settings":"",
+"Color toolbars":"",
+"Use chosen color for toolbars.":""
 }

@@ -57,7 +57,6 @@
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Sorter automatisk menupunkter for forsiden. Krævet på iPhone da denne ikke understøtter træk-og-slip.",
 "Basic options":"Grundlæggende indstillinger",
 "Black":"Sort",
-"Black (colored toolbars)":"Sort (farvet værktøjslinje)",
 "Browse":"Gennemse musikbibliotek",
 "Browse modes":"Måder at gennemgå musikbiblioteket på",
 "Browse music library":"Gå på opdagelse i dit musikbibliotek",
@@ -85,7 +84,6 @@
 "Ctrl+Shift+%1":"Ctrl+shift+%1",
 "Current play queue":"Nuværende afspilningskø",
 "Dark":"Mørk",
-"Dark (colored toolbars)":"Mørk (farvet værktøjslinje)",
 "Days":"Dage",
 "Decrease volume":"Skru ned for lyden",
 "Default player":"Standardafspiller",
@@ -173,7 +171,6 @@
 "Last scan: %1":"Sidste skanning: '%1'",
 "Library":"Bibliotek",
 "Light":"Lys",
-"Light (colored toolbars)":"Lys (farvet værktøjslinje)",
 "Loading...":"Indlæser...",
 "Lock screen and notification":"Låseskærm og underretninger",
 "Lock screen and notification controls will be disabled whilst player is active.":"Låseskærmen og afspilningsknapper i underretninger er slået fra mens afspilleren er aktiv",
@@ -448,5 +445,7 @@
 "%1 days":"%1 dage",
 "Appended album to the play queue":"",
 "Appended all albums to the play queue":"",
-"Application settings":""
+"Application settings":"",
+"Color toolbars":"",
+"Use chosen color for toolbars.":""
 }

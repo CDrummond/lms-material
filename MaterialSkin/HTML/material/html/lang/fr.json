@@ -60,7 +60,6 @@
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Tri automatique des éléments de l'écran d'accueil. Nécessaire pour l'iPhone car il ne prend pas en charge le glisser-déposer.",
 "Basic options":"Options de base",
 "Black":"Noir",
-"Black (colored toolbars)":"Noir (barres d'outils colorées)",
 "Browse":"Bibliothèque",
 "Browse modes":"Parcourir les modes",
 "Browse music library":"Parcourir la bibliothèque",
@@ -88,7 +87,6 @@
 "Ctrl+Shift+%1":"Ctrl+Maj+%1",
 "Current play queue":"Liste de lecture en cours",
 "Dark":"Sombre",
-"Dark (colored toolbars)":"Sombre (barres d'outils colorées)",
 "Days":"Jours",
 "Decrease volume":"Baisser le volume",
 "Default player":"Platine par défaut",
@@ -176,7 +174,6 @@
 "Last scan: %1":"Dernière analyse : %1",
 "Library":"Bibliothèque",
 "Light":"Clair",
-"Light (colored toolbars)":"Clair (barres d'outils colorées)",
 "Loading...":"Chargement...",
 "Lock screen and notification":"Ecran de verrouillage et notification",
 "Lock screen and notification controls will be disabled whilst player is active.":"L'écran de verrouillage et la notification de contrôle seront désactivés tant que la platine est active.",
@@ -448,5 +445,7 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Color toolbars":"",
+"Use chosen color for toolbars.":""
 }

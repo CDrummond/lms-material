@@ -499,6 +499,7 @@ Vue.component('lms-ui-settings', {
             this.themes=[
                 { key:'light',         label:i18n('Light')},
                 { key:'dark',          label:i18n('Dark')},
+                { key:'darker',        label:i18n('Darker')},
                 { key:'black',         label:i18n('Black')}
                 ];
             this.layoutItems=[

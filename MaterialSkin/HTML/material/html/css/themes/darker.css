@@ -1,0 +1,75 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+:root {
+ --active-color:var(--accent-color);
+ --active-toolbar-color:var(--active-color);
+ --scrollbar-thumb-color:#4f4f4f;
+ --scrollbar-track-color:#2f2f2f;
+ --scrollbar-corner-color:#222;
+ --background-color:#212121;
+ --background-shadow-color:rgba(32, 32, 32, 0.9);
+ --dialog-toolbar-color:#212121;
+ --bottom-toolbar-color:#212121;
+ --top-toolbar-color:#212121;
+ --sub-toolbar-color:#212121;
+ --bottom-toolbar-border-color:#2f2f2f;
+ --top-toolbar-border-color:#2f2f2f;
+ --sub-toolbar-border-color:#2f2f2f;
+ --dialog-toolbar-border-color:#2f2f2f;
+ --splitter-color:#2f2f2f;
+ --icon-color:#fff;
+ --dlg-icon-color:#fff;
+ --list-item-border-color:#2f2f2f;
+ --subheader-color:#fff;
+ --text-shadow-color:#212121;
+ --text-color:#fff;
+ --dialog-toolbar-text-color:#fff;
+ --top-toolbar-text-color:#fff;
+ --sub-toolbar-text-color:#fff;
+ --bottom-toolbar-text-color:#fff;
+ --active-nav-btn-color:var(--accent-color);
+ --toolbar-volume-color:var(--primary-color);
+ --bottom-position-slider-color:var(--primary-color);
+ --inactive-nav-opacity:0.75;
+}
+
+.np-info-cover {
+ background-color:#212121;
+}
+
+.v-menu__content, .v-dialog, .v-toast {
+ border:1px solid var(--dialog-toolbar-border-color) !important;
+}
+
+.v-dialog--fullscreen {
+ border:none !important;
+}
+
+.v-menu__content, .vol-sheet {
+ border-left:1px solid var(--dialog-toolbar-border-color);
+ border-right:1px solid var(--dialog-toolbar-border-color);
+ border-bottom:1px solid var(--dialog-toolbar-border-color);
+}
+
+.lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+ background-color:var(--list-item-border-color) !important;
+}
+
+.lms-list .lms-list-pad .v-list__tile:hover, .lms-list-sub .lms-list-pad .v-list__tile:hover, .lms-list3 .lms-list-pad .v-list__tile:hover, .lms-list-sub3 .lms-list-pad .v-list__tile:hover {
+ background-color:transparent !important;
+}
+
+@media (hover: hover) {
+ .menu-btn:hover {
+  background-color:rgba(128, 128, 128, 0.5);
+ }
+}
+
+.lms-toolbar .v-btn__content i.active-btn {
+ color:var(--active-color) !important;
+}

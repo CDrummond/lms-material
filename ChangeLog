@@ -4,6 +4,7 @@
    colour if usig coloured toolbars.
 2. Use separate checkbox for coloured toolbars option.
 3. Add 'Darker' theme variant.
+4. Remove botom nav resizing for android gesture navigation.
 
 1.5.9
 -----

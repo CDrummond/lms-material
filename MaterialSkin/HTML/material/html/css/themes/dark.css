@@ -13,14 +13,14 @@
  --scrollbar-corner-color:#333;
  --background-color:#424242;
  --background-shadow-color:rgba(72, 72, 72, 0.9);
- --dialog-toolbar-color:var(--primary-color);
+ --dialog-toolbar-color:#212121;
  --bottom-toolbar-color:#212121;
  --top-toolbar-color:#212121;
  --sub-toolbar-color:#3f3f3f;
  --bottom-toolbar-border-color:#212121;
  --top-toolbar-border-color:#212121;
  --sub-toolbar-border-color:#333;
- --dialog-toolbar-border-color:var(--primary-color);
+ --dialog-toolbar-border-color:#212121;
  --splitter-color:#333;
  --icon-color:#fff;
  --dlg-icon-color:#fff;

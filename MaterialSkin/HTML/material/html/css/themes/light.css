@@ -13,14 +13,14 @@
  --scrollbar-corner-color:#e0e0e0;
  --background-color:#fff;
  --background-shadow-color:rgba(255, 255, 255, 0.9);
- --dialog-toolbar-color:var(--primary-color);
+ --dialog-toolbar-color:#f5f5f5;
  --bottom-toolbar-color:#f5f5f5;
  --top-toolbar-color:#f5f5f5;
  --sub-toolbar-color:#f5f5f5;
  --bottom-toolbar-border-color:#e0e0e0;
  --top-toolbar-border-color:#e0e0e0;
  --sub-toolbar-border-color:#e0e0e0;
- --dialog-toolbar-border-color:var(--primary-color);
+ --dialog-toolbar-border-color:#e0e0e0;
  --splitter-color:#e0e0e0;
  --icon-color:#333;
  --dlg-icon-color:#fff;
@@ -28,7 +28,7 @@
  --subheader-color:rgba(0, 0, 0, 0.87);
  --text-shadow-color:#fff;
  --text-color:#333;
- --dialog-toolbar-text-color:#fff;
+ --dialog-toolbar-text-color:#333;
  --top-toolbar-text-color:#333;
  --sub-toolbar-text-color:#333;
  --bottom-toolbar-text-color:#333;

@@ -16,7 +16,7 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn v-if="appSettings!=undefined" flat icon :href="appSettings" :title="i18n('Application settings')"><img :src="'app-settings' | svgIcon(true)"></img></v-btn>
+    <v-btn v-if="appSettings!=undefined" flat icon :href="appSettings" :title="i18n('Application settings')"><v-icon>settings_applications</v-icon></v-btn>
     <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>
     <v-btn flat icon @click.native="revertToDefault" :title="i18n('Revert to default')"><v-icon>settings_backup_restore</b-icon></v-btn>
    </v-toolbar>
@@ -701,11 +701,6 @@ Vue.component('lms-ui-settings', {
         showBrowseModesDialog() {
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
-        }
-    },
-    filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

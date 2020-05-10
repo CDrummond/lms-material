@@ -51,3 +51,15 @@
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;
 }
+
+#browse-grid .add-btn, #browse-grid .play-btn,
+#browse-list .add-btn, #browse-list .play-btn {
+ color:rgba(48, 48, 48, 0.6);
+ background-color:rgba(240, 240, 240, 0.75)!important;
+}
+
+#browse-grid .add-btn:hover, #browse-grid .play-btn:hover,
+#browse-list .add-btn:hover, #browse-list .play-btn:hover {
+ color:#333;
+ background-color:rgba(240, 240, 240, 0.75)!important;
+}

@@ -8,6 +8,7 @@
 5. Update native colours when either top or bottom changes.
 6. Use non-svg icon for application settings, so that it is correctly
    recoloured.
+7. Better play/add hover buttons for light theme.
 
 1.5.9
 -----

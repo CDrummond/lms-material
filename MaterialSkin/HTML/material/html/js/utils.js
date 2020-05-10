@@ -849,7 +849,7 @@ function emitToolbarColors(top, bot) {
     if (queryParams.nativeColors) {
         let t = getComputedStyle(document.documentElement).getPropertyValue(top);
         let b = getComputedStyle(document.documentElement).getPropertyValue(bot);
-        if (t!=lastToolbarColors.top && b!=lastToolbarColors.bot) {
+        if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
             if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
                 setTimeout(function() {
                     emitToolbarColors(top, bot);

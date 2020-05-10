@@ -5,6 +5,7 @@
 2. Use separate checkbox for coloured toolbars option.
 3. Add 'Darker' theme variant.
 4. Remove bottom nav resizing for android gesture navigation.
+5. Update native colours when either top or bottom changes.
 
 1.5.9
 -----

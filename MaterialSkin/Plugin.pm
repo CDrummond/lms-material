@@ -751,7 +751,6 @@ sub _customActionsHandler {
     }
 }
 
-use Data::Dumper;
 sub _manifestHandler {
     my ( $httpClient, $response ) = @_;
     return unless $httpClient->connected;

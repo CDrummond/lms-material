@@ -383,7 +383,9 @@ function changeLink(href, id) {
 }
 
 function setTheme(theme, color) {
-    changeLink("html/css/themes/" + theme + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
+    let t = theme ? theme.split('-') : ['dark', 'standard'];
+    changeLink("html/css/themes/" + t[0] + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
+    changeLink("html/css/variant/" + (t.length>1 ? t[1] : 'standard') + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
     emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
 }

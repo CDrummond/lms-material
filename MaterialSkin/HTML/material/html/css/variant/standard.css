@@ -1,0 +1,10 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+ 
+.lms-toolbar .v-btn__content i.active-btn {
+ color:var(--active-color) !important;
+}

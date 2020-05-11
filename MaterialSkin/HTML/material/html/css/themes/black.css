@@ -21,6 +21,7 @@
  --top-toolbar-border-color:#282828;
  --sub-toolbar-border-color:#282828;
  --dialog-toolbar-border-color:#282828;
+ --dialog-border-color:#282828;
  --splitter-color:#282828;
  --icon-color:#fff;
  --dlg-icon-color:#fff;
@@ -43,7 +44,7 @@
 }
 
 .v-menu__content, .v-dialog, .v-toast {
- border:1px solid var(--dialog-toolbar-border-color) !important;
+ border:1px solid var(--dialog-border-color) !important;
 }
 
 .v-dialog--fullscreen {
@@ -51,9 +52,9 @@
 }
 
 .v-menu__content, .vol-sheet {
- border-left:1px solid var(--dialog-toolbar-border-color);
- border-right:1px solid var(--dialog-toolbar-border-color);
- border-bottom:1px solid var(--dialog-toolbar-border-color);
+ border-left:1px solid var(--dialog-border-color);
+ border-right:1px solid var(--dialog-border-color);
+ border-bottom:1px solid var(--dialog-border-color);
 }
 
 .lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {

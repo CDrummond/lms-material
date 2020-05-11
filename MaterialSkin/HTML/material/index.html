@@ -19,7 +19,8 @@
   <link href="html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2" rel="stylesheet">
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
-  print("<link href=\"html/css/themes/dark.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
+  print("<link href=\"html/css/themes/dark.css?r=$version\" rel=\"stylesheet\" id=\"themecss\">\n");
+  print("<link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">");

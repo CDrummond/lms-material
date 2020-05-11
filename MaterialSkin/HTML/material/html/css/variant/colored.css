@@ -6,31 +6,15 @@
  */
 
 :root {
- --active-color:var(--accent-color);
- --active-toolbar-color:var(--active-color);
- --scrollbar-thumb-color:#5f5f5f;
- --scrollbar-track-color:#3f3f3f;
- --scrollbar-corner-color:#333;
- --background-color:#424242;
- --background-shadow-color:rgba(72, 72, 72, 0.9);
+ --active-toolbar-color:#fff;
  --dialog-toolbar-color:var(--primary-color);
  --bottom-toolbar-color:var(--primary-color);
  --top-toolbar-color:var(--primary-color);
- --sub-toolbar-color:#3f3f3f;
  --bottom-toolbar-border-color:var(--primary-color);
  --top-toolbar-border-color:var(--primary-color);
- --sub-toolbar-border-color:#333;
  --dialog-toolbar-border-color:var(--primary-color);
- --splitter-color:#333;
- --icon-color:#fff;
- --dlg-icon-color:#fff;
- --list-item-border-color:#5c5c5c;
- --subheader-color:#fff;
- --text-shadow-color:#000;
- --text-color:#fff;
  --dialog-toolbar-text-color:#fff;
  --top-toolbar-text-color:#fff;
- --sub-toolbar-text-color:#fff;
  --bottom-toolbar-text-color:#fff;
  --active-nav-btn-color:#fff;
  --toolbar-volume-color:#fff;
@@ -38,18 +22,18 @@
  --inactive-nav-opacity:0.5;
 }
 
-.np-info-cover {
- background-color:#000;
-}
-
 .lms-toolbar .v-input--slider .v-slider__track,
 .lms-toolbar .v-input--slider .v-slider__track-fill,
 .lms-toolbar .v-slider__thumb-container .v-slider__thumb {
- background:rgba(255, 255, 255, 0.3333);
+ background:rgba(255, 255, 255, 0.3333)!important;
+}
+
+.lms-toolbar .v-btn__content i.active-btn {
+ color:#fff !important;
 }
 
 @media (hover: hover) {
  .menu-btn:hover {
-  background-color:rgba(128, 128, 128, 0.5);
+  background-color:rgba(184, 184, 184, 0.5);
  }
 }

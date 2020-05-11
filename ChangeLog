@@ -9,6 +9,7 @@
 6. Use non-svg icon for application settings, so that it is correctly
    recoloured.
 7. Better play/add hover buttons for light theme.
+8. Place colored css mods into separate file, no need for theme-colored.css
 
 1.5.9
 -----

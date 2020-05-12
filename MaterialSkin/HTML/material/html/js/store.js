@@ -27,7 +27,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('color', state.color);
         themeChanged = true;
     }
-    console.log(state.theme);
     state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
     if (themeChanged) {
         setTheme(state.theme, state.color);

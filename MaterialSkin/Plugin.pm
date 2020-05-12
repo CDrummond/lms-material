@@ -141,7 +141,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'user-themes']) ) {
+                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -576,20 +576,45 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'user-themes') {
-        my $path = Slim::Utils::Prefs::dir() . "/material-skin/themes/";
-        if (-d $path) {
-            my $cnt = 0;
-            opendir DIR, $path;
-            my @items = readdir(DIR);
-            close DIR;
-            foreach (@items) {
-                if (-f $path . "/" . $_ ) {
-                    my @parts = split(/\./, $_);
-                    if ((scalar(@parts)==2) && $parts[1]=='css') {
-                        $request->addResultLoop("themes", $cnt, "label", $parts[0]);
-                        $request->addResultLoop("themes", $cnt, "key", "user:" . $parts[0]);
-                        $cnt++;
+    if ($cmd eq 'themes') {
+        my $cnt = 0;
+        my $platform = $request->getParam('platform');
+        my @variants=('light', 'dark');
+        if ($platform) {
+            foreach my $variant (@{variants}) {
+                my $path = dirname(__FILE__) . "/HTML/material/html/css/themes/" . $platform . "/" . $variant;
+                if (-d $path) {
+                    opendir DIR, $path;
+                    my @items = readdir(DIR);
+                    close DIR;
+                    foreach (@items) {
+                        if (-f $path . "/" . $_ ) {
+                            my @parts = split(/\./, $_);
+                            if ((scalar(@parts)==2) && $parts[1]=='css') {
+                                $request->addResultLoop("themes", $cnt, "label", $parts[0]);
+                                $request->addResultLoop("themes", $cnt, "key", $platform . "/" . $variant . "/" . $parts[0]);
+                                $cnt++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach my $variant (@{variants}) {
+            my $path = Slim::Utils::Prefs::dir() . "/material-skin/themes/" . $variant;
+            if (-d $path) {
+                opendir DIR, $path;
+                my @items = readdir(DIR);
+                close DIR;
+                foreach (@items) {
+                    if (-f $path . "/" . $_ ) {
+                        my @parts = split(/\./, $_);
+                        if ((scalar(@parts)==2) && $parts[1]=='css') {
+                            $request->addResultLoop("themes", $cnt, "label", $parts[0]);
+                            $request->addResultLoop("themes", $cnt, "key", "user:" . $variant . "/" . $parts[0]);
+                            $cnt++;
+                        }
                     }
                 }
             }
@@ -814,7 +839,12 @@ sub _customThemeHandler {
     return unless $httpClient->connected;
 
     my $request = $response->request;
-    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/themes/" . basename($request->uri->path) . ".css";
+    my $pos = index($request->uri->path, "/dark/");
+    if ($pos<0) {
+        $pos = index($request->uri->path, "/light/");
+    }
+    my $theme = substr($request->uri->path, $pos);
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/themes" . $theme . ".css";
     if (-e $filePath) {
         $response->code(RC_OK);
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );

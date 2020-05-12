@@ -152,10 +152,10 @@ as the custom CSS file.
 
 ### Themes
 
-To install cusotm themes, place CSS files within a `material-skin/themes/`
-sub-folder of your LMS's `prefs` folder. e.g.
+To install cusotm themes, place CSS files within a `material-skin/themes/dark/`
+or `material-skin/themes/light/` sub-folder of your LMS's `prefs` folder. e.g.
 
-* `prefs/material-skin/themes/Adwaita-Dark.css`
+* `prefs/material-skin/themes/dark/Adwaita-Dark.css`
 
 This will add a `Adwaita-Dark` entry to Material's theme selector. The format of
 this file should be vased upon one of Material's existing theme files.

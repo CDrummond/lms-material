@@ -437,7 +437,21 @@ Vue.component('lms-ui-settings', {
                     window.console.error(err);
                 });
             }
-            lmsCommand("", ["material-skin", "user-themes"]).then(({data}) => {
+
+            var os = "other";
+            if (IS_IOS) {
+                os = "ios";
+            } else if (IS_ANDROID) {
+                os = "android";
+            } else if (navigator.platform.indexOf("Linux") != -1) {
+                os = "linux";
+            } else if (navigator.platform.indexOf("Win") != -1) {
+                os = "windows";
+            } else if (navigator.platform.indexOf("Mac") != -1) {
+                os = "mac";
+            }
+
+            lmsCommand("", ["material-skin", "themes", "platform:"+os]).then(({data}) => {
                 for (var i=0, len=this.themes.length; i<len; ++i) {
                     if (this.themes[i].key.startsWith("user:")) {
                         this.themes.splice(i, len-i);

@@ -839,20 +839,24 @@ sub _customThemeHandler {
     return unless $httpClient->connected;
 
     my $request = $response->request;
+    my $dark = 1;
     my $pos = index($request->uri->path, "/dark/");
     if ($pos<0) {
         $pos = index($request->uri->path, "/light/");
+        my $dark = 0;
     }
     my $theme = substr($request->uri->path, $pos);
     my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/themes" . $theme . ".css";
-    if (-e $filePath) {
-        $response->code(RC_OK);
-        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
-    } else {
-        $response->code(RC_NOT_FOUND);
-        $httpClient->send_response($response);
-        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+    $response->code(RC_OK);
+    if (! -e $filePath) {
+        # Not found, fallback to a default one...
+        $filePath = dirname(__FILE__) . "/HTML/material/html/css/themes/" . ($dark == 1 ? "dark" : "light") . ".css";
+        if (! -e $filePath) {
+            $filePath = dirname(__FILE__) . "/HTML/material/html/css/themes/" . ($dark == 1 ? "dark" : "light") . ".min.css";
+        }
     }
+    $response->code(RC_OK);
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
 }
 
 1;

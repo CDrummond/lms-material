@@ -17,7 +17,7 @@
  if (undefined!=theme && !theme.startsWith('dark')) {
   document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/"+theme+".css?r=MATERIAL_VERSION";
  }
- if (undefined!=theme && theme.startsWith('light')) {
+ if (undefined!=theme && (theme.startsWith('light') || theme.indexOf("/light/")>=0)) {
   document.querySelector("link[href='[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/classic-skin/light.css?r=MATERIAL_VERSION";
  }
  let col = window.localStorage.getItem("lms-material::color");

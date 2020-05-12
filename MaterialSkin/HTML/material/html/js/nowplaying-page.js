@@ -15,7 +15,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 <div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
-  <v-list v-if="info.show">
+  <v-list v-if="info.show && !menu.ontoolbar">
    <v-list-tile @click="adjustFont(10)" v-bind:class="{'disabled':infoZoom<=10}"><v-list-tile-title>{{trans.stdFont}}</v-list-tile-title></v-list-tile>
   <v-list-tile @click="adjustFont(15)" v-bind:class="{'disabled':infoZoom==15}"><v-list-tile-title>{{trans.mediumFont}}</v-list-tile-title></v-list-tile>
   <v-list-tile @click="adjustFont(20)" v-bind:class="{'disabled':infoZoom>=20}"><v-list-tile-title>{{trans.largeFont}}</v-list-tile-title></v-list-tile>
@@ -302,7 +302,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: 0,
                  lowHeight: false,
                  largeView: false,
-                 menu: { show: false, x:0, y:0, text: ["", ""] },
+                 menu: { show: false, x:0, y:0, text: ["", ""], ontoolbar:false },
                  rating: {value:0, setting:false},
                  timeTooltip: {show: false, x:0, y:0, text:undefined},
                  overlayVolume: -1,
@@ -679,6 +679,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.info.show || (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving)) && window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
                 this.touch = undefined;
                 this.menu.show = false;
+                this.menu.ontoolbar = false;
+                if (this.$store.state.desktopLayout && this.info.show) {
+                    let val = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottom-toolbar-height").replace("px", ""));
+                    this.menu.ontoolbar=event.clientY>(window.innerHeight-val);
+                }
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;
                 this.$nextTick(() => {

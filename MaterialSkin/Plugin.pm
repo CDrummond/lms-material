@@ -814,7 +814,7 @@ sub _customThemeHandler {
     return unless $httpClient->connected;
 
     my $request = $response->request;
-    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/themes/" . basename($request->uri->path);
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/themes/" . basename($request->uri->path) . ".css";
     if (-e $filePath) {
         $response->code(RC_OK);
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );

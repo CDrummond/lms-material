@@ -388,7 +388,7 @@ function setTheme(theme, color) {
     let themeName = t.join('-');
 
     if (themeName.startsWith("user:")) {
-        changeLink("/material/usertheme/" + themeName.substring(5) + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
+        changeLink("/material/usertheme/" + themeName.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "themecss");
     } else {
         changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
     }

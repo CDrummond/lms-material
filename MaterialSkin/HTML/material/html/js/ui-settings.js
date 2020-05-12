@@ -437,6 +437,18 @@ Vue.component('lms-ui-settings', {
                     window.console.error(err);
                 });
             }
+            lmsCommand("", ["material-skin", "user-themes"]).then(({data}) => {
+                for (var i=0, len=this.themes.length; i<len; ++i) {
+                    if (this.themes[i].key.startsWith("user:")) {
+                        this.themes.splice(i, len-i);
+                        break;
+                    }
+                }
+                if (data && data.result && data.result.themes) {
+                    this.themes.push.apply(this.themes, data.result.themes);
+                }
+            }).catch(err => {
+            });
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
@@ -453,9 +465,10 @@ Vue.component('lms-ui-settings', {
     },
     methods: {
         readStore() {
-            var themeParts = this.$store.state.theme ? this.$store.state.theme.split('-') : ['dark'];
-            this.theme = themeParts[0];
-            this.colorToolbars = 'colored'==themeParts[1];
+            let themeParts = this.$store.state.theme ? this.$store.state.theme.split('-') : ['dark'];
+            let variant = themeParts.length>1 && ('colored'==themeParts[1] || 'standard'==themeParts[1]) ? t.pop() : 'standard';
+            this.theme = themeParts.join('-');
+            this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
             this.largerElements = this.$store.state.largerElements;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
@@ -497,10 +510,10 @@ Vue.component('lms-ui-settings', {
         },
         initItems() {
             this.themes=[
-                { key:'light',         label:i18n('Light')},
-                { key:'dark',          label:i18n('Dark')},
-                { key:'darker',        label:i18n('Darker')},
-                { key:'black',         label:i18n('Black')}
+                { key:'light',  label:i18n('Light')},
+                { key:'dark',   label:i18n('Dark')},
+                { key:'darker', label:i18n('Darker')},
+                { key:'black',  label:i18n('Black')}
                 ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},

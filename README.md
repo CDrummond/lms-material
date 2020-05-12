@@ -137,21 +137,32 @@ clear this cache, start Material as follows:
 
 ### Customisation
 
-You may install CSS files within your LMS's `prefs/plugin` folder to modify the
-look or layout of Material. Each layout (desktop & mobile) will look for its own
-custom css file. These should be named as follows:
+If you wish to modify the look or layout of Material, you can do so by placing
+CSS files within a `material-skin/css/` sub-folder of your LMS's `prefs` folder.
+These should be named as follows:
 
-* `prefs/plugin/material-skin.desktop.css`
-* `prefs/plugin/material-skin.mobile.css`
+* `prefs/material-skin/css/desktop.css`
+* `prefs/material-skin/css/mobile.css`
 
 You may also specify the custom CSS as part of Material's URL, therefore allowing
 per-device CSS changes. e.g.
 
-* `http://<yourserver>:9000/material/?css=my-phone` will use `prefs/plugin/material-skin.my-phone.css` as the custom CSS file.
+* `http://<yourserver>:9000/material/?css=my-phone` will use `prefs/material-skin/css/my-phone.css`
+as the custom CSS file.
+
+### Themes
+
+To install cusotm themes, place CSS files within a `material-skin/themes/`
+sub-folder of your LMS's `prefs` folder. e.g.
+
+* `prefs/material-skin/themes/Adwaita-Dark.css`
+
+This will add a `Adwaita-Dark` entry to Material's theme selector. The format of
+this file should be vased upon one of Material's existing theme files.
 
 ### Custom menu entries
 
-Material will look for `material-skin.actions.json` within your LMS's `prefs/plugin`
+Material will look for `material-skin/actions.json` within your LMS's `prefs`
 folder. If found, then Material will add the actions listed in the `system` section
 to the main menu, actions in `allplayers` to all players, or you may create a section
 matching a specific player's MAC address. This file has the following format:

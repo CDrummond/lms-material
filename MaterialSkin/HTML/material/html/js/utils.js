@@ -383,9 +383,16 @@ function changeLink(href, id) {
 }
 
 function setTheme(theme, color) {
-    let t = theme ? theme.split('-') : ['dark', 'standard'];
-    changeLink("html/css/themes/" + t[0] + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
-    changeLink("html/css/variant/" + (t.length>1 ? t[1] : 'standard') + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
+    let t = theme.split('-');
+    let variant = t.length>1 && ('colored'==t[1] || 'standard'==t[1]) ? t.pop() : 'standard';
+    let themeName = t.join('-');
+
+    if (themeName.startsWith("user:")) {
+        changeLink("/material/usertheme/" + themeName.substring(5) + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
+    } else {
+        changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
+    }
+    changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
     emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
 }

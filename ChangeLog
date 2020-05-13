@@ -15,6 +15,7 @@
     song info.
 11. Add option to show current date & time when showing now-playing screen.
 12. Set default theme based upon platform.
+13. Always "E" to "tags" when asking for artist's albums, required for emblems.
 
 1.5.9
 -----

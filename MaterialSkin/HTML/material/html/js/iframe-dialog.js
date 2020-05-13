@@ -57,7 +57,7 @@ function clickHandler(e) {
         } else if (href.indexOf("clicmd=browselibrary+items&mode=albums")>0) {
             var id = href.split("artist_id=")[1].split("&")[0];
             var title = decodeURIComponent(href.split("linktitle=Artist%20(")[1].split(")&")[0]);
-            bus.$emit("search-action", "browse", {command:["albums"], params:["artist_id:"+id, "tags:jlys", SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "library_id:"+LMS_DEFAULT_LIBRARY]}, title);
+            bus.$emit("search-action", "browse", {command:["albums"], params:["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "library_id:"+LMS_DEFAULT_LIBRARY]}, title);
             e.preventDefault();
         } else if (href.indexOf("clicmd=browselibrary+items&mode=tracks")>0) {
             var id = href.split("album_id=")[1].split("&")[0];

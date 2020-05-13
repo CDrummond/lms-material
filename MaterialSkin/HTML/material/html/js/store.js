@@ -178,6 +178,21 @@ function convertLsAndNotif(val) {
     return val;
 }
 
+function defaultTheme() {
+    if (IS_IOS) {
+        return "light";
+    } else if (IS_ANDROID) {
+        return "darker";
+    } else if (navigator.platform.indexOf("Linux") != -1) {
+        return "linux/dark/Adwaita-Dark";
+    } else if (navigator.platform.indexOf("Win") != -1) {
+        return "windows/dark/Windows-10-Dark";
+    } else if (navigator.platform.indexOf("Mac") != -1) {
+        return "mac/dark/Mojave-Dark";
+    }
+    return "dark";
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -185,7 +200,7 @@ const store = new Vuex.Store({
         player: null, // Current player (from list)
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
-        theme: 'dark',
+        theme: defaultTheme(),
         color: 'blue',
         darkUi: true,
         largerElements: false,
@@ -364,8 +379,8 @@ const store = new Vuex.Store({
         initUiSettings(state) {
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
-            state.theme = getLocalStorageVal('theme', getLocalStorageBool('darkUi', true) ? 'dark' : 'light');
-            state.darkUi = !state.theme.startsWith('light');
+            state.theme = getLocalStorageVal('theme', state.theme);
+            state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
             state.largerElements = queryParams.hide.has('scale') ? false : getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', state.largerElements));
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);

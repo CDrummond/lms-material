@@ -459,7 +459,9 @@ Vue.component('lms-ui-settings', {
                     }
                 }
                 if (data && data.result && data.result.themes) {
-                    this.themes.push.apply(this.themes, data.result.themes);
+                    for (var i=0, list=data.result.themes, len=list.length; i<len; ++i) {
+                        this.themes.push({label:list[i].label.replace('-', ' '), key:list[i].key});
+                    }
                 }
             }).catch(err => {
             });

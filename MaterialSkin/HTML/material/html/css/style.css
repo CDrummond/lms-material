@@ -162,6 +162,14 @@ html, .mini-player {
  max-width:10px;
 }
 
+::-webkit-scrollbar-thumb:vertical {
+ min-height:64px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+ min-width:64px;
+}
+
 html { 
  overflow-y:hidden;
  margin:0px;

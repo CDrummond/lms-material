@@ -317,6 +317,9 @@ body {
  .vol-fixed-label {
   right:112px;
  }
+ .vol-sheet {
+  top:0px;
+ }
 }
 
 /* Give more space for 'Open mini-player icon */

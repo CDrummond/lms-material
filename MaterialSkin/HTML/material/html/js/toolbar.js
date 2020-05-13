@@ -18,6 +18,11 @@ Vue.component('lms-toolbar', {
     template: `
 <div>
 <v-toolbar fixed dense app class="lms-toolbar noselect">
+<div v-if="showClock" class="toolbar-clock">
+ <div class="maintoolbar-title">{{time}}</div>
+ <div class="maintoolbar-subtitle subtext">{{date}}</div>
+</div>
+
  <v-icon v-if="noPlayer" color="orange darken-2" class="toolbar-button">warning</v-icon>
  <div v-if="noPlayer && otherPlayers.length<1" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
  <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
@@ -86,18 +91,18 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <div v-if="updateProgress.show && wide>1" class="ellipsis subtext">{{updateProgress.text}}</div>
+ <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-progress-circular size=20 width=2 indeterminate></v-progress-circular></v-btn>
- <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="desktopLayout || wide>0" :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (desktopLayout || wide>0)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
- <v-btn v-show="desktopLayout || wide>0" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-show="desktopLayout || wide>0" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
- <v-btn v-show="!(desktopLayout || wide>0)" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
+ <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeDown" @click.middle="toggleMute" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-slider v-show="showVolumeSlider" :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+ <div v-show="!playerDvc && (showVolumeSlider)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
+ <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeUp" @click.middle="toggleMute" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-show="showVolumeSlider" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
+ <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeClick" @click.middle="toggleMute" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
-  <div class="vol-label" v-if="!(desktopLayout || wide>0)" v-bind:class="{'disabled':noPlayer}">{{playerStatus.volume|displayVolume}}</div>
+  <div class="vol-label" v-bind:class="{'disabled':noPlayer}">{{playerStatus.volume|displayVolume}}</div>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
@@ -180,17 +185,19 @@ Vue.component('lms-toolbar', {
                  playerDvc: true,
                  snackbar:{ show: false, msg: undefined},
                  connected: true,
-                 wide: 0,
+                 width: 100,
                  updateProgress: {show:false, text:undefined},
-                 showMiniLauncherButton: !queryParams.hide.has('mini')
+                 showMiniLauncherButton: !queryParams.hide.has('mini'),
+                 date: undefined,
+                 time: undefined
                }
     },
     mounted() {
         setInterval(function () {
-            this.wide = window.innerWidth>=1050 ? 2 : window.innerWidth>=900 ? 1 : 0;
+            this.width = Math.floor(window.innerWidth/50)*50;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.wide = window.innerWidth>=1050 ? 2 : window.innerWidth>=900 ? 1 : 0;
+            this.width = Math.floor(window.innerWidth/50)*50;
         }.bind(this));
 
         bus.$on('settingsMenuActions', function(actions, page) {
@@ -305,6 +312,11 @@ Vue.component('lms-toolbar', {
             // Ensure we update volume when player changes.
             this.playerVolume = undefined;
         }.bind(this));
+
+        bus.$on('nowPlayingClockChanged', function() {
+            this.controlClock();
+        }.bind(this));
+        this.controlClock();
 
         bus.$on('showError', function(err, msg) {
             this.snackbar = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
@@ -621,6 +633,34 @@ Vue.component('lms-toolbar', {
             this.sendVolumeTimer = setTimeout(function () {
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             }.bind(this), LMS_VOLUME_DEBOUNCE);
+        },
+        controlClock() {
+            if (this.$store.state.nowPlayingClock) {
+                if (undefined==this.clockTimer) {
+                    this.updateClock();
+                }
+            } else {
+                this.cancelClockInterval();
+            }
+        },
+        cancelClockInterval() {
+            if (undefined!==this.clockTimer) {
+                clearTimeout(this.clockTimer);
+                this.clockTimer = undefined;
+            }
+        },
+        updateClock() {
+            var date = new Date();
+            this.date = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
+            this.time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
+
+            if (undefined!==this.clockTimer) {
+                clearTimeout(this.clockTimer);
+            }
+            var next = 60-date.getSeconds();
+            this.clockTimer = setTimeout(function () {
+                this.updateClock();
+            }.bind(this), (next*1000)+25);
         }
     },
     computed: {
@@ -671,6 +711,16 @@ Vue.component('lms-toolbar', {
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        showVolumeSlider() {
+            return this.width>=(this.$store.state.desktopLayout ? 600 : (this.$store.state.nowPlayingClock ? 1300 : 850))
+        },
+        showUpdateProgress() {
+            return (!this.$store.state.nowPlayingClock || (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : (this.$store.state.page != 'now-playing'))) && this.wide>=1050
+        },
+        showClock() {
+            return this.$store.state.nowPlayingClock && (this.$store.state.desktopLayout
+                                                            ? (this.nowPlayingExpanded && this.width>=1300) : (this.$store.state.page == 'now-playing' && this.width>=500))
         }
     },
     filters: {
@@ -715,5 +765,6 @@ Vue.component('lms-toolbar', {
     beforeDestroy() {
         this.cancelSleepTimer();
         this.cancelDisconnectedTimer();
+        this.cancelClockInterval();
     }
 })

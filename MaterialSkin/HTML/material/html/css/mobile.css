@@ -12,11 +12,6 @@
  --bottom-nav-height:calc(var(--bottom-nav-pad) + 52px);
 }
 
-.maintoolbar-subtitle {
- margin-top:calc(14px - var(--small-font-size));
- font-size:var(--small-font-size);
-}
-
 .subtoolbar {
  position:fixed;
  top:var(--main-toolbar-height);
@@ -230,40 +225,6 @@
 
 .vol-btn {
  margin-top:-8px;
-}
-
-.vol-sheet .vol-btn div i {
- color:var(--text-color) !important;
-}
-
-.vol-sheet .vol-slider {
- margin:-8px 0px 0px 0px;
- height:8px;
-}
-
-.vol-sheet {
- padding:0px;
- position:absolute;
- top:var(--main-toolbar-height);
- right:0px;
- width:100vw;
- max-width:450px;
- z-index:2;
- background-color:var(--background-color) !important;
-}
-
-.vol-sheet .v-btn__content {
- color:var(--text-color);
-}
-
-@media only screen and (max-width:500px) {
-.vol-sheet {
-  max-width:100vw;
- }
-}
-
-.vol-sheet .v-card__actions {
- margin-top:-16px;
 }
 
 #letterOverlay, #volumeOverlay, #keyboardVolumeOverlay {

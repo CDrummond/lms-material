@@ -409,6 +409,11 @@ div.v-subheader {
  font-weight:var(--bold-weight);
 }
 
+.maintoolbar-subtitle {
+ margin-top:calc(14px - var(--small-font-size));
+ font-size:var(--small-font-size);
+}
+
 .noplayer-title {
  font-weight:var(--bold-weight);
 }
@@ -492,7 +497,6 @@ div.v-subheader {
  padding-top:16px;
  width:3em;
  text-align:left;
- opacity:var(--sub-opacity);
  font-size:var(--std-font-size) !important;
 }
 
@@ -519,6 +523,40 @@ div.v-subheader {
 
 .vol-fixed-label-noinf {
  right:calc(198px + ((var(--icon-size) - 24px)*5));
+}
+
+.vol-sheet .vol-btn div i {
+ color:var(--text-color) !important;
+}
+
+.vol-sheet .vol-slider {
+ margin:-8px 0px 0px 0px;
+ height:8px;
+}
+
+.vol-sheet {
+ padding:0px;
+ position:absolute;
+ top:var(--main-toolbar-height);
+ right:0px;
+ width:100vw;
+ max-width:450px;
+ z-index:2;
+ background-color:var(--background-color) !important;
+}
+
+.vol-sheet .v-btn__content {
+ color:var(--text-color);
+}
+
+@media only screen and (max-width:500px) {
+.vol-sheet {
+  max-width:100vw;
+ }
+}
+
+.vol-sheet .v-card__actions {
+ margin-top:-16px;
 }
 
 .v-menu__content {
@@ -1683,4 +1721,15 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .subtoolbar-subtitle small {
  opacity:0.5;
  font-size:100%;
+}
+
+.toolbar-clock {
+ position:fixed;
+ top:0px;
+ left:calc((100vw - 200px) / 2);
+ width:200px;
+ text-align:center;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
 }

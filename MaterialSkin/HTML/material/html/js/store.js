@@ -91,6 +91,11 @@ function updateUiSettings(state, val) {
         state.nowPlayingTrackNum = val.nowPlayingTrackNum;
         setLocalStorageVal('nowPlayingTrackNum', state.nowPlayingTrackNum);
     }
+    if (undefined!=val.nowPlayingClock && state.nowPlayingClock!=val.nowPlayingClock) {
+        state.nowPlayingClock = val.nowPlayingClock;
+        setLocalStorageVal('nowPlayingClock', state.nowPlayingClock);
+        bus.$emit('nowPlayingClockChanged');
+    }
     // NOTE: volumeStep is defined in utils.js
     if (undefined!=val.volumeStep && volumeStep!=val.volumeStep) {
         volumeStep = val.volumeStep;
@@ -200,6 +205,7 @@ const store = new Vuex.Store({
         techInfo: false,
         queueShowTrackNum: true,
         nowPlayingTrackNum: false,
+        nowPlayingClock: false,
         ratingsSupport: false,
         maxRating: 5,
         showPlayerMenuEntry: false,
@@ -379,6 +385,7 @@ const store = new Vuex.Store({
             state.techInfo = getLocalStorageBool('techInfo', state.techInfo);
             state.queueShowTrackNum = getLocalStorageBool('queueShowTrackNum', state.queueShowTrackNum);
             state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
+            state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
@@ -479,6 +486,7 @@ const store = new Vuex.Store({
                                      techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
                                      queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
                                      nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
+                                     nowPlayingClock: getLocalStorageBool('nowPlayingClock', undefined==prefs.nowPlayingClock ? state.nowPlayingClock : prefs.nowPlayingClock),
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                      lsAndNotif: getLocalStorageBool('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : convertLsAndNotif(prefs.lsAndNotif)),

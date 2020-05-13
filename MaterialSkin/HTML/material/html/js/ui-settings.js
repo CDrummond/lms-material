@@ -238,6 +238,15 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
+      <v-list-tile-title>{{i18n('Show current date and time')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="nowPlayingClock"></v-switch></v-list-tile-action>
+    </v-list-tile>
 
 
     <div class="dialog-padding"></div>
@@ -351,6 +360,7 @@ Vue.component('lms-ui-settings', {
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
+            nowPlayingClock:false,
             swipeVolume:false,
             keyboardControl:true,
             queueThreeLines:false,
@@ -496,6 +506,7 @@ Vue.component('lms-ui-settings', {
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
+            this.nowPlayingClock = this.$store.state.nowPlayingClock;
             this.swipeVolume = this.$store.state.swipeVolume;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
@@ -562,6 +573,7 @@ Vue.component('lms-ui-settings', {
                                                   techInfo:this.techInfo,
                                                   queueShowTrackNum:this.queueShowTrackNum,
                                                   nowPlayingTrackNum:this.nowPlayingTrackNum,
+                                                  nowPlayingClock:this.nowPlayingClock,
                                                   swipeVolume:this.swipeVolume,
                                                   keyboardControl:this.keyboardControl,
                                                   queueThreeLines:this.queueThreeLines,
@@ -606,6 +618,7 @@ Vue.component('lms-ui-settings', {
                                      techInfo:this.techInfo,
                                      queueShowTrackNum:this.queueShowTrackNum,
                                      nowPlayingTrackNum:this.nowPlayingTrackNum,
+                                     nowPlayingClock:this.nowPlayingClock,
                                      swipeVolume:this.swipeVolume,
                                      keyboardControl:this.keyboardControl,
                                      queueThreeLines:this.queueThreeLines,

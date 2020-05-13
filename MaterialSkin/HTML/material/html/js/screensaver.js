@@ -80,7 +80,7 @@ Vue.component('lms-screensaver', {
                 clearTimeout(this.updateTimer);
             }
             var next = 60-date.getSeconds();
-            this.updateTimer = setInterval(function () {
+            this.updateTimer = setTimeout(function () {
                 this.updateDateAndTime();
             }.bind(this), (next*1000)+25);
         },

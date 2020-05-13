@@ -13,6 +13,7 @@
  9. OS-specific and user themes.
 10. In desktop layout, fix menu shown when clicking cover if currently showing
     song info.
+11. Add option to show current date & time when showing now-playing screen.
 
 1.5.9
 -----

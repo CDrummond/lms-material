@@ -17,7 +17,7 @@
   <link href="html/lib/vue-virtual-scroller.css?r=1.0.10" rel="stylesheet">
   <link href="html/lib/photoswipe/photoswipe.min.css?r=4.1.2" rel="stylesheet">
   <link href="html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2" rel="stylesheet">
-
+  <!--CSS end-->
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $ua=$stash->get('userAgent');
@@ -42,7 +42,6 @@
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">");
   [% END %]
-  <!--CSS end-->
   <link href="/material/customcss/mobile" rel="stylesheet" id="customcss">
   <link href="/material/material.webmanifest" rel="manifest">
   <link href="/material/icon.png" rel="icon shortcut" sizes="128x128">

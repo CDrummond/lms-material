@@ -590,7 +590,7 @@ sub _cliCommand {
                     foreach (@items) {
                         if (-f $path . "/" . $_ ) {
                             my @parts = split(/\./, $_);
-                            if ((scalar(@parts)==2) && $parts[1]=='css') {
+                            if (((scalar(@parts)==2) && $parts[1]=='css') || ((scalar(@parts)==3) && $parts[1]=='min' && $parts[2]=='css')) {
                                 $request->addResultLoop("themes", $cnt, "label", $parts[0]);
                                 $request->addResultLoop("themes", $cnt, "key", $platform . "/" . $variant . "/" . $parts[0]);
                                 $cnt++;

@@ -205,31 +205,37 @@ def minifyJs():
     subprocess.call(jsCommand, shell=False)
 
 
+def minifyCssFiles(d):
+    for entry in sorted(os.listdir(os.path.join(HTML_FOLDER, d))):
+        path = os.path.join(HTML_FOLDER, d, entry)
+        if os.path.isdir(path):
+            minifyCssFiles(os.path.join(d, entry))
+        elif entry.endswith(".css"):
+            info("......%s/%s" % (d, entry))
+            cssStr=""
+            with open(path, "r") as f:
+                for line in f.readlines():
+                    cssStr+=line.replace("\n", "").replace(" {", "{")
+            while ("  " in cssStr):
+                cssStr=cssStr.replace("  ", " ")
+            cssStr=cssStr.replace("} ", "}").replace("{ ", "{").replace("; ", ";").replace(": ", ":").replace(" :", ":").replace(" !", "!");
+            while True:
+                start = cssStr.find("/*")
+                if start<0:
+                    break
+                end = cssStr.find("*/")
+                if end<start:
+                    break
+                cssStr=cssStr[:start]+cssStr[end+2:]
+            minCss = path.replace(".css", ".min.css")
+            with open(minCss, "w") as f:
+                f.write(cssStr)
+            os.remove(path)
+
+
 def minifyCss():
     info("...CSS")
-    for d in ["css", "css/classic-skin", "css/colors", "css/themes"]:
-        for css in sorted(os.listdir("%s/%s" % (HTML_FOLDER, d))):
-            if css.endswith(".css"):
-                info("......%s" % css)
-                origCss = "%s/%s/%s" % ( HTML_FOLDER, d, css)
-                cssStr=""
-                with open(origCss, "r") as f:
-                    for line in f.readlines():
-                        cssStr+=line.replace("\n", "").replace(" {", "{")
-                while ("  " in cssStr):
-                    cssStr=cssStr.replace("  ", " ")
-                cssStr=cssStr.replace("} ", "}").replace("{ ", "{").replace("; ", ";").replace(": ", ":").replace(" :", ":").replace(" !", "!");
-                while True:
-                    start = cssStr.find("/*")
-                    if start<0:
-                        break
-                    end = cssStr.find("*/")
-                    if end<start:
-                        break
-                    cssStr=cssStr[:start]+cssStr[end+2:]
-                minCss = origCss.replace(".css", ".min.css")
-                with open(minCss, "w") as f:
-                    f.write(cssStr)
+    minifyCssFiles("css")
 
 
 def removeUnminified():
@@ -237,10 +243,6 @@ def removeUnminified():
     for entry in os.listdir("%s/js" % HTML_FOLDER):
         if entry.endswith(".js") and not entry.endswith(".min.js"):
             os.remove("%s/js/%s" % (HTML_FOLDER, entry))
-    for d in ["css", "css/classic-skin", "css/colors", "css/themes"]:
-        for entry in os.listdir("%s/%s" % (HTML_FOLDER, d)):
-            if entry.endswith(".css") and not entry.endswith(".min.css"):
-                os.remove("%s/%s/%s" % (HTML_FOLDER, d, entry))
 
 
 def combineLib():
@@ -299,10 +301,6 @@ def fixHtml(version):
                 if "<!--CSS start-->" in line:
                     inCss = True
                     fixedLines.append('  <link href="html/lib/%s?r=%s" rel="stylesheet">\n' % (LIB_SINGLE_CSS, version))
-                    fixedLines.append('  <link href="html/css/themes/dark.min.css?r=%s" rel="stylesheet" id="variantcss">\n' % version)
-                    fixedLines.append('  <link href="html/css/colors/blue.min.css?r=%s" rel="stylesheet" id="colorcss">\n' % version)
-                    fixedLines.append('  <link href="html/css/style.min.css?r=%s" rel="stylesheet">\n' % version)
-                    fixedLines.append('  <link href="html/css/mobile.min.css?r=%s" rel="stylesheet" id="layoutcss">\n' % version)
                 elif "<!--CSS end-->" in line:
                     inCss = False
                 elif "<!--JS start-->" in line:
@@ -313,6 +311,8 @@ def fixHtml(version):
                 elif "<!--JS end-->" in line:
                     inJs = False
                 elif not inCss and not inJs:
+                    if "print" in line: # Perl block...
+                        line=line.replace(".css", ".min.css")
                     fixedLines.append(line)
 
             with open(path, "w") as f:

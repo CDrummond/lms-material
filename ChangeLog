@@ -15,8 +15,10 @@
     song info.
 11. Add option to show current date & time when showing now-playing screen.
 12. Set default theme based upon platform.
-13. Always add "E" to "tags" when asking for artist's albums, required for
+13. Always add 'E' to 'tags' when asking for artist's albums, required for
     emblems.
+14. Default to 'Darker' for Android, 'Light' for iOS, 'Adwaita Dark' for Linux,
+    'Mojave Dark' for macOS, and 'Windows 10 Dark' for Windows.
 
 1.5.9
 -----

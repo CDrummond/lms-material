@@ -179,6 +179,7 @@ function convertLsAndNotif(val) {
 }
 
 function defaultTheme() {
+    // Keep in sync with index.html
     if (IS_IOS) {
         return "light";
     } else if (IS_ANDROID) {

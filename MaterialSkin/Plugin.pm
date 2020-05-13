@@ -812,7 +812,9 @@ sub _manifestHandler {
     return unless $httpClient->connected;
 
     my $request = $response->request;
+    my $ua = $request->header('user-agent');
     my $filePath = dirname(__FILE__) . "/HTML/material/html/material.webmanifest";
+    my $manifest = read_file($filePath);
 
     if (defined $request->{_headers}->{'referer'}) {
         # See if we have any query params, if so add to start_url...
@@ -820,18 +822,29 @@ sub _manifestHandler {
         my $queryPos = index($referer, '?');
         if ($queryPos !=-1) {
             my $query = substr($referer, $queryPos);
-            my $manifest = read_file($filePath);
             $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/$query\"/g;
-            $response->code(RC_OK);
-            $response->content_type('application/manifest+json');
-            $response->header('Connection' => 'close');
-            $response->content($manifest);
-            return;
         }
     }
 
+    # Make manifest colours match platform default theme...
+    if (index($ua, 'Android') != -1) {
+        $manifest =~ s/\"#424242\"/\"#212121\"/g;
+    } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
+        $manifest =~ s/\"#424242\"/\"#ffffff\"/g;
+    } elsif (index($ua, 'Linux') != -1) {
+        $manifest =~ s/\"#424242\"/\"#353535\"/g;
+    } elsif (index($ua, 'Win') != -1) {
+        $manifest =~ s/\"#424242\"/\"#272625\"/g;
+    } elsif (index($ua, 'Mac') != -1) {
+        $manifest =~ s/\"#424242\"/\"#202020\"/g;
+    }
+
     $response->code(RC_OK);
-    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "application/manifest+json", $filePath, '', 'noAttachment' );
+    $response->content_type('application/manifest+json');
+    $response->header('Connection' => 'close');
+    $response->content($manifest);
+    $httpClient->send_response($response);
+    Slim::Web::HTTP::closeHTTPSocket($httpClient);
 }
 
 sub _customThemeHandler {

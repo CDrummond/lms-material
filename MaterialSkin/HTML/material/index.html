@@ -17,10 +17,27 @@
   <link href="html/lib/vue-virtual-scroller.css?r=1.0.10" rel="stylesheet">
   <link href="html/lib/photoswipe/photoswipe.min.css?r=4.1.2" rel="stylesheet">
   <link href="html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2" rel="stylesheet">
+
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
-  print("<link href=\"html/css/themes/dark.css?r=$version\" rel=\"stylesheet\" id=\"themecss\">\n");
-  print("<link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
+  my $ua=$stash->get('userAgent');
+  print("<link href=\"html/css/themes/");
+  # Keep in sync with store.js (defaultTheme)
+  if (index($ua, 'Android') != -1) {
+      print("darker");
+  } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
+      print("light");
+  } elsif (index($ua, 'Linux') != -1) {
+      print("linux/dark/Adwaita-Dark");
+  } elsif (index($ua, 'Win') != -1) {
+     print("windows/dark/Windows-10-Dark");
+  } elsif (index($ua, 'Mac') != -1) {
+     print("mac/dark/Mojave-Dark");
+  } else {
+      print("dark");
+  }
+  print(".css?r=$version\" rel=\"stylesheet\" id=\"themecss\">\n");
+  print("  <link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">");

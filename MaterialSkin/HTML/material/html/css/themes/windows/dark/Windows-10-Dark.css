@@ -1,0 +1,54 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+:root {
+ --active-color:var(--accent-color);
+ --active-toolbar-color:var(--active-color);
+ --scrollbar-thumb-color:#4d4d4d;
+ --scrollbar-track-color:#171717;
+ --scrollbar-corner-color:#171717;
+ --background-color:#202020;
+ --background-shadow-color:rgba(32, 32, 32, 0.9);
+ --dialog-toolbar-color:#000000;
+ --bottom-toolbar-color:#000000;
+ --top-toolbar-color:#000000;
+ --sub-toolbar-color:#191919;
+ --bottom-toolbar-border-color:#000000;
+ --top-toolbar-border-color:#000000;
+ --sub-toolbar-border-color:#191919;
+ --dialog-toolbar-border-color:#000000;
+ --splitter-color:#2b2b2b;
+ --icon-color:#edece7;
+ --dlg-icon-color:#edece7;
+ --list-item-border-color:#2b2b2b;
+ --subheader-color:#edece7;
+ --text-shadow-color:#000;
+ --text-color:#edece7;
+ --dialog-toolbar-text-color:#edece7;
+ --top-toolbar-text-color:#edece7;
+ --sub-toolbar-text-color:#edece7;
+ --bottom-toolbar-text-color:#edece7;
+ --active-nav-btn-color:var(--accent-color);
+ --toolbar-volume-color:var(--primary-color);
+ --bottom-position-slider-color:var(--primary-color);
+ --inactive-nav-opacity:0.75;
+}
+
+.np-info-cover {
+ background-color:#000;
+}
+
+@media (hover: hover) {
+ .menu-btn:hover {
+  background-color:rgba(128, 128, 128, 0.5);
+ }
+}
+
+.lms-toolbar .v-btn__content i.active-btn {
+ color:var(--active-color) !important;
+}
+

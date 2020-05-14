@@ -3,22 +3,23 @@
  1. Don't colour toolbars of fullscreen dialogs for dark and light themes, only
     colour if using coloured toolbars.
  2. Use separate checkbox for coloured toolbars option.
- 3. Add 'Darker' theme variant.
- 4. Remove bottom nav resizing for android gesture navigation.
- 5. Update native colours when either top or bottom changes.
- 6. Use non-svg icon for application settings, so that it is correctly
+ 3. Place colored css mods into separate file, no need for theme-colored.css
+ 4. Add 'Darker' theme variant.
+ 5. Add support for OS-specific and user themes (see README.md for user themes).
+ 6. Add OS-like themes for Linux, macOS, and Windows.
+ 7. Set default theme based upon platform. 'Darker' for Android, 'Light' for
+    iOS, 'Adwaita Dark' for Linux, 'Mojave Dark' for macOS, and
+    'Windows 10 Dark' for Windows.
+ 8. Better play/add hover buttons for light theme.
+ 9. Remove bottom nav resizing for android gesture navigation.
+10. Update native colours when either top or bottom changes.
+11. Use non-svg icon for application settings, so that it is correctly
     recoloured.
- 7. Better play/add hover buttons for light theme.
- 8. Place colored css mods into separate file, no need for theme-colored.css
- 9. OS-specific and user themes.
-10. In desktop layout, fix menu shown when clicking cover if currently showing
+12. In desktop layout, fix menu shown when clicking cover if currently showing
     song info.
-11. Add option to show current date & time when showing now-playing screen.
-12. Set default theme based upon platform.
-13. Always add 'E' to 'tags' when asking for artist's albums, required for
+13. Add option to show current date & time when showing now-playing screen.
+14. Always add 'E' to 'tags' when asking for artist's albums, required for
     emblems.
-14. Default to 'Darker' for Android, 'Light' for iOS, 'Adwaita Dark' for Linux,
-    'Mojave Dark' for macOS, and 'Windows 10 Dark' for Windows.
 
 1.5.9
 -----

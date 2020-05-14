@@ -315,10 +315,13 @@ body {
   display:none;
  }
  .vol-fixed-label {
-  right:112px;
+  right:96px;
  }
  .vol-sheet {
   top:0px;
+ }
+ .vol-full-label {
+  margin-right:-16px;
  }
 }
 

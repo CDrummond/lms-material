@@ -640,10 +640,10 @@ Vue.component('lms-toolbar', {
                     this.updateClock();
                 }
             } else {
-                this.cancelClockInterval();
+                this.cancelClockTimer();
             }
         },
-        cancelClockInterval() {
+        cancelClockTimer() {
             if (undefined!==this.clockTimer) {
                 clearTimeout(this.clockTimer);
                 this.clockTimer = undefined;
@@ -765,6 +765,6 @@ Vue.component('lms-toolbar', {
     beforeDestroy() {
         this.cancelSleepTimer();
         this.cancelDisconnectedTimer();
-        this.cancelClockInterval();
+        this.cancelClockTimer();
     }
 })

@@ -21,6 +21,8 @@
 14. Always add 'E' to 'tags' when asking for artist's albums, required for
     emblems.
 15. Better(?) portarait text position calculation.
+16. Alter appearance of scan progress shown in server settings, so that progress
+    can be seen with dark and light themes.
 
 1.5.9
 -----

@@ -373,3 +373,21 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
 ::-webkit-scrollbar-corner {
  background:var(--scrollbar-corner-color);
 }
+
+/* Progress bars (e.g. scan) */
+img[src*="bar_small_empty.gif"] {
+ border:1px solid var(--primary-color);
+ border-radius:50%;
+ width:10px !important;
+ height:10px !important;
+ margin-right:2px;
+}
+
+img[src*="bar_small_full.gif"] {
+ background-color:var(--primary-color);
+ border:1px solid var(--primary-color);
+ border-radius:50%;
+ width:10px !important;
+ height:10px !important;
+ margin-right:2px;
+}

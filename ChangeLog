@@ -20,6 +20,7 @@
 13. Add option to show current date & time when showing now-playing screen.
 14. Always add 'E' to 'tags' when asking for artist's albums, required for
     emblems.
+15. Better(?) portarait text position calculation.
 
 1.5.9
 -----

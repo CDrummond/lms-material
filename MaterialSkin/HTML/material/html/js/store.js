@@ -417,6 +417,10 @@ const store = new Vuex.Store({
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             // NOTE: volumeStep is defined in utils.js
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
+            // Ensure theme is in settings, so that it can be use in classic skin mods...
+            if (undefined==getLocalStorageVal('theme')) {
+                setLocalStorageVal('theme', state.theme);
+            }
             setTheme(state.theme, state.color);
             if (state.largerElements) {
                 setElemSizes(state.largerElements);

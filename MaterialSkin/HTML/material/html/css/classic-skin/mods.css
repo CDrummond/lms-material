@@ -376,16 +376,21 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
 
 /* Progress bars (e.g. scan) */
 img[src*="bar_small_empty.gif"] {
- border:1px solid var(--primary-color);
+ border:1px solid var(--active-color);
  border-radius:50%;
  width:10px !important;
  height:10px !important;
  margin-right:2px;
 }
 
+img[src*="bar_small_empty.gif"]:first-child,
+img[src*="bar_small_full.gif"]:first-child {
+ margin-left:6px;
+}
+
 img[src*="bar_small_full.gif"] {
- background-color:var(--primary-color);
- border:1px solid var(--primary-color);
+ background-color:var(--active-color);
+ border:1px solid var(--active-color);
  border-radius:50%;
  width:10px !important;
  height:10px !important;

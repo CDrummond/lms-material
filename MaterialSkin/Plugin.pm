@@ -38,7 +38,8 @@ my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
-my $THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
+my $USER_THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
+my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -86,7 +87,8 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
         Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
-        Slim::Web::Pages->addRawFunction($THEME_URL_PARSER_RE, \&_customThemeHandler);
+        Slim::Web::Pages->addRawFunction($USER_THEME_URL_PARSER_RE, \&_userThemeHandler);
+        Slim::Web::Pages->addRawFunction($USER_COLOR_URL_PARSER_RE, \&_userColorHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
     }
@@ -619,6 +621,41 @@ sub _cliCommand {
                 }
             }
         }
+
+        my $path = Slim::Utils::Prefs::dir() . "/material-skin/colors";
+        if (-d $path) {
+            opendir DIR, $path;
+            my @items = readdir(DIR);
+            close DIR;
+            $cnt = 0;
+            foreach (@items) {
+                my $colorPath = $path . "/" . $_ ;
+                if (-f $colorPath ) {
+                    my @parts = split(/\./, $_);
+                    if ((scalar(@parts)==2) && $parts[1]=='css') {
+                        open my $info, $colorPath or next;
+                        my $color="";
+                        while (my $line = <$info>) {
+                            if (index($line, '--primary-color')>=0) {
+                                my @parts = split(/:/, $line);
+                                if (scalar(@parts)==2) {
+                                    $color = $parts[1];
+                                    $color =~ s/^\s+|\s+$//g;
+                                    $color =~ s/;//g;
+                                }
+                            }
+                        }
+                        close $info;
+                        # --primary-color:#1976d2;
+                        if (length($color)>=4) {
+                            $request->addResultLoop("colors", $cnt, "color", $color);
+                            $request->addResultLoop("colors", $cnt, "key", "user:" . $parts[0]);
+                            $cnt++;
+                        }
+                    }
+                }
+            }
+        }
         $request->setStatusDone();
         return;
     }
@@ -847,7 +884,7 @@ sub _manifestHandler {
     Slim::Web::HTTP::closeHTTPSocket($httpClient);
 }
 
-sub _customThemeHandler {
+sub _userThemeHandler {
     my ( $httpClient, $response ) = @_;
     return unless $httpClient->connected;
 
@@ -872,4 +909,21 @@ sub _customThemeHandler {
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
 }
 
+sub _userColorHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/colors/" . basename($request->uri->path) . ".css";
+    $response->code(RC_OK);
+    if (! -e $filePath) {
+        # Not found, fallback to a default one...
+        $filePath = dirname(__FILE__) . "/HTML/material/html/css/colors/blue.css";
+        if (! -e $filePath) {
+            $filePath = dirname(__FILE__) . "/HTML/material/html/css/colors/blue.min.css";
+        }
+    }
+    $response->code(RC_OK);
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
+}
 1;

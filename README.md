@@ -150,15 +150,18 @@ per-device CSS changes. e.g.
 * `http://<yourserver>:9000/material/?css=my-phone` will use `prefs/material-skin/css/my-phone.css`
 as the custom CSS file.
 
-### Themes
+### Themes & colours
 
-To install cusotm themes, place CSS files within a `material-skin/themes/dark/`
-or `material-skin/themes/light/` sub-folder of your LMS's `prefs` folder. e.g.
+To install custom themes, place CSS files within a `material-skin/themes/dark/`
+or `material-skin/themes/light/` sub-folder of your LMS's `prefs` folder. For
+colours, place CSS files within `material-skin/colors/` sub-folder. e.g.
 
 * `prefs/material-skin/themes/dark/Adwaita-Dark.css`
+* `prefs/material-skin/colors/pink.css`
 
-This will add a `Adwaita-Dark` entry to Material's theme selector. The format of
-this file should be vased upon one of Material's existing theme files.
+This will add a `Adwaita-Dark` entry to Material's theme selector, and add a
+pink colour. The format of these filse should be based upon one of Material's
+existing theme, or colour, files.
 
 ### Custom menu entries
 

@@ -21,17 +21,23 @@
  let variant = t.length>1 && ('colored'==t[1] || 'standard'==t[1]) ? t.pop() : 'standard';
  let themeName = t.join('-');
 
- if (themeName.startsWith("user:")) {
-  document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "/material/usertheme/" + themeName.substring(5) + "?r=MATERIAL_VERSION";
- } else if (undefined!=themeName && themeName!='dark') {
-  document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/"+themeName+".css?r=MATERIAL_VERSION";
+ if (undefined!=themeName && themeName!='dark') {
+   if (themeName.startsWith("user:")) {
+    document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "/material/usertheme/" + themeName.substring(5) + "?r=MATERIAL_VERSION";
+   } else {
+    document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/"+themeName+".css?r=MATERIAL_VERSION";
+   }
  }
  if (undefined!=theme && (theme.startsWith('light') || theme.indexOf("/light/")>=0)) {
   document.querySelector("link[href='[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/classic-skin/light.css?r=MATERIAL_VERSION";
  }
  let col = window.localStorage.getItem("lms-material::color");
  if ('blue'!=col && undefined!=col) {
-  document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
+  if (col.startsWith("user:")) {
+    document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "/material/usercolor/" + col.substring(5) + "?r=MATERIAL_VERSION";
+  } else {
+    document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
+  }
  }
 </script>
 

@@ -393,7 +393,11 @@ function setTheme(theme, color) {
         changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
     }
     changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
-    changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
+    if (color.startsWith("user:")) {
+        changeLink("/material/usercolor/" + color.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "colorcss");
+    } else {
+        changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
+    }
     emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
 }
 

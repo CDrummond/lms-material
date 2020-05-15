@@ -34,6 +34,7 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
       <div class="color-grid">
        <div v-for="(item, index) in colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
       </div>
      </v-list-tile-content>
     </v-list-tile>
@@ -345,6 +346,7 @@ Vue.component('lms-ui-settings', {
             themes: [ ],
             color: 'blue',
             colors: [ ],
+            userColors: [ ],
             colorToolbars: false,
             largerElements: false,
             letterOverlay:false,
@@ -472,6 +474,10 @@ Vue.component('lms-ui-settings', {
                     for (var i=0, list=data.result.themes, len=list.length; i<len; ++i) {
                         this.themes.push({label:list[i].label.replace(/-/g, ' '), key:list[i].key});
                     }
+                }
+                this.userColors=[];
+                if (data && data.result && data.result.colors) {
+                    this.userColors=data.result.colors;
                 }
             }).catch(err => {
             });

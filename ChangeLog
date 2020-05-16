@@ -24,6 +24,8 @@
 16. Alter appearance of scan progress shown in server settings, so that progress
     can be seen with dark and light themes.
 17. Add support for user colours (see README.md for more details).
+18. Don't open 'Text files from music folder' in an embedded iframe for iOS as
+    PDF viewer does not scroll.
 
 1.5.9
 -----

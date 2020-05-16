@@ -1035,7 +1035,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.isTop = false;
                 this.jumplist = this.filteredJumplist = [];
             } else if (item.weblink) {
-                if (this.current && this.current.actions && this.current.actions.go && this.current.actions.go.params &&
+                if (!IS_IOS && this.current && this.current.actions && this.current.actions.go && this.current.actions.go.params &&
                     this.current.actions.go.params.folder && this.current.actions.go.cmd && this.current.actions.go.cmd.length>=2 &&
                     this.current.actions.go.cmd[0]=="musicartistinfo" && this.current.actions.go.cmd[1]=="localfiles") {
                     bus.$emit('dlg.open', 'iframe', item.weblink, item.title);

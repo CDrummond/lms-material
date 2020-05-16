@@ -429,7 +429,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             } else {
                 if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
                     var text = replaceNewLines(data.result.window.textarea);
-                    if (text.length>5) {
+                    if (text.length>0) {
                         resp.items.unshift({
                                         title: text,
                                         type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",

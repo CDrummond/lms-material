@@ -32,6 +32,8 @@
     artist -> list (not grid) albums -- list of albums is messed up (has artist
     list text and album lsit text). Fixed by downgrading vue-virtual-scoller to
     1.0.4
+20. Fix showing short comment fields - previously 'textarea' was only shown if
+    it had more than 5 characters.
 
 1.5.9
 -----

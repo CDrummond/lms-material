@@ -28,6 +28,10 @@
     github wiki for more details).
 18. Don't open 'Text files from music folder' in an embedded iframe for iOS, as
     PDF viewer does not scroll.
+19. Fix artist list (not grid) -> click jumplist (so that view scrolls) -> click
+    artist -> list (not grid) albums -- list of albums is messed up (has artist
+    list text and album lsit text). Fixed by reverting vue-virtual-scoller to
+    1.0.0-rc2.
 
 1.5.9
 -----

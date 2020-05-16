@@ -47,7 +47,7 @@ vue-touch-events:
     Notes: Set disableClick:true
 
 vue-virtual-scroller:
-    Version: 1.0.10
+    Version: 1.0.0-rc2
     URL: https://github.com/Akryum/vue-virtual-scroller
     License: MIT
 

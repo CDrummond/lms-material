@@ -716,7 +716,7 @@ Vue.component('lms-toolbar', {
             return this.width>=(this.$store.state.desktopLayout ? 600 : (this.$store.state.nowPlayingClock ? 1300 : 850))
         },
         showUpdateProgress() {
-            return (!this.$store.state.nowPlayingClock || (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : (this.$store.state.page != 'now-playing'))) && this.wide>=1050
+            return (!this.$store.state.nowPlayingClock || (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : (this.$store.state.page != 'now-playing'))) && this.width>=1050
         },
         showClock() {
             return this.$store.state.nowPlayingClock && (this.$store.state.desktopLayout

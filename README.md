@@ -1,5 +1,8 @@
 # Material skin for SlimServer (Logitech Media Server)
 
+Material-Skin is a HTML5/Javascript user-interface for Logitech Media server,
+suitable for mobile and desktop usage.
+
 ![Now Playing](screenshots/now-playing.png)
 
 The [Screenshots wiki page](https://github.com/CDrummond/lms-material/wiki/Screenshots)
@@ -19,7 +22,7 @@ This guide is on a separate github page, and is authored by Jim Gooch.
 6. Add, delete, rename, and edit playlists
 7. Now playing
 8. Play queue with drag'n'drop editing
-9. UI settings; light, coloured, dark, and black themes, 18 different colour
+9. UI settings; light, coloured, dark, darker, and black themes, 18 different colour
    schemes, album sort, auto scroll play queue
 10. Player settings; crossfade, replay gain, don't stop the music, alarms
 11. Server settings
@@ -29,235 +32,14 @@ This guide is on a separate github page, and is authored by Jim Gooch.
 15. Group player control; add, edit, delete
 16. Pin apps, etc., to main screen
 17. Swipe left/right to change views with mobile layout
-18. Lock screen controls when used with Chrome on Android
+18. Lock screen controls when used with Chrome on Android (actually, Kiwi browser is better for this)
 19. Integrated support for "Music and Artist Information" plugin
 20. Search for podcasts on iTunes or GPodder
 21. Move queue between players
 
-## Installation
+## Detailed information
 
-1. Open the LMS web page (e.g. `http://localhost:9000`)
-2. Click on Settings
-3. Select the Plugins tab
-4. At bottom of the page add the repo URL: `https://raw.githubusercontent.com/CDrummond/lms-material/master/public.xml`
-5. Install the plugin and enable as usual
-
-NOTE: This should no longer be necessary, as Material is now an official
-3rd-party add-on.
-
-## Usage
-
-1. Access the skin through `http://<yourserver>:9000/material/`
-2. Select "Add to Home screen" on your device, if supported.
-
-### Selecting mobile or desktop
-
-Material should automatically choose mobile or desktop layouts, but you may also
-force one or the other.
-
-* `http://<yourserver>:9000/material/?layout=mobile` will force mobile layout
-* `http://<yourserver>:9000/material/?layout=desktop` will force desktop layout
-
-You can also launch Material straight into its desktop now-playing screen,
-using:
-
-* `http://<yourserver>:9000/material/now-playing`
-
-### Selecting start-up player
-
-Material will restore the previously used player on start-up. To accomplish
-this, it stores the player's ID (its MAC address) in your browser's local
-storage. If you clean cookies, etc, then this setting will be cleared. As an
-alternative, you can specify the player's name (URL encoded) or its MAC address
-in Material's URL as follows:
-
-* `http://<yourserver>:9000/material/?player=Player%20Name`
-* `http://<yourserver>:9000/material/?player=01:02:03:04:05:06`
-
-### Selecting initial page
-
-Material will start on the last used page by default. For the mobile layout, you
-may specify the initial page in the URL query. Valid values are; `browse`,
-`now-playing`, and `queue`. e.g:
-
-* `http://<yourserver>:9000/material/?page=now-playing`
-
-### Actions
-
-You can specify a set of 'actions' to be triggered when the page is loaded. This
-is achieved by passing the `action` query parameter one or more times. This uses
-the following syntax:
-
-* `http://<yourserver>:9000/material/?action=name/comma-separated-params/player`
-
-`name` being the name of the action, `comma-separated-params` is (as its name
-implies) a list of comma-separated parameters to pass to the invoked action,
-`player` allows you to (optionally) specify that the action will only occur when
-the indicated player is present.
-
-* `http://<yourserver>:9000/material/?layout=desktop&action=expandNowPlaying/true`
-will open the desktop-layout with the now-playing page expanded (which is
-similar to `http://<yourserver>:9000/material/now-playing`)
-
-* `http://<yourserver>:9000/material/?layout=mobile&action=dlg.open/playersettings,-,alarms`
-will open the player settings dialog, and scroll the 'Alarms' section into view.
-`-` is used to tell the player settings dialog to act on the currently active
-player. Therefore, to be truly useful the `player=` query parameter should also
-be used. e.g. `http://<yourserver>:9000/material/?layout=mobile&player=Bedroom&action=dlg.open/playersettings,-,alarms`
-
-### Hidding elements
-
-You can specify a set of elements that can be hidden. This is achieved by
-passing the `hide` query parameter and specifying a comma-separated list of
-items. Currently only `mini` (to hide the mini player launch button), `notif`
-(to hide the lock screen and notification control settings), `launchPlayer` (to
-hide the launch player setting), and `scale` (to hade option for larger
-elements) may be specified. e.g.
-
-* `http://<yourserver>:9000/material/?hide=mini,notif`
-
-This query parameter is only intended to be used by applications wishing to
-embed Material such as [the Material Skin android app.](https://github.com/CDrummond/lms-material-app)
-
-### Debugging
-
-Material uses LMS's JSONRPC and Cometd interfaces to send commands and receive
-updates. To see (some) of the messages Material sends, and the messages
-received, start Material as follows:
-
-* `http://<yourserver>:9000/material/?debug=json` for JSONRPC
-* `http://<yourserver>:9000/material/?debug=cometd` for Cometd
-* `http://<yourserver>:9000/material/?debug=libcometd` to enable debugging from
-libcometd
-* `http://<yourserver>:9000/material/?debug=json,cometd,libcometed` for all
-
-### Cache
-
-Material caches artist and album lists, to speed up subsequent listings. This
-cache should automatically be recreated when LMS's music DB is rescanned. To
-manulaly clear this cache, start Material as follows:
-
-* `http://<yourserver>:9000/material/?clearcache`
-
-### Customisation
-
-If you wish to modify the look or layout of Material, you can do so by placing
-CSS files within a `material-skin/css/` sub-folder of your LMS's `prefs` folder.
-These should be named as follows:
-
-* `prefs/material-skin/css/desktop.css`
-* `prefs/material-skin/css/mobile.css`
-
-You may also specify the custom CSS as part of Material's URL, therefore
-allowing per-device CSS changes. e.g.
-
-* `http://<yourserver>:9000/material/?css=my-phone` will use
-`prefs/material-skin/css/my-phone.css` as the custom CSS file.
-
-### Themes & colours
-
-To install custom themes, place CSS files within a `material-skin/themes/dark/`
-or `material-skin/themes/light/` sub-folder of your LMS's `prefs` folder. For
-colours, place CSS files within `material-skin/colors/` sub-folder. e.g.
-
-* `prefs/material-skin/themes/dark/New-Theme.css`
-* `prefs/material-skin/colors/pink.css`
-
-This will add an `New Theme` entry to Material's theme selector, and add pink
-to the colour choice. The format of these filse should be based upon one of
-Material's existing theme, or colour, files.
-
-### Custom menu entries
-
-Material will look for `material-skin/actions.json` within your LMS's `prefs`
-folder. If found, then Material will add the actions listed in the `system`
-section to the main menu, actions in `allplayers` to all players, or you may
-create a section matching a specific player's MAC address. This file has the
-following format:
-
-```
-{
-  "system":[
-    {
-      "title":"A page to embed in Material",
-      "iframe":"http://address/to/embed",
-      "locked":true
-    },
-    {
-      "title":"A page to launch in a new window/tab",
-      "weblink":"http://some/site"
-    }
-    {
-      "title":"A command to run on the LMS server",
-      "command":"ls /tmp/ &",
-      "prompt":"Do this command?"
-    }
-  ],
-  "allplayers":[
-    {
-      "title":"A command to run on the LMS server",
-      "command":"echo \"Player MAC:$ID Player Name:$NAME\""
-    }
-  ]
-  "ab:cd:de:01:02:03":[
-    ...
-  ]
-}
-```
-
-`iframe` URLs are loaded within Material (as happens for server settings, etc),
-and `weblink` URLs are loaded in a new window (or tab). `command` is a command
-to run on the LMS server.
-
-`"locked":true` will hide the action until the password entered in Material's
-settings page matches that set in the Material Skin server settings.
-
-Set `"prompt"` to a query string to confirm with the user whether to perform the
-action or not.
-
-`$ID` will be replaced by the player's ID (its MAC address), and `$NAME` will
-be replaced by the player's name. NOTE: No validation takes place, and commands
-are invoked as is. Use `&` to run a command in the background - otherwise you
-could stall LMS.
-
-If you have multiple players, then player actions will be accessible from the
-'Manage players' dialog, otherwise they will be listed at the bottom of the
-'Player settings' dialog.
-
-### Native applications
-
-Material can send status updates, and current toolbar colors, to native Android
-(and iOS?) applications. To enable this in material, pass the `nativeStatus` and
-`nativeColors` query parameters, e.g.:
-
-* `http://<yourserver>:9000/material/?nativeColors&nativeStatus`
-
-Your Android app then needs something like the following:
-
-```
-public class MainActivity extends AppCompatActivity {
-    ...
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ....
-        webView.loadUrl("http://<yourserver>:9000/material/?native");
-        webView.addJavascriptInterface(this, "NativeReceiver");
-    }
-
-    @JavascriptInterface
-    public void updateStatus(String status){
-        // 'status' is JSON string
-    }
-}
-```
-
-### iOS fullscreen without home buttom
-
-If using Material as a webapp on an iOS device that has no home-screen button,
-then the black bar at the bottom can over-write part of Material's navigation
-bar. To work around this pass `ios` in the URL query. e.g.
-
-* `http://<yourserver>:9000/material/?ios`
+For more information on usage, installation, debug, etc, please refer to the [Detailed Information wiki page](https://github.com/CDrummond/lms-material/wiki/Detailed-Information)
 
 ## Donations
 

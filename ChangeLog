@@ -30,8 +30,8 @@
     PDF viewer does not scroll.
 19. Fix artist list (not grid) -> click jumplist (so that view scrolls) -> click
     artist -> list (not grid) albums -- list of albums is messed up (has artist
-    list text and album lsit text). Fixed by reverting vue-virtual-scoller to
-    1.0.0-rc2.
+    list text and album lsit text). Fixed by downgrading vue-virtual-scoller to
+    1.0.4
 
 1.5.9
 -----

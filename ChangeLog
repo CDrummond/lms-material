@@ -5,7 +5,8 @@
  2. Use separate checkbox for coloured toolbars option.
  3. Place colored css mods into separate file, no need for theme-colored.css
  4. Add 'Darker' theme variant.
- 5. Add support for OS-specific and user themes (see README.md for user themes).
+ 5. Add support for OS-specific and user themes (see 'Detailed Information' on
+    Material's github wiki for more details).
  6. Add OS-like themes for Linux, macOS, and Windows.
  7. Set default theme based upon platform. 'Darker' for Android, 'Light' for
     iOS, 'Adwaita Dark' for Linux, 'Mojave Dark' for macOS, and
@@ -20,10 +21,11 @@
 13. Add option to show current date & time when showing now-playing screen.
 14. Always add 'E' to 'tags' when asking for artist's albums, required for
     emblems.
-15. Better(?) portarait text position calculation.
+15. Better(?) portrait text position calculation.
 16. Alter appearance of scan progress shown in server settings, so that progress
     can be seen with dark and light themes.
-17. Add support for user colours (see README.md for more details).
+17. Add support for user colours (see 'Detailed Information' on Material's
+    github wiki for more details).
 18. Don't open 'Text files from music folder' in an embedded iframe for iOS, as
     PDF viewer does not scroll.
 

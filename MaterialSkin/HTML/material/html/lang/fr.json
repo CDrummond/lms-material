@@ -448,5 +448,7 @@
 "%1 days":"%1 jours",
 "Color toolbars":"",
 "Darker":"",
+"Show current date and time":"",
+"Show current date and time in main toolbar if there is sufficient space.":"",
 "Use chosen color for toolbars.":""
 }

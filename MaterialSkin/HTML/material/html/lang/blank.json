@@ -311,6 +311,8 @@
 "Show all information":"",
 "Show context menu when clicking anywhere on an audio item.":"",
 "Show controls":"",
+"Show current date and time":"",
+"Show current date and time in main toolbar if there is sufficient space.":"",
 "Show current track information":"",
 "Show extra settings":"",
 "Show file type, bitrate, etc.":"",

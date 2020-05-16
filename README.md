@@ -2,7 +2,8 @@
 
 ![Now Playing](screenshots/now-playing.png)
 
-The [Screenshots wiki page](https://github.com/CDrummond/lms-material/wiki/Screenshots) has more screenshots.
+The [Screenshots wiki page](https://github.com/CDrummond/lms-material/wiki/Screenshots)
+has more screenshots.
 
 For more information, please refer to the [User Guide](https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html).
 This guide is on a separate github page, and is authored by Jim Gooch.
@@ -57,7 +58,8 @@ force one or the other.
 * `http://<yourserver>:9000/material/?layout=mobile` will force mobile layout
 * `http://<yourserver>:9000/material/?layout=desktop` will force desktop layout
 
-You can also launch Material straight into its desktop now-playing screen, using:
+You can also launch Material straight into its desktop now-playing screen,
+using:
 
 * `http://<yourserver>:9000/material/now-playing`
 
@@ -93,9 +95,9 @@ implies) a list of comma-separated parameters to pass to the invoked action,
 `player` allows you to (optionally) specify that the action will only occur when
 the indicated player is present.
 
-* `http://<yourserver>:9000/material/?layout=desktop&action=expandNowPlaying/true` will
-open the desktop-layout with the now-playing page expanded (which is similar to
-`http://<yourserver>:9000/material/now-playing`)
+* `http://<yourserver>:9000/material/?layout=desktop&action=expandNowPlaying/true`
+will open the desktop-layout with the now-playing page expanded (which is
+similar to `http://<yourserver>:9000/material/now-playing`)
 
 * `http://<yourserver>:9000/material/?layout=mobile&action=dlg.open/playersettings,-,alarms`
 will open the player settings dialog, and scroll the 'Alarms' section into view.
@@ -105,17 +107,17 @@ be used. e.g. `http://<yourserver>:9000/material/?layout=mobile&player=Bedroom&a
 
 ### Hidding elements
 
-You can specify a set of elements that can be hidden. This is achieved by passing
-the `hide` query parameter and specifying a comma-separated list of items. Currently
-only `mini` (to hide the mini player launch button), `notif` (to hide the lock
-screen and notification control settings), `launchPlayer` (to hide the launch
-player setting), and `scale` (to hade option for larger elements) may be
-specified. e.g.
+You can specify a set of elements that can be hidden. This is achieved by
+passing the `hide` query parameter and specifying a comma-separated list of
+items. Currently only `mini` (to hide the mini player launch button), `notif`
+(to hide the lock screen and notification control settings), `launchPlayer` (to
+hide the launch player setting), and `scale` (to hade option for larger
+elements) may be specified. e.g.
 
 * `http://<yourserver>:9000/material/?hide=mini,notif`
 
-This query parameter is only intended to be used by applications wishing to embed
-Material such as [the Material Skin android app.](https://github.com/CDrummond/lms-material-app)
+This query parameter is only intended to be used by applications wishing to
+embed Material such as [the Material Skin android app.](https://github.com/CDrummond/lms-material-app)
 
 ### Debugging
 
@@ -125,13 +127,15 @@ received, start Material as follows:
 
 * `http://<yourserver>:9000/material/?debug=json` for JSONRPC
 * `http://<yourserver>:9000/material/?debug=cometd` for Cometd
-* `http://<yourserver>:9000/material/?debug=libcometd` to enable debugging from libcometd
+* `http://<yourserver>:9000/material/?debug=libcometd` to enable debugging from
+libcometd
 * `http://<yourserver>:9000/material/?debug=json,cometd,libcometed` for all
 
 ### Cache
 
-Material caches artist and album lists, to speed up subsequent listings. To
-clear this cache, start Material as follows:
+Material caches artist and album lists, to speed up subsequent listings. This
+cache should automatically be recreated when LMS's music DB is rescanned. To
+manulaly clear this cache, start Material as follows:
 
 * `http://<yourserver>:9000/material/?clearcache`
 
@@ -144,11 +148,11 @@ These should be named as follows:
 * `prefs/material-skin/css/desktop.css`
 * `prefs/material-skin/css/mobile.css`
 
-You may also specify the custom CSS as part of Material's URL, therefore allowing
-per-device CSS changes. e.g.
+You may also specify the custom CSS as part of Material's URL, therefore
+allowing per-device CSS changes. e.g.
 
-* `http://<yourserver>:9000/material/?css=my-phone` will use `prefs/material-skin/css/my-phone.css`
-as the custom CSS file.
+* `http://<yourserver>:9000/material/?css=my-phone` will use
+`prefs/material-skin/css/my-phone.css` as the custom CSS file.
 
 ### Themes & colours
 
@@ -156,19 +160,20 @@ To install custom themes, place CSS files within a `material-skin/themes/dark/`
 or `material-skin/themes/light/` sub-folder of your LMS's `prefs` folder. For
 colours, place CSS files within `material-skin/colors/` sub-folder. e.g.
 
-* `prefs/material-skin/themes/dark/Adwaita-Dark.css`
+* `prefs/material-skin/themes/dark/New-Theme.css`
 * `prefs/material-skin/colors/pink.css`
 
-This will add a `Adwaita-Dark` entry to Material's theme selector, and add a
-pink colour. The format of these filse should be based upon one of Material's
-existing theme, or colour, files.
+This will add an `New Theme` entry to Material's theme selector, and add pink
+to the colour choice. The format of these filse should be based upon one of
+Material's existing theme, or colour, files.
 
 ### Custom menu entries
 
 Material will look for `material-skin/actions.json` within your LMS's `prefs`
-folder. If found, then Material will add the actions listed in the `system` section
-to the main menu, actions in `allplayers` to all players, or you may create a section
-matching a specific player's MAC address. This file has the following format:
+folder. If found, then Material will add the actions listed in the `system`
+section to the main menu, actions in `allplayers` to all players, or you may
+create a section matching a specific player's MAC address. This file has the
+following format:
 
 ```
 {
@@ -256,7 +261,8 @@ bar. To work around this pass `ios` in the URL query. e.g.
 
 ## Donations
 
-I develop this skin purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...
+I develop this skin purely for fun, so no donations are required. However,
+seeing as I have been asked about this a few times, here is a link...
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url)
 

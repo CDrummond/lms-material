@@ -134,13 +134,20 @@ Vue.component('lms-iframe-dialog', {
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="actions.length>0">
+     <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || customActions.length>0">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(item, index) in actions">
         <v-list-tile @click="doAction(item)">
          <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
+        </v-list-tile>
+       </template>
+       <v-divider v-if="actions.length>0 && customActions.length>0"></v-divider>
+       <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
+        <v-list-tile @click="performCustomAction(action)">
+         <v-list-tile-avatar v-if="menuIcons && actions.length>0"></v-list-tile-avatar>
+         <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
       </v-list>
@@ -166,7 +173,8 @@ Vue.component('lms-iframe-dialog', {
             snackbar:{show:false, msg:undefined},
             loaded:false,
             showAll:false, // show all settings, or hide some?
-            actions: []
+            actions: [],
+            customActions: [],
         }
     },
     mounted() {
@@ -185,6 +193,7 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.showAll = showAll;
             this.actions = undefined==actions ? [] : actions;
+            this.customActions = getCustomActions(page+"-dialog", this.$store.state.unlockAll);
         }.bind(this));
             bus.$on('iframe-loaded', function() {
             this.loaded = true;

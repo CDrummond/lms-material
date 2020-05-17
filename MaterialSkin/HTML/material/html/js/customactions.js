@@ -17,30 +17,26 @@ function initCustomActions() {
     });
 }
 
+function getSectionActions(section, actions, lockedActions) {
+    if (customActions[section]) {
+        for (let i=0, sect=customActions[section], len=sect.length; i<len; ++i) {
+            if (lockedActions || !sect[i].locked) {
+                actions.push(sect[i]);
+            }
+        }
+    }
+}
+
 function getCustomActions(id, lockedActions) {
     let actions = [];
-    if (undefined==id) {
-        if (customActions && customActions.system) {
-            for (let i=0, len=customActions.system.length; i<len; ++i) {
-                if (lockedActions || !customActions.system[i].locked) {
-                    actions.push(customActions.system[i]);
-                }
-            }
-        }
-    } else {
-        if (customActions && customActions.allplayers) {
-            for (let i=0, len=customActions.allplayers.length; i<len; ++i) {
-                if (lockedActions || !customActions.allplayers[i].locked) {
-                    actions.push(customActions.allplayers[i]);
-                }
-            }
-        }
-        if (customActions && customActions[id]) {
-            for (let i=0, len=customActions[id].length; i<len; ++i) {
-                if (lockedActions || !customActions[id][i].locked) {
-                    actions.push(customActions[id][i]);
-                }
-            }
+    if (customActions) {
+        if (undefined==id) {
+            getSectionActions('system', actions, lockedActions);
+        } else if (id=='server-settings') {
+            getSectionActions('server-settings', actions, lockedActions);
+        } else {
+            getSectionActions('allplayers', actions, lockedActions);
+            getSectionActions(id, actions, lockedActions);
         }
     }
     return actions.length>0 ? actions : undefined;

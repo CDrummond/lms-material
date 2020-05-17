@@ -74,5 +74,15 @@ function performCustomAction(action, player) {
                 lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
             }
         }
+    } else if (action.script) {
+        if (undefined!=action.prompt) {
+            bus.$confirm(action.prompt).then(res => {
+                if (res) {
+                    eval(undefined==player ? action.script : action.script.replace("$ID", player.id).replace("$NAME", player.name));
+                }
+            });
+        } else {
+            eval(undefined==player ? action.script : action.script.replace("$ID", player.id).replace("$NAME", player.name));
+        }
     }
 }

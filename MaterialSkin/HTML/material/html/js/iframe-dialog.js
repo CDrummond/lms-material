@@ -193,7 +193,7 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.showAll = showAll;
             this.actions = undefined==actions ? [] : actions;
-            this.customActions = getCustomActions(page+"-dialog", this.$store.state.unlockAll);
+            this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
         }.bind(this));
             bus.$on('iframe-loaded', function() {
             this.loaded = true;

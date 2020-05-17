@@ -36,6 +36,7 @@
     it had more than 5 characters.
 21. Move actions buttons from dialogs into menus.
 22. Allow to add custom actions to server settings dialog.
+23. Add javascript execution to custom actions.
 
 1.5.9
 -----

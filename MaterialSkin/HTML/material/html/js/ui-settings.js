@@ -20,15 +20,15 @@ Vue.component('lms-ui-settings', {
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-list-tile @click="saveAsDefault">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>save_alt</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>save_alt</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="revertToDefault">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile :href="appSettings" v-if="appSettings!=undefined">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
      </v-list>
@@ -420,6 +420,9 @@ Vue.component('lms-ui-settings', {
         },
         darkUi() {
             return this.$store.state.darkUi
+        },
+        displayMenuIcons() {
+            return this.$store.state.menuIcons
         }
     },
     mounted() {

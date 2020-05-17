@@ -93,7 +93,7 @@ Vue.component('lms-player-settings', {
      <div class="dialog-padding" v-if="customActions && customActions.length>0"></div>
      <v-header class="dialog-section-header" v-if="customActions && customActions.length>0">{{i18n('Actions')}}</v-header>
      <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-      <v-list-tile><v-btn @click="performCustomAction(action, {id:playerId, name:playerName})" flat>{{action.title}}</v-btn></v-list-tile>
+      <v-list-tile><v-btn @click="performCustomAction(action, {id:playerId, name:playerName})" flat><v-icon v-if="action.icon" class="btn-icon">{{action.icon}}</v-icon>{{action.title}}</v-btn></v-list-tile>
      </template>
      <div class="dialog-padding" v-if="customActions && customActions.length>0"></div>
     </v-list>
@@ -298,7 +298,7 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerOrigName = player.name;
-            this.customActions = this.$store.state.players.length==1 ? getCustomActions(player, this.$store.state.unlockAll) : undefined;
+            this.customActions = this.$store.state.players.length==1 ? getCustomActions(player.id, this.$store.state.unlockAll) : undefined;
             if (this.$store.state.dstmPlugin) {
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {

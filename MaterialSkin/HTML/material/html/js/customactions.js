@@ -43,6 +43,18 @@ function getCustomActions(id, lockedActions) {
 }
 
 function performCustomAction(action, player) {
+    if (undefined!=action.prompt) {
+        bus.$confirm(action.prompt).then(res => {
+            if (res) {
+                doCustomAction(action, player);
+            }
+        });
+    } else {
+        doCustomAction(action, player);
+    }
+}
+
+function doCustomAction(action, player) {
     if (action.iframe) {
         if (undefined==player) {
             bus.$emit('dlg.open', 'iframe', action.iframe, action.title);
@@ -57,32 +69,12 @@ function performCustomAction(action, player) {
             window.open(action.weblink.replace("$ID", player.id).replace("$NAME", player.name));
         }
     } else if (action.command) {
-        if (undefined!=action.prompt) {
-            bus.$confirm(action.prompt).then(res => {
-                if (res) {
-                    if (undefined==player) {
-                        lmsCommand("", ["material-skin", "command", "cmd:"+action.command]);
-                    } else {
-                        lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
-                    }
-                }
-            });
+        if (undefined==player) {
+            lmsCommand("", ["material-skin", "command", "cmd:"+action.command]);
         } else {
-            if (undefined==player) {
-                lmsCommand("", ["material-skin", "command", "cmd:"+action.command]);
-            } else {
-                lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
-            }
+            lmsCommand("", ["material-skin", "command", "cmd:"+action.command.replace("$ID", player.id).replace("$NAME", player.name)]);
         }
     } else if (action.script) {
-        if (undefined!=action.prompt) {
-            bus.$confirm(action.prompt).then(res => {
-                if (res) {
-                    eval(undefined==player ? action.script : action.script.replace("$ID", player.id).replace("$NAME", player.name));
-                }
-            });
-        } else {
-            eval(undefined==player ? action.script : action.script.replace("$ID", player.id).replace("$NAME", player.name));
-        }
+        eval(undefined==player ? action.script : action.script.replace("$ID", player.id).replace("$NAME", player.name));
     }
 }

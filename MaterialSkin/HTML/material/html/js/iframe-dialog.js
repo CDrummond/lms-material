@@ -130,11 +130,21 @@ Vue.component('lms-iframe-dialog', {
  <v-dialog v-model="show" v-if="show" scrollable fullscreen>
   <v-card>
    <v-card-title class="settings-title">
-    <v-toolbar app class="dialog-toolbar">
+    <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
-     <v-btn flat v-for="(act, index) in actions" icon @click.native="doAction(act)" :title="act.title"><v-icon>{{act.icon}}</b-icon></v-btn>
+     <v-menu bottom left v-model="showMenu" v-if="actions.length>0">
+      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+      <v-list>
+       <template v-for="(item, index) in actions">
+        <v-list-tile @click="doAction(item)">
+         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
+         <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
+        </v-list-tile>
+       </template>
+      </v-list>
+     </v-menu>
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
@@ -149,6 +159,7 @@ Vue.component('lms-iframe-dialog', {
     data() {
         return {
             show: false,
+            showMenu: false,
             title: undefined,
             src: undefined,
             page: undefined,
@@ -170,6 +181,7 @@ Vue.component('lms-iframe-dialog', {
                                     ? "search"
                                     : "other";
             this.show = true;
+            this.showMenu = false;
             this.loaded = false;
             this.showAll = showAll;
             this.actions = undefined==actions ? [] : actions;
@@ -181,8 +193,15 @@ Vue.component('lms-iframe-dialog', {
             this.close();
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'iframe') {
+            if (this.showMenu) {
+                this.showMenu = false;
+            } else if (this.$store.state.activeDialog == 'iframe') {
                 this.close();
+            }
+        }.bind(this));
+        bus.$on('hideMenu', function(name) {
+            if (name=='iframe') {
+                this.showMenu= false;
             }
         }.bind(this));
         bus.$on('search-action', function(cmd, params, title, isAlbum) {
@@ -214,6 +233,7 @@ Vue.component('lms-iframe-dialog', {
     methods: {
         close() {
             this.show=false;
+            this.showMenu = false;
             bus.$emit('iframeClosed', this.isPlayer);
         },
         i18n(str, arg) {
@@ -232,9 +252,17 @@ Vue.component('lms-iframe-dialog', {
             });
         }
     },
+    computed: {
+        menuIcons() {
+            return this.$store.state.menuIcons
+        }
+    },
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'iframe', shown:val});
+        },
+        'showMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'iframe', shown:newVal});
         }
     }
 })

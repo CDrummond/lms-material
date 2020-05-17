@@ -34,6 +34,7 @@
     1.0.4
 20. Fix showing short comment fields - previously 'textarea' was only shown if
     it had more than 5 characters.
+21. Move actions buttons from dialogs into menus.
 
 1.5.9
 -----

@@ -12,13 +12,27 @@ Vue.component('lms-ui-settings', {
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app class="dialog-toolbar">
+   <v-toolbar app-data class="dialog-toolbar">
     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn v-if="appSettings!=undefined" flat icon :href="appSettings" :title="i18n('Application settings')"><v-icon>settings_applications</v-icon></v-btn>
-    <v-btn flat icon @click.native="saveAsDefault" :title="i18n('Save as default')"><v-icon>save_alt</b-icon></v-btn>
-    <v-btn flat icon @click.native="revertToDefault" :title="i18n('Revert to default')"><v-icon>settings_backup_restore</b-icon></v-btn>
+    <v-menu bottom left v-model="showMenu">
+     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+     <v-list>
+      <v-list-tile @click="saveAsDefault">
+       <v-list-tile-avatar v-if="menuIcons"><v-icon>save_alt</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="revertToDefault">
+       <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile :href="appSettings" v-if="appSettings!=undefined">
+       <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </v-list>
+    </v-menu>
    </v-toolbar>
   </v-card-title>
   <v-card-text>
@@ -342,6 +356,7 @@ Vue.component('lms-ui-settings', {
     data() {
         return {
             show: false,
+            showMenu: false,
             theme: 'dark',
             themes: [ ],
             color: 'blue',
@@ -409,6 +424,7 @@ Vue.component('lms-ui-settings', {
     },
     mounted() {
         bus.$on('uisettings.open', function(act) {
+            this.showMenu = false;
             this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
             this.readStore();
             this.password = getLocalStorageVal('password', '');
@@ -484,10 +500,17 @@ Vue.component('lms-ui-settings', {
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'browsemodes') {
+            if (this.showMenu) {
+                this.showMenu = false;
+            } else if (this.$store.state.activeDialog == 'browsemodes') {
                 this.browseModesDialog.show=false;
             } else if (this.$store.state.activeDialog == 'uisettings') {
                 this.show=false;
+            }
+        }.bind(this));
+        bus.$on('hideMenu', function(name) {
+            if (name=='uisettings') {
+                this.showMenu= false;
             }
         }.bind(this));
         bus.$on('langChanged', function() {
@@ -561,6 +584,7 @@ Vue.component('lms-ui-settings', {
         },
         close() {
             this.show=false;
+            this.showMenu = false;
             setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
             this.$store.commit('setUiSettings', { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                                   color:this.color,
@@ -757,6 +781,9 @@ Vue.component('lms-ui-settings', {
         },
         'browseModesDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
+        },
+        'showMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'uisettings', shown:newVal});
         }
     }
 })

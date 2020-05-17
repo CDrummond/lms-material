@@ -131,7 +131,7 @@ Vue.component('lms-manage-players', {
    <v-divider v-if="menu.customActions && menu.customActions.length>0"></v-divider>
    <template v-if="menu.customActions && menu.customActions.length>0" v-for="(action, index) in menu.customActions">
     <v-list-tile @click="performCustomAction(action, menu.player)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
@@ -485,6 +485,14 @@ Vue.component('lms-manage-players', {
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        darkUi () {
+            return this.$store.state.darkUi
+        },
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

@@ -774,6 +774,10 @@ sub _svgHandler {
         }
     }
 
+    if (! -e $filePath) {
+        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . basename($request->uri->path) . ".svg";
+    }
+
     if (-e $filePath) {
         my $svg = read_file($filePath);
         $svg =~ s/#000/$colour/g;

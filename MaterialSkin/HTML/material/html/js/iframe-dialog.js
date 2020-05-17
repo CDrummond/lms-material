@@ -134,7 +134,7 @@ Vue.component('lms-iframe-dialog', {
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || customActions.length>0">
+     <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(item, index) in actions">
@@ -143,7 +143,7 @@ Vue.component('lms-iframe-dialog', {
          <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
-       <v-divider v-if="actions.length>0 && customActions.length>0"></v-divider>
+       <v-divider v-if="actions.length>0 && (customActions && customActions.length>0)"></v-divider>
        <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
         <v-list-tile @click="performCustomAction(action)">
          <v-list-tile-avatar v-if="menuIcons && actions.length>0"></v-list-tile-avatar>
@@ -174,7 +174,7 @@ Vue.component('lms-iframe-dialog', {
             loaded:false,
             showAll:false, // show all settings, or hide some?
             actions: [],
-            customActions: [],
+            customActions: []
         }
     },
     mounted() {

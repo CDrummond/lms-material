@@ -145,7 +145,7 @@ Vue.component('lms-iframe-dialog', {
        </template>
        <v-divider v-if="actions.length>0 && (customActions && customActions.length>0)"></v-divider>
        <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-        <v-list-tile @click="performCustomAction(action)">
+        <v-list-tile @click="performCustomAction(action, player)">
          <v-list-tile-avatar v-if="menuIcons && actions.length>0"></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
@@ -184,7 +184,7 @@ Vue.component('lms-iframe-dialog', {
             this.page = page.indexOf("player/basic.html")>0
                             ? "player"
                             : page.indexOf("server/basic.html")>0
-                                ?  "server"
+                                ? "server"
                                 : page.indexOf("advanced_search.html")>0
                                     ? "search"
                                     : "other";
@@ -264,6 +264,9 @@ Vue.component('lms-iframe-dialog', {
     computed: {
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        player() {
+            return this.$store.state.player
         }
     },
     watch: {

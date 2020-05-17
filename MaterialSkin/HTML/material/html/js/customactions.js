@@ -32,8 +32,8 @@ function getCustomActions(id, lockedActions) {
     if (customActions) {
         if (undefined==id) {
             getSectionActions('system', actions, lockedActions);
-        } else if (id=='server-settings') {
-            getSectionActions('server-settings', actions, lockedActions);
+        } else if (id.endsWith('-dialog')) {
+            getSectionActions(id, actions, lockedActions);
         } else {
             getSectionActions('allplayers', actions, lockedActions);
             getSectionActions(id, actions, lockedActions);

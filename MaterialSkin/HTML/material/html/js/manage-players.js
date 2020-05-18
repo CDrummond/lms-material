@@ -123,7 +123,6 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
      </div>
     </v-layout>
    </v-container>

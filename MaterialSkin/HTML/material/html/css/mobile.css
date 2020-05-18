@@ -263,6 +263,11 @@
   margin-right:-12px !important;
  }
 
+ /* Adjust dialog toolbar, so that menu icon aligns with main menu icon */
+ .dialog-toolbar > .v-toolbar__content {
+  margin-right: -12px !important;
+ }
+
  .subtoolbar {
   padding:2px 0px 0px 6px;
  }

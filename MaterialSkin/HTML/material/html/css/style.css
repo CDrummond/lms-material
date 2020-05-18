@@ -1127,7 +1127,7 @@ progress {
 .ios-vcard-text-workaround {
  position:fixed;
  overflow-y:auto;
- padding:var(--std-font-size);
+ padding:14px;
  width:100vw;
  left:0px;
 }

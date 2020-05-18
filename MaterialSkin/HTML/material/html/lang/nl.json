@@ -443,12 +443,12 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Appended album to the play queue":"",
-"Appended all albums to the play queue":"",
-"Application settings":"",
-"Color toolbars":"",
-"Darker":"",
-"Show current date and time":"",
-"Show current date and time in main toolbar if there is sufficient space.":"",
-"Use chosen color for toolbars.":""
+"Appended album to the play queue":"Album toegevoegd aan de afspeellijst",
+"Appended all albums to the play queue":"Alle albums toegevoegd aan de afspeellijst",
+"Application settings":"Instellingen",
+"Color toolbars":"Kleur taakbalk",
+"Darker":"Donkerder",
+"Show current date and time":"Toon huidige datum en tijd",
+"Show current date and time in main toolbar if there is sufficient space.":"Toon huidige datum en tijd in de hoofd taakbalk indien er voldoende ruimte is",
+"Use chosen color for toolbars.":"Gebruik gekozen kleur voor taakbalk."
 }

@@ -376,6 +376,10 @@ function changeLink(href, id) {
             newlink.setAttribute("type", "text/css");
             newlink.setAttribute("href", href);
             newlink.setAttribute("id", id);
+            var onErr = links[i].getAttribute("onerror");
+            if (onErr!=undefined) {
+                newlink.setAttribute("onerror", onErr);
+            }
             document.getElementsByTagName("head").item(0).replaceChild(newlink, links[i]);
             return;
         }
@@ -383,22 +387,26 @@ function changeLink(href, id) {
 }
 
 function setTheme(theme, color) {
-    let t = theme.split('-');
-    let variant = t.length>1 && ('colored'==t[1] || 'standard'==t[1]) ? t.pop() : 'standard';
-    let themeName = t.join('-');
+    if (theme!=undefined) {
+        let t = theme.split('-');
+        let variant = t.length>1 && ('colored'==t[1] || 'standard'==t[1]) ? t.pop() : 'standard';
+        let themeName = t.join('-');
 
-    if (themeName.startsWith("user:")) {
-        changeLink("/material/usertheme/" + themeName.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "themecss");
-    } else {
-        changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
+        if (themeName.startsWith("user:")) {
+            changeLink("/material/usertheme/" + themeName.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "themecss");
+        } else {
+            changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
+        }
+        changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
     }
-    changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
-    if (color.startsWith("user:")) {
-        changeLink("/material/usercolor/" + color.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "colorcss");
-    } else {
-        changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
+    if (color!=undefined) {
+        if (color.startsWith("user:")) {
+            changeLink("/material/usercolor/" + color.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "colorcss");
+        } else {
+            changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
+        }
+        emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
     }
-    emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
 }
 
 function setLayout(useDesktop) {

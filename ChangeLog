@@ -12,6 +12,7 @@
  8. Update translations.
  9. Translate 'Dark' part of theme names.
 10. Always add custom actions to 'Player settings' dialog.
+11. If fail to load theme CSS file, fallback to 'dark.css'
 
 1.6.0
 -----

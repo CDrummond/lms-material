@@ -52,19 +52,15 @@
  color:var(--active-color) !important;
 }
 
-::-webkit-scrollbar:hover {
- border-left:1px solid var(--top-toolbar-border-color);
-}
-
 ::-webkit-scrollbar-thumb {
  border-radius:4px;
- border-left:3px solid var(--scrollbar-track-color);
- border-right:3px solid var(--scrollbar-track-color);
+ border-left:2px solid var(--scrollbar-track-color);
+ border-right:2px solid var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
- border-left:2px solid var(--scrollbar-track-color);
- border-right:2px solid var(--scrollbar-track-color);
+ border-left:1px solid var(--scrollbar-track-color);
+ border-right:1px solid var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar-thumb:active {

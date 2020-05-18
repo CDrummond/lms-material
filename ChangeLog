@@ -1,3 +1,7 @@
+1.6.1
+-----
+1. Improve Adwaita (Linux) scrollbars.
+
 1.6.0
 -----
  1. Don't colour toolbars of fullscreen dialogs for dark and light themes, only

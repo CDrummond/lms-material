@@ -257,7 +257,7 @@
  margin-bottom:0px;
 }
 
-@media only screen and (max-width:800px) {
+@media only screen and (max-width:370px) {
  .lms-toolbar > .v-toolbar__content {
   margin-left:-16px !important;
   margin-right:-12px !important;

@@ -63,9 +63,23 @@ Vue.component('lms-manage-players', {
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app class="dialog-toolbar">
+   <v-toolbar app-data class="dialog-toolbar">
     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-menu bottom left v-model="showMenu">
+     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+     <v-list>
+      <v-list-tile @click="sleepAll">
+       <v-list-tile-avatar v-if="menuIcons"><v-icon>hotel</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Set sleep time for all players')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="createGroup" v-if="manageGroups">
+       <v-list-tile-avatar v-if="menuIcons"><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </v-list>
+    </v-menu>
    </v-toolbar>
   </v-card-title>
 
@@ -109,9 +123,7 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="!player.isgroup && index>0 && (index==players.length-1 || players[index+1].isgroup)"><v-btn flat class="pmgr-button" @click="sleepAll"><v-icon class="btn-icon">hotel</v-icon><span class="ellipsis">{{i18n("Set sleep time for all players")}}</span></v-btn></v-flex>
       <v-flex xs12 v-if="!player.isgroup && index==players.length-1 && manageGroups" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
-      <v-flex xs12 v-if="manageGroups && index==players.length-1"><v-btn flat class="pmgr-button" @click="createGroup"><v-icon class="btn-icon">add_circle_outline</v-icon><span class="ellipsis">{{i18n('Create group player')}}</span></v-btn></v-flex>
      </div>
     </v-layout>
    </v-container>
@@ -143,6 +155,7 @@ Vue.component('lms-manage-players', {
     data() {
         return {
             show: false,
+            showMenu: false,
             showAllButtons: true,
             players: [],
             manageGroups: false,
@@ -192,7 +205,9 @@ Vue.component('lms-manage-players', {
         this.initItems();
 
         bus.$on('esc', function() {
-            if (this.menu.show) {
+            if (this.showMenu) {
+                this.showMenu = false;
+            } else if (this.menu.show) {
                 this.menu.show = false;
             } else if (this.$store.state.activeDialog == 'manage') {
                 this.show=false;
@@ -209,6 +224,7 @@ Vue.component('lms-manage-players', {
 
         bus.$on('noPlayers', function() {
             this.show=false;
+            this.showMenu = false;
         }.bind(this));
 
         bus.$on('playersRemoved', function(players) {
@@ -291,6 +307,7 @@ Vue.component('lms-manage-players', {
         close() {
             this.menu.show=false;
             this.show=false;
+            this.showMenu = false;
         },
         i18n(str) {
             if (this.show) {
@@ -502,7 +519,11 @@ Vue.component('lms-manage-players', {
         },
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'manage', shown:newVal});
-        }
+        },
+        'showMenu': function(val) {
+            this.$store.commit('dialogOpen', {name:'manage-menu', shown:val});
+            bus.$emit('subscribeAll', val);
+        },
     }
 })
 

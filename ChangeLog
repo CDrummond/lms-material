@@ -3,7 +3,9 @@
 1. Improve Adwaita (Linux) scrollbars.
 2. Show shutdown and restart actions in server settings toolbar if called from
    information dialog.
-3. Move player 'Extra settings' into menu in player settings toolbar.
+3. Move player 'Extra settings' into menu in player settings dialog toolbar.
+4. Move player 'Set sleep time for all players' and 'Create group' into menu in
+   manage players dialog toolbar.
 
 1.6.0
 -----

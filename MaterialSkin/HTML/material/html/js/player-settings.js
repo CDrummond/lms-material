@@ -14,11 +14,28 @@ Vue.component('lms-player-settings', {
  <v-dialog v-model="show" v-if="show" scrollable fullscreen>
   <v-card>
    <v-card-title class="settings-title">
-    <v-toolbar app class="dialog-toolbar">
+    <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
-   </v-toolbar>
-  </v-card-title>
+     <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
+     <v-spacer v-if="unlockAll || (customActions && customActions.length>0)"></v-spacer>
+     <v-menu bottom left v-model="showMenu" v-if="customActions || unlockAll">
+      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+      <v-list>
+       <v-list-tile v-if="unlockAll" @click="showExtraSettings">
+        <v-list-tile-avatar v-if="menuIcons"><v-icon>extension</v-icon></v-list-tile-avatar>
+        <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
+       </v-list-tile>
+       <v-divider v-if="unlockAll && (customActions && customActions.length>0)"></v-divider>
+       <template v-for="(action, index) in customActions">
+        <v-list-tile @click="performCustomAction(action, {id:playerId, name:playerName})">
+         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+         <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+        </v-list-tile>
+       </template>
+      </v-list>
+     </v-menu>
+    </v-toolbar>
+   </v-card-title>
 
   <v-card-text>
    <v-list two-line subheader class="settings-list">
@@ -84,18 +101,7 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
 
      <div class="dialog-padding"></div>
-     <div class="dialog-padding" v-if="unlockAll"></div>
-     <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('Extra settings')}}</v-header>
-     <v-list-tile class="settings-note" v-if="unlockAll"><p>{{i18n('The above are only the basic settings for a player, to access further settings use the button below.')}}</p></v-list-tile>
-     <v-btn v-longpress="showAllSettings" flat v-if="unlockAll"><v-icon class="btn-icon">settings</v-icon>{{i18n('Show extra settings')}}</v-btn>
-     <div class="dialog-padding"></div>
 
-     <div class="dialog-padding" v-if="customActions && customActions.length>0"></div>
-     <v-header class="dialog-section-header" v-if="customActions && customActions.length>0">{{i18n('Actions')}}</v-header>
-     <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-      <v-list-tile><v-btn @click="performCustomAction(action, {id:playerId, name:playerName})" flat><v-icon v-if="action.icon" class="btn-icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img btn-icon" :src="action.svg | svgIcon(darkUi)"></img>{{action.title}}</v-btn></v-list-tile>
-     </template>
-     <div class="dialog-padding" v-if="customActions && customActions.length>0"></div>
     </v-list>
    </v-card-text>
   </v-card>
@@ -221,6 +227,9 @@ Vue.component('lms-player-settings', {
         darkUi () {
             return this.$store.state.darkUi
         },
+        menuIcons() {
+            return this.$store.state.menuIcons
+        }
     },
     mounted() {
         bus.$on('langChanged', function() {
@@ -276,10 +285,17 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'alarm') {
+            if (this.showMenu) {
+                this.showMenu = false;
+            } if (this.$store.state.activeDialog == 'alarm') {
                 this.alarmDialog.show=false;
             } else if (this.$store.state.activeDialog == 'playersettings') {
                 this.show=false;
+            }
+        }.bind(this));
+        bus.$on('hideMenu', function(name) {
+            if (name=='playersettings') {
+                this.showMenu= false;
             }
         }.bind(this));
         bus.$on('iframeClosed', function(isPlayer) {
@@ -393,6 +409,7 @@ Vue.component('lms-player-settings', {
             });
             this.update(false);
             this.show=true;
+            this.showMenu = false;
             if (undefined!=section) {
                 this.$nextTick(function () {
                     var elem = document.getElementById(section);
@@ -445,6 +462,7 @@ Vue.component('lms-player-settings', {
         },
         close() {
             this.show=false;
+            this.showMenu = false;
             if (this.dstmItems.length>1) {
                 lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]).then(({data}) => {
                     bus.$emit("prefset", "plugin.dontstopthemusic:provider", this.dstm);
@@ -567,8 +585,8 @@ Vue.component('lms-player-settings', {
                 this.cancelSleepTimer();
             }
         },
-        showAllSettings(longPress) {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, longPress);
+        showExtraSettings() {
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
             if (longPress) {
                 this.close();
             }
@@ -607,6 +625,9 @@ Vue.component('lms-player-settings', {
         },
         'alarmDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'alarm', shown:val});
+        },
+        'showMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'playersettings', shown:newVal});
         }
     }
 })

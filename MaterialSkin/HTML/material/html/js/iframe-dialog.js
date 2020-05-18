@@ -85,17 +85,15 @@ function fixSearchControls(elem) {
     }
 }
 
-function hideClassicSkinElems(page, showAll) {
+function hideClassicSkinElems(page) {
     if (!page) {
         return;
     }
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
         let toHide = undefined;
-        if (!showAll) {
-            if ('player'==page) {
-                toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
-            }
+        if ('player'==page) {
+            toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
         }
         if ('search'==page) {
             if (iframe.contentDocument.addEventListener) {
@@ -156,7 +154,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page, showAll)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -172,13 +170,12 @@ Vue.component('lms-iframe-dialog', {
             page: undefined,
             snackbar:{show:false, msg:undefined},
             loaded:false,
-            showAll:false, // show all settings, or hide some?
             actions: [],
             customActions: []
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, showAll, actions) {
+        bus.$on('iframe.open', function(page, title, actions) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -191,7 +188,6 @@ Vue.component('lms-iframe-dialog', {
             this.show = true;
             this.showMenu = false;
             this.loaded = false;
-            this.showAll = showAll;
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
         }.bind(this));

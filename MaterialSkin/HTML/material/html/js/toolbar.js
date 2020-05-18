@@ -467,7 +467,8 @@ Vue.component('lms-toolbar', {
                 if (this.$store.state.unlockAll) {
                     lmsCommand("", ["material-skin", "server"]).then(({data}) => {
                         if (data && data.result) {
-                            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+(undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname)), undefined,
+                            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+(undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname)),
+                               // Keep in sync with information.js!
                                [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
                                 {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
                         }

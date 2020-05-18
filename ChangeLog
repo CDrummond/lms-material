@@ -1,6 +1,8 @@
 1.6.1
 -----
 1. Improve Adwaita (Linux) scrollbars.
+2. Show shutdown and restart actions in server settings toolbar if called from
+   information dialog.
 
 1.6.0
 -----

@@ -146,7 +146,7 @@ Vue.component('lms-iframe-dialog', {
        <v-divider v-if="actions.length>0 && (customActions && customActions.length>0)"></v-divider>
        <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
         <v-list-tile @click="performCustomAction(action, player)">
-         <v-list-tile-avatar v-if="menuIcons && actions.length>0"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>

@@ -484,14 +484,18 @@ Vue.component('lms-ui-settings', {
 
             lmsCommand("", ["material-skin", "themes", "platform:"+os]).then(({data}) => {
                 for (var i=0, len=this.themes.length; i<len; ++i) {
-                    if (this.themes[i].key.startsWith("user:")) {
+                    if (this.themes[i].other) {
                         this.themes.splice(i, len-i);
                         break;
                     }
                 }
                 if (data && data.result && data.result.themes) {
                     for (var i=0, list=data.result.themes, len=list.length; i<len; ++i) {
-                        this.themes.push({label:list[i].label.replace(/-/g, ' '), key:list[i].key});
+                        let name = list[i].label.replace(/-/g, ' ');
+                        if (!list[i].key.startsWith("user:")) {
+                            name=name.replace("Dark", i18n("Dark"));
+                        }
+                        this.themes.push({label:name, key:list[i].key, other:true});
                     }
                 }
                 this.userColors=[];

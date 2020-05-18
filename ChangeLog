@@ -9,6 +9,8 @@
 5. Only show DSTM dialog on longpress if DSTM is currently active.
 6. Remove outer scrollbar on DSTM dialog.
 7. Fix font-weight of text items in browse list.
+8. Update translations.
+9. Translate 'Dark' part of theme names.
 
 1.6.0
 -----

@@ -446,9 +446,9 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Color toolbars":"",
-"Darker":"",
-"Show current date and time":"",
-"Show current date and time in main toolbar if there is sufficient space.":"",
-"Use chosen color for toolbars.":""
+"Color toolbars":"Barres d'outils de couleur",
+"Darker":"Plus sombre",
+"Show current date and time":"Afficher la date et l'heure actuelles",
+"Show current date and time in main toolbar if there is sufficient space.":"Afficher la date et l'heure actuelles dans la barre d'outils principale s'il y a suffisamment de place.",
+"Use chosen color for toolbars.":"Utiliser la couleur choisie pour les barres d'outils."
 }

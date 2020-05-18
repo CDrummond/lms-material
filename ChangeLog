@@ -4,8 +4,8 @@
 2. Show shutdown and restart actions in server settings toolbar if called from
    information dialog.
 3. Move player 'Extra settings' into menu in player settings dialog toolbar.
-4. Move player 'Set sleep time for all players' and 'Create group' into menu in
-   manage players dialog toolbar.
+4. Move 'Set sleep time for all players' and 'Create group' into menu in manage
+   players dialog toolbar.
 5. Only show DSTM dialog on longpress if DSTM is currently active.
 6. Remove outer scrollbar on DSTM dialog.
 7. Fix font-weight of text items in browse list.

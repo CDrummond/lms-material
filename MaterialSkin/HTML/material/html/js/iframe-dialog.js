@@ -277,8 +277,8 @@ Vue.component('lms-iframe-dialog', {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'iframe', shown:val});
         },
-        'showMenu': function(newVal) {
-            this.$store.commit('menuVisible', {name:'iframe', shown:newVal});
+        'showMenu': function(val) {
+            this.$store.commit('menuVisible', {name:'iframe', shown:val});
         }
     }
 })

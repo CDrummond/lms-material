@@ -290,7 +290,7 @@ Vue.component('lms-player-settings', {
             } if (this.$store.state.activeDialog == 'alarm') {
                 this.alarmDialog.show=false;
             } else if (this.$store.state.activeDialog == 'playersettings') {
-                this.show=false;
+                this.close();
             }
         }.bind(this));
         bus.$on('hideMenu', function(name) {
@@ -626,8 +626,8 @@ Vue.component('lms-player-settings', {
         'alarmDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'alarm', shown:val});
         },
-        'showMenu': function(newVal) {
-            this.$store.commit('menuVisible', {name:'playersettings', shown:newVal});
+        'showMenu': function(val) {
+            this.$store.commit('menuVisible', {name:'playersettings', shown:val});
         }
     }
 })

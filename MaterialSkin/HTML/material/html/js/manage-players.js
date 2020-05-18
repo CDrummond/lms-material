@@ -210,7 +210,12 @@ Vue.component('lms-manage-players', {
             } else if (this.menu.show) {
                 this.menu.show = false;
             } else if (this.$store.state.activeDialog == 'manage') {
-                this.show=false;
+                this.close();
+            }
+        }.bind(this));
+        bus.$on('hideMenu', function(name) {
+            if (name=='manage-menu') {
+                this.showMenu= false;
             }
         }.bind(this));
 
@@ -517,13 +522,12 @@ Vue.component('lms-manage-players', {
             this.$store.commit('dialogOpen', {name:'manage', shown:val});
             bus.$emit('subscribeAll', val);
         },
-        'menu.show': function(newVal) {
-            this.$store.commit('menuVisible', {name:'manage', shown:newVal});
+        'menu.show': function(val) {
+            this.$store.commit('menuVisible', {name:'manage', shown:val});
         },
         'showMenu': function(val) {
-            this.$store.commit('dialogOpen', {name:'manage-menu', shown:val});
-            bus.$emit('subscribeAll', val);
-        },
+            this.$store.commit('menuVisible', {name:'manage-menu', shown:val});
+        }
     }
 })
 

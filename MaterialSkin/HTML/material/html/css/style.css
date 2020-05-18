@@ -1101,6 +1101,11 @@ progress {
  padding:var(--std-font-size);
 }
 
+/* DSTM dialog gets 2 scrollbars? Seens vuetify sets max-height to 90%, setting to 95% works-around this double scrollbar */
+.v-dialog:not(.v-dialog--fullscreen) {
+ max-height: 95%;
+}
+
 .alarm-entry {
  min-height:48px !important;
  max-height:144px !important;

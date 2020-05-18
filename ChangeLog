@@ -7,6 +7,7 @@
 4. Move player 'Set sleep time for all players' and 'Create group' into menu in
    manage players dialog toolbar.
 5. Only show DSTM dialog on longpress if DSTM is currently active.
+6. Remove outer scrollbar on DSTM dialog.
 
 1.6.0
 -----

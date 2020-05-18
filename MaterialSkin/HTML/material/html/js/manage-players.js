@@ -87,7 +87,7 @@ Vue.component('lms-manage-players', {
    <v-container grid-list-md class="pmgr-container">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
-      <v-flex xs12 v-if="0==index && !player.isgroup && (manageGroups || players[players.length-1].isgroup)" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && players[players.length-1].isgroup" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">

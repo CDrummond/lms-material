@@ -503,8 +503,10 @@ Vue.component('lms-toolbar', {
         },
         openMiniPlayer(player) {
             this.showPlayerMenu=false;
+            let width=Math.round(600*window.devicePixelRatio);
+            let height=Math.round(126*window.devicePixelRatio);
             window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
-                        'width=650,height=126,status=no,menubar=no,toolbar=no,location=no');
+                        'width='+width+',height='+height+',status=no,menubar=no,toolbar=no,location=no');
         },
         volumeDown(toggleMute) {
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {

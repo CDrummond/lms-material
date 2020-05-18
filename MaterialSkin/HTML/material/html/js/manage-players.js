@@ -279,15 +279,9 @@ Vue.component('lms-manage-players', {
             this.menu.show = true;
         },
         createGroup() {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
-                return;
-            }
             bus.$emit('dlg.open', 'group', 'create');
         },
         sleepAll() {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
-                return;
-            }
             bus.$emit('dlg.open', 'sleep');
         },
         playerAction(player, cmd) {

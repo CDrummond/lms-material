@@ -1078,7 +1078,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         repeatClicked(longPress) {
-            if (longPress && (this.dstm || this.playerStatus.repeat===0)) {
+            if (longPress && this.playerStatus.repeat===0) {
                 bus.$emit('dlg.open', 'dstm');
             } else if (this.playerStatus.repeat===1) {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 0]);

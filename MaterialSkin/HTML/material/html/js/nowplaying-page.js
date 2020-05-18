@@ -1062,7 +1062,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.repAltBtn.show) {
                 this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {
-                if (longPress & (this.dstm || this.playerStatus.playlist.repeat===0)) {
+                if (longPress && this.playerStatus.playlist.repeat===0) {
                    bus.$emit('dlg.open', 'dstm');
                 } else if (this.playerStatus.playlist.repeat===1) {
                     bus.$emit('playerCommand', ['playlist', 'repeat', 0]);

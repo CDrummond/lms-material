@@ -8,6 +8,7 @@
    manage players dialog toolbar.
 5. Only show DSTM dialog on longpress if DSTM is currently active.
 6. Remove outer scrollbar on DSTM dialog.
+7. Fix font-weight of text items in browse list.
 
 1.6.0
 -----

@@ -626,6 +626,8 @@ div.v-subheader {
  height:auto!important;
  padding-top:8px!important;
  padding-bottom:8px!important;
+ font-size:var(--std-font-size)!important;
+ font-weight:200!important;
 }
 
 .lms-list-sub .browse-text {

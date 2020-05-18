@@ -44,7 +44,7 @@ function getCustomActions(id, lockedActions) {
 
 function performCustomAction(action, player) {
     if (undefined!=action.prompt) {
-        bus.$confirm(action.prompt).then(res => {
+        bus.$confirm(action.prompt, {buttonTrueText: i18n('Yes'), buttonFalseText: i18n('No')}).then(res => {
             if (res) {
                 doCustomAction(action, player);
             }

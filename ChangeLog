@@ -22,6 +22,10 @@
 15. Fix volume display in mini-player when too narrow for toolbar volume slider.
 16. Fix 'Synchronise' option not appearing in player menu in 'Manage players'
     dialog.
+17. Show group members under group player in 'Manage players' dialog when group
+    is active.
+18. When playing/pausing/stoping playback on a group refresh status of all
+    members every 250ms for 1 second.
 
 1.6.0
 -----

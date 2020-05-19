@@ -16,30 +16,31 @@ var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
 var PMGR_SET_DEF_PLAYER_ACTION   = {cmd:"sdp",      icon:"check_box_outline_blank"};
 var PMGR_UNSET_DEF_PLAYER_ACTION = {cmd:"usdp",     icon:"check_box", active:true};
 
-var nameMap = {};
+var playerMap = {};
 
-function getSyncMasterName(player) {
+function getSyncMaster(player) {
     if (undefined==player.syncmaster || player.syncmaster.length<1) {
-        return player.name;
+        return player;
     }
-    let name = nameMap[player.syncmaster];
-    return undefined==name ? "" : name;
+    let master = playerMap[player.syncmaster];
+    return undefined==master ? {name:"", isgroup:false} : master;
 }
 
 function playerSyncSort(a, b) {
-    if (a.isgroup!=b.isgroup) {
-        return a.isgroup ? 1 : -1;
+    var masterA = getSyncMaster(a);
+    var masterB = getSyncMaster(b);
+
+    if (masterA.isgroup!=masterB.isgroup) {
+        return masterA.isgroup ? 1 : -1;
     }
 
-    var masterA = getSyncMasterName(a).toLowerCase();
-    var masterB = getSyncMasterName(b).toLowerCase();
-    if (masterA < masterB) {
+    if (masterA.name < masterB.name) {
         return -1;
     }
-    if (masterA > masterB) {
+    if (masterA.name > masterB.name) {
         return 1;
     }
-    if (masterA.length>0) {
+    if (masterA.name.length>0) {
         if (a.issyncmaster && !b.issyncmaster) {
             return -1;
         }
@@ -88,7 +89,7 @@ Vue.component('lms-manage-players', {
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && players[players.length-1].isgroup" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
-      <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" class="pmgr-title pmgr-grp-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile>
@@ -306,6 +307,10 @@ Vue.component('lms-manage-players', {
             this.menu.show=false;
             this.show=false;
             this.showMenu = false;
+            if (undefined!=this.groupRefreshTimer) {
+                clearTimeout(this.groupRefreshTimer);
+                this.groupRefreshTimer = undefined;
+            }
         },
         i18n(str) {
             if (this.show) {
@@ -361,7 +366,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
-                bus.$emit('refreshStatus', player.id);
+                this.refreshPlayer(player);
             });
         },
         playPause(player) {
@@ -369,7 +374,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
-                bus.$emit('refreshStatus', player.id);
+                this.refreshPlayer(player, true);
             });
         },
         stop(player) {
@@ -377,7 +382,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ['stop']).then(({data}) => {
-                bus.$emit('refreshStatus', player.id);
+                this.refreshPlayer(player, true);
             });
         },
         prevTrack(player) {
@@ -385,7 +390,7 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ['button', 'jump_rew']).then(({data}) => {
-                bus.$emit('refreshStatus', player.id);
+                this.refreshPlayer(player);
             });
         },
         nextTrack(player) {
@@ -393,12 +398,30 @@ Vue.component('lms-manage-players', {
                 return;
             }
             lmsCommand(player.id, ['playlist', 'index', '+1']).then(({data}) => {
-                bus.$emit('refreshStatus', player.id);
+                this.refreshPlayer(player);
             });
         },
         setActive(id) {
             if (id != this.$store.state.player.id && this.$store.state.visibleMenus.size<=0) {
                 this.$store.commit('setPlayer', id);
+            }
+        },
+        refreshPlayer(player, canChangeGroup, i) {
+            bus.$emit('refreshStatus', player.id);
+            // If a groip we need to refresh all members
+            if (player.isgroup && player.syncslaves && canChangeGroup) {
+                for (var i=0, len=player.syncslaves.length; i<len; ++i) {
+                    bus.$emit('refreshStatus', player.syncslaves[i]);
+                }
+                if (undefined==i) {
+                    i = 0;
+                }
+                if (i<4) {
+                    this.groupRefreshTimer = setTimeout(function () {
+                        this.groupRefreshTimer = undefined;
+                        this.refreshPlayer(player, canChangeGroup, i+1);
+                    }.bind(this), 250);
+                }
             }
         },
         deleteGroup(player) {
@@ -430,7 +453,7 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            nameMap[player.id]=player.name;
+            playerMap[player.id]={name:player.name.toLowerCase(), isgroup:player.isgroup};
 
             player.image = undefined;
             if (player.current) {

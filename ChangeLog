@@ -34,6 +34,7 @@
 22. Enable image grid for "home_menu" window style.
 23. Add dummy SVG image incase grid item has no icon and no image.
 24. Fix broken images in BBC iPlayer Extras podcast lists.
+25. On image error use radio.png
 
 1.6.0
 -----

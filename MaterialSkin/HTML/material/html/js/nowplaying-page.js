@@ -58,7 +58,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" class="np-std-button" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <img :key="coverUrl" v-lazy="coverUrl" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
+  <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
   <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
    <v-list-tile style>
     <v-list-tile-content>
@@ -149,7 +149,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-else>
    <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
      <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1':lowHeight,'np-text-landscape-3':!lowHeight&&threeLines}" v-if="playerStatus.current.title">{{title | limitStr}}</div>
      <div class="np-text-landscape" v-else>&nbsp;</div>
@@ -223,7 +223,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <p class="np-text subtext ellipsis" v-if="playerStatus.current.album" v-bind:class="{'ellipsis3':threeLines}">{{playerStatus.current.album}}</p>
     <p class="np-text subtext ellipsis3" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
     <p class="np-text" v-else>&nbsp;</p>
-    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">

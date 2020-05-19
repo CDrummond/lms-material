@@ -16,6 +16,8 @@
 11. If fail to load theme CSS file, fallback to 'dark.css'
 12. When launching mini-player take device pixel ratio into account so that
     correct size window is created.
+13. Slightly increase width of mini-player so that epiphany does not start in
+    its mobile layout.
 
 1.6.0
 -----

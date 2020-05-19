@@ -503,7 +503,7 @@ Vue.component('lms-toolbar', {
         },
         openMiniPlayer(player) {
             this.showPlayerMenu=false;
-            let width=Math.round(600*window.devicePixelRatio);
+            let width=Math.round(620*window.devicePixelRatio);
             let height=Math.round(126*window.devicePixelRatio);
             window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
                         'width='+width+',height='+height+',status=no,menubar=no,toolbar=no,location=no');

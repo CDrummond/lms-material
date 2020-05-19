@@ -64,7 +64,7 @@ Vue.component('lms-sync-dialog', {
                     this.players=[];
                     this.chosenPlayers=[];
                     this.$store.state.players.forEach(p => {
-                        if (p.id!==this.player.id) {
+                        if (p.id!==this.player.id && !p.isgroup) {
                             var play = {id:p.id, label:p.name};
                             this.players.push(play);
                             if (this.origSync.has(play.id)) {

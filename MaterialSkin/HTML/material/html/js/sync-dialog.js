@@ -56,6 +56,9 @@ Vue.component('lms-sync-dialog', {
     },
     mounted() {
         bus.$on('sync.open', function(player) {
+            if (player.isgroup) {
+                return;
+            }
             this.player = player;
             lmsCommand(this.player.id, ["sync", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._sync) {
@@ -63,16 +66,20 @@ Vue.component('lms-sync-dialog', {
                     this.origSync = sync.length>0 && sync[0]!="-" ? new Set(sync) : new Set();
                     this.players=[];
                     this.chosenPlayers=[];
+                    var numOtherStdPlayers = 0;
                     this.$store.state.players.forEach(p => {
                         if (p.id!==this.player.id && !p.isgroup) {
                             var play = {id:p.id, label:p.name};
                             this.players.push(play);
+                            numOtherStdPlayers++;
                             if (this.origSync.has(play.id)) {
                                 this.chosenPlayers.push(play.id);
                             }
                         }
                     });
-                    this.show = true;
+                    if (numOtherStdPlayers>0) {
+                        this.show = true;
+                    }
                 }
             });
         }.bind(this));

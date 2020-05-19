@@ -32,6 +32,7 @@
 21. Remove 'Synchronise' from player menu of group players in 'Manage players'
     dialog, and from main menu.
 22. Enable image grid for "home_menu" window style.
+23. Add dummy SVG image incase grid item has no icon and no image.
 
 1.6.0
 -----

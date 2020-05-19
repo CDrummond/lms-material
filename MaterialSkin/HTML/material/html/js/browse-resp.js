@@ -54,7 +54,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var radioImages = new Set();
             var numImages = 0;
 
-            resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && data.result.window.windowStyle=="icon_list" ? true : false;
+            resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu") ? true : false;
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;

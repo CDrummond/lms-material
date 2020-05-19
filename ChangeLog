@@ -31,6 +31,7 @@
 20. Don't list group players in sync dialog.
 21. Remove 'Synchronise' from player menu of group players in 'Manage players'
     dialog, and from main menu.
+22. Enable image grid for "home_menu" window style.
 
 1.6.0
 -----

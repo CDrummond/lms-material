@@ -30,11 +30,12 @@
     members has changed, refresh new and old members.
 20. Don't list group players in sync dialog.
 21. Remove 'Synchronise' from player menu of group players in 'Manage players'
-    dialog, and from main menu.
-22. Enable image grid for "home_menu" window style.
-23. Add dummy SVG image incase grid item has no icon and no image.
-24. Fix broken images in BBC iPlayer Extras podcast lists.
-25. On image error use radio.png
+    dialog.
+22. Disable 'Synchronise' in players menu if current player is a group.
+23. Enable image grid for "home_menu" window style.
+24. Add dummy SVG image incase grid item has no icon and no image.
+25. Fix broken images in BBC iPlayer Extras podcast lists.
+26. On image error use radio.png
 
 1.6.0
 -----

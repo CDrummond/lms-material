@@ -70,7 +70,7 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime)" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="multipleStandardPlayers && player && !player.isgroup" @click="bus.$emit('dlg.open', 'sync', player)" class="hide-for-mini">
+   <v-list-tile v-if="multipleStandardPlayers" v-bind:class="{'disabled':!player || player.isgroup}" @click="bus.$emit('dlg.open', 'sync', player)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="keyboardControl" class="menu-shortcut player-menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>

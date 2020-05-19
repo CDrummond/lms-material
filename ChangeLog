@@ -28,7 +28,7 @@
     members every 250ms for 1 second.
 19. Don't list group players in sync dialog.
 20. Remove 'Synchronise' from player menu of group players in 'Manage players'
-    dialog.
+    dialog, and from main menu.
 
 1.6.0
 -----

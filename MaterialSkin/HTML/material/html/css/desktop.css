@@ -11,11 +11,6 @@
  --bottom-toolbar-height:80px;
 }
 
-body {
- min-width:600px;
- min-height:400px;
-}
-
 .lms-desktop-toolbar-pad {
  height:var(--main-toolbar-height) !important;
 }

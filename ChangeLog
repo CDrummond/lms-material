@@ -19,6 +19,7 @@
 13. Slightly increase width of mini-player so that epiphany does not start in
     its mobile layout.
 14. Adjust mni-player size after opening, fixes size with Firefox.
+15. Fix volume display in mini-player when too narrow for toolbar volume slider.
 
 1.6.0
 -----

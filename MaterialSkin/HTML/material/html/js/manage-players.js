@@ -494,7 +494,7 @@ Vue.component('lms-manage-players', {
         multipleStandardPlayers () {
             if (this.$store.state.players) {
                 var len = this.$store.state.players.length;
-                return len>1 && !this.$store.state.players[len-1].isgroup && !this.$store.state.players[len-2].isgroup;
+                return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
             }
             return false;
         },

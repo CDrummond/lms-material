@@ -20,6 +20,8 @@
     its mobile layout.
 14. Adjust mni-player size after opening, fixes size with Firefox.
 15. Fix volume display in mini-player when too narrow for toolbar volume slider.
+16. Fix 'Synchronise' option not appearing in player menu in 'Manage players'
+    dialog.
 
 1.6.0
 -----

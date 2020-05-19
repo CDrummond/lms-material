@@ -82,6 +82,41 @@ function visibilityOrFocusChanged() {
     }
 }
 
+function playerIcon(player) {
+    if (player.model=="baby") {
+        return {icon:"radio"};
+    }
+    if (player.model=="boom") {
+        return {svg:"boom"};
+    }
+    if (player.model=="group") {
+        return {icon:"speaker_group"};
+    }
+    if (player.model=="squeezeesp32") {
+        return {svg:"amplifier"};
+    }
+    if (player.model=="squeezelite") {
+        if (player.playerid.startsWith("aa:aa:")) {
+            return {icon:"airplay"};
+        }
+        if (player.playerid.startsWith("bb:bb:")) {
+            return {svg:"dlna"};
+        }
+        if (player.playerid.startsWith("cc:cc:")) {
+            return {svg:"cast_audio"};
+        }
+//        return {icon:"desktop_windows"};
+    }
+    //if (touch) {
+    //   return {icon:"touch_app"};
+    //}
+    //if (transporter) {
+    //   return {svg:"transporter"};
+    //}
+   // return {icon:"speaker"};
+   return {svg:"dlna"};
+}
+
 function lmsCommand(playerid, command, commandId) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
@@ -328,13 +363,15 @@ var lmsServer = Vue.component('lms-server', {
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
                     if (1==parseInt(i.connected)) { // Only list/use connected players...
+                        var icon = playerIcon(i);
                         players.push({ id: i.playerid,
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),
                                        ison: undefined==i.power || 1==parseInt(i.power),
                                        isgroup: 'group'===i.model,
                                        model: i.modelname,
-                                       ip: i.ip
+                                       ip: i.ip,
+                                       icon: playerIcon(i)
                                       });
                         ids.add(i.playerid);
                     }
@@ -344,7 +381,7 @@ var lmsServer = Vue.component('lms-server', {
                 for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
                     var i = data.other_players_loop[idx];
                     if (!ids.has(i.playerid)) {
-                        otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
+                        otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl, icon: playerIcon(i)});
                     }
                 }
             }
@@ -391,11 +428,13 @@ var lmsServer = Vue.component('lms-server', {
 
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
+                player.icon = this.$store.state.player.icon;
                 this.isPlaying = player.isplaying;
             } else {
                 for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
+                        player.icon = this.$store.state.players[i].icon;
                     }
                 }
             }

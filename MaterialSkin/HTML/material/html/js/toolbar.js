@@ -7,7 +7,7 @@
 'use strict';
 
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
-var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "speaker" };
+var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "music_note" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  icon: "speaker_group" };
@@ -27,6 +27,7 @@ Vue.component('lms-toolbar', {
  <div v-if="noPlayer && otherPlayers.length<1" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
  <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
+   <v-icon v-if="!noPlayer && player.icon.icon" class="maintoolbar-player-icon">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" :src="player.icon.svg | svgIcon(darkUi)"></img>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -37,9 +38,8 @@ Vue.component('lms-toolbar', {
     <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
-     <v-list-tile-avatar v-if="(players && players.length>1) || otherPlayers.length>0">
-      <v-icon small v-if="players && players.length>1">{{player && item.id === player.id ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon>
-      <v-icon small v-else></v-icon>
+     <v-list-tile-avatar>
+      <v-icon v-if="item.icon.icon" v-bind:class="{'active-btn':player && item.id === player.id}">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi, undefined, undefined, player && item.id === player.id)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
@@ -61,7 +61,9 @@ Vue.component('lms-toolbar', {
    <template v-for="(item, index) in otherPlayers">
     <v-subheader class="hide-for-mini" v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
     <v-list-tile class="hide-for-mini" @click="movePlayer(item)">
-     <v-list-tile-avatar><v-icon small></v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar>
+      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
@@ -70,7 +72,7 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime)" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="multipleStandardPlayers" v-bind:class="{'disabled':!player || player.isgroup}" @click="bus.$emit('dlg.open', 'sync', player)" class="hide-for-mini">
+   <v-list-tile v-if="multipleStandardPlayers" @click="bus.$emit('dlg.open', 'sync', player)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>link</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.synchronise}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="keyboardControl" class="menu-shortcut player-menu-shortcut">{{trans.syncShortcut}}</v-list-tile-action>
@@ -744,8 +746,8 @@ Vue.component('lms-toolbar', {
             }
             return (isNaN(value) ? 0 : (value<0 ? -1*value : value))+"%";
         },
-        svgIcon: function (name, dark, update, toolbar) {
-            return "/material/svg/"+name+"?c="+(update ? toolbar ? lmsUpdateToolbarBtnColor : LMS_UPDATE_SVG : (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, update, toolbar, active) {
+            return "/material/svg/"+name+"?c="+(update ? toolbar ? lmsUpdateToolbarBtnColor : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcut : str;

@@ -485,9 +485,11 @@ Vue.component('lms-manage-players', {
             }
             
             var found = false;
+            var prevSlaves = undefined;
             for (var i=0, len=this.players.length; i<len; ++i) {
                 if (this.players[i].id==player.id) {
                     found=true;
+                    prevSlaves = this.players[i].syncslaves;
                     this.$set(this.players, i, player);
                     break;
                 }
@@ -496,9 +498,27 @@ Vue.component('lms-manage-players', {
                 this.players.push(player);
             }
             this.players.sort(playerSyncSort);
+
+            // Group changed? Update slaves...
+            if (found && ( (prevSlaves && player.syncslaves && player.syncslaves.length!=prevSlaves.length) || (!prevSlaves && player.syncslaves) || (prevSlaves && !player.syncslaves))) {
+                var refreshed = new Set();
+                if (prevSlaves) {
+                    for (var i=0, len=prevSlaves.length; i<len; ++i) {
+                        bus.$emit('refreshStatus', prevSlaves[i]);
+                        refreshed.add(prevSlaves[i]);
+                    }
+                }
+                if (player.syncslaves) {
+                    for (var i=0, len=player.syncslaves.length; i<len; ++i) {
+                        if (!refreshed.has(player.syncslaves[i])) {
+                            bus.$emit('refreshStatus', player.syncslaves[i]);
+                        }
+                    }
+                }
+            }
         },
         isMainPlayer(player) {
-            return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves<1;
+            return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves.length<1;
         }
     },
     computed: {

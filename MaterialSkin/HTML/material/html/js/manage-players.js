@@ -263,16 +263,13 @@ Vue.component('lms-manage-players', {
                            decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), menu:i18n("Menu") };
         },
         playerMenu(player, event) {
-            this.menu.actions=[PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
+            this.menu.actions=player.isgroup
+                                ? [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION, DIVIDER, PMGR_EDIT_GROUP_ACTION, PMGR_DELETE_GROUP_ACTION]
+                                : [PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
             this.menu.x=event.clientX;
             this.menu.y=event.clientY;
             this.menu.player=player;
 
-            if (player.isgroup) {
-                this.menu.actions.push(DIVIDER);
-                this.menu.actions.push(PMGR_EDIT_GROUP_ACTION);
-                this.menu.actions.push(PMGR_DELETE_GROUP_ACTION);
-            }
             this.menu.actions.push(DIVIDER);
             this.menu.actions.push(player.id == this.$store.state.defaultPlayer ? PMGR_UNSET_DEF_PLAYER_ACTION : PMGR_SET_DEF_PLAYER_ACTION);
             this.menu.customActions = getCustomActions(player.id, this.$store.state.unlockAll);

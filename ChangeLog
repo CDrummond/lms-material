@@ -27,6 +27,8 @@
 18. When playing/pausing/stoping playback on a group refresh status of all
     members every 250ms for 1 second.
 19. Don't list group players in sync dialog.
+20. Remove 'Synchronise' from player menu of group players in 'Manage players'
+    dialog.
 
 1.6.0
 -----

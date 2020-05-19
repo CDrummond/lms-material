@@ -18,6 +18,7 @@
     correct size window is created.
 13. Slightly increase width of mini-player so that epiphany does not start in
     its mobile layout.
+14. Adjust mni-player size after opening, fixes size with Firefox.
 
 1.6.0
 -----

@@ -503,10 +503,15 @@ Vue.component('lms-toolbar', {
         },
         openMiniPlayer(player) {
             this.showPlayerMenu=false;
-            let width=Math.round(620*window.devicePixelRatio);
-            let height=Math.round(126*window.devicePixelRatio);
-            window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
-                        'width='+width+',height='+height+',status=no,menubar=no,toolbar=no,location=no');
+            let height=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--main-toolbar-height').replace('px', ''))+
+                       parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-height').replace('px', ''));
+            let newWindow=window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
+                                      'width='+Math.round(620*window.devicePixelRatio)+',height='+Math.round(height*window.devicePixelRatio)+',status=no,menubar=no,toolbar=no,location=no');
+            newWindow.onload = function () {
+                let adjustedHeight=Math.round(height*newWindow.devicePixelRatio)
+                let adjust=newWindow.innerHeight-adjustedHeight;
+                newWindow.resizeTo(Math.round(620*newWindow.devicePixelRatio), newWindow.outerHeight-adjust);
+            };
         },
         volumeDown(toggleMute) {
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {

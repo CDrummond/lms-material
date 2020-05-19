@@ -390,11 +390,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.canUseGrid = true;
             }
 
-            if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) {
+            if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) { // && parent && parent.id.startsWith("radio:")) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 for (var i=0, len=resp.items.length; i<len; ++i) {
-                    resp.items[i].image = undefined;
+                    resp.items[i].image = resp.items[i].icon = undefined;
                 }
+                resp.canUseGrid=false;
             } else if (haveWithoutIcons && haveWithIcons) {
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);

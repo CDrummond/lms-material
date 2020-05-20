@@ -130,17 +130,12 @@ Vue.component('lms-manage-players', {
     <div v-for="(player, index) in otherPlayers" :key="player.id" style="width:100%">
      <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-grp-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
       <v-flex xs12>
-       <v-list class="pmgr-playerlist">
-        <v-list-tile>
-         <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="movePlayer(player)"><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-          {{player.name}}</v-list-tile-title>
-         </v-list-tile-content>
-         <v-list-tile-action class="pmgr-btn pmgr-btn-control" @click="movePlayer(player)" :title="player.name+' - '+i18n('Move')">
-          <v-btn icon><v-icon>check</v-icon></v-btn>
-         </v-list-tile-action>
-        </v-list-tile>
-       </v-list>
+       <v-list-tile>
+        <v-list-tile-content>
+         <v-list-tile-title style="cursor:pointer" @click="movePlayer(player)"><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+         {{player.name}}</v-list-tile-title>
+        </v-list-tile-content>
+       </v-list-tile>
       </v-flex xs12>
      </div>
 

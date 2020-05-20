@@ -23,11 +23,9 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 
- <v-icon v-if="noPlayer" color="orange darken-2" class="toolbar-button">warning</v-icon>
- <div v-if="noPlayer && otherPlayers.length<1" class="noplayer-title ellipsis">{{trans.noplayer}}</div>
- <v-menu v-else bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
+ <v-menu bottom :disabled="!noPlayer && !connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
-   <v-icon v-if="!noPlayer && player.icon.icon" class="maintoolbar-player-icon">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" :src="player.icon.svg | svgIcon(darkUi)"></img>
+   <v-icon v-if="noPlayer" color="orange darken-2" class="maintoolbar-player-icon">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" :src="player.icon.svg | svgIcon(darkUi)"></img>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -59,7 +57,7 @@ Vue.component('lms-toolbar', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0)" class="hide-for-mini"></v-divider>
+   <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
    <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>

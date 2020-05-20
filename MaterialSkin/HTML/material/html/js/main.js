@@ -57,6 +57,7 @@ var app = new Vue({
         initIconMap();
         initEmblems();
         initCustomActions();
+        initPlayerIcons();
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 var lang = data.result._p2.toLowerCase();

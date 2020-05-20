@@ -82,6 +82,18 @@ function visibilityOrFocusChanged() {
     }
 }
 
+var playerIcons = {bt:undefined};
+function initPlayerIcons() {
+    axios.get("/material/playericons.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+        let map = eval(resp.data);
+        if (undefined!=map['bluetooth']) {
+            playerIcons.bt = new Set(map['bluetooth']);
+        }
+    }).catch(err => {
+    console.log(err);
+    });
+}
+
 function playerIcon(player) {
     if (player.model=="baby") {
         return {icon:"radio"};
@@ -117,7 +129,9 @@ function playerIcon(player) {
         if (player.playerid.startsWith("cc:cc:")) {
             return {svg:"cast_audio"};
         }
-//        return {icon:"desktop_windows"};
+        if (undefined!=playerIcons.bt && playerIcons.bt.has(player.playerid)) {
+            return {icon:"bluetooth"};
+        }
     }
    return {icon:"speaker"};
 }

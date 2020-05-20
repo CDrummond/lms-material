@@ -40,6 +40,7 @@ my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
 my $USER_THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
 my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
+my $PLAYER_ICONS_URL_PARSER_RE = qr{material/playericons\.json}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -89,6 +90,7 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
         Slim::Web::Pages->addRawFunction($USER_THEME_URL_PARSER_RE, \&_userThemeHandler);
         Slim::Web::Pages->addRawFunction($USER_COLOR_URL_PARSER_RE, \&_userColorHandler);
+        Slim::Web::Pages->addRawFunction($PLAYER_ICONS_URL_PARSER_RE, \&_playerIconssHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
     }
@@ -930,4 +932,22 @@ sub _userColorHandler {
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
 }
+
+sub _playerIconssHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/playericons.json";
+    $response->code(RC_OK);
+    if (-e $filePath) {
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/json', $filePath, '', 'noAttachment' );
+    } else {
+        $response->code(RC_OK);
+        $response->content_type('application/json');
+        $response->header('Connection' => 'close');
+        $response->content("{}");
+    }
+}
+
 1;

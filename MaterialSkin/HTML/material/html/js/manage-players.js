@@ -555,7 +555,7 @@ Vue.component('lms-manage-players', {
             ev.dataTransfer.setData('Text', "player:"+which);
             this.dragIndex = which;
             this.stopScrolling = false;
-            this.draggingSyncedPlayer = !this.isMainPlayer(this.players[which]);
+            this.draggingSyncedPlayer = this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;
         },
         dragEnd() {
             this.stopScrolling = true;

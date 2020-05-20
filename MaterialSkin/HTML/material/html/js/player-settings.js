@@ -587,9 +587,6 @@ Vue.component('lms-player-settings', {
         },
         showExtraSettings() {
             bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
-            if (longPress) {
-                this.close();
-            }
         }
     },
     filters: {

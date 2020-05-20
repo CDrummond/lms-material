@@ -119,7 +119,7 @@ function playerIcon(player) {
         if (player.playerid.startsWith("cc:cc:")) {
             return {svg:"cast_audio"};
         }
-        if (BT_PLAYER_IDS.has(player.playerid)) {
+        if (player.modelname=="SqueezeLiteBT" || BT_PLAYER_IDS.has(player.playerid)) {
             return {icon:"bluetooth"};
         }
     }

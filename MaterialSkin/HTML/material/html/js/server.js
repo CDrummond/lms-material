@@ -109,7 +109,7 @@ function playerIcon(player) {
     }
     if (player.model=="squeezelite") {
         if (player.playerid.startsWith("aa:aa:")) {
-            return {icon:"airplay"};
+            return {svg:"airplay"};
         }
         if (player.playerid.startsWith("bb:bb:")) {
             return {svg:"dlna"};

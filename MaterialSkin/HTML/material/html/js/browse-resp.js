@@ -206,7 +206,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             i.svg="dice-list";
                             i.image=undefined;
                         } else if (i.presetParams.icon=="html/images/radio.png") {
-                            i.svg="radio-tower";
+                            i.svg="radio-station";
                             i.image=undefined;
                         } else if (i['icon-id']=="html/images/favorites.png") {
                             i.icon="favorite";
@@ -305,7 +305,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu=='language') {
                             i['icon-id']='/language.png';
                         }
-                        mapIcon(i, "radio");
+                        mapIcon(i, undefined, "radio-station");
                     } else {
                         radioImages.add(i.image);
                     }

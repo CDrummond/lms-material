@@ -511,17 +511,23 @@ var lmsServer = Vue.component('lms-server', {
             logCometdMessage("PLAYERPREFS ("+playerId+")", data);
             if (data[1]=="plugin.dontstopthemusic" && data[2]=="provider") {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
-            }
-            if (data[1]=="plugin.material-skin" && data[2]=="composergenres") {
-                var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_COMPOSER_GENRES = new Set(genres);
-                }
-            }
-            if (data[1]=="plugin.material-skin" && data[2]=="conductorgenres") {
-                var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_CONDUCTOR_GENRES = new Set(genres);
+            } else if (data[1]=="plugin.material-skin") {
+                if (data[2]=="composergenres") {
+                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                    if (genres.length>0) {
+                        LMS_COMPOSER_GENRES = new Set(genres);
+                    }
+                } else if (data[2]=="conductorgenres") {
+                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                    if (genres.length>0) {
+                        LMS_CONDUCTOR_GENRES = new Set(genres);
+                    }
+                } else if (data[2]=="btplayers") {
+                    var players = splitString(data[3].split("\r").join("").split("\n").join(",").replace(/\s/g,'').toLowerCase());
+                    if (players.length>0) {
+                        BT_PLAYER_IDS = new Set(players);
+                        this.refreshServerStatus();
+                    }
                 }
             }
         },

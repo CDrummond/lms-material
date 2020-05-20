@@ -136,8 +136,8 @@ Vue.component('lms-manage-players', {
           <v-list-tile-title style="cursor:pointer" @click="movePlayer(player)"><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
           {{player.name}}</v-list-tile-title>
          </v-list-tile-content>
-         <v-list-tile-action class="pmgr-btn pmgr-btn-control" @click="movePlayer(player)">
-          <v-btn icon><v-icon>swap_horiz</v-icon></v-btn>
+         <v-list-tile-action class="pmgr-btn pmgr-btn-control" @click="movePlayer(player)" :title="player.name+' - '+i18n('Move')">
+          <v-btn icon><v-icon>check</v-icon></v-btn>
          </v-list-tile-action>
         </v-list-tile>
        </v-list>

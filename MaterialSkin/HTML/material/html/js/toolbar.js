@@ -10,7 +10,7 @@ var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
 var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "music_note" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
-var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers"                };
+var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  svg: "player-manager" };
 
 var lmsUpdateToolbarBtnColor = LMS_UPDATE_SVG;
 
@@ -60,7 +60,7 @@ Vue.component('lms-toolbar', {
    <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
    <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
-    <v-list-tile-avatar v-if="players && players.length>0"></v-list-tile-avatar>
+    <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>

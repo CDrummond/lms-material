@@ -64,11 +64,11 @@ Vue.component('lms-manage-players', {
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app-data class="dialog-toolbar">
-    <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
-    <v-spacer></v-spacer>
-    <v-menu bottom left v-model="showMenu">
+   <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)">
+    <v-btn flat v-if="!draggingSyncedPlayer" icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-toolbar-title class="ellipsis">{{draggingSyncedPlayer ? i18n('Drop here to remove from sync group') : TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
+    <v-spacer v-if="!draggingSyncedPlayer"></v-spacer>
+    <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-list-tile @click="sleepAll">
@@ -85,14 +85,14 @@ Vue.component('lms-manage-players', {
   </v-card-title>
 
   <div class="ios-vcard-text-workaround">
-   <v-container grid-list-md class="pmgr-container">
+   <v-container grid-list-md class="pmgr-container" id="player-manager-list">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && players[players.length-1].isgroup" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
-        <v-list-tile>
+        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup">
          <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
@@ -179,7 +179,8 @@ Vue.component('lms-manage-players', {
             players: [],
             manageGroups: false,
             menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
-            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined }
+            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined, drop:undefined },
+            draggingSyncedPlayer: false
         }
     },
     mounted() {
@@ -323,6 +324,9 @@ Vue.component('lms-manage-players', {
             this.menu.show=false;
             this.show=false;
             this.showMenu = false;
+            this.scrollElement = undefined;
+            this.stopScrolling = true;
+            this.draggingSyncedPlayer = false;
             if (undefined!=this.groupRefreshTimer) {
                 clearTimeout(this.groupRefreshTimer);
                 this.groupRefreshTimer = undefined;
@@ -545,6 +549,76 @@ Vue.component('lms-manage-players', {
                     bus.$emit('movePlayer', player);
                 }
             });
+        },
+        dragStart(which, ev) {
+            ev.dataTransfer.dropEffect = 'move';
+            ev.dataTransfer.setData('Text', "player:"+which);
+            this.dragIndex = which;
+            this.stopScrolling = false;
+            this.draggingSyncedPlayer = !this.isMainPlayer(this.players[which]);
+        },
+        dragEnd() {
+            this.stopScrolling = true;
+            this.dragIndex = undefined;
+            this.draggingSyncedPlayer = false;
+        },
+        dragOver(ev) {
+            // Drag over item at top/bottom of list to start scrolling
+            this.stopScrolling = true;
+            if (ev.clientY < 110) {
+                this.stopScrolling = false;
+                this.scrollList(-5)
+            }
+
+            if (ev.clientY > (window.innerHeight - 70)) {
+                this.stopScrolling = false;
+                this.scrollList(5)
+            }
+            ev.preventDefault(); // Otherwise drop is never called!
+        },
+        scrollList(step) {
+            if (this.stopScrolling) {
+                return;
+            }
+            if (undefined==this.scrollElement) {
+                this.scrollElement = document.getElementById("player-manager-list");
+            }
+            var pos = this.scrollElement.scrollTop + step;
+            setScrollTop(this.scrollElement, pos);
+            if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
+                this.stopScrolling = true;
+            }
+            if (!this.stopScrolling) {
+                setTimeout(function () {
+                    this.scrollList(step);
+                }.bind(this), 100);
+            }
+        },
+        drop(to, ev) {
+            this.stopScrolling = true;
+            ev.preventDefault();
+            if (this.dragIndex!=undefined && to!=this.dragIndex) {
+                let playerId = this.players[this.dragIndex].id;
+                let from = this.players[this.dragIndex].syncmaster;
+                if (-1==to) {
+                    lmsCommand(playerId, ["sync", "-"]).then(({data}) => {
+                        bus.$emit('refreshStatus', playerId);
+                        bus.$emit('refreshStatus', from);
+                    });
+                } else {
+                    let dest = this.players[to].syncmaster ? this.players[to].syncmaster : this.players[to].id;
+                    if (dest!=from) {
+                        lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
+                            bus.$emit('refreshStatus', playerId);
+                            if (undefined!=from) {
+                                bus.$emit('refreshStatus', from);
+                            }
+                            bus.$emit('refreshStatus', dest);
+                        });
+                    }
+                }
+            }
+            this.dragIndex = undefined;
         }
     },
     computed: {

@@ -102,7 +102,7 @@ Vue.component('lms-sync-dialog', {
 
             // Build list of commands to execute...
             var commands = [];
-            // ...first remove any previosly synced players that will no longer ge synced
+            // ...first remove any previosuly synced players that will no longer be synced
             this.origSync.forEach(p => {
                 if (!newSync.has(p)) {
                     commands.push({player:p, command:["sync", "-"]});

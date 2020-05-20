@@ -35,7 +35,7 @@ Vue.component('lms-toolbar', {
        
   <v-list class="toolbar-player-list" v-bind:class="{'toolbar-player-list-desktop': !IS_MOBILE && desktopLayout}">
    <template v-for="(item, index) in players">
-    <v-subheader v-if="index==0 && !item.isgroup && (players[players.length-1].isgroup || otherPlayers.length>0)">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
      <v-list-tile-avatar>
@@ -58,21 +58,10 @@ Vue.component('lms-toolbar', {
       </v-list-tile-action>
     </v-list-tile>
    </template>
-   <template v-for="(item, index) in otherPlayers">
-    <v-subheader class="hide-for-mini" v-if="0==index || item.server!=otherPlayers[index-1].server">{{item.server}}</v-subheader>
-    <v-list-tile class="hide-for-mini" @click="movePlayer(item)">
-     <v-list-tile-avatar>
-      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
-     </v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title>{{item.name}}</v-list-tile-title>
-     </v-list-tile-content>
-    </v-list-tile>
-   </template>
 
-   <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime)" class="hide-for-mini"></v-divider>
+   <v-divider v-if="((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0)" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="players && players.length>1" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
+   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_MANAGE_PLAYERS.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -595,13 +584,6 @@ Vue.component('lms-toolbar', {
                 clearInterval(this.disconnectedTimer);
                 this.disconnectedTimer = undefined;
             }
-        },
-        movePlayer(player) {
-            this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
-                if (res) {
-                    bus.$emit('movePlayer', player);
-                }
-            });
         },
         volumeSliderStart() {
             this.movingVolumeSlider=true;

@@ -126,6 +126,24 @@ Vue.component('lms-manage-players', {
        </v-layout>
       </v-flex>
      </div>
+     
+    <div v-for="(player, index) in otherPlayers" :key="player.id" style="width:100%">
+     <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-grp-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
+      <v-flex xs12>
+       <v-list class="pmgr-playerlist">
+        <v-list-tile>
+         <v-list-tile-content>
+          <v-list-tile-title style="cursor:pointer" @click="movePlayer(player)"><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+          {{player.name}}</v-list-tile-title>
+         </v-list-tile-content>
+         <v-list-tile-action class="pmgr-btn pmgr-btn-control" @click="movePlayer(player)">
+          <v-btn icon><v-icon>swap_horiz</v-icon></v-btn>
+         </v-list-tile-action>
+        </v-list-tile>
+       </v-list>
+      </v-flex xs12>
+     </div>
+
     </v-layout>
    </v-container>
   </div>
@@ -520,6 +538,13 @@ Vue.component('lms-manage-players', {
         },
         isMainPlayer(player) {
             return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves.length<1;
+        },
+        movePlayer(player) {
+            this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    bus.$emit('movePlayer', player);
+                }
+            });
         }
     },
     computed: {
@@ -528,6 +553,9 @@ Vue.component('lms-manage-players', {
         },
         defaultPlayer() {
             return this.$store.state.defaultPlayer
+        },
+        otherPlayers () {
+            return this.$store.state.otherPlayers
         },
         stopButton() {
             return this.$store.state.stopButton

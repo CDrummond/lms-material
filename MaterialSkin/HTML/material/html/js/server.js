@@ -113,8 +113,7 @@ function playerIcon(player) {
     //if (transporter) {
     //   return {svg:"transporter"};
     //}
-   // return {icon:"speaker"};
-   return {svg:"dlna"};
+   return {icon:"speaker"};
 }
 
 function lmsCommand(playerid, command, commandId) {

@@ -413,9 +413,9 @@ div.v-subheader {
 }
 
 .maintoolbar-player-icon {
-  position:fixed;
-  top:12px;
-  left:22px;
+ position:fixed;
+ top:12px;
+ left:24px;
 }
 
 .maintoolbar-title {
@@ -1237,13 +1237,11 @@ progress {
  margin-left:4px;
 }
 
-.svg-list-img {
- width:var(--icon-size) !important;
- height:var(--icon-size) !important;
- vertical-align:middle;
+.v-icon {
+ text-align:center;
 }
 
-.svg-img, .radio-image .svg-img {
+.v-icon, .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  vertical-align:middle;
@@ -1728,10 +1726,6 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  display: -webkit-box;
  -webkit-box-orient: vertical;
  -webkit-line-clamp: 3;
-}
-
-.v-icon {
- font-size:var(--icon-size);
 }
 
 .v-btn {

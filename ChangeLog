@@ -37,6 +37,7 @@
     never actually happen).
 25. Fix broken images in BBC iPlayer Extras podcast lists.
 26. On image error use radio.png
+27. React to conductor and composer genre changes.
 
 1.6.0
 -----

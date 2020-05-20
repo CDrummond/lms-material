@@ -18,7 +18,7 @@
     correct size window is created.
 13. Slightly increase width of mini-player so that epiphany does not start in
     its mobile layout.
-14. Adjust mni-player size after opening, fixes size with Firefox.
+14. Adjust mini-player size after opening, fixes size with Firefox.
 15. Fix volume display in mini-player when too narrow for toolbar volume slider.
 16. Fix 'Synchronise' option not appearing in player menu in 'Manage players'
     dialog.
@@ -33,7 +33,8 @@
     dialog.
 22. Disable 'Synchronise' in players menu if current player is a group.
 23. Enable image grid for "home_menu" window style.
-24. Add dummy SVG image incase grid item has no icon and no image.
+24. Add dummy SVG image incase grid item has no icon and no image (this should
+    never actually happen).
 25. Fix broken images in BBC iPlayer Extras podcast lists.
 26. On image error use radio.png
 

@@ -57,7 +57,6 @@ var app = new Vue({
         initIconMap();
         initEmblems();
         initCustomActions();
-        initPlayerIcons();
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
                 var lang = data.result._p2.toLowerCase();
@@ -96,6 +95,15 @@ var app = new Vue({
             }
         });
 
+        lmsCommand("", ["pref", "plugin.material-skin:btplayers", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2 != null) {
+                var players = splitString(data.result._p2.split("\r").join("").split("\n").join(",").replace(/\s/g,'').toLowerCase());
+                if (players.length>0) {
+                    BT_PLAYER_IDS = new Set(players);
+                    logJsonMessage("BT_PLAYER_IDS", players);
+                }
+            }
+        });
         lmsCommand("", ["pref", "plugin.material-skin:composergenres", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2 != null) {
                 var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));

@@ -82,17 +82,7 @@ function visibilityOrFocusChanged() {
     }
 }
 
-var playerIcons = {bt:undefined};
-function initPlayerIcons() {
-    axios.get("/material/playericons.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
-        let map = eval(resp.data);
-        if (undefined!=map['bluetooth']) {
-            playerIcons.bt = new Set(map['bluetooth']);
-        }
-    }).catch(err => {
-    console.log(err);
-    });
-}
+var BT_PLAYER_IDS = new Set();
 
 function playerIcon(player) {
     if (player.model=="baby") {
@@ -129,7 +119,7 @@ function playerIcon(player) {
         if (player.playerid.startsWith("cc:cc:")) {
             return {svg:"cast_audio"};
         }
-        if (undefined!=playerIcons.bt && playerIcons.bt.has(player.playerid)) {
+        if (BT_PLAYER_IDS.has(player.playerid)) {
             return {icon:"bluetooth"};
         }
     }

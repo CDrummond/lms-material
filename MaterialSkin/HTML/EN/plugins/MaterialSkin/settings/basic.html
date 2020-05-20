@@ -1,18 +1,18 @@
 [% PROCESS settings/header.html %]
 
-	[% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PASSWORD" desc="PLUGIN_MATERIAL_SKIN_PASSWORD_DESC" %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PASSWORD" desc="PLUGIN_MATERIAL_SKIN_PASSWORD_DESC" %]
         <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
-	[% END %]
+    [% END %]
 
-	[% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES" desc="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC" %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES" desc="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC" %]
         <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="8">[% prefs.composergenres %]</textarea>
-	[% END %]
+    [% END %]
 
-	[% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES" desc="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC" %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES" desc="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC" %]
         <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="8">[% prefs.conductorgenres %]</textarea>
-	[% END %]
+    [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_BT_PLAYERS" desc="PLUGIN_MATERIAL_BT_PLAYERS_GENRES_DESC" %]
         <textarea class="stdedit" name="pref_btplayers" id="btplayers" cols="45" rows="8">[% prefs.btplayers %]</textarea>
-	[% END %]
+    [% END %]
 [% PROCESS settings/footer.html %]

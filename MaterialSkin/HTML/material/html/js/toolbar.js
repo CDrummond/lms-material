@@ -23,7 +23,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 
- <v-menu bottom :disabled="!noPlayer && !connected" class="ellipsis" v-model="showPlayerMenu">
+ <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
    <v-icon v-if="noPlayer" color="orange darken-2" class="maintoolbar-player-icon">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" :src="player.icon.svg | svgIcon(darkUi)"></img>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">

@@ -89,6 +89,18 @@ function playerIcon(player) {
     if (player.model=="boom") {
         return {svg:"boom"};
     }
+    if (player.model=="transporter") {
+        return {svg:"transporter"};
+    }
+    if (player.model=="squeezebox2") { // Classic
+        return {icon:"call_to_action"};
+    }
+    if (player.model=="fab4") { // Touch
+        return {icon:"touch_app"};
+    }
+    if (player.model=="receiver") {
+        return {svg:"recevier"};
+    }
     if (player.model=="group") {
         return {icon:"speaker_group"};
     }
@@ -107,12 +119,6 @@ function playerIcon(player) {
         }
 //        return {icon:"desktop_windows"};
     }
-    //if (touch) {
-    //   return {icon:"touch_app"};
-    //}
-    //if (transporter) {
-    //   return {svg:"transporter"};
-    //}
    return {icon:"speaker"};
 }
 

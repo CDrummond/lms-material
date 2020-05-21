@@ -68,7 +68,8 @@
     "/difm.png":{"svg":"piano"},
     "/mp3tunes.png":{"svg":"file-music-outline"},
     "/iheartradio.png":{"svg":"iheartradio"},
-    "/radionet.jpg":{"svg":"radionet"}
+    "/radionet.jpg":{"svg":"radionet"},
+    "/subsonic.png":{"svg":"sub"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

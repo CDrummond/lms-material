@@ -801,11 +801,13 @@ sub _customCssHandler {
     if (! -e $filePath) { # Try pre 1.6.0 path
         $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin." . basename($request->uri->path) . ".css";
     }
+    $response->code(RC_OK);
     if (-e $filePath) {
-        $response->code(RC_OK);
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
     } else {
-        $response->code(RC_NOT_FOUND);
+        $response->content_type('text/text');
+        $response->header('Connection' => 'close');
+        $response->content("");
         $httpClient->send_response($response);
         Slim::Web::HTTP::closeHTTPSocket($httpClient);
     }
@@ -845,6 +847,8 @@ sub _customActionsHandler {
         $response->content_type('application/json');
         $response->header('Connection' => 'close');
         $response->content("{}");
+        $httpClient->send_response($response);
+        Slim::Web::HTTP::closeHTTPSocket($httpClient);
     }
 }
 

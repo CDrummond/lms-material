@@ -217,6 +217,10 @@ div.v-subheader {
  margin-bottom:8px;
 }
 
+.theme--dark.v-divider, .theme--light.v-divider {
+ border-color:var(--list-item-border-color) !important;
+}
+
 /* Stop horizontal scrollbar in full screen dialogs */
 .v-dialog .v-card {
  overflow-x:hidden !important;

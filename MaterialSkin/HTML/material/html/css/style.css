@@ -240,6 +240,10 @@ div.v-subheader {
  max-width:calc(100vw - 60px);
 }
 
+.pmgr-icon {
+ margin-top:-4px;
+}
+
 /* Add a little padding at the bottom of lists */
 .lms-list-pad {
  height:40px;

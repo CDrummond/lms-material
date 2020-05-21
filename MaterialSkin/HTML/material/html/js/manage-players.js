@@ -474,11 +474,15 @@ Vue.component('lms-manage-players', {
             if (player.current.title) {
                 if (player.current.artist) {
                     player.track=player.current.title+SEPARATOR+player.current.artist;
+                } else if (player.current.trackartist) {
+                    player.track=player.current.title+SEPARATOR+player.current.trackartist;
                 } else {
                     player.track=player.current.title;
                 }
             } else if (player.current.artist) {
                 player.track=player.current.artist;
+            } else if (player.current.trackartist) {
+                player.track=player.current.trackartist;
             } else {
                 player.track="...";
                 player.hasTrack = false;

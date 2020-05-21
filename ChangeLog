@@ -40,6 +40,7 @@
 27. React to conductor and composer genre changes.
 28. Add icon for SqueezeSonic.
 29. Ignore groups when when listing players on other servers.
+30. Use trackartist if artist not found for a track in 'Manage players' dialog.
 
 1.6.0
 -----

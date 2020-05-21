@@ -25,34 +25,6 @@ function queueItemCover(item, infoPlugin) {
     return resolveImageUrl(LMS_BLANK_COVER);
 }
 
-function animate(elem, from, to) {
-    var opacity = 0;
-    var steps = 10;
-    var val = from;
-    var orig = elem.style.opacity;
-    var origVal = orig ? orig : 1.0;
-    var step = (from-to)/steps;
-    var interval = setInterval(fadeOut, 40);
-    function fadeOut() {
-        if (val <= to) {
-            clearInterval(interval);
-            interval = setInterval(fadeIn, 40);
-        } else {
-            val-=step;
-            elem.style.opacity = origVal * val;
-        }
-    }
-    function fadeIn() {
-        if (val >= from) {
-            clearInterval(interval);
-            elem.style.opacity = orig;
-        } else {
-            val+=step;
-            elem.style.opacity = origVal * val;
-        }
-    }
-}
-
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
 function showArtist(id, title) {
@@ -278,7 +250,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile>
   </RecycleScroller>
   <template v-else v-for="(item, index) in items">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item">
     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
@@ -500,7 +472,7 @@ var lmsQueue = Vue.component("lms-queue", {
         // Long-press on 'queue' nav button whilst in queue scrolls to current track
         bus.$on('nav', function(page, longPress) {
             if ('queue'==page && longPress) {
-                this.scrollToCurrent(true);
+                this.scrollToCurrent();
             }
         }.bind(this));
         bus.$on('settingsMenuAction:queue', function(action) {
@@ -785,7 +757,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 focusEntry(this);
             } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length>=1) {
-                    this.scrollToCurrent(true);
+                    this.scrollToCurrent();
                 }
             } else if (act==PQ_MOVE_QUEUE_ACTION) {
                 if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
@@ -966,7 +938,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             }
         },
-        scrollToCurrent(pulse) {
+        scrollToCurrent() {
             if (!this.$store.state.desktopLayout && this.$store.state.page!='queue') {
                 this.autoScrollRequired = true;
                 return;
@@ -974,24 +946,11 @@ var lmsQueue = Vue.component("lms-queue", {
 
             this.autoScrollRequired = false;
             var scroll = this.items.length>5 && this.currentIndex>=0;
-            if (scroll || (pulse && this.items.length>0)) {
+            if (scroll) {
                 if (this.currentIndex<this.items.length) {
-                    if (this.items.length<=LMS_MAX_NON_SCROLLER_ITEMS) {
-                        var elem=document.getElementById('track'+this.currentIndex);
-                        if (elem) {
-                            if (scroll) {
-                                setScrollTop(this.scrollElement, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
-                            }
-                            if (pulse) {
-                                animate(elem, 1.0, 0.2);
-                            }
-                        }
-                    } else if (scroll) { // TODO: pulse not implemented!
+                    if (scroll) {
                         var pos = this.currentIndex>3 ? (this.currentIndex-3)*(this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE) : 0;
                         setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-                        setTimeout(function () {
-                            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
-                        }.bind(this), 100);
                     }
                 } else if (scroll) {
                     this.autoScrollRequired = true;

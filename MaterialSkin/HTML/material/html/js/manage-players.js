@@ -20,7 +20,7 @@ var playerMap = {};
 
 function getSyncMaster(player) {
     if (undefined==player.syncmaster || player.syncmaster.length<1) {
-        return player;
+        return {name:player.name.toLowerCase(), isgroup:player.isgroup};
     }
     let master = playerMap[player.syncmaster];
     return undefined==master ? {name:"", isgroup:false} : master;
@@ -33,7 +33,6 @@ function playerSyncSort(a, b) {
     if (masterA.isgroup!=masterB.isgroup) {
         return masterA.isgroup ? 1 : -1;
     }
-
     if (masterA.name < masterB.name) {
         return -1;
     }

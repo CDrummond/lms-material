@@ -1182,8 +1182,7 @@ progress {
 }
 
 .pmgr-divider {
- margin-top:4px;
- margin-bottom:4px;
+ border-color:var(--list-item-border-color)!important;
 }
 
 .pmgr-vol-slider {

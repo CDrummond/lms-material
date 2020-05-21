@@ -123,7 +123,7 @@ function playerIcon(player) {
         if (player.modelname=="SqueezeLitePCP") {
             return {svg:"raspberry-pi"};
         }
-        if (player.modelname=="SqueezeLiteWin") {
+        if (player.modelname=="SqueezeLiteWin" || player.modelname=="Squeezelite-X") {
             return {svg:"windows"};
         }
         if (player.modelname=="SqueezeLiteLinux") {
@@ -141,6 +141,11 @@ function playerIcon(player) {
     if (player.model=="squeezeplayer") {
         if (player.modelname=="SqueezePlayer") {
             return {icon:"android"};
+        }
+    }
+    if (player.model=="iPengiPod") {
+        if (player.modelname=="SqueezePlay") {
+            return {icon:"apple"};
         }
     }
 

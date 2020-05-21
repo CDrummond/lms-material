@@ -15,7 +15,7 @@ Vue.component('lms-dstm-dialog', {
     <v-layout wrap>
      <v-flex xs12>{{i18n("Don't Stop The Music")}}</v-flex>
      <v-flex xs12>
-      <v-list class="sleep-list" class="dialog-main-list">
+      <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="setDstm(item.key)">
          <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>

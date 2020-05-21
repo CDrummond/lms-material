@@ -138,6 +138,12 @@ function playerIcon(player) {
             return {icon:"android"};
         }
     }
+    if (player.model=="squeezeplayer") {
+        if (player.modelname=="SqueezePlayer") {
+            return {icon:"android"};
+        }
+    }
+
     return {icon:"speaker"};
 }
 

@@ -343,7 +343,7 @@ var lmsServer = Vue.component('lms-server', {
             if (data.other_players_loop) {
                 for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
                     var i = data.other_players_loop[idx];
-                    if (!ids.has(i.playerid)) {
+                    if (!ids.has(i.playerid) && 'group'!==i.model) {
                         otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
                     }
                 }

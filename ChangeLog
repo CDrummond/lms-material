@@ -39,6 +39,7 @@
 26. On image error use radio.png
 27. React to conductor and composer genre changes.
 28. Add icon for SqueezeSonic.
+29. Ignore groups when when listing players on other servers.
 
 1.6.0
 -----

@@ -1358,7 +1358,8 @@ div.v-subheader {
 }
 
 .v-menu__content .v-subheader {
- height:24px;
+ height:36px;
+ opacity:var(--sub-opacity);
 }
 
 .v-menu__content .v-list__tile .menu-shortcut {
@@ -1419,10 +1420,6 @@ div.v-subheader {
 
 .queue-action {
  min-width:44px !important;
-}
-
-.v-menu__content .v-subheader {
- height: 48px;
 }
 
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {

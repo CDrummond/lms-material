@@ -58,8 +58,7 @@ sub initPlugin {
     $prefs->init({
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
-        password => '',
-        btplayers => '',
+        password => ''
     });
 
     if (main::WEBUI) {

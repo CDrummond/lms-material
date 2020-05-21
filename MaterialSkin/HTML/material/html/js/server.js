@@ -82,8 +82,6 @@ function visibilityOrFocusChanged() {
     }
 }
 
-var BT_PLAYER_IDS = new Set();
-
 function playerIcon(player) {
     if (player.model=="baby") {
         return {icon:"radio"};
@@ -119,7 +117,7 @@ function playerIcon(player) {
         if (player.playerid.startsWith("cc:cc:")) {
             return {svg:"cast_audio"};
         }
-        if (player.modelname=="SqueezeLiteBT" || BT_PLAYER_IDS.has(player.playerid)) {
+        if (player.modelname=="SqueezeLiteBT") {
             return {icon:"bluetooth"};
         }
     }
@@ -521,12 +519,6 @@ var lmsServer = Vue.component('lms-server', {
                     var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
                     if (genres.length>0) {
                         LMS_CONDUCTOR_GENRES = new Set(genres);
-                    }
-                } else if (data[2]=="btplayers") {
-                    var players = splitString(data[3].split("\r").join("").split("\n").join(",").replace(/\s/g,'').toLowerCase());
-                    if (players.length>0) {
-                        BT_PLAYER_IDS = new Set(players);
-                        this.refreshServerStatus();
                     }
                 }
             }

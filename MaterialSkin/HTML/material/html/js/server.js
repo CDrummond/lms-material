@@ -120,8 +120,25 @@ function playerIcon(player) {
         if (player.modelname=="SqueezeLiteBT") {
             return {icon:"bluetooth"};
         }
+        if (player.modelname=="SqueezeLitePCP") {
+            return {svg:"raspberry-pi"};
+        }
+        if (player.modelname=="SqueezeLiteWin") {
+            return {svg:"windows"};
+        }
+        if (player.modelname=="SqueezeLiteLinux") {
+            return {svg:"linux"};
+        }
+        if (player.modelname=="SqueezeLiteMac") {
+            return {svg:"apple"};
+        }
     }
-   return {icon:"speaker"};
+    if (player.model=="squeezeplay") {
+        if (player.modelname=="SB Player") {
+            return {icon:"android"};
+        }
+    }
+    return {icon:"speaker"};
 }
 
 function lmsCommand(playerid, command, commandId) {

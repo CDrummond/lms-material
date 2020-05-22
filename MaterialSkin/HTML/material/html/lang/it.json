@@ -332,6 +332,7 @@
 "Disc %1":"",
 "Don't Stop The Music":"",
 "Downloading plugin updates":"",
+"Drop here to remove from sync group":"",
 "E-Mail":"",
 "Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other LMS control points (such as the default web UI).":"",
 "Enable keyboard shortcuts":"",

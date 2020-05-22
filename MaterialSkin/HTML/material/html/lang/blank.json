@@ -110,6 +110,7 @@
 "Draw background":"",
 "Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)":"",
 "Draw letter overlay":"",
+"Drop here to remove from sync group":"",
 "E-Mail":"",
 "ERROR: List processing failed":"",
 "Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other LMS control points (such as the default web UI).":"",

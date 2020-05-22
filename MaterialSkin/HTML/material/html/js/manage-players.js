@@ -324,6 +324,7 @@ Vue.component('lms-manage-players', {
             this.scrollElement = undefined;
             this.stopScrolling = true;
             this.draggingSyncedPlayer = false;
+            this.dragIndex = undefined;
             if (undefined!=this.groupRefreshTimer) {
                 clearTimeout(this.groupRefreshTimer);
                 this.groupRefreshTimer = undefined;

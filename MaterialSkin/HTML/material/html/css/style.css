@@ -213,12 +213,17 @@ div.v-subheader {
 }
 
 .v-divider--vertical {
- margin-top:8px;
- margin-bottom:8px;
+ margin:8px 0px 8px 0px !important;
 }
 
-.theme--dark.v-divider, .theme--light.v-divider {
+.v-divider, .pmgr-divider {
+ margin:0px 8px 0px 8px;
+ border-width:0.5px !important;
+}
+
+.theme--dark.v-divider, .theme--light.v-divider, .pmgr-divider, .alarm-divider {
  border-color:var(--list-item-border-color) !important;
+ opacity:100%;
 }
 
 /* Stop horizontal scrollbar in full screen dialogs */
@@ -1187,10 +1192,6 @@ progress {
 
 .pmgr-vol-dec-btn {
  margin-left:58px!important;
-}
-
-.pmgr-divider {
- border-color:var(--list-item-border-color)!important;
 }
 
 .pmgr-vol-slider {

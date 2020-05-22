@@ -115,7 +115,7 @@ function playerIcon(player) {
             return {svg:"dlna"};
         }
         if (player.playerid.startsWith("cc:cc:")) {
-            return {svg:"cast_audio"};
+            return {svg:"cast-audio"};
         }
         if (player.modelname=="SqueezeLiteBT") {
             return {icon:"bluetooth"};
@@ -145,7 +145,7 @@ function playerIcon(player) {
     }
     if (player.model=="iPengiPod") {
         if (player.modelname=="SqueezePlay") {
-            return {icon:"apple"};
+            return {svg:"apple"};
         }
     }
 

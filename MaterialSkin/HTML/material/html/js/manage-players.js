@@ -128,7 +128,7 @@ Vue.component('lms-manage-players', {
      
     <div v-for="(player, index) in otherPlayers" :key="player.id" style="width:100%">
      <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-grp-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
-      <v-flex xs12>
+      <v-flex xs12 style="padding:0px;">
       <v-list style="padding:0px;">
        <v-list-tile @click="movePlayer(player)">
         <v-list-tile-content>

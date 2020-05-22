@@ -44,7 +44,7 @@
 31. Send empty string if custom css not found, to save browser logging an error.
 32. Player icons.
 33. Remove 'Synchronise' from players menu, accessible from 'Manage players'
-   dialog.
+    dialog.
 34. Move listing of players on other servers into 'Manage players' dialog.
 35. Sync players via drag'n'drop.
 

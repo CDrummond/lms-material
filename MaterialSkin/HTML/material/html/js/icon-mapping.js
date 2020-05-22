@@ -44,7 +44,7 @@ function mapIconType(item, type) {
     return false;
 }
 
-function mapIcon(item, fallbackIcon) {
+function mapIcon(item, fallbackIcon, fallbackSvg) {
     if (mapIconType(item, "icon-id")) {
         return true;
     }
@@ -55,7 +55,7 @@ function mapIcon(item, fallbackIcon) {
         return true;
     }
     if (undefined!=fallbackIcon) {
-        item.icon=fallbackIcon; item.image=undefined;
+        item.icon=fallbackIcon; item.svg=fallbackSvg; item.image=undefined;
         return true;
     }
     return false;

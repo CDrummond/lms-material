@@ -1,3 +1,11 @@
+1.7.0
+-----
+1. Player icons.
+2. Remove 'Synchronise' from players menu, accessible from 'Manage players'
+   dialog.
+3. Move listing of players on other servers into 'Manage players' dialog.
+4. Sync players via drag'n'drop.
+
 1.6.1
 -----
  1. Improve Adwaita (Linux) scrollbars.

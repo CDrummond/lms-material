@@ -272,6 +272,14 @@
   padding:2px 0px 0px 6px;
  }
 
+ .maintoolbar-player-icon {
+  display:none!important;
+ }
+
+ .maintoolbar-title, .maintoolbar-subtitle {
+  padding-left:2px;
+ }
+
  .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
   padding:0 12px !important;
  }

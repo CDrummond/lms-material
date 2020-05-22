@@ -82,6 +82,76 @@ function visibilityOrFocusChanged() {
     }
 }
 
+function playerIcon(player) {
+    if (player.model=="baby") {
+        return {icon:"radio"};
+    }
+    if (player.model=="boom") {
+        return {svg:"boom"};
+    }
+    if (player.model=="transporter") {
+        return {svg:"transporter"};
+    }
+    if (player.model=="squeezebox2") { // Classic
+        return {icon:"call_to_action"};
+    }
+    if (player.model=="fab4") { // Touch
+        return {icon:"touch_app"};
+    }
+    if (player.model=="receiver") {
+        return {svg:"recevier"};
+    }
+    if (player.model=="group") {
+        return {icon:"speaker_group"};
+    }
+    if (player.model=="squeezeesp32") {
+        return {svg:"amplifier"};
+    }
+    if (player.model=="squeezelite") {
+        if (player.playerid.startsWith("aa:aa:")) {
+            return {svg:"airplay"};
+        }
+        if (player.playerid.startsWith("bb:bb:")) {
+            return {svg:"dlna"};
+        }
+        if (player.playerid.startsWith("cc:cc:")) {
+            return {svg:"cast_audio"};
+        }
+        if (player.modelname=="SqueezeLiteBT") {
+            return {icon:"bluetooth"};
+        }
+        if (player.modelname=="SqueezeLitePCP") {
+            return {svg:"raspberry-pi"};
+        }
+        if (player.modelname=="SqueezeLiteWin" || player.modelname=="Squeezelite-X") {
+            return {svg:"windows"};
+        }
+        if (player.modelname=="SqueezeLiteLinux") {
+            return {svg:"linux"};
+        }
+        if (player.modelname=="SqueezeLiteMac") {
+            return {svg:"apple"};
+        }
+    }
+    if (player.model=="squeezeplay") {
+        if (player.modelname=="SB Player") {
+            return {icon:"android"};
+        }
+    }
+    if (player.model=="squeezeplayer") {
+        if (player.modelname=="SqueezePlayer") {
+            return {icon:"android"};
+        }
+    }
+    if (player.model=="iPengiPod") {
+        if (player.modelname=="SqueezePlay") {
+            return {icon:"apple"};
+        }
+    }
+
+    return {icon:"speaker"};
+}
+
 function lmsCommand(playerid, command, commandId) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
@@ -328,13 +398,15 @@ var lmsServer = Vue.component('lms-server', {
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
                     if (1==parseInt(i.connected)) { // Only list/use connected players...
+                        var icon = playerIcon(i);
                         players.push({ id: i.playerid,
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),
                                        ison: undefined==i.power || 1==parseInt(i.power),
                                        isgroup: 'group'===i.model,
                                        model: i.modelname,
-                                       ip: i.ip
+                                       ip: i.ip,
+                                       icon: playerIcon(i)
                                       });
                         ids.add(i.playerid);
                     }
@@ -344,7 +416,7 @@ var lmsServer = Vue.component('lms-server', {
                 for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
                     var i = data.other_players_loop[idx];
                     if (!ids.has(i.playerid) && 'group'!==i.model) {
-                        otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl});
+                        otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl, icon: playerIcon(i)});
                     }
                 }
             }
@@ -391,11 +463,13 @@ var lmsServer = Vue.component('lms-server', {
 
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
+                player.icon = this.$store.state.player.icon;
                 this.isPlaying = player.isplaying;
             } else {
                 for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
+                        player.icon = this.$store.state.players[i].icon;
                     }
                 }
             }
@@ -463,17 +537,17 @@ var lmsServer = Vue.component('lms-server', {
             logCometdMessage("PLAYERPREFS ("+playerId+")", data);
             if (data[1]=="plugin.dontstopthemusic" && data[2]=="provider") {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
-            }
-            if (data[1]=="plugin.material-skin" && data[2]=="composergenres") {
-                var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_COMPOSER_GENRES = new Set(genres);
-                }
-            }
-            if (data[1]=="plugin.material-skin" && data[2]=="conductorgenres") {
-                var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_CONDUCTOR_GENRES = new Set(genres);
+            } else if (data[1]=="plugin.material-skin") {
+                if (data[2]=="composergenres") {
+                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                    if (genres.length>0) {
+                        LMS_COMPOSER_GENRES = new Set(genres);
+                    }
+                } else if (data[2]=="conductorgenres") {
+                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                    if (genres.length>0) {
+                        LMS_CONDUCTOR_GENRES = new Set(genres);
+                    }
                 }
             }
         },

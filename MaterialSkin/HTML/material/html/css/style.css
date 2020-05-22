@@ -217,6 +217,10 @@ div.v-subheader {
  margin-bottom:8px;
 }
 
+.theme--dark.v-divider, .theme--light.v-divider {
+ border-color:var(--list-item-border-color) !important;
+}
+
 /* Stop horizontal scrollbar in full screen dialogs */
 .v-dialog .v-card {
  overflow-x:hidden !important;
@@ -234,6 +238,10 @@ div.v-subheader {
 
 .pmgr-button .v-btn__content {
  max-width:calc(100vw - 60px);
+}
+
+.pmgr-icon {
+ margin-top:-4px;
 }
 
 /* Add a little padding at the bottom of lists */
@@ -412,12 +420,21 @@ div.v-subheader {
  height:24px;
 }
 
+.maintoolbar-player-icon {
+ position:fixed;
+ top:12px;
+ left:24px;
+}
+
 .maintoolbar-title {
+ padding-left:58px;
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
+ min-width:160px;
 }
 
 .maintoolbar-subtitle {
+ padding-left:58px;
  margin-top:calc(14px - var(--small-font-size));
  font-size:var(--small-font-size);
 }
@@ -474,7 +491,7 @@ div.v-subheader {
 
 .subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn,
 .np-controls div.v-btn__content i.active-btn, .np-controls-wide div.v-btn__content i.active-btn,
-.lms-jumplist div.active-btn, .v-menu__content i.active-btn {
+.lms-jumplist div.active-btn, .v-menu__content i.active-btn, .pmgr-playerlist i.active-btn {
  color:var(--active-color) !important;
 }
 
@@ -1173,8 +1190,7 @@ progress {
 }
 
 .pmgr-divider {
- margin-top:4px;
- margin-bottom:4px;
+ border-color:var(--list-item-border-color)!important;
 }
 
 .pmgr-vol-slider {
@@ -1228,13 +1244,11 @@ progress {
  margin-left:4px;
 }
 
-.svg-list-img {
- width:var(--icon-size) !important;
- height:var(--icon-size) !important;
- vertical-align:middle;
+.v-icon {
+ text-align:center;
 }
 
-.svg-img, .radio-image .svg-img {
+.v-icon, .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  vertical-align:middle;
@@ -1352,7 +1366,8 @@ div.v-subheader {
 }
 
 .v-menu__content .v-subheader {
- height:24px;
+ height:36px;
+ opacity:var(--sub-opacity);
 }
 
 .v-menu__content .v-list__tile .menu-shortcut {
@@ -1413,10 +1428,6 @@ div.v-subheader {
 
 .queue-action {
  min-width:44px !important;
-}
-
-.v-menu__content .v-subheader {
- height: 48px;
 }
 
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {
@@ -1719,10 +1730,6 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  display: -webkit-box;
  -webkit-box-orient: vertical;
  -webkit-line-clamp: 3;
-}
-
-.v-icon {
- font-size:var(--icon-size);
 }
 
 .v-btn {

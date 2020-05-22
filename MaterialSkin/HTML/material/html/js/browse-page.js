@@ -565,7 +565,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               id: TOP_MYMUSIC_ID },
                             { command: ["radios"],
                               params: ["menu:radio"],
-                              icon: "radio",
+                              svg: "radio-tower",
                               type: "group",
                               weight: 1,
                               id: TOP_RADIO_ID,
@@ -2204,6 +2204,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.options.pinned.add(this.top[i].id);
                 } else if (this.top[i].id==TOP_CDPLAYER_ID && this.top[i].params.length==0) {
                     this.top[i].params.push("menu:1");
+                } else if (this.top[i].id==TOP_RADIO_ID) {
+                    this.top[i].icon=undefined; this.top[i].svg="radio-tower";
                 }
             }
             for (var i=0, len=this.top.length; i<len; ++i) {

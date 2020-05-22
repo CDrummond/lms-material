@@ -9,7 +9,7 @@
 var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
 var PMGR_DELETE_GROUP_ACTION     = {cmd:"delete",   icon:"delete"};
 var PMGR_SYNC_ACTION             = {cmd:"sync",     icon:"link"};
-var PMGR_SETTINGS_ACTION         = {cmd:"settings", icon:"speaker"};
+var PMGR_SETTINGS_ACTION         = {cmd:"settings", icon:"music_note"};
 var PMGR_POWER_ON_ACTION         = {cmd:"on",       icon:"power_settings_new", dimmed:true};
 var PMGR_POWER_OFF_ACTION        = {cmd:"off",      icon:"power_settings_new", active:true};
 var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
@@ -20,7 +20,7 @@ var playerMap = {};
 
 function getSyncMaster(player) {
     if (undefined==player.syncmaster || player.syncmaster.length<1) {
-        return player;
+        return {name:player.name.toLowerCase(), isgroup:player.isgroup};
     }
     let master = playerMap[player.syncmaster];
     return undefined==master ? {name:"", isgroup:false} : master;
@@ -33,7 +33,6 @@ function playerSyncSort(a, b) {
     if (masterA.isgroup!=masterB.isgroup) {
         return masterA.isgroup ? 1 : -1;
     }
-
     if (masterA.name < masterB.name) {
         return -1;
     }
@@ -64,11 +63,11 @@ Vue.component('lms-manage-players', {
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app-data class="dialog-toolbar">
-    <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
-    <v-spacer></v-spacer>
-    <v-menu bottom left v-model="showMenu">
+   <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)">
+    <v-btn flat v-if="!draggingSyncedPlayer" icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-toolbar-title class="ellipsis">{{draggingSyncedPlayer ? i18n('Drop here to remove from sync group') : TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
+    <v-spacer v-if="!draggingSyncedPlayer"></v-spacer>
+    <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-list-tile @click="sleepAll">
@@ -85,19 +84,20 @@ Vue.component('lms-manage-players', {
   </v-card-title>
 
   <div class="ios-vcard-text-workaround">
-   <v-container grid-list-md class="pmgr-container">
+   <v-container grid-list-md class="pmgr-container" id="player-manager-list">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && players[players.length-1].isgroup" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12 v-if="player.isgroup && (0==index || !players[index-1].isgroup)" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
-        <v-list-tile>
+        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup">
          <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon small class="pmgr-radio">{{currentPlayer && currentPlayer.id==player.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>{{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon v-if="player.icon.icon" class="pmgr-icon" v-bind:class="{'active-btn':currentPlayer && currentPlayer.id==player.id}">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi, currentPlayer && currentPlayer.id==player.id)"></img>
+          {{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
           <v-list-tile-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
@@ -125,6 +125,22 @@ Vue.component('lms-manage-players', {
        </v-layout>
       </v-flex>
      </div>
+     
+    <div v-for="(player, index) in otherPlayers" :key="player.id" style="width:100%">
+     <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-grp-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
+      <v-flex xs12 style="padding:0px;">
+      <v-list style="padding:0px;">
+       <v-list-tile @click="movePlayer(player)">
+        <v-list-tile-content>
+         <v-list-tile-title><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+         {{player.name}}</v-list-tile-title>
+        </v-list-tile-content>
+       </v-list-tile>
+       <v-divider v-if="index==otherPlayers.length-1 || otherPlayers[index+1].server==player.server" class="pmgr-divider"></v-divider>
+       </v-list>
+      </v-flex>
+     </div>
+
     </v-layout>
    </v-container>
   </div>
@@ -160,7 +176,8 @@ Vue.component('lms-manage-players', {
             players: [],
             manageGroups: false,
             menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
-            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined }
+            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined, drop:undefined },
+            draggingSyncedPlayer: false
         }
     },
     mounted() {
@@ -304,6 +321,9 @@ Vue.component('lms-manage-players', {
             this.menu.show=false;
             this.show=false;
             this.showMenu = false;
+            this.scrollElement = undefined;
+            this.stopScrolling = true;
+            this.draggingSyncedPlayer = false;
             if (undefined!=this.groupRefreshTimer) {
                 clearTimeout(this.groupRefreshTimer);
                 this.groupRefreshTimer = undefined;
@@ -523,6 +543,83 @@ Vue.component('lms-manage-players', {
         },
         isMainPlayer(player) {
             return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves.length<1;
+        },
+        movePlayer(player) {
+            this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
+                if (res) {
+                    bus.$emit('movePlayer', player);
+                }
+            });
+        },
+        dragStart(which, ev) {
+            ev.dataTransfer.dropEffect = 'move';
+            ev.dataTransfer.setData('Text', "player:"+which);
+            this.dragIndex = which;
+            this.stopScrolling = false;
+            this.draggingSyncedPlayer = this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;
+        },
+        dragEnd() {
+            this.stopScrolling = true;
+            this.dragIndex = undefined;
+            this.draggingSyncedPlayer = false;
+        },
+        dragOver(ev) {
+            // Drag over item at top/bottom of list to start scrolling
+            this.stopScrolling = true;
+            if (ev.clientY < 110) {
+                this.stopScrolling = false;
+                this.scrollList(-5)
+            }
+
+            if (ev.clientY > (window.innerHeight - 70)) {
+                this.stopScrolling = false;
+                this.scrollList(5)
+            }
+            ev.preventDefault(); // Otherwise drop is never called!
+        },
+        scrollList(step) {
+            if (this.stopScrolling) {
+                return;
+            }
+            if (undefined==this.scrollElement) {
+                this.scrollElement = document.getElementById("player-manager-list");
+            }
+            var pos = this.scrollElement.scrollTop + step;
+            setScrollTop(this.scrollElement, pos);
+            if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
+                this.stopScrolling = true;
+            }
+            if (!this.stopScrolling) {
+                setTimeout(function () {
+                    this.scrollList(step);
+                }.bind(this), 100);
+            }
+        },
+        drop(to, ev) {
+            this.stopScrolling = true;
+            ev.preventDefault();
+            if (this.dragIndex!=undefined && to!=this.dragIndex) {
+                let playerId = this.players[this.dragIndex].id;
+                let from = this.players[this.dragIndex].syncmaster;
+                if (-1==to) {
+                    lmsCommand(playerId, ["sync", "-"]).then(({data}) => {
+                        bus.$emit('refreshStatus', playerId);
+                        bus.$emit('refreshStatus', from);
+                    });
+                } else {
+                    let dest = this.players[to].syncmaster ? this.players[to].syncmaster : this.players[to].id;
+                    if (dest!=from) {
+                        lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
+                            bus.$emit('refreshStatus', playerId);
+                            if (undefined!=from) {
+                                bus.$emit('refreshStatus', from);
+                            }
+                            bus.$emit('refreshStatus', dest);
+                        });
+                    }
+                }
+            }
+            this.dragIndex = undefined;
         }
     },
     computed: {
@@ -531,6 +628,9 @@ Vue.component('lms-manage-players', {
         },
         defaultPlayer() {
             return this.$store.state.defaultPlayer
+        },
+        otherPlayers () {
+            return this.$store.state.otherPlayers
         },
         stopButton() {
             return this.$store.state.stopButton
@@ -547,11 +647,11 @@ Vue.component('lms-manage-players', {
         },
         darkUi () {
             return this.$store.state.darkUi
-        },
+        }
     },
     filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, active) {
+            return "/material/svg/"+name+"?c="+(active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

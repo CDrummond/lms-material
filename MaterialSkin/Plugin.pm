@@ -934,4 +934,5 @@ sub _userColorHandler {
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
 }
+
 1;

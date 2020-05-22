@@ -8,6 +8,12 @@ PLUGIN_MATERIAL_SKIN
 	FR	Thème 'Material Skin', adapté à une utilisation mobile.
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
+PLUGIN_MATERIAL_SKIN_BT_PLAYERS
+	EN	BLuetooth players
+
+PLUGIN_MATERIAL_BT_PLAYERS_GENRES_DESC
+	EN	Comma-separated list of Bluetooth player IDs (MAC address). These players will be give an Bluetooth icon n the Material UI.
+
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen
 	EN	Composer genres

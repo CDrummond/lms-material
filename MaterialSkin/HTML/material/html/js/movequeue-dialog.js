@@ -18,7 +18,7 @@ Vue.component('lms-movequeue-dialog', {
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(p, index) in players" v-if="p.id!=src">
         <v-list-tile @click="moveTo(p)">
-         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.isgroup ? 'speaker_group' : 'speaker'}}</v-icon></v-list-tile-avatar>
+         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="p.icon.icon">{{p.icon.icon}}</v-icon><img v-else class="svg-img" :src="p.icon.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
         </v-list-tile>
         <v-divider></v-divider>
@@ -43,6 +43,9 @@ Vue.component('lms-movequeue-dialog', {
         players () {
             return this.$store.state.players
         },
+        darkUi () {
+            return this.$store.state.darkUi
+        }
     },
     mounted() {
         bus.$on('movequeue.open', function(player) {
@@ -71,6 +74,11 @@ Vue.component('lms-movequeue-dialog', {
             } else {
                 return str;
             }
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

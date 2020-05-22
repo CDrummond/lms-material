@@ -1,13 +1,5 @@
 1.7.0
 -----
-1. Player icons.
-2. Remove 'Synchronise' from players menu, accessible from 'Manage players'
-   dialog.
-3. Move listing of players on other servers into 'Manage players' dialog.
-4. Sync players via drag'n'drop.
-
-1.6.1
------
  1. Improve Adwaita (Linux) scrollbars.
  2. Show shutdown and restart actions in server settings toolbar if called from
     information dialog.
@@ -50,6 +42,11 @@
 29. Ignore groups when when listing players on other servers.
 30. Use trackartist if artist not found for a track in 'Manage players' dialog.
 31. Send empty string if custom css not found, to save browser logging an error.
+32. Player icons.
+33. Remove 'Synchronise' from players menu, accessible from 'Manage players'
+   dialog.
+34. Move listing of players on other servers into 'Manage players' dialog.
+35. Sync players via drag'n'drop.
 
 1.6.0
 -----

@@ -999,14 +999,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                               genreArtists:true },
                             { title: i18n("Albums"),
                               command: ["albums"],
-                              params: [item.id, ALBUM_TAGS, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+                              params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
                               id: uniqueId(item.id, 1)},
                             { title: i18n("Random Albums"),
                               command: ["albums"],
-                              params: [item.id, ALBUM_TAGS, "sort:random"],
+                              params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               svg: "dice-album",
                               type: "group",
@@ -1858,18 +1858,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         } else if (mode=="albums") {
                             if (!hasTags) {
-                                p.push(hasArtistId ? ARTIST_ALBUM_TAGS : ALBUM_TAGS);
+                                p.push(hasArtistId ? ARTIST_ALBUM_TAGS_PLACEHOLDER : ALBUM_TAGS_PLACEHOLDER);
                             }
                             if (!hasSort) {
                                 p.push(SORT_KEY+(hasArtistId ? ARTIST_ALBUM_SORT_PLACEHOLDER : ALBUM_SORT_PLACEHOLDER));
                             }
                         } else if (mode=="playlists") {
                             if (!hasTags) {
-                                p.push(PLAYLIST_TAGS);
+                                p.push(PLAYLIST_TAGS_PLACEHOLDER);
                             }
                         } else if (!hasTags) {
                             if (mode=="artists" || mode=="vaalbums") {
-                                p.push(ARTIST_TAGS);
+                                p.push(ARTIST_TAGS_PLACEHOLDER);
                                 if (!hasLibraryId) {
                                     p.push('include_online_only_artists:1');
                                 }
@@ -1983,15 +1983,20 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (cmd.params.length>0) {
                 var albumSort=getAlbumSort(cmd, this.inGenre);
                 for (var i=0, len=cmd.params.length; i<len; ++i) {
-                    if (cmd.params[i].startsWith("tags:")) {
-                        cmd.params[i]+=(this.$store.state.ratingsSupport && "tracks"==cmd.command[0] ? "R" : "")+
-                                       (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
-                    } else if (item && item.swapid && cmd.params[i]==item.id) {
+                    if (item && item.swapid && cmd.params[i]==item.id) {
                         cmd.params[i]=item.swapid;
                     } else {
                         cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                                                    .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                                   .replace(TERM_PLACEHOLDER, this.enteredTerm);
+                                                   .replace(TERM_PLACEHOLDER, this.enteredTerm)
+                                                   .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
+                                                   .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
+                                                   .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
+                                                   .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
+                        if (cmd.params[i].startsWith("tags:")) {
+                            cmd.params[i]+=(this.$store.state.ratingsSupport && "tracks"==cmd.command[0] ? "R" : "")+
+                                           (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
+                        }
                     }
                 }
             }

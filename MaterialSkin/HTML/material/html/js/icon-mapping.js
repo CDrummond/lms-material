@@ -45,11 +45,11 @@ function mapPlayerIcon(player) {
     if (undefined!=playerIcons) {
         let model = playerIcons[player.model];
         if (undefined!=model) {
-            if (undefined!=model['icon']) {
-                return {icon:model['icon']};
+            if (undefined!=model['icon'] || undefined!=model['svg']) {
+                return model;
             }
-            if (undefined!=model['svg']) {
-                return {svg:model['svg']};
+            if (undefined!=model[player.modelname]) {
+                return model[player.modelname];
             }
             if (undefined!=model['mac']) {
                 for (let i=0, len=model['mac'].length; i<len; ++i) {
@@ -64,9 +64,6 @@ function mapPlayerIcon(player) {
                         return model['firmware'][i];
                     }
                 }
-            }
-            if (undefined!=model[player.modelname]) {
-                return model[player.modelname];
             }
         }
     }

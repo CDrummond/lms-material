@@ -1,27 +1,23 @@
-[
-  {
+{
+  "spotify":{
     "name":"spotify",
     "bgnd":"#1dd35e",
-    "color":"#fff",
-    "extid":"spotify:"
+    "color":"#fff"
   },
-  {
+  "qobuz":{
     "name":"qobuz",
     "bgnd":"#fff",
-    "color":"#000",
-    "extid":"qobuz:"
+    "color":"#000"
   },
-  {
+  "wimp":{
     "name":"tidal",
     "bgnd":"#000",
-    "color":"#fff",
-    "extid":"wimp:"
+    "color":"#fff"
   },
-  {
+  "deezer":{
     "name":"deezer",
     "bgnd":"#fb8715",
-    "color":"#fff",
-    "extid":"deezer:"
-  },
-]
+    "color":"#fff"
+  }
+}
 

@@ -615,7 +615,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               rating: i.rating,
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
-                              emblem: getEmblem(i.extid)
+                              emblem: showAlbumName ? getEmblem(i.extid) : undefined
                           });
             }
             if (discs.size>1) {

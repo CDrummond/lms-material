@@ -805,7 +805,7 @@ sub _customCssHandler {
     if (-e $filePath) {
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
     } else {
-        $response->content_type('text/text');
+        $response->content_type('text/css');
         $response->header('Connection' => 'close');
         $response->content("");
         $httpClient->send_response($response);

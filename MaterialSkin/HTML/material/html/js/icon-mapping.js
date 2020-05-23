@@ -52,24 +52,21 @@ function mapPlayerIcon(player) {
                 return {svg:model['svg']};
             }
             if (undefined!=model['mac']) {
-                let mac=player.playerid.substring(0, 6);
-                if (undefined!=model['mac'][mac]) {
-                    if (undefined!=model['mac'][mac]['icon']) {
-                        return {icon:model['mac'][mac]['icon']};
+                for (let i=0, len=model['mac'].length; i<len; ++i) {
+                    if (model['mac'][i]['starts'] && player.playerid.startsWith(model['mac'][i]['starts'])) {
+                        return model['mac'][i];
                     }
-                    if (undefined!=model['mac'][mac]['svg']) {
-                        return {svg:model['mac'][mac]['svg']};
+                }
+            }
+            if (undefined!=player.firmware && undefined!=model['firmware']) {
+                for (let i=0, len=model['firmware'].length; i<len; ++i) {
+                    if (model['firmware'][i]['ends'] && player.firmware.endsWith(model['firmware'][i]['ends'])) {
+                        return model['firmware'][i];
                     }
                 }
             }
             if (undefined!=model[player.modelname]) {
-                let name = model[player.modelname];
-                if (undefined!=name['icon']) {
-                    return {icon:name['icon']};
-                }
-                if (undefined!=name['svg']) {
-                    return {svg:name['svg']};
-                }
+                return model[player.modelname];
             }
         }
     }

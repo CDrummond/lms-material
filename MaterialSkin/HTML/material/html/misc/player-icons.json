@@ -24,57 +24,58 @@
         "svg":"amplifier"
     },
     "squeezelite":{
-        "mac":{
-            "aa:aa:": {
+        "firmware":[
+            {
+                "ends":"-pCP",
+                "svg":"raspberry-pi"
+            }
+        ],
+        "mac":[
+            {
+                "starts":"aa:aa:",
                 "svg":"airplay"
             },
-            "bb:bb:": {
+            {
+                "starts":"bb:bb:",
                 "svg":"dlna"
             },
-            "cc:cc:":{
+            {
+                "starts":"cc:cc:",
                 "svg":"cast-audio"
             }
+        ],
+        "SqueezeLiteBT":{
+            "icon":"bluetooth"
         },
-        "model":{
-            "SqueezeLiteBT":{
-                "icon":"bluetooth"
-            },
-            "SqueezeLitePCP":{
-                "svg":"raspberry-pi"
-            },
-            "SqueezeLiteWin":{
-                "svg":"windows"
-            },
-            "Squeezelite-X":{
-                "svg":"windows"
-            },
-            "SqueezeLiteLinux":{
-                "svg":"linux"
-            },
-            "SqueezeLiteMac":{
-                "svg":"apple"
-            }
+        "SqueezeLitePCP":{
+            "svg":"raspberry-pi"
+        },
+        "SqueezeLiteWin":{
+            "svg":"windows"
+        },
+        "Squeezelite-X":{
+            "svg":"windows"
+        },
+        "SqueezeLiteLinux":{
+            "svg":"linux"
+        },
+        "SqueezeLiteMac":{
+            "svg":"apple"
         }
     },
     "squeezeplay":{
-        "model":{
-            "SB Player":{
-                "icon":"android"
-            }
+        "SB Player":{
+            "icon":"android"
         }
     },
     "squeezeplayer":{
-        "model":{
-            "SqueezePlayer":{
-                "icon":"android"
-            }
+        "SqueezePlayer":{
+            "icon":"android"
         }
     },
     "iPengiPod":{
-        "model":{
-            "SqueezePlay":{
-                "svg":"apple"
-            }
+        "SqueezePlay":{
+            "svg":"apple"
         }
     }
 }

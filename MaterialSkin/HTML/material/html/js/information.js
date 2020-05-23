@@ -242,7 +242,7 @@ Vue.component('lms-information-dialog', {
                                 info[5]=i18n("Signal Strength: %1%", prevStrengths[player.playerid]);
                             }
 
-                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:playerIcon(player)});
+                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player)});
                             if (!isgroup) {
                                 lmsCommand(player.playerid, ["signalstrength" ,"?"]).then(({data}) => {
                                     if (data && data.result && data.result._signalstrength>0) {

@@ -1979,7 +1979,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
 
-            // Replace sort and search terms
+            // Replace sort, search terms, and fix tags (ratings and online emblems)
             if (cmd.params.length>0) {
                 var albumSort=getAlbumSort(cmd, this.inGenre);
                 for (var i=0, len=cmd.params.length; i<len; ++i) {

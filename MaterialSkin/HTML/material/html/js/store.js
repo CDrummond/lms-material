@@ -453,10 +453,14 @@ const store = new Vuex.Store({
             });
             // Artist images?
             lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
-                if (data && data.result && data.result._p2 != null) {
-                    lmsOptions.artistImages = 1==data.result._p2;
-                    setLocalStorageVal('artistImages', lmsOptions.artistImages);
-                }
+                lmsOptions.artistImages = data && data.result && data.result._p2 != null && 1==data.result._p2;
+                setLocalStorageVal('artistImages', lmsOptions.artistImages);
+            });
+            // Emblems?
+            lmsCommand("", ["pref", "plugin.onlinelibrary:enableServiceEmblem", "?"]).then(({data}) => {
+                lmsOptions.serviceEmblems = data && data.result && data.result._p2 != null && 1==data.result._p2;
+                setLocalStorageVal('serviceEmblems', lmsOptions.serviceEmblems);
+                console.log(lmsOptions.serviceEmblems);
             });
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {

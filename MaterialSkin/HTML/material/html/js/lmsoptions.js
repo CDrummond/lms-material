@@ -11,4 +11,5 @@ var lmsOptions = {newMusicLimit: 100,
                   infoPlugin: getLocalStorageBool('infoPlugin', false),
                   artistImages: getLocalStorageBool('artistImages', false),
                   noGenreFilter: getLocalStorageBool('noGenreFilter', false),
-                  noRoleFilter: getLocalStorageBool('noRoleFilter', false)};
+                  noRoleFilter: getLocalStorageBool('noRoleFilter', false),
+                  serviceEmblems: getLocalStorageBool('serviceEmblems', true)};

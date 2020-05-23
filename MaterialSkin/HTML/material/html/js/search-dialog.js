@@ -89,10 +89,11 @@ Vue.component('lms-search-dialog', {
                     this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
                 }
                 if (0==this.category || 2==this.category) {
-                    this.commands.push({cat:2, command:["albums"], params:[ALBUM_TAGS, "sort:album", "search:"+this.str]});
+                    this.commands.push({cat:2, command:["albums"], params:[ALBUM_TAGS+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
                 }
                 if (0==this.category || 3==this.category) {
-                    this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy", "search:"+this.str]});
+                    this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+(this.$store.state.ratingsSupport ? "R" : "")+
+                                                                                             (lmsOptions.serviceEmblems ? "E" : ""), "search:"+this.str]});
                 }
                 if (this.commands.length<1) {
                     return;

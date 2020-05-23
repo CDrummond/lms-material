@@ -77,27 +77,29 @@ function mapPlayerIcon(player) {
     return {icon:"speaker"};
 }
 
-function mapIconType(item, type) {
+function mapIconType(item, app, type) {
     let lmsIcon = item[type];
     if (undefined==lmsIcon || (typeof lmsIcon !== 'string')) {
         return false;
     }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {
         if (lmsIcon.endsWith(key)) {
-            if (value['icon']) {
-                item.image=item[value]=item.svg=undefined; item.icon=value['icon'];
-            } else if (value['svg']) {
-                item.image=item[value]=item.icon=undefined; item.svg=value['svg'];
+            let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
+            if (entry['icon']) {
+                item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+            } else if (entry['svg']) {
+                item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
             }
             return true;
         }
     }
     for (const [key, value] of Object.entries(iconMap["indexOf"])) {
         if (lmsIcon.indexOf(key)>0) {
-            if (value['icon']) {
-                item.image=item[value]=item.svg=undefined; item.icon=value['icon'];
-            } else if (value['svg']) {
-                item.image=item[value]=item.icon=undefined; item.svg=value['svg'];
+            let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
+            if (entry['icon']) {
+                item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+            } else if (entry['svg']) {
+                item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
             }
             return true;
         }
@@ -105,21 +107,21 @@ function mapIconType(item, type) {
     return false;
 }
 
-function mapIcon(item, fallbackIcon, fallbackSvg) {
+function mapIcon(item, app, fallback) {
     if (undefined==iconMap) {
         return false;
     }
-    if (mapIconType(item, "icon-id")) {
+    if (mapIconType(item, app, "icon-id")) {
         return true;
     }
-    if (mapIconType(item, "icon")) {
+    if (mapIconType(item, app, "icon")) {
         return true;
     }
-    if (item.image && item.image.startsWith("html/images/") && mapIconType(item, "image")) {
+    if (item.image && item.image.startsWith("html/images/") && mapIconType(item, app, "image")) {
         return true;
     }
-    if (undefined!=fallbackIcon) {
-        item.icon=fallbackIcon; item.svg=fallbackSvg; item.image=undefined;
+    if (undefined!=fallback) {
+        item.icon=fallback.icon; item.svg=fallback.svg; item.image=undefined;
         return true;
     }
     return false;

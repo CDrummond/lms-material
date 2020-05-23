@@ -48,6 +48,7 @@
 34. Move listing of players on other servers into 'Manage players' dialog.
 35. Sync players via drag'n'drop.
 36. Store icon and emblem maps in local storage.
+37. Map Spotty's 'inbox.png' to the icon Material uses for genres.
 
 1.6.0
 -----

@@ -270,7 +270,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
-                    mapIcon(i);
+                    mapIcon(i, command);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
                 } else if (isRadios) {
@@ -305,7 +305,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu=='language') {
                             i['icon-id']='/language.png';
                         }
-                        mapIcon(i, undefined, "radio-station");
+                        mapIcon(i, undefined, {icon:undefined, svg:"radio-station"});
                     } else {
                         radioImages.add(i.image);
                     }

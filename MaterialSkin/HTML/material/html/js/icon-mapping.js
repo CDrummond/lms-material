@@ -51,13 +51,6 @@ function mapPlayerIcon(player) {
             if (undefined!=model[player.modelname]) {
                 return model[player.modelname];
             }
-            if (undefined!=model['mac']) {
-                for (let i=0, len=model['mac'].length; i<len; ++i) {
-                    if (model['mac'][i]['starts'] && player.playerid.startsWith(model['mac'][i]['starts'])) {
-                        return model['mac'][i];
-                    }
-                }
-            }
             if (undefined!=player.firmware && undefined!=model['firmware']) {
                 for (let i=0, len=model['firmware'].length; i<len; ++i) {
                     if (model['firmware'][i]['ends'] && player.firmware.endsWith(model['firmware'][i]['ends'])) {

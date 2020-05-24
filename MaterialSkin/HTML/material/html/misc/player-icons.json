@@ -30,20 +30,15 @@
                 "svg":"raspberry-pi"
             }
         ],
-        "mac":[
-            {
-                "starts":"aa:aa:",
-                "svg":"airplay"
-            },
-            {
-                "starts":"bb:bb:",
-                "svg":"dlna"
-            },
-            {
-                "starts":"cc:cc:",
-                "svg":"cast-audio"
-            }
-        ],
+        "RaopBridge":{
+            "svg":"airplay"
+        },
+        "CastBridge":{
+            "svg":"cast-audio"
+        },
+        "UPnPBridge":{
+            "svg":"dlna"
+        },
         "SqueezeLiteBT":{
             "icon":"bluetooth"
         },

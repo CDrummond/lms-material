@@ -2,6 +2,7 @@
 -----
 1. Handle case where firmware is not a string.
 2. Map icon for "squeezebox3"
+3. Cancel timer in sleep dialog if closed by 'esc' or no players.
 
 1.7.0
 -----

@@ -11,6 +11,9 @@
     "squeezebox2":{
         "icon":"call_to_action"
     },
+    "squeezebox3":{
+        "icon":"call_to_action"
+    },
     "fab4":{
         "icon":"touch_app"
     },

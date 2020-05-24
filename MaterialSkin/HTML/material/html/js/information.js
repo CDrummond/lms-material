@@ -66,8 +66,8 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('Players')}}</p>
    <ul>
     <template v-for="(item, index) in players">
-     <li><v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}
-      <ul>
+     <li><v-icon v-if="item.icon.icon" style="margin-top:-4px">{{item.icon.icon}}</v-icon><img v-else class="svg-img" style="margin-top:-4px" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}
+      <ul style="margin-bottom:16px">
        <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
       </ul>
      </li>

@@ -59,6 +59,21 @@
         "SqueezeLiteLinux":{
             "svg":"linux"
         },
+        "SqueezeLiteFedora":{
+            "svg":"fedora"
+        },
+        "SqueezeLiteUbuntu":{
+            "svg":"ubuntu"
+        },
+        "SqueezeLiteRedHat":{
+            "svg":"redhat"
+        },
+        "SqueezeLiteSuse":{
+            "svg":"suse"
+        },
+        "SqueezeLiteArchLinux":{
+            "svg":"archlinux"
+        },
         "SqueezeLiteMac":{
             "svg":"apple"
         }

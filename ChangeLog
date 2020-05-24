@@ -51,6 +51,7 @@
 37. Map Spotty's 'inbox.png' to the icon Material uses for genres.
 38. Only show emblem in track lists if also showing cover.
 39. Respect LMS option to show emblems or not.
+40. For jumplist where there is no key, use unfilled circle for non active.
 
 1.6.0
 -----

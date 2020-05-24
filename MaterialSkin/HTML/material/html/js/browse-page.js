@@ -82,7 +82,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div v-if="grid.use">
   <div class="noselect bgnd-cover lms-jumplist" v-bind:class="{'lms-jumplist-wide':jumplistWide}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
    </template>
   </div>
   <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
@@ -2681,7 +2681,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.jumplist = [];
                 var jump = this.items.length/10.0;
                 for (var i=0; i<10; ++i) {
-                    this.jumplist.push({key:'\u25cf', index: Math.round(i*jump)});
+                    this.jumplist.push({key:'\u25cf', alt:'\u25cb', index: Math.round(i*jump)});
                 }
             }
             if (undefined==this.jumplist || this.jumplist.length<1) {

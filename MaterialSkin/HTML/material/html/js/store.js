@@ -460,7 +460,6 @@ const store = new Vuex.Store({
             lmsCommand("", ["pref", "plugin.onlinelibrary:enableServiceEmblem", "?"]).then(({data}) => {
                 lmsOptions.serviceEmblems = data && data.result && data.result._p2 != null && 1==data.result._p2;
                 setLocalStorageVal('serviceEmblems', lmsOptions.serviceEmblems);
-                console.log(lmsOptions.serviceEmblems);
             });
             // Music and Artist info plugin installled?
             lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {

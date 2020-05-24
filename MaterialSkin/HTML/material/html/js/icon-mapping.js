@@ -53,7 +53,7 @@ function mapPlayerIcon(player) {
             }
             if (undefined!=player.firmware && undefined!=model['firmware']) {
                 for (let i=0, len=model['firmware'].length; i<len; ++i) {
-                    if (model['firmware'][i]['ends'] && player.firmware.endsWith(model['firmware'][i]['ends'])) {
+                    if (model['firmware'][i]['ends'] && ('' + player.firmware).endsWith(model['firmware'][i]['ends'])) {
                         return model['firmware'][i];
                     }
                 }

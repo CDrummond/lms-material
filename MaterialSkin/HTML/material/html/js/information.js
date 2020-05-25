@@ -292,6 +292,8 @@ Vue.component('lms-information-dialog', {
         },
         close() {
             this.show = false;
+            this.scanning = false;
+            this.pluginStatus = 'idle';
             if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = undefined;

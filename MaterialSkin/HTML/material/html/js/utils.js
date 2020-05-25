@@ -890,7 +890,5 @@ function emitToolbarColors(top, bot) {
 
 function confirm(obj, prompt, buttons) {
     obj.$store.commit('dialogOpen', {name:'prompt', shown:true});
-    return obj.$confirm(prompt, buttons).then(res => {
-        return new Promise(function(resolve, reject) { resolve(res); });
-    }).finally(() => {  obj.$store.commit('dialogOpen', {name:'prompt', shown:false}); });
+    return obj.$confirm(prompt, buttons).finally(() => { obj.$store.commit('dialogOpen', {name:'prompt', shown:false}); });
 }

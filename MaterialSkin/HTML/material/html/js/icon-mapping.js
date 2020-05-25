@@ -52,7 +52,7 @@ function initIconMap() {
         playerIdIconMap = JSON.parse(cfg);
     }
     lmsCommand("", ["material-skin", "playericons"]).then(({data}) => {
-        if (data && data.result) {
+        if (data && data.result && data.result.players) {
             for (var i=0, loop=data.result.players, len=loop.length; i<len; ++i) {
                 playerIdIconMap[loop[i].id]=JSON.parse(loop[i].icon);
             }

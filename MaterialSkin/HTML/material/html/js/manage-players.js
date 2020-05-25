@@ -74,7 +74,7 @@ Vue.component('lms-manage-players', {
        <v-list-tile-avatar v-if="menuIcons"><v-icon>hotel</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Set sleep time for all players')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="createGroup" v-if="manageGroups">
+      <v-list-tile @click="createGroup" v-if="manageGroups && unlockAll">
        <v-list-tile-avatar v-if="menuIcons"><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
@@ -281,7 +281,9 @@ Vue.component('lms-manage-players', {
         },
         playerMenu(player, event) {
             this.menu.actions=player.isgroup
-                                ? [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION, DIVIDER, PMGR_EDIT_GROUP_ACTION, PMGR_DELETE_GROUP_ACTION]
+                                ? this.$store.state.unlockAll
+                                    ? [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION, DIVIDER, PMGR_EDIT_GROUP_ACTION, PMGR_DELETE_GROUP_ACTION]
+                                    : [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION]
                                 : [PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
             this.menu.x=event.clientX;
             this.menu.y=event.clientY;
@@ -651,6 +653,9 @@ Vue.component('lms-manage-players', {
         },
         darkUi () {
             return this.$store.state.darkUi
+        },
+        unlockAll() {
+            return this.$store.state.unlockAll
         }
     },
     filters: {

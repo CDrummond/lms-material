@@ -7,6 +7,10 @@
 5. Ignore 'esc' when confirm, and simple text entry, dialogs are shown.
 6. Show spinning progress in 'Information' dialog when downloading plugins or
    scanning database.
+7. Hide player name and icon in 'Player settings' dialog if password set and not
+   matched.
+8. Hide create, edit, and delete group options in 'Mange players' dialog if
+   password set and not matched.
 
 1.7.0
 -----

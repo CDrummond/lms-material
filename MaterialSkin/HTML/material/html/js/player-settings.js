@@ -39,14 +39,14 @@ Vue.component('lms-player-settings', {
 
   <v-card-text>
    <v-list two-line subheader class="settings-list">
-    <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
-    <v-list-tile>
+    <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('General')}}</v-header>
+    <v-list-tile v-if="unlockAll">
      <v-list-tile-content>
       <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
      </v-list-tile-content>
      <v-list-tile-action><v-btn icon flat @click="setIcon" style="margin-top:-18px"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
     </v-list-tile>
-    <div class="dialog-padding"></div>
+    <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
     <v-list-tile>
      <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>

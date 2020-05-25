@@ -44,7 +44,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile-content>
       <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
      </v-list-tile-content>
-     <v-list-tile-action><v-btn icon flat @click="setIcon"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
+     <v-list-tile-action><v-btn icon flat @click="setIcon" style="margin-top:-12px"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
     </v-list-tile>
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>

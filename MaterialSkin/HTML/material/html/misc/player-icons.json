@@ -37,7 +37,7 @@
             "svg":"airplay"
         },
         "CastBridge":{
-            "svg":"cast-audio"
+            "svg":"google-chrome"
         },
         "UPnPBridge":{
             "svg":"dlna"

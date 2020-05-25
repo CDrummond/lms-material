@@ -662,12 +662,15 @@ sub _cliCommand {
 
     if ($cmd eq 'playericons') {
         my $cnt = 0;
-        foreach my $client (Slim::Player::Client::clients()) {
-            my $icon = $prefs->client($client)->get('icon');
-            if ($icon) {
-                $request->addResultLoop("players", $cnt, "id", $client->id);
-                $request->addResultLoop("players", $cnt, "icon", $icon);
-                $cnt++;
+        foreach my $key (keys %{$prefs->{prefs}}) {
+            if ($key =~ /^_client:.+/) {
+                my $cpref = $prefs->get($key);
+                my $icon = $prefs->get($key)->{'icon'};
+                if ($icon) {
+                    $request->addResultLoop("players", $cnt, "id", substr($key, 8));
+                    $request->addResultLoop("players", $cnt, "icon", $icon);
+                    $cnt++;
+                }
             }
         }
         $request->setStatusDone();

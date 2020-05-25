@@ -158,7 +158,7 @@ Vue.component('lms-manage-players', {
    </template>
    <v-divider v-if="menu.customActions && menu.customActions.length>0"></v-divider>
    <template v-if="menu.customActions && menu.customActions.length>0" v-for="(action, index) in menu.customActions">
-    <v-list-tile @click="performCustomAction(action, menu.player)">
+    <v-list-tile @click="doCustomAction(action, menu.player)">
      <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
@@ -443,7 +443,7 @@ Vue.component('lms-manage-players', {
             }
         },
         deleteGroup(player) {
-            this.$confirm(i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(this, i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
                         // If server status is refreshed straight away, group player comes back (in listing). Delaying for 1/4 seems to
@@ -546,7 +546,7 @@ Vue.component('lms-manage-players', {
             return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves.length<1;
         },
         movePlayer(player) {
-            this.$confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(this, i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     bus.$emit('movePlayer', player);
                 }
@@ -621,6 +621,9 @@ Vue.component('lms-manage-players', {
                 }
             }
             this.dragIndex = undefined;
+        },
+        doCustomAction(action, player) {
+            performCustomAction(this, action, player);
         }
     },
     computed: {

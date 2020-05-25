@@ -667,7 +667,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.items.length<1) {
                 return;
             }
-            this.$confirm(i18n("Remove all tracks from queue?"),
+            confirm(this, i18n("Remove all tracks from queue?"),
                           {buttonTrueText: i18n('Clear'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     bus.$emit('playerCommand', ["playlist", "clear"]);
@@ -1124,6 +1124,9 @@ var lmsQueue = Vue.component("lms-queue", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'queue', shown:newVal});
+        },
+        'dialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'browse', shown:val});
         }
     },
     beforeDestroy() {

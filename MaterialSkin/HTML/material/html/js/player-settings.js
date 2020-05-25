@@ -27,7 +27,7 @@ Vue.component('lms-player-settings', {
        </v-list-tile>
        <v-divider v-if="unlockAll && (customActions && customActions.length>0)"></v-divider>
        <template v-for="(action, index) in customActions">
-        <v-list-tile @click="performCustomAction(action, {id:playerId, name:playerName})">
+        <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
          <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
@@ -557,7 +557,7 @@ Vue.component('lms-player-settings', {
             this.alarmDialog.show = false;
         },
         deleteAlarm(alarm) {
-            this.$confirm(i18n("Delete alarm?"),
+            confirm(this, i18n("Delete alarm?"),
                           {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
                 if (res) {
                     lmsCommand(this.playerId, ["alarm", "delete", "id:"+alarm.id]).then(({data}) => {
@@ -611,6 +611,9 @@ Vue.component('lms-player-settings', {
         },
         showExtraSettings() {
             bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
+        },
+        doCustomAction(action, player) {
+            performCustomAction(this, action, player);
         }
     },
     filters: {

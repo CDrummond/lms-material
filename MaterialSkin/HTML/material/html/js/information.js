@@ -35,6 +35,8 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
+    <li v-if="scanning"><v-progress-circular size=16 width=2 indeterminate></v-progress-circular> {{scanInfo}}</li>
+    <li v-else>{{scanInfo}}</li>
    </ul>
    <v-menu bottom v-if="!scanning && unlockAll">
     <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
@@ -55,7 +57,7 @@ Vue.component('lms-information-dialog', {
     <template v-for="(plug, index) in updates.details"><li>{{plug.title}} {{plug.version}}<v-btn flat icon style="margin-top:2px;height:18px;width:18px" @click="pluginInfo(plug)"><v-icon small>help_outline</v-icon></v-btn></li></template>
    </ul>
    <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins" flat><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
-   <p v-if="'downloading'==pluginStatus">{{i18n('Downloading plugin updates')}}</p>
+   <p v-if="'downloading'==pluginStatus"><v-progress-circular size=16 width=2 indeterminate></v-progress-circular> {{i18n('Downloading plugin updates')}}</p>
    <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat>{{i18n('Restart server')}}</v-btn>
    <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
    <ul>
@@ -104,6 +106,7 @@ Vue.component('lms-information-dialog', {
             show: false,
             server: [],
             library: [],
+            scanInfo: undefined,
             players: [],
             plugins: {names: new Set(), details: []},
             updates: {names: new Set(), details: [], server:false},
@@ -274,8 +277,8 @@ Vue.component('lms-information-dialog', {
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    i18n("Total albums: %1", data.result["info total albums"]),
                                    i18n("Total songs: %1", data.result["info total songs"]),
-                                   i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true)),
-                                   undefined!=progressInfo ? progressInfo : i18n("Last scan: %1", this.scanning ? i18n("In progress") : formatDate(data.result.lastscan))];
+                                   i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true))];
+                    this.scanInfo=undefined!=progressInfo ? progressInfo : this.scanning ? i18n("In progress") : i18n("Last scan: %1", formatDate(data.result.lastscan));
 
                     // Noticed a scan has started, so get server class to also poll for changes - so that icon in main toolbar is updated...
                     if (this.scanning && !wasScanning) {

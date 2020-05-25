@@ -5,6 +5,8 @@
 3. Cancel timer in sleep dialog if closed by 'esc' or no players.
 4. Allow changing player icons.
 5. Ignore 'esc' when confirm, and simple text entry, dialogs are shown.
+6. Show spinning progress in 'Information' dialog when downloading plugins or
+   scanning database.
 
 1.7.0
 -----

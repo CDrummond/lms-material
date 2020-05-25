@@ -16,6 +16,7 @@ function getMiscJson(item, name, obj) {
         try {
             let data = JSON.parse(cfg);
             if (undefined!=data) {
+                for (var x in item) if (item.hasOwnProperty(x)) delete item[x];
                 for (let [key, value] of Object.entries(data)) {
                     item[key]=value;
                 }
@@ -26,6 +27,7 @@ function getMiscJson(item, name, obj) {
     if (item['material-version']!=LMS_MATERIAL_REVISION) {
         axios.get("html/misc/"+name+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
             let data = eval(resp.data);
+            for (var x in item) if (item.hasOwnProperty(x)) delete item[x];
             data['material-version']=LMS_MATERIAL_REVISION;
             for (let [key, value] of Object.entries(data)) {
                 item[key]=value;

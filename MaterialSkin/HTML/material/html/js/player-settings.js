@@ -41,7 +41,10 @@ Vue.component('lms-player-settings', {
    <v-list two-line subheader class="settings-list">
     <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
     <v-list-tile>
-     <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
+     <v-list-tile-content>
+      <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
+     </v-list-tile-content>
+     <v-list-tile-action><v-btn icon flat @click="setIcon"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
     </v-list-tile>
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
@@ -179,6 +182,7 @@ Vue.component('lms-player-settings', {
         return {
             show: false,
             playerName: undefined,
+            playerIcon: undefined,
             crossfade: undefined,
             replaygain: undefined,
             dstm: undefined,
@@ -303,6 +307,11 @@ Vue.component('lms-player-settings', {
                 this.update(true);
             }
         }.bind(this));
+        bus.$on('playerIconSet', function(playerId, icon) {
+            if (playerId==this.playerId) {
+                this.playerIcon = icon;
+            }
+        }.bind(this));
     },
     methods: {
         handlePlayerStatus(playerStatus) {
@@ -317,6 +326,8 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerOrigName = player.name;
+            this.playerIcon = player.icon;
+            this.playerOrigIcon = player.icon;
             this.customActions = getCustomActions(player.id, this.$store.state.unlockAll);
             if (this.$store.state.dstmPlugin) {
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
@@ -481,6 +492,16 @@ Vue.component('lms-player-settings', {
                     bus.$emit('refreshServerStatus');
                 });
             }
+
+            if (this.playerOrigIcon.icon!=this.playerIcon.icon || this.playerOrigIcon.svg!=this.playerIcon.svg) {
+                lmsCommand(this.playerId, ["playerpref", "plugin.material-skin:icon", JSON.stringify(this.playerIcon)]);
+                this.$store.commit('setIcon', {id:this.playerId, icon:this.playerIcon});
+                // From icon-mapping.js
+                playerIdIconMap[this.playerId]=this.playerIcon;
+                setLocalStorageVal("playerIdIconMap", JSON.stringify(playerIdIconMap));
+            }
+
+            this.playerIconUpdate = undefined;
             this.playerId = undefined;
         },
         loadAlarms() {
@@ -554,6 +575,9 @@ Vue.component('lms-player-settings', {
         },
         setSleep(duration) {
             bus.$emit('dlg.open', 'sleep', {id: this.playerId, name: this.playerName});
+        },
+        setIcon() {
+            bus.$emit('dlg.open', 'icon', {id: this.playerId, name: this.playerName, icon:this.playerIcon});
         },
         cancelSleepTimer() {
             this.sleepTime = undefined;

@@ -632,6 +632,16 @@ const store = new Vuex.Store({
                 setLayout(desktopLayout);
                 bus.$emit('layoutChanged');
             }
+        },
+        setIcon(state, playerIcon) {
+            if (state.player && playerIcon.id==state.player.id) {
+                state.player.icon=playerIcon.icon;
+            }
+            for (var i=0, len=state.players.length; i<len; ++i) {
+                if (playerIcon.id==state.players[i].id) {
+                    state.players[i].icon=playerIcon.icon;
+                }
+            }
         }
     }
 })

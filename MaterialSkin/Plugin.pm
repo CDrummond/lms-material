@@ -143,7 +143,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes']) ) {
+                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -654,6 +654,20 @@ sub _cliCommand {
                         }
                     }
                 }
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'playericons') {
+        my $cnt = 0;
+        foreach my $client (Slim::Player::Client::clients()) {
+            my $icon = $prefs->client($client)->get('icon');
+            if ($icon) {
+                $request->addResultLoop("players", $cnt, "id", $client->id);
+                $request->addResultLoop("players", $cnt, "icon", $icon);
+                $cnt++;
             }
         }
         $request->setStatusDone();

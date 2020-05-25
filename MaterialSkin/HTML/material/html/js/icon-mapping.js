@@ -8,8 +8,9 @@
 
 var iconMap = {};
 var playerIcons = {};
+var playerIdIconMap = {};
 
-function getMiscJson(item, name) {
+function getMiscJson(item, name, obj) {
     let cfg = getLocalStorageVal("misc-"+name);
     if (undefined!=cfg) {
         try {
@@ -30,18 +31,40 @@ function getMiscJson(item, name) {
                 item[key]=value;
             }
             setLocalStorageVal("misc-"+name, JSON.stringify(item));
+            if (obj) {
+               obj.$forceUpdate();
+            }
         }).catch(err => {
             window.console.error(err);
         });
+    } else if (obj) {
+        obj.$forceUpdate();
     }
 }
 
 function initIconMap() {
     getMiscJson(playerIcons, "player-icons");
     getMiscJson(iconMap, "icon-map");
+
+    // Get user set icons...
+    let cfg = getLocalStorageVal("playerIdIconMap", undefined);
+    if (cfg!=undefined) {
+        playerIdIconMap = JSON.parse(cfg);
+    }
+    lmsCommand("", ["material-skin", "playericons"]).then(({data}) => {
+        if (data && data.result) {
+            for (var i=0, loop=data.result.players, len=loop.length; i<len; ++i) {
+                playerIdIconMap[loop[i].id]=JSON.parse(loop[i].icon);
+            }
+            setLocalStorageVal("playerIdIconMap", JSON.stringify(playerIdIconMap));
+        }
+    });
 }
 
 function mapPlayerIcon(player) {
+    if (undefined!=playerIdIconMap && undefined!=playerIdIconMap[player.playerid]) {
+        return playerIdIconMap[player.playerid];
+    }
     if (undefined!=playerIcons) {
         let model = playerIcons[player.model];
         if (undefined!=model) {

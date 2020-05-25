@@ -1588,7 +1588,7 @@ div.v-subheader {
  }
 }
 
-.color-grid {
+.color-grid, .icon-grid {
  overflow-x:hidden !important;
  display:grid;
  grid-template-columns:repeat(auto-fit, minmax(36px, 1fr));
@@ -1600,6 +1600,10 @@ div.v-subheader {
  padding-right:8px !important;
  justify-items:center;
  width:100%;
+}
+
+.icon-grid {
+ grid-template-columns:repeat(auto-fit, minmax(64px, 1fr));
 }
 
 .color-circle {
@@ -1619,6 +1623,17 @@ div.v-subheader {
  margin-bottom:2px;
  margin-right:10px;
  border:3px solid var(--text-color);
+}
+
+.icon-grid .v-btn {
+ width:48px !important;
+ height:48px !important;
+}
+
+.icon-grid .v-btn .svg-img, .icon-grid .v-btn .v-icon {
+ font-size:32px !important;
+ width:32px !important;
+ height:32px !important;
 }
 
 img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[lazy='loaded'].np-image {

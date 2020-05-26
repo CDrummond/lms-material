@@ -48,7 +48,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content>
       <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
       <div class="color-grid">
-       <div v-for="(item, index) in colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <div v-for="(item, index) in colorList.colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
       </div>
      </v-list-tile-content>
@@ -361,7 +361,7 @@ Vue.component('lms-ui-settings', {
             theme: 'dark',
             themes: [ ],
             color: 'blue',
-            colors: [ ],
+            colorList: { } ,
             userColors: [ ],
             colorToolbars: false,
             largerElements: false,
@@ -461,14 +461,7 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
-            if (this.colors.length<1) {
-                let uisd = this;
-                axios.get("html/misc/colors.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
-                    uisd.colors = eval(resp.data);
-                 }).catch(err => {
-                    window.console.error(err);
-                });
-            }
+            getMiscJson(this.colorList, "colors", this);
 
             var os = "other";
             if (IS_IOS) {

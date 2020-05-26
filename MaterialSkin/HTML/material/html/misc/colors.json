@@ -1,4 +1,5 @@
-[
+{
+ "colors":[
   { "key":"red",        "color":"#c62828"},
   { "key":"pink",       "color":"#c2185b"},
   { "key":"purple",     "color":"#9c27b0"},
@@ -17,4 +18,5 @@
   { "key":"deeporange", "color":"#f4511e"},
   { "key":"brown",      "color":"#8d6e63"},
   { "key":"bluegrey",   "color":"#455a64"}
-]
+ ]
+}

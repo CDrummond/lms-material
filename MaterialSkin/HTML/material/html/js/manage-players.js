@@ -265,6 +265,20 @@ Vue.component('lms-manage-players', {
                 }
             }
         }.bind(this));
+
+        bus.$on('playerIconSet', function(playerId, icon) {
+            if (playerId==this.playerId) {
+                this.playerIcon = icon;
+            }
+            for (var i=0, len=this.players.length; i<len; ++i) {
+                if (this.players[i].id==playerId) {
+                    let p = his.players[i];
+                    p.icon = icon;
+                    this.$set(this.players, i, p);
+                    break;
+                }
+            }
+        }.bind(this));
     },
     methods: {
         initItems() {

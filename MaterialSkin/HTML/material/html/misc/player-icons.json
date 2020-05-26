@@ -79,6 +79,9 @@
     "squeezeplay":{
         "SB Player":{
             "icon":"android"
+        },
+        "OpenFrame":{
+            "icon":"touch_app"
         }
     },
     "squeezeplayer":{

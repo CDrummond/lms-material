@@ -1,3 +1,7 @@
+1.7.2
+-----
+1. Set OpenFrame default icon.
+
 1.7.1
 -----
 1. Handle case where firmware is not a string.

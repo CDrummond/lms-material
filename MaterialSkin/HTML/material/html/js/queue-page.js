@@ -518,6 +518,15 @@ var lmsQueue = Vue.component("lms-queue", {
         this.wide=5;
         this.updateMenu();
 
+        bus.$on('layoutChanged', function(action) {
+            let pos = this.scrollElement.scrollTop;
+            if (pos>0) {
+                this.$nextTick(function () {
+                    setScrollTop(this.scrollElement, pos);
+                });
+            }
+        }.bind(this));
+
         bus.$on('noPlayers', function() {
             this.updateSettingsMenu();
         }.bind(this));

@@ -11,7 +11,8 @@
    matched.
 8. Hide create, edit, and delete group options in 'Mange players' dialog if
    password set and not matched.
-9. Use 'v-if' and not 'v-show' to control display of volume controls.
+9. Only bind one handler to all volume buttons, and use element id to determine
+   action to take.
 
 1.7.0
 -----

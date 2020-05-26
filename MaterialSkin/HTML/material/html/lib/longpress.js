@@ -35,9 +35,9 @@ Vue.directive('longpress', {
                         el.longpress.started = false;
                         // Run function
                         if (undefined==el.longpress.binding.value.method) {
-                            el.longpress.binding.value(true);
+                            el.longpress.binding.value(true, el);
                         } else {
-                            el.longpress.binding.value.method(binding.value.item, true);
+                            el.longpress.binding.value.method(binding.value.item, true, el);
                         }
                     }, 1000)
                 } else {
@@ -46,9 +46,9 @@ Vue.directive('longpress', {
                         el.longpress.started = false;
                         // Run function
                         if (undefined==el.longpress.binding.value.method) {
-                            el.longpress.binding.value(true);
+                            el.longpress.binding.value(true, el);
                         } else {
-                            el.longpress.binding.value.method(binding.value.item, true);
+                            el.longpress.binding.value.method(binding.value.item, true, el);
                         }
                     }, 1000)
                 }
@@ -59,9 +59,9 @@ Vue.directive('longpress', {
         el.longpress.cancel = (e) => {
            if (el.longpress.started && !el.longpress.timedout) {
                 if (undefined==el.longpress.binding.value.method) {
-                    el.longpress.binding.value(false);
+                    el.longpress.binding.value(false, el);
                 } else {
-                    el.longpress.binding.value.method(binding.value.item, false);
+                    el.longpress.binding.value.method(binding.value.item, false, el);
                 }
                 el.longpress.started = false;
             }

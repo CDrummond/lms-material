@@ -15,7 +15,7 @@ Vue.component('lms-icon-dialog', {
     <v-layout wrap>
      <v-flex xs12>
       <div class="icon-grid">
-       <v-btn flat icon v-for="(item, index) in icons" @click="setIcon(item)">
+       <v-btn flat icon v-for="(item, index) in items.icons" @click="setIcon(item)">
         <v-icon v-if="item.icon" v-bind:class="{'active-btn':player.icon.icon == item.icon}">{{item.icon}}</v-icon>
         <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi, player.icon.svg==item.svg)"></img>
        </v-btn>
@@ -35,7 +35,7 @@ Vue.component('lms-icon-dialog', {
     data() {
         return {
             show: false,
-            icons: []
+            items: {icons:[]}
         }
     },
     computed: {
@@ -47,7 +47,7 @@ Vue.component('lms-icon-dialog', {
         bus.$on('icon.open', function(player) {
             this.player = player;
             this.show = true;
-            getMiscJson(this.icons, "player-icons-list", this);
+            getMiscJson(this.items, "player-icons-list", this);
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.cancel();

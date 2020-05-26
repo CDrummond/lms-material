@@ -474,7 +474,6 @@ Vue.component('lms-toolbar', {
             };
         },
         volumeBtn(toggleMute, el) {
-        console.log("XXXX", el);
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer || undefined==el || undefined==el.id) {
                 return;
             }

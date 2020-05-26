@@ -83,6 +83,13 @@ function mapPlayerIcon(player) {
                     }
                 }
             }
+            if (undefined!=player.playerid && undefined!=model['playerid']) {
+                for (let i=0, len=model['playerid'].length; i<len; ++i) {
+                    if (model['playerid'][i]['begins'] && ('' + player.playerid).startsWith(model['playerid'][i]['begins'])) {
+                        return model['playerid'][i];
+                    }
+                }
+            }
         }
     }
 

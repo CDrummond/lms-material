@@ -33,6 +33,16 @@
                 "svg":"raspberry-pi"
             }
         ],
+        "playerid":[
+            {
+                "begins":"b8:27:eb:",
+                "svg":"raspberry-pi"
+            },
+            {
+                "begins":"dc:a6:32:",
+                "svg":"raspberry-pi"
+            }
+        ],
         "RaopBridge":{
             "svg":"airplay"
         },

@@ -2,6 +2,7 @@
 -----
 1. Relayout portrait now-playing; cover is at top, all text is shown below
    (fade out if insufficient space, scrollable), rating shown at top of cover.
+2. Allow song details text in landscape now-playing to scroll.
 
 1.7.2
 -----

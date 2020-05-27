@@ -724,7 +724,18 @@ div.v-subheader {
  mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
-.np-portrait-song-info div {
+.np-landscape-song-info {
+ display: flex;
+ display: -webkit-flex;
+ width:100%;
+ height:100%;
+ padding-left:16px;
+ padding-right:16px;
+ -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+ mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+}
+
+.np-portrait-song-info div, .np-landscape-song-info div {
  text-align:center;
  margin: auto;
  width:100%;
@@ -797,20 +808,7 @@ div.v-subheader {
 
 .np-text-landscape {
  margin:16px 8px 16px 8px;
- font-size:400%;
- text-align:center;
- overflow: hidden;
- display: -webkit-box;
- -webkit-box-orient: vertical;
- -webkit-line-clamp: 2;
-}
-
-.np-text-landscape-1 {
- -webkit-line-clamp: 1;
-}
-
-.np-text-landscape-3 {
- -webkit-line-clamp: 3;
+ font-size:350%;
 }
 
 .np-portrait-rating {
@@ -839,58 +837,39 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 @media only screen and (max-height:800px) {
  .np-text-landscape {
-  margin:12px !important;
   font-size:300% !important;
-  text-align:center;
  }
 }
 
 @media only screen and (max-height:700px) {
  .np-text-landscape {
-  margin:8px !important;
   font-size:225% !important;
-  text-align:center;
  }
 }
 
 @media only screen and (max-height:600px) {
  .np-text-landscape {
-  margin:4px !important;
   font-size:175% !important;
-  text-align:center;
  }
 }
 
 @media only screen and (max-height:500px) {
  .np-text-landscape {
-  margin:4px !important;
   font-size:125% !important;
-  text-align:center;
  }
 }
 
 @media only screen and (max-height:400px) {
  .np-text-landscape {
-  margin:4px !important;
   font-size:100% !important;
-  text-align:center;
- }
-}
-
-@media only screen and (max-height:365px) {
- .np-text-landscape {
-  -webkit-line-clamp: 1 !important;
  }
 }
 
 @media only screen and (max-height:300px) {
  .np-text-landscape {
-  margin:0px 2px 0px 2px !important;
   font-size:75% !important;
-  text-align:center;
  }
 }
-
 
 @media screen and (max-width: 399px) {
  #advanced-search-btn {

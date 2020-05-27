@@ -151,13 +151,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
-     <div class="np-text-landscape np-title" v-bind:class="{'np-text-landscape-1':lowHeight,'np-text-landscape-3':!lowHeight&&threeLines}" v-if="playerStatus.current.title">{{title | limitStr}}</div>
-     <div class="np-text-landscape" v-else>&nbsp;</div>
-     <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1':lowHeight,'np-text-landscape-3':!lowHeight&&threeLines}" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer | limitStr}}</div>
-     <div class="np-text-landscape" v-else>&nbsp;</div>
-     <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1':lowHeight,'np-text-landscape-3':!lowHeight&&threeLines}" v-if="playerStatus.current.album">{{playerStatus.current.album | limitStr}}</div>
-     <div class="np-text-landscape subtext" v-bind:class="{'np-text-landscape-1':lowHeight,'np-text-landscape-3':!lowHeight&&threeLines}" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title | limitStr}}</div>
-     <div class="np-text-landscape" v-else>&nbsp;</div>
+
+     <div class="np-landscape-song-info">
+      <div>
+       <b class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}<br/></b>
+        <obj class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}<br/></obj>
+        <obj class="np-text-landscape subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}<br/></obj>
+      </div>
+     </div>
+
      <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
       <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
       <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>

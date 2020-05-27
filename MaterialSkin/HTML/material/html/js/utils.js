@@ -469,7 +469,7 @@ function adjustVolume(vol, inc) {
 }
 
 function isLandscape() {
-    return window.innerWidth >= (window.innerHeight*1.5);
+    return window.innerWidth >= (window.innerHeight*(IS_MOBILE || IS_IOS ? 1.3 : 1.5));
 }
 
 function incrementVolume() {

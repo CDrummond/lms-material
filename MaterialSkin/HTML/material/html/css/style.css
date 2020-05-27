@@ -703,7 +703,7 @@ div.v-subheader {
 
 .np-image {
  object-fit:contain;
- object-position:50% 0;
+ object-position:50% 50%;
  height:var(--np-portrait-image-size);
  width:100vw;
  padding:16px;

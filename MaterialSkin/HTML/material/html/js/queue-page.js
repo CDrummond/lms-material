@@ -60,7 +60,7 @@ function showArtist(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), 'queue');
 }
 
 function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
@@ -68,7 +68,7 @@ function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title));
+    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title), 'queue');
 }
 
 function showComposer(id, title) {
@@ -76,7 +76,7 @@ function showComposer(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title));
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), 'queue');
 }
 
 function getId(item, idType) {

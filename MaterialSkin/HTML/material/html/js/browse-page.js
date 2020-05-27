@@ -448,12 +448,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.itemMoreMenu(item, index, page);
         }.bind(this));
 
-        bus.$on('browse', function(cmd, params, title) {
+        bus.$on('browse', function(cmd, params, title, page) {
             if (!this.$store.state.desktopLayout) {
                 this.$store.commit('setPage', 'browse');
             }
             this.goHome();
-            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM});
+            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
         }.bind(this));
 
         bus.$on('refreshList', function(section) {

@@ -671,7 +671,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else if (NP_BROWSE_CMD==item.act) {
                 this.info.show=false;
                 this.largeView=false;
-                bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title);
+                bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title, 'now-playing');
             }
         },
         showPic() {

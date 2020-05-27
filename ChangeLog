@@ -5,6 +5,8 @@
 2. Allow song details text in landscape now-playing to scroll.
 3. Add 'Go to artist' and 'Go to album' actions to now-playing cover context
    menu.
+4. If invoke browse from queue, or now-playing, in mobile layout, then revert to
+   this page when navigating back.
 
 1.7.2
 -----

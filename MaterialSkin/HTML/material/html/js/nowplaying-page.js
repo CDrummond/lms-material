@@ -218,9 +218,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-portrait-song-info">
      <div>
-      <b class="np-title">{{playerStatus.current.title ? playerStatus.current.title : ""}}</b><br/>
-       <obj class="subtext">{{playerStatus.current.artistAndComposer ? playerStatus.current.artistAndComposer : ""}}</obj><br/>
-       <obj class="subtext">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title ? playerStatus.current.remote_title : ""}}</obj><br/>
+      <b class="np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}<br/></b>
+       <obj class="subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}<br/></obj>
+       <obj class="subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}<br/></obj>
      </div>
     </div>
    </div>

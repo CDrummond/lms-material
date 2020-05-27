@@ -242,7 +242,7 @@
  z-index:-1;
 }
 
-@media only screen and (min-height:850px) and (min-width:850px) {
+@media only screen and (min-height:750px) and (min-width:750px) {
 .np-image {
   padding:158px 8px 128px 8px; /* t, r, b, l */
   height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 32px));

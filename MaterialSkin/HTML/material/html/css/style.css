@@ -789,7 +789,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }
 
-@media only screen and (min-height:850px) and (min-width:850px) {
+@media only screen and (min-height:750px) and (min-width:750px) {
  .np-duration, .np-pos, .np-tech {
   font-size:100% !important;
  }

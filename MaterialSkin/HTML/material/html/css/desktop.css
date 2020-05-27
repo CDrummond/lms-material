@@ -242,6 +242,13 @@
  z-index:-1;
 }
 
+@media only screen and (min-height:850px) and (min-width:850px) {
+.np-image {
+  padding:158px 8px 128px 8px; /* t, r, b, l */
+  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 32px));
+ }
+}
+
 .np-image-landscape {
  padding:16px 16px 0px 16px;
  object-fit:contain;

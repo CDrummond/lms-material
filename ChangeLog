@@ -3,6 +3,8 @@
 1. Set OpenFrame default icon.
 2. Add more icon choices.
 3. Use MAC/playerid to set icon of raspberry-pi - thanks to 'mavit'
+4. Increase portrait now-playing font size if both widht and height are 850px or
+   more.
 
 1.7.1
 -----

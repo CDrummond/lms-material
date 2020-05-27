@@ -181,6 +181,13 @@
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 16px)) !important;
 }
 
+@media only screen and (min-height:850px) and (min-width:850px) {
+ .np-image {
+  padding:120px 8px 112px 8px; /* t, r, b, l */
+  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 32px));
+ }
+}
+
 .np-details-landscape {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 118px));
  width:50vw;

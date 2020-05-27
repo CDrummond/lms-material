@@ -789,6 +789,18 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }
 
+@media only screen and (min-height:850px) and (min-width:850px) {
+ .np-duration, .np-pos, .np-tech {
+  font-size:100% !important;
+ }
+ .np-text:not(.np-text-landscape) {
+  font-size:125%;
+ }
+ .np-title:not(.np-text-landscape) {
+  font-size:150%;
+ }
+}
+
 @media only screen and (max-height:800px) {
  .np-text-landscape {
   margin:12px !important;

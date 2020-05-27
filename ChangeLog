@@ -1,16 +1,5 @@
 1.8.0
 -----
-1. Relayout portrait now-playing; cover is at top, all text is shown below
-   (fade out if insufficient space, scrollable), rating shown at top of cover.
-2. Allow song details text in landscape now-playing to scroll.
-3. Add 'Go to artist' and 'Go to album' actions to now-playing cover context
-   menu.
-4. If invoke browse from queue, or now-playing, in mobile layout, then revert to
-   this page when navigating back.
-5. Show changes in plugin info dialog.
-
-1.7.2
------
 1. Set OpenFrame default icon.
 2. Add more icon choices.
 3. Use MAC/playerid to set icon of raspberry-pi - thanks to 'mavit'
@@ -18,6 +7,14 @@
    more.
 5. For mobile devices, switch to landscape when width >= height*1.3, else switch
    when width >= height*1.5 (previous ratio for all).
+6. Relayout portrait now-playing; cover is at top, all text is shown below
+   (fade out if insufficient space, scrollable), rating shown at top of cover.
+7. Allow song details text in landscape now-playing to scroll.
+8. Add 'Go to artist' and 'Go to album' actions to now-playing cover context
+   menu.
+9. If invoke browse from queue, or now-playing, in mobile layout, then revert to
+   this page when navigating back.
+10. Show changes in plugin info dialog.
 
 1.7.1
 -----

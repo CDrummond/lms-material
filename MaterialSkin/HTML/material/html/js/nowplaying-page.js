@@ -656,8 +656,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.portraitElem || this.landscape) {
                 this.portraitPad = 0;
             } else {
+                var fontAdjust = window.innerWidth>=750 && window.innerHeight>=750 ? 1.2 : 1.0;
                 var coverMax = Math.min(this.portraitElem.offsetWidth-16, this.portraitElem.offsetHeight-216);
-                var spaceForText = this.$store.state.largeFonts ? (40+(27*2)) : (32+(21*2));
+                var spaceForText = (this.$store.state.largeFonts ? (40+(27*2)) : (32+(21*2)))*fontAdjust;
                 var topAndBotSpace = (this.portraitElem.offsetHeight - 
                                         (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + spaceForText))/2;
                 var portraitPad = Math.max(0, Math.floor(topAndBotSpace/2)-8);

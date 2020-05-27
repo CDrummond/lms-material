@@ -35,7 +35,7 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
-    <li v-if="scanning"><v-progress-circular size=16 width=2 indeterminate></v-progress-circular> {{scanInfo}}</li>
+    <li v-if="scanning"><v-progress-circular size=16 width=2 indeterminate style="margin-top:-4px"></v-progress-circular> {{scanInfo}}</li>
     <li v-else>{{scanInfo}}</li>
    </ul>
    <v-menu bottom v-if="!scanning && unlockAll">
@@ -57,7 +57,7 @@ Vue.component('lms-information-dialog', {
     <template v-for="(plug, index) in updates.details"><li>{{plug.title}} {{plug.version}}<v-btn flat icon @click="pluginInfo(plug)" class="info-help-icon"><v-icon small>help_outline</v-icon></v-btn></li></template>
    </ul>
    <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins" flat><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
-   <p v-if="'downloading'==pluginStatus"><v-progress-circular size=16 width=2 indeterminate></v-progress-circular> {{i18n('Downloading plugin updates')}}</p>
+   <p v-if="'downloading'==pluginStatus"><v-progress-circular size=16 width=2 indeterminate style="margin-top:-4px"></v-progress-circular> {{i18n('Downloading plugin updates')}}</p>
    <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat>{{i18n('Restart server')}}</v-btn>
    <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
    <ul>

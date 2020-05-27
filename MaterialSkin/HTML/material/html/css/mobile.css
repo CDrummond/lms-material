@@ -10,6 +10,7 @@
  --sub-toolbar-height:48px;
  --bottom-nav-pad:0px;
  --bottom-nav-height:calc(var(--bottom-nav-pad) + 52px);
+ --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 200px)), 100vw);
 }
 
 .subtoolbar {
@@ -153,20 +154,6 @@
  width:100%;
 }
 
-.np-image {
- position:fixed;
- top:calc(var(--main-toolbar-height));
- left:0px;
- display:block;
- object-fit:contain;
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height)));
- width:calc(100vw);
- margin-left:auto;
- margin-right:auto;
- padding:104px 8px 112px 8px; /* t, r, b, l */
- z-index:-1;
-}
-
 .np-image-landscape {
  padding:16px 16px 0px 16px;
  object-fit:contain;
@@ -179,13 +166,6 @@
 
 .np-image-landscape-wide {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 16px)) !important;
-}
-
-@media only screen and (min-height:750px) and (min-width:750px) {
- .np-image {
-  padding:120px 8px 112px 8px; /* t, r, b, l */
-  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 32px));
- }
 }
 
 .np-details-landscape {

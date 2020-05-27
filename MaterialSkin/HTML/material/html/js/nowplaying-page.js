@@ -215,15 +215,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <div v-bind:style="{height: portraitPad+'px'}"></div>
-    <p class="np-text np-title ellipsis" v-if="playerStatus.current.title" v-bind:class="{'ellipsis3':threeLines}">{{title}}</p>
-    <p class="np-text" v-else>&nbsp;</p>
-    <p class="np-text subtext ellipsis" v-if="playerStatus.current.artistAndComposer" v-bind:class="{'ellipsis3':threeLines}">{{playerStatus.current.artistAndComposer}}</p>
-    <p class="np-text" v-else>&nbsp;</p>
-    <p class="np-text subtext ellipsis" v-if="playerStatus.current.album" v-bind:class="{'ellipsis3':threeLines}">{{playerStatus.current.album}}</p>
-    <p class="np-text subtext ellipsis3" v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</p>
-    <p class="np-text" v-else>&nbsp;</p>
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <div class="np-portrait-song-info">
+     <div>
+      <b class="np-title">{{playerStatus.current.title ? playerStatus.current.title : ""}}</b><br/>
+       <obj class="subtext">{{playerStatus.current.artistAndComposer ? playerStatus.current.artistAndComposer : ""}}</obj><br/>
+       <obj class="subtext">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title ? playerStatus.current.remote_title : ""}}</obj><br/><br/>
+     </div>
+    </div>
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text" v-bind:class="{'np-rating-shadow' : techInfo || playerStatus.playlist.count>1}">
@@ -297,7 +296,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                           stdFont:undefined, mediumFont:undefined, largerFont:undefined, play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
                  showTotal: true,
-                 portraitPad: 0,
                  landscape: false,
                  wide: 0,
                  lowHeight: false,
@@ -349,39 +347,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         }.bind(this));
-        bus.$on('pageChanged', function(val) {
-            if (0==this.lastWidth && val=='now-playing') {
-                this.$nextTick(() => {
-                    this.portraitElem = document.getElementById("np-page");
-                    this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-                    this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
-                    this.calcPortraitPad();
-                });
-            }
-        }.bind(this));
-        this.portraitElem = document.getElementById("np-page");
-        this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-        this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
         this.lowHeight = window.innerHeight <= (this.$store.state.desktopLayout ? 400 : 450);
-        this.calcPortraitPad();
         var npView = this;
         window.addEventListener('resize', () => {
             if (npView.resizeTimeout) {
                 clearTimeout(npView.resizeTimeout);
             }
             npView.resizeTimeout = setTimeout(function () {
-                // Only update if changed
-                if (!npView.landscape && !npView.portraitElem) {
-                    npView.portraitElem = document.getElementById("np-page");
-                    npView.lastWidth = npView.portraitElem ? npView.portraitElem.offsetWidth : 0;
-                    npView.lastHeight = npView.portraitElem ? npView.portraitElem.offsetHeight : 0;
-                }
-                if (npView.portraitElem &&
-                    (Math.abs(npView.lastWidth-npView.portraitElem.offsetWidth)>4 || Math.abs(npView.lastHeight-npView.portraitElem.offsetHeight))) {
-                    npView.lastWidth = npView.portraitElem.offsetWidth;
-                    npView.lastHeight = npView.portraitElem.offsetHeight;
-                    npView.calcPortraitPad();
-                }
                 npView.lowHeight = window.innerHeight <= (npView.$store.state.desktopLayout ? 400 : 430);
                 npView.resizeTimeout = undefined;
                 if (window.innerHeight<LMS_MIN_NP_LARGE_INFO_HEIGHT) {
@@ -650,22 +622,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
             this.menu.text[0]=i18n("Show image");
             this.menu.text[1]=i18n("Show track information");
-        },
-        calcPortraitPad() {
-            // Calculate padding, so that (in portrait mode) text is not too far from cover
-            if (!this.portraitElem || this.landscape) {
-                this.portraitPad = 0;
-            } else {
-                var fontAdjust = window.innerWidth>=750 && window.innerHeight>=750 ? 1.2 : 1.0;
-                var coverMax = Math.min(this.portraitElem.offsetWidth-16, this.portraitElem.offsetHeight-216);
-                var spaceForText = (this.$store.state.largeFonts ? (40+(27*2)) : (32+(21*2)))*fontAdjust;
-                var topAndBotSpace = (this.portraitElem.offsetHeight - 
-                                        (coverMax + /*bottom*/(this.$store.state.ratingsSupport || this.$store.state.techInfo ? 120 : 90) + spaceForText))/2;
-                var portraitPad = Math.max(0, Math.floor(topAndBotSpace/2)-8);
-                if (portraitPad!=this.portraitPad) {
-                    this.portraitPad = portraitPad;
-                }
-            }
         },
         showContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {
@@ -1240,9 +1196,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 this.$nextTick(function () {
                     this.page = document.getElementById("np-page");
-                    this.portraitElem = this.page;
                     this.setBgndCover();
-                    this.calcPortraitPad();
                 });
             } else {
                 if (this.before) {
@@ -1256,16 +1210,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.page = undefined;
             }
             bus.$emit('nowPlayingExpanded', val);
-        },
-        'landscape': function(val) {
-            if (!val) {
-                this.$nextTick(() => {
-                    this.portraitElem = document.getElementById("np-page");
-                    this.lastWidth = this.portraitElem ? this.portraitElem.offsetWidth : 0;
-                    this.lastHeight = this.portraitElem ? this.portraitElem.offsetHeight : 0;
-                    this.calcPortraitPad();
-                });
-            }
         },
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});

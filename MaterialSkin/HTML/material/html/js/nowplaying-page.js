@@ -154,9 +154,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <div class="np-landscape-song-info">
       <div>
-       <b class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}<br/></b>
-        <obj class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}<br/></obj>
-        <obj class="np-text-landscape subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}<br/></obj>
+       <p class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+       <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
+       <p class="np-text-landscape subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
       </div>
      </div>
 
@@ -220,9 +220,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-portrait-song-info">
      <div>
-      <b class="np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}<br/></b>
-       <obj class="subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}<br/></obj>
-       <obj class="subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}<br/></obj>
+      <p class="np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+      <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
+      <p class="np-text subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
      </div>
     </div>
    </div>

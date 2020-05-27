@@ -744,6 +744,11 @@ div.v-subheader {
  overflow-x:hidden;
 }
 
+.np-portrait-song-info div p {
+ margin:3px 0px!important;
+ padding:0px!important;
+}
+
 .np-playpause {
  margin:0px 2px 2px 2px !important;
  width:52px !important;
@@ -807,7 +812,6 @@ div.v-subheader {
 }
 
 .np-text-landscape {
- margin:16px 8px 16px 8px;
  font-size:350%;
 }
 
@@ -828,10 +832,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
   font-size:100% !important;
  }
  .np-text:not(.np-text-landscape) {
-  font-size:125%;
+  font-size:110%;
  }
  .np-title:not(.np-text-landscape) {
-  font-size:150%;
+  font-size:135%;
  }
 }
 

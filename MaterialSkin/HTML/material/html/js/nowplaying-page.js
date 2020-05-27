@@ -231,6 +231,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
+    <v-flex xs12><div class="np-portrait-thin-pad"></div></v-flex>
+
     <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
      <v-layout>
       <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
@@ -240,6 +242,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </v-layout>
     </v-flex>
     <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
+
+    <v-flex xs12><div class="np-portrait-thin-pad"></div></v-flex>
 
     <v-flex xs4 class="no-control-adjust">
      <v-layout text-xs-center>

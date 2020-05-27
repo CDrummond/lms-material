@@ -19,6 +19,7 @@
  --dialog-list-max-width:900px;
  --icon-size:24px;
  --toolbar-button-margin:4px;
+ --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
 }
 
 .note {
@@ -717,7 +718,7 @@ div.v-subheader {
  position:fixed;
  top:calc(var(--np-portrait-image-size) + 32px);
  width:100vw;
- height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 188px));
+ height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 188px + (var(--thin-portrait-adjust) * 3)));
  padding-left:16px;
  padding-right:16px;
  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
@@ -747,6 +748,10 @@ div.v-subheader {
 .np-portrait-song-info div p {
  margin:3px 0px!important;
  padding:0px!important;
+}
+
+.np-portrait-thin-pad {
+ height:var(--thin-portrait-adjust);
 }
 
 .np-playpause {
@@ -839,12 +844,15 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media (max-aspect-ratio: 1/2) and (min-height:750px) {
+@media (max-aspect-ratio: 4/7) and (min-height:750px) {
  .np-text:not(.np-text-landscape) {
   font-size:120%;
  }
  .np-title:not(.np-text-landscape) {
   font-size:150%;
+ }
+ :root {
+  --thin-portrait-adjust:16px;
  }
 }
 
@@ -937,7 +945,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  padding:8px;
  width:100%;
  position:absolute;
- bottom:0px;
+ bottom:var(--thin-portrait-adjust);
 }
 
 .np-controls-wide {

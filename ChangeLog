@@ -3,11 +3,11 @@
 1. Set OpenFrame default icon.
 2. Add more icon choices.
 3. Use MAC/playerid to set icon of raspberry-pi - thanks to 'mavit'
-4. Increase portrait now-playing font size if both widht and height are 750px or
+4. Increase portrait now-playing font size if both width and height are 750px or
    more.
 5. For mobile devices, switch to landscape when width >= height*1.3, else switch
    when width >= height*1.5 (previous ratio for all).
-6. Relayout portrait now-playing; cover is at top, all text is shown below
+6. Re-layout portrait now-playing; cover is at top, all text is shown below
    (fade out if insufficient space, scrollable), rating shown at top of cover.
 7. Allow song details text in landscape now-playing to scroll.
 8. Add 'Go to artist' and 'Go to album' actions to now-playing cover context

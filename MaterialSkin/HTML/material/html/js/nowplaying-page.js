@@ -220,7 +220,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div>
       <b class="np-title">{{playerStatus.current.title ? playerStatus.current.title : ""}}</b><br/>
        <obj class="subtext">{{playerStatus.current.artistAndComposer ? playerStatus.current.artistAndComposer : ""}}</obj><br/>
-       <obj class="subtext">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title ? playerStatus.current.remote_title : ""}}</obj><br/><br/>
+       <obj class="subtext">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title ? playerStatus.current.remote_title : ""}}</obj><br/>
      </div>
     </div>
    </div>

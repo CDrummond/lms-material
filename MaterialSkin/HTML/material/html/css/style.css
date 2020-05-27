@@ -839,9 +839,12 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:800px) {
- .np-text-landscape {
-  font-size:300% !important;
+@media (max-aspect-ratio: 1/2) and (min-height:750px) {
+ .np-text:not(.np-text-landscape) {
+  font-size:120%;
+ }
+ .np-title:not(.np-text-landscape) {
+  font-size:150%;
  }
 }
 

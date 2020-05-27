@@ -1,7 +1,7 @@
 1.8.0
 -----
 1. Relayout portrait now-playing; cover is at top, all text is shown below
-   (fade out if insufficient space, scrollable).
+   (fade out if insufficient space, scrollable), rating shown at top of cover.
 
 1.7.2
 -----

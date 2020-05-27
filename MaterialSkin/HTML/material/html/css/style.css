@@ -813,8 +813,13 @@ div.v-subheader {
  -webkit-line-clamp: 3;
 }
 
-.np-rating-shadow {
+.np-portrait-rating {
+ position:fixed;
+ width:100vw;
+ left:0px;
+ top:var(--main-toolbar-height);
  text-shadow: 2px 2px 5px var(--text-shadow-color);
+ z-index:2;
 }
 
 div.v-rating i.primary--text, div.v-rating i.accent--text {

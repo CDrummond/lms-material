@@ -10,25 +10,23 @@ const BIO_TAB = 0;
 const REVIEW_TAB = 1;
 const LYRICS_TAB = 2;
 
+const NP_FONT_ACT = 0;
+const NP_PIC_ACT = 1;
+const NP_INFO_ACT = 2;
+const NP_BROWSE_CMD = 3;
+
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
  <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
-  <v-list v-if="info.show && !menu.ontoolbar">
-   <v-list-tile @click="adjustFont(10)" v-bind:class="{'disabled':infoZoom<=10}"><v-list-tile-title>{{trans.stdFont}}</v-list-tile-title></v-list-tile>
-  <v-list-tile @click="adjustFont(15)" v-bind:class="{'disabled':infoZoom==15}"><v-list-tile-title>{{trans.mediumFont}}</v-list-tile-title></v-list-tile>
-  <v-list-tile @click="adjustFont(20)" v-bind:class="{'disabled':infoZoom>=20}"><v-list-tile-title>{{trans.largeFont}}</v-list-tile-title></v-list-tile>
-  </v-list>
-  <v-list v-else>
-   <v-list-tile @click="showPic()">
-    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><v-icon>photo</v-icon></v-list-tile-avatar>
-    <v-list-tile-title>{{menu.text[0]}}</v-list-tile-title>
-   </v-list-tile>
-   <v-list-tile @click="trackInfo()">
-    <v-list-tile-avatar v-if="menuIcons" :tile="true" class="lms-avatar"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-title>{{menu.text[1]}}</v-list-tile-title>
-   </v-list-tile>
+  <v-list>
+   <template v-for="(item, index) in menu.items">
+    <v-list-tile @click="menuAction(item)">
+     <v-list-tile-avatar v-if="menuIcons && menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
   </v-list>
  </v-menu>
  
@@ -296,13 +294,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                          tabs: [ { title:undefined, text:undefined, reqId:0 }, { title:undefined, text:undefined, reqId:0 }, { title:undefined, text:undefined, reqId:0 } ] },
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          stdFont:undefined, mediumFont:undefined, largerFont:undefined, play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
+                          play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
                  lowHeight: false,
                  largeView: false,
-                 menu: { show: false, x:0, y:0, text: ["", ""], ontoolbar:false },
+                 menu: { show: false, x:0, y:0, items: [], icons:false },
                  rating: {value:0, setting:false},
                  timeTooltip: {show: false, x:0, y:0, text:undefined},
                  overlayVolume: -1,
@@ -616,14 +614,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
-                           shuffleOff:i18n("No shuffle"), stdFont:i18n("Standard font size"), mediumFont:i18n("Medium font size"),
-                           largeFont:i18n("Large font size"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
+                           shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
                            next:i18n("Next track") };
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
             this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
             this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
-            this.menu.text[0]=i18n("Show image");
-            this.menu.text[1]=i18n("Show track information");
         },
         showContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {
@@ -638,16 +633,45 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.info.show || (this.coverUrl && this.coverUrl!=LMS_BLANK_COVER && (undefined==this.touch || !this.touch.moving)) && window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
                 this.touch = undefined;
                 this.menu.show = false;
-                this.menu.ontoolbar = false;
+                let ontoolbar = false;
                 if (this.$store.state.desktopLayout && this.info.show) {
                     let val = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottom-toolbar-height").replace("px", ""));
-                    this.menu.ontoolbar=event.clientY>(window.innerHeight-val);
+                    ontoolbar=event.clientY>(window.innerHeight-val);
+                }
+                if (this.info.show && !ontoolbar) {
+                    this.menu.icons=false;
+                    this.menu.items=[{title:i18n("Standard font size"), act:NP_FONT_ACT, val:10},
+                                     {title:i18n("Medium font size"), act:NP_FONT_ACT, val:15},
+                                     {title:i18n("Large font size"), act:NP_FONT_ACT, val:20}];
+                } else {
+                    this.menu.icons=true;
+                    this.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT},
+                                     {title:i18n("Show track information"), svg:"more", act:NP_INFO_ACT}];
+                    if (this.infoTrack.artist_id) {
+                        this.menu.items.push({title:i18n("Go to artist"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+this.infoTrack.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:"artist"});
+                    }
+                    if (this.infoTrack.album_id) {
+                        this.menu.items.push({title:i18n("Go to album"), act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+this.infoTrack.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:this.playerStatus.current.album}, icon:"album"});
+                    }
                 }
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;
                 this.$nextTick(() => {
                     this.menu.show = true;
                 });
+            }
+        },
+        menuAction(item) {
+            if (NP_FONT_ACT==item.act) {
+                this.adjustFont(item.val);
+            } else if (NP_PIC_ACT==item.act) {
+                this.showPic();
+            } else if (NP_INFO_ACT==item.act) {
+                this.trackInfo();
+            } else if (NP_BROWSE_CMD==item.act) {
+                this.info.show=false;
+                this.largeView=false;
+                bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title);
             }
         },
         showPic() {

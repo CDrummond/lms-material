@@ -1108,6 +1108,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         touchStart(event) {
+            if (event.srcElement.classList.contains("np-title") || event.srcElement.classList.contains("np-text") || event.srcElement.classList.contains("np-text-landscape")) {
+                return;
+            }
             if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0 && this.playerStatus.dvc) {
                 this.touch={x:event.touches[0].clientX, y:event.touches[0].clientY, moving:false};
                 this.lastSentVolume=-1;

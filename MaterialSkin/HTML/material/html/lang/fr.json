@@ -110,6 +110,7 @@
 "Draw background":"Générer un arrière plan",
 "Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)":"Générer des grosses lettres lors du défilement de certaines listes triées (artistes, albums...)",
 "Draw letter overlay":"Générer des lettres en surimpression",
+"Drop here to remove from sync group":"Déposer ici pour retirer du groupe de synchronisation",
 "E-Mail":"Email",
 "ERROR: List processing failed":"ERREUR: le traitement de la liste a échoué",
 "Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other LMS control points (such as the default web UI).":"Chaque platine peut se voir attribuer une bibliothèque 'virtuelle'. Si définie, elle sera utilisée pour restreindre la sélection 'Morceaux au hasard' (seuls les morceaux de la bibliothèque choisie seront utilisés) ainsi que d'autres fonctions. Ce paramètre peut également affecter la navigation dans la bibliothèque via les autres interfaces de pilotage de LMS (comme l'interface utilisateur Web par défaut).",
@@ -449,5 +450,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Drop here to remove from sync group":"Déposer ici pour retirer du groupe de synchronisation"
+"Changes":"",
+"Go to album":"",
+"Go to artist":""
 }

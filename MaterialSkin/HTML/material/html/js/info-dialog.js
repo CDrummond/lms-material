@@ -41,6 +41,9 @@ Vue.component('lms-info-dialog', {
             if (item.descr) {
                 this.details.push({title: i18n("Description"), text: item.descr});
             }
+            if (item.changes) {
+                this.details.push({title: i18n("Changes"), text: item.changes});
+            }
             if (item.version) {
                 this.details.push({title: i18n("Version"), text: item.version});
             }

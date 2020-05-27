@@ -7,6 +7,7 @@
    menu.
 4. If invoke browse from queue, or now-playing, in mobile layout, then revert to
    this page when navigating back.
+5. Show changes in plugin info dialog.
 
 1.7.2
 -----

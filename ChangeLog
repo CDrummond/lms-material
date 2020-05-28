@@ -18,6 +18,7 @@
 11. Press, not long-press, on queue nav whilst in queue view scrolls to
     current.
 12. Adjust now-playing landscape text size.
+13. Check now-playing landscape mode on all resizes, not just width.
 
 1.7.1
 -----

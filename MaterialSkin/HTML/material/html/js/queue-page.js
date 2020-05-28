@@ -26,6 +26,10 @@ function queueItemCover(item, infoPlugin) {
 }
 
 function animate(elem, from, to) {
+    if (elem.animating) {
+        return;
+    }
+    elem.animating = true;
     var opacity = 0;
     var steps = 10;
     var val = from;
@@ -46,6 +50,7 @@ function animate(elem, from, to) {
         if (val >= from) {
             clearInterval(interval);
             elem.style.opacity = orig;
+            elem.animating = false;
         } else {
             val+=step;
             elem.style.opacity = origVal * val;

@@ -19,6 +19,7 @@
     current.
 12. Adjust now-playing landscape text size.
 13. Check now-playing landscape mode on all resizes, not just width.
+14. Don't attempt to animate current queue element if already animating it.
 
 1.7.1
 -----

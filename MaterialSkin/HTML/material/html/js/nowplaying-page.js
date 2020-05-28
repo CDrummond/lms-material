@@ -152,7 +152,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <div class="np-landscape-song-info hide-scrollbar fade-bottom">
       <div>
-       <p class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+       <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
        <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
        <p class="np-text-landscape subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
       </div>

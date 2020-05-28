@@ -837,8 +837,12 @@ div.v-subheader {
  text-align:center;
 }
 
+.np-title-landscape {
+ font-size:300%!important;
+}
+
 .np-text-landscape {
- font-size:350%;
+ font-size:250%;
 }
 
 .np-portrait-rating {
@@ -877,31 +881,59 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:700px) {
+@media only screen and (max-height:800px) {
+ .np-title-landscape {
+  font-size:275% !important;
+ }
  .np-text-landscape {
   font-size:225% !important;
  }
 }
 
+@media only screen and (max-height:700px) {
+. np-title-landscape {
+   font-size:250% !important;
+  }
+ .np-text-landscape {
+  font-size:200% !important;
+ }
+}
+
 @media only screen and (max-height:600px) {
+ .np-title-landscape {
+  font-size:225% !important;
+ }
  .np-text-landscape {
   font-size:175% !important;
  }
 }
 
 @media only screen and (max-height:500px) {
+ .np-title-landscape {
+  font-size:175% !important;
+ }
  .np-text-landscape {
   font-size:125% !important;
  }
 }
 
 @media only screen and (max-height:400px) {
+ .np-title-landscape {
+  font-size:150% !important;
+ }
  .np-text-landscape {
   font-size:100% !important;
+ }
+ .np-landscape-song-info div p {
+  margin:3px 0px!important;
+  padding:0px!important;
  }
 }
 
 @media only screen and (max-height:300px) {
+ .np-title-landscape {
+   font-size:100% !important;
+  }
  .np-text-landscape {
   font-size:75% !important;
  }

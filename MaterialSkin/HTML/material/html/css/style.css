@@ -20,6 +20,7 @@
  --icon-size:24px;
  --toolbar-button-margin:4px;
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
+ --fade-size:16px;
 }
 
 .note {
@@ -718,18 +719,33 @@ div.v-subheader {
  position:fixed;
  top:calc(var(--np-portrait-image-size) + 32px);
  width:100vw;
- height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 188px + (var(--thin-portrait-adjust) * 3)));
+ height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 187px + (var(--thin-portrait-adjust) * 3)));
  padding-left:16px;
  padding-right:16px;
- -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
- mask-image: linear-gradient(to bottom, black calc(100% - 32px), transparent 100%);
 }
 
-@media only screen and (max-height:600px) {
- .np-portrait-song-info {
-  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black calc(100% - 16px), transparent 100%);
- }
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+.fade-none {
+}
+
+.fade-top {
+ -webkit-mask-image: linear-gradient(to top, black 0px, transparent var(--fade-size));
+ mask-image: linear-gradient(to top, black 0px, transparent var(--fade-size));
+}
+
+.fade-both {
+ -webkit-mask-image: linear-gradient(transparent 0px, black var(--fade-size), black calc(100% - var(--fade-size)), transparent 100%);
+ mask-image: linear-gradient(transparent 0px, black var(--fade-size), black calc(100% - var(--fade-size)), transparent 100%);
+}
+*/
+
+.fade-bottom {
+ -webkit-mask-image: linear-gradient(to bottom, black calc(100% - var(--fade-size)), transparent 100%);
+ mask-image: linear-gradient(to bottom, black calc(100% - var(--fade-size)), transparent 100%);
 }
 
 .np-landscape-song-info {
@@ -739,8 +755,6 @@ div.v-subheader {
  height:100%;
  padding-left:16px;
  padding-right:16px;
- -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
- mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
 .np-portrait-song-info div, .np-landscape-song-info div {

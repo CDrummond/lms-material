@@ -150,7 +150,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
 
-     <div class="np-landscape-song-info">
+     <div class="np-landscape-song-info hide-scrollbar fade-bottom">
       <div>
        <p class="np-text-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
        <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
@@ -216,7 +216,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
-    <div class="np-portrait-song-info">
+    <div class="np-portrait-song-info hide-scrollbar fade-bottom">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
       <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>

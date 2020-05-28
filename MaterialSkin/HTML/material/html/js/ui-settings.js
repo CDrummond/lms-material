@@ -553,7 +553,7 @@ Vue.component('lms-ui-settings', {
             this.menuIcons = this.$store.state.menuIcons;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
-            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", "[]")));
+            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},

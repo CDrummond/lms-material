@@ -20,6 +20,8 @@
 12. Adjust now-playing landscape text size.
 13. Check now-playing landscape mode on all resizes, not just width.
 14. Don't attempt to animate current queue element if already animating it.
+15. Hide 'CD Player' and 'Remote Libraries' from 'Settings' dialog 'Home screen
+    items' selection unless these are enabled in LMS.
 
 1.7.1
 -----

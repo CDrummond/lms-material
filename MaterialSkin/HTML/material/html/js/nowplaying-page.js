@@ -302,7 +302,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  showTotal: true,
                  landscape: false,
                  wide: 0,
-                 lowHeight: false,
                  largeView: false,
                  menu: { show: false, x:0, y:0, items: [], icons:false },
                  rating: {value:0, setting:false},
@@ -351,20 +350,21 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         }.bind(this));
-        this.lowHeight = window.innerHeight <= (this.$store.state.desktopLayout ? 400 : 450);
         var npView = this;
+        this.sizeCheckDelay = 0; // How many resize events have we seen before size checked?
         window.addEventListener('resize', () => {
             if (npView.resizeTimeout) {
                 clearTimeout(npView.resizeTimeout);
             }
-            npView.resizeTimeout = setTimeout(function () {
-                npView.lowHeight = window.innerHeight <= (npView.$store.state.desktopLayout ? 400 : 430);
-                npView.resizeTimeout = undefined;
-                if (window.innerHeight<LMS_MIN_NP_LARGE_INFO_HEIGHT) {
-                    npView.largeView = false;
-                    npView.info.show = false;
-                }
-            }, 50);
+            npView.sizeCheckDelay++;
+            if (npView.sizeCheckDelay>=10) {
+                npView.checkWindowSize();
+            } else {
+                npView.resizeTimeout = setTimeout(function () {
+                    npView.resizeTimeout = undefined;
+                    npView.checkWindowSize();
+                }, 50);
+            }
         }, false);
 
         // Long-press on 'now playing' nav button whilst in now-playing shows track info
@@ -555,16 +555,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.setBgndCover(true);
         }.bind(this));
 
-        this.landscape = isLandscape();
-        this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        this.checkLandscape();
         setTimeout(function () {
-            this.landscape = isLandscape();
-            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+            this.checkLandscape();
         }.bind(this), 1000);
-        bus.$on('windowWidthChanged', function() {
-            this.landscape = isLandscape();
-            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
-        }.bind(this));
 
         bus.$on('currentCover', function(coverUrl) {
             this.coverUrl = undefined==coverUrl ? LMS_BLANK_COVER : coverUrl;
@@ -1173,6 +1167,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         adjustFont(sz) {
             this.infoZoom=sz;
             getLocalStorageVal('npInfoZoom', sz);
+        },
+        checkWindowSize() {
+            this.checkLandscape();
+            this.sizeCheckDelay = 0;
+            if (window.innerHeight<LMS_MIN_NP_LARGE_INFO_HEIGHT) {
+                this.largeView = false;
+                this.info.show = false;
+            }
+        },
+        checkLandscape() {
+            this.landscape = isLandscape();
+            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
         }
     },
     filters: {

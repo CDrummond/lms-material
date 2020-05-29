@@ -96,8 +96,8 @@ Vue.component('lms-manage-players', {
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><v-icon v-if="player.icon.icon" class="pmgr-icon" v-bind:class="{'active-btn':currentPlayer && currentPlayer.id==player.id}" :id="'pmgr-player-'+index">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi, currentPlayer && currentPlayer.id==player.id)" :id="'pmgr-player-'+index"></img>
-          {{player.name}}<v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon" v-bind:class="{'active-btn':currentPlayer && currentPlayer.id==player.id}">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi, currentPlayer && currentPlayer.id==player.id)"></img>
+          {{player.name}}</obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
           <v-list-tile-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">

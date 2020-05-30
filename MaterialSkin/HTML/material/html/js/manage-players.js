@@ -65,7 +65,7 @@ Vue.component('lms-manage-players', {
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)">
     <v-btn flat v-if="!draggingSyncedPlayer" icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title class="ellipsis">{{draggingSyncedPlayer ? i18n('Drop here to remove from sync group') : TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
+    <v-toolbar-title class="ellipsis">{{draggingSyncedPlayer ? i18n('Drop here to remove from group') : TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
     <v-spacer v-if="!draggingSyncedPlayer"></v-spacer>
     <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
@@ -617,23 +617,73 @@ Vue.component('lms-manage-players', {
             this.stopScrolling = true;
             ev.preventDefault();
             if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                let playerId = this.players[this.dragIndex].id;
+                let player = this.players[this.dragIndex];
                 let from = this.players[this.dragIndex].syncmaster;
                 if (-1==to) {
-                    lmsCommand(playerId, ["sync", "-"]).then(({data}) => {
-                        bus.$emit('refreshStatus', playerId);
+                    let group = undefined;
+                    for (let i=0, len=this.players.length; i<len; ++i) {
+                        if (this.players[i].id==from) {
+                            group = this.players[i];
+                            break;
+                        }
+                    }
+                    lmsCommand(player.id, ["sync", "-"]).then(({data}) => {
+                        bus.$emit('refreshStatus', player.id);
                         bus.$emit('refreshStatus', from);
+
+                        if (undefined!=group) {
+                            lmsCommand(group.id, ["playergroup", 0, 255]).then(({data}) => {
+                                let members=[];
+                                if (data && data.result && data.result.players_loop) {
+                                    for (let i=0, loop=data.result.players_loop, len=loop.length; i<len; ++i) {
+                                        if (loop[i].id!=player.id) {
+                                            members.push(loop[i].id);
+                                        }
+                                    }
+                                }
+                                lmsCommand("", ['playergroups', 'update', 'id:'+group.id, "members:"+(members.length>0 ? members.join(",") : "-")]).then(({data}) => {
+                                    bus.$emit('refreshServerStatus', 1000);
+                                    bus.$emit('showMessage', i18n("Removed '%1' from '%2'", player.name, group.name));
+                                });
+                            });
+                        }
                     });
                 } else {
-                    let dest = this.players[to].syncmaster ? this.players[to].syncmaster : this.players[to].id;
-                    if (dest!=from) {
-                        lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
-                            bus.$emit('refreshStatus', playerId);
-                            if (undefined!=from) {
-                                bus.$emit('refreshStatus', from);
+                    let target = this.players[to];
+                    if (target.isgroup) {
+                        lmsCommand(target.id, ["playergroup", 0, 255]).then(({data}) => {
+                            let updateGroup=true;
+                            let members=[player.id];
+                            if (data && data.result && data.result.players_loop) {
+                                for (let i=0, loop=data.result.players_loop, len=loop.length; i<len; ++i) {
+                                    if (loop[i].id==player.id) {
+                                        updateGroup=false;
+                                        break;
+                                    }
+                                    members.push(loop[i].id);
+                                }
                             }
-                            bus.$emit('refreshStatus', dest);
+                            if (updateGroup) {
+                                lmsCommand("", ['playergroups', 'update', 'id:'+target.id, "members:"+(members.length>0 ? members.join(",") : "-")]).then(({data}) => {
+                                    bus.$emit('refreshServerStatus', 1000);
+                                    bus.$emit('showMessage', i18n("Added '%1' to '%2'", player.name, target.name));
+                                    lmsCommand(target.id, ["material-skin-group", "set-modes"]);
+                                });
+                            } else {
+                                bus.$emit('showMessage', i18n("'%1' is already a member of '%2'", player.name, target.name));
+                            }
                         });
+                    } else {
+                        let dest = target.syncmaster ? target.syncmaster : target.id;
+                        if (dest!=from) {
+                            lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
+                                bus.$emit('refreshStatus', player.id);
+                                if (undefined!=from) {
+                                    bus.$emit('refreshStatus', from);
+                                }
+                                bus.$emit('refreshStatus', dest);
+                            });
+                        }
                     }
                 }
             }

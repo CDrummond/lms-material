@@ -22,6 +22,7 @@
 14. Don't attempt to animate current queue element if already animating it.
 15. Hide 'CD Player' and 'Remote Libraries' from 'Settings' dialog 'Home screen
     items' selection unless these are enabled in LMS.
+16. Allow to add, and remove, players from group via drag'n'drop.
 
 1.7.1
 -----

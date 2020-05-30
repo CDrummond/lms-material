@@ -23,6 +23,8 @@
 15. Hide 'CD Player' and 'Remote Libraries' from 'Settings' dialog 'Home screen
     items' selection unless these are enabled in LMS.
 16. Allow to add, and remove, players from group via drag'n'drop.
+17. When click 'Change Mix Mode', or 'Create Mix from Playing', in 'More' menu
+    then show message and go back.
 
 1.7.1
 -----

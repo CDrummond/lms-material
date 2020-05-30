@@ -862,18 +862,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 : item.actions && item.actions.go && item.actions.go.nextWindow
                                     ? item.actions.go.nextWindow
                                     : undefined;
+
             if (nextWindow) {
                 nextWindow=nextWindow.toLowerCase();
                 var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && !msgIsEmpty(resp.items[0].title)
                                 ? resp.items[0].title : item.title;
+                bus.$emit('showMessage', message);
                 if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
-                    bus.$emit('showMessage', message);
                     this.refreshList();
-                } else if (this.history.length>0 && (nextWindow=="parent" || (isMoreMenu && nextWindow=="grandparent"))) {
-                    bus.$emit('showMessage', message);
+                } else if (this.history.length>0 && (nextWindow=="parent" || nextWindow=="nowplaying" || (isMoreMenu && nextWindow=="grandparent"))) {
                     this.goBack(true);
                 } else if (nextWindow=="grandparent" && this.history.length>1) {
-                    bus.$emit('showMessage', message);
                     this.history.pop();
                     this.goBack(true);
                 }

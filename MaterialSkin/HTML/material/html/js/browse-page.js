@@ -876,6 +876,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.history.pop();
                     this.goBack(true);
                 }
+                if (nextWindow=="nowplaying" && !this.$store.state.desktopLayout) {
+                    this.$store.commit('setPage', 'now-playing');
+                }
             } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);

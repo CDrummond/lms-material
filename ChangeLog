@@ -25,6 +25,8 @@
 16. Allow to add, and remove, players from group via drag'n'drop.
 17. When click 'Change Mix Mode', or 'Create Mix from Playing', in 'More' menu
     then show message and go back.
+18. If clicked action's nextwindow is 'nowPlaying' then switch to now-playing
+    view on mobile layout.
 
 1.7.1
 -----

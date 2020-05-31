@@ -741,11 +741,14 @@ sub _cliGroupCommand {
                 # iterate over all clients, and set mode to enabled if enabled for client
                 foreach my $id (@{$members}) {
                     my $member = Slim::Player::Client::getClient($id);
-                    my $clientPrefs = $serverprefs->client($member);
-
-                    foreach my $mode (@{$modeList}) {
-                        if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
-                            $modes{ $mode->{id} } = 0;
+                    if ($member) {
+                        my $clientPrefs = $serverprefs->client($member);
+                        if ($clientPrefs) {
+                            foreach my $mode (@{$modeList}) {
+                                if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
+                                    $modes{ $mode->{id} } = 0;
+                                }
+                            }
                         }
                     }
                 }

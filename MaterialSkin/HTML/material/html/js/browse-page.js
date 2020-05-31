@@ -7,7 +7,7 @@
 'use strict';
 
 var B_ALBUM_SORTS=[ ];
-var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer', 'tracks']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer', 'tracks', 'musicip']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `

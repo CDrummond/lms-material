@@ -437,6 +437,9 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
 
+            if (player.isgroup && data.members) {
+                player.members=data.members.split(',');
+            }
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             if (isCurrent) {
                 updateNative(player);

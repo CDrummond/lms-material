@@ -1344,6 +1344,13 @@ progress {
  margin-left:4px;
 }
 
+.pmgr-member-list {
+ opacity:var(--sub-opacity);
+ font-size:var(--small-font-size);
+ margin-left:64px;
+ margin-top:-12px;
+}
+
 .v-icon {
  text-align:center;
 }

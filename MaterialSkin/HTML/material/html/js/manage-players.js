@@ -23,7 +23,7 @@ function getSyncMaster(player) {
         return {name:player.name.toLowerCase(), isgroup:player.isgroup};
     }
     let master = playerMap[player.syncmaster];
-    return undefined==master ? {name:"", isgroup:false} : master;
+    return undefined==master ? {name:"", isgroup:false} : {name:master.toLowerCase(), isgroup:master.isgroup};
 }
 
 function playerSyncSort(a, b) {
@@ -123,6 +123,9 @@ Vue.component('lms-manage-players', {
         <p class="pmgr-vol" v-bind:class="{'pmgr-vol-small':!showAllButtons,  'dimmed': !player.ison}">{{player.volume}}%</p>
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
+      </v-flex>
+      <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0">
+       <div class="pmgr-member-list ellipsis">{{player.members | formatMembers}}</div>
       </v-flex>
      </div>
      
@@ -487,7 +490,7 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            playerMap[player.id]={name:player.name.toLowerCase(), isgroup:player.isgroup};
+            playerMap[player.id]={name:player.name, isgroup:player.isgroup};
 
             player.image = undefined;
             if (player.current) {
@@ -726,6 +729,17 @@ Vue.component('lms-manage-players', {
     filters: {
         svgIcon: function (name, dark, active) {
             return "/material/svg/"+name+"?c="+(active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        },
+        formatMembers: function(members) {
+            let names=[];
+            for (let i=0, len=members.length; i<len; ++i) {
+                let entry = playerMap[members[i]];
+                if (entry) {
+                    names.push(entry.name);
+                }
+            }
+            names.sort(function (a, b) { return a.toLowerCase().localeCompare(b.toLowerCase());});
+            return names.join(", ");
         }
     },
     watch: {

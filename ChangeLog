@@ -28,6 +28,7 @@
 18. If clicked action's nextwindow is 'nowPlaying' then switch to now-playing
     view on mobile layout.
 19. Fix adding a selection of MusicIP mix tracks to queue.
+20. Add czech translation - thanks to Kucheek
 
 1.7.1
 -----

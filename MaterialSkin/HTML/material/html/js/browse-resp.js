@@ -331,7 +331,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 if (!i.id) {
-                    if (parent.id.startsWith(TOP_ID_PREFIX)) {
+                    if (i.params && i.params.track_id) {
+                        i.id = uniqueId("track_id:"+i.params.track_id); // Incase of duplicates?
+                    } else if (parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+resp.items.length;
                     } else {
                         i.id=parent.id+"."+resp.items.length;
@@ -374,7 +376,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 if (isFavorites) {
                     i.draggable = true;
-                    i.realIndex = resp.items.length; // So items are deleted in correct order, even when lsit is sorted.
+                    i.realIndex = resp.items.length; // So items are deleted in correct order, even when list is sorted.
                 }
                 if (i.type=="text" && i.title.startsWith("<")) {
                     i.type="html";

@@ -2423,15 +2423,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var ids="";
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (ids.length<1) {
-                        ids+=list[i].id;
+                        ids+=originalId(list[i].id);
                     } else {
-                        ids+=","+list[i].id.split(":")[1];
+                        ids+=","+originalId(list[i].id).split(":")[1];
                     }
                 }
                 var command = this.buildFullCommand({id:ids}, act);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;
+                }
+                if (!command.command.includes(ids)) { // Selection from MusicIP mix does not get IDs???
+                    command.command.push(ids);
                 }
                 if (PLAY_ACTION==act) {
                     lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {

@@ -43,11 +43,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
+            var isMusicIpMix = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
-            // Create a unique ID for favorites each time it is listed. When list is re-ordered via d'n'd we
-            // need different IDs for the re-ordered items so that the correct cover is shown.
-            var uniqueness = isFavorites ? new Date().getTime().toString(16) : undefined;
             var menu = undefined;
             var types = new Set();
             var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
@@ -441,7 +439,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.canUseGrid = false;
                     }
                 }
-                resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
+                if (isMusicIpMix && resp.items.length>1) {
+                    resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-1);
+                } else {
+                    resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
+                }
             }
         } else if (data.result.artists_loop) {
             var isComposers = false;

@@ -23,7 +23,7 @@ function getSyncMaster(player) {
         return {name:player.name.toLowerCase(), isgroup:player.isgroup};
     }
     let master = playerMap[player.syncmaster];
-    return undefined==master ? {name:"", isgroup:false} : {name:master.toLowerCase(), isgroup:master.isgroup};
+    return undefined==master ? {name:"", isgroup:false} : {name:master.name.toLowerCase(), isgroup:master.isgroup};
 }
 
 function playerSyncSort(a, b) {
@@ -124,7 +124,7 @@ Vue.component('lms-manage-players', {
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
       </v-flex>
-      <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0">
+      <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0 && (!player.syncmaster || player.syncmaster.length<1)">
        <div class="pmgr-member-list ellipsis">{{player.members | formatMembers}}</div>
       </v-flex>
      </div>

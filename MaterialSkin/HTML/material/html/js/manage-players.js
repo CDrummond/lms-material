@@ -106,7 +106,7 @@ Vue.component('lms-manage-players', {
       <v-flex xs12 v-if="player.isgroup && index==firstGroupIndex" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
-        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup">
+        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index)}" :id="'tile-pmgr-player-'+index">
          <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
@@ -200,7 +200,8 @@ Vue.component('lms-manage-players', {
             firstGroupIndex: -1,
             menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
             trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined, drop:undefined },
-            draggingSyncedPlayer: false
+            draggingSyncedPlayer: false,
+            dropId: undefined
         }
     },
     mounted() {
@@ -611,8 +612,23 @@ Vue.component('lms-manage-players', {
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.draggingSyncedPlayer = false;
+            this.dropId = undefined;
         },
         dragOver(ev) {
+            this.dropId=undefined;
+            if (undefined!=ev.target) {
+                let elem = ev.target;
+                for (let level=0; level<5 & undefined!=elem && undefined==this.dropId; ++level) {
+                    if (elem.id) {
+                        if (elem.id.startsWith("pmgr-")) {
+                            this.dropId=elem.id
+                        } else if (elem.id.startsWith("tile-pmgr-")) {
+                            this.dropId=elem.id.substring(5);
+                        }
+                    }
+                    elem=elem.parentNode;
+                }
+            }
             // Drag over item at top/bottom of list to start scrolling
             this.stopScrolling = true;
             if (ev.clientY < 110) {

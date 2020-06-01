@@ -142,7 +142,7 @@ Vue.component('lms-manage-players', {
       <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0 && (!player.syncmaster || player.syncmaster.length<1)">
        <div class="pmgr-member-list ellipsis">
         <template v-for="(member, idx) in player.members">
-         <obj @dragstart="dragStart((index*PMGR_GROUP_MEMBER_ID_MOD)+idx, $event)" @dragend="dragEnd()" :draggable="true" :id="'pmgr-player-'+((index*PMGR_GROUP_MEMBER_ID_MOD)+idx)" style="cursor:pointer">{{playerMap[member] ? playerMap[member].name : member}}</obj><obj>{{idx==player.members.length-1 ? "" : ", "}}</obj>
+         <obj @dragstart="dragStart(((index+1)*PMGR_GROUP_MEMBER_ID_MOD)+idx, $event)" @dragend="dragEnd()" :draggable="true" :id="'pmgr-player-'+(((index+1)*PMGR_GROUP_MEMBER_ID_MOD)+idx)" style="cursor:pointer">{{playerMap[member] ? playerMap[member].name : member}}</obj><obj>{{idx==player.members.length-1 ? "" : ", "}}</obj>
         </template>
        </div>
       </v-flex>
@@ -616,7 +616,7 @@ Vue.component('lms-manage-players', {
         },
         dragOver(ev) {
             this.dropId=undefined;
-            if (undefined!=ev.target) {
+            if (undefined!=ev.target && this.dragIndex<PMGR_GROUP_MEMBER_ID_MOD) {
                 let elem = ev.target;
                 for (let level=0; level<5 & undefined!=elem && undefined==this.dropId; ++level) {
                     if (elem.id) {
@@ -669,6 +669,7 @@ Vue.component('lms-manage-players', {
                     if (-1==to) {
                         let grp = Math.floor(this.dragIndex/PMGR_GROUP_MEMBER_ID_MOD);
                         let member = this.dragIndex-(grp*PMGR_GROUP_MEMBER_ID_MOD);
+                        grp--; // We add 1 before multiplying by PMGR_GROUP_MEMBER_ID_MOD
                         if (grp<=this.players.length && this.players[grp].isgroup && this.players[grp].members && member<this.players[grp].members.length) {
                             this.updateGroup(this.players[grp], this.players[grp].members[member], false);
                         }

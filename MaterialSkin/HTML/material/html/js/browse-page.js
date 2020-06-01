@@ -772,47 +772,45 @@ var lmsBrowse = Vue.component("lms-browse", {
                     });
                 }
 
-                if (this.items.length>0) {
-                    if (item.id.startsWith(SEARCH_ID)) {
-                        if (this.items[0].id.startsWith("track_id:")) {
-                            this.tbarActions=[SEARCH_LIB_ACTION, ADD_ALL_ACTION, PLAY_ALL_ACTION];
-                        } else {
-                            this.tbarActions=[SEARCH_LIB_ACTION];
-                        }
-                    } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
-                        this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
-                    } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
-                        this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
-                    } else if (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command)) {
-                        if (this.current && this.current.menu) {
-                            for (var i=0, len=this.current.menu.length; i<len; ++i) {
-                                if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                                    break;
-                                }
+                if (item.id.startsWith(SEARCH_ID)) {
+                    if (this.items.length>0 && this.items[0].id.startsWith("track_id:")) {
+                        this.tbarActions=[SEARCH_LIB_ACTION, ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                    } else {
+                        this.tbarActions=[SEARCH_LIB_ACTION];
+                    }
+                } else if (SECTION_FAVORITES==this.current.section && this.current.isFavFolder) {
+                    this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
+                } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
+                    this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
+                } else if (this.items.length>0 && (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command))) {
+                    if (this.current && this.current.menu) {
+                        for (var i=0, len=this.current.menu.length; i<len; ++i) {
+                            if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
+                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                break;
                             }
                         }
+                    }
 
-                        // Select track -> More -> Album:AlbumTitle -> Tracks
-                        if (this.tbarActions.length==0 && this.current && ((this.current.actions && this.current.actions.play) || this.current.stdItem)) {
-                            this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                        }
+                    // Select track -> More -> Album:AlbumTitle -> Tracks
+                    if (this.tbarActions.length==0 && this.current && ((this.current.actions && this.current.actions.play) || this.current.stdItem)) {
+                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                    }
 
-                        // No menu actions? If first item is an audio trsck, add a PlayAll/AddAll to toolbar. This will add each item individually
-                        if (this.tbarActions.length==0 && this.items.length>1 && this.items.length<=200 && isAudioTrack(this.items[0]) && this.items[0].menu &&
-                            this.items[0].menu.length>0 && this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) &&
-                            (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
-                            this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                    // No menu actions? If first item is an audio trsck, add a PlayAll/AddAll to toolbar. This will add each item individually
+                    if (this.tbarActions.length==0 && this.items.length>1 && this.items.length<=200 && isAudioTrack(this.items[0]) && this.items[0].menu &&
+                        this.items[0].menu.length>0 && this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) &&
+                        (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
+                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
 
-                            // add-all/play-all is SLOW, but youtube allows add/play on modified version of parentID - where we make this
-                            // from removing the last part of the ID of the first item. So 3_searchTerm.0 becomes 3_searchTerm
-                            if (this.command.command[0]=="youtube" && this.items[0].params && this.items[0].params.item_id) {
-                                var parts = this.items[0].params.item_id.split(".");
-                                if (parts.length==2) {
-                                    parts.pop();
-                                    this.current.allid = "item_id:"+parts.join(".");
-                                    this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                                }
+                        // add-all/play-all is SLOW, but youtube allows add/play on modified version of parentID - where we make this
+                        // from removing the last part of the ID of the first item. So 3_searchTerm.0 becomes 3_searchTerm
+                        if (this.command.command[0]=="youtube" && this.items[0].params && this.items[0].params.item_id) {
+                            var parts = this.items[0].params.item_id.split(".");
+                            if (parts.length==2) {
+                                parts.pop();
+                                this.current.allid = "item_id:"+parts.join(".");
+                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
                             }
                         }
                     }

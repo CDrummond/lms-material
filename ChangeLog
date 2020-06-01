@@ -32,6 +32,7 @@
     (requires v0.13, or later, of Groups plugin).
 22. Add options to control ratings display in queue and now-playing. Only
     visible if 'TrackStat' is installed.
+23. Show search, and add, podcast actions even if there are no current podcasts.
 
 1.7.1
 -----

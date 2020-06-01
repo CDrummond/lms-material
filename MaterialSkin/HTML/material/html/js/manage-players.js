@@ -15,6 +15,7 @@ var PMGR_POWER_OFF_ACTION        = {cmd:"off",      icon:"power_settings_new", a
 var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
 var PMGR_SET_DEF_PLAYER_ACTION   = {cmd:"sdp",      icon:"check_box_outline_blank"};
 var PMGR_UNSET_DEF_PLAYER_ACTION = {cmd:"usdp",     icon:"check_box", active:true};
+const PMGR_GROUP_MEMBER_ID_MOD = 1000;
 
 var playerMap = {};
 
@@ -49,6 +50,20 @@ function playerSyncSort(a, b) {
     }
     var nameA = a.name.toLowerCase();
     var nameB = b.name.toLowerCase();
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+    return 0;
+}
+
+function playerIdSort(a, b) {
+    var mapA = playerMap[a];
+    var mapB = playerMap[b];
+    var nameA = mapA ? mapA.name.toLowerCase() : a;
+    var nameB = mapB ? mapB.name.toLowerCase() : b;
     if (nameA < nameB) {
         return -1;
     }
@@ -125,7 +140,11 @@ Vue.component('lms-manage-players', {
        </v-layout>
       </v-flex>
       <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0 && (!player.syncmaster || player.syncmaster.length<1)">
-       <div class="pmgr-member-list ellipsis">{{player.members | formatMembers}}</div>
+       <div class="pmgr-member-list ellipsis">
+        <template v-for="(member, idx) in player.members">
+         <obj @dragstart="dragStart((index*PMGR_GROUP_MEMBER_ID_MOD)+idx, $event)" @dragend="dragEnd()" :draggable="true" :id="'pmgr-player-'+((index*PMGR_GROUP_MEMBER_ID_MOD)+idx)" style="cursor:pointer">{{playerMap[member] ? playerMap[member].name : member}}</obj><obj>{{idx==player.members.length-1 ? "" : ", "}}</obj>
+        </template>
+       </div>
       </v-flex>
      </div>
      
@@ -586,7 +605,7 @@ Vue.component('lms-manage-players', {
             ev.dataTransfer.setDragImage(document.getElementById("pmgr-player-"+which), 0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
-            this.draggingSyncedPlayer = this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;
+            this.draggingSyncedPlayer = which>PMGR_GROUP_MEMBER_ID_MOD || this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;
         },
         dragEnd() {
             this.stopScrolling = true;
@@ -628,73 +647,49 @@ Vue.component('lms-manage-players', {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                let player = this.players[this.dragIndex];
-                let from = this.players[this.dragIndex].syncmaster;
-                if (-1==to) {
-                    let group = undefined;
-                    for (let i=0, len=this.players.length; i<len; ++i) {
-                        if (this.players[i].id==from) {
-                            group = this.players[i];
-                            break;
+            if (this.dragIndex!=undefined && to!=this.dragIndex && to<PMGR_GROUP_MEMBER_ID_MOD) {
+                if (this.dragIndex>=PMGR_GROUP_MEMBER_ID_MOD) {
+                    // Dragging a group member out of group
+                    if (-1==to) {
+                        let grp = Math.floor(this.dragIndex/PMGR_GROUP_MEMBER_ID_MOD);
+                        let member = this.dragIndex-(grp*PMGR_GROUP_MEMBER_ID_MOD);
+                        if (grp<=this.players.length && this.players[grp].isgroup && this.players[grp].members && member<this.players[grp].members.length) {
+                            this.updateGroup(this.players[grp], this.players[grp].members[member], false);
                         }
                     }
-                    lmsCommand(player.id, ["sync", "-"]).then(({data}) => {
-                        bus.$emit('refreshStatus', player.id);
-                        bus.$emit('refreshStatus', from);
-
-                        if (undefined!=group) {
-                            lmsCommand(group.id, ["playergroup", 0, 255]).then(({data}) => {
-                                let members=[];
-                                if (data && data.result && data.result.players_loop) {
-                                    for (let i=0, loop=data.result.players_loop, len=loop.length; i<len; ++i) {
-                                        if (loop[i].id!=player.id) {
-                                            members.push(loop[i].id);
-                                        }
-                                    }
-                                }
-                                lmsCommand("", ['playergroups', 'update', 'id:'+group.id, "members:"+(members.length>0 ? members.join(",") : "-")]).then(({data}) => {
-                                    bus.$emit('refreshServerStatus', 1000);
-                                    bus.$emit('showMessage', i18n("Removed '%1' from '%2'", player.name, group.name));
-                                });
-                            });
-                        }
-                    });
                 } else {
-                    let target = this.players[to];
-                    if (target.isgroup) {
-                        lmsCommand(target.id, ["playergroup", 0, 255]).then(({data}) => {
-                            let updateGroup=true;
-                            let members=[player.id];
-                            if (data && data.result && data.result.players_loop) {
-                                for (let i=0, loop=data.result.players_loop, len=loop.length; i<len; ++i) {
-                                    if (loop[i].id==player.id) {
-                                        updateGroup=false;
-                                        break;
-                                    }
-                                    members.push(loop[i].id);
-                                }
+                    let playerId = this.players[this.dragIndex].id;
+                    let from = this.players[this.dragIndex].syncmaster;
+                    if (-1==to) {
+                        // Remove player
+                        let group = undefined;
+                        for (let i=0, len=this.players.length; i<len; ++i) {
+                            if (this.players[i].id==from) {
+                                group = this.players[i];
+                                break;
                             }
-                            if (updateGroup) {
-                                lmsCommand("", ['playergroups', 'update', 'id:'+target.id, "members:"+(members.length>0 ? members.join(",") : "-")]).then(({data}) => {
-                                    bus.$emit('refreshServerStatus', 1000);
-                                    bus.$emit('showMessage', i18n("Added '%1' to '%2'", player.name, target.name));
-                                    lmsCommand(target.id, ["material-skin-group", "set-modes"]);
-                                });
-                            } else {
-                                bus.$emit('showMessage', i18n("'%1' is already a member of '%2'", player.name, target.name));
-                            }
+                        }
+                        lmsCommand(playerId, ["sync", "-"]).then(({data}) => {
+                            bus.$emit('refreshStatus', playerId);
+                            bus.$emit('refreshStatus', from);
+                            this.updateGroup(group, playerId, false);
                         });
                     } else {
-                        let dest = target.syncmaster ? target.syncmaster : target.id;
-                        if (dest!=from) {
-                            lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
-                                bus.$emit('refreshStatus', player.id);
-                                if (undefined!=from) {
-                                    bus.$emit('refreshStatus', from);
-                                }
-                                bus.$emit('refreshStatus', dest);
-                            });
+                        // Add player
+                        let target = this.players[to];
+                        if (target.isgroup) {
+                            this.updateGroup(target, playerId, true);
+                        } else {
+                            let dest = target.syncmaster ? target.syncmaster : target.id;
+                            if (dest!=from) {
+                                lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
+                                    bus.$emit('refreshStatus', playerId);
+                                    if (undefined!=from) {
+                                        bus.$emit('refreshStatus', from);
+                                    }
+                                    bus.$emit('refreshStatus', dest);
+                                });
+                            }
                         }
                     }
                 }
@@ -703,6 +698,32 @@ Vue.component('lms-manage-players', {
         },
         doCustomAction(action, player) {
             performCustomAction(this, action, player);
+        },
+        updateGroup(group, player, addPlayer) {
+            if (undefined!=group) {
+                let members = [];
+                let found = false;
+                for (let i=0, len=group.members.length; i<len; ++i) {
+                    if (player==group.members[i]) {
+                        found=true;
+                        if (addPlayer) {
+                            return;
+                        }
+                    } else {
+                        members.push(group.members[i]);
+                    }
+                }
+                if (addPlayer) {
+                    members.push(player);
+                } else if (!found) {
+                    return;
+                }
+                members.sort(playerIdSort);
+                lmsCommand("", ['playergroups', 'update', 'id:'+group.id, "members:"+members]).then(({data}) => {
+                    bus.$emit('refreshServerStatus', 1000);
+                    group.members=members;
+                });
+            }
         }
     },
     computed: {
@@ -738,17 +759,6 @@ Vue.component('lms-manage-players', {
     filters: {
         svgIcon: function (name, dark, active) {
             return "/material/svg/"+name+"?c="+(active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        },
-        formatMembers: function(members) {
-            let names=[];
-            for (let i=0, len=members.length; i<len; ++i) {
-                let entry = playerMap[members[i]];
-                if (entry) {
-                    names.push(entry.name);
-                }
-            }
-            names.sort(function (a, b) { return a.toLowerCase().localeCompare(b.toLowerCase());});
-            return names.join(", ");
         }
     },
     watch: {

@@ -719,14 +719,16 @@ Vue.component('lms-manage-players', {
             if (undefined!=group) {
                 let members = [];
                 let found = false;
-                for (let i=0, len=group.members.length; i<len; ++i) {
-                    if (player==group.members[i]) {
-                        found=true;
-                        if (addPlayer) {
-                            return;
+                if (group.members) {
+                    for (let i=0, len=group.members.length; i<len; ++i) {
+                        if (player==group.members[i]) {
+                            found=true;
+                            if (addPlayer) {
+                                return;
+                            }
+                        } else {
+                            members.push(group.members[i]);
                         }
-                    } else {
-                        members.push(group.members[i]);
                     }
                 }
                 if (addPlayer) {

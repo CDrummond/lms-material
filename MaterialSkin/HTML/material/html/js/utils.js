@@ -578,10 +578,13 @@ function shouldAddLibraryId(command) {
     return false;
 }
 
+
+
+
 // Determine if an item is a 'text' item - i.e. cannot browse into
 function isTextItem(item) {
     return !item.isPinned && !item.weblink &&
-           ( "text"==item.type || "redirect"==item.type ||
+           ( "text"==item.type || ("redirect"==item.type && item.actions && item.actions.go && item.actions.go.nextWindow) ||
              // if group is not undefined, its probably a pinned app
              (undefined==item.type && undefined==item.group && (!item.menuActions || item.menuActions.length<1) && /* !item.params && Dynamic playlists have params? */
               (!item.command || (item.command[0]!="browsejive" && (item.command.length<2 || item.command[1]!="browsejive")))));

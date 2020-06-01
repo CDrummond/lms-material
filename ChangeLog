@@ -15,26 +15,22 @@
  9. If invoke browse from queue, or now-playing, in mobile layout, then revert
     to this page when navigating back.
 10. Show changes in plugin info dialog.
-11. Press, not long-press, on queue nav whilst in queue view scrolls to
-    current.
+11. Press, not long-press, on queue nav whilst in queue view scrolls to current.
 12. Adjust now-playing landscape text size.
 13. Check now-playing landscape mode on all resizes, not just width.
 14. Don't attempt to animate current queue element if already animating it.
 15. Hide 'CD Player' and 'Remote Libraries' from 'Settings' dialog 'Home screen
     items' selection unless these are enabled in LMS.
 16. Allow to add, and remove, players from group via drag'n'drop.
-17. When click 'Change Mix Mode', or 'Create Mix from Playing', in 'More' menu
-    then show message and go back.
-18. If clicked action's nextwindow is 'nowPlaying' then switch to now-playing
+17. If clicked action's nextwindow is 'nowPlaying' then switch to now-playing
     view on mobile layout.
-19. Fix adding a selection of MusicIP mix tracks to queue.
-20. Add czech translation - thanks to Kucheek
-21. Remove 'Play this mix' entry in MusicIP mix resutlts, instead use standard
+18. Fix adding a selection of MusicIP mix tracks to queue.
+19. Add czech translation - thanks to Kucheek
+20. Remove 'Play this mix' entry in MusicIP mix results, instead use standard
     add/play buttons in subtoolbar.
-22. Display list of group members under group in 'Manage players' dialog.
-23. Support adding, and removing, group members via drag'n'dop in 'Manage
-    players' dialog.
-24. Add options to control ratings display in queue and now-playing. Only
+21. Display list of group members under group in 'Manage players' dialog
+    (requires v0.13, or later, of Groups plugin).
+22. Add options to control ratings display in queue and now-playing. Only
     visible if 'TrackStat' is installed.
 
 1.7.1

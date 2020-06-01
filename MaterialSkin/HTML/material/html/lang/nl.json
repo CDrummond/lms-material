@@ -449,11 +449,10 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"'%1' is already a member of '%2'":"",
-"Added '%1' to '%2'":"",
 "Changes":"",
+"Display rating stars.":"",
 "Drop here to remove from group":"",
 "Go to album":"",
 "Go to artist":"",
-"Removed '%1' from '%2'":""
+"Show rating":""
 }

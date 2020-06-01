@@ -225,14 +225,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+    <v-list-tile v-if="ratingsSupport">
+     <v-list-tile-content @click="showRating = !showRating" class="switch-label">
+      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
+     <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="ratingsSupport"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
@@ -264,6 +264,14 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="nowPlayingClock"></v-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-list-tile>
+     <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
@@ -286,14 +294,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+    <v-list-tile v-if="ratingsSupport">
+     <v-list-tile-content @click="queueShowRating = !queueShowRating" class="switch-label">
+      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
+     <v-list-tile-action><v-switch v-model="queueShowRating"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="ratingsSupport"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
@@ -311,6 +319,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
     </v-list-tile>
+
+    <v-list-tile>
+     <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
     <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
@@ -412,7 +429,9 @@ Vue.component('lms-ui-settings', {
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
             showScale: !queryParams.hide.has('scale'),
             appSettings: queryParams.appSettings,
-            serverName: ""
+            serverName: "",
+            showRating: true,
+            queueShowRating: true
         }
     },
     computed: {
@@ -424,6 +443,9 @@ Vue.component('lms-ui-settings', {
         },
         displayMenuIcons() {
             return this.$store.state.menuIcons
+        },
+        ratingsSupport() {
+            return this.$store.state.ratingsSupport
         }
     },
     mounted() {
@@ -551,6 +573,8 @@ Vue.component('lms-ui-settings', {
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
+            this.showRating = this.$store.state.showRating;
+            this.queueShowRating = this.$store.state.queueShowRating;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
@@ -615,7 +639,9 @@ Vue.component('lms-ui-settings', {
                                                   hidden:this.hiddenItems(),
                                                   skipSeconds:this.skipSeconds,
                                                   disabledBrowseModes:this.disabledBrowseModes(),
-                                                  screensaver:this.screensaver
+                                                  screensaver:this.screensaver,
+                                                  showRating:this.showRating,
+                                                  queueShowRating:this.queueShowRating
                                                 } );
 
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
@@ -660,7 +686,9 @@ Vue.component('lms-ui-settings', {
                                      hidden:Array.from(this.hiddenItems()),
                                      skipSeconds:this.skipSeconds,
                                      disabledBrowseModes:Array.from(this.disabledBrowseModes()),
-                                     screensaver:this.screensaver
+                                     screensaver:this.screensaver,
+                                     showRating:this.showRating,
+                                     queueShowRating:this.queueShowRating
                                    };
                     for (var key in window.localStorage) {
                         if (key.startsWith(LS_PREFIX+ALBUM_SORT_KEY) || key.startsWith(LS_PREFIX+ARTIST_ALBUM_SORT_KEY)) {

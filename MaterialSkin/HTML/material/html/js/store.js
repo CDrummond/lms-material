@@ -150,6 +150,14 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('screensaver', state.screensaver);
         bus.$emit('screensaverDisplayChanged');
     }
+    if (undefined!=val.showRating && state.showRating!=val.showRating) {
+        state.showRating = val.showRating;
+        setLocalStorageVal('showRating', state.showRating);
+    }
+    if (undefined!=val.queueShowRating && state.queueShowRating!=val.queueShowRating) {
+        state.queueShowRating = val.queueShowRating;
+        setLocalStorageVal('queueShowRating', state.queueShowRating);
+    }
     if (undefined!=val.disabledBrowseModes) {
         var diff = new Set([...val.disabledBrowseModes].filter(x => !state.disabledBrowseModes.has(x)));
         var diff2 = new Set([...state.disabledBrowseModes].filter(x => !val.disabledBrowseModes.has(x)));
@@ -224,6 +232,8 @@ const store = new Vuex.Store({
         nowPlayingClock: false,
         ratingsSupport: false,
         maxRating: 5,
+        showRating: true,
+        queueShowRating: true,
         showPlayerMenuEntry: false,
         lsAndNotif:true,
         page:'browse',
@@ -405,6 +415,8 @@ const store = new Vuex.Store({
             state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
+            state.showRating = getLocalStorageBool('showRating', state.showRating);
+            state.queueShowRating = getLocalStorageBool('queueShowRating', state.queueShowRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             state.lsAndNotif = convertLsAndNotif(getLocalStorageVal('lsAndNotif', state.lsAndNotif));
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
@@ -520,7 +532,9 @@ const store = new Vuex.Store({
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
-                                     screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver) };
+                                     screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
+                                     showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
+                                     queueShowRating: getLocalStorageBool('queueShowRating', undefined==prefs.queueShowRating ? state.queueShowRating : prefs.queueShowRating) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

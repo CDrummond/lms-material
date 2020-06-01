@@ -34,6 +34,8 @@
 22. Display list of group members under group in 'Manage players' dialog.
 23. Support adding, and removing, group members via drag'n'dop in 'Manage
     players' dialog.
+24. Add options to control ratings display in queue and now-playing. Only
+    visible if 'TrackStat' is installed.
 
 1.7.1
 -----

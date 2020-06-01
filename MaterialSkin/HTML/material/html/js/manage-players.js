@@ -670,7 +670,7 @@ Vue.component('lms-manage-players', {
                         let grp = Math.floor(this.dragIndex/PMGR_GROUP_MEMBER_ID_MOD);
                         let member = this.dragIndex-(grp*PMGR_GROUP_MEMBER_ID_MOD);
                         grp--; // We add 1 before multiplying by PMGR_GROUP_MEMBER_ID_MOD
-                        if (grp<=this.players.length && this.players[grp].isgroup && this.players[grp].members && member<this.players[grp].members.length) {
+                        if (grp>=0 && member>=0 && grp<=this.players.length && this.players[grp].isgroup && this.players[grp].members && member<this.players[grp].members.length) {
                             this.updateGroup(this.players[grp], this.players[grp].members[member], false);
                         }
                     }
@@ -718,31 +718,49 @@ Vue.component('lms-manage-players', {
         },
         updateGroup(group, player, addPlayer) {
             if (undefined!=group) {
-                let members = [];
-                let found = false;
                 if (group.members) {
-                    for (let i=0, len=group.members.length; i<len; ++i) {
-                        if (player==group.members[i]) {
-                            found=true;
-                            if (addPlayer) {
-                                return;
+                    this.updateGroupMembers(group, group.members, player, addPlayer);
+                } else {
+                    // Older (pre 0.13) Group players plugin? Query group for member list...
+                    lmsCommand(group.id, ["playergroup", 0, 255]).then(({data}) => {
+                        if (data && data.result) {
+                            let members = [];
+                            if (data.result.players_loop) {
+                                for (let i=0, loop=data.result.players_loop, len=loop.length; i<len; ++i) {
+                                    members.push(loop[i].id);
+                                }
                             }
-                        } else {
-                            members.push(group.members[i]);
+                            this.updateGroupMembers(group, members, player, addPlayer);
                         }
-                    }
+                    });
                 }
-                if (addPlayer) {
-                    members.push(player);
-                } else if (!found) {
-                    return;
-                }
-                members.sort(playerIdSort);
-                lmsCommand("", ['playergroups', 'update', 'id:'+group.id, "members:"+members]).then(({data}) => {
-                    bus.$emit('refreshServerStatus', 1000);
-                    group.members=members;
-                });
             }
+        },
+        updateGroupMembers(group, currentMembers, player, addPlayer) {
+            let members = [];
+            let found = false;
+            for (let i=0, len=currentMembers.length; i<len; ++i) {
+                if (player==currentMembers[i]) {
+                    found=true;
+                    if (addPlayer) {
+                        return;
+                    }
+                } else {
+                    members.push(currentMembers[i]);
+                }
+            }
+            if (addPlayer) {
+                members.push(player);
+            } else if (!found) {
+                return;
+            }
+            members.sort(playerIdSort);
+            lmsCommand("", ['playergroups', 'update', 'id:'+group.id, "members:"+members]).then(({data}) => {
+                bus.$emit('refreshServerStatus', 1000);
+                if (undefined!=group.members){
+                    group.members=members;
+                }
+            });
         }
     },
     computed: {

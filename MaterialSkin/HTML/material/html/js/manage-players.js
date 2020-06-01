@@ -730,7 +730,7 @@ Vue.component('lms-manage-players', {
             performCustomAction(this, action, player);
         },
         updateGroup(group, player, addPlayer) {
-            if (undefined!=group) {
+            if (undefined!=group && group.isgroup) {
                 if (group.members) {
                     this.updateGroupMembers(group, group.members, player, addPlayer);
                 } else {

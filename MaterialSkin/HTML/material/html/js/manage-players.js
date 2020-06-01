@@ -618,15 +618,28 @@ Vue.component('lms-manage-players', {
             this.dropId=undefined;
             if (undefined!=ev.target && this.dragIndex<PMGR_GROUP_MEMBER_ID_MOD) {
                 let elem = ev.target;
-                for (let level=0; level<5 & undefined!=elem && undefined==this.dropId; ++level) {
+                let dropId = undefined;
+                for (let level=0; level<5 & undefined!=elem && undefined==dropId; ++level) {
                     if (elem.id) {
                         if (elem.id.startsWith("pmgr-")) {
-                            this.dropId=elem.id
+                            dropId=elem.id
                         } else if (elem.id.startsWith("tile-pmgr-")) {
-                            this.dropId=elem.id.substring(5);
+                            dropId=elem.id.substring(5);
                         }
                     }
                     elem=elem.parentNode;
+                }
+                if (undefined!=dropId) {
+                    let index=parseInt(dropId.split('-').slice(-1)[0]);
+                    if (index>=0 && index<this.players.length) {
+                        let player = this.players[index];
+                        let dragPlayer = this.players[this.dragIndex];
+                        let playerMaster = player.syncmaster ? player.syncmaster : "A";
+                        let dragPlayerMaster = dragPlayer.syncmaster ? dragPlayer.syncmaster : "B";
+                        if (player.id!=dragPlayer.id && player.id!=dragPlayerMaster && playerMaster!=dragPlayerMaster) {
+                            this.dropId=dropId;
+                        }
+                    }
                 }
             }
             // Drag over item at top/bottom of list to start scrolling

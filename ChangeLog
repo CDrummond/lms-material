@@ -32,6 +32,8 @@
 21. Remove 'Play this mix' entry in MusicIP mix resutlts, instead use standard
     add/play buttons in subtoolbar.
 22. Display list of group members under group in 'Manage players' dialog.
+23. Support adding, and removing, group members via drag'n'dop in 'Manage
+    players' dialog.
 
 1.7.1
 -----

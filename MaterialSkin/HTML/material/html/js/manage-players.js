@@ -548,7 +548,10 @@ Vue.component('lms-manage-players', {
                 player.track="...";
                 player.hasTrack = false;
             }
-            
+
+            if (player.isgroup && player.members) {
+                player.members.sort(playerIdSort);
+            }
             var found = false;
             var prevSlaves = undefined;
             for (var i=0, len=this.players.length; i<len; ++i) {
@@ -731,49 +734,23 @@ Vue.component('lms-manage-players', {
         },
         updateGroup(group, player, addPlayer) {
             if (undefined!=group && group.isgroup) {
-                if (group.members) {
-                    this.updateGroupMembers(group, group.members, player, addPlayer);
-                } else {
-                    // Older (pre 0.13) Group players plugin? Query group for member list...
-                    lmsCommand(group.id, ["playergroup", 0, 255]).then(({data}) => {
-                        if (data && data.result) {
-                            let members = [];
-                            if (data.result.players_loop) {
-                                for (let i=0, loop=data.result.players_loop, len=loop.length; i<len; ++i) {
-                                    members.push(loop[i].id);
-                                }
-                            }
-                            this.updateGroupMembers(group, members, player, addPlayer);
-                        }
-                    });
+                let index = group.members ? group.members.indexOf(player) : -1;
+                if (addPlayer && group.members && index>=0) {
+                    return;
                 }
-            }
-        },
-        updateGroupMembers(group, currentMembers, player, addPlayer) {
-            let members = [];
-            let found = false;
-            for (let i=0, len=currentMembers.length; i<len; ++i) {
-                if (player==currentMembers[i]) {
-                    found=true;
-                    if (addPlayer) {
-                        return;
+                lmsCommand("", ['playergroups', 'update', 'id:'+group.id, 'members:'+(addPlayer ? '+' : '-')+player]).then(({data}) => {
+                    bus.$emit('refreshServerStatus', 1000);
+                    if (undefined==group.members) {
+                        group.members=[];
                     }
-                } else {
-                    members.push(currentMembers[i]);
-                }
+                    if (addPlayer) {
+                        group.members.push(player);
+                    } else {
+                        group.members.splice(index, 1);
+                        group.members.sort(playerIdSort);
+                    }
+                });
             }
-            if (addPlayer) {
-                members.push(player);
-            } else if (!found) {
-                return;
-            }
-            members.sort(playerIdSort);
-            lmsCommand("", ['playergroups', 'update', 'id:'+group.id, "members:"+members]).then(({data}) => {
-                bus.$emit('refreshServerStatus', 1000);
-                if (undefined!=group.members){
-                    group.members=members;
-                }
-            });
         }
     },
     computed: {

@@ -871,10 +871,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 @media (max-aspect-ratio: 4/7) and (min-height:750px) {
  .np-text:not(.np-text-landscape) {
-  font-size:120%;
+  font-size:100%;
  }
  .np-title:not(.np-text-landscape) {
-  font-size:150%;
+  font-size:135%;
  }
  :root {
   --thin-portrait-adjust:16px;
@@ -891,7 +891,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 @media only screen and (max-height:700px) {
-. np-title-landscape {
+ .np-title-landscape {
    font-size:250% !important;
   }
  .np-text-landscape {

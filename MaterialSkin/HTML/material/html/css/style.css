@@ -227,7 +227,7 @@ div.v-subheader {
 }
 
 .theme--dark.v-divider--vertical, .theme--light.v-divider--vertical {
- border-left:1px solid :var(--list-item-border-color) !important;
+ border-left:1px solid var(--list-item-border-color) !important;
 }
 
 /* Stop horizontal scrollbar in full screen dialogs */
@@ -1887,5 +1887,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .highlight-drop {
  border-radius:4px;
  background-color:var(--pq-current-color);
+}
+
+.highlight-drag {
+ border-radius:4px;
+ background-color:var(--list-item-border-color);
 }
 

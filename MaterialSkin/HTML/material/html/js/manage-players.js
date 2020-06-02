@@ -107,7 +107,7 @@ Vue.component('lms-manage-players', {
       <v-flex xs12 v-if="player.isgroup && index==firstGroupIndex" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
-        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index)}" :id="'tile-pmgr-player-'+index">
+        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
          <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
@@ -202,7 +202,8 @@ Vue.component('lms-manage-players', {
             menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
             trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined, drop:undefined },
             draggingSyncedPlayer: false,
-            dropId: undefined
+            dropId: undefined,
+            dragIndex: undefined
         }
     },
     mounted() {
@@ -613,7 +614,10 @@ Vue.component('lms-manage-players', {
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', "player:"+which);
-            ev.dataTransfer.setDragImage(document.getElementById("pmgr-player-"+which), 0, 0);
+            ev.dataTransfer.setDragImage(which<PMGR_GROUP_MEMBER_ID_MOD
+                                            ? document.getElementById("pmgr-player-"+which).parentNode.parentNode.parentNode
+                                            : document.getElementById("pmgr-player-"+which),
+                                         0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
             this.draggingSyncedPlayer = which>PMGR_GROUP_MEMBER_ID_MOD || this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;

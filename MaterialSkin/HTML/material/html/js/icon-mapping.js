@@ -101,6 +101,9 @@ function mapIconType(item, app, type) {
     if (undefined==lmsIcon || (typeof lmsIcon !== 'string')) {
         return false;
     }
+    if (lmsIcon.indexOf("imageproxy/")>=0) {
+        return false;
+    }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {
         if (lmsIcon.endsWith(key)) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;

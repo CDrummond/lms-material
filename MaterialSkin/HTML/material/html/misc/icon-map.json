@@ -70,7 +70,9 @@
     "/mp3tunes.png":{"svg":"file-music-outline"},
     "/iheartradio.png":{"svg":"iheartradio"},
     "/radionet.jpg":{"svg":"radionet"},
-    "/subsonic.png":{"svg":"sub"}
+    "/subsonic.png":{"svg":"sub"},
+    "/WiMP/html/images/icon.png":{"svg":"tidal"},
+    "/Deezer/html/images/icon.png":{"svg":"deezer"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

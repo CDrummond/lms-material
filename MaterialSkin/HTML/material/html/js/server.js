@@ -468,7 +468,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             logCometdMessage("PLAYERPREFS ("+playerId+")", data);
             if (data[1]=="plugin.dontstopthemusic" && data[2]=="provider") {
-                bus.$emit("prefset", data[1]+":"+data[2], data[3]);
+                bus.$emit("prefset", data[1]+":"+data[2], data[3], playerId);
             } else if (data[1]=="plugin.material-skin") {
                 if (data[2]=="composergenres") {
                     var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
@@ -484,11 +484,11 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         getPlayerPrefs() {
-            bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0); // reset
+            bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0, this.$store.state.player.id); // reset
             if (this.$store.state.dstmPlugin && this.$store.state.player) {
                 lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2) {
-                        bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2);
+                        bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2, this.$store.state.player.id);
                     }
                 });
             }

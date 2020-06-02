@@ -538,8 +538,8 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('playerListChanged', function() {
             this.updateSettingsMenu();
         }.bind(this));
-        bus.$on('prefset', function(pref, value) {
-            if ("plugin.dontstopthemusic:provider"==pref) {
+        bus.$on('prefset', function(pref, value, player) {
+            if ("plugin.dontstopthemusic:provider"==pref && player==this.$store.state.player.id) {
                 this.dstm = (""+value)!="0";
             }
         }.bind(this));

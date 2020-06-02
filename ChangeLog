@@ -33,6 +33,8 @@
 22. Add options to control ratings display in queue and now-playing. Only
     visible if 'TrackStat' is installed.
 23. Show search, and add, podcast actions even if there are no current podcasts.
+24. When DSTM is changed in player settings dialog, only update icon in queue
+    and now-playing if its the current player.
 
 1.7.1
 -----

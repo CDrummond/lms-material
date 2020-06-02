@@ -21,7 +21,8 @@
 14. Don't attempt to animate current queue element if already animating it.
 15. Hide 'CD Player' and 'Remote Libraries' from 'Settings' dialog 'Home screen
     items' selection unless these are enabled in LMS.
-16. Allow to add, and remove, players from group via drag'n'drop.
+16. Allow to add, and remove, players from group via drag'n'drop. (Requires
+    v0.13.1, or later, of Groups plugin)
 17. If clicked action's nextwindow is 'nowPlaying' then switch to now-playing
     view on mobile layout.
 18. Fix adding a selection of MusicIP mix tracks to queue.

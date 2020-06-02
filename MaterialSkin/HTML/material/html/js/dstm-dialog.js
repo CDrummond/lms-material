@@ -72,9 +72,7 @@ Vue.component('lms-dstm-dialog', {
             this.show=false;
         },
         setDstm(value) {
-            lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {
-                bus.$emit("prefset", "plugin.dontstopthemusic:provider", value, this.$store.state.player.id);
-            });
+            bus.$emit("dstm", this.$store.state.player.id, value);
             this.show=false;
         },
         i18n(str, arg) {

@@ -796,6 +796,32 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
 
+        // Set DSTM. If player is synced, then set for all others in sync group...
+        bus.$on('dstm', function(player, value) {
+            lmsCommand(player, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : "")]).then(({data}) => {
+                if (data && data.result) {
+                    if (data.result.sync_master && data.result.sync_master!=player) {
+                        lmsCommand(data.result.sync_master, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {
+                            bus.$emit("prefset", "plugin.dontstopthemusic:provider", value, data.result.sync_master);
+                        });
+                    }
+                    if (data.result.sync_slaves) {
+                        for (let i=0, loop=data.result.sync_slaves.split(","), len=loop.length; i<len; ++i) {
+                            if (loop[i]!=player && loop[i]!=data.result.sync_master) {
+                                lmsCommand(loop[i], ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {
+                                    bus.$emit("prefset", "plugin.dontstopthemusic:provider", value, loop[i]);
+                                });
+                            }
+                        }
+                    }
+                    this.handlePlayerStatus(player, data.result, true);
+                }
+                lmsCommand(player, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {
+                    bus.$emit("prefset", "plugin.dontstopthemusic:provider", value, player);
+                });
+            });
+        }.bind(this));
+
         // Add event listners for focus change, so that we can do an immediate reconect
         var prop = getHiddenProp();
         if (prop) {

@@ -475,9 +475,7 @@ Vue.component('lms-player-settings', {
             this.show=false;
             this.showMenu = false;
             if (this.dstmItems.length>1) {
-                lmsCommand(this.playerId, ["playerpref", "plugin.dontstopthemusic:provider", this.dstm]).then(({data}) => {
-                    bus.$emit("prefset", "plugin.dontstopthemusic:provider", this.dstm, this.playerId);
-                });
+                bus.$emit("dstm", this.playerId, this.dstm);
             }
             lmsCommand(this.playerId, ["material-skin-client", "set-lib", "id:"+this.library]);
             lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);

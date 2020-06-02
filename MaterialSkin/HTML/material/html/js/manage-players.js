@@ -211,6 +211,12 @@ Vue.component('lms-manage-players', {
             this.show = true;
             this.openDialogs = 0;
 
+            if (this.$store.state.players) {
+                for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
+                    playerMap[loop[i].id]={name:loop[i].name, isgroup:loop[i].isgroup};
+                }
+            }
+
             // Check to see if we can manage groups...
             this.manageGroups = getLocalStorageBool('manageGroups', false);
             lmsCommand("", ["can", "playergroups", "items", "?"]).then(({data}) => {

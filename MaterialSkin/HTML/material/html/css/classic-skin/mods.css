@@ -396,3 +396,12 @@ img[src*="bar_small_full.gif"] {
  height:10px !important;
  margin-right:2px;
 }
+
+div#Info0, div#Info1, div#Info2, div#Info3, div#Info4, div#Info5, div#Info6, div#Info7, div#Info8, div#Info9, div#Info10, div#Info11, div#Info12, div#Info13, div#Info14 {
+ margin-left:6px;
+ opacity:0.7;
+}
+
+.progressItem {
+ margin-bottom:-8px;
+}

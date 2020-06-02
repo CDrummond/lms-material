@@ -745,9 +745,9 @@ Vue.component('lms-manage-players', {
                     }
                     if (addPlayer) {
                         group.members.push(player);
+                        group.members.sort(playerIdSort);
                     } else {
                         group.members.splice(index, 1);
-                        group.members.sort(playerIdSort);
                     }
                 });
             }

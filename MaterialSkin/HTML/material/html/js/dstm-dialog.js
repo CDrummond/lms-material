@@ -48,11 +48,11 @@ Vue.component('lms-dstm-dialog', {
                 lmsCommand(this.$store.state.player.id, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {
                         this.items=[];
-                        data.result.item_loop.forEach(i => {
-                            if (i.actions && i.actions.do && i.actions.do.cmd) {
-                                this.items.push({key: i.actions.do.cmd[2], label:i.text, selected:1===i.radio});
+                        for (let i=0, loop=data.result.item_loop, len=loop.length; i<len; ++i) {
+                            if (loop[i].actions && loop[i].actions.do && loop[i].actions.do.cmd) {
+                                this.items.push({key: loop[i].actions.do.cmd[2], label:loop[i].text, selected:1===loop[i].radio});
                             }
-                        });
+                        }
                         this.show=true;
                     }
                 });

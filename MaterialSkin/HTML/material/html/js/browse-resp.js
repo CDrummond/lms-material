@@ -439,9 +439,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.canUseGrid = false;
                     }
                 }
-                if (isMusicIpMix && resp.items.length>1 && resp.items[1].id.startsWith("track_id")) {
+                if (isMusicIpMix) {
                     resp.items.shift();
-                    resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+                    resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
                 }

@@ -3,6 +3,7 @@
 1. Fix multi-disc handling breaking queue display.
 2. Fix starting track when selecting 'Play album from track' on a multi-cd album
    where LMS is set to group discs.
+3. Remove 'Play this mix' item even if there are no tracks for mix.
 
 1.8.0
 -----

@@ -169,7 +169,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                 let i = loop[idx];
                 let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
-                    title = (i.disccount && i.disc && i.disccount>1 ? i.disc+"." : "")+(i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
+                    title = formatTrackNum(i)+SEPARATOR+title;
                 }
 
                 let duration = undefined==i.duration ? undefined : parseInt(i.duration);
@@ -424,7 +424,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     var i = playerStatus.current;
                     var title = i.title;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
-                        title = (i.disccount && i.disc && i.disccount>1 ? i.disc+"." : "")+(i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
+                        title = formatTrackNum(i)+SEPARATOR+title;
                     }
                     if (this.$store.state.ratingsSupport && this.$store.state.queueShowRating && undefined!=i.rating) {
                         title=ratingString(title, i.rating);

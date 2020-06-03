@@ -419,8 +419,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 trackChanged = true;
             }
             let disc = playerStatus.current.disccount>1 ? playerStatus.current.disc : 0;
-            if (disc!=this.playerStatus.current.disc) {
+            if (disc!=this.playerStatus.current.disc || playerStatus.current.disccount!=this.playerStatus.current.disccount) {
                 this.playerStatus.current.disc = disc;
+                this.playerStatus.current.disccount = playerStatus.current.disccount;
                 trackChanged = true;
             }
             if (playerStatus.will_sleep_in!=this.playerStatus.sleepTimer) {
@@ -1290,7 +1291,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         title() {
             if (this.$store.state.nowPlayingTrackNum && this.playerStatus.current.tracknum) {
-                return (this.playerStatus.current.disc>0 ? this.playerStatus.current.disc+"." : "")+(this.playerStatus.current.tracknum>9 ? this.playerStatus.current.tracknum : ("0" + this.playerStatus.current.tracknum))+SEPARATOR+this.playerStatus.current.title;
+                return formatTrackNum(this.playerStatus.current)+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
         },

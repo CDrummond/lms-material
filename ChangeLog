@@ -37,6 +37,7 @@
 24. When DSTM is changed in player settings dialog, only update icon in queue
     and now-playing if its the current player.
 25. When changing DSTM, if player is in a sync group then update all members.
+26. Fix display of track numbers when number in LMS is already prefixed with a 0
 
 1.7.1
 -----

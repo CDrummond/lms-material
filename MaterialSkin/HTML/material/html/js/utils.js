@@ -898,6 +898,6 @@ function confirm(obj, prompt, buttons) {
 
 function formatTrackNum(item) {
     let t = parseInt(item.tracknum);
-    let d = item.disccount && item.disc && parseInt(item.disccount)>1 ? parseInt(i.disc) : undefined;
+    let d = item.disccount && item.disc && parseInt(item.disccount)>1 ? parseInt(item.disc) : undefined;
     return (undefined==d ? "" : (d+SEPARATOR)) + (t>9 ? t : ("0" + t));
 }

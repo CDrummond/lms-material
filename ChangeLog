@@ -1,3 +1,7 @@
+1.8.1
+-----
+1. Fix multi-disc handling breaking queue display.
+
 1.8.0
 -----
  1. Set OpenFrame default icon.

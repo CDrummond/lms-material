@@ -1361,6 +1361,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (RATING_ACTION==act) {
                 bus.$emit('dlg.open', 'rating', [item.id], item.rating);
             } else if (PLAY_ALBUM_ACTION==act) {
+                if (item.filter) { // From multi-disc, so need to adjust index
+                    for (var i=0, len=this.items.length; i<index; ++i) {
+                        if (this.items[i].header) {
+                            index--;
+                        }
+                    }
+                }
                 var command = this.buildFullCommand(this.current, PLAY_ACTION);
                 command.command.push("play_index:"+index);
                 lmsCommand(this.playerId(), command.command).then(({data}) => {
@@ -1372,7 +1379,25 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }).catch(err => {
                     logAndShowError(err, undefined, command.command);
                 });
-            } else if (SEARCH_PODCAST_ACTION==act) {
+            } /*else if (PLAY_DISC_ACTION==act) {
+                // TODO: Need to re-add 'index' to doList if enable this action
+                var itemList = [];
+                var index = undefined;
+                for (var i=0, len=this.items.length; i<len; ++i) {
+                    if (this.items[i].filter==item.filter) {
+                        if (!this.items[i].header) {
+                            itemList.push(this.items[i]);
+                            if (index==undefined && this.items[i].id==item.id) {
+                                index=i-1; // Skip header
+                            }
+                        }
+                    } else if (this.items[i].header && itemList.length>0) {
+                        break;
+                    }
+                }
+                this.doList(itemList, PLAY_ACTION, index);
+                bus.$emit('showMessage', i18n("Adding tracks..."));
+            }*/ else if (SEARCH_PODCAST_ACTION==act) {
                 bus.$emit('dlg.open', 'podcastsearch');
             } else if (ADD_PODCAST_ACTION==act) {
                 if (item.isPodcast) {
@@ -2414,7 +2439,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.doList(itemList, act);
             this.clearSelection();
         },
-        doList(list, act) {
+        doList(list, act/*, index*/) {
             act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act ? PLAY_ACTION : act;
             // Perform an action on a list of items. If these are tracks, then we can use 1 command...
             if (list[0].id.startsWith("track_id:")) {
@@ -2426,7 +2451,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         ids+=","+originalId(list[i].id).split(":")[1];
                     }
                 }
-                var command = this.buildFullCommand({id:ids}, act);
+                var command = this.buildFullCommand({id:ids}, /*PLAY_ACTION==act && undefined!=index ? ADD_ACTION :*/ act);
                 if (command.command.length===0) {
                     bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
                     return;
@@ -2437,6 +2462,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (PLAY_ACTION==act) {
                     lmsCommand(this.playerId(), ["playlist", "clear"]).then(({data}) => {
                         lmsCommand(this.playerId(), command.command).then(({data}) => {
+                            /*if (undefined!=index) {
+                                bus.$emit('playerCommand', ["playlist", "index", index]);
+                            }*/
                             bus.$emit('refreshStatus');
                             logJsonMessage("RESP", data);
                             if (!this.$store.state.desktopLayout) {

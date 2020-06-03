@@ -9,10 +9,12 @@ PLUGIN_MATERIAL_SKIN
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_BT_PLAYERS
-	EN	BLuetooth players
+	EN	Bluetooth players
+	FR	Platines Bluetooth
 
 PLUGIN_MATERIAL_BT_PLAYERS_GENRES_DESC
-	EN	Comma-separated list of Bluetooth player IDs (MAC address). These players will be give an Bluetooth icon n the Material UI.
+	EN	Comma-separated list of Bluetooth player IDs (MAC address). These players will be give an Bluetooth icon in the Material UI.
+	FR	Liste des identifiants des platines Bluetooth (adresses MAC), séparés par des virgules. Ces platines se verront attribuer un icône Bluetooth dans l'interface utilisateur 'Material Skin'.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen

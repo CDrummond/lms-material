@@ -449,10 +449,10 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Changes":"",
-"Display rating stars.":"",
-"Drop here to remove from group":"",
-"Go to album":"",
-"Go to artist":"",
-"Show rating":""
+"Changes":"Changements",
+"Display rating stars.":"Afficher les étoiles de notation.",
+"Drop here to remove from group":"Déposer ici pour retirer du groupe",
+"Go to album":"Aller à l'album",
+"Go to artist":"Aller à l'artiste",
+"Show rating":"Afficher la notation"
 }

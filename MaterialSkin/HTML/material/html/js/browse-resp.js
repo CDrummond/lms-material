@@ -24,7 +24,7 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[], actions:[] };
+    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
 
     try {
     if (data && data.result) {
@@ -499,7 +499,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.jumplist = []; // Search results NOT sorted???
             }
         } else if (data.result.albums_loop) {
-            resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             resp.canUseGrid = true;
             var jumpListYear = false;
             if (data.params && data.params.length>1) {
@@ -554,7 +553,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.jumplist = []; // Search results NOT sorted???
             }
         } else if (data.result.titles_loop) {
-            resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
             var totalDuration=0;
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
             var showAlbumName = (parent && parent.id && (parent.id.startsWith("artist_id:") || parent.id.startsWith("currentaction:")));
@@ -569,18 +567,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
             }
-            var actions = [PLAY_ACTION];
-            if (allowPlayAlbum && data.result.count>1) {
-                actions.push(PLAY_ALBUM_ACTION);
-            }
-            actions.push(INSERT_ACTION);
-            actions.push(ADD_ACTION);
-            actions.push(DIVIDER);
-            if (options.ratingsSupport) {
-                actions.push(RATING_ACTION);
-            }
-            actions.push(SELECT_ACTION)
-            actions.push(MORE_LIB_ACTION);
+            var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -615,7 +602,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               title: title,
                               subtitle: undefined!=i.rating ? ratingString(formatSeconds(i.duration), i.rating) : formatSeconds(i.duration),
                               //icon: "music_note",
-                              menu: actions,
+                              stdItem: stdItem,
                               type: "track",
                               rating: i.rating,
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
@@ -674,11 +661,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {
-            resp.actions=[ADD_ACTION, DIVIDER, PLAY_ACTION];
-            //if (options.ratingsSupport) {
-            //    actions.push(DIVIDER);
-            //    actions.push(RATING_ACTION);
-            //}
             var totalDuration = 0;
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -700,9 +682,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;
-                //if (options.ratingsSupport && undefined!=i.rating) {
-                //    subtitle = ratingString(subtitle, i.rating);
-                //}
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,

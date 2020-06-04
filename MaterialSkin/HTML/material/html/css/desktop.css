@@ -9,7 +9,19 @@
  --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
  --bottom-toolbar-height:80px;
- --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 250px)), 100vw);
+ --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
+}
+
+/* For old browser's that dont support min() */
+@supports not (width: min(10px, 5vw)) {
+ :root {
+  --np-portrait-image-size:100vw;
+ }
+ @media (min-aspect-ratio: 68/100) {
+  :root {
+   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px));
+  }
+ }
 }
 
 .lms-desktop-toolbar-pad {

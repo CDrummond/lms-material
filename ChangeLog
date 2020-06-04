@@ -4,6 +4,8 @@
 2. Fix starting track when selecting 'Play album from track' on a multi-cd album
    where LMS is set to group discs.
 3. Remove 'Play this mix' item even if there are no tracks for mix.
+4. Adjust portrait max size calculation.
+5. Add work-around for older browser's that don't support CSS min()
 
 1.8.0
 -----

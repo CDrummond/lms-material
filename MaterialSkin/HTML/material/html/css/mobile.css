@@ -10,7 +10,19 @@
  --sub-toolbar-height:48px;
  --bottom-nav-pad:0px;
  --bottom-nav-height:calc(var(--bottom-nav-pad) + 52px);
- --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 200px)), 100vw);
+ --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 210px)), 100vw);
+}
+
+/* For old browser's that dont support min() */
+@supports not (width: min(10px, 5vw)) {
+ :root {
+  --np-portrait-image-size:100vw;
+ }
+ @media (min-aspect-ratio: 68/100) {
+  :root {
+   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 210px));
+  }
+ }
 }
 
 .subtoolbar {

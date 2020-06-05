@@ -1,6 +1,7 @@
 1.8.2
 -----
 1. Fix hovering of items in grid when items have no sub-title.
+2. When using year for jumplist only use last 2 digits.
 
 1.8.1
 -----

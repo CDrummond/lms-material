@@ -528,6 +528,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     title+=" (" + i.year + ")";
                 }
                 var key = jumpListYear ? (""+i.year) : removeDiactrics(i.textkey);
+                if (jumpListYear && key.length>2) {
+                    key="'"+key.slice(-2);
+                }
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }

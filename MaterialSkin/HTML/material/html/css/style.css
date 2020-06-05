@@ -1455,10 +1455,6 @@ div.v-subheader {
  cursor:pointer;
 }
 
-.lms-jumplist-wide div {
- font-size:calc(var(--small-font-size) - 0.5px);
-}
-
 @media screen and (max-width: 289px) {
  #home-button{display:none;}
 }

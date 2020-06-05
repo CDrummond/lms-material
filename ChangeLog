@@ -8,6 +8,8 @@
 5. Add work-around for older browser's that don't support CSS min()
 6. When browsing genres, show 'All Artists' and 'Album Artists' if LMS set to
    use two separate lists, and also show 'Compilations'
+7. If group is created with no players, assign a list of basic default browse
+   modes.
 
 1.8.0
 -----

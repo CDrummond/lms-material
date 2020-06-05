@@ -44,6 +44,9 @@ my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
 
+my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'myMusicArtistsAllArtists', 'myMusicAlbums',
+                             'myMusicGenres', 'myMusicYears', 'myMusicNewMusic','myMusicPlaylists', 'myMusicAlbumsVariousArtists' );
+
 sub initPlugin {
     my $class = shift;
 
@@ -733,6 +736,7 @@ sub _cliGroupCommand {
                 my $groupPrefs = $serverprefs->client($client);
                 my $modeList = Slim::Menu::BrowseLibrary->_getNodeList();
                 my %modes;
+                my $haveMember = 0;
                 # Set all modes as disabled
                 foreach my $mode (@{$modeList}) {
                     $modes{ $mode->{id} } = 1;
@@ -744,6 +748,7 @@ sub _cliGroupCommand {
                     if ($member) {
                         my $clientPrefs = $serverprefs->client($member);
                         if ($clientPrefs) {
+                            $haveMember = 1;
                             foreach my $mode (@{$modeList}) {
                                 if ($clientPrefs->get("disabled_" . $mode->{id})==0) {
                                     $modes{ $mode->{id} } = 0;
@@ -753,6 +758,12 @@ sub _cliGroupCommand {
                     }
                 }
 
+                if ($haveMember == 0) {
+                    # Group has no members??? Enable some basic modes...
+                    foreach my $mode (@DEFAULT_BROWSE_MODES) {
+                        $modes{ $mode } = 0;
+                    }
+                }
                 # update group prefs
                 my @keys = keys %modes;
                 for my $key (@keys) {

@@ -10,6 +10,8 @@
    use two separate lists, and also show 'Compilations'
 7. If group is created with no players, assign a list of basic default browse
    modes.
+8. Update group player's list of browse modes when add/remove players in 'Manage
+   players' dialog.
 
 1.8.0
 -----

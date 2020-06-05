@@ -750,6 +750,7 @@ Vue.component('lms-manage-players', {
                     return;
                 }
                 lmsCommand("", ['playergroups', 'update', 'id:'+group.id, 'members:'+(addPlayer ? '+' : '-')+player]).then(({data}) => {
+                    lmsCommand(group.id, ["material-skin-group", "set-modes"]);
                     bus.$emit('refreshServerStatus', 1000);
                     if (undefined==group.members) {
                         group.members=[];

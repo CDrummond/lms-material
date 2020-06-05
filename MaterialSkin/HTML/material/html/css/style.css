@@ -340,6 +340,10 @@ div.v-subheader {
  background-color:transparent !important;
  cursor:pointer;
  width:calc(139px + (5px * var(--image-grid-factor))) !important;
+ height:calc(175px + (5px * var(--image-grid-factor))) !important;
+}
+
+.image-grid-item-with-sub {
  height:calc(195px + (5px * var(--image-grid-factor))) !important;
 }
 
@@ -351,8 +355,12 @@ div.v-subheader {
  position:absolute;
  width:32px !important;
  height:32px !important;
- bottom:30px !important;
+ bottom:10px !important;
  right:-10px !important;
+}
+
+.image-grid-item-with-sub .image-grid-btn, .image-grid-item-with-sub .image-grid-btn:hover {
+ bottom:30px !important;
 }
 
 .image-grid-item-icon {

@@ -445,9 +445,9 @@ const store = new Vuex.Store({
             //   Filter album/tracks on role?
             lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy"]).then(({data}) => {
                 if (data && data.result) {
-                    var separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
-                    if (separateArtists!=getLocalStorageBool('separateArtists', false)) {
-                        setLocalStorageVal('separateArtists', separateArtists);
+                    lmsOptions.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
+                    if (lmsOptions.separateArtists!=getLocalStorageBool('separateArtists', false)) {
+                        setLocalStorageVal('separateArtists', lmsOptions.separateArtists);
                         clearListCache(true);
                     }
 

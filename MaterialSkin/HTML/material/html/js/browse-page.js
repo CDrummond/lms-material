@@ -992,27 +992,44 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('dlg.open', 'rndmix');
             } else if (!item.genreArtists && STD_ITEM_GENRE==item.stdItem && this.current && this.current.id==GENRES_ID) {
                 this.addHistory();
-                this.items=[{ title: i18n("Artists"),
+                this.items=[];
+                this.items.push({ title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
                               command: ["artists"],
                               params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
                               svg: "artist",
                               type: "group",
-                              id: uniqueId(item.id, 0),
-                              genreArtists:true },
-                            { title: i18n("Albums"),
+                              id: uniqueId(item.id, this.items.length),
+                              genreArtists:true });
+                if (lmsOptions.separateArtists) {
+                      this.items.push({ title: i18n("Album Artists"),
+                          command: ["artists"],
+                          params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
+                          svg: "albumartist",
+                          type: "group",
+                          id: uniqueId(item.id, this.items.length),
+                          genreArtists:true });
+                }
+                this.items.push({ title: i18n("Albums"),
                               command: ["albums"],
                               params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               icon: "album",
                               type: "group",
-                              id: uniqueId(item.id, 1)},
-                            { title: i18n("Random Albums"),
+                              id: uniqueId(item.id, this.items.length)});
+                this.items.push({ title: i18n("Random Albums"),
                               command: ["albums"],
                               params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
                               menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
                               svg: "dice-album",
                               type: "group",
-                              id: uniqueId(item.id, 2)}];
+                              id: uniqueId(item.id, this.items.length)});
+                this.items.push({ title: i18n("Compilations"),
+                              command: ["albums"],
+                              params: [item.id, ALBUM_TAGS_PLACEHOLDER, "compilation:1", "sort:album"],
+                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                              svg: "album-multi",
+                              type: "group",
+                              id: uniqueId(item.id, this.items.length)});
                 this.inGenre = item.title;
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
@@ -1021,7 +1038,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "composer",
                                         type: "group",
-                                        id: uniqueId(item.id, 3)});
+                                        id: uniqueId(item.id, this.items.length)});
                 }
                 if (LMS_CONDUCTOR_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Conductors"),
@@ -1030,7 +1047,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         cancache: true,
                                         svg: "conductor",
                                         type: "group",
-                                        id: uniqueId(item.id, 4)});
+                                        id: uniqueId(item.id, this.items.length)});
                 }
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Select category");

@@ -26,11 +26,13 @@
 "Alarm settings":"Configuration de l'alarme",
 "Alarms":"Alarmes",
 "Album":"Album",
+"Album Artists":"Artistes des Albums",
 "Album Mix":"Mélange d'albums",
 "Album Review":"Revues d'album",
 "Album gain":"Normalisation du volume par album",
 "Albums":"Albums",
 "All":"Tout",
+"All Artists":"Tous les Artistes",
 "All options":"Toutes les options",
 "Alphabetically sort favorites, rather than server supplied order.":"Trier les favoris par ordre alphabétique plutôt que dans l'ordre fourni par le serveur.",
 "Already in favorites":"Déjà présent dans les favoris",
@@ -75,6 +77,7 @@
 "Collapse now playing":"Fermer la vue 'lecture en cours'",
 "Color":"Couleur",
 "Color toolbars":"Barres d'outils de couleur",
+"Compilations":"Compilations",
 "Composers":"Compositeurs",
 "Conductors":"Chefs d'orchestre",
 "Continuous":"Continu",
@@ -454,8 +457,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Album Artists":"Artistes des Albums",
-"All Artists":"Tous les Artistes",
-"Compilations":"Compilations"
+"%1 days":"%1 jours"
 }

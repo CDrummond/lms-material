@@ -26,11 +26,13 @@
 "Alarm settings":" Wekker instellingen",
 "Alarms":"Wekkers",
 "Album":"Album",
+"Album Artists":"Albumartiesten",
 "Album Mix":"Album Mix",
 "Album Review":"Album Recensies",
 "Album gain":"Album normalisering",
 "Albums":"Albums",
 "All":"Alle",
+"All Artists":"Alle artiesten",
 "All options":"Alle opties",
 "Alphabetically sort favorites, rather than server supplied order.":"Sorteer favorieten alfabetisch, in tegenstelling tot volgorde van server",
 "Already in favorites":"Reeds in favorieten",
@@ -75,6 +77,7 @@
 "Collapse now playing":"'Speelt Nu' inklappen",
 "Color":"Kleur",
 "Color toolbars":"Kleur taakbalk",
+"Compilations":"Verzamelingen",
 "Composers":"Componisten",
 "Conductors":"Dirigenten",
 "Continuous":"Continu",
@@ -454,8 +457,5 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen",
-"Album Artists":"Albumartiesten",
-"All Artists":"Alle artiesten",
-"Compilations":"Verzamelingen"
+"%1 days":"%1 dagen"
 }

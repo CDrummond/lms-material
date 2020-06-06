@@ -4,6 +4,7 @@
 2. When using year for jumplist only use last 2 digits.
 3. Pressing on red error icon (shown when connection is lost) will produce a
    menu allowing access to app settings - when Material is loaded within app.
+4. Allow app to specfiy a quit action. If so, this will be shown in main menu.
 
 1.8.1
 -----

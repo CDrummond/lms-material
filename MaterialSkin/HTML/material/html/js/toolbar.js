@@ -138,18 +138,28 @@ Vue.component('lms-toolbar', {
      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
+   <v-divider v-if="undefined!=appQuit"></v-divider>
+   <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{trans.appQuit}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
   </v-list>
  </v-menu>
- <v-menu v-else-if="!connected && undefined!=appSettings" bottom left v-model="showErrorMenu">
+ <v-menu v-else-if="!connected && (undefined!=appSettings || undefined!=appQuit)" bottom left v-model="showErrorMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><v-icon class="red">error</v-icon></v-btn>
   <v-list>
    <v-list-tile @click="bus.$emit('showError', undefined, trans.connectionLost)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>error</v-icon></v-btn></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <v-list-tile :href="appSettings">
+   <v-list-tile :href="appSettings" v-if="undefined!=appSettings">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-content><v-list-tile-title>{{trans.appSettings}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-divider v-if="undefined!=appQuit"></v-divider>
+   <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{trans.appQuit}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
   </v-list>
  </v-menu>
@@ -174,7 +184,7 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, fixedVol:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined},
+                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -187,7 +197,8 @@ Vue.component('lms-toolbar', {
                  showMiniLauncherButton: !queryParams.hide.has('mini'),
                  date: undefined,
                  time: undefined,
-                 appSettings: queryParams.appSettings
+                 appSettings: queryParams.appSettings,
+                 appQuit: queryParams.appQuit
                }
     },
     mounted() {
@@ -430,7 +441,7 @@ Vue.component('lms-toolbar', {
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
-                          appSettings: i18n('Application settings')};
+                          appSettings:i18n('Application settings'), appQuit:i18n('Quit')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

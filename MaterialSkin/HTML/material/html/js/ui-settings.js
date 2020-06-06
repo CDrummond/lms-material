@@ -27,11 +27,6 @@ Vue.component('lms-ui-settings', {
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-divider v-if="appSettings!=undefined"></v-divider>
-      <v-list-tile :href="appSettings" v-if="appSettings!=undefined">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
      </v-list>
     </v-menu>
    </v-toolbar>
@@ -428,7 +423,6 @@ Vue.component('lms-ui-settings', {
             showLsAndNotif: IS_ANDROID && !queryParams.hide.has('notif'),
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
             showScale: !queryParams.hide.has('scale'),
-            appSettings: queryParams.appSettings,
             serverName: "",
             showRating: true,
             queueShowRating: true

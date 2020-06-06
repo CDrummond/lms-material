@@ -115,6 +115,10 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
     </v-list-tile>
+    <v-list-tile :href="appSettings" v-if="undefined!=appSettings && item.id==TB_UI_SETTINGS.id">
+     <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{trans.appSettings}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-tile-avatar>

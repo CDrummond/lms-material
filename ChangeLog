@@ -2,6 +2,8 @@
 -----
 1. Fix hovering of items in grid when items have no sub-title.
 2. When using year for jumplist only use last 2 digits.
+3. Pressing on red error icon (shown when connection is lost) will produce a
+   menu allowing access to app settings - when Material is loaded within app.
 
 1.8.1
 -----

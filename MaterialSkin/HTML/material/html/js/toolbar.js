@@ -140,7 +140,20 @@ Vue.component('lms-toolbar', {
    </template>
   </v-list>
  </v-menu>
- <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost);">
+ <v-menu v-else-if="!connected && undefined!=appSettings" bottom left v-model="showErrorMenu">
+  <v-btn slot="activator" icon :title="trans.mainMenu"><v-icon class="red">error</v-icon></v-btn>
+  <v-list>
+   <v-list-tile @click="bus.$emit('showError', undefined, trans.connectionLost)">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>error</v-icon></v-btn></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-list-tile :href="appSettings">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+  </v-list>
+ </v-menu>
+ <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost)">
   <v-icon class="red">error</v-icon>
  </v-btn>
 </v-toolbar>
@@ -156,11 +169,12 @@ Vue.component('lms-toolbar', {
                  customActions:undefined,
                  showPlayerMenu: false,
                  showMainMenu: false,
+                 showErrorMenu: false,
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, fixedVol:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined},
+                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -172,7 +186,8 @@ Vue.component('lms-toolbar', {
                  updateProgress: {show:false, text:undefined},
                  showMiniLauncherButton: !queryParams.hide.has('mini'),
                  date: undefined,
-                 time: undefined
+                 time: undefined,
+                 appSettings: queryParams.appSettings
                }
     },
     mounted() {
@@ -272,12 +287,15 @@ Vue.component('lms-toolbar', {
         bus.$on('esc', function() {
             this.showPlayerMenu = false;
             this.showMainMenu = false;
+            this.showErrorMenu = false;
         }.bind(this));
         bus.$on('hideMenu', function(name) {
             if (name=='main') {
                 this.showMainMenu = false;
             } else if (name=='player') {
                 this.showPlayerMenu = false;
+            } else if (name=='error') {
+                this.showErrorMenu = false;
             }
         }.bind(this));
 
@@ -411,7 +429,8 @@ Vue.component('lms-toolbar', {
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost!'),
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
-                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player')};
+                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
+                          appSettings: i18n('Application settings')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -717,6 +736,9 @@ Vue.component('lms-toolbar', {
         },
         'showMainMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'main', shown:newVal});
+        },
+        'showErrorMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'error', shown:newVal});
         }
     },
     beforeDestroy() {

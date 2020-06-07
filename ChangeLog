@@ -6,6 +6,7 @@
    menu allowing access to app settings - when Material is loaded within app.
 4. Allow app to specify a quit action. If so, this will be shown in main menu.
 5. Move 'Application settings' into main menu.
+6. Fix not showing track numbers (if configured to do so) in now-playing.
 
 1.8.1
 -----

@@ -152,7 +152,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <div class="np-landscape-song-info hide-scrollbar fade-bottom">
       <div>
-       <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+       <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
        <p class="np-text-landscape subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
       </div>
@@ -218,7 +218,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-portrait-song-info hide-scrollbar fade-bottom">
      <div>
-      <p class="np-title" v-if="playerStatus.current.title">{{playerStatus.current.title}}</p>
+      <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
       <p class="np-text subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
      </div>

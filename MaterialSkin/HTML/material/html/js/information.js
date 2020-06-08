@@ -201,7 +201,9 @@ Vue.component('lms-information-dialog', {
             if (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server")) {
                 var plugins = document.getElementById("info-plugins");
                 if (plugins) {
-                    plugins.scrollIntoView(true);
+                    setTimeout(function () {
+                        plugins.scrollIntoView({ block: 'start',  behavior: 'smooth' });
+                    }, 25);
                     return true;
                 }
             }

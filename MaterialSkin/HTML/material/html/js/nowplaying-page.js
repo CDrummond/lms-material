@@ -469,11 +469,27 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 trackChanged = true;
             }
             var artistAndComposer;
-            if (playerStatus.current.composer && playerStatus.current.genre && LMS_COMPOSER_GENRES.has(playerStatus.current.genre) &&
-                playerStatus.current.composer!=this.playerStatus.current.artist) {
+            var useComposer = playerStatus.current.composer && playerStatus.current.genre && LMS_COMPOSER_GENRES.has(playerStatus.current.genre);
+            if (useComposer && playerStatus.current.composer!=this.playerStatus.current.artist) {
                 artistAndComposer = addPart(playerStatus.current.composer, this.playerStatus.current.artist);
             } else {
                 artistAndComposer = this.playerStatus.current.artist;
+            }
+            if (playerStatus.current.composer!=this.playerStatus.current.composer) {
+                this.playerStatus.current.composer = playerStatus.current.composer;
+            }
+            let composer_id = useComposer
+                                ? playerStatus.current.composer_id
+                                    ? playerStatus.current.composer_id
+                                    : playerStatus.current.composer_ids
+                                        ? playerStatus.current.composer_ids.split(",")[0]
+                                        : undefined
+                                : undefined;
+            if (composer_id!=this.playerStatus.current.composer_id) {
+                this.playerStatus.current.composer_id = composer_id;
+            }
+            if (playerStatus.current.genre!=this.playerStatus.current.genre) {
+                this.playerStatus.current.genre = playerStatus.current.genre;
             }
             if (artistAndComposer!=this.playerStatus.current.artistAndComposer) {
                 this.playerStatus.current.artistAndComposer = artistAndComposer;
@@ -652,6 +668,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 : this.playerStatus.current.artist_id;
                     if (artist_id) {
                         this.menu.items.push({title:i18n("Go to artist"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:"artist"});
+                    }
+                    console.log(this.playerStatus.current.composer, this.playerStatus.current.composer_id, this.playerStatus.current.genre, LMS_COMPOSER_GENRES.has(this.playerStatus.current.genre));
+                    if (this.playerStatus.current.composer && this.playerStatus.current.composer_id && this.playerStatus.current.genre && LMS_COMPOSER_GENRES.has(this.playerStatus.current.genre)) {
+                        this.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+this.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:this.playerStatus.current.composer}, svg:"composer"});
                     }
                     if (this.playerStatus.current.album_id) {
                         this.menu.items.push({title:i18n("Go to album"), act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+this.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:this.playerStatus.current.album}, icon:"album"});

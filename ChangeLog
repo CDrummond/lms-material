@@ -9,7 +9,8 @@
 6. Fix not showing track numbers (if configured to do so) in now-playing.
 7. Smooth scroll 'Information' dialog to 'Plugins' section when there are
    updates available - to make it obvious what has happened.
-8. Use current track detais for "Go to XXX" entries.
+8. Use current track detais for 'Go to XXX' entries.
+9. Add 'Go to composer' for tracks in composer genres that have composer set.
 
 1.8.1
 -----

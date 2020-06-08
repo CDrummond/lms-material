@@ -646,11 +646,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.menu.icons=true;
                     this.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT},
                                      {title:i18n("Show track information"), svg:"more", act:NP_INFO_ACT}];
-                    if (this.infoTrack.artist_id) {
-                        this.menu.items.push({title:i18n("Go to artist"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+this.infoTrack.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:"artist"});
+
+                    let artist_id = this.playerStatus.current.artist_ids
+                                ? this.playerStatus.current.artist_ids.split(",")[0].trim()
+                                : this.playerStatus.current.artist_id;
+                    if (artist_id) {
+                        this.menu.items.push({title:i18n("Go to artist"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:"artist"});
                     }
-                    if (this.infoTrack.album_id) {
-                        this.menu.items.push({title:i18n("Go to album"), act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+this.infoTrack.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:this.playerStatus.current.album}, icon:"album"});
+                    if (this.playerStatus.current.album_id) {
+                        this.menu.items.push({title:i18n("Go to album"), act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+this.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:this.playerStatus.current.album}, icon:"album"});
                     }
                 }
                 this.menu.x = event.clientX;

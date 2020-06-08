@@ -1476,7 +1476,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             this.$store.commit('setPage', 'now-playing');
                         } else if (act===ADD_ACTION) {
                             bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
-                        } else if (act==="insert") {
+                        } else if (act===INSERT_ACTION) {
                             bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", item.title));
                         }
                     }

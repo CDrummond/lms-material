@@ -1,16 +1,17 @@
 1.8.2
 -----
-1. Fix hovering of items in grid when items have no sub-title.
-2. When using year for jumplist only use last 2 digits.
-3. Pressing on red error icon (shown when connection is lost) will produce a
-   menu allowing access to app settings - when Material is loaded within app.
-4. Allow app to specify a quit action. If so, this will be shown in main menu.
-5. Move 'Application settings' into main menu.
-6. Fix not showing track numbers (if configured to do so) in now-playing.
-7. Smooth scroll 'Information' dialog to 'Plugins' section when there are
-   updates available - to make it obvious what has happened.
-8. Use current track detais for 'Go to XXX' entries.
-9. Add 'Go to composer' for tracks in composer genres that have composer set.
+ 1. Fix hovering of items in grid when items have no sub-title.
+ 2. When using year for jumplist only use last 2 digits.
+ 3. Pressing on red error icon (shown when connection is lost) will produce a
+    menu allowing access to app settings - when Material is loaded within app.
+ 4. Allow app to specify a quit action. If so, this will be shown in main menu.
+ 5. Move 'Application settings' into main menu.
+ 6. Fix not showing track numbers (if configured to do so) in now-playing.
+ 7. Smooth scroll 'Information' dialog to 'Plugins' section when there are
+    updates available - to make it obvious what has happened.
+ 8. Use current track detais for 'Go to XXX' entries.
+ 9. Add 'Go to composer' for tracks in composer genres that have composer set.
+10. Fix 'Inserted XXX into the play queue' messages not showing.
 
 1.8.1
 -----

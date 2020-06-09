@@ -72,7 +72,8 @@
     "/radionet.jpg":{"svg":"radionet"},
     "/subsonic.png":{"svg":"sub"},
     "/WiMP/html/images/icon.png":{"svg":"tidal"},
-    "/Deezer/html/images/icon.png":{"svg":"deezer"}
+    "/Deezer/html/images/icon.png":{"svg":"deezer"},
+    "/MusicMagic/html/images/icon.png":{"svg":"magic-wand"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

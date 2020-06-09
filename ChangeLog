@@ -14,6 +14,7 @@
 10. Fix 'Inserted XXX into the play queue' messages not showing.
 11. Use current player when calling custom action from main menu.
 12. Allow specifying toolbar title for iframe custom actions.
+13. Map MusicMagic and SugarCube icons.
 
 1.8.1
 -----

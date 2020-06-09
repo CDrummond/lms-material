@@ -2182,6 +2182,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                             } else if (c.id.startsWith("playlists")) {
                                                 item.icon = "list";
                                                 item.section = SECTION_PLAYLISTS;
+                                            } else if (c.id == "moods") {
+                                                item.svg = "magic-wand";
+                                                item.icon = undefined;
                                             } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                                 if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
                                                     item.limit=lmsOptions.newMusicLimit;

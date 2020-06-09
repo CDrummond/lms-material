@@ -627,6 +627,9 @@ function updateItemFavorites(item) {
         item.favIcon="html/images/years.png";
     } else if (item.id.startsWith("playlist:")) {
         item.favIcon="html/images/playlists.png";
+    } else if (item.stdItem==STD_ITEM_MUSICIP_MOOD) {
+        item.favUrl=item.id;
+        item.favIcon="plugins/MusicMagic/html/images/icon.png";
     }
 
     item.favUrl = item.favUrl ? item.favUrl : item.url;

@@ -29,12 +29,26 @@ function parseBrowseResp(data, parent, options, cacheKey) {
     try {
     if (data && data.result) {
         logJsonMessage("RESP", data);
-        if (data.result.item_loop) {  // SlimBrowse response
+        var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
+        var isMusicIpMoods = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="moods";
+
+        if (isMusicIpMoods && data.result.item_loop) {
+            for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.mood) {
+                    resp.items.push({id: "mood://"+i.actions.go.params.mood,
+                                     title: i.text,
+                                     actions: i.actions,
+                                     stdItem: STD_ITEM_MUSICIP_MOOD,
+                                     isUrl: true});
+                }
+            }
+            resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
+        } else if (data.result.item_loop) {  // SlimBrowse response
             var playAction = false;
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
             var isFavorites = parent && parent.isFavFolder ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isRadios = parent && parent.section == SECTION_RADIO;
@@ -44,6 +58,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isMusicIpMix = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix";
+
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;

@@ -16,6 +16,7 @@ const STD_ITEM_TRACK = 6;
 const STD_ITEM_ALBUM_TRACK = 7;
 const STD_ITEM_PLAYLIST_TRACK = 8;
 const STD_ITEM_REMOTE_PLAYLIST_TRACK = 9;
+const STD_ITEM_MUSICIP_MOOD = 10;
 
 const STD_ITEMS=[
     {
@@ -59,6 +60,9 @@ const STD_ITEMS=[
     },
     {
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
+    },
+    {
+        menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
     }
 ];
 

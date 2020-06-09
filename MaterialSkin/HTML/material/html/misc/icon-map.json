@@ -73,7 +73,8 @@
     "/subsonic.png":{"svg":"sub"},
     "/WiMP/html/images/icon.png":{"svg":"tidal"},
     "/Deezer/html/images/icon.png":{"svg":"deezer"},
-    "/MusicMagic/html/images/icon.png":{"svg":"magic-wand"}
+    "/MusicMagic/html/images/icon.png":{"svg":"magic-wand"},
+    "/SugarCube/html/images/sugarcube.png":{"svg":"spicefly-sugarcube"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

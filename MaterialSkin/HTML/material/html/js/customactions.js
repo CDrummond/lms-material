@@ -56,11 +56,15 @@ function performCustomAction(obj, action, player) {
 
 function doCustomAction(action, player) {
     if (action.iframe) {
+        let title = action.title;
+        if (action.toolbar && action.toolbar.title) {
+            title = action.toolbar.title;
+        }
         if (undefined==player) {
-            bus.$emit('dlg.open', 'iframe', action.iframe, action.title);
+            bus.$emit('dlg.open', 'iframe', action.iframe, title);
         } else {
             bus.$emit('dlg.open', 'iframe', action.iframe.replace("$ID", player.id).replace("$NAME", player.name),
-                      action.title.replace("$NAME", player.name));
+                      title.replace("$NAME", player.name));
         }
     } else if (action.weblink) {
         if (undefined==player) {

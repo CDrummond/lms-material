@@ -651,7 +651,7 @@ Vue.component('lms-toolbar', {
             }.bind(this), (next*1000)+25);
         },
         doCustomAction(action) {
-            performCustomAction(this, action);
+            performCustomAction(this, action, this.$store.state.player);
         }
     },
     computed: {

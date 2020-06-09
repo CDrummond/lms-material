@@ -64,7 +64,7 @@ function doCustomAction(action, player) {
             bus.$emit('dlg.open', 'iframe', action.iframe, title);
         } else {
             bus.$emit('dlg.open', 'iframe', action.iframe.replace("$ID", player.id).replace("$NAME", player.name),
-                      title.replace("$NAME", player.name));
+                      title.replace("$ID", player.id).replace("$NAME", player.name));
         }
     } else if (action.weblink) {
         if (undefined==player) {

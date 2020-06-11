@@ -8,6 +8,19 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
+function getTouchPos(ev) {
+    if (undefined==ev) {
+        return undefined;
+    }
+    if (undefined==ev.touches || ev.touches.length<1) {
+        if (undefined!=ev.changedTouches && ev.changedTouches.length>0) {
+            return {x:ev.changedTouches[0].clientX, y:ev.changedTouches[0].clientY};
+        }
+        return undefined;
+    }
+    return {x:ev.touches[0].clientX, y:ev.touches[0].clientY};
+}
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -206,14 +219,19 @@ var app = new Vue({
         }
     },
     methods: {
-        swipeLeft(ev) {
-            this.swipe(ev, 'l');
+        touchStart(ev) {
+            this.touch=getTouchPos(ev);
+            this.touchValid=false;
         },
-        swipeRight(ev) {
-            this.swipe(ev, 'r');
+        touchEnd(ev) {
+            if (undefined!=this.touch) {
+                let end=getTouchPos(ev);
+                this.touchValid=Math.abs(this.touch.x-end.x)>75 && Math.abs(this.touch.y-end.y)<50;
+                this.touch=undefined;
+            }
         },
-        swipe(ev, direction) {
-            if (this.$store.state.visibleMenus.size>0 || this.$store.state.desktopLayout) {
+        swipe(direction, ev) {
+            if (!this.touchValid || this.$store.state.visibleMenus.size>0 || this.$store.state.desktopLayout) {
                 return;
             }
             if (this.$store.state.page=='now-playing') {
@@ -226,9 +244,6 @@ var app = new Vue({
                         return;
                     }
                 }
-            }
-            if (Math.abs(ev.touchstartX-ev.touchendX)<75) {
-                return;
             }
             if (this.$store.state.openDialogs.length>0) {
                 if (this.$store.state.openDialogs.length==1) {
@@ -246,7 +261,7 @@ var app = new Vue({
                     return;
                 }
             }
-            if ('l'==direction) {
+            if ('left'==direction) {
                 if (this.$store.state.page=='browse') {
                     this.$store.commit('setPage', 'now-playing');
                 } else if (this.$store.state.page=='now-playing') {
@@ -254,7 +269,7 @@ var app = new Vue({
                 } else if (this.$store.state.page=='queue') {
                     this.$store.commit('setPage', 'browse');
                 }
-            } else if ('r'==direction) {
+            } else if ('right'==direction) {
                 if (this.$store.state.page=='browse') {
                     this.$store.commit('setPage', 'queue');
                 } else if (this.$store.state.page=='now-playing') {

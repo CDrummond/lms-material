@@ -53,7 +53,7 @@
  </head>
  <body>
   <div id="app" v-cloak>
-   <v-app class="lms-app" :dark="darkUi" v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight">
+   <v-app class="lms-app" :dark="darkUi" v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight" v-touch-options="{swipeTolerance: 90}">
     <lms-currentcover></lms-currentcover>
     <lms-mediasession></lms-mediasession>
     <lms-server></lms-server>

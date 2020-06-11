@@ -16,6 +16,7 @@
 12. Allow specifying toolbar title for iframe custom actions.
 13. Map MusicMagic and SugarCube icons.
 14. Better integration of 'MusicIP Mood Mix'
+15. Change swipe tolerance from 30px to 90px.
 
 1.8.1
 -----

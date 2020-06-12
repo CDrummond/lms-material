@@ -1199,12 +1199,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('showError', undefined, i18n("No Player"));
             } else if (act===RENAME_ACTION) {
                 this.dialog = this.isTop || item.isPinned
-                                ? { show:true, title:i18n("Rename item"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item,}
+                                ? { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item,}
                                 : SECTION_PLAYLISTS==item.section
-                                    ? { show:true, title:i18n("Rename playlist"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
+                                    ? { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
                                         command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]}
-                                    : { show:true, title:i18n("Rename favorite"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                        command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
+                                    : SECTION_PODCASTS==item.section
+                                        ? { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
+                                            command:["material-skin", "edit-podcast", "pos:"+item.id.split(":")[1].split(".")[1], "name:"+TERM_PLACEHOLDER]}
+                                        : { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
+                                            command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
                 focusEntry(this);
             } else if (act==ADD_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length});

@@ -160,6 +160,7 @@
 "Go home":"Retour à l'accueil",
 "Go to album":"Aller à l'album",
 "Go to artist":"Aller à l'artiste",
+"Go to composer":"Aller au compositeur",
 "Go to homescreen":"Aller à l'écran d'accueil",
 "Group Players":"Groupes de platines",
 "Group members":"Membres du groupe",
@@ -250,6 +251,7 @@
 "Previous/next long-press skip":"Saut par pression longue sur Précédent/Suivant",
 "Provider":"Fournisseur",
 "Queue":"Liste de lecture",
+"Quit":"Quitter",
 "Radio":"Radio",
 "Random Albums":"Albums aléatoires",
 "Random Mix":"Morceaux au hasard",
@@ -265,9 +267,6 @@
 "Remove the selected items?":"Retirer les éléments sélectionnés ?",
 "Rename":"Renommer",
 "Rename failed":"Échec de renommage",
-"Rename favorite":"Renommer un favori",
-"Rename item":"Renommer l'élément",
-"Rename playlist":"Renommer une liste de lecture",
 "Repeat":"Périodicité",
 "Repeat queue":"Répéter la liste de lecture en cours",
 "Repeat single track":"Répéter la piste en cours",
@@ -457,7 +456,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Go to composer":"Aller au compositeur",
-"Quit":"Quitter"
+"%1 days":"%1 jours"
 }

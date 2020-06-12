@@ -144,7 +144,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'delete-podcast', 'plugins',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons']) ) {
         $request->setStatusBadParams();
@@ -306,6 +306,21 @@ sub _cliCommand {
             $podPrefs->set(feeds => $feeds);
             $request->setStatusDone();
             return;
+        }
+    }
+
+    if ($cmd eq 'edit-podcast') {
+        my $pos = $request->getParam('pos');
+        my $name = $request->getParam('name');
+        if (defined $pos && $name) {
+            my $podPrefs = preferences('plugin.podcast');
+            my $feeds = $podPrefs->get('feeds');
+            if ($pos < scalar @{$feeds}) {
+                @{$feeds}[$pos]->{'name'}=$name;
+                $podPrefs->set(feeds => $feeds);
+                $request->setStatusDone();
+                return;
+            }
         }
     }
 

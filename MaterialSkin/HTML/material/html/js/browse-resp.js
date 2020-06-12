@@ -124,6 +124,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     i.title=i.title.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
                 }
 
+                i.section = parent ? parent.section : undefined;
+
                 if (!i.type && !i.style && i.actions && i.actions.go && i.actions.go.params) {
                     for (var key in i.actions.go.params) {
                         if (i.actions.go.params[key]==TERM_PLACEHOLDER) {
@@ -189,8 +191,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (!i.type) {
                         i.isFavFolder = true;
                     }
-                    i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
                     i.menu.push(i.isFavFolder ? RENAME_ACTION : EDIT_ACTION);
+                    i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
                     if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
@@ -251,7 +253,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
+                    i.menu.push(RENAME_ACTION);
                     i.menu.push(REMOVE_PODCAST_ACTION);
+                    i.section=SECTION_PODCASTS;
                 }
 
                 if (!i.type && i.actions && i.actions.go && i.actions.go.params) {
@@ -380,8 +384,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     i.menu.push(MORE_ACTION);
                 }
-
-                i.section = parent ? parent.section : undefined;
 
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {

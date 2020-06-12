@@ -1,3 +1,7 @@
+1.8.3
+-----
+1. Show hover buttons for favourites, even if first favourite is a folder.
+
 1.8.2
 -----
  1. Fix hovering of items in grid when items have no sub-title.

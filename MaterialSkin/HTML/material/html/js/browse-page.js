@@ -724,7 +724,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.jumplistActive=0;
                 this.hoverBtns = !IS_MOBILE && this.items.length>0 &&
                                  ( (undefined!=this.items[0].stdItem && this.items[0].stdItem!=STD_ITEM_GENRE && this.items[0].stdItem!=STD_ITEM_YEAR) ||
-                                   (this.items[0].menu && (this.items[0].menu[0]==PLAY_ACTION || this.items[0].menu[0]==PLAY_ALL_ACTION)));
+                                   (this.items[0].menu && (this.items[0].menu[0]==PLAY_ACTION || this.items[0].menu[0]==PLAY_ALL_ACTION)) ||
+                                   this.items[0].isFavFolder );
 
                 // Get list of actions (e.g. biography, online services) to show in subtoolbar
                 this.currentActions={show:false, items:[]};

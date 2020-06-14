@@ -146,7 +146,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons']) ) {
+                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'playercontrol']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -693,6 +693,23 @@ sub _cliCommand {
         }
         $request->setStatusDone();
         return;
+    }
+
+    if ($cmd eq 'playercontrol') {
+        my $action = $request->getParam('action');
+        if ($action && (($action eq 'muting') or ($action eq 'pause'))) {
+            my $val = $request->getParam('val');
+            my @players = Slim::Player::Client::clients();
+            for my $player (@players) {
+                if ($action eq 'muting') {
+                    $player->execute(['mixer', $action, $val]);
+                } else {
+                    $player->execute([$action, $val]);
+                }
+            }
+            $request->setStatusDone();
+            return;
+        }
     }
 
     $request->setStatusBadParams();

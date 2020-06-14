@@ -39,7 +39,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, appSettings:undefined, appQuit:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -68,6 +68,8 @@ function parseQueryParams() {
             resp.nativeStatus=true;
         } else if ("nativeColors"==kv[0]) {
             resp.nativeColors=true;
+        } else if ("nativePlayer"==kv[0]) {
+            resp.nativePlayer=true;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {

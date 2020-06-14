@@ -202,6 +202,16 @@ function defaultTheme() {
     return "dark";
 }
 
+function storeCurrentPlayer(id) {
+    setLocalStorageVal('player', id);
+    if (queryParams.nativePlayer) {
+        try {
+            NativeReceiver.updatePlayer(id);
+        } catch (e) {
+        }
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -321,7 +331,7 @@ const store = new Vuex.Store({
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
                             state.player = copyPlayer(state.players[i]);
-                            setLocalStorageVal('player', state.player.id);
+                            storeCurrentPlayer(state.player.id);
                             break;
                         }
                     }
@@ -332,7 +342,7 @@ const store = new Vuex.Store({
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if (state.players[i].id === config || state.players[i].name == config) {
                                 state.player = copyPlayer(state.players[i]);
-                                setLocalStorageVal('player', state.player.id);
+                                storeCurrentPlayer(state.player.id);
                                 break;
                             }
                         }
@@ -348,7 +358,7 @@ const store = new Vuex.Store({
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
                                 state.player = copyPlayer(state.players[i]);
-                                setLocalStorageVal('player', state.player.id);
+                                storeCurrentPlayer(state.player.id);
                                 break;
                             }
                         }
@@ -367,7 +377,7 @@ const store = new Vuex.Store({
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === id) {
                         state.player = copyPlayer(state.players[i]);
-                        setLocalStorageVal('player', id);
+                        storeCurrentPlayer(id);
                         bus.$emit('playerChanged');
                         break;
                     }

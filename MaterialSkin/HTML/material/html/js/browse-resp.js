@@ -170,6 +170,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;
+                            resp.allowHoverBtns=true;
                         }
                         if (insertAction) {
                             i.menu.push(INSERT_ACTION);
@@ -190,6 +191,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     if (!i.type) {
                         i.isFavFolder = true;
+                        resp.allowHoverBtns = true;
                     }
                     i.menu.push(i.isFavFolder ? RENAME_ACTION : EDIT_ACTION);
                     i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);

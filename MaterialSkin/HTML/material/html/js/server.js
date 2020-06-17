@@ -340,12 +340,20 @@ var lmsServer = Vue.component('lms-server', {
                         ids.add(i.playerid);
                     }
                 }
-             }
+            }
             if (data.other_players_loop) {
                 for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
                     var i = data.other_players_loop[idx];
                     if (!ids.has(i.playerid) && 'group'!==i.model) {
                         otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl, icon: mapPlayerIcon(i)});
+                    }
+                }
+            }
+            if (data.sn_players_loop) {
+                for (var idx=0, len=data.sn_players_loop.length; idx<len; ++idx) {
+                    var i = data.sn_players_loop[idx];
+                    if (!ids.has(i.playerid) && 'group'!==i.model) {
+                        otherPlayers.push({id: i.playerid, name: i.name, server:'mysqueezebox.com', serverurl:'http://www.mysqueezebox.com', icon: mapPlayerIcon(i)});
                     }
                 }
             }
@@ -750,7 +758,8 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
         bus.$on('movePlayer', function(player) {
-            lmsCommand("", ["material-skin", "moveplayer", "id:"+player.id, "serverurl:"+player.serverurl]).then(({data}) => {
+            let url = new URL(player.serverurl);
+            lmsCommand("", ["disconnect", player.id, url.hostname]).then(({data}) => {
                 this.checkForMovedPlayer(player.id, 8);
             }).catch(err => {
                 bus.$emit('showError', undefined, i18n("Failed to move '%1'", player.name));

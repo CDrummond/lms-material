@@ -144,51 +144,10 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['moveplayer', 'info', 'movequeue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'movequeue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'playercontrol']) ) {
         $request->setStatusBadParams();
-        return;
-    }
-
-    if ($cmd eq 'moveplayer') {
-        my $id = $request->getParam('id');
-        my $serverurl = $request->getParam('serverurl');
-        if (!$id || !$serverurl) {
-            $request->setStatusBadParams();
-            return;
-        }
-
-        main::INFOLOG && $log->is_info && $log->info('Connect player ' . $id . ' from ' . $serverurl . ' to this server');
-        Slim::Networking::SimpleAsyncHTTP->new(
-            sub {
-                main::INFOLOG && $log->is_info && $log->info('Connect response recieved player');
-                my $http = shift;
-                my $serverurl = $http->params('serverurl');
-                my $res = eval { from_json( $http->content ) };
-
-                if ( $@ || ref $res ne 'HASH' || $res->{error} ) {
-                    $http->error( $@ || 'Invalid JSON response: ' . $http->content );
-                    return _players_error( $http );
-                }
-
-                my @params = @{$res->{params}};
-                my $id = $params[0];
-                my $buddy = Slim::Player::Client::getClient($id);
-                if ($buddy) {
-                    main::INFOLOG && $log->is_info && $log->info('Disconnect player ' . $id . ' from ' . $serverurl);
-                    $buddy->execute(["disconnect", $serverurl]);
-                }
-            },
-            sub {
-                # Ignore errors?
-            }, {
-                timeout => 10,
-                serverurl  => $serverurl,
-            }
-        )->post( $serverurl . 'jsonrpc.js', to_json({ id => 1, method => 'slim.request', params => [ $id, ['connect', Slim::Utils::Network::serverAddr()] ]}));
-
-        $request->setStatusDone();
         return;
     }
 

@@ -1276,8 +1276,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (favIcon) {
                             command.push("icon:"+favIcon);
                         }
-                        if (item.presetParams && item.presetParams.parser) {
-                            command.push("parser:"+item.presetParams.parser);
+                        if (item.presetParams) {
+                            let stdFavParams = new Set(["url", "title", "type", "icon", "favorites_url", "favorites_type", "favorites_title"]);
+                            for (var key in item.presetParams) {
+                                if (!stdFavParams.has(key)) {
+                                    command.push(key+":"+item.presetParams[key]);
+                                }
+                            }
                         }
                         lmsCommand(this.playerId(), command).then(({data})=> {
                             logJsonMessage("RESP", data);

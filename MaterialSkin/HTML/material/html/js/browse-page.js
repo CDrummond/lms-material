@@ -7,7 +7,7 @@
 'use strict';
 
 var B_ALBUM_SORTS=[ ];
-var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer', 'tracks', 'musicip']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'deezer', 'tracks', 'musicip', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -798,10 +798,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.tbarActions=[ADD_ACTION, PLAY_ACTION];
                     }
 
-                    // No menu actions? If first item is an audio trsck, add a PlayAll/AddAll to toolbar. This will add each item individually
-                    if (this.tbarActions.length==0 && this.items.length>1 && this.items.length<=200 && isAudioTrack(this.items[0]) && this.items[0].menu &&
-                        this.items[0].menu.length>0 && this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) &&
-                        (this.items[0].menu[0]==ADD_ACTION || this.items[0].menu[0]==PLAY_ACTION) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
+                    // No menu actions? If have 3..200 audio tracks, add a PlayAll/AddAll to toolbar. This will add each item individually
+                    // 3..200 is chosen so that we dont add these to bandcamp when it shows "Listen as podcast" and "Listen to songs" entries...
+                    if (this.tbarActions.length==0 && resp.numAudioItems>2 && resp.numAudioItems<=200 &&
+                        this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
 
                         // add-all/play-all is SLOW, but youtube allows add/play on modified version of parentID - where we make this
@@ -2516,7 +2516,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 var commands = [];
                 for (var i=0, len=list.length; i<len; ++i) {
-                    commands.push({act:PLAY_ACTION==act ? (0==i ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
+                    if (list[i].stdItem || (list[i].menu && list[i].menu.length>0 && list[i].menu[0]==PLAY_ACTION)) {
+                        commands.push({act:PLAY_ACTION==act ? (0==commands.length() ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
+                    }
                 }
                 this.doCommands(commands, PLAY_ACTION==act);
             }

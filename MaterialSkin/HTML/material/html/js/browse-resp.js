@@ -24,7 +24,7 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
+    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0 };
 
     try {
     if (data && data.result) {
@@ -170,7 +170,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;
-                            resp.allowHoverBtns=true;
+                            resp.allowHoverBtns = true;
+                            resp.numAudioItems++;
                         }
                         if (insertAction) {
                             i.menu.push(INSERT_ACTION);

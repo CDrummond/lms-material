@@ -10,6 +10,7 @@
 7. Fix saving favourites of items that have additional attributes - e.g.
    Radio.net stations.
 8. Allow hover buttons for most items with a play action.
+9. Add add/play-all to subtoolbar if there are 3..200 items with a play action.
 
 1.8.2
 -----

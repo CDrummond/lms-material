@@ -389,7 +389,7 @@ div.v-subheader {
  margin-bottom:auto !important;
 }
 
-.image-grid-select-btn, .grid-btns, .image-grid-select-btn:hover {
+.image-grid-select-btn, .image-grid-select-btn:hover {
  position:absolute;
  top:2px !important;
  left:4px !important;
@@ -403,6 +403,10 @@ div.v-subheader {
  height:32px !important;
  border-radius:50% !important;
  padding:3px;
+}
+
+.image-grid-item:hover .emblem {
+ opacity:0.75;
 }
 
 .image-grid-item .emblem img {
@@ -1778,6 +1782,12 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  font-family: "Material Icons";
  font-size:var(--icon-size);
  text-decoration:none;
+}
+
+.grid-btns {
+ position:absolute;
+ top:2px !important;
+ right:2px !important;
 }
 
 .menu-btn:after {

@@ -6,6 +6,7 @@
 4. List players on mysqueezebox.com
 5. Simplify moving code to move player from other server, only need to issue
    'disconnect' command.
+6. Place add/play hover buttons on right hand side of grid items.
 
 1.8.2
 -----

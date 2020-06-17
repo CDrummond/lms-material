@@ -7,6 +7,8 @@
 5. Simplify moving code to move player from other server, only need to issue
    'disconnect' command.
 6. Place add/play hover buttons on right hand side of grid items.
+7. Fix saving favourites of items that have 'parser' attribute - e.g. Radio.net
+   stations.
 
 1.8.2
 -----

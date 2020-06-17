@@ -1276,6 +1276,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (favIcon) {
                             command.push("icon:"+favIcon);
                         }
+                        if (item.presetParams && item.presetParams.parser) {
+                            command.push("parser:"+item.presetParams.parser);
+                        }
                         lmsCommand(this.playerId(), command).then(({data})=> {
                             logJsonMessage("RESP", data);
                             bus.$emit('showMessage', i18n("Added to favorites"));

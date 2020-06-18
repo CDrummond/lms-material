@@ -670,7 +670,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (artist_id) {
                         this.menu.items.push({title:i18n("Go to artist"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:"artist"});
                     }
-                    console.log(this.playerStatus.current.composer, this.playerStatus.current.composer_id, this.playerStatus.current.genre, LMS_COMPOSER_GENRES.has(this.playerStatus.current.genre));
                     if (this.playerStatus.current.composer && this.playerStatus.current.composer_id && this.playerStatus.current.genre && LMS_COMPOSER_GENRES.has(this.playerStatus.current.genre)) {
                         this.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+this.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:this.playerStatus.current.composer}, svg:"composer"});
                     }

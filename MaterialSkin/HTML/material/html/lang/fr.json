@@ -456,5 +456,9 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Copy details":"",
+"Playing %1":"",
+"Playing %1 by %2":"",
+"Playing %1 by %2 from %3":""
 }

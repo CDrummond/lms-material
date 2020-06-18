@@ -453,8 +453,12 @@
 "%1 Years":"%1 roků",
 "1 day":"1 den",
 "%1 days":"%1 dní",
+"Copy details":"",
 "Display rating stars.":"",
 "Go to composer":"",
+"Playing %1":"",
+"Playing %1 by %2":"",
+"Playing %1 by %2 from %3":"",
 "Quit":"",
 "Show rating":""
 }

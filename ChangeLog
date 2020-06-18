@@ -1,16 +1,18 @@
 1.8.3
 -----
-1. Show hover buttons for favourites, even if first favourite is a folder.
-2. Add option to rename podcast.
-3. Add ability for APK app to control all, or active, player during call.
-4. List players on mysqueezebox.com
-5. Simplify moving code to move player from other server, only need to issue
-   'disconnect' command.
-6. Place add/play hover buttons on right hand side of grid items.
-7. Fix saving favourites of items that have additional attributes - e.g.
-   Radio.net stations.
-8. Allow hover buttons for most items with a play action.
-9. Add add/play-all to subtoolbar if there are 3..200 items with a play action.
+ 1. Show hover buttons for favourites, even if first favourite is a folder.
+ 2. Add option to rename podcast.
+ 3. Add ability for APK app to control all, or active, player during call.
+ 4. List players on mysqueezebox.com
+ 5. Simplify moving code to move player from other server, only need to issue
+    'disconnect' command.
+ 6. Place add/play hover buttons on right hand side of grid items.
+ 7. Fix saving favourites of items that have additional attributes - e.g.
+    Radio.net stations.
+ 8. Allow hover buttons for most items with a play action.
+ 9. Add add/play-all to subtoolbar if there are 3..200 items with a play action.
+10. Add 'Copy details' to now-playing context menu - places 'Playing SONG by
+    ARTIST from ALBUM' onto clipboard.
 
 1.8.2
 -----

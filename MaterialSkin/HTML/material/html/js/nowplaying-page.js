@@ -14,6 +14,7 @@ const NP_FONT_ACT = 0;
 const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
+const NP_COPY_DETAILS_CMD = 4;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
@@ -676,6 +677,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (this.playerStatus.current.album_id) {
                         this.menu.items.push({title:i18n("Go to album"), act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+this.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:this.playerStatus.current.album}, icon:"album"});
                     }
+                    if (undefined!=this.playerStatus.current.title) {
+                        this.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
+                    }
                 }
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;
@@ -695,6 +699,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.show=false;
                 this.largeView=false;
                 bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title, 'now-playing');
+            } else if (NP_COPY_DETAILS_CMD==item.act) {
+                if (undefined!=this.playerStatus.current.title && undefined!=this.playerStatus.current.artist && undefined!=this.playerStatus.current.album) {
+                    copyTextToClipboard(i18n("Playing %1 by %2 from %3", this.playerStatus.current.title, this.playerStatus.current.artist, this.playerStatus.current.album));
+                } else if (undefined!=this.playerStatus.current.title && undefined!=this.playerStatus.current.artist) {
+                    copyTextToClipboard(i18n("Playing %1 by %2", this.playerStatus.current.title, this.playerStatus.current.artist));
+                } else {
+                    copyTextToClipboard(i18n("Playing %1", this.playerStatus.current.title));
+                }
             }
         },
         showPic() {

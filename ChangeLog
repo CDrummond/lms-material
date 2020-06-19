@@ -13,6 +13,7 @@
  9. Add add/play-all to subtoolbar if there are 3..200 items with a play action.
 10. Add 'Copy details' to now-playing context menu - places 'Playing SONG by
     ARTIST from ALBUM' onto clipboard.
+11. Use 'Roboto Mono' for desktop bottom bar details.
 
 1.8.2
 -----

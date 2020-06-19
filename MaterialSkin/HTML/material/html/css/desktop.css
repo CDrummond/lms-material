@@ -166,7 +166,7 @@
 
 .np-details-desktop div .v-list__tile .v-list__tile__action {
  min-width:unset;
- font-family: monospace, monospace;
+ font-family:'Roboto Mono', monospace;
  font-weight: var(--std-weight);
  font-size:calc(var(--std-font-size) - 4px) !important;
  height:54px;

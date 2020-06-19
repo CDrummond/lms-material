@@ -17,6 +17,8 @@
 12. Remove list pad for iOS devices.
 13. Scroll to top of grid/list when change view type. Seems to improve
     performance on iOS?
+14. Use unfilled circle for inactive items in jumplist where there is no key
+    when using list as well as grid.
 
 1.8.2
 -----

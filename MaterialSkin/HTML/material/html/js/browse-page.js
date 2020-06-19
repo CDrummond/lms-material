@@ -1649,6 +1649,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
                     this.$forceUpdate();
+                    // Scroll to top. Without this, on iPad with iOS12 at least, grid->list scroll becomes slugish.
+                    // But if user clicks on jumplist (which would call setScrollTop) then scrolling improves???
+                    setScrollTop(this.scrollElement, 0);
                 });
             }
         },

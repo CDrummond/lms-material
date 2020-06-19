@@ -15,6 +15,8 @@
     ARTIST from ALBUM' onto clipboard.
 11. Use 'Roboto Mono' for desktop bottom bar details.
 12. Remove list pad for iOS devices.
+13. Scroll to top of grid/list when change view type. Seems to improve
+    performance on iOS?
 
 1.8.2
 -----

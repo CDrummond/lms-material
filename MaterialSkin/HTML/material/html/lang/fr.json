@@ -81,6 +81,7 @@
 "Composers":"Compositeurs",
 "Conductors":"Chefs d'orchestre",
 "Continuous":"Continu",
+"Copy details":"Copier les détails",
 "Country":"Pays",
 "Create":"Créer",
 "Create folder":"Créer un dossier",
@@ -243,6 +244,9 @@
 "Player settings":"Configuration de platine",
 "Players":"Platines",
 "Playing":"En cours",
+"Playing %1":"Lecture de %1",
+"Playing %1 by %2":"Lecture de %1 par %2",
+"Playing %1 by %2 from %3":"Lecture de %1 par %2 de %3",
 "Plugins":"Plugins",
 "Power on all group members when playing to group.":"Allumer tous les membres du groupe lorsque vous utiliser un groupe.",
 "Power on all upon play":"Allumer tout à la lecture",
@@ -457,8 +461,6 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Copy details":"Copier les détails",
-"Playing %1":"Lecture de %1",
-"Playing %1 by %2":"Lecture de %1 par %2",
-"Playing %1 by %2 from %3":"Lecture de %1 par %2 de %3"
+"Do not crossfade successive tracks from the same album.":"",
+"Smart crossfade":""
 }

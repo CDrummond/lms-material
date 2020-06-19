@@ -455,10 +455,12 @@
 "%1 days":"%1 dní",
 "Copy details":"",
 "Display rating stars.":"",
+"Do not crossfade successive tracks from the same album.":"",
 "Go to composer":"",
 "Playing %1":"",
 "Playing %1 by %2":"",
 "Playing %1 by %2 from %3":"",
 "Quit":"",
-"Show rating":""
+"Show rating":"",
+"Smart crossfade":""
 }

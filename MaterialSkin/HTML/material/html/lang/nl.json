@@ -456,9 +456,11 @@
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
 "Copy details":"",
+"Do not crossfade successive tracks from the same album.":"",
 "Go to composer":"",
 "Playing %1":"",
 "Playing %1 by %2":"",
 "Playing %1 by %2 from %3":"",
-"Quit":""
+"Quit":"",
+"Smart crossfade":""
 }

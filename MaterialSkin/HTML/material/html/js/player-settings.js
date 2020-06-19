@@ -52,6 +52,14 @@ Vue.component('lms-player-settings', {
      <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
+    <v-list-tile :disabled="0==crossfade" v-bind:class="{'disabled':0==crossfade}">
+     <v-list-tile-content @click="smartCrossfade = !smartCrossfade" class="switch-label">
+      <v-list-tile-title>{{i18n('Smart crossfade')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Do not crossfade successive tracks from the same album.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="smartCrossfade"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
     <v-list-tile>
      <v-select :items="replaygainItems" :label="i18n('Volume gain')" v-model="replaygain" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -189,6 +197,7 @@ Vue.component('lms-player-settings', {
             playerName: undefined,
             playerIcon: undefined,
             crossfade: undefined,
+            smartCrossfade: false,
             replaygain: undefined,
             dstm: undefined,
             crossfadeItems:[],
@@ -330,9 +339,10 @@ Vue.component('lms-player-settings', {
             this.replaygain='0';
             this.playerId = player.id;
             this.playerName = player.name;
-            this.playerOrigName = player.name;
             this.playerIcon = player.icon;
-            this.playerOrigIcon = player.icon;
+            this.orig = { player: {name:player.name, icon:player.icon}, dstm:"",
+                          alarms: { fade:false, timeout:0, snooze:0, on:false, volume:0 },
+                          library:"", crossfade:"0", smartCrossfade:false, replaygain:"" };
             this.customActions = getCustomActions(player.id, this.$store.state.unlockAll);
             if (this.$store.state.dstmPlugin) {
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
@@ -341,7 +351,7 @@ Vue.component('lms-player-settings', {
                             if (loop[i].actions && loop[i].actions.do && loop[i].actions.do.cmd) {
                                 this.dstmItems.push({key: loop[i].actions.do.cmd[2], label:loop[i].text});
                                 if (1===loop[i].radio) {
-                                    this.dstm = loop[i].actions.do.cmd[2];
+                                    this.dstm = this.orig.dstm = loop[i].actions.do.cmd[2];
                                 }
                             }
                         }
@@ -356,27 +366,27 @@ Vue.component('lms-player-settings', {
             this.alarms.fade=true;
             lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.alarms.fade=1==data.result._p2;
+                    this.alarms.fade=this.orig.alarms.fade=1==data.result._p2;
                 }
             });
             lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.alarms.timeout=Math.floor(parseInt(data.result._p2)/60);
+                    this.alarms.timeout=this.orig.alarms.timeout=Math.floor(parseInt(data.result._p2)/60);
                 }
             });
             lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.alarms.snooze=Math.floor(parseInt(data.result._p2)/60);
+                    this.alarms.snooze=this.orig.alarms.snooze=Math.floor(parseInt(data.result._p2)/60);
                 }
             });
             lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.alarms.on=1==data.result._p2;
+                    this.alarms.on=this.orig.alarms.on=1==data.result._p2;
                 }
             });
             lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.alarms.volume=data.result._p2;
+                    this.alarms.volume=this.orig.alarms.volume=data.result._p2;
                 }
             });
             this.alarmSounds=[];
@@ -415,7 +425,7 @@ Vue.component('lms-player-settings', {
                         if (data && data.result) {
                             for (var i=0, len=this.libraries.length; i<len; ++i) {
                                 if (this.libraries[i].id==data.result.id) {
-                                    this.library=this.libraries[i].id;
+                                    this.library=this.orig.library=this.libraries[i].id;
                                     break;
                                 }
                             }
@@ -437,22 +447,22 @@ Vue.component('lms-player-settings', {
         },
         initItems() {
             this.crossfadeItems=[
-                { key:'0', label:i18n("No fade")},
-                { key:'1', label:i18n("Crossfade")},
-                { key:'2', label:i18n("Fade in")},
-                { key:'3', label:i18n("Fade out")},
-                { key:'4', label:i18n("Fade in and out")}
+                { key:0, label:i18n("No fade")},
+                { key:1, label:i18n("Crossfade")},
+                { key:2, label:i18n("Fade in")},
+                { key:3, label:i18n("Fade out")},
+                { key:4, label:i18n("Fade in and out")}
                 ];
             this.replaygainItems=[
-                { key:'0', label:i18n("None")},
-                { key:'1', label:i18n("Track gain")},
-                { key:'2', label:i18n("Album gain")},
-                { key:'3', label:i18n("Smart gain")}
+                { key:0, label:i18n("None")},
+                { key:1, label:i18n("Track gain")},
+                { key:2, label:i18n("Album gain")},
+                { key:3, label:i18n("Smart gain")}
                 ];
             this.alarmShuffeItems=[
-                { key:'0', label:i18n("Don't shuffle")},
-                { key:'1', label:i18n("Shuffle by song")},
-                { key:'2', label:i18n("Shuffle by album")},
+                { key:0, label:i18n("Don't shuffle")},
+                { key:1, label:i18n("Shuffle by song")},
+                { key:2, label:i18n("Shuffle by album")},
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];
             this.trans={dstm:i18n("Don't Stop The Music")};
@@ -461,42 +471,64 @@ Vue.component('lms-player-settings', {
             if (readName) {
                 lmsCommand(this.playerId, ["playerpref", "playername", "?"]).then(({data}) => {
                     if (data && data.result && undefined!=data.result._p2 && this.playerName!=data.result._p2) {
-                        this.playerName=data.result._p2;
+                        this.playerName=this.orig.playerName=data.result._p2;
                     }
                 });
             }
             lmsCommand(this.playerId, ["playerpref", "transitionType", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.crossfade=data.result._p2;
+                    this.crossfade=this.orig.crossfade=parseInt(data.result._p2);
+                }
+            });
+            lmsCommand(this.playerId, ["playerpref", "transitionSmart", "?"]).then(({data}) => {
+                if (data && data.result && undefined!=data.result._p2) {
+                    this.smartCrossfade=this.orig.smartCrossfade=1==parseInt(data.result._p2);
                 }
             });
             lmsCommand(this.playerId, ["playerpref", "replayGainMode", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._p2) {
-                    this.replaygain=data.result._p2;
+                    this.replaygain=this.orig.replaygain=parseInt(data.result._p2);
                 }
             });
         },
         close() {
             this.show=false;
             this.showMenu = false;
-            if (this.dstmItems.length>1) {
+            if (this.dstmItems.length>1 && this.dstm!=this.orig.dstm) {
                 bus.$emit("dstm", this.playerId, this.dstm);
             }
-            lmsCommand(this.playerId, ["material-skin-client", "set-lib", "id:"+this.library]);
-            lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
-            lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
-            lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
-            lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
-            lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
-            lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
+            if (this.orig.library!=this.library) {
+                lmsCommand(this.playerId, ["material-skin-client", "set-lib", "id:"+this.library]);
+            }
+            if (this.orig.crossfade!=this.crossfade) {
+                lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
+            }
+            if (this.orig.smartCrossfade!=this.smartCrossfade) {
+                lmsCommand(this.playerId, ["playerpref", "transitionSmart", this.smartCrossfade ? 1 : 0]);
+            }
+            if (this.orig.replaygain!=this.replaygain) {
+                lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
+            }
+            if (this.orig.alarms.fade!=this.alarms.fade) {
+                lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
+            }
+            if (this.orig.alarms.timeout!=this.alarms.timeout) {
+                lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
+            }
+            if (this.orig.alarms.snooze!=this.alarms.snooze) {
+                lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
+            }
+            if (this.orig.alarms.volume!=this.alarms.volume) {
+                lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
+            }
 
-            if (this.playerOrigName!=this.playerName) {
+            if (this.orig.player.name!=this.playerName) {
                 lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
                     bus.$emit('refreshServerStatus');
                 });
             }
 
-            if (this.playerOrigIcon.icon!=this.playerIcon.icon || this.playerOrigIcon.svg!=this.playerIcon.svg) {
+            if (this.orig.player.icon.icon!=this.playerIcon.icon || this.orig.player.icon.svg!=this.playerIcon.svg) {
                 lmsCommand(this.playerId, ["playerpref", "plugin.material-skin:icon", JSON.stringify(this.playerIcon)]);
                 this.$store.commit('setIcon', {id:this.playerId, icon:this.playerIcon});
                 // From icon-mapping.js

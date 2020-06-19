@@ -446,6 +446,7 @@
 "Copy details":"",
 "Darker":"",
 "Display rating stars.":"",
+"Do not crossfade successive tracks from the same album.":"",
 "Drop here to remove from group":"",
 "Go to album":"",
 "Go to artist":"",
@@ -458,6 +459,7 @@
 "Show current date and time":"",
 "Show current date and time in main toolbar if there is sufficient space.":"",
 "Show rating":"",
+"Smart crossfade":"",
 "Use chosen color for toolbars.":"",
 "⌘+%1":"",
 "⌘+Shift+%1":""

@@ -258,6 +258,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingClock"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
@@ -266,7 +267,6 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
@@ -314,6 +314,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
@@ -322,7 +323,6 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
     <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>

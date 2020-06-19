@@ -51,9 +51,11 @@ Vue.component('lms-player-settings', {
     <v-list-tile>
      <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
     </v-list-tile>
+    <v-divider></v-divider>
     <v-list-tile>
      <v-select :items="replaygainItems" :label="i18n('Volume gain')" v-model="replaygain" item-text="label" item-value="key"></v-select>
     </v-list-tile>
+    <v-divider v-if="dstmItems && dstmItems.length>1"></v-divider>
     <v-list-tile v-if="dstmItems && dstmItems.length>1">
      <v-select :items="dstmItems" :label="trans.dstm" v-model="dstm" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -73,6 +75,7 @@ Vue.component('lms-player-settings', {
       </v-list-tile-content>
       <v-list-tile-action><v-switch v-model="alarms.on" @click.stop="toggleAllAlarms()"></v-switch></v-list-tile-action>
      </v-list-tile>
+     <v-divider v-if="unlockAll"></v-divider>
      <div class="settings-sub-pad" v-if="unlockAll"></div>
      <v-subheader class="alarm-sched-header" v-if="unlockAll">{{i18n('Scheduled alarms')}}</v-subheader>
      <template v-for="(item, index) in alarms.scheduled" v-if="unlockAll">
@@ -89,9 +92,11 @@ Vue.component('lms-player-settings', {
      <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
      </v-list-tile>
+     <v-divider v-if="unlockAll"></v-divider>
      <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
      </v-list-tile>
+     <v-divider v-if="unlockAll"></v-divider>
      <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>

@@ -19,6 +19,7 @@
     performance on iOS?
 14. Use unfilled circle for inactive items in jumplist where there is no key
     when using list as well as grid.
+15. Fix missing dividers in 'Settings' and 'Player settings' dialogs.
 
 1.8.2
 -----

@@ -14,6 +14,7 @@
 10. Add 'Copy details' to now-playing context menu - places 'Playing SONG by
     ARTIST from ALBUM' onto clipboard.
 11. Use 'Roboto Mono' for desktop bottom bar details.
+12. Remove list pad for iOS devices.
 
 1.8.2
 -----

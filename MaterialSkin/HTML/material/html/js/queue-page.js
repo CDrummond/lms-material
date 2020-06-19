@@ -301,7 +301,6 @@ var lmsQueue = Vue.component("lms-queue", {
     <div class="pq-current-indicator" v-if="index==currentIndex"></div>
    </v-list-tile>
   </template>
-  <v-list-tile v-if="IS_IOS" class="lms-list-pad"></v-list-tile>
  </v-list>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

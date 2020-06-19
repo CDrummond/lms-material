@@ -254,11 +254,6 @@ div.v-subheader {
  margin-right:4px;
 }
 
-/* Add a little padding at the bottom of lists */
-.lms-list-pad {
- height:40px;
-}
-
 .lms-list, .lms-list-sub {
  padding:0px;
 }

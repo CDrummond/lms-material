@@ -225,8 +225,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     </div>
    </v-list-tile>
   </template>
-
-  <v-list-tile v-if="IS_IOS" class="lms-list-pad"></v-list-tile>
  </v-list>
  </div>
 

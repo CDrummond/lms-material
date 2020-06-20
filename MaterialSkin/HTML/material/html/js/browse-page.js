@@ -2080,6 +2080,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.fetchingItems=true;
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
                 if (data && data.result) {
+                    logJsonMessage("RESP", data);
                     this.myMusic = [];
                     var stdItems = new Set();
                     // Get basic, configurable, browse modes...
@@ -2163,6 +2164,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else {
                         lmsList(this.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                             if (data && data.result && data.result.item_loop) {
+                                logJsonMessage("RESP", data);
                                 for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                                     var c = loop[idx];
                                     if (c.node=="myMusic" && c.id) {

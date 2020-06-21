@@ -1333,7 +1333,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             } else if (act===ADD_RANDOM_ALBUM_ACTION) {
                 var params = [];
-                buildStdItemCommand(item, this.current).params.forEach(p => { params.push(p); });
+                buildStdItemCommand(item, this.command).params.forEach(p => { if (!p.startsWith("sort:")) { params.push(p); } });
                 params.push(SORT_KEY+"random");
                 lmsList(this.playerId(), ["albums"], params, 0, 1).then(({data}) => {
                     var resp = parseBrowseResp(data, this.current, this.options);
@@ -1800,7 +1800,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (undefined==commandName) {
-                cmd = buildStdItemCommand(item, this.current);
+                cmd = buildStdItemCommand(item, this.command);
             }
 
             if (cmd.command.length<1) { // Build SlimBrowse command
@@ -1977,7 +1977,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (item.id) {
                     command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
                     if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
-                        var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==this.current.id ? this.history.length>0 ? this.history[this.history.length-1].current : undefined : this.current).params : item.params;
+                        var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==this.current.id ? this.history.length>0 ? this.history[this.history.length-1].command : undefined : this.command).params : item.params;
                         for (var i=0, loop = params, len=loop.length; i<len; ++i) {
                             if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
                                  (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||

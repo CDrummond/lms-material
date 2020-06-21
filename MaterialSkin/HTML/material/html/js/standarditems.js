@@ -66,7 +66,7 @@ const STD_ITEMS=[
     }
 ];
 
-function buildStdItemCommand(item, parent) {
+function buildStdItemCommand(item, parentCommand) {
     var command={command:[], params:[]};
     if (undefined==item) {
         return command;
@@ -74,14 +74,14 @@ function buildStdItemCommand(item, parent) {
 
     if (undefined==item.stdItem) {
         if (item.command && item.command.length>0) {
-            item.command.forEach(i => {
-                command.command.push(i);
-            });
+            for (var i=0, list=item.command, len=list.length; i<len; ++i) {
+                command.command.push(list[i]);
+            }
         }
         if (item.params && item.params.length>0) {
-            item.params.forEach(i => {
-                command.params.push(i);
-            });
+            for (var i=0, list=item.params, len=list.length; i<len; ++i) {
+                command.params.push(list[i]);
+            }
         }
         return command;
     }
@@ -95,8 +95,7 @@ function buildStdItemCommand(item, parent) {
         command.params.push(list[i]);
     }
     command.params.push(item.id);
-    if (undefined!=parent) {
-        var parentCommand = buildStdItemCommand(parent, undefined);
+    if (undefined!=parentCommand) {
         if (item.id.startsWith("artist_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {

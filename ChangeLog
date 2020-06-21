@@ -22,6 +22,8 @@
 15. Fix missing dividers in 'Settings' and 'Player settings' dialogs.
 16. Add 'Smart crossfade' to 'Player settings' dialog.
 17. Only update changed player settings.
+18. When building a list command use roles and parent ID from parent command
+    rather than recreating parent command.
 
 1.8.2
 -----

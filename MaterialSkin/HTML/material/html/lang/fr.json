@@ -461,6 +461,6 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Do not crossfade successive tracks from the same album.":"",
-"Smart crossfade":""
+"Do not crossfade successive tracks from the same album.":"Do not crossfade successive tracks from the same album.":"Ne pas effectuer de fondu enchaîné entre les pistes successives d'un même album.",
+"Smart crossfade":"Fondu enchaîné intelligent"
 }

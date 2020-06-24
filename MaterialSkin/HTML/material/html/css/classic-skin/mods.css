@@ -156,7 +156,7 @@ div#innerSettingsBlock {
 
 *, body, table, input, select, textarea, p, l {
  font-size:16px !important;
- font-family:Roboto,sans-serif;
+ font-family:Roboto,sans-serif !important;
  text-rendering: optimizeLegibility;
  line-height: 1.5;
  -webkit-font-smoothing: antialiased;
@@ -286,8 +286,12 @@ html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc
  background-color:var(--background-color) !important;
 }
 
-html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, #statusarea, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select, b {
+html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentPlaylistLabel, #statusarea, .stdedit, .exlisting, p, ol, ul, dl, dd, td, .exboldlisting, th, h5, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li, select, b, pre, code {
  color: var(--text-color) !important;
+}
+
+pre, code {
+ font-family:'Roboto Mono', monospace !important;
 }
 
 .browsedbLeftControls > a:before {

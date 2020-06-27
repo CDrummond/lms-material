@@ -1,6 +1,8 @@
 1.8.4
 -----
 1. Fix some text colours in updates page.
+2. Remove (?) icons from plugins in information dialog, and make complete
+   plugin title clickable.
 
 1.8.3
 -----

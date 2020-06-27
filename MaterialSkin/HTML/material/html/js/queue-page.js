@@ -103,7 +103,7 @@ function buildSubtitle(i, threeLines) {
     if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre) && i.composer!=i.artist) {
         let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</a>");
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.composer);
         }
@@ -112,21 +112,21 @@ function buildSubtitle(i, threeLines) {
     if (i.artist) {
         let id = IS_MOBILE ? undefined : getId(i, 'artist_id');
         if (!IS_MOBILE && undefined!=id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</a>");
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.artist);
         }
     } else if (i.trackartist) {
         let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</a>");
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.trackartist);
         }
     } else if (i.albumartist) {
         let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<a href=\"#\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</a>");
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.albumartist);
         }
@@ -144,7 +144,7 @@ function buildSubtitle(i, threeLines) {
             album+=" (" + i.year + ")";
         }
         if (i.album_id && !IS_MOBILE) {
-            album="<a href=\"#\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\')\">" + album + "</a>";
+            album="<obj class=\"link-item\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\')\">" + album + "</obj>";
         }
         subtitle=addPart(subtitle, album);
     } else if (remoteTitle && remoteTitle!=i.title) {

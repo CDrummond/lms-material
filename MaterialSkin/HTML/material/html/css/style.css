@@ -411,13 +411,12 @@ div.v-subheader {
 
 .lms-list-sub .emblem, .lms-list-jump .emblem {
  position:absolute;
- top:0px !important;
- left:39px !important;
+ top:1px !important;
+ left:38px !important;
  width:20px !important;
  height:20px !important;
  border-radius:50% !important;
  padding:1px;
- box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .lms-list-sub .emblem img, .lms-list-jump .emblem img {

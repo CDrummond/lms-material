@@ -1169,10 +1169,11 @@ progress {
 .settings-list-checkbox {
  margin-left:32px;
  height:24px;
+ flex: 0 1 auto;
 }
 
 .settings-list-checkbox-action {
- margin:16px 16px -32px 0px; /* t, r, b, l */
+ margin:16px 16px -32px 32px; /* t, r, b, l */
 }
 
 .player-settings-list-checkbox {

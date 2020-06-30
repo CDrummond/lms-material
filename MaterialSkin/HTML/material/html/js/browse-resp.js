@@ -63,7 +63,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var haveWithoutIcons = false;
             var menu = undefined;
             var types = new Set();
-            var maybeAllowGrid = command!="trackstat" && !isFavorites; // && command!="playhistory";
+            var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var radioImages = new Set();
             var numImages = 0;
 

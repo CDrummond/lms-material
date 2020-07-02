@@ -75,7 +75,9 @@
     "/Deezer/html/images/icon.png":{"svg":"deezer"},
     "/MusicMagic/html/images/icon.png":{"svg":"magic-wand"},
     "/SugarCube/html/images/sugarcube.png":{"svg":"spicefly-sugarcube"},
-    "/icon_nature_sounds.png":{"svg":"nature_sounds"}
+    "/icon_nature_sounds.png":{"svg":"nature_sounds"},
+    "/napster.png":{"svg":"napster"},
+    "/shoutcast.png":{"svg":"shoutcast"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

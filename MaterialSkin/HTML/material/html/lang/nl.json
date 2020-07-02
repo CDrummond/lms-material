@@ -455,12 +455,12 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Copy details":"",
-"Do not crossfade successive tracks from the same album.":"",
-"Go to composer":"",
-"Playing %1":"",
-"Playing %1 by %2":"",
-"Playing %1 by %2 from %3":"",
-"Quit":"",
-"Smart crossfade":""
+"Copy details":"Kopieer gegevens",
+"Do not crossfade successive tracks from the same album.":"Opeenvolgende nummers van hetzelfde album niet crossfaden",
+"Go to composer":"Ga naar componist",
+"Playing %1":"Speelt %1",
+"Playing %1 by %2":"Speelt %1 door %2",
+"Playing %1 by %2 from %3":"Speelt %1 door %2 van %3",
+"Quit":"Afsluiten",
+"Smart crossfade":"Slimme crossfade"
 }

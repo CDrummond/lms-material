@@ -879,7 +879,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
                 bus.$emit('showMessage', item.title);
                 this.goBack(true);
-            } else if (resp.items && resp.items.length>0) {
+            } else if (resp.items && (resp.items.length>0 || (command.command.length>1 && command.command[0]=="favorites" && command.command[1]=="items"))) {
                 this.handleListResponse(item, command, resp);
             }
         },

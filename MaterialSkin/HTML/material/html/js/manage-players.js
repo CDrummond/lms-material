@@ -244,11 +244,9 @@ Vue.component('lms-manage-players', {
         }.bind(this));
 
         this.showAllButtons = window.innerWidth>=400;
-        this.$nextTick(() => {
-            window.addEventListener('resize', () => {
-                this.showAllButtons = window.innerWidth>=400;
-            });
-        });
+        bus.$on('windowWidthChanged', function() {
+            this.showAllButtons = window.innerWidth>=400;
+        }.bind(this));
 
         bus.$on('langChanged', function() {
             this.initItems();

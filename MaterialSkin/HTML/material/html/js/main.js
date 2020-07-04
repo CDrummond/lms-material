@@ -131,6 +131,7 @@ var app = new Vue({
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
         let vh = window.innerHeight * 0.01;
         let lastWinHeight = window.innerHeight;
+        let LastReportedHeight = lastWinHeight;
         let lastWinWidth = window.innerWidth;
         let timeout = undefined;
         let lmsApp = this;
@@ -151,6 +152,10 @@ var app = new Vue({
                     lastWinWidth = window.innerWidth;
                     lmsApp.checkLayout();
                     bus.$emit('windowWidthChanged');
+                }
+                if (Math.abs(LastReportedHeight-window.innerHeight)>=3) {
+                    LastReportedHeight = window.innerHeight;
+                    bus.$emit('windowHeightChanged');
                 }
 
                 // Check entries are visible

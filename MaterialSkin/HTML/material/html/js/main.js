@@ -27,7 +27,7 @@ var app = new Vue({
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, search: false,
                             movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, iframe: false,
-                            dstm: false, savequeue: false, icon: false, confirm:false } }
+                            dstm: false, savequeue: false, icon: false, prompt:false } }
     },
     created() {
         this.autoLayout = true;
@@ -185,10 +185,10 @@ var app = new Vue({
             this.$store.commit('dialogOpen', {name:name, shown:val});
         }.bind(this));
 
-        bus.$on('dlg.open', function(name, a, b, c, d) {
+        bus.$on('dlg.open', function(name, a, b, c, d, e, f, g, h) {
             this.dialogs[name] = true; // Mount
             this.$nextTick(function () {
-                bus.$emit(name+".open", a, b, c, d);
+                bus.$emit(name+".open", a, b, c, d, e, f, g, h);
             });
         }.bind(this));
         if (queryParams.actions.length>0) {

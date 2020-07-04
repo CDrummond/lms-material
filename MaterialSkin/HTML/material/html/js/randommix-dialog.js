@@ -14,10 +14,10 @@ Vue.component('lms-randommix', {
    <v-select :items="mixes" :label="i18n('Mix Type')" v-model="chosenMix" item-text="label" item-value="key"></v-select>
    <div class="dialog-main-list">
    <v-select chips deletable-chips multiple :items="genres" :label="i18n('Selected Genres')" v-model="chosenGenres">
-    <v-list-tile slot="prepend-item" @click="toggleGenres()">
-     <v-list-tile-action><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-action>
-     <v-list-tile-title>{{i18n('Select All')}}</v-list-tile-title>
-    </v-list-tile>
+    <v-list-item slot="prepend-item" @click="toggleGenres()">
+     <v-list-item-action><v-icon>{{selectAllIcon}}</v-icon></v-list-item-action>
+     <v-list-item-title>{{i18n('Select All')}}</v-list-item-title>
+    </v-list-item>
     <v-divider slot="prepend-item"></v-divider>
    </v-select>
    <v-select v-if="libraries.length>1 && showAll" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
@@ -27,11 +27,11 @@ Vue.component('lms-randommix', {
    </div>
   </v-card-text>
   <v-card-actions>
-   <v-btn flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
+   <v-btn text @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
-   <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
-   <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
+   <v-btn text @click.native="close()">{{i18n('Close')}}</v-btn>
+   <v-btn text @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
+   <v-btn text @click.native="start()">{{i18n('Start')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

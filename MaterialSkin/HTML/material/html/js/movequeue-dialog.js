@@ -17,10 +17,10 @@ Vue.component('lms-movequeue-dialog', {
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(p, index) in players" v-if="p.id!=src">
-        <v-list-tile @click="moveTo(p)">
-         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="p.icon.icon">{{p.icon.icon}}</v-icon><img v-else class="svg-img" :src="p.icon.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-         <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
-        </v-list-tile>
+        <v-list-item @click="moveTo(p)">
+         <v-list-item-icon :tile="true" class="lms-avatar"><v-icon v-if="p.icon.icon">{{p.icon.icon}}</v-icon><img v-else class="svg-img" :src="p.icon.svg | svgIcon(darkUi)"></img></v-list-item-icon>
+         <v-list-item-title class="sleep-item">{{p.name}}</v-list-item-title>
+        </v-list-item>
         <v-divider></v-divider>
         </template>
       </v-list>
@@ -30,7 +30,7 @@ Vue.component('lms-movequeue-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

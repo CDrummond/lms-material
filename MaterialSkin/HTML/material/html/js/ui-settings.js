@@ -13,20 +13,22 @@ Vue.component('lms-ui-settings', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar">
-    <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
+    <v-btn icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-menu bottom left v-model="showMenu">
-     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+     <template v-slot:activator="{ on }">
+      <v-btn icon v-on="on"><v-icon>more_vert</v-icon></v-btn>
+     </template>
      <v-list>
-      <v-list-tile @click="saveAsDefault">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>save_alt</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="revertToDefault">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
+      <v-list-item @click="saveAsDefault">
+       <v-list-item-icon v-if="displayMenuIcons"><v-icon>save_alt</v-icon></v-list-item-icon>
+       <v-list-item-content><v-list-item-title>{{i18n('Save as default')}}</v-list-item-title></v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="revertToDefault">
+       <v-list-item-icon v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-item-icon>
+       <v-list-item-content><v-list-item-title>{{i18n('Revert to default')}}</v-list-item-title></v-list-item-content>
+      </v-list-item>
      </v-list>
     </v-menu>
    </v-toolbar>
@@ -35,175 +37,175 @@ Vue.component('lms-ui-settings', {
    <v-list two-line subheader class="settings-list">
     <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
 
-    <v-list-tile>
+    <v-list-item>
      <v-select :items="themes" :label="i18n('Theme')" v-model="theme" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
+    </v-list-item>
     <v-divider></v-divider>
-    <v-list-tile>
-     <v-list-tile-content>
-      <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
+    <v-list-item>
+     <v-list-item-content>
+      <v-list-item-title>{{i18n('Color')}}</v-list-item-title>
       <div class="color-grid">
        <div v-for="(item, index) in colorList.colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
       </div>
-     </v-list-tile-content>
-    </v-list-tile>
+     </v-list-item-content>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="colorToolbars = !colorToolbars" class="switch-label">
-      <v-list-tile-title>{{i18n('Color toolbars')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="colorToolbars"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="colorToolbars = !colorToolbars" class="switch-label">
+      <v-list-item-title>{{i18n('Color toolbars')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="colorToolbars"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="allowLayoutAdjust">
+    <v-list-item v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
+    </v-list-item>
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
-    <v-list-tile v-if="showScale">
-     <v-list-tile-content @click="largerElements = !largerElements" class="switch-label">
-      <v-list-tile-title>{{i18n('Larger fonts and icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="largerElements"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="showScale">
+     <v-list-item-content @click="largerElements = !largerElements" class="switch-label">
+      <v-list-item-title>{{i18n('Larger fonts and icons')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="largerElements"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider v-if="showScale"></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="stopButton = !stopButton" class="switch-label">
+      <v-list-item-title>{{i18n('Stop button')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="stopButton"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-item>
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
-    </v-list-tile>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="!IS_MOBILE">
-     <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
-      <v-list-tile-title>{{i18n('Keyboard shortcuts')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="keyboardControl"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="!IS_MOBILE">
+     <v-list-item-content @click="keyboardControl = !keyboardControl" class="switch-label">
+      <v-list-item-title>{{i18n('Keyboard shortcuts')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="keyboardControl"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider v-if="!IS_MOBILE"></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="menuIcons = !menuIcons" class="switch-label">
-      <v-list-tile-title>{{i18n('Menu icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show icons next to popup menu entries.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="menuIcons"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="menuIcons = !menuIcons" class="switch-label">
+      <v-list-item-title>{{i18n('Menu icons')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Show icons next to popup menu entries.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="menuIcons"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <v-divider></v-divider>
-    <v-list-tile>
-     <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
-      <v-list-tile-title>{{i18n('Screensaver')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="screensaver"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="screensaver = !screensaver" class="switch-label">
+      <v-list-item-title>{{i18n('Screensaver')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="screensaver"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <v-divider v-if="showLaunchPlayer"></v-divider>
-    <v-list-tile v-if="showLaunchPlayer">
-     <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
-      <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}}{{showLsAndNotif ? (' ' +i18n('Lock screen and notification controls will be disabled whilst player is active.')) : ''}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="showLaunchPlayer">
+     <v-list-item-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
+      <v-list-item-title>{{i18n("Add menu option to start player")}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Add option to main menu to launch player.')}}{{showLsAndNotif ? (' ' +i18n('Lock screen and notification controls will be disabled whilst player is active.')) : ''}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <v-divider v-if="hasPassword"></v-divider>
-    <v-list-tile v-if="hasPassword">
+    <v-list-item v-if="hasPassword">
      <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
-    </v-list-tile>
+    </v-list-item>
 
     <div class="dialog-padding" v-if="showLsAndNotif"></div>
     <v-header class="dialog-section-header" v-if="showLsAndNotif">{{i18n('Lock screen and notification')}}</v-header>
-    <v-list-tile v-if="showLsAndNotif">
-     <v-list-tile-content @click="lsAndNotif = !lsAndNotif" class="switch-label">
-      <v-list-tile-title>{{i18n('Show controls')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show playback controls and details of current track on Android's lock screen and notifications.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="lsAndNotif"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="showLsAndNotif">
+     <v-list-item-content @click="lsAndNotif = !lsAndNotif" class="switch-label">
+      <v-list-item-title>{{i18n('Show controls')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Show playback controls and details of current track on Android's lock screen and notifications.")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="lsAndNotif"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider v-if="showLsAndNotif"></v-divider>
-    <v-list-tile v-if="showLsAndNotif">
-     <v-list-tile-content @click="lsAndNotifPlaySilence = !lsAndNotifPlaySilence" class="switch-label">
-      <v-list-tile-title>{{i18n('Play silence')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Enable this option to have a dummy silence file played whilst LMS is playing music. This is required for some browsers (e.g. Chrome) to keep the notifications alive and for correct operation of the play/pause button. If you toggle this setting you will need to reload your browser session.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="lsAndNotifPlaySilence"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="showLsAndNotif">
+     <v-list-item-content @click="lsAndNotifPlaySilence = !lsAndNotifPlaySilence" class="switch-label">
+      <v-list-item-title>{{i18n('Play silence')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Enable this option to have a dummy silence file played whilst LMS is playing music. This is required for some browsers (e.g. Chrome) to keep the notifications alive and for correct operation of the play/pause button. If you toggle this setting you will need to reload your browser session.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="lsAndNotifPlaySilence"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
-    <v-list-tile>
-     <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="letterOverlay"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="letterOverlay = !letterOverlay" class="switch-label">
+      <v-list-item-title>{{i18n('Draw letter overlay')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="letterOverlay"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
-      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
+      <v-list-item-title>{{i18n('Always show menu')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="showMenuAudio"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
-      <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="sortFavorites = !sortFavorites" class="switch-label">
+      <v-list-item-title>{{i18n('Sort favorites list')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="sortFavorites"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
+      <v-list-item-title>{{i18n('Draw background')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="browseBackdrop"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
-      <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="sortHome"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="sortHome = !sortHome" class="switch-label">
+      <v-list-item-title>{{i18n('Sort home screen')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="sortHome"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content class="switch-label">
-      <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-title>
-     <v-list-tile-content/>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content class="switch-label">
+      <v-list-item-title>{{i18n('Home screen items')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-item-title>
+     <v-list-item-content/>
+    </v-list-item>
    
     <template v-for="(item, index) in showItems">
      <div style="display:flex">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
-      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
+      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog" icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
      </div>
     </template>
     <div class="dialog-padding"></div>
@@ -211,129 +213,129 @@ Vue.component('lms-ui-settings', {
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Now Playing')}}</v-header>
 
-    <v-list-tile>
-     <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
-      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="techInfo"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="techInfo = !techInfo" class="switch-label">
+      <v-list-item-title>{{i18n('Display technical info')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="techInfo"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="ratingsSupport">
-     <v-list-tile-content @click="showRating = !showRating" class="switch-label">
-      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="ratingsSupport">
+     <v-list-item-content @click="showRating = !showRating" class="switch-label">
+      <v-list-item-title>{{i18n('Show rating')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Display rating stars.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="showRating"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider v-if="ratingsSupport"></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
-      <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
+      <v-list-item-title>{{i18n('Show track number')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="swipeVolume = !swipeVolume" class="switch-label">
-      <v-list-tile-title>{{i18n('Swipe to change volume')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="swipeVolume"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="swipeVolume = !swipeVolume" class="switch-label">
+      <v-list-item-title>{{i18n('Swipe to change volume')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="swipeVolume"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
-    <v-list-tile>
+    <v-list-item>
      <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
-    </v-list-tile>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
-      <v-list-tile-title>{{i18n('Show current date and time')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="nowPlayingClock"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
+      <v-list-item-title>{{i18n('Show current date and time')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="nowPlayingClock"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
+      <v-list-item-title>{{i18n('Draw background')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
 
-    <v-list-tile>
-     <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
-      <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="autoScrollQueue"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
+      <v-list-item-title>{{i18n('Auto-scroll to current track')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="autoScrollQueue"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="showMenuAudioQueue = !showMenuAudioQueue" class="switch-label">
-      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showMenuAudioQueue"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="showMenuAudioQueue = !showMenuAudioQueue" class="switch-label">
+      <v-list-item-title>{{i18n('Always show menu')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="showMenuAudioQueue"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="ratingsSupport">
-     <v-list-tile-content @click="queueShowRating = !queueShowRating" class="switch-label">
-      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueShowRating"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="ratingsSupport">
+     <v-list-item-content @click="queueShowRating = !queueShowRating" class="switch-label">
+      <v-list-item-title>{{i18n('Show rating')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Display rating stars.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="queueShowRating"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider v-if="ratingsSupport"></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
-      <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueShowTrackNum"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
+      <v-list-item-title>{{i18n('Show track number')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="queueShowTrackNum"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
-      <v-list-tile-title>{{i18n('Three lines')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
+      <v-list-item-title>{{i18n('Three lines')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="queueThreeLines"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
+      <v-list-item-title>{{i18n('Draw background')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="queueBackdrop"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
     <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
 
-    <v-list-tile v-if="infoPlugin">
-     <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item v-if="infoPlugin">
+     <v-list-item-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
+      <v-list-item-title>{{i18n('Draw background')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-item-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="infoBackdrop"></v-switch></v-list-item-action>
+    </v-list-item>
 
     <div class="dialog-padding"></div>
    </v-list>
@@ -359,7 +361,7 @@ Vue.component('lms-ui-settings', {
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>
-    <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
+    <v-btn text @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
    </v-card-actions>
   </v-card>
  </v-dialog>

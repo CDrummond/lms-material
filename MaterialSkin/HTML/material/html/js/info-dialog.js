@@ -19,7 +19,7 @@ Vue.component('lms-info-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
+   <v-btn text @click.native="close()">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

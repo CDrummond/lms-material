@@ -16,21 +16,21 @@ Vue.component('lms-podcast-search-dialog', {
   <v-card-title>{{i18n("Search for podcasts")}}</v-card-title>
   <v-form ref="form">
    <v-list two-line>
-    <v-list-tile>
+    <v-list-item>
      <v-text-field :label="i18n('Term')" clearable v-model="term" class="lms-search" @keyup.enter="search()" ref="entry"></v-text-field>
-    </v-list-tile>
-    <v-list-tile v-if="providers.length>1">
+    </v-list-item>
+    <v-list-item v-if="providers.length>1">
      <v-select :items="providers" :label="i18n('Provider')" v-model="provider" item-text="name" item-value="key"></v-select>
-    </v-list-tile>
-    <v-list-tile v-if="provider && hasCountry.has(provider)">
+    </v-list-item>
+    <v-list-item v-if="provider && hasCountry.has(provider)">
      <v-select :items="countries" :label="i18n('Country')" v-model="country" item-text="value" item-value="key"></v-select>
-    </v-list-tile>
+    </v-list-item>
    </v-list>
   </v-form>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="search()">{{i18n('Search')}}</v-btn
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="search()">{{i18n('Search')}}</v-btn
   </v-card-actions>
  </v-card>
 </v-dialog>

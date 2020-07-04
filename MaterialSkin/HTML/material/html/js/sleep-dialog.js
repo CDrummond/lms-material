@@ -18,9 +18,9 @@ Vue.component('lms-sleep-dialog', {
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
-        <v-list-tile @click="setSleep(item.duration)">
-         <v-list-tile-title>{{item.label}}</v-list-tile-title>
-        </v-list-tile>
+        <v-list-item @click="setSleep(item.duration)">
+         <v-list-item-title>{{item.label}}</v-list-item-title>
+        </v-list-item>
         <v-divider></v-divider>
         </template>
       </v-list>
@@ -31,7 +31,7 @@ Vue.component('lms-sleep-dialog', {
   <v-card-actions>
    <p v-if="undefined!=sleepTime">{{i18n("%1 until sleep", formatSeconds(sleepTime))}}</p>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

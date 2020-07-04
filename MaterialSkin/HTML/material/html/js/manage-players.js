@@ -79,21 +79,23 @@ Vue.component('lms-manage-players', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)">
-    <v-btn flat v-if="!draggingSyncedPlayer" icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn text v-if="!draggingSyncedPlayer" icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title class="ellipsis" style="width:100%; text-align:center" v-if="draggingSyncedPlayer">{{i18n('Drop here to remove from group')}}</v-toolbar-title>
     <v-toolbar-title class="ellipsis" v-else>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
     <v-spacer v-if="!draggingSyncedPlayer"></v-spacer>
     <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
-     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+     <template v-slot:activator="{ on }">
+      <v-btn icon v-on="on"><v-icon>more_vert</v-icon></v-btn>
+     </template>
      <v-list>
-      <v-list-tile @click="sleepAll">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>hotel</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Set sleep time for all players')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="createGroup" v-if="manageGroups && unlockAll">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
+      <v-list-item @click="sleepAll">
+       <v-list-item-icon v-if="menuIcons"><v-icon>hotel</v-icon></v-list-item-icon>
+       <v-list-item-content><v-list-item-title>{{i18n('Set sleep time for all players')}}</v-list-item-title></v-list-item-content>
+      </v-list-item>
+      <v-list-item @click="createGroup" v-if="manageGroups && unlockAll">
+       <v-list-item-icon v-if="menuIcons"><v-icon>add_circle_outline</v-icon></v-list-item-icon>
+       <v-list-item-content><v-list-item-title>{{i18n("Create group player")}}</v-list-item-title></v-list-item-content>
+      </v-list-item>
      </v-list>
     </v-menu>
    </v-toolbar>
@@ -107,35 +109,35 @@ Vue.component('lms-manage-players', {
       <v-flex xs12 v-if="player.isgroup && index==firstGroupIndex" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
-        <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
-         <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
+        <v-list-item @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
+         <v-list-item-icon v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
-         </v-list-tile-avatar>
-         <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon" v-bind:class="{'active-btn':currentPlayer && currentPlayer.id==player.id}">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi, currentPlayer && currentPlayer.id==player.id)"></img>
-          {{player.name}}</obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
-          <v-list-tile-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
-         </v-list-tile-content>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
+         </v-list-item-icon>
+         <v-list-item-content>
+          <v-list-item-title style="cursor:pointer" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon" v-bind:class="{'active-btn':currentPlayer && currentPlayer.id==player.id}">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi, currentPlayer && currentPlayer.id==player.id)"></img>
+          {{player.name}}</obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-item-title>
+          <v-list-item-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-item-sub-title>
+         </v-list-item-content>
+         <v-list-item-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="prevTrack(player)" :title="player.name + ' - ' + trans.prev">
           <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
-         </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
+         </v-list-item-action>
+         <v-list-item-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack}" @click="playPause(player)" :title="player.name + ' - ' + (player.isplaying ? trans.pause : trans.play)">
            <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
-         </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="stop(player)" v-bind:class="{'disabled':!player.hasTrack}" :title="player.name + ' - ' + trans.stop">
+         </v-list-item-action>
+         <v-list-item-action v-if="player.playIcon && showAllButtons && stopButton && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="stop(player)" v-bind:class="{'disabled':!player.hasTrack}" :title="player.name + ' - ' + trans.stop">
            <v-btn icon><v-icon>stop</v-icon></v-btn>
-         </v-list-tile-action>
-         <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" v-bind:class="{'disabled':!player.hasTrack}" :title="player.name + ' - ' + trans.next">
+         </v-list-item-action>
+         <v-list-item-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" v-bind:class="{'disabled':!player.hasTrack}" :title="player.name + ' - ' + trans.next">
           <v-btn icon><v-icon>skip_next</v-icon></v-btn>
-         </v-list-tile-action>
-        </v-list-tile>
+         </v-list-item-action>
+        </v-list-item>
        </v-list>
       </v-flex xs12>
       <v-flex xs12>
        <v-layout>
-        <v-btn flat icon @click="volumeDown(player)" class="pmgr-btn pmgr-vol-dec-btn" :title="player.name + ' - ' + trans.decVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+        <v-btn icon @click="volumeDown(player)" class="pmgr-btn pmgr-vol-dec-btn" :title="player.name + ' - ' + trans.decVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
         <v-slider @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
-        <v-btn flat icon @click="volumeUp(player)" class="pmgr-btn" :title="player.name + ' - ' + trans.incVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+        <v-btn icon @click="volumeUp(player)" class="pmgr-btn" :title="player.name + ' - ' + trans.incVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
         <p class="pmgr-vol" v-bind:class="{'pmgr-vol-small':!showAllButtons,  'dimmed': !player.ison}">{{player.volume}}%</p>
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
@@ -153,12 +155,12 @@ Vue.component('lms-manage-players', {
      <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-grp-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
       <v-flex xs12 style="padding:0px;">
       <v-list style="padding:0px;">
-       <v-list-tile @click="movePlayer(player)">
-        <v-list-tile-content>
-         <v-list-tile-title><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-         {{player.name}}</v-list-tile-title>
-        </v-list-tile-content>
-       </v-list-tile>
+       <v-list-item @click="movePlayer(player)">
+        <v-list-item-content>
+         <v-list-item-title><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+         {{player.name}}</v-list-item-title>
+        </v-list-item-content>
+       </v-list-item>
        <v-divider v-if="index==otherPlayers.length-1 || otherPlayers[index+1].server==player.server" class="pmgr-divider"></v-divider>
        </v-list>
       </v-flex>
@@ -174,17 +176,17 @@ Vue.component('lms-manage-players', {
   <v-list>
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
-    <v-list-tile v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-title>{{action.title}}</v-list-tile-title>
-    </v-list-tile>
+    <v-list-item v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
+     <v-list-item-icon v-if="menuIcons"><v-icon v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon></v-list-item-icon>
+     <v-list-item-title>{{action.title}}</v-list-item-title>
+    </v-list-item>
    </template>
    <v-divider v-if="menu.customActions && menu.customActions.length>0"></v-divider>
    <template v-if="menu.customActions && menu.customActions.length>0" v-for="(action, index) in menu.customActions">
-    <v-list-tile @click="doCustomAction(action, menu.player)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+    <v-list-item @click="doCustomAction(action, menu.player)">
+     <v-list-item-icon v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-item-icon>
+     <v-list-item-content><v-list-item-title>{{action.title}}</v-list-item-title></v-list-item-content>
+    </v-list-item>
    </template>
   </v-list>
  </v-menu>

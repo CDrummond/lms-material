@@ -342,6 +342,7 @@ var app = new Vue({
         VueSplitter: VueSplitter
     },
     store,
-    lmsServer
+    lmsServer,
+    vuetify: new Vuetify({icons:{iconfont:'md'}})
 })
 

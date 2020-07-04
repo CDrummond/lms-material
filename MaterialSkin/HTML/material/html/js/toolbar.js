@@ -17,33 +17,35 @@ var lmsUpdateToolbarBtnColor = LMS_UPDATE_SVG;
 Vue.component('lms-toolbar', {
     template: `
 <div>
-<v-toolbar fixed dense app class="lms-toolbar noselect">
+<v-toolbar fixed class="lms-toolbar noselect">
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
-  <v-toolbar-title slot="activator">
-   <v-icon v-if="noPlayer" color="orange darken-2" class="maintoolbar-player-icon">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi)"></img>
-   <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
+  <template v-slot:activator="{ on }">
+   <v-toolbar-title v-on="on">
+    <v-icon v-if="noPlayer" color="orange darken-2" class="maintoolbar-player-icon">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi)"></img>
+    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
-   <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
-  </v-toolbar-title>
+    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
+   </v-toolbar-title>
+  </template>
        
   <v-list class="toolbar-player-list" v-bind:class="{'toolbar-player-list-desktop': !IS_MOBILE && desktopLayout}">
    <template v-for="(item, index) in players">
     <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-list-tile @click="setPlayer(item.id)">
-     <v-list-tile-avatar>
+    <v-list-item @click="setPlayer(item.id)">
+     <v-list-item-icon>
       <v-icon v-if="item.icon.icon" v-bind:class="{'active-btn':player && item.id === player.id}">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi, undefined, undefined, player && item.id === player.id)"></img>
-     </v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title>{{item.name}}</v-list-tile-title>
-     </v-list-tile-content>
-      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
-      <v-list-tile-action>
+     </v-list-item-icon>
+     <v-list-item-content>
+      <v-list-item-title>{{item.name}}</v-list-item-title>
+     </v-list-item-content>
+      <v-list-item-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-item-action>
+      <v-list-item-action>
        <v-layout v-if="!IS_MOBILE && desktopLayout && showMiniLauncherButton">
         <v-flex xs6>
          <v-btn icon class="hide-for-mini open-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
@@ -53,35 +55,35 @@ Vue.component('lms-toolbar', {
         </v-flex>
        </v-layout>
        <v-btn v-else-if="item.canpoweroff" icon style="float:right" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
-      </v-list-tile-action>
-    </v-list-tile>
+      </v-list-item-action>
+    </v-list-item>
    </template>
 
    <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
-    <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
-   </v-list-tile>
+   <v-list-item v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
+    <v-list-item-icon v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-item-icon>
+    <v-list-item-content><v-list-item-title>{{TB_MANAGE_PLAYERS.title}}</v-list-item-title></v-list-item-content>
+    <v-list-item-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-item-action>
+   </v-list-item>
 
-   <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
-    <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
-    </v-list-tile-content>
-   </v-list-tile>
+   <v-list-item v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
+    <v-list-item-icon><v-icon>hotel</v-icon></v-list-item-icon>
+    <v-list-item-content>
+     <v-list-item-title>{{playerStatus.sleepTime | displayTime}}</v-list-item-title>
+    </v-list-item-content>
+   </v-list-item>
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
  <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
- <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-progress-circular size=20 width=2 indeterminate></v-progress-circular></v-btn>
- <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @mousewheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-btn v-if="updateProgress.show" icon @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-progress-circular size=20 width=2 indeterminate></v-progress-circular></v-btn>
+ <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @mousewheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <v-slider v-show="showVolumeSlider" :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @mousewheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  <div v-show="!playerDvc && (showVolumeSlider)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
- <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @mousewheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @mousewheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="showVolumeSlider" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
- <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @mousewheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
+ <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @mousewheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
@@ -103,68 +105,72 @@ Vue.component('lms-toolbar', {
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true)"></img><v-icon>more_vert</v-icon></v-btn>
+  <template v-slot:activator="{ on }">
+   <v-btn v-on="on" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true)"></img><v-icon>more_vert</v-icon></v-btn>
+  </template>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-list-tile v-else-if="item.id!=TB_SERVER_SETTINGS.id || unlockAll" @click="menuAction(item.id)">
-     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-      <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
-    </v-list-tile>
-    <v-list-tile :href="appSettings" v-if="undefined!=appSettings && item.id==TB_UI_SETTINGS.id">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{trans.appSettings}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+    <v-list-item v-else-if="item.id!=TB_SERVER_SETTINGS.id || unlockAll" @click="menuAction(item.id)">
+     <v-list-item-icon v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-item-icon>
+     <v-list-item-content>
+      <v-list-item-title>{{item.title}}</v-list-item-title>
+      <v-list-item-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-item-sub-title>
+     </v-list-item-content>
+     <v-list-item-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-item-action>
+    </v-list-item>
+    <v-list-item :href="appSettings" v-if="undefined!=appSettings && item.id==TB_UI_SETTINGS.id">
+     <v-list-item-icon v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-item-icon>
+     <v-list-item-content><v-list-item-title>{{trans.appSettings}}</v-list-item-title></v-list-item-content>
+    </v-list-item>
    </template>
-   <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
-    <v-list-tile-avatar v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-tile-avatar>
-    <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
-   </v-list-tile>
+   <v-list-item v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
+    <v-list-item-icon v-if="menuIcons"><v-icon>surround_sound</v-icon></v-list-item-icon>
+    <v-list-item-title>{{trans.startPlayer}}</v-list-item-title>
+   </v-list-item>
    <v-divider v-if="otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
    <template v-if="otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
-    <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && playlist.count==''}">
-     <v-list-tile-avatar v-if="menuIcons">
+    <v-list-item @click="bus.$emit('settingsMenuAction:'+currentPage, action)" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && playlist.count==''}">
+     <v-list-item-icon v-if="menuIcons">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-     </v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
-     <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
-    </v-list-tile>
+     </v-list-item-icon>
+     <v-list-item-content><v-list-item-title>{{ACTIONS[action].title}}</v-list-item-title></v-list-item-content>
+     <v-list-item-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-item-action>
+    </v-list-item>
    </template>
    <v-divider v-if="customActions && customActions.length>0"></v-divider>
    <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-    <v-list-tile @click="doCustomAction(action)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+    <v-list-item @click="doCustomAction(action)">
+     <v-list-item-icon v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-item-icon>
+     <v-list-item-content><v-list-item-title>{{action.title}}</v-list-item-title></v-list-item-content>
+    </v-list-item>
    </template>
    <v-divider v-if="undefined!=appQuit"></v-divider>
-   <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
-    <v-list-tile-avatar v-if="menuIcons"><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.appQuit}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
+   <v-list-item :href="appQuit" v-if="undefined!=appQuit">
+    <v-list-item-icon v-if="menuIcons"><v-icon>power_settings_new</v-icon></v-list-item-icon>
+    <v-list-item-content><v-list-item-title>{{trans.appQuit}}</v-list-item-title></v-list-item-content>
+   </v-list-item>
   </v-list>
  </v-menu>
  <v-menu v-else-if="!connected && (undefined!=appSettings || undefined!=appQuit)" bottom left v-model="showErrorMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><v-icon class="red">error</v-icon></v-btn>
+  <template v-slot:activator="{ on }">
+   <v-btn v-on="on" icon :title="trans.mainMenu"><v-icon class="red">error</v-icon></v-btn>
+  </template>
   <v-list>
-   <v-list-tile @click="bus.$emit('showError', undefined, trans.connectionLost)">
-    <v-list-tile-avatar v-if="menuIcons"><v-icon>error</v-icon></v-btn></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-   <v-list-tile :href="appSettings" v-if="undefined!=appSettings">
-    <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.appSettings}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
+   <v-list-item @click="bus.$emit('showError', undefined, trans.connectionLost)">
+    <v-list-item-icon v-if="menuIcons"><v-icon>error</v-icon></v-btn></v-list-item-icon>
+    <v-list-item-content><v-list-item-title>{{trans.connectionLost}}</v-list-item-title></v-list-item-content>
+   </v-list-item>
+   <v-list-item :href="appSettings" v-if="undefined!=appSettings">
+    <v-list-item-icon v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-item-icon>
+    <v-list-item-content><v-list-item-title>{{trans.appSettings}}</v-list-item-title></v-list-item-content>
+   </v-list-item>
    <v-divider v-if="undefined!=appQuit"></v-divider>
-   <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
-    <v-list-tile-avatar v-if="menuIcons"><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.appQuit}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
+   <v-list-item :href="appQuit" v-if="undefined!=appQuit">
+    <v-list-item-icon v-if="menuIcons"><v-icon>power_settings_new</v-icon></v-list-item-icon>
+    <v-list-item-content><v-list-item-title>{{trans.appQuit}}</v-list-item-title></v-list-item-content>
+   </v-list-item>
   </v-list>
  </v-menu>
  <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost)">

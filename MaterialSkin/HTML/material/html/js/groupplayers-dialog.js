@@ -13,43 +13,43 @@ Vue.component('lms-groupplayers-dialog', {
   <v-card-title>{{player ? i18n("Edit group player") : i18n("Create group player")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
-    <v-list-tile>
-     <v-list-tile-content>
+    <v-list-item>
+     <v-list-item-content>
       <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
-     </v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile>
+     </v-list-item-content>
+    </v-list-item>
+    <v-list-item>
      <v-select chips deletable-chips multiple :items="players" :label="i18n('Group members')" v-model="chosenPlayers" item-text="label" item-value="id">
-      <v-list-tile slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">
-       <v-list-tile-action><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-action>
-       <v-list-tile-title>{{i18n('Select All')}}</v-list-tile-title>
-      </v-list-tile>
+      <v-list-item slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">
+       <v-list-item-action><v-icon>{{selectAllIcon}}</v-icon></v-list-item-action>
+       <v-list-item-title>{{i18n('Select All')}}</v-list-item-title>
+      </v-list-item>
       <v-divider slot="prepend-item"></v-divider>
      </v-select>
-    </v-list-tile>
-    <v-list-tile>
-     <v-list-tile-content @click="options.powerMaster = !options.powerMaster" class="switch-label">
-      <v-list-tile-title>{{i18n('Power on/off all')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Use group player's power settings to control power of all members.")}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="options.powerMaster"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    </v-list-item>
+    <v-list-item>
+     <v-list-item-content @click="options.powerMaster = !options.powerMaster" class="switch-label">
+      <v-list-item-title>{{i18n('Power on/off all')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n("Use group player's power settings to control power of all members.")}}</v-list-item-sub-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="options.powerMaster"></v-switch></v-list-item-action>
+    </v-list-item>
     <v-divider></v-divider>
-    <v-list-tile>
-     <v-list-tile-content @click="options.powerPlay = !options.powerPlay" class="switch-label">
-      <v-list-tile-title>{{i18n('Power on all upon play')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Power on all group members when playing to group.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="options.powerPlay"></v-switch></v-list-tile-action>
-    </v-list-tile>
+    <v-list-item>
+     <v-list-item-content @click="options.powerPlay = !options.powerPlay" class="switch-label">
+      <v-list-item-title>{{i18n('Power on all upon play')}}</v-list-item-title>
+      <v-list-item-sub-title>{{i18n('Power on all group members when playing to group.')}}</v-list-item-sub-title>
+     </v-list-item-content>
+     <v-list-item-action><v-switch v-model="options.powerPlay"></v-switch></v-list-item-action>
+    </v-list-item>
    </v-list>
   </v-form>
   <div class="dialog-padding"></div>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat v-if="player" @click.native="update()">{{i18n('Update')}}</v-btn>
-   <v-btn flat v-else @click.native="create()">{{i18n('Create')}}</v-btn>
+   <v-btn text @click.native="close()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text v-if="player" @click.native="update()">{{i18n('Update')}}</v-btn>
+   <v-btn text v-else @click.native="create()">{{i18n('Create')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

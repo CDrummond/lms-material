@@ -15,7 +15,7 @@ Vue.component('lms-icon-dialog', {
     <v-layout wrap>
      <v-flex xs12>
       <div class="icon-grid">
-       <v-btn flat icon v-for="(item, index) in items.icons" @click="setIcon(item)">
+       <v-btn icon v-for="(item, index) in items.icons" @click="setIcon(item)">
         <v-icon v-if="item.icon" v-bind:class="{'active-btn':player.icon.icon == item.icon}">{{item.icon}}</v-icon>
         <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi, player.icon.svg==item.svg)"></img>
        </v-btn>
@@ -26,7 +26,7 @@ Vue.component('lms-icon-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

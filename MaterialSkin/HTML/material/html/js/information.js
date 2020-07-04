@@ -12,12 +12,12 @@ Vue.component('lms-information-dialog', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app class="dialog-toolbar">
-    <v-btn flat icon @click.native="close()" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn icon @click.native="close()" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')+serverName}}</div>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon @click.native="openWindow('https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html')" :title="i18n('User guide')"><v-icon>help_outline</b-icon></v-btn>
+    <v-btn icon @click.native="openWindow('https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html')" :title="i18n('User guide')"><v-icon>help_outline</b-icon></v-btn>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">
@@ -28,7 +28,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="openSettings" v-if="unlockAll" flat><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn>
+    <v-btn @click="openSettings" v-if="unlockAll"><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -39,12 +39,14 @@ Vue.component('lms-information-dialog', {
     <li v-else>{{scanInfo}}</li>
    </ul>
    <v-menu bottom v-if="!scanning && unlockAll">
-    <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
+    <template v-slot:activator="{ on }">
+     <v-btn v-on="on" text><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
+    </template>
     <v-list>
      <template v-for="(item, index) in rescans">
-      <v-list-tile @click="lmsCommand('', item.cmd)">
-       <v-list-tile-title>{{item.name}}</v-list-tile-title>
-      </v-list-tile>
+      <v-list-item @click="lmsCommand('', item.cmd)">
+       <v-list-item-title>{{item.name}}</v-list-item-title>
+      </v-list-item>
      </template>
     </v-list>
    </v-menu>
@@ -56,9 +58,9 @@ Vue.component('lms-information-dialog', {
    <ul v-if="'downloading'!=pluginStatus && updates.details.length>0">
     <template v-for="(plug, index) in updates.details"><li @click="pluginInfo(plug)" class="link-item">{{plug.title}} {{plug.version}}</li></template>
    </ul>
-   <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins" flat><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
+   <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins"><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
    <p v-if="'downloading'==pluginStatus"><v-progress-circular size=16 width=2 indeterminate style="margin-top:-4px"></v-progress-circular> {{i18n('Downloading plugin updates')}}</p>
-   <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat>{{i18n('Restart server')}}</v-btn>
+   <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer">{{i18n('Restart server')}}</v-btn>
    <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
    <ul>
     <template v-for="(plug, index) in plugins.details"><li v-if="'downloading'==pluginStatus || !updates.names.has(plug.name)" class="link-item" @click="pluginInfo(plug)">{{plug.title}} {{plug.version}}</li></template>
@@ -88,7 +90,7 @@ Vue.component('lms-information-dialog', {
    </p>
 
    <p>{{i18n('Material Skin is developed purely for fun, and no donations are required. However, if you wish to make a donation, please use the button below:')}}</p>
-   <v-btn @click="openWindow('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url')" flat><img class="svg-img btn-icon" :src="'paypal' | svgIcon(darkUi)"></img>{{i18n('Donate')}}</v-btn>
+   <v-btn @click="openWindow('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url')"><img class="svg-img btn-icon" :src="'paypal' | svgIcon(darkUi)"></img>{{i18n('Donate')}}</v-btn>
 
    <div class="dialog-padding"></div>
    <v-divider></v-divider>

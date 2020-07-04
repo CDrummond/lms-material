@@ -17,10 +17,10 @@ Vue.component('lms-dstm-dialog', {
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
-        <v-list-tile @click="setDstm(item.key)">
-         <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
-         <v-list-tile-content>{{item.label}}</v-list-tile-content> 
-        </v-list-tile>
+        <v-list-item @click="setDstm(item.key)">
+         <v-list-item-icon><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-item-icon>
+         <v-list-item-content>{{item.label}}</v-list-item-content> 
+        </v-list-item>
         <v-divider></v-divider>
        </template>
       </v-list>
@@ -30,7 +30,7 @@ Vue.component('lms-dstm-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

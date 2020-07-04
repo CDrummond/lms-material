@@ -21,8 +21,8 @@ Vue.component('lms-rating-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="apply()">{{i18n('Apply')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="apply()">{{i18n('Apply')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

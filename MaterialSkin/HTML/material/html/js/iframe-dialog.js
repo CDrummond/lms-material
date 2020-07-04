@@ -129,24 +129,24 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
-      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+      <template v-slot:activator="{ on }"><v-btn icon v-on="on"><v-icon>more_vert</v-icon></v-btn></template>
       <v-list>
        <template v-for="(item, index) in actions">
-        <v-list-tile @click="doAction(item)">
-         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
-         <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
-        </v-list-tile>
+        <v-list-item @click="doAction(item)">
+         <v-list-item-icon v-if="menuIcons"><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-item-icon>
+         <v-list-item-content><v-list-item-title>{{item.title}}</v-list-item-title></v-list-item-content>
+        </v-list-item>
        </template>
        <v-divider v-if="actions.length>0 && (customActions && customActions.length>0)"></v-divider>
        <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-        <v-list-tile @click="doCustomAction(action, player)">
-         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-         <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-        </v-list-tile>
+        <v-list-item @click="doCustomAction(action, player)">
+         <v-list-item-icon v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-item-icon>
+         <v-list-item-content><v-list-item-title>{{action.title}}</v-list-item-title></v-list-item-content>
+        </v-list-item>
        </template>
       </v-list>
      </v-menu>

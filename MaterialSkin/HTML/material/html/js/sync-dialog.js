@@ -16,10 +16,10 @@ Vue.component('lms-sync-dialog', {
      <v-flex xs12>{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
      <v-flex xs12>
       <v-select chips deletable-chips multiple :items="players" :label="i18n('Synchronise players')" v-model="chosenPlayers" item-text="label" item-value="id">
-       <v-list-tile slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">
-        <v-list-tile-action><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-action>
-        <v-list-tile-title>{{i18n('Select All')}}</v-list-tile-title>
-       </v-list-tile>
+       <v-list-item slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">
+        <v-list-item-action><v-icon>{{selectAllIcon}}</v-icon></v-list-item-action>
+        <v-list-item-title>{{i18n('Select All')}}</v-list-item-title>
+       </v-list-item>
        <v-divider slot="prepend-item"></v-divider>
       </v-select>
      </v-flex>
@@ -28,8 +28,8 @@ Vue.component('lms-sync-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="sync()">{{i18n('Sync')}}</v-btn>
+   <v-btn text @click.native="close()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="sync()">{{i18n('Sync')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

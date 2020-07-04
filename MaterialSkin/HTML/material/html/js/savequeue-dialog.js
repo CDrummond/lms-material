@@ -13,17 +13,17 @@ Vue.component('lms-savequeue', {
   <v-card-title>{{i18n('Save play queue')}}</v-card-title>
   <v-form>
    <v-list two-line>
-    <v-list-tile>
-     <v-list-tile-content>
+    <v-list-item>
+     <v-list-item-content>
       <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry" :rules="[checkExists]" :error-messages="errorMessages"></v-text-field>
-     </v-list-tile-content>
-    </v-list-tile>
+     </v-list-item-content>
+    </v-list-item>
    </v-list>
   </v-form>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="save()">{{nameExists ? i18n('Overwrite') : i18n('Save')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="save()">{{nameExists ? i18n('Overwrite') : i18n('Save')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

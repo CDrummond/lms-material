@@ -17,8 +17,8 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(false)">{{negativeButton}}</v-btn>
-   <v-btn flat @click.native="close(true)">{{positiveButton}}</v-btn>
+   <v-btn text @click.native="close(false)">{{negativeButton}}</v-btn>
+   <v-btn text @click.native="close(true)">{{positiveButton}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>`,

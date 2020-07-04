@@ -13,23 +13,23 @@ Vue.component('lms-favorite', {
   <v-card-title>{{isAdd ? i18n("Add favorite") : i18n("Edit favorite")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
-    <v-list-tile>
-     <v-list-tile-content>
+    <v-list-item>
+     <v-list-item-content>
       <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
-     </v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile>
-     <v-list-tile-content>
+     </v-list-item-content>
+    </v-list-item>
+    <v-list-item>
+     <v-list-item-content>
       <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
-     </v-list-tile-content>
-    </v-list-tile>
+     </v-list-item-content>
+    </v-list-item>
    </v-list>
   </v-form>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="update()" v-if="!isAdd">{{i18n('Update')}}</v-btn>
-   <v-btn flat @click.native="add()" v-if="isAdd">{{i18n('Add')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="update()" v-if="!isAdd">{{i18n('Update')}}</v-btn>
+   <v-btn text @click.native="add()" v-if="isAdd">{{i18n('Add')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

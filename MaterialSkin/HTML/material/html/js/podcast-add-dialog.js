@@ -13,26 +13,26 @@ Vue.component('lms-podcast-add-dialog', {
   <v-card-title>{{i18n("Add podcast")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
-    <v-list-tile>
-     <v-list-tile-content>
+    <v-list-item>
+     <v-list-item-content>
       <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
-     </v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile>
-     <v-list-tile-content>
+     </v-list-item-content>
+    </v-list-item>
+    <v-list-item>
+     <v-list-item-content>
       <v-text-field clearable :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
-     </v-list-tile-content>
-     <v-list-tile-action><v-btn flat @click="validate">{{i18n('Validate')}}</v-btn></v-list-tile-action>
-    </v-list-tile>
-    <v-list-tile v-if="error">
+     </v-list-item-content>
+     <v-list-item-action><v-btn text @click="validate">{{i18n('Validate')}}</v-btn></v-list-item-action>
+    </v-list-item>
+    <v-list-item v-if="error">
      <p style="color:red">{{error}}</p>
-    </v-list-tile>
+    </v-list-item>
    </v-list>
   </v-form>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="add()">{{i18n('Add')}}</v-btn>
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text @click.native="add()">{{i18n('Add')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

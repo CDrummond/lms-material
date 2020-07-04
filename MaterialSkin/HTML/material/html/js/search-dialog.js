@@ -13,20 +13,20 @@ Vue.component('lms-search-dialog', {
   <v-card-title>{{i18n("Search library")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
-    <v-list-tile>
+    <v-list-item>
      <v-text-field :disabled="searching" :label="i18n('Term')" clearable v-model="term" class="lms-search" @keyup.enter="search()" ref="entry"></v-text-field>
-    </v-list-tile>
-    <v-list-tile>
+    </v-list-item>
+    <v-list-item>
      <v-select :disabled="searching" :label="i18n('Category')" :items="categories" v-model="category" item-text="label" item-value="value"></v-select>
-    </v-list-tile>
+    </v-list-item>
    </v-list>
   </v-form>
   <v-card-actions>
    <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
-   <v-btn flat v-else @click.native="advanced()" id="advanced-search-btn">{{i18n('Advanced')}}</v-btn>
+   <v-btn text v-else @click.native="advanced()" id="advanced-search-btn">{{i18n('Advanced')}}</v-btn>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat v-if="!searching" @click.native="search()">{{i18n('Search')}}</v-btn
+   <v-btn text @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn text v-if="!searching" @click.native="search()">{{i18n('Search')}}</v-btn
   </v-card-actions>
  </v-card>
 </v-dialog>

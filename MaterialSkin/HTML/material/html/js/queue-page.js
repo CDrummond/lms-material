@@ -198,20 +198,6 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
 var lmsQueue = Vue.component("lms-queue", {
   template: `
 <div> 
- <v-dialog v-model="dialog.show" v-if="dialog.show" persistent max-width="500px">
-  <v-card>
-   <v-card-title>{{dialog.title}}</v-card-title>
-   <v-card-text>
-    <v-text-field single-line :label="dialog.hint" v-model="dialog.value" @keyup.enter="dialogResponse(true);" ref="entry"></v-text-field>
-   </v-card-text>
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
-    <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
-   </v-card-actions>
-  </v-card>
- </v-dialog>
-
  <div class="subtoolbar noselect list-details">
   <v-layout v-if="selection.size>0">
    <v-layout row wrap>
@@ -329,7 +315,6 @@ var lmsQueue = Vue.component("lms-queue", {
         return {
             items: [],
             currentIndex: -1,
-            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined},
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
@@ -686,20 +671,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             });
         },
-        dialogResponse(val) {
-            if (val && this.dialog.value) {
-                var str = this.dialog.value.trim();
-                if (str.length>1) {
-                    this.dialog.show = false;
-
-                    if ('add'==this.dialog.action) {
-                        lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", str]).then(({data}) => {
-                            bus.$emit('refreshStatus');
-                        });
-                    }
-                }
-            }
-        },
         click(item, index, event) {
             if (this.selection.size>0) {
                 this.select(item, index, event);
@@ -793,8 +764,13 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (act==PQ_ADD_URL_ACTION) {
-                this.dialog={show: true, title: ACTIONS[PQ_ADD_URL_ACTION].title, hint: i18n("URL"), ok: i18n("Add"), value:"", action:'add'};
-                focusEntry(this);
+                promptForText(ACTIONS[PQ_ADD_URL_ACTION].title, i18n("URL"), undefined, i18n("Add")).then(resp => {
+                    if (resp.ok && resp.value && resp.value.length>0) {
+                        lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", resp.value]).then(({data}) => {
+                            bus.$emit('refreshStatus');
+                        });
+                    }
+                });
             } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length>=1) {
                     this.scrollToCurrent(true);
@@ -1136,9 +1112,6 @@ var lmsQueue = Vue.component("lms-queue", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'queue', shown:newVal});
-        },
-        'dialog.show': function(val) {
-            this.$store.commit('dialogOpen', {name:'browse', shown:val});
         }
     },
     beforeDestroy() {

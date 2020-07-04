@@ -12,19 +12,6 @@ var ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal',
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <v-dialog v-model="dialog.show" v-if="dialog.show" persistent max-width="500px">
-  <v-card>
-   <v-card-title>{{dialog.title}}</v-card-title>
-   <v-card-text>
-    <v-text-field single-line :label="dialog.hint" v-model="dialog.value" @keyup.enter="dialogResponse(true);" ref="entry"></v-text-field>
-   </v-card-text>
-  <v-card-actions>
-   <v-spacer></v-spacer>
-   <v-btn flat @click.native="dialog.show = false; dialogResponse(false);">{{undefined===dialog.cancel ? trans.cancel : dialog.cancel}}</v-btn>
-   <v-btn flat @click.native="dialogResponse(true);">{{undefined===dialog.ok ? trans.ok : dialog.ok}}</v-btn>
-  </v-card-actions>
-  </v-card>
- </v-dialog>
  <div v-if="headerTitle" class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
   <v-layout v-if="selection.size>0">
    <v-layout row wrap>
@@ -308,7 +295,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             grid: {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
             hoverBtns: false,
-            dialog: { show:false, title:undefined, hint:undefined, ok: undefined, cancel:undefined, command:undefined},
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, search:undefined },
@@ -1133,35 +1119,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.enteredTerm = event.target._value;
             this.doTextClick(item);
         },
-        dialogResponse(val) {
-            if (val && this.dialog.value) {
-                var str = this.dialog.value.trim();
-                if (str.length>0 && str!==this.dialog.hint) {
-                    this.dialog.show = false;
-                    if (this.dialog.item && this.dialog.item.isPinned) {
-                        this.dialog.item.title=str;
-                        this.saveTopList();
-                    } else {
-                        var command = [];
-                        this.dialog.command.forEach(p => { command.push(p.replace(TERM_PLACEHOLDER, str)); });
-
-                        if (this.dialog.params) {
-                            var params = [];
-                            this.dialog.params.forEach(p => { params.push(p.replace(TERM_PLACEHOLDER, str)); });
-                            this.fetchItems({command: command, params: params}, this.dialog.item);
-                        } else {
-                            lmsCommand(this.playerId(), command).then(({data}) => {
-                                logJsonMessage("RESP", data);
-                                this.refreshList();
-                            }).catch(err => {
-                                logAndShowError(err, this.dialog.command.length>2 && this.dialog.command[1]==='rename' ? i18n("Rename failed") : i18n("Failed"), command);
-                            });
-                        }
-                    }
-                }
-                this.dialog = {};
-            }
-        },
         itemMoreMenu(item, queueIndex, page) {
             if (undefined!=queueIndex) {
                 this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item, page);
@@ -1198,25 +1155,43 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (!this.playerId()) {  // *************** NO PLAYER ***************
                 bus.$emit('showError', undefined, i18n("No Player"));
             } else if (act===RENAME_ACTION) {
-                this.dialog = this.isTop || item.isPinned
-                                ? { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined, item:item,}
-                                : SECTION_PLAYLISTS==item.section
-                                    ? { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                        command:["playlists", "rename", item.id, "newname:"+TERM_PLACEHOLDER]}
-                                    : SECTION_PODCASTS==item.section
-                                        ? { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                            command:["material-skin", "edit-podcast", "pos:"+item.id.split(":")[1].split(".")[1], "name:"+TERM_PLACEHOLDER]}
-                                        : { show:true, title:i18n("Rename"), hint:item.title, value:item.title, ok: i18n("Rename"), cancel:undefined,
-                                            command:["favorites", "rename", item.id, "title:"+TERM_PLACEHOLDER]};
-                focusEntry(this);
+                promptForText(i18n("Rename"), item.title, item.title, i18n("Rename")).then(resp => {
+                    if (resp.ok && resp.value && resp.value.length>0 && resp.value!=item.title) {
+                        if (item.isPinned) {
+                            item.title=str;
+                            this.saveTopList();
+                        } else {
+                            var command = SECTION_PLAYLISTS==item.section
+                                            ? ["playlists", "rename", item.id, "newname:"+resp.value]
+                                            : SECTION_PODCASTS==item.section
+                                                ? ["material-skin", "edit-podcast", "pos:"+item.id.split(":")[1].split(".")[1], "name:"+resp.value]
+                                                : ["favorites", "rename", item.id, "title:"+resp.value];
+
+                            lmsCommand(this.playerId(), command).then(({data}) => {
+                                logJsonMessage("RESP", data);
+                                this.refreshList();
+                            }).catch(err => {
+                                logAndShowError(err, i18n("Rename failed"), command);
+                            });
+                        }
+                    }
+                });
             } else if (act==ADD_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length});
             } else if (act==EDIT_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'edit', item);
             } else if (act==ADD_FAV_FOLDER_ACTION) {
-                this.dialog = { show:true, title:ACTIONS[ADD_FAV_FOLDER_ACTION].title, ok: i18n("Create"), cancel:undefined,
-                                command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length] };
-                focusEntry(this);
+                promptForText(ACTIONS[ADD_FAV_FOLDER_ACTION].title, undefined, undefined, i18n("Create")).then(resp => {
+                    if (resp.ok && resp.value && resp.value.length>0) {
+                        lmsCommand(this.playerId(), ["favorites", "addlevel", "title:"+resp.value, 
+                                                     (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length]).then(({data}) => {
+                            logJsonMessage("RESP", data);
+                            this.refreshList();
+                        }).catch(err => {
+                            logAndShowError(err, i18n("Failed"), command);
+                        });
+                    }
+                });
             } else if (act===DELETE_ACTION) {
                 confirm(i18n("Delete '%1'?", item.title), i18n('Delete')).then(res => {
                     if (res) {
@@ -2913,9 +2888,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'browse', shown:newVal});
-        },
-        'dialog.show': function(val) {
-            this.$store.commit('dialogOpen', {name:'browse', shown:val});
         }
     }
 });

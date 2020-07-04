@@ -898,11 +898,6 @@ function emitToolbarColors(top, bot) {
     }
 }
 
-function confirm(obj, prompt, buttons) {
-    obj.$store.commit('dialogOpen', {name:'prompt', shown:true});
-    return obj.$confirm(prompt, buttons).finally(() => { obj.$store.commit('dialogOpen', {name:'prompt', shown:false}); });
-}
-
 function formatTrackNum(item) {
     let t = parseInt(item.tracknum);
     let d = item.disccount && item.disc && parseInt(item.disccount)>1 ? parseInt(item.disc) : undefined;

@@ -592,8 +592,7 @@ Vue.component('lms-player-settings', {
             this.alarmDialog.show = false;
         },
         deleteAlarm(alarm) {
-            confirm(this, i18n("Delete alarm?"),
-                          {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Delete alarm?"), i18n('Delete')).then(res => {
                 if (res) {
                     lmsCommand(this.playerId, ["alarm", "delete", "id:"+alarm.id]).then(({data}) => {
                         this.loadAlarms();

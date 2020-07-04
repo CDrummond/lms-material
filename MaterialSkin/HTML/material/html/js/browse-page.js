@@ -1215,7 +1215,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 command:["favorites", "addlevel", "title:"+TERM_PLACEHOLDER, (this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length] };
                 focusEntry(this);
             } else if (act===DELETE_ACTION) {
-                confirm(this, i18n("Delete '%1'?", item.title), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+                confirm(i18n("Delete '%1'?", item.title), i18n('Delete')).then(res => {
                     if (res) {
                         if (item.id.startsWith("playlist_id:")) {
                             this.clearSelection();
@@ -1230,7 +1230,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             } else if (act==REMOVE_ACTION) {
-                confirm(this, i18n("Remove '%1'?", item.title), {buttonTrueText: i18n('Remove'), buttonFalseText: i18n('Cancel')}).then(res => {
+                confirm(i18n("Remove '%1'?", item.title), i18n('Remove')).then(res => {
                     if (res) {
                         this.clearSelection();
                         lmsCommand(this.playerId(), ["playlists", "edit", "cmd:delete", this.current.id, "index:"+index]).then(({data}) => {
@@ -1297,9 +1297,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined==id) {
                     return;
                 }
-                confirm(this, act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
-                                                           : i18n("Delete '%1'?", item.title)+addNote(i18n("This will remove the folder, and any favorites contained within.")),
-                              {buttonTrueText: act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete"), buttonFalseText: i18n('Cancel')}).then(res => {
+                confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
+                                                     : i18n("Delete '%1'?", item.title)+addNote(i18n("This will remove the folder, and any favorites contained within.")),
+                        act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete")).then(res => {
                     if (res) {
                         this.clearSelection();
                         var command = ["favorites", "delete", id];
@@ -1438,7 +1438,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit('dlg.open', 'podcastadd');
                 }
             } else if (REMOVE_PODCAST_ACTION==act) {
-                    confirm(this, i18n("Remove '%1'?", item.title), {buttonTrueText: i18n("Remove"), buttonFalseText: i18n('Cancel')}).then(res => {
+                    confirm(i18n("Remove '%1'?", item.title), i18n("Remove")).then(res => {
                     if (res) {
                         lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({data}) => {
                             this.refreshList();
@@ -1579,7 +1579,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$store.commit('setLibrary', id);
         },
         deleteLibrary(lib) {
-            confirm(this, i18n("Delete '%1'?", lib.name)+addNote(i18n("This will remove the 'virtual library', but will not delete the actual music files contained within.")), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Delete '%1'?", lib.name)+addNote(i18n("This will remove the 'virtual library', but will not delete the actual music files contained within.")), i18n('Delete')).then(res => {
                 if (res) {
                     lmsCommand("", ["material-skin", "delete-vlib", "id:"+lib.id]).then(({data}) => {
                         if (this.$store.state.library==lib.id) {
@@ -2352,7 +2352,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.saveTopList();
                 bus.$emit('showMessage', i18n("Pinned '%1' to home screen.", item.title));
             } else if (!add && index!=-1) {
-                confirm(this, i18n("Un-pin '%1'?", item.title), {buttonTrueText: i18n('Un-pin'), buttonFalseText: i18n('Cancel')}).then(res => {
+                confirm(i18n("Un-pin '%1'?", item.title), i18n('Un-pin')).then(res => {
                     if (res) {
                         this.top.splice(index, 1);
                         this.options.pinned.delete(item.id);
@@ -2445,9 +2445,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (1==selection.size) {
                 this.itemAction(act, this.items[selection[0]], selection[0]);
             } else {
-                confirm(this, REMOVE_ACTION==act || REMOVE_FROM_FAV_ACTION==act ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
-                             {buttonTrueText: REMOVE_ACTION==act || REMOVE_FROM_FAV_ACTION==act ? i18n("Remove") : i18n("Delete"),
-                              buttonFalseText: i18n('Cancel')}).then(res => {
+                confirm(REMOVE_ACTION==act || REMOVE_FROM_FAV_ACTION==act ? i18n("Remove the selected items?") : i18n("Delete the selected items?"),
+                        REMOVE_ACTION==act || REMOVE_FROM_FAV_ACTION==act ? i18n("Remove") : i18n("Delete")).then(res => {
                     if (res) {
                         var ids=[];
                         selection.sort((a, b) => (undefined!=this.items[b].realIndex ? this.items[b].realIndex : b) - (undefined!=this.items[b].realIndex ? this.items[a].realIndex : a));

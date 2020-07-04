@@ -51,13 +51,6 @@ vue-virtual-scroller:
     URL: https://github.com/Akryum/vue-virtual-scroller
     License: MIT
 
-vuetify-confirm:
-    Version: pre 0.2.0
-    URL: https://github.com/yariksav/vuetify-confirm
-    License: MIT
-    Notes: Swapped location of True/False buttons, remove default setting of
-           button colours, and made dialogs persistent.
-
 vuetify
     Version: 1.5.23
     URL: https://github.com/vuetifyjs/vuetify

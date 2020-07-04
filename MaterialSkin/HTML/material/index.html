@@ -85,6 +85,7 @@
     <lms-dstm-dialog v-if="dialogs.dstm"></lms-dstm-dialog>
     <lms-savequeue v-if="dialogs.savequeue"></lms-savequeue>
     <lms-icon-dialog v-if="dialogs.icon"></lms-icon-dialog>
+    <lms-confirm-dialog v-if="dialogs.confirm"></lms-confirm-dialog>
     <lms-screensaver></lms-screensaver>
     <lms-volumeoverlay></lms-volumeoverlay>
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
@@ -140,10 +141,10 @@
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   print("<script>const LMS_MATERIAL_REVISION=\"$version\";</script>\n");
-  print("  <script src=\"html/lib/vuetify-confirm.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/actions.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/constants.js?r=$version\"></script>\n");
+  print("  <script src=\"html/js/confirm-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/customactions.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/standarditems.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/emblems.js?r=$version\"></script>\n");

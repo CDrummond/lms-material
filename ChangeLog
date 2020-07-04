@@ -4,6 +4,7 @@
 2. Map icons for 'Sounds & Effects', Napster, and SHOUTcast.
 3. Fix showing folder icon for favourites folder.
 4. Allow navigating into empty favourites folder.
+5. Re-filter jumplist on window height changes.
 
 1.8.4
 -----

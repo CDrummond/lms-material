@@ -486,6 +486,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.enteredTerm = term;
             this.fetchUrlItems(url, provider);
         }.bind(this));
+        bus.$on('windowHeightChanged', function() {
+            this.filterJumplist();
+        }.bind(this));
         if (!IS_MOBILE) {
             bindKey('home');
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');

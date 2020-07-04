@@ -489,7 +489,7 @@ Vue.component('lms-manage-players', {
             }
         },
         deleteGroup(player) {
-            confirm(this, i18n("Delete '%1'?", player.name), {buttonTrueText: i18n('Delete'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Delete '%1'?", player.name), i18n('Delete')).then(res => {
                 if (res) {
                     lmsCommand("", ['playergroups', 'delete', 'id:'+player.id]).then(({data}) => {
                         // If server status is refreshed straight away, group player comes back (in listing). Delaying for 1/4 seems to
@@ -603,7 +603,7 @@ Vue.component('lms-manage-players', {
             return player.isgroup || player.issyncmaster || !player.syncslaves || player.syncslaves.length<1;
         },
         movePlayer(player) {
-            confirm(this, i18n("Move '%1' from '%2' to this server?", player.name, player.server), {buttonTrueText: i18n('Move'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Move '%1' from '%2' to this server?", player.name, player.server), i18n('Move')).then(res => {
                 if (res) {
                     bus.$emit('movePlayer', player);
                 }

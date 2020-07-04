@@ -648,9 +648,9 @@ Vue.component('lms-ui-settings', {
             }
         },
         saveAsDefault() {
-            confirm(this, i18n("Save the current settings as default for new users?")+
-                                (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
-                          {buttonTrueText: i18n('Set Defaults'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Save the current settings as default for new users?")+
+                         (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
+                    i18n('Set Defaults')).then(res => {
                 if (res) {
                     var settings = { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                      color:this.color,
@@ -699,8 +699,7 @@ Vue.component('lms-ui-settings', {
             });
         },
         revertToDefault() {
-            confirm(this, i18n("Revert to default settings?"),
-                          {buttonTrueText: i18n('Revert'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Revert to default settings?"), i18n('Revert')).then(res => {
                 if (res) {
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
                         if (data && data.result && data.result._p2) {

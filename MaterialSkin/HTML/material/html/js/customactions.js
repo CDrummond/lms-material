@@ -44,7 +44,7 @@ function getCustomActions(id, lockedActions) {
 
 function performCustomAction(obj, action, player) {
     if (undefined!=action.prompt) {
-        confirm(obj, action.prompt, {buttonTrueText: i18n('Yes'), buttonFalseText: i18n('Cancel')}).then(res => {
+        confirm(action.prompt, i18n('Yes')).then(res => {
             if (res) {
                 doCustomAction(action, player);
             }

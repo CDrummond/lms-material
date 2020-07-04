@@ -680,8 +680,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.items.length<1) {
                 return;
             }
-            confirm(this, i18n("Remove all tracks from queue?"),
-                          {buttonTrueText: i18n('Clear'), buttonFalseText: i18n('Cancel')}).then(res => {
+            confirm(i18n("Remove all tracks from queue?"), i18n('Clear')).then(res => {
                 if (res) {
                     bus.$emit('playerCommand', ["playlist", "clear"]);
                 }

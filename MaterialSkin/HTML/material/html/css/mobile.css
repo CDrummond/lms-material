@@ -118,7 +118,7 @@
  margin:0px;
 }
 
-.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+.lms-list .v-list-item, .lms-list-sub .v-list-item {
  padding:0 16px !important;
 }
 
@@ -279,7 +279,7 @@
   padding-left:2px;
  }
 
- .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+ .lms-list .v-list-item, .lms-list-sub .v-list-item {
   padding:0 12px !important;
  }
  

@@ -94,8 +94,8 @@
  min-width:600px;
 }
 
-.np-bar .v-list__tile__content, .np-bar .v-list__tile__content .v-list__tile__sub-title,
-.np-bar .v-list .v-list__tile__title, .np-bar .np-tech-desktop, .np-bar .np-time-desktop, .np-bar div i,
+.np-bar .v-list-item__content, .np-bar .v-list-item__content .v-list-item__sub-title,
+.np-bar .v-list .v-list-item__title, .np-bar .np-tech-desktop, .np-bar .np-time-desktop, .np-bar div i,
 .np-bar div.v-rating i.primary--text, .np-bar div.v-rating i.accent--text {
  color:var(--bottom-toolbar-text-color) !important;
 }
@@ -158,13 +158,13 @@
  width:calc(100vw - (290px + ((var(--icon-size) - 24px)*4)))!important;
 }
 
-.np-details-desktop div .v-list__tile {
+.np-details-desktop div .v-list-item {
  height:54px;
  margin:0px 8px 0px 0px; /* t, r, b, l */
  padding:0px;
 }
 
-.np-details-desktop div .v-list__tile .v-list__tile__action {
+.np-details-desktop div .v-list-item .v-list-item__action {
  min-width:unset;
  font-family:'Roboto Mono', monospace;
  font-weight: var(--std-weight);
@@ -327,10 +327,10 @@
 .toolbar-player-list-desktop {
  min-width:320px!important;
 }
-.v-menu__content .toolbar-player-list-desktop .v-list__tile .menu-shortcut-player {
+.v-menu__content .toolbar-player-list-desktop .v-list-item .menu-shortcut-player {
  min-width:54px!important;
 }
-.v-menu__content .toolbar-player-list-desktop .v-list__tile .player-menu-shortcut {
+.v-menu__content .toolbar-player-list-desktop .v-list-item .player-menu-shortcut {
  min-width:80px!important;
 }
 

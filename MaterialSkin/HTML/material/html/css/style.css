@@ -56,8 +56,8 @@
  caret-color:var(--accent-color)!important;
 }
 
-.v-dialog .v-list, .v-list .v-list__tile__title, .v-select__selection, .v-select__selection--comma,
-.v-list .v-list__tile__sub-title, .v-select__slot .v-label, .v-dialog .v-card .v-card__text,
+.v-dialog .v-list, .v-list .v-list-item__title, .v-select__selection, .v-select__selection--comma,
+.v-list .v-list-item__sub-title, .v-select__slot .v-label, .v-dialog .v-card .v-card__text,
 .v-dialog .v-card .v-btn__content {
  color:var(--text-color);
 }
@@ -132,17 +132,17 @@ html, .mini-player {
  margin-right:-8px !important;
 }
 
-.v-list__tile__title, .v-select__selection, .v-select__selection--comma , .v-btn__content, html{
+.v-list-item__title, .v-select__selection, .v-select__selection--comma , .v-btn__content, html{
  font-size:var(--std-font-size);
  font-weight:var(--std-weight);
 }
 
-.v-list__tile__sub-title, .v-select__slot .v-label {
+.v-list-item__sub-title, .v-select__slot .v-label {
  font-size:var(--small-font-size);
  font-weight:var(--std-weight);
 }
 
-.lms-list .v-list__tile__sub-title, .lms-list-sub .v-list__tile__sub-title {
+.lms-list .v-list-item__sub-title, .lms-list-sub .v-list-item__sub-title {
  margin-top:-2px;
 }
 
@@ -258,11 +258,11 @@ div.v-subheader {
  padding:0px;
 }
 
-.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+.lms-list .v-list-item, .lms-list-sub .v-list-item {
  height:calc(var(--list-elem-height) - 1px) !important;
 }
 
-.lms-list3 .v-list__tile, .lms-list-sub3 .v-list__tile {
+.lms-list3 .v-list-item, .lms-list-sub3 .v-list-item {
  height:calc(var(--list-elem-3line-height) - 1px) !important;
 }
 
@@ -619,16 +619,16 @@ div.v-subheader {
  }
 }
 
-.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
+.v-list, .v-list>div, .v-list-item, .v-list-item__title, .v-list-item__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
  transition:none !important;
 }
 
-.v-list__tile--avatar .v-subheader {
+.v-list-item--avatar .v-subheader {
  padding:0 3px;
 }
 
 /* Clickable artist/album in queue */
-.v-list__tile__sub-title, .v-list__tile__sub-title a {
+.v-list-item__sub-title, .v-list-item__sub-title a {
  color:var(--icon-color);
  opacity:var(--sub-opacity) !important;
 }
@@ -1068,7 +1068,7 @@ progress {
  background-color:var(--pq-current-color);
 }
 
-.pq-current div.v-list__tile__title {
+.pq-current div.v-list-item__title {
  font-weight:var(--bold-weight);
 }
 
@@ -1196,25 +1196,25 @@ progress {
  padding-left:17px;
 }
 
-.switch-label .v-list__tile__title {
+.switch-label .v-list-item__title {
  white-space:normal;
  min-height:24px;
  max-height:72px;
  height:auto;
 }
 
-.switch-label .v-list__tile__sub-title {
+.switch-label .v-list-item__sub-title {
  white-space:normal;
  min-height:24px;
  max-height:240px;
  height:auto;
 }
 
-.v-list__tile__action .v-input--switch {
+.v-list-item__action .v-input--switch {
  max-width:36px;
 }
 
-.v-dialog .v-card .v-card__text .v-list--two-line .v-list__tile {
+.v-dialog .v-card .v-card__text .v-list--two-line .v-list-item {
  margin-top:8px;
  margin-bottom:8px;
  min-height:58px;
@@ -1287,7 +1287,7 @@ progress {
  margin-top:-28px!important;
 }
 
-.pmgr-sync .v-list__tile {
+.pmgr-sync .v-list-item {
  margin-left:56px;
  height:48px !important;
 }
@@ -1362,7 +1362,7 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon), .svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon), .svg-list-img, .lms-avatar .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  vertical-align:middle;
@@ -1414,7 +1414,11 @@ div.v-subheader {
  }
 }
 
-.lms-avatar .v-avatar {
+.v-list-item__icon {
+ margin:0px;
+}
+
+.lms-avatar img {
  width:calc(var(--list-elem-height) - 1px) !important;
  height:calc(var(--list-elem-height) - 1px) !important;
  margin-left:-4px;
@@ -1426,7 +1430,7 @@ div.v-subheader {
  margin-left:4px;
 }
 
-.lms-list3 .lms-avatar .v-avatar, .lms-list-sub3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar, .lms-list-sub3 .v-list__tile__avatar {
+.lms-list3 .lms-avatar .v-avatar, .lms-list-sub3 .lms-avatar .v-avatar, .lms-list3 .v-list-item__avatar, .lms-list-sub3 .v-list-item__avatar {
  width:calc(var(--list-elem-3line-height) - 1px) !important;
  height:calc(var(--list-elem-3line-height) - 1px) !important;
  margin-left:-4px;
@@ -1470,7 +1474,7 @@ div.v-subheader {
  opacity:0.25!important;
 }
 
-.v-menu__content .v-list__tile .v-list__tile__avatar {
+.v-menu__content .v-list-item .v-list-item__avatar {
  min-width:44px !important;
  width:44px !important;
  margin-left:-8px;
@@ -1478,7 +1482,7 @@ div.v-subheader {
  padding:0px;
 }
 
-.v-menu__content .v-list__tile .v-list__tile__action {
+.v-menu__content .v-list-item .v-list-item__action {
  min-width:38px !important;
  width:38px !important;
 }
@@ -1488,7 +1492,7 @@ div.v-subheader {
  opacity:var(--sub-opacity);
 }
 
-.v-menu__content .v-list__tile .menu-shortcut {
+.v-menu__content .v-list-item .menu-shortcut {
  min-width:40px!important;
  margin-left:16px;
  margin-right:4px;
@@ -1496,11 +1500,11 @@ div.v-subheader {
  justify-content:flex-start;
 }
 
-.v-menu__content .v-list__tile .player-menu-shortcut {
+.v-menu__content .v-list-item .player-menu-shortcut {
  min-width:68px!important;
 }
 
-.v-menu__content .v-list__tile .menu-shortcut-player {
+.v-menu__content .v-list-item .menu-shortcut-player {
  min-width:42px!important;
  margin-right:-9px;
 }
@@ -1513,7 +1517,7 @@ div.v-subheader {
  font-weight:var(--bold-weight);
 }
 
-.v-list__tile__title a:hover, .v-list__tile__sub-title a:hover, .clickable:hover {
+.v-list-item__title a:hover, .v-list-item__sub-title a:hover, .clickable:hover {
  text-decoration:underline;
 }
 
@@ -1521,14 +1525,14 @@ div.v-subheader {
  margin-left:4px;
 }
 
-.sleep-list .v-list__tile {
+.sleep-list .v-list-item {
  padding:4px 0px 4px 0px;
  height: auto;
  min-height: 48px;
  max-height: 96px;
 }
 
-.sleep-list .v-list__tile__content {
+.sleep-list .v-list-item__content {
  white-space: normal !important;
  overflow: auto !important;
  text-overflow: initial !important;
@@ -1538,7 +1542,7 @@ div.v-subheader {
  min-width:28px !important;
 }
 
-.browse-header .v-list__tile__title {
+.browse-header .v-list-item__title {
  color:var(--active-color);
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
@@ -1791,11 +1795,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  content:"\e5d4";
 }
 
-.image-grid-item .grid-btns, .v-list__tile .list-btns {
+.image-grid-item .grid-btns, .v-list-item .list-btns {
  visibility: hidden;
 }
 
-.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns {
+.image-grid-item:hover .grid-btns, .v-list-item:hover .list-btns {
  visibility: visible;
 }
 
@@ -1805,7 +1809,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  right:38px !important;
 }
 
-.lms-list .v-list__tile__action .v-btn--icon, .lms-list-sub .v-list__tile__action .v-btn--icon {
+.lms-list .v-list-item__action .v-btn--icon, .lms-list-sub .v-list-item__action .v-btn--icon {
  margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 
@@ -1850,7 +1854,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  white-space:normal!important;
 }
 
-.vlib-menu .v-list__tile__title {
+.vlib-menu .v-list-item__title {
  white-space:normal!important;
  overflow: hidden;
  display: -webkit-box;
@@ -1858,7 +1862,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  -webkit-line-clamp: 2;
 }
 
-.vlib-menu .v-list__tile__title {
+.vlib-menu .v-list-item__title {
  height:unset!important;
  min-height:24px;
 }

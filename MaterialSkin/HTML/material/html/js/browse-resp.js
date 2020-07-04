@@ -339,14 +339,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             : i.type=="audio"
                                 ? "music_note"
                                 : "crop_portrait";
-                } else {
-                    mapIcon(i);
-                    if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
-                        if (i.params && i.params.item_id) {
-                            i.id = "item_id:"+i.params.item_id;
-                        } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
-                            i.id = "item_id:"+i.actions.go.params.item_id;
-                        }
+                } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
+                    if (i.params && i.params.item_id) {
+                        i.id = "item_id:"+i.params.item_id;
+                    } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                        i.id = "item_id:"+i.actions.go.params.item_id;
                     }
                 }
 

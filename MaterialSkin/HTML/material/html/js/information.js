@@ -42,7 +42,7 @@ Vue.component('lms-information-dialog', {
     <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
     <v-list>
      <template v-for="(item, index) in rescans">
-      <v-list-tile @click="lmsCommand('', item.cmd)">
+      <v-list-tile @click="rescan(item)">
        <v-list-tile-title>{{item.name}}</v-list-tile-title>
       </v-list-tile>
      </template>
@@ -336,6 +336,10 @@ Vue.component('lms-information-dialog', {
                         // Keep in sync with toolbar.js!
                         [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
                          {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+        },
+        rescan(item) {
+            bus.$emit('showMessage', item.name);
+            lmsCommand('', item.cmd);
         }
     },
     beforeDestroy() {

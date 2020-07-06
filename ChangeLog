@@ -5,6 +5,7 @@
 3. Fix showing folder icon for favourites folder.
 4. Allow navigating into empty favourites folder.
 5. Re-filter jumplist on window height changes.
+6. Show a message when rescan activated.
 
 1.8.4
 -----

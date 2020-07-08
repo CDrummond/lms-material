@@ -7,6 +7,7 @@
 5. Re-filter jumplist on window height changes.
 6. Show a message when rescan activated.
 7. Add API to get list of active (on and playing) players.
+8. When moving queue, restore sync group of source player.
 
 1.8.4
 -----

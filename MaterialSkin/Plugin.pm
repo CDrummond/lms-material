@@ -187,12 +187,30 @@ sub _cliCommand {
             return;
         }
 
+        # Get list of playes source is currently synced with
+        my @buddies;
+        if ($from->isSynced()) {
+            @buddies = $from->syncedWith();
+            # Check that we are not already synced with dest player...
+            for my $buddy (@buddies) {
+                if ($buddy->id() eq $toId) {
+                    main::INFOLOG && $log->is_info && $log->info("Tried to move client $fromId to a player its already synced with ($toId)");
+                    $request->setStatusBadParams();
+                    return;
+                }
+            }
+        }
+
         $to->execute(['power', 1]) unless $to->power;
         $from->execute(['sync', $toId]);
         if ( exists $INC{'Slim/Plugin/RandomPlay/Plugin.pm'} && (my $mix = Slim::Plugin::RandomPlay::Plugin::active($from)) ) {
             $to->execute(['playlist', 'addtracks', 'listRef', ['randomplay://' . $mix] ]);
         }
         $from->execute(['sync', '-']);
+        # Restore any previous synced players
+        for my $buddy (@buddies) {
+            $from->execute(['sync', $buddy->id()]);
+        }
         $from->execute(['playlist', 'clear']);
         $from->execute(['power', 0]);
 

@@ -203,7 +203,6 @@
 "More":"Mere",
 "Move":"Flyt",
 "Move '%1' from '%2' to this server?":"Flyt '%1' fra '%2' til denne server?",
-"Move queue to another player":"Flyt kø til en anden afspiller",
 "Move selection here":"Flyt de valgte hertil",
 "Move to next in queue":"Gør til den næste i køen",
 "Move to parent folder":"Gå til forrige folder",
@@ -296,7 +295,6 @@
 "Select All":"Vælg alle",
 "Select category":"Vælg kategori",
 "Select multiple items":"Vælg flere elementer",
-"Select the player you wish to move the queue to:":"Vælg hvilken afspiller du vil flytte køen til",
 "Select which players you would like to synchronise with '%1':":"Vælg hvilke afspillere du vil synkronisere med '%1':",
 "Selected Genres":"Valgte genrer",
 "Server":"Server",
@@ -458,9 +456,13 @@
 "1 day":"1 dag",
 "%1 days":"%1 dage",
 "Copy details":"",
+"Copy the queue to:":"",
 "Do not crossfade successive tracks from the same album.":"",
+"Move the queue to:":"",
 "Playing %1":"",
 "Playing %1 by %2":"",
 "Playing %1 by %2 from %3":"",
-"Smart crossfade":""
+"Queue copied to '%1'":"",
+"Smart crossfade":"",
+"Transfer queue to another player":""
 }

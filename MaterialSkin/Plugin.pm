@@ -66,7 +66,7 @@ sub initPlugin {
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
-		Plugins::MaterialSkin::Settings->new();
+        Plugins::MaterialSkin::Settings->new();
 
         Slim::Web::Pages->addPageFunction( 'desktop', sub {
             my ($client, $params) = @_;
@@ -144,7 +144,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'movequeue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers']) ) {
         $request->setStatusBadParams();
@@ -173,9 +173,10 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'movequeue') {
+    if ($cmd eq 'transferqueue') {
         my $fromId = $request->getParam('from');
         my $toId = $request->getParam('to');
+        my $move = $request->getParam('move');
         if (!$fromId || !$toId) {
             $request->setStatusBadParams();
             return;
@@ -187,12 +188,15 @@ sub _cliCommand {
             return;
         }
 
+        # Remeber if source was playing, and start dest playing if so
+        my $wasPlaying = $from->isPlaying();
+
         # Get list of playes source is currently synced with
-        my @buddies;
+        my @sourceBuddies;
         if ($from->isSynced()) {
-            @buddies = $from->syncedWith();
+            @sourceBuddies = $from->syncedWith();
             # Check that we are not already synced with dest player...
-            for my $buddy (@buddies) {
+            for my $buddy (@sourceBuddies) {
                 if ($buddy->id() eq $toId) {
                     main::INFOLOG && $log->is_info && $log->info("Tried to move client $fromId to a player its already synced with ($toId)");
                     $request->setStatusBadParams();
@@ -201,18 +205,69 @@ sub _cliCommand {
             }
         }
 
+        # Get list of players dest is currently synced with
+        my @destBuddies;
+        if ($to->isSynced()) {
+            @destBuddies = $to->syncedWith();
+        }
+
         $to->execute(['power', 1]) unless $to->power;
+
+        # Sync with destination player - queue will be copied
         $from->execute(['sync', $toId]);
         if ( exists $INC{'Slim/Plugin/RandomPlay/Plugin.pm'} && (my $mix = Slim::Plugin::RandomPlay::Plugin::active($from)) ) {
             $to->execute(['playlist', 'addtracks', 'listRef', ['randomplay://' . $mix] ]);
         }
+
+        # Switch to now playing view?
+        $to->execute(['now-playing']);
+
+        # Now unsync source from dest
         $from->execute(['sync', '-']);
+
+        # If dest was in a sync group, re-add the buddies...
+        for my $buddy (@destBuddies) {
+            $to->execute(['sync', $buddy->id()]);
+        }
+
         # Restore any previous synced players
-        for my $buddy (@buddies) {
+        for my $buddy (@sourceBuddies) {
             $from->execute(['sync', $buddy->id()]);
         }
-        $from->execute(['playlist', 'clear']);
-        $from->execute(['power', 0]);
+
+        # If queue is moved then clear source
+        if ($move) {
+            $from->execute(['playlist', 'clear']);
+            $from->execute(['power', 0]);
+        }
+
+        # Sometimes sync goes bit off even when all sync settings are correct so
+        # if dest is synced power off and on again
+        if ($to->isSynced() || $to->model eq "group") {
+            $to->execute(['power', 0]);
+            # ...power back on after 1 second...
+            Slim::Utils::Timers::setTimer($to, Time::HiRes::time() + 1.00, sub {
+                my ( $to, $wasPlaying ) = @_;
+                $to->execute(['power', 1]);
+
+                # If destination was a group, then power off/on yet again!
+                if ($to->model eq "group") {
+                    $to->execute(['power', 0]);
+                    # ...and wait 1 second again...
+                    Slim::Utils::Timers::setTimer($to, Time::HiRes::time() + 1.00, sub {
+                        my ( $to, $wasPlaying ) = @_;
+                        $to->execute(['power', 1]);
+                        if ($wasPlaying) {
+                            $to->execute(['play']);
+                        }
+                    }, $wasPlaying);
+                } elsif ($wasPlaying) {
+                    $to->execute(['play']);
+                }
+            }, $wasPlaying);
+        } elsif ($wasPlaying) {
+            $to->execute(['play']);
+        }
 
         $request->setStatusDone();
         return;

@@ -13,16 +13,18 @@ Vue.component('lms-movequeue-dialog', {
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
-     <v-flex xs12>{{i18n("Select the player you wish to move the queue to:")}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
+       <v-list-tile>
+        <v-select :items="options" v-model="option" item-text="label" item-value="key"></v-select>
+       </v-list-tile>
        <template v-for="(p, index) in players" v-if="p.id!=src">
         <v-list-tile @click="moveTo(p)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="p.icon.icon">{{p.icon.icon}}</v-icon><img v-else class="svg-img" :src="p.icon.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
         </v-list-tile>
         <v-divider></v-divider>
-        </template>
+       </template>
       </v-list>
      </v-flex>
     </v-layout>
@@ -37,7 +39,10 @@ Vue.component('lms-movequeue-dialog', {
 `,
     props: [],
     data() {
-        return { show:false, src:undefined }
+        return { show:false,
+                 src:undefined,
+                 option:1,
+                 options:[] }
     },
     computed: {
         players () {
@@ -50,6 +55,8 @@ Vue.component('lms-movequeue-dialog', {
     mounted() {
         bus.$on('movequeue.open', function(player) {
             this.src = player.id;
+            this.option = parseInt(getLocalStorageVal('movequeue', 1));
+            this.initItems();
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
@@ -63,9 +70,14 @@ Vue.component('lms-movequeue-dialog', {
             this.show=false;
         },
         moveTo(dest) {
-            lmsCommand("", ["material-skin", "movequeue", "from:"+this.src, "to:"+dest.id]).then(({data}) => {
-                this.$store.commit('setPlayer', dest.id);
+            lmsCommand("", ["material-skin", "transferqueue", "from:"+this.src, "to:"+dest.id, "move:"+this.option]).then(({data}) => {
+                if (1==this.option) {
+                    this.$store.commit('setPlayer', dest.id);
+                } else {
+                    bus.$emit('showMessage', i18n("Queue copied to '%1'", dest.name));
+                }
             });
+            setLocalStorageVal('movequeue', this.option);
             this.show=false;
         },
         i18n(str) {
@@ -74,7 +86,12 @@ Vue.component('lms-movequeue-dialog', {
             } else {
                 return str;
             }
-        }
+        },
+        initItems() {
+            this.options=[
+                { key:0, label:i18n("Copy the queue to:")},
+                { key:1, label:i18n("Move the queue to:")} ]
+        },
     },
     filters: {
         svgIcon: function (name, dark) {

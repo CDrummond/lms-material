@@ -1,14 +1,16 @@
 1.8.5
 -----
-1. Better redhat icon.
-2. Map icons for 'Sounds & Effects', Napster, and SHOUTcast.
-3. Fix showing folder icon for favourites folder.
-4. Allow navigating into empty favourites folder.
-5. Re-filter jumplist on window height changes.
-6. Show a message when rescan activated.
-7. Add API to get list of active (on and playing) players.
-8. When moving queue, restore sync group of source player.
-9. Remove vuetify-confirm
+ 1. Better redhat icon.
+ 2. Map icons for 'Sounds & Effects', Napster, and SHOUTcast.
+ 3. Fix showing folder icon for favourites folder.
+ 4. Allow navigating into empty favourites folder.
+ 5. Re-filter jumplist on window height changes.
+ 6. Show a message when rescan activated.
+ 7. Add API to get list of active (on and playing) players.
+ 8. When moving queue, move to all players synced with dest and restore sync
+    group of source player.
+ 9. Provide option to copy, as well as move, queue to another player.
+10. Remove vuetify-confirm
 
 1.8.4
 -----

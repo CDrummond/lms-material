@@ -139,7 +139,7 @@ function updateActionStrings() {
     ACTIONS[PQ_SCROLL_ACTION].key=LMS_SCROLL_QUEUE_KEYBOARD;
     ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL to queue");
     ACTIONS[PQ_ADD_URL_ACTION].key=LMS_QUEUE_ADD_URL_KEYBOARD;
-    ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Move queue to another player");
+    ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Transfer queue to another player");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
     ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=i18n("Remove album");
 }

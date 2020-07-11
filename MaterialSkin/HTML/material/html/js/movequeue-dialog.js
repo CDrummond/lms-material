@@ -10,7 +10,7 @@ Vue.component('lms-movequeue-dialog', {
     template: `
 <v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
  <v-card>
-  <v-card-text>
+  <v-card-text style="margin-top:-16px">
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
      <v-flex xs12>

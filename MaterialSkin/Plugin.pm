@@ -238,8 +238,9 @@ sub _cliCommand {
         # If queue is moved then clear source
         if ($move) {
             $from->execute(['playlist', 'clear']);
-            $from->execute(['power', 0]);
         }
+
+        $from->execute(['power', 0]);
 
         # Sometimes sync goes bit off even when all sync settings are correct so
         # if dest is synced power off and on again

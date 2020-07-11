@@ -246,13 +246,49 @@ function nameSort(a, b) {
     return 0;
 }
 
-function titleSort(a, b) {
-    var titleA = fixTitle(a.title.toLowerCase());
-    var titleB = fixTitle(b.title.toLowerCase());
+function fixedSort(a, b) {
+    var titleA = fixTitle(a.toLowerCase());
+    var titleB = fixTitle(b.toLowerCase());
     if (titleA < titleB) {
         return -1;
     }
     if (titleA > titleB) {
+        return 1;
+    }
+    return 0;
+}
+
+function titleSort(a, b) {
+    return fixedSort(a.title, b.title);
+}
+
+function yearAlbumTrackSort(a, b) {
+    var va=a.year ? a.year : 0;
+    var vb=b.year ? b.year : 0;
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
+        return 1;
+    }
+    var s = fixedSort(a.album, b.album);
+    if (s!=0) {
+        return s;
+    }
+    va=a.disc ? a.disc : 0;
+    vb=b.disc ? b.disc : 0;
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
+        return 1;
+    }
+    va=a.tracknum ? a.tracknum : 0;
+    vb=b.tracknum ? b.tracknum : 0;
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
         return 1;
     }
     return 0;

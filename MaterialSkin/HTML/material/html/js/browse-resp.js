@@ -22,7 +22,7 @@ function removeDiactrics(key) {
     return key;
 }
 
-function parseBrowseResp(data, parent, options, cacheKey) {
+function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0 };
 
@@ -575,21 +575,51 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.titles_loop) {
             var totalDuration=0;
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
-            var showAlbumName = (parent && parent.id && (parent.id.startsWith("artist_id:") || parent.id.startsWith("currentaction:")));
+            var isAllSongs = parent && parent.id && parent.id.startsWith("currentaction:");
+            var showAlbumName = isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
+
+            // Check if we are listing 'All Songs' for an artist
+            var roleIsAA = false;
+            var hasAlbumId = false;
+            var artistId = undefined;
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
                     if ((""+data.params[1][p]).startsWith("album_id:")) {
                         allowPlayAlbum = true;
+                        hasAlbumId = true;
                     } else if ((""+data.params[1][p]).startsWith("search:")) {
                         showAlbumName = true;
+                    } else if (data.params[1][p]=="role_id:ALBUMARTIST") {
+                        roleIsAA = true;
+                    } else if ((""+data.params[1][p]).startsWith("artist_id:")) {
+                        artistId = data.params[1][p].split(":")[1];
                     }
                 }
             }
+
+            // 'All Songs' on AlbumArtist ignores role_id if tags requested! So work-around this by
+            // filtering returned songs on artist_id
+            var filterAlbumArtistId = isAllSongs && roleIsAA && !hasAlbumId && undefined!=artistId;
+
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
+
+                if (filterAlbumArtistId) {
+                    var ids = i.albumartist_ids ? i.albumartist_ids.split(",") : [];
+                    var found = false;
+                    for (var a=0, len=ids.length && !found; a<len; ++a) {
+                        if (ids[a]==artistId) {
+                            found=true;
+                        }
+                    }
+                    if (!found) {
+                        continue; // Skip this track
+                    }
+                }
+
                 var title = i.title;
                 var duration = parseFloat(i.duration || 0);
                 if (i.tracknum>0) {
@@ -627,8 +657,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               rating: i.rating,
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
-                              emblem: showAlbumName ? getEmblem(i.extid) : undefined
+                              emblem: showAlbumName ? getEmblem(i.extid) : undefined,
+                              tracknum: isAllSongs && i.tracknum ? parseInt(i.tracknum) : undefined,
+                              disc: isAllSongs && i.disc ? parseInt(i.disc) : undefined,
+                              year: isAllSongs && i.year ? parseInt(i.year) : undefined,
+                              album: isAllSongs ? i.album : undefined
                           });
+            }
+            if (isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year")) {
+                resp.items.sort(yearAlbumTrackSort);
             }
             if (discs.size>1) {
                 let d = 0;

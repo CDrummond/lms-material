@@ -656,7 +656,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var count = item.limit ? item.limit : LMS_BATCH_SIZE;
             lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
-                    var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined);
+                    var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
                     this.handleListResponse(item, command, resp);
                     this.prevPage = prevPage;
                     this.fetchingItems = false;
@@ -1641,7 +1641,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var pos=undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
             this.fetchingItems = true;
             lmsList(this.playerId(), this.command.command, this.command.params, 0, LMS_BATCH_SIZE, this.current.cancache).then(({data}) => {
-                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined);
+                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined, this.command, this.inGenre);
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
                 this.filteredJumplist = [];

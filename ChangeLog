@@ -12,6 +12,10 @@
  9. Provide option to copy, as well as move, queue to another player.
 10. Remove vuetify-confirm
 11. Hacky fix for browse view navigating back when photo viewer closed.
+12. Work-around LMS issues where requesing all songs for an album artist ignores
+    the role if tags parameter is passed. (LMS issue 387)
+13. If sorting an artist's albums by year, then when list 'All Songs' also sort
+    these by year.
 
 1.8.4
 -----

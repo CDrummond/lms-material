@@ -13,9 +13,7 @@
 10. Remove vuetify-confirm
 11. Hacky fix for browse view navigating back when photo viewer closed.
 12. Correctly supply role_id when requesing 'All Songs'
-13. Work-around LMS issues where requesing all songs for an album artist ignores
-    the role if tags parameter is passed. (LMS issue 387)
-14. If sorting an artist's albums by year, then when list 'All Songs' also sort
+13. If sorting an artist's albums by year, then when list 'All Songs' also sort
     these by year.
 
 1.8.4

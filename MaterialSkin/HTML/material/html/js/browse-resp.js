@@ -579,46 +579,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var showAlbumName = isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
 
-            // Check if we are listing 'All Songs' for an artist
-            var roleIsAA = false;
-            var hasAlbumId = false;
-            var artistId = undefined;
-
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
                     if ((""+data.params[1][p]).startsWith("album_id:")) {
                         allowPlayAlbum = true;
-                        hasAlbumId = true;
                     } else if ((""+data.params[1][p]).startsWith("search:")) {
                         showAlbumName = true;
-                    } else if (data.params[1][p]=="role_id:ALBUMARTIST") {
-                        roleIsAA = true;
-                    } else if ((""+data.params[1][p]).startsWith("artist_id:")) {
-                        artistId = data.params[1][p].split(":")[1];
                     }
                 }
             }
 
-            // 'All Songs' on AlbumArtist ignores role_id if tags requested! So work-around this by
-            // filtering returned songs on artist_id
-            var filterAlbumArtistId = isAllSongs && roleIsAA && !hasAlbumId && undefined!=artistId;
-
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-
-                if (filterAlbumArtistId) {
-                    var ids = i.albumartist_ids ? i.albumartist_ids.split(",") : [];
-                    var found = false;
-                    for (var a=0, len=ids.length && !found; a<len; ++a) {
-                        if (ids[a]==artistId) {
-                            found=true;
-                        }
-                    }
-                    if (!found) {
-                        continue; // Skip this track
-                    }
-                }
 
                 var title = i.title;
                 var duration = parseFloat(i.duration || 0);

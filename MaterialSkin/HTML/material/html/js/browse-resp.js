@@ -578,6 +578,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isAllSongs = parent && parent.id && parent.id.startsWith("currentaction:");
             var showAlbumName = isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
+            var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year");
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -631,13 +632,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tracknum: isAllSongs && i.tracknum ? parseInt(i.tracknum) : undefined,
-                              disc: isAllSongs && i.disc ? parseInt(i.disc) : undefined,
-                              year: isAllSongs && i.year ? parseInt(i.year) : undefined,
-                              album: isAllSongs ? i.album : undefined
+                              tracknum: sortTracks && i.tracknum ? parseInt(i.tracknum) : undefined,
+                              disc: sortTracks && i.disc ? parseInt(i.disc) : undefined,
+                              year: sortTracks && i.year ? parseInt(i.year) : undefined,
+                              album: sortTracks ? i.album : undefined
                           });
             }
-            if (isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year")) {
+            if (sortTracks) {
                 resp.items.sort(yearAlbumTrackSort);
             }
             if (discs.size>1) {

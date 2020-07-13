@@ -16,6 +16,11 @@
 13. If sorting an artist's albums by year, then when list 'All Songs' also sort
     these by year.
 14. Invoke icon mapping more often.
+15. Remove 'compilation:1' filter when listing 'Compilations' as this filtering
+    is to strict.
+16. Remove listing 'Compilations' under a genre, as this requires the
+    'complation:1' filter - but this will then exclude compilation albums
+    without this tag.
 
 1.8.4
 -----

@@ -1009,13 +1009,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                               svg: "dice-album",
                               type: "group",
                               id: uniqueId(item.id, this.items.length)});
-                this.items.push({ title: i18n("Compilations"),
-                              command: ["albums"],
-                              params: [item.id, ALBUM_TAGS_PLACEHOLDER, "compilation:1", "sort:album"],
-                              menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
-                              svg: "album-multi",
-                              type: "group",
-                              id: uniqueId(item.id, this.items.length)});
                 this.inGenre = item.title;
                 if (LMS_COMPOSER_GENRES.has(item.title)) {
                     this.items.push({ title: i18n("Composers"),
@@ -1856,7 +1849,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 mode="albums";
                             } else if (mode=="vaalbums") {
                                 mode="albums";
-                                p.push("compilation:1");
                             } else if (mode=="years") {
                                 p.push("hasAlbums:1");
                             } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists") {

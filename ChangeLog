@@ -15,6 +15,7 @@
 12. Correctly supply role_id when requesing 'All Songs'
 13. If sorting an artist's albums by year, then when list 'All Songs' also sort
     these by year.
+14. Invoke icon mapping more often.
 
 1.8.4
 -----

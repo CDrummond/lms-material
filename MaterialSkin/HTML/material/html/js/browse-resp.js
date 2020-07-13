@@ -345,6 +345,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
                         i.id = "item_id:"+i.actions.go.params.item_id;
                     }
+                    mapIcon(i);
                 }
 
                 if (!i.id) {

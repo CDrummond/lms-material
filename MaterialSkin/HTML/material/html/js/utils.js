@@ -937,7 +937,7 @@ function emitToolbarColors(top, bot) {
 function formatTrackNum(item) {
     let t = parseInt(item.tracknum);
     let d = item.disccount && item.disc && parseInt(item.disccount)>1 ? parseInt(item.disc) : undefined;
-    return (undefined==d ? "" : (d+SEPARATOR)) + (t>9 ? t : ("0" + t));
+    return (undefined==d ? "" : (d+".")) + (t>9 ? t : ("0" + t));
 }
 
 function copyTextToClipboard(text) {

@@ -21,6 +21,7 @@
 16. Remove listing 'Compilations' under a genre, as this requires the
     'complation:1' filter - but this will then exclude compilation albums
     without this tag.
+17. Use <disc>.<track> to show track numbers for multi-disc albums.
 
 1.8.4
 -----

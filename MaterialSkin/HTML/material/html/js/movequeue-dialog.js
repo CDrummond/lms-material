@@ -71,9 +71,8 @@ Vue.component('lms-movequeue-dialog', {
         },
         moveTo(dest) {
             lmsCommand("", ["material-skin", "transferqueue", "from:"+this.src, "to:"+dest.id, "move:"+this.option]).then(({data}) => {
-                if (1==this.option) {
-                    this.$store.commit('setPlayer', dest.id);
-                } else {
+                this.$store.commit('setPlayer', dest.id);
+                if (0==this.option) {
                     bus.$emit('showMessage', i18n("Queue copied to '%1'", dest.name));
                 }
             });

@@ -17,7 +17,7 @@
     these by year.
 14. Invoke icon mapping more often.
 15. Remove 'compilation:1' filter when listing 'Compilations' as this filtering
-    is too strict, and LMS jsut uses 'Various Artists' artist for this anyway.
+    is too strict, and LMS just uses 'Various Artists' artist for this anyway.
 16. Remove listing 'Compilations' under a genre, as this requires the
     'complation:1' filter - but this will then exclude compilation albums
     without this tag.

@@ -23,7 +23,7 @@ Vue.component('lms-randommix', {
    <v-select v-if="libraries.length>1 && showAll" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
    <v-checkbox v-if="showAll" v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
    <v-text-field v-if="showAll" :label="i18n('Historic track count')" v-model="oldTracks" type="number"></v-text-field>
-   <v-text-field v-if="showAll" :label="i18n('Upcomming track count')" v-model="newTracks" type="number"></v-text-field>
+   <v-text-field v-if="showAll" :label="i18n('Upcoming track count')" v-model="newTracks" type="number"></v-text-field>
    </div>
   </v-card-text>
   <v-card-actions>

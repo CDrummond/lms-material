@@ -77,7 +77,8 @@
     "/SugarCube/html/images/sugarcube.png":{"svg":"spicefly-sugarcube"},
     "/icon_nature_sounds.png":{"svg":"nature_sounds"},
     "/napster.png":{"svg":"napster"},
-    "/shoutcast.png":{"svg":"shoutcast"}
+    "/shoutcast.png":{"svg":"shoutcast"},
+    "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

@@ -101,11 +101,8 @@ function mapIconType(item, app, type) {
     if (undefined==lmsIcon || (typeof lmsIcon !== 'string')) {
         return false;
     }
-    if (lmsIcon.indexOf("imageproxy/")>=0) {
-        return false;
-    }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {
-        if (lmsIcon.endsWith(key) || lmsIcon.endsWith(key+"/image.png")) {
+        if (lmsIcon.endsWith(key) || (lmsIcon.indexOf('imageproxy')>0 && lmsIcon.endsWith(key.substring(1)+"/image.png"))) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
             if (entry['icon']) {
                 item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];

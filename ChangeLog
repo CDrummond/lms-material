@@ -6,6 +6,7 @@
 4. Map icon for Sprocket plugin.
 5. When mapping icons and looking if image ends with a value also check for
    value + '/image.png'
+6. Fix mapping of mysqueezebox.com apps when using local LMS image proxy.
 
 1.8.5
 -----

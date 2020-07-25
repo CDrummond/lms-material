@@ -2,6 +2,7 @@
 -----
 1. Translation updates.
 2. Spelling fixes.
+3. Ignore repeated keypresses less than 100ms apart.
 
 1.8.5
 -----

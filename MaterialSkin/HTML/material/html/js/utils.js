@@ -871,11 +871,16 @@ function setElemSizes(larger) {
     document.documentElement.style.setProperty('--toolbar-button-margin', larger ? '2px' : '4px');
 }
 
+var lastShortcut={key:undefined, modifier:undefined, time:undefined};
 function bindKey(key, modifier) {
     Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), function(e) {
         if (store.state.keyboardControl) {
             e.preventDefault();
-            bus.$emit('keyboard', key, modifier);
+            let now = new Date().getTime();
+            if (key!=lastShortcut.key || modifier!=lastShortcut.modifier || undefined==lastShortcut.time || now-lastShortcut.time>100) {
+                bus.$emit('keyboard', key, modifier);
+            }
+            lastShortcut={key:key, modifier:modifier, time:now};
         }
     } );
 }

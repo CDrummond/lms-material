@@ -10,6 +10,7 @@
 7. Close track information dialog on 'esc' or back button.
 8. Update rating display if current setting, or calculated value, differs from
    previous.
+9. Allow to set custom actions for now-playing cover context menu.
 
 1.8.5
 -----

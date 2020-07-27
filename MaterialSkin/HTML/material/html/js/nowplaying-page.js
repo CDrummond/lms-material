@@ -15,6 +15,7 @@ const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
+const NP_CUSTOM = 100;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
@@ -24,7 +25,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-list>
    <template v-for="(item, index) in menu.items">
     <v-list-tile @click="menuAction(item)">
-     <v-list-tile-avatar v-if="menuIcons && menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons && menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -319,6 +320,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        bus.$on('customActions', function(val) {
+            this.customActions = getCustomActions("track", false);
+        }.bind(this));
         this.infoZoom = parseInt(getLocalStorageVal('npInfoZoom', 10));
         if (this.infoZoom<10 | this.infoZoom>20) {
             this.infoZoom = 10;
@@ -685,6 +689,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (undefined!=this.playerStatus.current.title) {
                         this.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
                     }
+                    if (this.customActions && this.customActions.length>0) {
+                        for (let i=0, loop=this.customActions, len=loop.length; i<len; ++i) {
+                            this.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i});
+                        }
+                    }
                 }
                 this.menu.x = event.clientX;
                 this.menu.y = event.clientY;
@@ -711,6 +720,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     copyTextToClipboard(i18n("Playing %1 by %2", this.playerStatus.current.title, this.playerStatus.current.artist));
                 } else {
                     copyTextToClipboard(i18n("Playing %1", this.playerStatus.current.title));
+                }
+            } else if (this.customActions && item.act>=NP_CUSTOM) {
+                let ca = item.act-NP_CUSTOM;
+                if (ca>=0 && ca<this.customActions.length) {
+                    performCustomAction(this, this.customActions[ca], this.$store.state.player, this.playerStatus.current);
                 }
             }
         },

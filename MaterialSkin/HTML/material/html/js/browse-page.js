@@ -85,7 +85,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-else class="image-grid-item-img" :src="'image' | svgIcon(darkUi)"></img>
       <div class="image-grid-text" @click.stop="itemMenu(items[idx], idx, $event)">{{items[idx].title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
-      <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0)" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 Menu', items[idx].title)"></div>
+      <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0)" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 (Menu)', items[idx].title)"></div>
       <div class="emblem" v-if="items[idx].emblem" :style="{background: items[idx].emblem.bgnd}">
        <img :src="items[idx].emblem | emblem()"></img>
       </div>
@@ -134,7 +134,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="add-btn grid-btn" @click.stop="itemAction(item.header ? ADD_ALL_ACTION : ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
       <div class="play-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_ALL_ACTION : PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
      </div>
-     <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', item.title)">
+     <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
@@ -154,7 +154,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
    <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
    <v-list-tile v-else-if="item.header" class="lms-list-item browse-header" @click="click(item, index, $event)"><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 Menu', item.title)">
+    <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 (Menu)', item.title)">
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)" class="list-btns">
       <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
       <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
@@ -203,7 +203,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
      </v-btn>
-     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 Menu', item.title)">
+     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>

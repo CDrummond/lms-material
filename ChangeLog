@@ -8,6 +8,8 @@
    value + '/image.png'
 6. Fix mapping of mysqueezebox.com apps when using local LMS image proxy.
 7. Close track information dialog on 'esc' or back button.
+8. Update rating display if current setting, or calculated value, differs from
+   previous.
 
 1.8.5
 -----

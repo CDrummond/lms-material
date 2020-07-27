@@ -305,7 +305,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  wide: 0,
                  largeView: false,
                  menu: { show: false, x:0, y:0, items: [], icons:false },
-                 rating: {value:0, setting:false},
+                 rating: {value:0, setting:0},
                  timeTooltip: {show: false, x:0, y:0, text:undefined},
                  overlayVolume: -1,
                  repAltBtn:{show:false, command:[], icon:undefined, image:undefined, tooltip:undefined},
@@ -464,9 +464,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.remote_title = playerStatus.current.remote_title;
                 trackChanged = true;
             }
-            if (playerStatus.current.rating!=this.rating.setting) {
+            let rv = undefined==playerStatus.current.rating ? 0 : (Math.ceil(playerStatus.current.rating/10.0)/2.0);
+            if (playerStatus.current.rating!=this.rating.setting || this.rating.value!=rv) {
                 this.rating.setting = playerStatus.current.rating;
-                this.rating.value = undefined==this.rating.setting ? 0 : (Math.ceil(this.rating.setting/10.0)/2.0);
+                this.rating.value = rv;
                 trackChanged = true;
             }
             var artistAndComposer;

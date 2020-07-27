@@ -590,7 +590,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.initItems();
 
         bus.$on('esc', function() {
-            this.menu.show = false;
+            if (this.menu.show) {
+                this.menu.show = false;
+            } else if (this.$store.state.openDialogs.length==1 && this.$store.state.visibleMenus.size<=0 &&
+                       this.info.show && (this.$store.state.desktopLayout || this.$store.state.page=='now-playing')) {
+                this.info.show = false;
+            }
         }.bind(this));
 
         bus.$on('info', function() {

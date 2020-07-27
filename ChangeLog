@@ -7,6 +7,7 @@
 5. When mapping icons and looking if image ends with a value also check for
    value + '/image.png'
 6. Fix mapping of mysqueezebox.com apps when using local LMS image proxy.
+7. Close track information dialog on 'esc' or back button.
 
 1.8.5
 -----

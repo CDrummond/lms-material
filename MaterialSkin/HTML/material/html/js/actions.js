@@ -47,8 +47,9 @@ const PQ_SCROLL_ACTION        = 35;
 const PQ_ADD_URL_ACTION       = 36;
 const PQ_MOVE_QUEUE_ACTION    = 37;
 const PQ_REMOVE_ALBUM_ACTION  = 38;
+const PQ_ZAP_ACTION           = 39;
 
-const INSERT_ALL_ACTION       = 39;
+const INSERT_ALL_ACTION       = 40;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -91,6 +92,7 @@ var ACTIONS=[
     {cmd:"pq-addurl",    icon: "add"},
     {cmd:"pq-movequeue", icon: "swap_horiz"},
     {cmd:"pq-rmalbum",   icon: "album"},
+    {cmd:"pq-zap",       icon: "flash_on"},
 
     {cmd:"insert-all",   icon:"format_indent_increase"}
 ];
@@ -142,5 +144,6 @@ function updateActionStrings() {
     ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Transfer queue to another player");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
     ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=i18n("Remove album");
+    ACTIONS[PQ_ZAP_ACTION].title=i18n("Zap");
 }
 

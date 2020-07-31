@@ -72,7 +72,6 @@
 "Close":"Закрыть",
 "Collapse now playing":"Свернуть проигрываемое",
 "Color":"Цвет",
-"Compilations":"Сборки",
 "Composers":"Композиторы",
 "Conductors":"Дирижер",
 "Continuous":"Продолжить",
@@ -165,7 +164,6 @@
 "Insufficient metadata to fetch information.":"Недостаточно метаданных для получения информации",
 "Invalid URL":"Не верный URL",
 "Invert selection":"Наоборот",
-"Item %1 Menu":"Пункт %1 Меню",
 "Keyboard shortcuts":"Сочетания клавиш",
 "LMS support forums":"Форум поддержки",
 "Large font size":"Больбшой шрифт",
@@ -463,6 +461,8 @@
 "Smart crossfade":"",
 "Transfer queue to another player":"",
 "Use chosen color for toolbars.":"",
+"Zap":"",
+"Zapped '%1'":"",
 "⌘+%1":"",
 "⌘+Shift+%1":""
 }

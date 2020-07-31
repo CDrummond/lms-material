@@ -77,7 +77,6 @@
 "Collapse now playing":"Vis ikke kun aktuelle nummer",
 "Color":"Farve",
 "Color toolbars":"Værktøjslinje",
-"Compilations":"Kompilationer",
 "Composers":"Komponister",
 "Conductors":"Dirigenter",
 "Continuous":"Vedvarende",
@@ -176,7 +175,6 @@
 "Insufficient metadata to fetch information.":"Ikke nok metadata til at hente informationen",
 "Invalid URL":"Ulovlig URL",
 "Invert selection":"Inverter valgte",
-"Item %1 Menu":"Undermenu %1",
 "Keyboard shortcuts":"Tastaturgenveje",
 "LMS support forums":"LMS supportforum",
 "Large font size":"Stor fontstørrelse",
@@ -464,5 +462,7 @@
 "Playing %1 by %2 from %3":"",
 "Queue copied to '%1'":"",
 "Smart crossfade":"",
-"Transfer queue to another player":""
+"Transfer queue to another player":"",
+"Zap":"",
+"Zapped '%1'":""
 }

@@ -77,7 +77,6 @@
 "Collapse now playing":"Sbalit Právě hraje",
 "Color":"Barva",
 "Color toolbars":"Barevné lišty",
-"Compilations":"Sbírka",
 "Composers":"Skladatelé",
 "Conductors":"Dirigenti",
 "Continuous":"Trvalý",
@@ -174,7 +173,6 @@
 "Insufficient metadata to fetch information.":"Nedostatek metadat pro získání informací.",
 "Invalid URL":"Chybná URL",
 "Invert selection":"Opačný výběr",
-"Item %1 Menu":"Nabídka položky %1",
 "Keyboard shortcuts":"Klávesové zkratky",
 "LMS support forums":"LMS diskuzní fórum",
 "Large font size":"Velmi velké fonty",
@@ -464,5 +462,7 @@
 "Quit":"",
 "Show rating":"",
 "Smart crossfade":"",
-"Transfer queue to another player":""
+"Transfer queue to another player":"",
+"Zap":"",
+"Zapped '%1'":""
 }

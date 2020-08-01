@@ -12,6 +12,7 @@
     previous.
  9. Allow to set custom actions for now-playing cover context menu.
 10. Add action to 'Zap' play queue items.
+11. Don't close 'More' list when clicking radio stream skip actions.
 
 1.8.5
 -----

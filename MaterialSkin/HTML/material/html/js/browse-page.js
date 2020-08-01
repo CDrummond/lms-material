@@ -857,7 +857,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
                     this.refreshList();
                 } else if (this.history.length>0 && (nextWindow=="parent" || nextWindow=="nowplaying" || (isMoreMenu && nextWindow=="grandparent"))) {
-                    this.goBack(true);
+                    // If "trackinfo items" has "parent" and returns an empty list, then don't go back... Work-around for:
+                    // https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
+                    if (nextWindow!="parent" || command.command[0]!="trackinfo" || command.command[1]!="items" || !resp.items || resp.items.length>0) {
+                        this.goBack(true);
+                    }
                 } else if (nextWindow=="grandparent" && this.history.length>1) {
                     this.history.pop();
                     this.goBack(true);

@@ -211,7 +211,11 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
+   <v-layout row wrap v-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0">
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single}">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
+   </v-layout>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat</v-icon></v-btn>
@@ -322,6 +326,7 @@ var lmsQueue = Vue.component("lms-queue", {
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
                      shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
+            playlist: {name: undefined, modified: false},
             selection: new Set(),
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0,
@@ -385,7 +390,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.items=[];
                 this.timestamp=0;
             }
-            this.playlistName=playerStatus.playlist.name;
+            this.playlist.name=playerStatus.playlist.name;
+            this.playlist.modified=playerStatus.playlist.modified;
             if (playerStatus.playlist.timestamp!=this.timestamp || (playerStatus.playlist.timestamp>0 && this.items.length<1) ||
                 (playerStatus.playlist.timestamp<=0 && this.items.length>0) || this.listSize!=playerStatus.playlist.count) {
                 if (playerStatus.playlist.current!=this.currentIndex) {
@@ -659,7 +665,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.items.length<1) {
                 return;
             }
-            bus.$emit('dlg.open', 'savequeue', ""+(undefined==this.playlistName ? "" : this.playlistName));
+            bus.$emit('dlg.open', 'savequeue', ""+(undefined==this.playlist.name ? "" : this.playlist.name));
         },
         clear() {
             if (this.items.length<1) {

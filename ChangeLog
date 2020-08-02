@@ -16,6 +16,8 @@
 12. When saving the queue, don't use error text colour to indicate that a
     playlist with that name exists - looks odd if saving queue to its existing
     name.
+13. Show name of currently loaded playlist in queue view.
+14. Use asterisk next to queue's playlist name to indicate its modified.
 
 1.8.5
 -----

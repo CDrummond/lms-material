@@ -322,6 +322,7 @@ var lmsServer = Vue.component('lms-server', {
                 bus.$emit("scanProgress", undefined);
                 this.scheduleNextServerStatus(0);
                 this.scanInProgress = false;
+                bus.$emit('refreshList', SECTION_NEWMUSIC);
             }
 
             if (data.players_loop) {

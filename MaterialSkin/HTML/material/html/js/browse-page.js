@@ -2105,6 +2105,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.cancache = true;
                             } else if (c.id == "myMusicNewMusic") {
                                 item.icon = "new_releases";
+                                item.section = SECTION_NEWMUSIC;
                             } else if (c.id.startsWith("myMusicMusicFolder")) {
                                 item.icon = "folder";
                             } else if (c.id.startsWith("myMusicFileSystem")) {

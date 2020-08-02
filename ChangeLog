@@ -13,6 +13,9 @@
  9. Allow to set custom actions for now-playing cover context menu.
 10. Add action to 'Zap' play queue items.
 11. Don't close 'More' list when clicking radio stream skip actions.
+12. When saving the queue, don't use error text colour to indicate that a
+    playlist with that name exists - looks odd if saving queue to its existing
+    name.
 
 1.8.5
 -----

@@ -1905,3 +1905,6 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  background-color:var(--list-item-border-color);
 }
 
+.save-queue-dialog .error--text {
+ color:var(--active-color)!important;
+}

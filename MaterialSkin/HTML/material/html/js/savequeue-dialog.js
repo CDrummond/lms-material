@@ -42,6 +42,7 @@ Vue.component('lms-savequeue', {
         bus.$on('savequeue.open', function(name) {
             this.show = true;
             this.name = name;
+            this.currentName = ""+name;
             this.errorMessages = undefined;
             focusEntry(this);
             this.checkExists();
@@ -84,6 +85,10 @@ Vue.component('lms-savequeue', {
             this.show=false;
             lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({data})=>{
                 bus.$emit('refreshPlaylist', name);
+                if (this.currentName!=name) {
+                    // Refresh status to pick up new name quicker...
+                    bus.$emit('refreshStatus', this.$store.state.player.id);
+                }
             }).catch(err => {
                 bus.$emit('showError', err, i18n("Failed to save play queue!"));
                 logError(err);

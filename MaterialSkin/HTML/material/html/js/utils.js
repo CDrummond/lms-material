@@ -44,7 +44,7 @@ function parseQueryParams() {
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
         if ("player"==kv[0]) {
-            setLocalStorageVal("player", kv[1]);
+            setLocalStorageVal("player", decodeURIComponent(kv[1]));
             removeLocalStorage("defaultPlayer");
             resp.player=kv[1];
         } else if ("page"==kv[0]) {

@@ -361,6 +361,7 @@ def updateRepoXml(repoFile, version, zipFile, sha1, pluginName=None):
     updatedUrl=False
     updatedSha=False
     info("Updating %s" % repoFile)
+    inSection = True if pluginName is None else False
     with open(repoFile, "r") as f:
         lines=f.readlines()
     for i in range(len(lines)):
@@ -408,8 +409,8 @@ zipFile = createZip(version)
 sha1 = getSha1Sum(zipFile)
 if version!="test":
     if os.path.exists(REPO_XML):
-        updateRepoXml(REPO_XML, version, zipFile, sha1, "Material Skin")
+        updateRepoXml(REPO_XML, version, zipFile, sha1, "MaterialSkin")
     if os.path.exists(PUBLIC_XML):
-        updateRepoXml(PUBLIC_XML, version, zipFile, sha1, "Material Skin")
+        updateRepoXml(PUBLIC_XML, version, zipFile, sha1)
 cleanup()
 

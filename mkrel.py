@@ -17,6 +17,7 @@ import sys
 
 
 PUBLIC_XML = "public.xml"
+REPO_XML = "repo.xml"
 BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
 INSTALL_XML = BUILD_FOLDER + "/MaterialSkin/install.xml"
@@ -354,38 +355,41 @@ def getSha1Sum(zipFile):
     return sha1.hexdigest()
 
 
-def updatePublicXml(version, zipFile, sha1):
+def updateRepoXml(repoFile, version, zipFile, sha1, pluginName=None):
     lines=[]
     updatedVersion=False
     updatedUrl=False
     updatedSha=False
-    info("Updating %s" % PUBLIC_XML)
-    with open(PUBLIC_XML, "r") as f:
+    info("Updating %s" % repoFile)
+    with open(repoFile, "r") as f:
         lines=f.readlines()
     for i in range(len(lines)):
-        updated = updateLine(lines[i], 'version="', '"', version)
-        if updated:
-            lines[i]=updated
-            updatedVersion=True
-        updated = updateLine(lines[i], '<url>', '</url>', releaseUrl(version))
-        if updated:
-            lines[i]=updated
-            updatedUrl=True
-        updated = updateLine(lines[i], '<sha>', '</sha>', sha1)
-        if updated:
-            lines[i]=updated
-            updatedSha=True
+        if pluginName is not None and '<plugin name="' in lines[i]:
+            inSection = pluginName in lines[i]
+        if inSection:
+            updated = updateLine(lines[i], 'version="', '"', version)
+            if updated:
+                lines[i]=updated
+                updatedVersion=True
+            updated = updateLine(lines[i], '<url>', '</url>', releaseUrl(version))
+            if updated:
+                lines[i]=updated
+                updatedUrl=True
+            updated = updateLine(lines[i], '<sha>', '</sha>', sha1)
+            if updated:
+                lines[i]=updated
+                updatedSha=True
 
-        if updatedVersion and updatedUrl and updatedSha:
-            break
+            if updatedVersion and updatedUrl and updatedSha:
+                break
 
     if not updatedVersion:
-        error("Failed to update version in %s" % PUBLIC_XML)
+        error("Failed to update version in %s" % repoFile)
     if not updatedUrl:
-        error("Failed to url version in %s" % PUBLIC_XML)
+        error("Failed to url version in %s" % repoFile)
     if not updatedSha:
-        error("Failed to sha version in %s" % PUBLIC_XML)
-    with open(PUBLIC_XML, "w") as f:
+        error("Failed to sha version in %s" % repoFile)
+    with open(repoFile, "w") as f:
         for line in lines:
             f.write(line)
 
@@ -403,6 +407,9 @@ minify(version)
 zipFile = createZip(version)
 sha1 = getSha1Sum(zipFile)
 if version!="test":
-    updatePublicXml(version, zipFile, sha1)
+    if os.path.exists(REPO_XML):
+        updateRepoXml(REPO_XML, version, zipFile, sha1, "Material Skin")
+    if os.path.exists(PUBLIC_XML):
+        updateRepoXml(PUBLIC_XML, version, zipFile, sha1, "Material Skin")
 cleanup()
 

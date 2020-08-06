@@ -613,6 +613,7 @@ const store = new Vuex.Store({
                 for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
                     if (state.openDialogs[i]==val.name) {
                         state.openDialogs.splice(i, 1);
+                        state.lastDialogClose = new Date().getTime();
                         break;
                     }
                 }

@@ -17,7 +17,7 @@
     playlist with that name exists - looks odd if saving queue to its existing
     name.
 13. Show name of currently loaded playlist in queue view.
-14. Use asterisk next to queue's playlist name to indicate its modified.
+14. Use asterisk next to queue's playlist name to indicate it has been modified.
 15. Refresh 'New Music' after scan complete.
 16. Don't navigate back in browse view on 'esc' press if a dialog was closed
     250ms (or less) ago.

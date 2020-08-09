@@ -58,7 +58,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:true="nextButton" class="np-std-button" :title="trans.next"><v-icon large>skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu="showContextMenu" @click="clickImage(event)"></img>
+  <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu.prevent="showContextMenu" @click="clickImage(event)"></img>
   <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
    <v-list-tile style>
     <v-list-tile-content>
@@ -89,7 +89,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-      <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+      <v-card flat class="np-info-card-cover" @contextmenu.prevent="showContextMenu">
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-tab-item>
@@ -99,7 +99,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-layout row>
      <template v-for="(tab, index) in info.tabs">
       <v-flex xs4>
-       <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+       <v-card flat class="np-info-card-cover" @contextmenu.prevent="showContextMenu">
         <v-card-title><p>{{tab.title}}</p></v-card-title>
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
        </v-card>
@@ -129,7 +129,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-      <v-card flat class="np-info-card-cover" @contextmenu="showContextMenu">
+      <v-card flat class="np-info-card-cover" @contextmenu.prevent="showContextMenu">
        <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-tab-item>

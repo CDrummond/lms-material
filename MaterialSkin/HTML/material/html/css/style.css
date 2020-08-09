@@ -1907,4 +1907,5 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .save-queue-dialog .error--text {
  color:var(--active-color)!important;
+ caret-color:var(--active-color)!important;
 }

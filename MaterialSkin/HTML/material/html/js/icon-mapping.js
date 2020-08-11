@@ -106,10 +106,11 @@ function mapIconType(item, app, type) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
             if (entry['icon']) {
                 item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+                return true;
             } else if (entry['svg']) {
                 item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
+                return true;
             }
-            return true;
         }
     }
     for (const [key, value] of Object.entries(iconMap["indexOf"])) {
@@ -117,10 +118,11 @@ function mapIconType(item, app, type) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
             if (entry['icon']) {
                 item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+                return true;
             } else if (entry['svg']) {
                 item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
+                return true;
             }
-            return true;
         }
     }
     return false;

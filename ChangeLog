@@ -5,6 +5,7 @@
 2. Open browse and queue menus on right-click.
 3. Allow to hide 'Default player' setting via passing 'defplayer' to 'hide' url
    query parameter.
+4. Map some new Spotty icons.
 
 1.8.6
 -----

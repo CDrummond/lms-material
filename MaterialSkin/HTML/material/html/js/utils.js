@@ -600,16 +600,17 @@ function hasPlayableId(item) {
            item.album || item.artist || item.variousartist || item.year || item.genre || item.playlist; // CustomBrowse
 }
 
+const ADD_LIBRARY_ID = new Set(['artists', 'albums', 'tracks', 'genres', 'years', 'browselibrary', 'custombrowse']);
+
 function shouldAddLibraryId(command) {
     if (command.command && command.command.length>0) {
-        if (command.command[0]=="artists" || command.command[0]=="albums" || command.command[0]=="tracks" ||
-            command.command[0]=="genres" || command.command[0]=="playlists" || "browselibrary"==command.command[0]) {
+        if (ADD_LIBRARY_ID.has(command.command[0])) {
             return true;
         }
         if (command.command[0]=="playlistcontrol") {
             for (var i=1, len=command.command.length; i<len; ++i) {
-                if (command.command[i].startsWith("artist_id:") || command.command[i].startsWith("album_id:") ||
-                    command.command[i].startsWith("track_id:") || command.command[i].startsWith("genre_id:") || command.command[i].startsWith("year:")) {
+                if (command.command[i].startsWith("artist_id:") || command.command[i].startsWith("album_id:") || command.command[i].startsWith("track_id:") ||
+                    command.command[i].startsWith("genre_id:") || command.command[i].startsWith("year:") || command.command[i].startsWith("playlist_id:")) {
                     return true;
                 }
             }

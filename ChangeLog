@@ -7,6 +7,7 @@
    query parameter.
 4. Map some new Spotty icons.
 5. Fix controlling volume with mousewheel.
+6. Add 'libray_id' to custom browse commands.
 
 1.8.6
 -----

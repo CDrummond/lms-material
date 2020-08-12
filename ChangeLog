@@ -8,6 +8,8 @@
 4. Map some new Spotty icons.
 5. Fix controlling volume with mousewheel.
 6. Add 'libray_id' to custom browse commands.
+7. Reduce CPU usage by not using v-progress-circular in toolbar or 'Information'
+   dialog.
 
 1.8.6
 -----

@@ -10,7 +10,7 @@
 6. Add 'libray_id' to custom browse commands.
 7. Reduce CPU usage by not using v-progress-circular in toolbar or 'Information'
    dialog.
-6. If more than 6 genres chosen in 'Random Mix' dialog, then jsut show the first
+6. If more than 6 genres chosen in 'Random Mix' dialog, then just show the first
    5 with a "(+X others)" label.
 7. Map random play icon in favourites.
 

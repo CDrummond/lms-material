@@ -12,6 +12,7 @@
    dialog.
 6. If more than 6 genres chosen in 'Random Mix' dialog, then jsut show the first
    5 with a "(+X others)" label.
+7. Map random play icon in favourites.
 
 1.8.6
 -----

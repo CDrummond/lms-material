@@ -226,6 +226,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else if (i.presetParams.icon=="html/images/radio.png") {
                             i.svg="radio-station";
                             i.image=undefined;
+                        } else if (i.presetParams.icon=="plugins/RandomPlay/html/images/icon.png") {
+                            i.svg="dice-multiple";
+                            i.image=undefined;
                         } else if (i['icon-id']=="html/images/favorites.png") {
                             i.icon="favorite";
                             i.image=undefined;

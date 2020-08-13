@@ -19,6 +19,12 @@ Vue.component('lms-randommix', {
      <v-list-tile-title>{{i18n('Select All')}}</v-list-tile-title>
     </v-list-tile>
     <v-divider slot="prepend-item"></v-divider>
+    <template v-slot:selection="{ item, index }">
+      <v-chip v-if="(index < 5) || chosenGenres.length==6">
+        <span>{{ item }}</span>
+      </v-chip>
+      <span v-if="index == 5 && chosenGenres.length>6" class="subtext">{{i18n("(+%1 others)", chosenGenres.length - 5) }}</span>
+    </template>
    </v-select>
    <v-select v-if="libraries.length>1 && showAll" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
    <v-checkbox v-if="showAll" v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
@@ -196,9 +202,9 @@ Vue.component('lms-randommix', {
                 this.chosenGenres = this.genres.slice();
             }
         },
-        i18n(str) {
+        i18n(str, val) {
             if (this.show) {
-                return i18n(str);
+                return i18n(str, val);
             } else {
                 return str;
             }

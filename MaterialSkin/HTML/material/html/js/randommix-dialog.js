@@ -20,7 +20,7 @@ Vue.component('lms-randommix', {
     </v-list-tile>
     <v-divider slot="prepend-item"></v-divider>
     <template v-slot:selection="{ item, index }">
-      <v-chip v-if="(index < 5) || chosenGenres.length==6">
+      <v-chip v-if="(index < 5) || chosenGenres.length==6" close @input="chosenGenres.splice(index, 1)">
         <span>{{ item }}</span>
       </v-chip>
       <span v-if="index == 5 && chosenGenres.length>6" class="subtext">{{i18n("(+%1 others)", chosenGenres.length - 5) }}</span>

@@ -171,7 +171,7 @@ Vue.component('lms-search-dialog', {
             } else {
                 let command = this.commands.shift();
                 lmsList("", command.command, command.params, 0, LMS_SEARCH_LIMIT, false).then(({data}) => {
-                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true)});
+                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
                     if (resp.items.length>0) {
                         this.results.push({command:command, params:command.params, resp:resp});
                     }

@@ -50,6 +50,8 @@ const PQ_REMOVE_ALBUM_ACTION  = 38;
 const PQ_ZAP_ACTION           = 39;
 
 const INSERT_ALL_ACTION       = 40;
+const GOTO_ARTIST_ACTION      = 41;
+const GOTO_ALBUM_ACTION       = 42;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -94,7 +96,10 @@ var ACTIONS=[
     {cmd:"pq-rmalbum",   icon: "album"},
     {cmd:"pq-zap",       icon: "flash_on"},
 
-    {cmd:"insert-all",   icon:"format_indent_increase"}
+    {cmd:"insert-all",   icon:"format_indent_increase"},
+
+    {cmd:"goto-artist",  svg:"artist"},
+    {cmd:"goto-album",   icon:"album"}
 ];
 
 function updateActionStrings() {
@@ -145,5 +150,8 @@ function updateActionStrings() {
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
     ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=i18n("Remove album");
     ACTIONS[PQ_ZAP_ACTION].title=i18n("Zap");
+
+    ACTIONS[GOTO_ARTIST_ACTION].title=i18n("Go to artist");
+    ACTIONS[GOTO_ALBUM_ACTION].title=i18n("Go to album");
 }
 

@@ -583,6 +583,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var showAlbumName = isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
             var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year");
+            var isSearchResult = options.isSearch;
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -639,7 +640,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               tracknum: sortTracks && i.tracknum ? parseInt(i.tracknum) : undefined,
                               disc: sortTracks && i.disc ? parseInt(i.disc) : undefined,
                               year: sortTracks && i.year ? parseInt(i.year) : undefined,
-                              album: sortTracks ? i.album : undefined
+                              album: sortTracks || isSearchResult ? i.album : undefined,
+                              artist: isSearchResult ? i.artist : undefined,
+                              album_id: isSearchResult ? i.album_id : undefined,
+                              artist_id: isSearchResult ? i.artist_id : undefined
                           });
             }
             if (sortTracks) {

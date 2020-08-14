@@ -1450,6 +1450,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.doList(itemList, act);
                     bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
                 }
+            } else if (act==GOTO_ARTIST_ACTION) {
+                this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
+            } else if (act==GOTO_ALBUM_ACTION) {
+                this.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, TRACK_TAGS, SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
             } else {
                 var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {
@@ -1483,8 +1487,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             if (!item.menu) {
-                if (undefined!=item.stdItem){
-                    showMenu(this, {show:true, item:item, itemMenu:STD_ITEMS[item.stdItem].menu, x:event.clientX, y:event.clientY, index:index});
+                if (undefined!=item.stdItem) {
+                    // Ger menu items - if this is an album or track from search then we have a different menu
+                    var itm = STD_ITEMS[item.stdItem];
+                    showMenu(this, {show:true, item:item, itemMenu:itm.searchMenu && (this.current.libsearch || this.current.allSearchResults) ? itm.searchMenu : itm.menu, x:event.clientX, y:event.clientY, index:index});
                 }
                 return;
             }

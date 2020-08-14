@@ -13,6 +13,7 @@
 6. If more than 6 genres chosen in 'Random Mix' dialog, then just show the first
    5 with a "(+X others)" label.
 7. Map random play icon in favourites.
+8. Add 'Go to artist' and 'Go to album' to search results menus.
 
 1.8.6
 -----

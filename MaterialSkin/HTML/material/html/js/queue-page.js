@@ -849,7 +849,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     // Have all tracks, so sum durations...
                     var duration = 0;
                     for (var i=0; i<this.listSize; ++i) {
-                        if (this.items[i].duration!=undefined && this.items[i].duration>0) {
+                        if (this.items[i].duration!=undefined && this.items[i].duration>0 && !isNaN(this.items[i].duration)) {
                             duration+=this.items[i].duration;
                         }
                     }
@@ -859,6 +859,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     // Don't have all tracks, so ask LMS for total duration...
                     lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
                         this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
+                        if (isNaN(this.duration)) {
+                            this.duration = 0.0;
+                        }
                         bus.$emit("queueStatus", this.listSize, this.duration);
                     });
                 }
@@ -1089,16 +1092,17 @@ var lmsQueue = Vue.component("lms-queue", {
     },
     filters: {
         displayTime: function (value, bracket) {
-            if (!value) {
+            if (!value || value<0.000000000001 || isNaN(value)) {
+                return '';
+            }
+            let str = formatSeconds(Math.floor(value));
+            if (undefined==str || str.length<1) {
                 return '';
             }
             if (bracket) {
-                if (value<0.000000000001) {
-                    return '';
-                }
-                return " (" + formatSeconds(Math.floor(value)) + ")";
+                return " (" + str + ")";
             }
-            return formatSeconds(Math.floor(value));
+            return str;
         },
         displayCount: function (value) {
             if (!value) {

@@ -848,23 +848,28 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.items.length==this.listSize) {
                     // Have all tracks, so sum durations...
                     var duration = 0;
-                    for (var i=0; i<this.listSize; ++i) {
+                    var isValid = true;
+                    for (var i=0; i<this.listSize && isValid; ++i) {
                         if (this.items[i].duration!=undefined && this.items[i].duration>0 && !isNaN(this.items[i].duration)) {
-                            duration+=this.items[i].duration;
+                            duration += this.items[i].duration;
+                        } else {
+                            isValid = false;
                         }
                     }
-                    this.duration = duration;
-                    bus.$emit("queueStatus", this.listSize, this.duration);
-                } else {
-                    // Don't have all tracks, so ask LMS for total duration...
-                    lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
-                        this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
-                        if (isNaN(this.duration)) {
-                            this.duration = 0.0;
-                        }
+                    if (isValid) {
+                        this.duration = duration;
                         bus.$emit("queueStatus", this.listSize, this.duration);
-                    });
+                        return;
+                    }
                 }
+                // Don't have all tracks, so ask LMS for total duration... (OR isValid from above is false)
+                lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
+                    this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
+                    if (isNaN(this.duration)) {
+                        this.duration = 0.0;
+                    }
+                    bus.$emit("queueStatus", this.listSize, this.duration);
+                });
             } else {
                 this.duration = 0.0;
                 bus.$emit("queueStatus", this.listSize, this.duration);

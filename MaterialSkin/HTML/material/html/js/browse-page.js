@@ -63,7 +63,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-layout>
  </div>
- <v-progress-circular class="browse-progress" v-if="fetchingItems" color="primary" size=72 width=6 indeterminate></v-progress-circular>
+ <v-icon class="browse-progress" v-if="fetchingItems" color="primary">audiotrack</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
 
  <div v-if="grid.use">

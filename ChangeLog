@@ -1,3 +1,7 @@
+1.8.8
+-----
+1. Use pulsing, instead of spinning, icon for active tasks.
+
 1.8.7
 -----
 1. Also set 'caret-color' to active colour when indicating playlist name already

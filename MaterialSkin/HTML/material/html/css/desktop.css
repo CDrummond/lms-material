@@ -66,10 +66,9 @@
 }
 
 .browse-progress {
- z-index:2;
  position:fixed;
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 36px));
- left:calc(((100vw * (var(--splitter-pc)/100))/2) - 36px);
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 32px));
+ left:calc(((100vw * (var(--splitter-pc)/100))/2) - 32px);
 }
 
 .vue-splitter .splitter {

@@ -172,7 +172,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
 
-                let duration = undefined==i.duration ? undefined : parseInt(i.duration);
+                let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let haveRating = showRatings && undefined!=i.rating;
                 resp.items.push({
                               id: "track_id:"+i.id,

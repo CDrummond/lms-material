@@ -3,6 +3,7 @@
 1. Use pulsing, instead of spinning, icon for active tasks.
 2. Check for 'Not a Number' when calculating, and showing, queue duration.
 3. If encounter an invalid time when calculating queue duration, just ask LMS.
+4. Queue item durations are floating point, so handle correctly.
 
 1.8.7
 -----

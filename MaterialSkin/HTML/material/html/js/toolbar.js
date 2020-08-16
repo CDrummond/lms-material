@@ -288,10 +288,13 @@ Vue.component('lms-toolbar', {
             if (!this.movingVolumeSlider) {
                 this.playerMuted = playerStatus.volume<0;
                 var vol = Math.abs(playerStatus.volume);
-                if (vol!=this.playerVolume) {
+                if (vol != this.playerVolume) {
+                    // Ignore changes to 'playerVolume' when switching players...
+                    this.ignorePlayerVolChange = this.$store.state.player.id != this.playerId;
                     this.playerVolume = vol;
                 }
             }
+            this.playerId = ""+this.$store.state.player.id
         }.bind(this));
         
         bus.$on('langChanged', function() {
@@ -739,7 +742,12 @@ Vue.component('lms-toolbar', {
     },
     watch: {
         'playerVolume': function(newVal) {
-            if (newVal>=0) {
+            // Ignore changes to 'playerVolume' when switching players...
+            if (this.ignorePlayerVolChange) {
+                this.ignorePlayerVolChange = false;
+                return;
+            }
+            if (!isNaN(newVal) && newVal>=0) {
                 this.resetSendVolumeTimer();
             }
         },

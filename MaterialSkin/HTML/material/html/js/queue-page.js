@@ -421,13 +421,14 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     var subtitle = buildSubtitle(i, this.$store.state.queueThreeLines);
                     var remoteTitle = checkRemoteTitle(i);
+                    var duration = undefined==i.duration ? undefined : parseFloat(i.duration);
 
-                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || i.duration!=this.items[index].duration) {
+                    if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
-                        if (i.duration!=this.items[index].duration) {
-                            this.items[index].durationStr = i.duration && i.duration>0 ? formatSeconds(Math.floor(i.duration)) : undefined;
-                            this.items[index].duration = i.duration;
+                        if (duration!=this.items[index].duration) {
+                            this.items[index].durationStr = undefined!=duration && duration>0 ? formatSeconds(duration) : undefined;
+                            this.items[index].duration = duration;
                             this.getDuration();
                         }
 

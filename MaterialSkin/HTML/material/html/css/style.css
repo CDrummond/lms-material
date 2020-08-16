@@ -483,6 +483,7 @@ div.v-subheader {
 .subtoolbar-title-single {
  height:var(--sub-toolbar-height) !important;
  line-height:var(--sub-toolbar-height) !important;
+ margin-top:-2px!important;
 }
 
 .subtoolbar-pad {

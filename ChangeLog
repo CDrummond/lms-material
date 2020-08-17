@@ -5,6 +5,7 @@
 3. Queue item durations are floating point, so handle correctly.
 4. Fix subtoolbar single line alignment.
 5. Don't set mixer volume when changing players.
+6. Move 'Zap' next to remove actions.
 
 1.8.7
 -----

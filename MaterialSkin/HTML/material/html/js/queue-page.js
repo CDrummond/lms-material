@@ -181,8 +181,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, SELECT_ACTION, MOVE_HERE_ACTION, PQ_ZAP_ACTION, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, SELECT_ACTION, MOVE_HERE_ACTION, PQ_ZAP_ACTION, MORE_ACTION],
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,

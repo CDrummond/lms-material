@@ -230,6 +230,7 @@ const store = new Vuex.Store({
         library: null,
         infoPlugin: false,
         dstmPlugin: false,
+        customSkipPlugin: false,
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
@@ -413,6 +414,7 @@ const store = new Vuex.Store({
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
             lmsOptions.infoPlugin = state.infoPlugin;
             state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
+            state.customSkipPlugin = getLocalStorageBool('customSkipPlugin', state.customSkipPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
@@ -495,11 +497,19 @@ const store = new Vuex.Store({
             });
             // Don't Stop The Music installed?
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
-                state.dstmPlugin = data && data.result && data.result._p2 && "disabled"!=data.result._p2;
+                state.dstmPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             }).catch(err => {
                 state.dstmPlugin = false;
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
+            });
+            // CustomSkip installed?
+            lmsCommand("", ["pref", "plugin.state:CustomSkip", "?"]).then(({data}) => {
+                state.customSkipPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
+                setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
+            }).catch(err => {
+                state.customSkipPlugin = false;
+                setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
             });
 
             var pass = getLocalStorageVal('password', '-');

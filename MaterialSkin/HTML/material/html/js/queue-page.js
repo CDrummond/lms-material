@@ -303,7 +303,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action!=MOVE_HERE_ACTION || (selection.size>0 && !menu.item.selected)" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : (action==PQ_ZAP_ACTION ? customSkipPlugin : true)" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -351,6 +351,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         noPlayer() {
             return !this.$store.state.player
+        },
+        customSkipPlugin() {
+            return this.$store.state.customSkipPlugin
         }
     },
     created() {

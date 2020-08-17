@@ -463,7 +463,7 @@
 "Start":"",
 "URL":"",
 "Version":"",
-"Zap":"",
-"Zapped '%1'":"",
+"Zap":"Zappen",
+"Zapped '%1'":"'%1' gezappt",
 "⌘+%1":""
 }

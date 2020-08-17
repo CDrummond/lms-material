@@ -851,7 +851,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     var duration = 0;
                     var isValid = true;
                     for (var i=0; i<this.listSize && isValid; ++i) {
-                        if (this.items[i].duration!=undefined && this.items[i].duration>0 && !isNaN(this.items[i].duration)) {
+                        if (this.items[i].duration!=undefined && this.items[i].duration>0) {
                             duration += this.items[i].duration;
                         } else {
                             isValid = false;
@@ -866,9 +866,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 // Don't have all tracks, so ask LMS for total duration... (OR isValid from above is false)
                 lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
                     this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
-                    if (isNaN(this.duration)) {
-                        this.duration = 0.0;
-                    }
                     bus.$emit("queueStatus", this.listSize, this.duration);
                 });
             } else {
@@ -1098,7 +1095,7 @@ var lmsQueue = Vue.component("lms-queue", {
     },
     filters: {
         displayTime: function (value, bracket) {
-            if (!value || value<0.000000000001 || isNaN(value)) {
+            if (!value || value<0.000000000001) {
                 return '';
             }
             let str = formatSeconds(Math.floor(value));

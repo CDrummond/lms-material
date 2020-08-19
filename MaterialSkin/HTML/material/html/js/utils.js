@@ -81,6 +81,12 @@ function parseQueryParams() {
             resp.appQuit=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+        } else if ("theme"==kv[0]) {
+            var parts = kv[1].split(",");
+            setLocalStorageVal('theme', parts[0]);
+            if (parts.length>1) {
+                setLocalStorageVal('color', parts[1]);
+            }
         }
     }
     return resp;

@@ -464,6 +464,6 @@
 "1 day":"1 jour",
 "%1 days":"%1 jours",
 "(+%1 others)":"(+%1 autres)",
-"Zap":"Zapper",
-"Zapped '%1'":"'%1' zappé"
+"Zap":"Ignorer",
+"Zapped '%1'":"'%1' ignoré"
 }

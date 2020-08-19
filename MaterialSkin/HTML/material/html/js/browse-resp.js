@@ -643,7 +643,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               album: sortTracks || isSearchResult ? i.album : undefined,
                               artist: isSearchResult ? i.artist : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
-                              artist_id: isSearchResult ? i.artist_id : undefined
+                              artist_id: isSearchResult ? i.artist_id : undefined,
+                              url: i.url
                           });
             }
             if (sortTracks) {

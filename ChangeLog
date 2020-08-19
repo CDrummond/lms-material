@@ -3,6 +3,8 @@
 1. Allow specifying theme, and colour, via URL. e.g.
    http://SERVER:9000/material/?theme=dark,green For platform themes (e.g.
    Adwaita-Dark) you need to specify path. e.g. "theme=linux/dark/Adwaita-Dark"
+2. Add 'Add to playlist' action, allowing tracks to be saved to new, or
+   existing, playlists.
 
 1.8.8
 -----

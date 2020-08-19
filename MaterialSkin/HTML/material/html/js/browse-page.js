@@ -25,6 +25,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-divider vertical v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION)"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION)"><v-icon>play_circle_outline</v-icon></v-btn>
+   <v-btn v-if="items[0].stdItem==STD_ITEM_TRACK || items[0].stdItem==STD_ITEM_ALBUM_TRACK" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_TO_PLAYLIST_ACTION)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <v-divider vertical></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -1454,6 +1455,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
             } else if (act==GOTO_ALBUM_ACTION) {
                 this.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, TRACK_TAGS, SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
+            } else if (ADD_TO_PLAYLIST_ACTION==act) {
+                bus.$emit('dlg.open', 'addtoplaylist', [item]);
             } else {
                 var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {
@@ -2456,7 +2459,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (var i=0, len=selection.length; i<len; ++i) {
                 itemList.push(this.items[selection[i]]);
             }
-            this.doList(itemList, act);
+            if (ADD_TO_PLAYLIST_ACTION==act) {
+                bus.$emit('dlg.open', 'addtoplaylist', itemList);
+            } else {
+                this.doList(itemList, act);
+            }
             this.clearSelection();
         },
         doList(list, act/*, index*/) {

@@ -27,7 +27,7 @@ var app = new Vue({
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, search: false,
                             movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, iframe: false,
-                            dstm: false, savequeue: false, icon: false, prompt:false } }
+                            dstm: false, savequeue: false, icon: false, prompt:false, addtoplaylist: false } }
     },
     created() {
         this.autoLayout = true;

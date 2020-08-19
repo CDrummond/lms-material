@@ -23,7 +23,7 @@ Vue.component('lms-addtoplaylist-dialog', {
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="save()">{{nameExists ? i18n('Add') : i18n('Create')}}</v-btn>
+   <v-btn flat @click.native="save()">{{i18n('Add')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -33,8 +33,6 @@ Vue.component('lms-addtoplaylist-dialog', {
         return {
             show: false,
             name: "",
-            nameExists: false,
-            errorMessages: undefined,
             existing: []
         }
     },
@@ -43,7 +41,6 @@ Vue.component('lms-addtoplaylist-dialog', {
         bus.$on('addtoplaylist.open', function(items) {
             this.show = true;
             this.items = items;
-            this.errorMessages = undefined;
             focusEntry(this);
             lmsCommand("", ["playlists", 0, 10000]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
@@ -81,13 +78,35 @@ Vue.component('lms-addtoplaylist-dialog', {
             }
             this.show=false;
 
-            var urls=[];
-            for (var i=0, len=this.items.length; i<len; ++i) {
-                if (this.items[i].url) {
-                    urls.push(this.items[i].url);
+            if (1==this.items.length && this.items[0].id.startsWith("album_id:")) {
+                this.saveAlbumToPlaylist(name, this.items[0].id);
+            } else {
+                var urls=[];
+                for (var i=0, len=this.items.length; i<len; ++i) {
+                    if (this.items[i].url) {
+                        urls.push(this.items[i].url);
+                    }
                 }
+                this.saveUrlsToPlaylist(name, urls);
             }
-
+        },
+        saveAlbumToPlaylist(name, albumId) {
+            lmsCommand("", ["tracks", 0, 1000, albumId, "tags:u"]).then(({data})=>{
+                var urls = [];
+                if (data && data.result && data.result.titles_loop) {
+                    for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
+                        if (loop[i].url) {
+                            urls.push(loop[i].url);
+                        }
+                    }
+                }
+                this.saveUrlsToPlaylist(name, urls);
+            }).catch(err => {
+                bus.$emit('showError', err, i18n("Failed to add to playlist!"));
+                logError(err);
+            });
+        },
+        saveUrlsToPlaylist(name, urls) {
             if (urls.length>0) {
                 lmsCommand("", ["playlists", "new", "name:"+name]).then(({data})=>{
                     var playlistId = undefined;

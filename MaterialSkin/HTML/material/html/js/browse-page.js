@@ -25,7 +25,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-divider vertical v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION)"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION)"><v-icon>play_circle_outline</v-icon></v-btn>
-   <v-btn v-if="items[0].stdItem==STD_ITEM_TRACK || items[0].stdItem==STD_ITEM_ALBUM_TRACK" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_TO_PLAYLIST_ACTION)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
+   <v-btn v-if="items[0].items[0].stdItem==STD_ITEM_TRACK || items[0].stdItem==STD_ITEM_ALBUM_TRACK" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_TO_PLAYLIST_ACTION)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <v-divider vertical></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -55,7 +55,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <img v-if="currentActions.items[0].svg" class="svg-img" :src="currentActions.items[0].svg | svgIcon(darkUi)"></img>
     <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
    </v-btn>
-   <v-divider vertical v-if="tbarActions.length>0 && (currentActions.show || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1))"></v-divider>
+   <v-btn v-if="items.length>0 && items[0].saveableTrack" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
+   <v-divider vertical></v-divider>
+   <v-divider vertical v-if="tbarActions.length>0 && (currentActions.show || (items.length>0 && items[0].musicip) || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -1616,6 +1618,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (undefined!=this.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
                 this.itemAction(act, {swapid:this.current.allid, id:this.items[0].id, title:this.current.title,
                                       goAction:this.items[0].goAction, params:this.items[0].params, section:this.items[0].section});
+            } else if (ADD_TO_PLAYLIST_ACTION==act) {
+                bus.$emit('dlg.open', 'addtoplaylist', this.items);
             } else {
                 this.itemAction(act, this.current);
             }

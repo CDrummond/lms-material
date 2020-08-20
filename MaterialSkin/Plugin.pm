@@ -146,7 +146,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'plugins',
                                                   'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers']) ) {
+                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -588,7 +588,6 @@ sub _cliCommand {
         }
     }
 
-
     if ($cmd eq 'command') {
         my $act = $request->getParam('cmd');
         if ($act) {
@@ -738,6 +737,28 @@ sub _cliCommand {
         }
         $request->setStatusDone();
         return;
+    }
+
+    if ($cmd eq 'urls') {
+        my $tracks = $request->getParam('tracks');
+        if ($tracks) {
+            my $dbh = Slim::Schema->dbh;
+            my @list = split(/,/, $tracks);
+            my $sql = $dbh->prepare_cached( qq{SELECT url FROM tracks WHERE id = ? LIMIT 1} );
+            my $cnt = 0;
+            foreach my $t (@list) {
+                $sql->execute($t);
+                if ( my $result = $sql->fetchall_arrayref({}) ) {
+                    my $url = $result->[0]->{'url'} if ref $result && scalar @$result;
+                    if ($url) {
+                        $request->addResultLoop("urls_loop", $cnt, "url", $url);
+                        $cnt++;
+                    }
+                }
+            }
+            $request->setStatusDone();
+            return;
+        }
     }
 
     $request->setStatusBadParams();

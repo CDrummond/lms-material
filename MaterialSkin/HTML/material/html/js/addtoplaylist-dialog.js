@@ -87,7 +87,12 @@ Vue.component('lms-addtoplaylist-dialog', {
                         urls.push(this.items[i].url);
                     }
                 }
-                this.saveUrlsToPlaylist(name, urls);
+
+                if (urls.length==0 && this.items[0].params && this.items[0].params.track_id) {
+                    this.saveTracksToPlaylist(name);
+                } else {
+                    this.saveUrlsToPlaylist(name, urls);
+                }
             }
         },
         saveAlbumToPlaylist(name, albumId) {
@@ -95,6 +100,28 @@ Vue.component('lms-addtoplaylist-dialog', {
                 var urls = [];
                 if (data && data.result && data.result.titles_loop) {
                     for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
+                        if (loop[i].url) {
+                            urls.push(loop[i].url);
+                        }
+                    }
+                }
+                this.saveUrlsToPlaylist(name, urls);
+            }).catch(err => {
+                bus.$emit('showError', err, i18n("Failed to add to playlist!"));
+                logError(err);
+            });
+        },
+        saveTracksToPlaylist(name) {
+            var tracks=[];
+            for (var i=0, len=this.items.length; i<len; ++i) {
+                if (this.items[i].params && this.items[i].params.track_id) {
+                    tracks.push(this.items[i].params.track_id);
+                }
+            }
+            lmsCommand("", ["material-skin", "urls", "tracks:"+tracks.join(",")]).then(({data})=>{
+                var urls = [];
+                if (data && data.result && data.result.urls_loop) {
+                    for (var i=0, loop=data.result.urls_loop, loopLen=loop.length; i<loopLen; ++i) {
                         if (loop[i].url) {
                             urls.push(loop[i].url);
                         }

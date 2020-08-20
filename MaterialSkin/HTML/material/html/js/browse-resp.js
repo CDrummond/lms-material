@@ -134,6 +134,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
+                if (i.trackType && i.trackType == "local" && isMusicIpMix) {
+                    i.saveableTrack = true; // Can save track list to playlist...
+                }
                 // Issue #58 Pretend 'text' with a go action is just a text line, so that click() works
                 if (undefined==i.type && !i.style && i.actions && i.actions.go && !i.icon && !i["icon-id"] && !i.image && !i.window &&
                     (!i.addAction || i.actions.go.nextWindow)) {

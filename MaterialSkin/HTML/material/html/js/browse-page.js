@@ -56,7 +56,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
    </v-btn>
    <v-btn v-if="items.length>0 && items[0].saveableTrack" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
-   <v-divider vertical></v-divider>
    <v-divider vertical v-if="tbarActions.length>0 && (currentActions.show || (items.length>0 && items[0].musicip) || (desktopLayout && settingsMenuActions.length>0) || (showRatingButton && items.length>1))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">

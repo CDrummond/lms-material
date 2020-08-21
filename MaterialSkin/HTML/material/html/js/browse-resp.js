@@ -134,9 +134,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
-                if (i.trackType && i.trackType == "local" && isMusicIpMix) {
-                    i.saveableTrack = true; // Can save track list to playlist...
-                }
                 // Issue #58 Pretend 'text' with a go action is just a text line, so that click() works
                 if (undefined==i.type && !i.style && i.actions && i.actions.go && !i.icon && !i["icon-id"] && !i.image && !i.window &&
                     (!i.addAction || i.actions.go.nextWindow)) {
@@ -373,6 +370,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     if (!addedDivider) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
+                    }
+                    if ((isMusicIpMix && i.trackType && i.trackType == "local") /*||
+                        (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
+                        i.saveableTrack = true; // Can save track list to playlist...
+                        i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
                     i.menu.push(SELECT_ACTION);
                 }

@@ -81,60 +81,62 @@ Vue.component('lms-addtoplaylist-dialog', {
             if (1==this.items.length && this.items[0].id.startsWith("album_id:")) {
                 this.saveAlbumToPlaylist(name, this.items[0].id);
             } else {
-                var urls=[];
+                var tracks = [];
                 for (var i=0, len=this.items.length; i<len; ++i) {
                     if (this.items[i].url) {
-                        urls.push(this.items[i].url);
-                    }
+                        tracks.push({url:this.items[i].url});
+                    } /*else if (this.items[i].presetParams && this.items[i].presetParams.favorites_url) {
+                        tracks.push({url:this.items[i].presetParams.favorites_url, title:this.items[i].title});
+                    }*/
                 }
 
-                if (urls.length==0 && this.items[0].params && this.items[0].params.track_id) {
-                    this.saveTracksToPlaylist(name);
+                if (tracks.length==0 && this.items[0].params && this.items[0].params.track_id) {
+                    this.convertTrackIds(name);
                 } else {
-                    this.saveUrlsToPlaylist(name, urls);
+                    this.saveTracksToPlaylist(name, tracks);
                 }
             }
         },
         saveAlbumToPlaylist(name, albumId) {
             lmsCommand("", ["tracks", 0, 1000, albumId, "tags:u"]).then(({data})=>{
-                var urls = [];
+                var tracks = [];
                 if (data && data.result && data.result.titles_loop) {
                     for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
                         if (loop[i].url) {
-                            urls.push(loop[i].url);
+                            tracks.push({url:loop[i].url});
                         }
                     }
                 }
-                this.saveUrlsToPlaylist(name, urls);
+                this.saveTracksToPlaylist(name, tracks);
             }).catch(err => {
                 bus.$emit('showError', err, i18n("Failed to add to playlist!"));
                 logError(err);
             });
         },
-        saveTracksToPlaylist(name) {
-            var tracks=[];
+        convertTrackIds(name) {
+            var trackIds = [];
             for (var i=0, len=this.items.length; i<len; ++i) {
                 if (this.items[i].params && this.items[i].params.track_id) {
-                    tracks.push(this.items[i].params.track_id);
+                    trackIds.push(this.items[i].params.track_id);
                 }
             }
-            lmsCommand("", ["material-skin", "urls", "tracks:"+tracks.join(",")]).then(({data})=>{
-                var urls = [];
+            lmsCommand("", ["material-skin", "urls", "tracks:"+trackIds.join(",")]).then(({data})=>{
+                var tracks = [];
                 if (data && data.result && data.result.urls_loop) {
                     for (var i=0, loop=data.result.urls_loop, loopLen=loop.length; i<loopLen; ++i) {
                         if (loop[i].url) {
-                            urls.push(loop[i].url);
+                            tracks.push({url:loop[i].url});
                         }
                     }
                 }
-                this.saveUrlsToPlaylist(name, urls);
+                this.saveTracksToPlaylist(name, tracks);
             }).catch(err => {
                 bus.$emit('showError', err, i18n("Failed to add to playlist!"));
                 logError(err);
             });
         },
-        saveUrlsToPlaylist(name, urls) {
-            if (urls.length>0) {
+        saveTracksToPlaylist(name, tracks) {
+            if (tracks.length>0) {
                 lmsCommand("", ["playlists", "new", "name:"+name]).then(({data})=>{
                     var playlistId = undefined;
                     if (data && data.result) {
@@ -145,7 +147,7 @@ Vue.component('lms-addtoplaylist-dialog', {
                         }
                     }
                     if (playlistId!=undefined) {
-                        this.savePlaylist(name, playlistId, urls);
+                        this.savePlaylist(name, playlistId, tracks);
                     } else {
                         bus.$emit('showError', err, i18n("Failed to add to playlist!"));
                     }
@@ -157,11 +159,13 @@ Vue.component('lms-addtoplaylist-dialog', {
                 bus.$emit('showError', err, i18n("Failed to add to playlist!"));
             }
         },
-        savePlaylist(name, id, urls) {
-            var url = urls.shift();
-            lmsCommand("", ["playlists", "edit", "playlist_id:"+id, "cmd:add", "url:"+url]).then(({data})=>{
-                if (urls.length>0) {
-                    this.savePlaylist(name, id, urls);
+        savePlaylist(name, id, tracks) {
+            var track = tracks.shift();
+            var cmd = ["playlists", "edit", "playlist_id:"+id, "cmd:add", "url:"+track.url];
+
+            lmsCommand("", cmd).then(({data})=>{
+                if (tracks.length>0) {
+                    this.savePlaylist(name, id, tracks);
                 } else {
                     bus.$emit('showMessage', i18n("Added to '%1'", name));
                 }

@@ -625,9 +625,6 @@ function shouldAddLibraryId(command) {
     return false;
 }
 
-
-
-
 // Determine if an item is a 'text' item - i.e. cannot browse into
 function isTextItem(item) {
     return !item.isPinned && !item.weblink &&

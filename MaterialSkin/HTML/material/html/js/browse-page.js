@@ -2505,7 +2505,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var commands = [];
                 for (var i=0, len=list.length; i<len; ++i) {
                     if (list[i].stdItem || (list[i].menu && list[i].menu.length>0 && list[i].menu[0]==PLAY_ACTION)) {
-                        commands.push({act:PLAY_ACTION==act ? (0==commands.length() ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
+                        commands.push({act:PLAY_ACTION==act ? (0==commands.length ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
                     }
                 }
                 this.doCommands(commands, PLAY_ACTION==act);

@@ -8,19 +8,6 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
-function getTouchPos(ev) {
-    if (undefined==ev) {
-        return undefined;
-    }
-    if (undefined==ev.touches || ev.touches.length<1) {
-        if (undefined!=ev.changedTouches && ev.changedTouches.length>0) {
-            return {x:ev.changedTouches[0].clientX, y:ev.changedTouches[0].clientY};
-        }
-        return undefined;
-    }
-    return {x:ev.touches[0].clientX, y:ev.touches[0].clientY};
-}
-
 var app = new Vue({
     el: '#app',
     data() {

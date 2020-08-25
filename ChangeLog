@@ -7,6 +7,7 @@
    existing, playlists.
 3. On desktop browsers, allow keypress to jump via jumplist.
 4. Ignore swipe to change page if started in timebar.
+5. For mobile devices, show time position tooltip with touch and drag.
 
 1.8.8
 -----

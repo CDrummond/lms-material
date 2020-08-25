@@ -349,6 +349,25 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     created() {
+        if (!IS_MOBILE) {
+            let browse = this;
+            document.onkeyup = function(event) {
+                if (!event.ctrlKey && !event.altKey && !event.metaKey && undefined!=browse.jumplist && browse.jumplist.length>1 &&
+                    browse.$store.state.openDialogs.length<1 && browse.$store.state.visibleMenus.size<1 && (browse.$store.state.desktopLayout || browse.$store.state.page=="browse")) {
+                    let key = event.key.toUpperCase();
+                    if ('#'==key) {
+                        browse.jumpTo(browse.jumplist[0]);
+                    } else {
+                        for (let i=0, loop=browse.jumplist, len=loop.length; i<len; ++i) {
+                            if (loop[i].key == key) {
+                                browse.jumpTo(loop[i]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            };
+        }
         this.reqId = 0;
         this.myMusic=[];
         this.history=[];

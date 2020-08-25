@@ -5,6 +5,7 @@
    Adwaita-Dark) you need to specify path. e.g. "theme=linux/dark/Adwaita-Dark"
 2. Add 'Add to playlist' action, allowing tracks to be saved to new, or
    existing, playlists.
+3. On desktop browsers, allow keypress to jump via jumplist.
 
 1.8.8
 -----

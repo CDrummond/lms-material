@@ -225,30 +225,30 @@ var app = new Vue({
     },
     methods: {
         touchStart(ev) {
-            this.touch=getTouchPos(ev);
+            this.touch = getTouchPos(ev);
             this.touchValid=false;
         },
         touchEnd(ev) {
             if (undefined!=this.touch) {
-                let end=getTouchPos(ev);
-                this.touchValid=Math.abs(this.touch.x-end.x)>75 && Math.abs(this.touch.y-end.y)<50;
-                this.touch=undefined;
+                let end = getTouchPos(ev);
+                this.touchValid = Math.abs(this.touch.x-end.x)>75 && Math.abs(this.touch.y-end.y)<50;
+                if (this.touchValid && this.$store.state.page=='now-playing') {
+                    // Ignore swipes on position slider...
+                    var elem = document.getElementById("pos-slider");
+                    if (elem) {
+                        var rect = elem.getBoundingClientRect();
+                        if ((rect.x-16)<=this.touch.x && (rect.x+rect.width+16)>=this.touch.x &&
+                            (rect.y-32)<=this.touch.y && (rect.y+rect.height+32)>=this.touch.y) {
+                            this.touchValid = false;
+                        }
+                    }
+                }
+                this.touch = undefined;
             }
         },
         swipe(direction, ev) {
             if (!this.touchValid || this.$store.state.visibleMenus.size>0 || this.$store.state.desktopLayout) {
                 return;
-            }
-            if (this.$store.state.page=='now-playing') {
-                // Ignore swipes on position slider...
-                var elem = document.getElementById("pos-slider");
-                if (elem) {
-                    var rect = elem.getBoundingClientRect();
-                    if ((rect.x-4)<=ev.touchstartX && (rect.x+rect.width+8)>=ev.touchstartX &&
-                        (rect.y-4)<=ev.touchstartY && (rect.y+rect.height+8)>=ev.touchstartY) {
-                        return;
-                    }
-                }
             }
             if (this.$store.state.openDialogs.length>0) {
                 if (this.$store.state.openDialogs.length==1) {

@@ -6,6 +6,7 @@
 2. Add 'Add to playlist' action, allowing tracks to be saved to new, or
    existing, playlists.
 3. On desktop browsers, allow keypress to jump via jumplist.
+4. Ignore swipe to change page if started in timebar.
 
 1.8.8
 -----

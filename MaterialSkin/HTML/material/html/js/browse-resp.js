@@ -400,10 +400,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (i.type=="text" && i.title.startsWith("<")) {
                     i.type="html";
                 }
+
+                /* Play/add of a track from a favourited album adds all tracks :( this section works-around this... */
+                if (!isFavorites && parent && parent.section == SECTION_FAVORITES && i.commonParams && i.commonParams.track_id) {
+                    i.id = "track_id:"+i.commonParams.track_id;
+                    i.stdItem = STD_ITEM_TRACK;
+                    i.type = i.presetParams = i.commonParams = i.menu = i.playallParams = i.addallParams = i.goAction = i.style = undefined;
+                }
+
                 resp.items.push(i);
                 types.add(i.type);
             }
-
+            /* ...continuation of favroutied album add/play tack issue... */
+            if (!isFavorites && parent && parent.section == SECTION_FAVORITES && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
+                resp.baseActions = [];
+            }
             if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
                 resp.canUseGrid = false;
             } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && 1==types.size &&
@@ -441,6 +452,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (1==resp.items.length && 'text'==resp.items[0].type && 'itemNoAction'==resp.items[0].style && msgIsEmpty(resp.items[0].title)) {
                 resp.items=[];
             }
+
             if (isApps || isPodcastList) {
                 resp.items.sort(titleSort);
             } else if (isFavorites) {

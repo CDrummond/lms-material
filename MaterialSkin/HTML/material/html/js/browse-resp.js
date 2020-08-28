@@ -614,8 +614,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var title = i.title;
                 var duration = parseFloat(i.duration || 0);
                 if (i.tracknum>0) {
-                     title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
-                     //title = i.tracknum + ". " + title; // SlimBrowse format
+                    title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
+                    //title = i.tracknum + ". " + title; // SlimBrowse format
+                    if (isSearchResult && undefined!=i.disc) {
+                        title = i.disc+"."+title;
+                    }
                 }
                 if (i.trackartist && (showAlbumName || (( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))))) {
                      title+=SEPARATOR + i.trackartist;
@@ -628,7 +631,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         title+=" (" + i.year + ")";
                     }
                 }
-                if (undefined!=i.disc) {
+                if (undefined!=i.disc && !isSearchResult) {
                     if (discs.has(i.disc)) {
                         var entry = discs.get(i.disc);
                         entry.total++;

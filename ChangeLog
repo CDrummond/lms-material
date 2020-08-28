@@ -4,6 +4,7 @@
 2. Treat backspace as per esc - which will allow navigating back.
 3. Show icons for custom actions in now playing context menu.
 4. Show hover actions for tracks of multi-disc albums shown as one allbum.
+5. Don't split tracks into discs when showing search results.
 
 1.8.8
 -----

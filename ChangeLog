@@ -2,6 +2,7 @@
 -----
 1. Work-around add/play of a track from favourited album adding all tracks.
 2. Treat backspace as per esc - which will allow navigating back.
+3. Show icons for custom actions in now playing context menu.
 
 1.8.8
 -----

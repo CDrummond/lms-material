@@ -691,7 +691,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                     if (this.customActions && this.customActions.length>0) {
                         for (let i=0, loop=this.customActions, len=loop.length; i<len; ++i) {
-                            this.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i});
+                            this.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
                         }
                     }
                 }

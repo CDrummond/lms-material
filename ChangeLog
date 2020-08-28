@@ -10,6 +10,14 @@
 5. For mobile devices, show time position tooltip with touch and drag.
 6. Replace search dialog with a search-as-type text field in subtoolbar.
 
+1.8.9
+-----
+1. Work-around add/play of a track from favourited album adding all tracks.
+2. Treat backspace as per esc - which will allow navigating back.
+3. Show icons for custom actions in now playing context menu.
+4. Show hover actions for tracks of multi-disc albums shown as one allbum.
+5. Don't split tracks into discs when showing search results.
+
 1.8.8
 -----
 1. Use pulsing, instead of spinning, icon for active tasks.

@@ -186,6 +186,11 @@ var app = new Vue({
             }
         });
 
+        bindKey('backspace');
+        bus.$on('keyboard', function(key, modifier) {
+            bus.$emit('esc');
+        }.bind(this));
+
         bus.$on('dialogOpen', function(name, val) {
             this.$store.commit('dialogOpen', {name:name, shown:val});
         }.bind(this));

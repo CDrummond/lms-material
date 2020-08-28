@@ -1,6 +1,7 @@
 1.8.9
 -----
 1. Work-around add/play of a track from favourited album adding all tracks.
+2. Treat backspace as per esc - which will allow navigating back.
 
 1.8.8
 -----

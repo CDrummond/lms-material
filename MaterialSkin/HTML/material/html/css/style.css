@@ -533,12 +533,13 @@ div.v-subheader {
 }
 
 .vol-full-slider {
- max-width:200px;
+ max-width:200px!important;
+ min-width:200px!important;
 }
 
 .vol-full-label {
  padding-top:16px;
- width:3em;
+ min-width:3em!important;
  text-align:left;
  font-size:var(--std-font-size) !important;
 }
@@ -949,6 +950,9 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 @media screen and (max-width: 399px) {
  #advanced-search-btn {
   display:none;
+ }
+ .lib-search {
+  margin-right:12px!important;
  }
 }
 

@@ -12,7 +12,7 @@ const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <div v-if="headerTitle" class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
+ <div v-if="headerTitle || searchActive" class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
   <v-layout v-if="selection.size>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -29,6 +29,11 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-divider vertical></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
+  </v-layout>
+  <v-layout v-else-if="searchActive">
+   <v-btn flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
+   <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <lms-search-field></lms-search-field>
   </v-layout>
   <v-layout v-else>
    <v-btn flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
@@ -313,7 +318,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             settingsMenuActions: [],
             subtitleClickable: false,
             disabled: new Set(),
-            wide: false
+            wide: false,
+            searchActive: false
         }
     },
     computed: {
@@ -488,8 +494,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             }
         }.bind(this));
-        bus.$on('libSeachResults', function(item, command, resp) {
+        bus.$on('libSearchResults', function(item, command, resp) {
             this.handleListResponse(item, command, resp);
+        }.bind(this));
+        bus.$on('closeLibSearch', function() {
+            this.goBack();
         }.bind(this));
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
@@ -515,7 +524,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if ('mod'==modifier) {
                     if (LMS_SEARCH_KEYBOARD==key) {
                         if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
-                            bus.$emit('dlg.open', 'search');
+                            this.itemAction(SEARCH_LIB_ACTION);
                         } else if (this.current && this.current.id==PODCASTS_ID) {
                             bus.$emit('dlg.open', 'podcastsearch');
                         }
@@ -657,6 +666,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             prev.prevPage = this.prevPage;
             prev.allSearchResults = this.allSearchResults;
             prev.inGenre = this.inGenre;
+            prev.searchActive = this.searchActive;
             this.prevPage = undefined;
             this.history.push(prev);
         },
@@ -683,6 +693,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.handleListResponse(item, command, resp);
                     this.prevPage = prevPage;
                     this.fetchingItems = false;
+                    this.searchActive = false;
                     this.enableRatings();
                 }
             }).catch(err => {
@@ -708,8 +719,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleListResponse(item, command, resp) {
             if (resp && resp.items) {
-                if (!item.id.startsWith(SEARCH_ID) || this.history.length<1 || !this.current || !this.current.id.startsWith(SEARCH_ID)) {
+                // Only add history if this is not a search response replacing a search response...
+                if (SEARCH_ID!=item.id || undefined==this.current || SEARCH_ID!=this.current.id) {
                     this.addHistory();
+                }
+                if (item.id.startsWith(SEARCH_ID)) {
+                    this.searchActive = true;
                 }
                 this.command = command;
                 this.currentBaseActions = this.baseActions;
@@ -949,6 +964,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.items = item.allSearchResults;
                     this.headerSubTitle = item.subtitle;
                     this.current = item;
+                    this.searchActive = false;
                     if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                     }
@@ -1161,7 +1177,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         itemAction(act, item, index, event) {
             if (act==SEARCH_LIB_ACTION) {
                 if (this.$store.state.visibleMenus.size<1) {
-                    bus.$emit('dlg.open', 'search');
+                    setLocalStorageVal('search', '');
+                    this.searchActive = true;
                 }
             } else if (act===MORE_ACTION) {
                 if (item.isPodcast) {
@@ -1696,6 +1713,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         goHome() {
+            this.searchActive = false;
             if (this.history.length==0) {
                 return;
             }
@@ -1756,6 +1774,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
                 return;
             }
+            let searchWasActive = this.searchActive;
+            if (this.searchActive) {
+                this.searchActive = false;
+                if (this.items.length<1 || undefined==this.items[0].allSearchResults) {
+                    return; // Search results not being shown, so '<-' button just closes search field
+                }
+            }
             if (this.prevPage && !this.$store.state.desktopLayout) {
                 var nextPage = ""+this.prevPage;
                 this.$nextTick(function () { this.$nextTick(function () { this.$store.commit('setPage', nextPage); }); });
@@ -1787,6 +1812,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.prevPage = prev.prevPage;
             this.allSearchResults = prev.allSearchResults;
             this.inGenre = prev.inGenre;
+            this.searchActive = prev.searchActive && !searchWasActive;
+
             if (refresh || prev.needsRefresh) {
                 this.refreshList();
             } else {

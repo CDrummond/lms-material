@@ -266,16 +266,6 @@
  flex-direction:column;
 }
 
-/* Moving the splitter sometimes causes now-playing bar text to be selected? Disable selection to work-around */
-.noselect {
- -webkit-touch-callout:none;
- -webkit-user-select:none;
- -khtml-user-select:none;
- -moz-user-select:none;
- -ms-user-select:none;
- user-select:none;
-}
-
 .cursor {
  cursor:pointer;
 }

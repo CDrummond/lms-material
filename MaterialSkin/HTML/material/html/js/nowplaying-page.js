@@ -150,7 +150,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
   <div v-else>
    <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
-   <div v-if="landscape" @touchstart.passive="touchStart" @touchend.passive="touchEnd" @touchmove.passive="touchMoving">
+   <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
 
@@ -218,7 +218,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </div>
     </div>
    </div>
-   <div v-else @touchstart.passive="touchStart" @touchend.passive="touchEnd" @touchmove.passive="touchMoving">
+   <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-portrait-song-info hide-scrollbar fade-bottom">
      <div>

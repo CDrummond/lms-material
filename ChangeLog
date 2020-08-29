@@ -1,12 +1,12 @@
 1.9.0
 -----
-1. Allow specifying theme, and colour, via URL. e.g.
+1. Allow specifying theme, and colour, via URL query. e.g.
    http://SERVER:9000/material/?theme=dark,green For platform themes (e.g.
    Adwaita-Dark) you need to specify path. e.g. "theme=linux/dark/Adwaita-Dark"
 2. Add 'Add to playlist' action, allowing tracks to be saved to new, or
    existing, playlists.
 3. On desktop browsers, allow keypress to jump via jumplist.
-4. Ignore swipe to change page if started in time positin bar.
+4. Ignore swipe to change page if started in time position bar.
 5. For mobile devices, show time position tooltip with touch and drag.
 6. Replace search dialog with a search-as-type text field in subtoolbar.
 

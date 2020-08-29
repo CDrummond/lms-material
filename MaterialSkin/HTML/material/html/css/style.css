@@ -1777,7 +1777,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 @keyframes npCoverFadeIn {
- 0% { opacity:0; }
+ 0% { opacity:0.25; }
  100% { opacity:1; }
 }
 

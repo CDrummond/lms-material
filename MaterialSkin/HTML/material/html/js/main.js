@@ -150,7 +150,7 @@ var app = new Vue({
                     let elem = document.activeElement;
                     let found = false;
                     for (let i=0; i<10 && !found && elem; ++i) {
-                        if (elem.classList.contains("lms-list-item")) {
+                        if (elem.classList.contains("lms-list-item") || elem.classList.contains("subtoolbar")) {
                             found = true;
                         } else {
                             elem = elem.parentElement;

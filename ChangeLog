@@ -5,6 +5,8 @@
 3. Show icons for custom actions in now playing context menu.
 4. Show hover actions for tracks of multi-disc albums shown as one allbum.
 5. Don't split tracks into discs when showing search results.
+6. When scrolling input fields into view check if field is in a list item and if
+   so scroll the item into view.
 
 1.8.8
 -----

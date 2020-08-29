@@ -160,7 +160,16 @@ var app = new Vue({
 
                 // Check entries are visible
                 if (IS_MOBILE && (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA")) {
-                    ensureVisible(document.activeElement);
+                    let elem = document.activeElement;
+                    let found = false;
+                    for (let i=0; i<10 && !found && elem; ++i) {
+                        if (elem.classList.contains("lms-list-item")) {
+                            found = true;
+                        } else {
+                            elem = elem.parentElement;
+                        }
+                    }
+                    ensureVisible(found ? elem : document.activeElement);
                 }
             }, 50);
         }, false);

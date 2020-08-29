@@ -315,8 +315,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 infoZoom:10,
-                 threeLines:false
+                 infoZoom:10
                 };
     },
     mounted() {
@@ -392,8 +391,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('playerStatus', function(playerStatus) {
             var playStateChanged = false;
             var trackChanged = false;
-
-            this.threeLines = playerStatus.current.remote_title && (""+playerStatus.current.id)[0]=='-';
 
             // Have other items changed
             if (playerStatus.isplaying!=this.playerStatus.isplaying) {

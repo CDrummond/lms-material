@@ -462,6 +462,18 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.itemMoreMenu(item, index, page);
         }.bind(this));
+        bus.$on('browse-search', function(text, page) {
+            if (!this.$store.state.desktopLayout) {
+                this.$store.commit('setPage', 'browse');
+            }
+            if (this.history.length>=50) {
+                this.goHome();
+            }
+            this.searchActive = true;
+            this.$nextTick(function () {
+                bus.$emit('search-for', text, page);
+            });
+        }.bind(this));
 
         bus.$on('browse', function(cmd, params, title, page) {
             if (!this.$store.state.desktopLayout) {
@@ -494,8 +506,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             }
         }.bind(this));
-        bus.$on('libSearchResults', function(item, command, resp) {
-            this.handleListResponse(item, command, resp);
+        bus.$on('libSearchResults', function(item, command, resp, prevPage) {
+            this.handleListResponse(item, command, resp, prevPage);
         }.bind(this));
         bus.$on('closeLibSearch', function() {
             this.goBack();
@@ -690,8 +702,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
-                    this.handleListResponse(item, command, resp);
-                    this.prevPage = prevPage;
+                    this.handleListResponse(item, command, resp, prevPage);
                     this.fetchingItems = false;
                     this.enableRatings();
                 }
@@ -716,7 +727,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 logError(err);
             });
         },
-        handleListResponse(item, command, resp) {
+        handleListResponse(item, command, resp, prevPage) {
             if (resp && resp.items) {
                 // Only add history if this is not a search response replacing a search response...
                 if (SEARCH_ID!=item.id || undefined==this.current || SEARCH_ID!=this.current.id) {
@@ -744,6 +755,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
                 var changedView = this.grid.use != prevUseGrid;
                 this.jumplistActive=0;
+                this.prevPage = prevPage;
                 this.hoverBtns = !IS_MOBILE && this.items.length>0 &&
                                  ( (undefined!=this.items[0].stdItem && this.items[0].stdItem!=STD_ITEM_GENRE && this.items[0].stdItem!=STD_ITEM_YEAR) ||
                                    (this.items.length>1 && this.items[0].header && undefined!=this.items[1].stdItem && this.items[1].stdItem!=STD_ITEM_GENRE && this.items[1].stdItem!=STD_ITEM_YEAR) ||
@@ -910,6 +922,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack(true);
             } else if (resp.items && (resp.items.length>0 || (command.command.length>1 && command.command[0]=="favorites" && command.command[1]=="items"))) {
                 this.handleListResponse(item, command, resp);
+            } else if (command && command.command && command.command[0]=='globalsearch') {
+                bus.$emit('showMessage', i18n('No results found'));
             }
         },
         canClickText(item) {
@@ -1775,7 +1789,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             let searchWasActive = this.searchActive;
             if (this.searchActive) {
                 this.searchActive = false;
-                if (this.items.length<1 || undefined==this.items[0].allSearchResults) {
+                if (this.items.length<1 || (undefined==this.items[0].allSearchResults && SEARCH_OTHER_ID!=this.items[0].id)) {
                     return; // Search results not being shown, so '<-' button just closes search field
                 }
             }

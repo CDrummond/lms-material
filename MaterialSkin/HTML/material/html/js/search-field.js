@@ -34,7 +34,13 @@ Vue.component('lms-search-field', {
         this.results=[];
         this.searching=false;
         this.str = "";
+        this.prevPage = undefined;
         focusEntry(this);
+        bus.$on('search-for', function(text, prevPage) {
+            this.term = text;
+            this.prevPage = prevPage;
+            this.searchNow();
+        }.bind(this));
     },
     methods: {
         cancel() {
@@ -142,8 +148,7 @@ Vue.component('lms-search-field', {
                             }
                         }
                     }
-                    bus.$emit('libSearchResults', item, {command:[], params:[]},
-                              { items:items, baseActions:[], canUseGrid: false, jumplist:[]});
+                    bus.$emit('libSearchResults', item, {command:[], params:[]}, { items:items, baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
                 }
                 this.commands=[];
                 this.results=[];

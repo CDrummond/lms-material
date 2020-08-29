@@ -52,6 +52,8 @@ const LMS_APPEND_KEYBOARD = "A"; // + shift
 const LMS_ADD_ITEM_ACTION_KEYBOARD = "C";
 const LMS_CREATE_FAV_FOLDER_KEYBOARD = "M"; // +shift
 
+const SEARCH_OTHER_ID = "search.other";
+
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
                                   "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",

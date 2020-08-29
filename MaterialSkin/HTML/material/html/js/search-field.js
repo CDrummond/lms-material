@@ -6,6 +6,8 @@
  */
 'use strict';
 
+const SEARCH_OTHER = new Set(['Deezer', 'Qobuz', 'Spotty', 'Tidal', 'YouTube']);
+
 let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
@@ -151,6 +153,16 @@ Vue.component('lms-search-field', {
                 lmsList(5==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
                         let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                        if (5==command.cat) {
+                            // Only want to show music sources...
+                            let items = resp.items;
+                            resp.items = [];
+                            for (let i=0, len=items.length; i<len; ++i) {
+                                if (SEARCH_OTHER.has(items[i].title)) {
+                                    resp.items.push(items[i]);
+                                }
+                            }
+                        }
                         if (resp.items.length>0) {
                             this.results.push({command:command, params:command.params, resp:resp});
                         }

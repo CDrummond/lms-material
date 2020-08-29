@@ -345,6 +345,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
 
+        bus.$on('pageChanged', function(page) {
+            if (page=='now-playing') {
+                if (!this.info.show) {
+                    this.$forceUpdate();
+                }
+            }
+        }.bind(this));
+
         bus.$on('info-swipe', function(d) {
             if (this.info.show) {
                 if ('l'==d) {

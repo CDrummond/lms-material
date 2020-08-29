@@ -74,6 +74,7 @@ Vue.component('lms-search-field', {
                 this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+(this.$store.state.ratingsSupport ? "R" : "")+
                                                                                          (lmsOptions.serviceEmblems ? "E" : ""), "search:"+this.str]});
                 this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
+                this.commands.push({cat:5, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
                 let libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                 if (libId) {
                     for (let i=0, len=this.commands.length; i<len; ++i) {
@@ -100,7 +101,7 @@ Vue.component('lms-search-field', {
                     for (let i=0, len=this.results.length; i<len; ++i) {
                         let all = [];
                         let numItems = this.results[i].resp.items.length;
-                        let clamped = numItems>LMS_INITIAL_SEARCH_RESULTS
+                        let clamped = 5!=this.results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
                         let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
                         let titleParam = clamped ? limit+" / "+numItems : numItems;
                         let filter = undefined;
@@ -125,6 +126,8 @@ Vue.component('lms-search-field', {
                             items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
                                         allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        } else if (5==this.results[i].command.cat) {
+                            items.push({title: i18n("Search on..."), id:"search.other", header:true});
                         }
                         for (let idx=0, loop=this.results[i].resp.items; idx<numItems; ++idx) {
                             let itm = loop[idx];
@@ -145,7 +148,7 @@ Vue.component('lms-search-field', {
                 this.searching=false;
             } else {
                 let command = this.commands.shift();
-                lmsList("", command.command, command.params, 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
+                lmsList(5==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
                         let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
                         if (resp.items.length>0) {

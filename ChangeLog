@@ -9,6 +9,7 @@
 4. Ignore swipe to change page if started in time position bar.
 5. For mobile devices, show time position tooltip with touch and drag.
 6. Replace search dialog with a search-as-type text field in subtoolbar.
+7. Show other search options at end of search results.
 
 1.8.9
 -----

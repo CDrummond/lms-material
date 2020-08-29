@@ -693,7 +693,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.handleListResponse(item, command, resp);
                     this.prevPage = prevPage;
                     this.fetchingItems = false;
-                    this.searchActive = false;
                     this.enableRatings();
                 }
             }).catch(err => {
@@ -723,9 +722,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (SEARCH_ID!=item.id || undefined==this.current || SEARCH_ID!=this.current.id) {
                     this.addHistory();
                 }
-                if (item.id.startsWith(SEARCH_ID)) {
-                    this.searchActive = true;
-                }
+                this.searchActive = item.id.startsWith(SEARCH_ID);
                 this.command = command;
                 this.currentBaseActions = this.baseActions;
                 this.headerTitle=item.title

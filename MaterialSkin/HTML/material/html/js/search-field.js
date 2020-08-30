@@ -13,7 +13,7 @@ Vue.component('lms-search-field', {
     template: `
 <v-layout>
  <v-text-field :label="i18n('Search')" clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" ref="entry"></v-text-field>
- <v-btn v-if="searching" :title="i18n('Searching')" flat icon class="toolbar-button"><v-icon class="pulse">search</v-icon></v-btn>
+ <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
  <v-btn v-else id="advanced-search-btn" :title="i18n('Advanced search')" flat icon class="toolbar-button" @click="advanced()"><img :src="'database-search' | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,

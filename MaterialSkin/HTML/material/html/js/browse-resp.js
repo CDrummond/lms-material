@@ -618,9 +618,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 var title = i.title;
                 var duration = parseFloat(i.duration || 0);
-                if (i.tracknum>0) {
-                    title = (i.tracknum>9 ? i.tracknum : ("0" + i.tracknum))+SEPARATOR+title;
-                    //title = i.tracknum + ". " + title; // SlimBrowse format
+                var tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
+                if (tracknum>0) {
+                    title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+title;
+                    //title = tracknum + ". " + title; // SlimBrowse format
                     if (isSearchResult && undefined!=i.disc) {
                         title = i.disc+"."+title;
                     }
@@ -657,7 +658,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tracknum: sortTracks && i.tracknum ? parseInt(i.tracknum) : undefined,
+                              tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: sortTracks && i.disc ? parseInt(i.disc) : undefined,
                               year: sortTracks && i.year ? parseInt(i.year) : undefined,
                               album: sortTracks || isSearchResult ? i.album : undefined,

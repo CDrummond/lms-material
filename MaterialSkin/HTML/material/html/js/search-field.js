@@ -12,8 +12,9 @@ let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
 <v-layout>
- <v-text-field :disabled="searching" :label="i18n('Search')" clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" ref="entry"></v-text-field>
- <v-btn id="advanced-search-btn" :title="i18n('Advanced search')" flat icon class="toolbar-button" @click="advanced()"><img :src="'database-search' | svgIcon(darkUi)"></img></v-btn>
+ <v-text-field :label="i18n('Search')" clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" ref="entry"></v-text-field>
+ <v-btn v-if="searching" :title="i18n('Searching')" flat icon class="toolbar-button"><v-icon class="pulse">search</v-icon></v-btn>
+ <v-btn v-else id="advanced-search-btn" :title="i18n('Advanced search')" flat icon class="toolbar-button" @click="advanced()"><img :src="'database-search' | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,
     props: [],
@@ -65,7 +66,7 @@ Vue.component('lms-search-field', {
             this.stopDebounce();
             this.debounceTimer = setTimeout(function () {
                 this.searchNow();
-            }.bind(this), 300);
+            }.bind(this), 500);
         },
         searchNow() {
             this.cancel();

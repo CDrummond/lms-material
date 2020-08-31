@@ -956,6 +956,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
+.lib-search .v-label:not(.v-label--active) {
+ margin-top:-3px; /* Align non-focused subtoolbar 'Search' label with back arrow */
+}
+
 .np-slider {
  margin:5px 0 !important; /* v-progress-linear has margin: 1rem 0; */
  height:24px !important;

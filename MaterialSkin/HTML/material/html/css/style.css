@@ -1374,7 +1374,7 @@ progress {
 }
 
 .link-item:hover {
- color:var(--active-color);
+ color:var(--active-color)!important;
 }
 
 .svg-update-img {

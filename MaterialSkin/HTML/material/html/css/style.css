@@ -1435,6 +1435,12 @@ div.v-subheader {
  min-width: 74px;
 }
 
+/* Ensure only text are of subtitle is clickable */
+.lms-list-sub .v-list__tile__sub-title, .lms-list-sub3 .v-list__tile__sub-title {
+ width:auto!important;
+ max-width:100%!important;
+}
+
 .lms-jumplist {
  padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;

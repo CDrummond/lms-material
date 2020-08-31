@@ -706,7 +706,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions=[];
                 this.settingsMenuActions=[];
                 this.isTop = false;
-                this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
+                this.subtitleClickable = !IS_MOBILE && this.items.length>0 && undefined!=this.items[0].id && undefined!=this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var prevUseGrid = this.grid.use;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
                 var changedView = this.grid.use != prevUseGrid;
@@ -1532,7 +1532,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (IS_MOBILE && this.grid.use) {
                 this.itemMenu(item, index, event);
-            } else if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+            } else if (!IS_MOBILE && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
                                 {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
             } else {

@@ -91,7 +91,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
       <img v-else class="image-grid-item-img" :src="'image' | svgIcon(darkUi)"></img>
       <div class="image-grid-text" @click.stop="itemMenu(items[idx], idx, $event)">{{items[idx].title}}</div>
-      <div class="image-grid-text subtext" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
+      <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(items[idx], idx, $event)">{{items[idx].subtitle}}</div>
       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0)" @click.stop="itemMenu(items[idx], idx, $event)" :title="i18n('%1 (Menu)', items[idx].title)"></div>
       <div class="emblem" v-if="items[idx].emblem" :style="{background: items[idx].emblem.bgnd}">
        <img :src="items[idx].emblem | emblem()"></img>
@@ -133,7 +133,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-content v-if="item.header" @click="click(item, index, $event)"><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
@@ -198,7 +198,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
     <v-list-tile-content v-else>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'clickable':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
@@ -750,7 +750,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions=[];
                 this.settingsMenuActions=[];
                 this.isTop = false;
-                this.subtitleClickable = !IS_MOBILE && this.items.length>0 && this.items[0].id && this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
+                this.subtitleClickable = !IS_MOBILE && this.items.length>0 && undefined!=this.items[0].id && undefined!=this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var prevUseGrid = this.grid.use;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
                 var changedView = this.grid.use != prevUseGrid;
@@ -1583,7 +1583,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (IS_MOBILE && this.grid.use) {
                 this.itemMenu(item, index, event);
-            } else if (!IS_MOBILE && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+            } else if (!IS_MOBILE && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
                                 {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
             } else {

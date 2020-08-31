@@ -22,6 +22,8 @@
 5. Don't split tracks into discs when showing search results.
 6. When scrolling input fields into view check if field is in a list item and if
    so scroll the item into view.
+7. Make only text area of list subtitle clickable.
+8. Use active item colour for hover of clickable subtitles.
 
 1.8.8
 -----

@@ -1382,7 +1382,7 @@ progress {
 }
 
 .link-item:hover {
- color:var(--active-color);
+ color:var(--active-color)!important;
 }
 
 .svg-update-img {
@@ -1441,6 +1441,12 @@ div.v-subheader {
  margin-left:-4px;
  margin-right:4px;
  min-width: 74px;
+}
+
+/* Ensure only text are of subtitle is clickable */
+.lms-list-sub .v-list__tile__sub-title, .lms-list-sub3 .v-list__tile__sub-title {
+ width:auto!important;
+ max-width:100%!important;
 }
 
 .lms-jumplist {
@@ -1520,10 +1526,6 @@ div.v-subheader {
 
 .current-player {
  font-weight:var(--bold-weight);
-}
-
-.v-list__tile__title a:hover, .v-list__tile__sub-title a:hover, .clickable:hover {
- text-decoration:underline;
 }
 
 .lib-name {

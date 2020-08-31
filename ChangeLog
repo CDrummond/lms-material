@@ -9,6 +9,7 @@
    so scroll the item into view.
 7. Make only text area of list subtitle clickable.
 8. Use active item colour for hover of clickable subtitles.
+9. Add $COMPOSER for custom actions.
 
 1.8.8
 -----

@@ -78,6 +78,9 @@ function doReplacements(string, player, track) {
         if (undefined!=track.title) {
             val=val.replace("$TRACKNAME", track.title);
         }
+        if (undefined!=track.composer) {
+            val=val.replace("$COMPOSER", track.composer);
+        }
     }
     return val;
 }

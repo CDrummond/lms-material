@@ -14,6 +14,11 @@
     'Go to album' menu entries.
 11. Use albumartist for 'Go to artist' (in now-playing) if track has albumartist
     but no artist.
+12. Fix editing and deleting of podcasts.
+13. When edit, or delete a podcast, pass existing name to API call to ensure
+    indexes are correct.
+14. Place 'Recently used' at end of podcast list (where it is before sort
+    anyway).
 
 1.8.8
 -----

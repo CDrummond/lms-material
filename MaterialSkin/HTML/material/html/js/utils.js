@@ -324,6 +324,15 @@ function partialFavSort(a, b) {
     return a.pos<b.pos ? -1 : 1;
 }
 
+function podcastSort(a, b) {
+    var al = "link"==a.type ? 1 : 0;
+    var bl = "link"==b.type ? 1 : 0;
+    if (al!=bl) {
+        return al<bl ? -1 : 1;
+    }
+    return titleSort(a, b);
+}
+
 function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
         return a.isgroup ? 1 : -1;

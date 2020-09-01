@@ -676,6 +676,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 : this.playerStatus.current.artist_id;
                     if (artist_id && this.playerStatus.current.artist && this.playerStatus.current.artist!="?") {
                         this.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
+                    } else {
+                        let albumartist_id = this.playerStatus.current.albumartist_ids
+                                    ? this.playerStatus.current.albumartist_ids.split(",")[0].trim()
+                                    : this.playerStatus.current.albumartist_id;
+                        if (albumartist_id && this.playerStatus.current.albumartist && this.playerStatus.current.albumartist!="?") {
+                            this.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:this.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
+                        }
                     }
                     if (this.playerStatus.current.composer && this.playerStatus.current.composer_id && this.playerStatus.current.genre && LMS_COMPOSER_GENRES.has(this.playerStatus.current.genre)) {
                         this.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+this.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:this.playerStatus.current.composer}, svg:"composer"});

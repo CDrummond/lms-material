@@ -60,12 +60,16 @@ function animate(elem, from, to) {
 
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
-function showArtist(id, title) {
+function showArtist(id, title, isAlbumArtist) {
     if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), 'queue');
+    var params = ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER];
+    if (isAlbumArtist) {
+        params.push("role_id:ALBUMARTIST");
+    }
+    bus.$emit("browse", ["albums"], params, unescape(title), 'queue');
 }
 
 function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
@@ -126,7 +130,7 @@ function buildSubtitle(i, threeLines) {
     } else if (i.albumartist) {
         let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\')\">" + i.albumartist + "</obj>");
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\',true)\">" + i.albumartist + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.albumartist);
         }

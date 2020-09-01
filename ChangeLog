@@ -12,6 +12,8 @@
  9. Add $COMPOSER for custom actions.
 10. Ensure valid artist, and album, name before showing 'Go to artist' or
     'Go to album' menu entries.
+11. Use albumartist for 'Go to artist' (in now-playing) if track has albumartist
+    but no artist.
 
 1.8.8
 -----

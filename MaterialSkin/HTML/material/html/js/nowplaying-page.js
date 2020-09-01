@@ -674,13 +674,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     let artist_id = this.playerStatus.current.artist_ids
                                 ? this.playerStatus.current.artist_ids.split(",")[0].trim()
                                 : this.playerStatus.current.artist_id;
-                    if (artist_id) {
+                    if (artist_id && this.playerStatus.current.artist && this.playerStatus.current.artist!="?") {
                         this.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:this.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
                     }
                     if (this.playerStatus.current.composer && this.playerStatus.current.composer_id && this.playerStatus.current.genre && LMS_COMPOSER_GENRES.has(this.playerStatus.current.genre)) {
                         this.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+this.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:this.playerStatus.current.composer}, svg:"composer"});
                     }
-                    if (this.playerStatus.current.album_id) {
+                    if (this.playerStatus.current.album_id && this.playerStatus.current.album) {
                         this.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+this.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:this.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
                     }
                     if (undefined!=this.playerStatus.current.title) {

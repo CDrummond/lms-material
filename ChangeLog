@@ -15,15 +15,25 @@
 
 1.8.9
 -----
-1. Work-around add/play of a track from favourited album adding all tracks.
-2. Treat backspace as per esc - which will allow navigating back.
-3. Show icons for custom actions in now playing context menu.
-4. Show hover actions for tracks of multi-disc albums shown as one allbum.
-5. Don't split tracks into discs when showing search results.
-6. When scrolling input fields into view check if field is in a list item and if
-   so scroll the item into view.
-7. Make only text area of list subtitle clickable.
-8. Use active item colour for hover of clickable subtitles.
+ 1. Work-around add/play of a track from favourited album adding all tracks.
+ 2. Treat backspace as per esc - which will allow navigating back.
+ 3. Show icons for custom actions in now playing context menu.
+ 4. Show hover actions for tracks of multi-disc albums shown as one allbum.
+ 5. Don't split tracks into discs when showing search results.
+ 6. When scrolling input fields into view check if field is in a list item and
+    if so scroll the item into view.
+ 7. Make only text area of list subtitle clickable.
+ 8. Use active item colour for hover of clickable subtitles.
+ 9. Add $COMPOSER for custom actions.
+10. Ensure valid artist, and album, name before showing 'Go to artist' or
+    'Go to album' menu entries.
+11. Use albumartist for 'Go to artist' (in now-playing) if track has albumartist
+    but no artist.
+12. Fix editing and deleting of podcasts.
+13. When edit, or delete a podcast, pass existing name to API call to ensure
+    indexes are correct.
+14. Place 'Recently used' at end of podcast list (where it is before sort
+    anyway).
 
 1.8.8
 -----

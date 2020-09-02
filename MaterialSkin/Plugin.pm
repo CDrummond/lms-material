@@ -344,14 +344,19 @@ sub _cliCommand {
 
     if ($cmd eq 'edit-podcast') {
         my $pos = $request->getParam('pos');
-        my $name = $request->getParam('name');
-        if (defined $pos && $name) {
+        my $name = $request->getParam('newname');
+        my $origName = $request->getParam('oldname');
+        if (defined $pos && $name && $origName) {
             my $podPrefs = preferences('plugin.podcast');
             my $feeds = $podPrefs->get('feeds');
             if ($pos < scalar @{$feeds}) {
-                @{$feeds}[$pos]->{'name'}=$name;
-                $podPrefs->set(feeds => $feeds);
-                $request->setStatusDone();
+                if (@{$feeds}[$pos]->{'name'} eq $origName) {
+                    @{$feeds}[$pos]->{'name'}=$name;
+                    $podPrefs->set(feeds => $feeds);
+                    $request->setStatusDone();
+                } else {
+                    $request->setStatusBadParams();
+                }
                 return;
             }
         }
@@ -359,13 +364,18 @@ sub _cliCommand {
 
     if ($cmd eq 'delete-podcast') {
         my $pos = $request->getParam('pos');
+        my $name = $request->getParam('name');
         if (defined $pos) {
             my $podPrefs = preferences('plugin.podcast');
             my $feeds = $podPrefs->get('feeds');
             if ($pos < scalar @{$feeds}) {
-                splice @{$feeds}, $pos, 1;
-                $podPrefs->set(feeds => $feeds);
-                $request->setStatusDone();
+                if (@{$feeds}[$pos]->{'name'} eq $name) {
+                    splice @{$feeds}, $pos, 1;
+                    $podPrefs->set(feeds => $feeds);
+                    $request->setStatusDone();
+                } else {
+                    $request->setStatusBadParams();
+                }
                 return;
             }
         }
@@ -788,7 +798,7 @@ sub _cliClientCommand {
         return;
     }
 
-    $request->setStatusBadParams()
+    $request->setStatusBadParams();
 }
 
 sub _cliGroupCommand {

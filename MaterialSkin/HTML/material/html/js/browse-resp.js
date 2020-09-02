@@ -262,6 +262,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.menu.push(RENAME_ACTION);
                     i.menu.push(REMOVE_PODCAST_ACTION);
                     i.section=SECTION_PODCASTS;
+                    i.index=resp.items.length;
+                    if ("link"==i.type) {
+                        i.menu = [];
+                    }
                 }
 
                 if (!i.type && i.actions && i.actions.go && i.actions.go.params) {
@@ -458,8 +462,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items=[];
             }
 
-            if (isApps || isPodcastList) {
+            if (isApps) {
                 resp.items.sort(titleSort);
+            } else if (isPodcastList) {
+                resp.items.sort(podcastSort);
             } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }

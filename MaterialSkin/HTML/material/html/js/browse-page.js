@@ -1216,7 +1216,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             var command = SECTION_PLAYLISTS==item.section
                                             ? ["playlists", "rename", item.id, "newname:"+resp.value]
                                             : SECTION_PODCASTS==item.section
-                                                ? ["material-skin", "edit-podcast", "pos:"+item.id.split(":")[1].split(".")[1], "name:"+resp.value]
+                                                ? ["material-skin", "edit-podcast", "pos:"+item.index, "newname:"+resp.value, "oldname:"+item.title]
                                                 : ["favorites", "rename", item.id, "title:"+resp.value];
 
                             lmsCommand(this.playerId(), command).then(({data}) => {
@@ -1224,6 +1224,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 this.refreshList();
                             }).catch(err => {
                                 logAndShowError(err, i18n("Rename failed"), command);
+                                this.refreshList();
                             });
                         }
                     }
@@ -1470,10 +1471,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (REMOVE_PODCAST_ACTION==act) {
                     confirm(i18n("Remove '%1'?", item.title), i18n("Remove")).then(res => {
                     if (res) {
-                        lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.id.split(":")[1].split(".")[1]]).then(({data}) => {
+                        lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.index, "name:"+item.title]).then(({data}) => {
                             this.refreshList();
                         }).catch(err => {
                             logAndShowError(err, i18n("Failed to remove podcast!"), command);
+                            this.refreshList();
                         });
                     }
                 });

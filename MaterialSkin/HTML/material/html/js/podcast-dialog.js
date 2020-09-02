@@ -6,11 +6,11 @@
  */
 'use strict';
 
-Vue.component('lms-podcast-add-dialog', {
+Vue.component('lms-podcast-dialog', {
     template: `
 <v-dialog v-model="show" v-if="show" persistent scrollable width="600">
  <v-card>
-  <v-card-title>{{i18n("Add podcast")}}</v-card-title>
+  <v-card-title>{{isEdit ? i18n("Edit podcast") : i18n("Add podcast")}}</v-card-title>
   <v-form ref="form" v-model="valid" lazy-validation>
    <v-list two-line>
     <v-list-tile>
@@ -32,7 +32,7 @@ Vue.component('lms-podcast-add-dialog', {
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="add()">{{i18n('Add')}}</v-btn>
+   <v-btn flat @click.native="save()">{{isEdit ? i18n('Update') : i18n('Add')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -49,14 +49,34 @@ Vue.component('lms-podcast-add-dialog', {
         }
     },
     mounted() {
-        bus.$on('podcastadd.open', function() {
-            this.url = "";
-            this.name = "";
-            this.show = true;
-            focusEntry(this);
+        bus.$on('podcast.open', function(mode, item) {
+            this.isEdit = 'edit' == mode;
+            if (this.isEdit) {
+                this.item = item;
+                if (this.item) {
+                    lmsCommand("", ["material-skin", "podcast-url", "pos:"+item.index, "name:"+item.title]).then(({data}) => {
+                        if (data.result.url) {
+                            this.url = data.result.url;
+                            this.origUrl = ""+data.result.url;
+                            this.name = ""+item.title;
+                            this.show = true;
+                        } else {
+                            bus.$emit('showError', i18n('Failed to fetch podcast URL'));
+                        }
+                    }).catch(err => {
+                        bus.$emit('showError', i18n('Failed to fetch podcast URL'));
+                    });
+                }
+            } else {
+                this.item = undefined;
+                this.url = "";
+                this.name = "";
+                this.show = true;
+                focusEntry(this);
+            }
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'podcastadd') {
+            if (this.$store.state.activeDialog == 'podcast') {
                 this.show=false;
             }
         }.bind(this));
@@ -96,17 +116,24 @@ Vue.component('lms-podcast-add-dialog', {
                 this.showError(i18n("Failed to parse feed"));
             }            
         },
-        add() {
+        save() {
             var url = this.url ? this.url.trim() : "";
             var name = this.name ? this.name.trim() : "";
             if (url.length<1 || name.length<1) {
                 return;
             }
-            lmsCommand("", ["material-skin", "add-podcast", "url:"+url, "name:"+name]).then(({data}) => {
+            if (this.isEdit && this.item.title == name && this.origUrl == url) {
+                // No change...
+                return;
+            }
+
+            lmsCommand("", this.isEdit
+                            ? ["material-skin", "edit-podcast", "newurl:"+url, "newname:"+name, "oldname:"+this.item.title, "oldurl:"+this.origUrl, "pos:"+this.item.index]
+                            : ["material-skin", "add-podcast", "url:"+url, "name:"+name]).then(({data}) => {
                 bus.$emit('refreshList', SECTION_PODCASTS);
                 this.show=false;
             }).catch(err => {
-                this.showError(i18n("Failed add podcast"));
+                this.showError(this.isEdit ? i18n("Failed edit podcast") : i18n("Failed add podcast"));
             });
         },
         showError(str) {
@@ -132,7 +159,7 @@ Vue.component('lms-podcast-add-dialog', {
     },
     watch: {
         'show': function(val) {
-            this.$store.commit('dialogOpen', {name:'podcastadd', shown:val});
+            this.$store.commit('dialogOpen', {name:'podcast', shown:val});
         }
     },
     beforeDestroy() {

@@ -1215,9 +1215,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         } else {
                             var command = SECTION_PLAYLISTS==item.section
                                             ? ["playlists", "rename", item.id, "newname:"+resp.value]
-                                            : SECTION_PODCASTS==item.section
-                                                ? ["material-skin", "edit-podcast", "pos:"+item.index, "newname:"+resp.value, "oldname:"+item.title]
-                                                : ["favorites", "rename", item.id, "title:"+resp.value];
+                                            : ["favorites", "rename", item.id, "title:"+resp.value];
 
                             lmsCommand(this.playerId(), command).then(({data}) => {
                                 logJsonMessage("RESP", data);
@@ -1232,7 +1230,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act==ADD_FAV_ACTION) {
                 bus.$emit('dlg.open', 'favorite', 'add', {id:(this.current.id.startsWith("item_id:") ? this.current.id+"." : "item_id:")+this.items.length});
             } else if (act==EDIT_ACTION) {
-                bus.$emit('dlg.open', 'favorite', 'edit', item);
+                if (SECTION_PODCASTS==item.section) {
+                    bus.$emit('dlg.open', 'podcast', 'edit', item);
+                } else {
+                    bus.$emit('dlg.open', 'favorite', 'edit', item);
+                }
             } else if (act==ADD_FAV_FOLDER_ACTION) {
                 promptForText(ACTIONS[ADD_FAV_FOLDER_ACTION].title, undefined, undefined, i18n("Create")).then(resp => {
                     if (resp.ok && resp.value && resp.value.length>0) {
@@ -1466,10 +1468,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                         logAndShowError(err, i18n("Failed to remove favorite!"), command);
                     });
                 } else {
-                    bus.$emit('dlg.open', 'podcastadd');
+                    bus.$emit('dlg.open', 'podcast', 'add');
                 }
             } else if (REMOVE_PODCAST_ACTION==act) {
-                    confirm(i18n("Remove '%1'?", item.title), i18n("Remove")).then(res => {
+                confirm(i18n("Remove '%1'?", item.title), i18n("Remove")).then(res => {
                     if (res) {
                         lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.index, "name:"+item.title]).then(({data}) => {
                             this.refreshList();

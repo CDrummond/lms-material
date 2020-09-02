@@ -259,7 +259,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    i.menu.push(RENAME_ACTION);
+                    i.menu.push(EDIT_ACTION);
                     i.menu.push(REMOVE_PODCAST_ACTION);
                     i.section=SECTION_PODCASTS;
                     i.index=resp.items.length;

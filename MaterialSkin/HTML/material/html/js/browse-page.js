@@ -818,6 +818,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
                 } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
                     this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
+                } else if (SECTION_PLAYLISTS==this.current.section && this.current.id.startsWith("playlist_id:")) {
+                    this.tbarActions=[REMOVE_DUPES_ACTION, ADD_ACTION, PLAY_ACTION];
                 } else if (this.items.length>0 && (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command))) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -1510,6 +1512,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, TRACK_TAGS, SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
             } else if (ADD_TO_PLAYLIST_ACTION==act) {
                 bus.$emit('dlg.open', 'addtoplaylist', [item]);
+            } else if (REMOVE_DUPES_ACTION==act) {
+                confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
+                    if (res) {
+                        if (this.items[0].id.startsWith("playlist_id:")) { // Showing playlists, so need to get track list...
+                            lmsList("", ["playlists", "tracks"], [item.id, PLAYLIST_TRACK_TAGS]).then(({data}) => {
+                                var resp = parseBrowseResp(data, item, this.options, undefined);
+                                if (resp.items.length>0) {
+                                    removeDuplicates(item.id, resp.items);
+                                } else {
+                                    bus.$emit('showMessage', i18n('Playlist has no tracks'));
+                                }
+                            });
+                        } else {
+                            removeDuplicates(item.id, this.items);
+                        }
+                    }
+                });
             } else {
                 var command = this.buildFullCommand(item, act);
                 if (command.command.length===0) {

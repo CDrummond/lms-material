@@ -15,6 +15,7 @@
  9. Allow editing of podcast URL as well as name.
 10. Use treble-clef as genre icon.
 11. Fix HTML tags shown in confirmation dialog.
+12. Add action to remove duplicates from playlists.
 
 1.8.9
 -----

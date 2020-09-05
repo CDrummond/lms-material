@@ -92,6 +92,7 @@ const ALBUM_TAGS = "tags:ajlsyKS";
 const ARTIST_ALBUM_TAGS = "tags:jlsyK";
 const TRACK_TAGS = "tags:distuAC";
 const PLAYLIST_TAGS = "tags:sux";
+const PLAYLIST_TRACK_TAGS = "tags:acdltK";
 const SORT_KEY = "sort:";
 const FILTER_PREFIX = "filter:";
 const SECTION_APPS = 1;

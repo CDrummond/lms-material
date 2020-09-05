@@ -1010,3 +1010,22 @@ function getTouchPos(ev) {
     }
     return {x:ev.touches[0].clientX, y:ev.touches[0].clientY};
 }
+
+function removeDuplicates(playistId, items) {
+    let dupes=[];
+    let tracks = new Set();
+    for (let i=0, len=items.length; i<len; ++i) {
+        let track = items[i].title.toLowerCase();
+        if (tracks.has(track)) {
+            dupes.push("index:"+i);
+        } else {
+            tracks.add(track);
+        }
+    }
+    dupes = dupes.reverse();
+    if (dupes.length>0) {
+        bus.$emit('doAllList', dupes, ["playlists", "edit", "cmd:delete", playistId], SECTION_PLAYLISTS, i18n("All duplicates removed"));
+    } else {
+        bus.$emit('showMessage', i18n('Playlist has no duplicates'));
+    }
+}

@@ -251,6 +251,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         addedDivider = true;
                     }
                     i.menu.push(RENAME_ACTION);
+                    i.menu.push(REMOVE_DUPES_ACTION);
                     i.menu.push(DELETE_ACTION);
                 }
 

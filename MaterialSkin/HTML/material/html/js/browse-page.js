@@ -2170,7 +2170,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.icon = "album";
                                 item.cancache = true;
                             } else if (c.id.startsWith("myMusicGenres")) {
-                                item.icon = "label";
+                                item.svg = "treble-clef";
+                                item.icon = undefined;
                                 item.cancache = true;
                                 item.id = GENRES_ID;
                             } else if (c.id == "myMusicPlaylists") {
@@ -2200,7 +2201,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     item.svg = "artist";
                                     item.icon = undefined;
                                 } else if (c.icon.endsWith("/genres.png")) {
-                                    item.icon = "label";
+                                    item.svg = "treble-clef";
+                                    item.icon = undefined;
                                 }
                             }
                             item.params.push("menu:1");
@@ -2260,12 +2262,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                 if (c.id.startsWith("artist")) {
                                                     item.svg = "artist";
                                                     item.icon = undefined;
+                                                } else if (c.id.startsWith("genre")) {
+                                                    item.svg = "treble-clef";
+                                                    item.icon = undefined;
                                                 } else {
                                                     item.icon = c.id.startsWith("new") ? "new_releases" :
                                                                 c.id.startsWith("album") ? "album" :
                                                                 c.id.startsWith("artist") ? "group" :
                                                                 c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
-                                                                c.id.startsWith("genre") ? "label" :
                                                                 c.id.startsWith("playlist") ? "list" :
                                                                 c.id.startsWith("ratedmysql") ? "star" :
                                                                 "music_note";
@@ -2277,7 +2281,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                     item.svg = "artist";
                                                     item.icon = undefined;
                                                 } else if (c.icon.endsWith("/genres.png")) {
-                                                    item.icon = "label";
+                                                    item.svg = "treble-clef";
+                                                    item.icon = undefined;
                                                 }
                                             }
                                             if (getField(item, "genre_id:")>=0) {

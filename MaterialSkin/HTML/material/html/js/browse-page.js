@@ -70,7 +70,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-layout>
  </div>
- <v-icon class="browse-progress" v-if="fetchingItems" color="primary">audiotrack</v-icon>
+ <v-icon class="browse-progress" v-if="fetchingItems" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
 
  <div v-if="grid.use">

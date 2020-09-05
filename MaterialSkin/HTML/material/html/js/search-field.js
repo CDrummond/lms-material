@@ -55,7 +55,7 @@ Vue.component('lms-search-field', {
         stopDebounce() {
             if (undefined!=this.debounceTimer) {
                 clearTimeout(this.debounceTimer);
-                this.debounceTimer;
+                this.debounceTimer = undefined;
             }
         },
         advanced() {

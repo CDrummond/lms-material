@@ -182,6 +182,12 @@ var app = new Vue({
             }
         });
 
+        if (document.addEventListener) {
+            document.addEventListener('click', this.clickListener);
+        } else if (document.attachEvent) {
+            document.attachEvent('onclick', this.clickListener);
+        }
+
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {
             bus.$emit('esc');
@@ -342,6 +348,41 @@ var app = new Vue({
         setLayout(forceDesktop) {
             this.autoLayout = undefined==forceDesktop;
             this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
+        },
+        clickListener(event) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            if (this.$store.state.openDialogs.length>1) {
+                return;
+            }
+            let page = undefined;
+            if (this.$store.state.desktopLayout) {
+                page = this.$store.state.openDialogs.length==0 ? 'browse' : (this.$store.state.openDialogs[0]=='info-dialog' ? 'now-playing' : undefined);
+            } else {
+                page = this.$store.state.page=='now-playing'
+                            ? this.$store.state.openDialogs.length==1 && 'info-dialog'==this.$store.state.openDialogs[0] ? this.$store.state.page : undefined
+                            : this.$store.state.page=='browse' ? this.$store.state.page : undefined;
+            }
+
+            if (undefined!=page) {
+                let target = event.target || event.srcElement;
+                if (target.tagName === 'A') {
+                    let href = target.getAttribute('href');
+                    if (undefined!=href && null!=href && href.length>10) { // 10 = http://123
+                        let text = target.text;
+                        if (undefined==text || text.length<1) {
+                            text = target.textContent;
+                        }
+                        if (undefined!=text && text.length>0) {
+                            let menu = [{title:ACTIONS[FOLLOW_LINK_ACTION].title, icon:ACTIONS[FOLLOW_LINK_ACTION].icon, act:FOLLOW_LINK_ACTION, link:href},
+                                        {title:ACTIONS[SEARCH_TEXT_ACTION].title+SEPARATOR+text, icon:ACTIONS[SEARCH_TEXT_ACTION].icon, act:SEARCH_TEXT_ACTION, text:text}]
+                            bus.$emit('showLinkMenu.'+page, event.clientX, event.clientY, menu);
+                            event.preventDefault();
+                        }
+                    }
+                }
+            }
         }
     },
     components: {

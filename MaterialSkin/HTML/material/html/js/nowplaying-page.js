@@ -15,8 +15,6 @@ const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
-const NP_FOLLOW_LINK = 5;
-const NP_SEARCH = 6;
 const NP_CUSTOM = 100;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
@@ -321,11 +319,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
-        if (document.addEventListener) {
-            document.addEventListener('click', this.clickListener);
-        } else if (document.attachEvent) {
-            document.attachEvent('onclick', this.clickListener);
-        }
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));
@@ -628,6 +621,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
 
+        bus.$on('showLinkMenu.now-playing', function(x, y, menu) {
+            this.menu.icons = true;
+            this.menu.items = menu
+            this.menu.x = x;
+            this.menu.y = y;
+            this.menu.show = true;
+        }.bind(this));
+
         this.showTotal = getLocalStorageBool('showTotal', true);
         if (!IS_MOBILE) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
@@ -740,9 +741,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 } else {
                     copyTextToClipboard(i18n("Playing %1", this.playerStatus.current.title));
                 }
-            } else if (NP_FOLLOW_LINK==item.act) {
+            } else if (FOLLOW_LINK_ACTION==item.act) {
                 openWindow(item.link);
-            } else if (NP_SEARCH==item.act) {
+            } else if (SEARCH_TEXT_ACTION==item.act) {
                 bus.$emit('browse-search', item.text, 'now-playing');
                 this.info.show=false;
                 this.largeView=false;
@@ -1274,31 +1275,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         checkLandscape() {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
-        },
-        clickListener(event) {
-            if (this.info.show) {
-                let target = event.target || event.srcElement;
-                if (target.tagName === 'A') {
-                    let href = target.getAttribute('href');
-                    if (undefined!=href && null!=href && href.length>10) { // 10 = http://123
-                        let text = target.text;
-                        if (undefined==text || text.length<1) {
-                            text = target.textContent;
-                        }
-                        if (undefined!=text && text.length>0) {
-                            this.menu.icons=true;
-                            this.menu.items=[{title:i18n("Follow link"), icon:"public", act:NP_FOLLOW_LINK, link:href},
-                                             {title:i18n("Search")+SEPARATOR+text, icon:"search", act:NP_SEARCH, text:text}];
-                                             this.menu.x = event.clientX;
-                            this.menu.y = event.clientY;
-                            this.$nextTick(() => {
-                                this.menu.show = true;
-                            });
-                            event.preventDefault();
-                        }
-                    }
-                }
-            }
         }
     },
     filters: {

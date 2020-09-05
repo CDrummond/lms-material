@@ -10,8 +10,8 @@
  5. For mobile devices, show time position tooltip with touch and drag.
  6. Replace search dialog with a search-as-type text field in subtoolbar.
  7. Show other search options at end of search results.
- 8. Intercept links on now-playing page and show a menu allowing to choose from
-    following link or searching for item.
+ 8. Intercept links on now-playing and browse pages and show a menu allowing to
+    choose from following link or searching for item.
  9. Allow editing of podcast URL as well as name.
 10. Use treble-clef as genre icon.
 11. Fix HTML tags shown in confirmation dialog.

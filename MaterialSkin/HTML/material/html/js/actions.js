@@ -55,6 +55,9 @@ const GOTO_ALBUM_ACTION       = 42;
 const ADD_TO_PLAYLIST_ACTION  = 43;
 const REMOVE_DUPES_ACTION     = 44;
 
+const FOLLOW_LINK_ACTION      = 45;
+const SEARCH_TEXT_ACTION      = 46;
+
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
     {cmd:"play_album",   icon:"album"},
@@ -104,7 +107,10 @@ var ACTIONS=[
     {cmd:"goto-album",   icon:"album"},
 
     {cmd:"addto-playlist",icon:"playlist_add"},
-    {cmd:"rem-dup",      svg:"remove-duplicates"}
+    {cmd:"rem-dup",      svg:"remove-duplicates"},
+
+    {cmd:"follow-link",  icon:"public"},
+    {cmd:"search-text",  icon:"search"}
 ];
 
 function updateActionStrings() {
@@ -160,5 +166,7 @@ function updateActionStrings() {
     ACTIONS[GOTO_ALBUM_ACTION].title=i18n("Go to album");
     ACTIONS[ADD_TO_PLAYLIST_ACTION].title=i18n("Add to playlist");
     ACTIONS[REMOVE_DUPES_ACTION].title=i18n("Remove duplicates");
+    ACTIONS[FOLLOW_LINK_ACTION].title=i18n("Follow link");
+    ACTIONS[SEARCH_TEXT_ACTION].title=i18n("Search");
 }
 

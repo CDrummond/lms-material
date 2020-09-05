@@ -290,7 +290,17 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-
+  <v-list v-else-if="menu.linkItems">
+   <template v-for="(item, index) in menu.linkItems">
+    <v-list-tile @click="linkAction(item)">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
+      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+  </v-list>
  </v-menu>
 </div>
       `,
@@ -515,6 +525,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('searchPodcasts', function(url, term, provider) {
             this.enteredTerm = term;
             this.fetchUrlItems(url, provider);
+        }.bind(this));
+        bus.$on('showLinkMenu.browse', function(x, y, menu) {
+            showMenu(this, {linkItems: menu, x:x, y:y, show:true});
         }.bind(this));
         bus.$on('windowHeightChanged', function() {
             this.filterJumplist();
@@ -1597,6 +1610,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, this.current.id, "menu:1"]};
                 this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});
+            }
+        },
+        linkAction(item) {
+            if (FOLLOW_LINK_ACTION==item.act) {
+                openWindow(item.link);
+            } else if (SEARCH_TEXT_ACTION==item.act) {
+                bus.$emit('browse-search', item.text);
             }
         },
         clickSubtitle(item, index, event) {

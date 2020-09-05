@@ -8,26 +8,13 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
-function getTouchPos(ev) {
-    if (undefined==ev) {
-        return undefined;
-    }
-    if (undefined==ev.touches || ev.touches.length<1) {
-        if (undefined!=ev.changedTouches && ev.changedTouches.length>0) {
-            return {x:ev.changedTouches[0].clientX, y:ev.changedTouches[0].clientY};
-        }
-        return undefined;
-    }
-    return {x:ev.touches[0].clientX, y:ev.touches[0].clientY};
-}
-
 var app = new Vue({
     el: '#app',
     data() {
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
-                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false, search: false,
-                            movequeue: false, podcastadd: false, podcastsearch: false, iteminfo: false, iframe: false,
-                            dstm: false, savequeue: false, icon: false, prompt:false } }
+                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false,
+                            movequeue: false, podcast: false, podcastsearch: false, iteminfo: false, iframe: false,
+                            dstm: false, savequeue: false, icon: false, prompt:false, addtoplaylist: false } }
     },
     created() {
         this.autoLayout = true;
@@ -163,7 +150,7 @@ var app = new Vue({
                     let elem = document.activeElement;
                     let found = false;
                     for (let i=0; i<10 && !found && elem; ++i) {
-                        if (elem.classList.contains("lms-list-item")) {
+                        if (elem.classList.contains("lms-list-item") || elem.classList.contains("subtoolbar")) {
                             found = true;
                         } else {
                             elem = elem.parentElement;
@@ -239,30 +226,30 @@ var app = new Vue({
     },
     methods: {
         touchStart(ev) {
-            this.touch=getTouchPos(ev);
+            this.touch = getTouchPos(ev);
             this.touchValid=false;
         },
         touchEnd(ev) {
             if (undefined!=this.touch) {
-                let end=getTouchPos(ev);
-                this.touchValid=Math.abs(this.touch.x-end.x)>75 && Math.abs(this.touch.y-end.y)<50;
-                this.touch=undefined;
+                let end = getTouchPos(ev);
+                this.touchValid = Math.abs(this.touch.x-end.x)>75 && Math.abs(this.touch.y-end.y)<50;
+                if (this.touchValid && this.$store.state.page=='now-playing') {
+                    // Ignore swipes on position slider...
+                    var elem = document.getElementById("pos-slider");
+                    if (elem) {
+                        var rect = elem.getBoundingClientRect();
+                        if ((rect.x-16)<=this.touch.x && (rect.x+rect.width+16)>=this.touch.x &&
+                            (rect.y-32)<=this.touch.y && (rect.y+rect.height+32)>=this.touch.y) {
+                            this.touchValid = false;
+                        }
+                    }
+                }
+                this.touch = undefined;
             }
         },
         swipe(direction, ev) {
             if (!this.touchValid || this.$store.state.visibleMenus.size>0 || this.$store.state.desktopLayout) {
                 return;
-            }
-            if (this.$store.state.page=='now-playing') {
-                // Ignore swipes on position slider...
-                var elem = document.getElementById("pos-slider");
-                if (elem) {
-                    var rect = elem.getBoundingClientRect();
-                    if ((rect.x-4)<=ev.touchstartX && (rect.x+rect.width+8)>=ev.touchstartX &&
-                        (rect.y-4)<=ev.touchstartY && (rect.y+rect.height+8)>=ev.touchstartY) {
-                        return;
-                    }
-                }
             }
             if (this.$store.state.openDialogs.length>0) {
                 if (this.$store.state.openDialogs.length==1) {

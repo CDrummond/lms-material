@@ -78,7 +78,7 @@
     <lms-sleep-dialog v-if="dialogs.sleep"></lms-sleep-dialog>
     <lms-search-dialog v-if="dialogs.search"></lms-search-dialog>
     <lms-movequeue-dialog v-if="dialogs.movequeue"></lms-movequeue-dialog>
-    <lms-podcast-add-dialog v-if="dialogs.podcastadd"></lms-podcast-add-dialog>
+    <lms-podcast-dialog v-if="dialogs.podcast"></lms-podcast-dialog>
     <lms-podcast-search-dialog v-if="dialogs.podcastsearch"></lms-podcast-search-dialog>
     <lms-info-dialog v-if="dialogs.iteminfo"></lms-info-dialog>
     <lms-iframe-dialog v-if="dialogs.iframe"></lms-iframe-dialog>
@@ -86,6 +86,7 @@
     <lms-savequeue v-if="dialogs.savequeue"></lms-savequeue>
     <lms-icon-dialog v-if="dialogs.icon"></lms-icon-dialog>
     <lms-prompt-dialog v-if="dialogs.prompt"></lms-prompt-dialog>
+    <lms-addtoplaylist-dialog v-if="dialogs.addtoplaylist"></lms-addtoplaylist-dialog>
     <lms-screensaver></lms-screensaver>
     <lms-volumeoverlay></lms-volumeoverlay>
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
@@ -171,15 +172,16 @@
   print("  <script src=\"html/js/manage-players.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/favorite-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/sleep-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/search-dialog.js?r=$version\"></script>\n");
+  print("  <script src=\"html/js/search-field.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/movequeue-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/podcast-add-dialog.js?r=$version\"></script>\n");
+  print("  <script src=\"html/js/podcast-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/podcast-search-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/info-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/iframe-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/icon-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/dstm-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/savequeue-dialog.js?r=$version\"></script>\n");
+  print("  <script src=\"html/js/addtoplaylist-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/screensaver.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/volume-overlay.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/i18n.js?r=$version\"></script>\n");

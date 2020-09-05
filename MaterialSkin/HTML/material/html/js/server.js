@@ -195,16 +195,19 @@ var lmsServer = Vue.component('lms-server', {
                 bus.$emit('refreshList', SECTION_PLAYLISTS);
             }
         },
-        doAllList(ids, command, section) {
+        doAllList(ids, command, section, msg) {
             if (ids.length>0) {
                 var id = ids.shift();
                 var cmd = command.slice();
                 cmd.push(id);
                 lmsCommand(this.$store.state.player.id, cmd).then(({data}) => {
                     if (ids.length>0) {
-                        this.doAllList(ids, command, section);
+                        this.doAllList(ids, command, section, msg);
                     } else {
                         bus.$emit('refreshList', section);
+                        if (undefined!=msg) {
+                            bus.$emit('showMessage', msg);
+                        }
                     }
                 }).catch(err => {
                     bus.$emit('refreshList', section);
@@ -754,9 +757,9 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('movePlaylistItems', function(playlist, indexes, to) {
             this.movePlaylistItems(playlist, indexes, to, 0, 0);
         }.bind(this));
-        bus.$on('doAllList', function(ids, command, section) {
+        bus.$on('doAllList', function(ids, command, section, msg) {
             if (this.$store.state.player) {
-                this.doAllList(ids, command, section);
+                this.doAllList(ids, command, section, msg);
             }
         }.bind(this));
         bus.$on('movePlayer', function(player) {

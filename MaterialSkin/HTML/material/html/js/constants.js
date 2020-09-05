@@ -52,6 +52,8 @@ const LMS_APPEND_KEYBOARD = "A"; // + shift
 const LMS_ADD_ITEM_ACTION_KEYBOARD = "C";
 const LMS_CREATE_FAV_FOLDER_KEYBOARD = "M"; // +shift
 
+const SEARCH_OTHER_ID = "search.other";
+
 // Semi-constant :-)
 var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
                                   "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
@@ -88,8 +90,9 @@ const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlsyKS";
 const ARTIST_ALBUM_TAGS = "tags:jlsyK";
-const TRACK_TAGS = "tags:distAC";
+const TRACK_TAGS = "tags:distuAC";
 const PLAYLIST_TAGS = "tags:sux";
+const PLAYLIST_TRACK_TAGS = "tags:acdltK";
 const SORT_KEY = "sort:";
 const FILTER_PREFIX = "filter:";
 const SECTION_APPS = 1;

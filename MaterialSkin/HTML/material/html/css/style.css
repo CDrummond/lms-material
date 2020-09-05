@@ -533,12 +533,13 @@ div.v-subheader {
 }
 
 .vol-full-slider {
- max-width:200px;
+ max-width:200px!important;
+ min-width:200px!important;
 }
 
 .vol-full-label {
  padding-top:16px;
- width:3em;
+ min-width:3em!important;
  text-align:left;
  font-size:var(--std-font-size) !important;
 }
@@ -950,6 +951,13 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  #advanced-search-btn {
   display:none;
  }
+ .lib-search {
+  margin-right:12px!important;
+ }
+}
+
+.lib-search .v-label:not(.v-label--active) {
+ margin-top:-3px; /* Align non-focused subtoolbar 'Search' label with back arrow */
 }
 
 .np-slider {
@@ -1618,7 +1626,7 @@ div.v-subheader {
 }
 
 /* Long press on buttons sometimes causes select? */
-.v-btn--icon, .v-btn__content, .v-btn__content i {
+.v-btn--icon, .v-btn__content, .v-btn__content i, .noselect {
  -webkit-touch-callout:none;
  -webkit-user-select:none;
  -khtml-user-select:none;
@@ -1775,7 +1783,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 @keyframes npCoverFadeIn {
- 0% { opacity:0; }
+ 0% { opacity:0.25; }
  100% { opacity:1; }
 }
 

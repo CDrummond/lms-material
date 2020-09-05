@@ -81,6 +81,12 @@ function parseQueryParams() {
             resp.appQuit=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+        } else if ("theme"==kv[0]) {
+            var parts = kv[1].split(",");
+            setLocalStorageVal('theme', parts[0]);
+            if (parts.length>1) {
+                setLocalStorageVal('color', parts[1]);
+            }
         }
     }
     return resp;
@@ -628,9 +634,6 @@ function shouldAddLibraryId(command) {
     return false;
 }
 
-
-
-
 // Determine if an item is a 'text' item - i.e. cannot browse into
 function isTextItem(item) {
     return !item.isPinned && !item.weblink &&
@@ -992,5 +995,37 @@ function copyTextToClipboard(text) {
     } catch (err) {
     } finally {
         document.body.removeChild(textArea);
+    }
+}
+
+function getTouchPos(ev) {
+    if (undefined==ev) {
+        return undefined;
+    }
+    if (undefined==ev.touches || ev.touches.length<1) {
+        if (undefined!=ev.changedTouches && ev.changedTouches.length>0) {
+            return {x:ev.changedTouches[0].clientX, y:ev.changedTouches[0].clientY};
+        }
+        return undefined;
+    }
+    return {x:ev.touches[0].clientX, y:ev.touches[0].clientY};
+}
+
+function removeDuplicates(playistId, items) {
+    let dupes=[];
+    let tracks = new Set();
+    for (let i=0, len=items.length; i<len; ++i) {
+        let track = items[i].title.toLowerCase();
+        if (tracks.has(track)) {
+            dupes.push("index:"+i);
+        } else {
+            tracks.add(track);
+        }
+    }
+    dupes = dupes.reverse();
+    if (dupes.length>0) {
+        bus.$emit('doAllList', dupes, ["playlists", "edit", "cmd:delete", playistId], SECTION_PLAYLISTS, i18n("All duplicates removed"));
+    } else {
+        bus.$emit('showMessage', i18n('Playlist has no duplicates'));
     }
 }

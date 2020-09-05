@@ -52,6 +52,8 @@ const PQ_ZAP_ACTION           = 39;
 const INSERT_ALL_ACTION       = 40;
 const GOTO_ARTIST_ACTION      = 41;
 const GOTO_ALBUM_ACTION       = 42;
+const ADD_TO_PLAYLIST_ACTION  = 43;
+const REMOVE_DUPES_ACTION     = 44;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -99,7 +101,10 @@ var ACTIONS=[
     {cmd:"insert-all",   icon:"format_indent_increase"},
 
     {cmd:"goto-artist",  svg:"artist"},
-    {cmd:"goto-album",   icon:"album"}
+    {cmd:"goto-album",   icon:"album"},
+
+    {cmd:"addto-playlist",icon:"playlist_add"},
+    {cmd:"rem-dup",      svg:"remove-duplicates"}
 ];
 
 function updateActionStrings() {
@@ -153,5 +158,7 @@ function updateActionStrings() {
 
     ACTIONS[GOTO_ARTIST_ACTION].title=i18n("Go to artist");
     ACTIONS[GOTO_ALBUM_ACTION].title=i18n("Go to album");
+    ACTIONS[ADD_TO_PLAYLIST_ACTION].title=i18n("Add to playlist");
+    ACTIONS[REMOVE_DUPES_ACTION].title=i18n("Remove duplicates");
 }
 

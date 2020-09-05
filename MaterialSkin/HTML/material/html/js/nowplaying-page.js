@@ -15,12 +15,14 @@ const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
+const NP_FOLLOW_LINK = 5;
+const NP_SEARCH = 6;
 const NP_CUSTOM = 100;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
- <v-tooltip v-if="!IS_MOBILE" top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
+ <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <template v-for="(item, index) in menu.items">
@@ -82,7 +84,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop noselect" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"  @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
   <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -171,7 +173,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
         <v-layout class="np-time-layout">
          <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider noselect" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
          <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
          <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
         </v-layout>
@@ -238,7 +240,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
      <v-layout>
       <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"></v-progress-linear>
+      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider noselect" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
       <p class="np-duration cursor" v-if="(showTotal || !playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
       <p class="np-duration cursor" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
      </v-layout>
@@ -319,6 +321,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        if (document.addEventListener) {
+            document.addEventListener('click', this.clickListener);
+        } else if (document.attachEvent) {
+            document.attachEvent('onclick', this.clickListener);
+        }
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));
@@ -334,6 +341,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.info.show = false;
                 }
                 this.largeView = val;
+            }
+        }.bind(this));
+
+        bus.$on('pageChanged', function(page) {
+            if (page=='now-playing') {
+                if (!this.info.show) {
+                    this.$forceUpdate();
+                }
             }
         }.bind(this));
 
@@ -725,6 +740,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 } else {
                     copyTextToClipboard(i18n("Playing %1", this.playerStatus.current.title));
                 }
+            } else if (NP_FOLLOW_LINK==item.act) {
+                openWindow(item.link);
+            } else if (NP_SEARCH==item.act) {
+                bus.$emit('browse-search', item.text, 'now-playing');
+                this.info.show=false;
+                this.largeView=false;
             } else if (this.customActions && item.act>=NP_CUSTOM) {
                 let ca = item.act-NP_CUSTOM;
                 if (ca>=0 && ca<this.customActions.length) {
@@ -764,15 +785,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.playerStatus.current.pospc = pc;
             }
         },
-        sliderChanged(e) {
+        sliderChanged(e, isTouch) {
             if (this.playerStatus.current.canseek && this.playerStatus.current.duration>3) {
                 const rect = document.getElementById("pos-slider").getBoundingClientRect();
-                const pos = e.clientX - rect.x;
-                const width = rect.width;
+                const evPos = isTouch ? getTouchPos(e) : {x:e.clientX, y:e.clientY};
+                let pos = evPos.x - rect.x;
+                if (isTouch && ( (evPos.x < rect.x - 16) || (evPos.x > rect.x+rect.width + 16) ||
+                                 (evPos.y < rect.y - 48) || (evPos.y > rect.y+rect.height + 48)) ) {
+                    return;
+                }
+                pos = Math.min(Math.max(0, pos), rect.width);
                 this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
             }
         },
-        moveTimeTooltip(e) {
+        moveTimeTooltipTouch(e) {
+            this.moveTimeTooltip(getTouchPos(e), true);
+        },
+        moveTimeTooltip(e, isTouch) {
             if (this.timeTooltip.show) {
                 if (this.playerStatus.current.duration<=1) {
                     this.timeTooltip.show = false;
@@ -780,10 +809,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 this.timeTooltip.x = e.x
                 const rect = document.getElementById("pos-slider").getBoundingClientRect();
-                this.timeTooltip.y = rect.y;
-                const pos = e.clientX - rect.x;
-                const width = rect.width;
+                this.timeTooltip.y = rect.y - (isTouch ? 32 : 0);
+                let pos = e.x - rect.x;
+                pos = Math.min(Math.max(0, pos), rect.width);
                 this.timeTooltip.text=""+formatSeconds(Math.floor(this.playerStatus.current.duration * pos / rect.width));
+            }
+        },
+        touchSliderEnd(e) {
+            if (this.timeTooltip.show) {
+                this.sliderChanged(e, true);
+                this.timeTooltip.show = false;
             }
         },
         setInfoTrack() {
@@ -1239,6 +1274,31 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         checkLandscape() {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        },
+        clickListener(event) {
+            if (this.info.show) {
+                let target = event.target || event.srcElement;
+                if (target.tagName === 'A') {
+                    let href = target.getAttribute('href');
+                    if (undefined!=href && null!=href && href.length>10) { // 10 = http://123
+                        let text = target.text;
+                        if (undefined==text || text.length<1) {
+                            text = target.textContent;
+                        }
+                        if (undefined!=text && text.length>0) {
+                            this.menu.icons=true;
+                            this.menu.items=[{title:i18n("Follow link"), icon:"public", act:NP_FOLLOW_LINK, link:href},
+                                             {title:i18n("Search")+SEPARATOR+text, icon:"search", act:NP_SEARCH, text:text}];
+                                             this.menu.x = event.clientX;
+                            this.menu.y = event.clientY;
+                            this.$nextTick(() => {
+                                this.menu.show = true;
+                            });
+                            event.preventDefault();
+                        }
+                    }
+                }
+            }
         }
     },
     filters: {

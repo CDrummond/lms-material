@@ -2719,9 +2719,9 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             var haveSubtitle = false;
             // How many columns?
-            var maxColumns = Math.floor(listWidth/width);
-            var numColumns = Math.max(Math.min(maxColumns, this.items.length), 1);
-            return {w: width, h: height, s: steps, mc:maxColumns, nc: numColumns}
+            var maxColumns = Math.floor(listWidth / width);
+            var numColumns = Math.max(Math.min(maxColumns, 20), 1);
+            return {w: width, h: height, s: steps, mc: maxColumns, nc: numColumns}
         },
         layoutGrid(force) {
             if (!this.grid.use) {
@@ -2733,7 +2733,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var changed = false;
             var haveSubtitle = false;
             var viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
-            var listWidth = viewWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (this.filteredJumplist.length>1 && this.items.length>10 ? JUMP_LIST_WIDTH :0) + VIEW_RIGHT_PADDING);
+            var listWidth = viewWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + VIEW_RIGHT_PADDING);
 
             // Calculate what grid item size we should use...
             var sz = undefined;

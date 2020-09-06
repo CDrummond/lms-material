@@ -19,6 +19,8 @@
 13. Remove home button. Functionality can be achieved via long-press on back
     button or (in mobile layout) bottom nav 'Browse' button, or by using popup
     menu on subtoolbar title.
+14. Fix grid size changing when browse from a list with jumplist to one without
+    (and vice versa).
 
 1.8.9
 -----

@@ -81,7 +81,8 @@
     "/icon_nature_sounds.png":{"svg":"nature_sounds"},
     "/napster.png":{"svg":"napster"},
     "/shoutcast.png":{"svg":"shoutcast"},
-    "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"}
+    "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"},
+    "/TVH/icon.png":{"svg":"tvheadend"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

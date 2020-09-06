@@ -16,6 +16,9 @@
 10. Use treble-clef as genre icon.
 11. Fix HTML tags shown in confirmation dialog.
 12. Add action to remove duplicates from playlists.
+13. Remove home button. Functionality can be achieved via long-press on back
+    button or (in mobile layout) bottom nav 'Browse' button, or by using popup
+    menu on subtoolbar title.
 
 1.8.9
 -----

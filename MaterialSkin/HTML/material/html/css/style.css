@@ -1947,3 +1947,6 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  }
 }
 
+#back-button {
+ margin-right:14px !important;
+}

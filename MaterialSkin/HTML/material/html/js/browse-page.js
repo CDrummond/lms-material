@@ -12,7 +12,7 @@ const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <div v-if="headerTitle || searchActive" class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
+ <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
   <v-layout v-if="selection.size>0">
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -34,7 +34,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field></lms-search-field>
   </v-layout>
-  <v-layout v-else>
+  <v-layout v-else-if="headerTitle">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
@@ -66,6 +66,11 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
+  </v-layout>
+  <v-layout v-else>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
+   <v-spacer></v-spacer>
+   <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItems" color="primary">refresh</v-icon>
@@ -111,7 +116,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </template>
  </div>
 
- <v-list class="bgnd-cover" v-bind:class="{'lms-list': !headerTitle, 'lms-list-sub': headerTitle, 'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
+ <v-list class="bgnd-cover lms-list-sub" v-bind:class="{'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
   <RecycleScroller v-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header}"@contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
@@ -204,11 +209,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
       <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
      </div>
-     <v-btn flat icon v-if="undefined==item.stdItem && item.menu.length==1 && item.menu[0]==SEARCH_LIB_ACTION" @click.stop="itemAction(item.menu[0], item, index, $event)" :title="ACTIONS[SEARCH_LIB_ACTION].title">
-      <img v-if="ACTIONS[item.menu[0]].svg" :src="ACTIONS[item.menu[0]].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[item.menu[0]].icon}}</v-icon>
-     </v-btn>
-     <v-btn icon v-else @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)">
+     <v-btn icon @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)">
       <v-icon>more_vert</v-icon>
      </v-btn>
     </v-list-tile-action>
@@ -312,7 +313,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             hoverBtns: false,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, search:undefined },
+                     select:undefined, unselect:undefined, sources: undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
             libraryName: undefined,
@@ -597,7 +598,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goBack:i18n("Go back") };
+                          goBack:i18n("Go back"), sources:i18n("Music sources") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -605,7 +606,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "library_music",
                               type: "group",
                               weight: 0,
-                              menu: [SEARCH_LIB_ACTION],
                               id: TOP_MYMUSIC_ID },
                             { command: ["radios"],
                               params: ["menu:radio"],

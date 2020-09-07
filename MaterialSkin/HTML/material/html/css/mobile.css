@@ -100,16 +100,6 @@
 
 .lms-list {
  position:fixed;
- top:var(--main-toolbar-height);
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height)));
- width:100vw;
- overflow:auto;
- backface-visibility:hidden;
- margin:0px;
-}
-
-.lms-list-sub {
- position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
  width:100vw;
@@ -118,7 +108,7 @@
  margin:0px;
 }
 
-.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+.lms-list .v-list__tile {
  padding:0 16px !important;
 }
 
@@ -278,11 +268,11 @@
   padding-left:2px;
  }
 
- .lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+ .lms-list .v-list__tile {
   padding:0 12px !important;
  }
  
- .lms-list-sub .emblem, .lms-list-jump .emblem {
+ .lms-list .emblem, .lms-list-jump .emblem {
   left:35px !important;
  }
 
@@ -290,7 +280,7 @@
   left:31px !important;
  }
 
- .lms-list-sub3 .pq-current-indicator {
+ .lms-list3 .pq-current-indicator {
   left:50px !important;
  }
 }

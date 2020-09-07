@@ -116,7 +116,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </template>
  </div>
 
- <v-list class="bgnd-cover lms-list-sub" v-bind:class="{'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
+ <v-list class="bgnd-cover lms-list" v-bind:class="{'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
   <RecycleScroller v-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header}"@contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">

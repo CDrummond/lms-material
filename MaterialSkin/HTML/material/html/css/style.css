@@ -142,7 +142,7 @@ html, .mini-player {
  font-weight:var(--std-weight);
 }
 
-.lms-list .v-list__tile__sub-title, .lms-list-sub .v-list__tile__sub-title {
+.lms-list .v-list__tile__sub-title {
  margin-top:-2px;
 }
 
@@ -254,15 +254,15 @@ div.v-subheader {
  margin-right:4px;
 }
 
-.lms-list, .lms-list-sub {
+.lms-list {
  padding:0px;
 }
 
-.lms-list .v-list__tile, .lms-list-sub .v-list__tile {
+.lms-list .v-list__tile {
  height:calc(var(--list-elem-height) - 1px) !important;
 }
 
-.lms-list3 .v-list__tile, .lms-list-sub3 .v-list__tile {
+.lms-list3 .v-list__tile {
  height:calc(var(--list-elem-3line-height) - 1px) !important;
 }
 
@@ -409,7 +409,7 @@ div.v-subheader {
  height:26px !important;
 }
 
-.lms-list-sub .emblem, .lms-list-jump .emblem {
+.lms-list .emblem, .lms-list-jump .emblem {
  position:absolute;
  top:1px !important;
  left:38px !important;
@@ -419,7 +419,7 @@ div.v-subheader {
  padding:1px;
 }
 
-.lms-list-sub .emblem img, .lms-list-jump .emblem img {
+.lms-list .emblem img, .lms-list-jump .emblem img {
  width:18px !important;
  height:18px !important;
 }
@@ -621,7 +621,7 @@ div.v-subheader {
  }
 }
 
-.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .lms-list-sub, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
  transition:none !important;
 }
 
@@ -657,7 +657,7 @@ div.v-subheader {
  min-width:36px !important;
 }
 
-.lms-list-sub > .browse-text > div {
+.lms-list > .browse-text > div {
  min-height:var(--list-elem-height)!important;
  height:auto!important;
  padding-top:8px!important;
@@ -666,7 +666,7 @@ div.v-subheader {
  font-weight:200!important;
 }
 
-.lms-list-sub .browse-text {
+.lms-list .browse-text {
  font-size:var(--std-font-size)!important;
  font-weight:200!important;
 }
@@ -704,7 +704,7 @@ div.v-subheader {
 }
 
 /* Biographies, etc, from More > Artist information > ... */
-.lms-list-sub > .browse-html {
+.lms-list > .browse-html {
  font-size:var(--std-font-size)!important;
  min-height:var(--list-elem-height)!important;
  height:auto!important;
@@ -1098,7 +1098,7 @@ progress {
  border:2px solid var(--primary-color);
 }
 
-.lms-list-sub3 .pq-current-indicator {
+.lms-list3 .pq-current-indicator {
  left:54px !important;
 }
 
@@ -1123,7 +1123,7 @@ progress {
  vertical-align:middle !important;
 }
 
-.lms-list3 .pq-time, .lms-list-sub3 .pq-time {
+.lms-list3 .pq-time {
  height:var(--list-elem-3line-height);
  line-height:var(--list-elem-3line-height);
 }
@@ -1435,7 +1435,7 @@ div.v-subheader {
  margin-left:4px;
 }
 
-.lms-list3 .lms-avatar .v-avatar, .lms-list-sub3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar, .lms-list-sub3 .v-list__tile__avatar {
+.lms-list3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar {
  width:calc(var(--list-elem-3line-height) - 1px) !important;
  height:calc(var(--list-elem-3line-height) - 1px) !important;
  margin-left:-4px;
@@ -1444,7 +1444,7 @@ div.v-subheader {
 }
 
 /* Ensure only text are of subtitle is clickable */
-.lms-list-sub .v-list__tile__sub-title, .lms-list-sub3 .v-list__tile__sub-title {
+.lms-list .v-list__tile__sub-title, .lms-list3 .v-list__tile__sub-title {
  width:auto!important;
  max-width:100%!important;
 }
@@ -1826,7 +1826,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  right:38px !important;
 }
 
-.lms-list .v-list__tile__action .v-btn--icon, .lms-list-sub .v-list__tile__action .v-btn--icon {
+.lms-list .v-list__tile__action .v-btn--icon {
  margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 

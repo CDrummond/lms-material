@@ -14,6 +14,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 <div id="browse-view">
  <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
   <v-layout v-if="selection.size>0">
+   <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}</v-flex>
@@ -68,6 +69,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-layout>
   <v-layout v-else>
+   <div class="toolbar-nobtn-pad"></div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>

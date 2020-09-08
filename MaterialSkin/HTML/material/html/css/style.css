@@ -486,6 +486,10 @@ div.v-subheader {
  margin-top:-2px!important;
 }
 
+.toolbar-nobtn-pad {
+ width:8px;
+}
+
 .subtoolbar-pad {
  margin-top:2px;
 }

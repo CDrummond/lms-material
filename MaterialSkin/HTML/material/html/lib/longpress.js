@@ -39,7 +39,7 @@ Vue.directive('longpress', {
                         } else {
                             el.longpress.binding.value.method(binding.value.item, true, el);
                         }
-                    }, 1000)
+                    }, 500)
                 } else {
                     el.longpress.pressTimer = setTimeout(() => {
                         el.longpress.timedout = true;
@@ -50,7 +50,7 @@ Vue.directive('longpress', {
                         } else {
                             el.longpress.binding.value.method(binding.value.item, true, el);
                         }
-                    }, 1000)
+                    }, 500)
                 }
             }
         }

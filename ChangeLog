@@ -23,6 +23,7 @@
     (and vice versa).
 15. Add mapping for TVHeadend icon.
 16. Show 'Music sources' as subtoolbar title on browse home screen.
+17. Reduce long-press timeout from 1s to 500ms.
 
 1.8.9
 -----

@@ -2363,6 +2363,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.top[i].params.push("menu:1");
                 } else if (this.top[i].id==TOP_RADIO_ID) {
                     this.top[i].icon=undefined; this.top[i].svg="radio-tower";
+                } else if (this.top[i].id==TOP_MYMUSIC_ID) {
+                    this.top[i].menu=undefined;
                 }
             }
             for (var i=0, len=this.top.length; i<len; ++i) {

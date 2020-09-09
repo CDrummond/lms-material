@@ -190,7 +190,9 @@ var app = new Vue({
 
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {
-            bus.$emit('esc');
+            if (!modifier && 'backspace'==key) {
+                bus.$emit('esc');
+            }
         }.bind(this));
 
         bus.$on('dialogOpen', function(name, val) {

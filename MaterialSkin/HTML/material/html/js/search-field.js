@@ -36,7 +36,12 @@ Vue.component('lms-search-field', {
         this.searching=false;
         this.str = "";
         this.prevPage = undefined;
-        focusEntry(this);
+        // If term stored in local storage then search must have happened, user browsed into results
+        // and then back. If so, don't focus search field - as it causes on-screen keyboard to be shown
+        // the hidde, which flickers.
+        if (undefined==this.term || this.term.length<1) {
+            focusEntry(this);
+        }
         bus.$on('search-for', function(text, prevPage) {
             this.term = text;
             this.prevPage = prevPage;

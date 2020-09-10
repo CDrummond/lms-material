@@ -26,6 +26,8 @@
 17. Reduce long-press timeout from 1s to 500ms.
 18. Fix various keys causing browse to navigate back.
 19. Make URLs case-insensitive - e.g. allow http://HOST:9000/Material/Mobile
+20. When checking where to add add/play all buttons, look for 'wimp' as well as
+    'tidal'
 
 1.8.9
 -----

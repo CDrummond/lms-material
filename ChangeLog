@@ -25,6 +25,7 @@
 16. Show 'Music sources' as subtoolbar title on browse home screen.
 17. Reduce long-press timeout from 1s to 500ms.
 18. Fix various keys causing browse to navigate back.
+19. Make URLs case-insensitive - e.g. allow http://HOST:9000/Material/Mobile
 
 1.8.9
 -----

@@ -15,7 +15,7 @@
  <body>
   <script>
    var query = window.location.href.indexOf('?');
-   window.location.href = window.location.href.replace('/mobile', '/').replace('.html', '') + (query>0 ? "&" : "?")+"layout=mobile";
+   window.location.href = window.location.href.replace(/\/mobile/i, '/').replace(/\.html/i, '') + (query>0 ? "&" : "?")+"layout=mobile";
   </script>
  </body>
 </html>

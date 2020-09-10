@@ -33,6 +33,10 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 
+my $DESKTOP_URL_PARSER_RE = qr{desktop}i;
+my $MINI_URL_PARSER_RE = qr{mini}i;
+my $NOW_PLAYING_URL_PARSER_RE = qr{now-playing}i;
+my $MOBILE_URL_PARSER_RE = qr{mobile}i;
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
@@ -68,19 +72,19 @@ sub initPlugin {
         require Plugins::MaterialSkin::Settings;
         Plugins::MaterialSkin::Settings->new();
 
-        Slim::Web::Pages->addPageFunction( 'desktop', sub {
+        Slim::Web::Pages->addPageFunction( $DESKTOP_URL_PARSER_RE, sub {
             my ($client, $params) = @_;
             return Slim::Web::HTTP::filltemplatefile('desktop.html', $params);
         } );
-        Slim::Web::Pages->addPageFunction( 'mini', sub {
+        Slim::Web::Pages->addPageFunction( $MINI_URL_PARSER_RE, sub {
             my ($client, $params) = @_;
             return Slim::Web::HTTP::filltemplatefile('mini.html', $params);
         } );
-        Slim::Web::Pages->addPageFunction( 'now-playing', sub {
+        Slim::Web::Pages->addPageFunction( $NOW_PLAYING_URL_PARSER_RE, sub {
             my ($client, $params) = @_;
             return Slim::Web::HTTP::filltemplatefile('now-playing.html', $params);
         } );
-        Slim::Web::Pages->addPageFunction( 'mobile', sub {
+        Slim::Web::Pages->addPageFunction( $MOBILE_URL_PARSER_RE, sub {
             my ($client, $params) = @_;
             return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
         } );

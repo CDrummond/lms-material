@@ -33,7 +33,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else-if="searchActive">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
-   <lms-search-field></lms-search-field>
+   <lms-search-field @results="handleListResponse"></lms-search-field>
   </v-layout>
   <v-layout v-else-if="headerTitle">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
@@ -516,9 +516,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && this.current.id==("album_id:"+album)) {
                 this.refreshList();
             }
-        }.bind(this));
-        bus.$on('libSearchResults', function(item, command, resp, prevPage) {
-            this.handleListResponse(item, command, resp, prevPage);
         }.bind(this));
         bus.$on('closeLibSearch', function() {
             this.goBack();

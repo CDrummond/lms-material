@@ -154,7 +154,7 @@ Vue.component('lms-search-field', {
                             }
                         }
                     }
-                    bus.$emit('libSearchResults', item, {command:[], params:[]}, { items:items, baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
+                    this.$emit('results', item, {command:[], params:[]}, { items:items, baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
                 }
                 this.commands=[];
                 this.results=[];

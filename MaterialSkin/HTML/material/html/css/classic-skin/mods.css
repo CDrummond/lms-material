@@ -141,7 +141,7 @@ td input[type=checkbox] { /* Fix checkbox in Performance / Custom pre-caching sp
  vertical-align: text-bottom !important;
 }
 
-div.prefDesc, p {
+div.prefDesc, div.prefDesc a, p {
  font-size:14px!important;
 }
 

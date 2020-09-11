@@ -28,6 +28,8 @@
 19. Make URLs case-insensitive - e.g. allow http://HOST:9000/Material/Mobile
 20. When checking where to add add/play all buttons, look for 'wimp' as well as
     'tidal'
+21. If a list has 'All Songs' entry, then use its actions to build the play/add
+    all actions in the subtoolbar.
 
 1.8.9
 -----

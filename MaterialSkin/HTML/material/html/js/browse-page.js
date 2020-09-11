@@ -672,6 +672,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         addHistory() {
             var prev = {};
             prev.items = this.items;
+            prev.allSongsItem = this.allSongsItem;
             prev.jumplist = this.jumplist;
             prev.baseActions = this.baseActions;
             prev.current = this.current;
@@ -757,6 +758,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.current = item;
                 this.currentLibId = command.libraryId;
                 this.items=resp.items;
+                this.allSongsItem=resp.allSongsItem;
                 this.jumplist=resp.jumplist;
                 this.filteredJumplist = [];
                 this.baseActions=resp.baseActions;
@@ -833,6 +835,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
                 } else if (SECTION_PLAYLISTS==this.current.section && this.current.id.startsWith("playlist_id:")) {
                     this.tbarActions=[REMOVE_DUPES_ACTION, ADD_ACTION, PLAY_ACTION];
+                } else if (this.allSongsItem) {
+                    this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                 } else if (this.items.length>0 && (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command))) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
@@ -1498,8 +1502,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) {
                 if (this.current && item.id == this.current.id) { // Called from subtoolbar => act on all items
-                    this.doList(this.items, act);
-                     bus.$emit('showMessage', i18n("Adding tracks..."));
+                    if (this.allSongsItem) {
+                        this.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_ACTION, this.allSongsItem);
+                    } else {
+                        this.doList(this.items, act);
+                        bus.$emit('showMessage', i18n("Adding tracks..."));
+                    }
                 } else { // Need to filter items...
                     var itemList = [];
                     var isFilter = item.id.startsWith(FILTER_PREFIX); // MultiCD's have a 'filter' so we can play a single CD
@@ -1847,6 +1855,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var prev = this.history.pop();
             var changedView = this.grid.use != prev.grid.use;
             this.items = prev.items;
+            this.allSongsItem = prev.allSongsItem;
             this.jumplist = prev.jumplist;
             this.filteredJumplist = [];
             this.grid = prev.grid;

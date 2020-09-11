@@ -24,7 +24,7 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0 };
+    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0 };
 
     try {
     if (data && data.result) {
@@ -101,6 +101,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (resp.items.length==data.result.count-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
                     // Remove 'All Songs' entry
                     data.result.count--;
+                    if (playAction && loopLen>1) { // Save as special entry, so browse page can use for add/play all buttons
+                        resp.allSongsItem = i;
+                    }
                     continue;
                 }
                 var addedPlayAction = false;

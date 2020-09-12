@@ -30,6 +30,8 @@
     'tidal'
 21. If a list has 'All Songs' entry, then use its actions to build the play/add
     all actions in the subtoolbar.
+22. Look for 'playControl' action in SlimBrowse response and, if have more than
+    2 audio items, use this for add/play all actions.
 
 1.8.9
 -----

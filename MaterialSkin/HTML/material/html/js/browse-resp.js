@@ -420,11 +420,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.stdItem = STD_ITEM_TRACK;
                     i.type = i.presetParams = i.commonParams = i.menu = i.playallParams = i.addallParams = i.goAction = i.style = undefined;
                 }
-
                 resp.items.push(i);
                 types.add(i.type);
             }
-            /* ...continuation of favroutied album add/play tack issue... */
+            /* ...continuation of favourited album add/play track issue... */
             if (!isFavorites && parent && parent.section == SECTION_FAVORITES && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
                 resp.baseActions = [];
             }
@@ -434,7 +433,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                (!types.has("text") && !types.has("search") && !types.has("entry") && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }
-
+            if (playAction && resp.numAudioItems>2 && undefined==resp.allSongsItem &&
+                resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
+                resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
+            }
             if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) { // && parent && parent.id.startsWith("radio:")) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 for (var i=0, len=resp.items.length; i<len; ++i) {

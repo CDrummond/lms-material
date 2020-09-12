@@ -854,17 +854,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (this.tbarActions.length==0 && resp.numAudioItems>2 && resp.numAudioItems<=200 &&
                         this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-
-                        // add-all/play-all is SLOW, but youtube allows add/play on modified version of parentID - where we make this
-                        // from removing the last part of the ID of the first item. So 3_searchTerm.0 becomes 3_searchTerm
-                        if (this.command.command[0]=="youtube" && this.items[0].params && this.items[0].params.item_id) {
-                            var parts = this.items[0].params.item_id.split(".");
-                            if (parts.length==2) {
-                                parts.pop();
-                                this.current.allid = "item_id:"+parts.join(".");
-                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
-                            }
-                        }
                     }
                 }
                 if (resp.canUseGrid && !resp.forceGrid) {

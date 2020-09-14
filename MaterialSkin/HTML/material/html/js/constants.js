@@ -8,6 +8,7 @@
 'use strict';
 
 const LMS_BATCH_SIZE = 25000;
+const LMS_QUEUE_BATCH_SIZE = 500;
 const LMS_MAX_NON_SCROLLER_ITEMS = 100;
 const LMS_MAX_PLAYERS = 100;
 const LMS_IMAGE_SZ = 300

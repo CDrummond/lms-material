@@ -849,17 +849,11 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.items[index].selected = false;
                 }
             }
-            if (this.selection.size>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
-                this.$nextTick(function () {
-                    this.items = JSON.parse(JSON.stringify(this.items));
-                });
-            }
             this.selection = new Set();
         },
         select(item, index, event) {
             if (this.selection.size>0) {
                 this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
-                this.$forceUpdate();
             }
         },
         getDuration() {
@@ -1153,8 +1147,8 @@ var lmsQueue = Vue.component("lms-queue", {
         }
         if (undefined!=this.scrollElement) {
             this.scrollElement.removeEventListener("scroll", this.handleScroll);
-            window.removeEventListener("resize", this.handleResize);
         }
+        window.removeEventListener("resize", this.handleResize);
     }
 });
 

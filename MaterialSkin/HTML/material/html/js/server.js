@@ -737,6 +737,9 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('playerCommand', function(command) {
             if (this.$store.state.player) {
                 lmsCommand(this.$store.state.player.id, command).then(({data}) => {
+                    if (command.length>2 && command[0]=='mixer' && command[1]=='muting') { // Muting can be slow? Check after 1/2 second
+                        setTimeout(function () { this.updateCurrentPlayer(); }.bind(this), 500);
+                    }
                     this.updateCurrentPlayer();
                 });
             }

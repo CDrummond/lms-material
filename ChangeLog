@@ -35,6 +35,7 @@
 23. Remove android lock screen and notification controls.
 24. Always send 'mixer muting 0' to disable muting, and 'mixer muting 1' to
     enable, as opposed to 'mixer muting toggle'
+25. When toggling mute state, check player status 0.5 seconds later.
 
 1.8.9
 -----

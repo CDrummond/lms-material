@@ -515,7 +515,7 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if (toggleMute && this.playerDvc) {
-                bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+                bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
             } else if ("vol-up-btn"==el.id) {
                 bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), true)]);
             } else if ("vol-down-btn"==el.id) {
@@ -535,7 +535,7 @@ Vue.component('lms-toolbar', {
             if (this.noPlayer || !this.playerDvc) {
                 return;
             }
-            bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+            bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
         },
         volWheel(event) {
             if (event.deltaY<0) {

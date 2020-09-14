@@ -33,6 +33,8 @@
 22. Look for 'playControl' action in SlimBrowse response and, if have more than
     2 audio items, use this for add/play all actions.
 23. Remove android lock screen and notification controls.
+24. Always send 'mixer muting 0' to disable muting, and 'mixer muting 1' to
+    enable, as opposed to 'mixer muting toggle'
 
 1.8.9
 -----

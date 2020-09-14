@@ -103,7 +103,7 @@ Vue.component('lms-volume', {
             this.resetCloseTimer();
         },
         toggleMute() {
-            bus.$emit('playerCommand', ['mixer', 'muting', 'toggle']);
+            bus.$emit('playerCommand', ['mixer', 'muting', this.muted ? 0 : 1]);
             this.resetCloseTimer();
         },
         volWheel(event) {

@@ -105,11 +105,6 @@ function updateUiSettings(state, val) {
         state.showPlayerMenuEntry = val.showPlayerMenuEntry;
         setLocalStorageVal('showPlayerMenuEntry', state.showPlayerMenuEntry);
     }
-    if (undefined!=val.lsAndNotif && state.lsAndNotif!=val.lsAndNotif) {
-        state.lsAndNotif = val.lsAndNotif;
-        setLocalStorageVal('lsAndNotif', state.lsAndNotif);
-        bus.$emit('lsAndNotifChanged');
-    }
     if (undefined!=val.menuIcons && state.menuIcons!=val.menuIcons) {
         state.menuIcons = val.menuIcons;
         setLocalStorageVal('menuIcons', state.menuIcons);
@@ -177,15 +172,6 @@ function updateUiSettings(state, val) {
     }
 }
 
-function convertLsAndNotif(val) {
-    if ('playing'==val || 'always'==val) {
-        return true;
-    } else if ('never'==val) {
-        return false;
-    }
-    return val;
-}
-
 function defaultTheme() {
     // Keep in sync with index.html
     if (IS_IOS) {
@@ -246,7 +232,6 @@ const store = new Vuex.Store({
         showRating: true,
         queueShowRating: true,
         showPlayerMenuEntry: false,
-        lsAndNotif:true,
         page:'browse',
         menuIcons: true,
         sortHome: IS_IPHONE,
@@ -430,7 +415,6 @@ const store = new Vuex.Store({
             state.showRating = getLocalStorageBool('showRating', state.showRating);
             state.queueShowRating = getLocalStorageBool('queueShowRating', state.queueShowRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
-            state.lsAndNotif = convertLsAndNotif(getLocalStorageVal('lsAndNotif', state.lsAndNotif));
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[]")));
@@ -545,7 +529,6 @@ const store = new Vuex.Store({
                                      nowPlayingClock: getLocalStorageBool('nowPlayingClock', undefined==prefs.nowPlayingClock ? state.nowPlayingClock : prefs.nowPlayingClock),
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
-                                     lsAndNotif: getLocalStorageBool('lsAndNotif', undefined==prefs.lsAndNotif ? state.lsAndNotif : convertLsAndNotif(prefs.lsAndNotif)),
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),

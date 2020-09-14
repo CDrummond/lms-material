@@ -55,7 +55,6 @@
   <div id="app" v-cloak>
    <v-app class="lms-app" :dark="darkUi" v-touch:swipe.left="swipe" v-touch:swipe.right="swipe" v-touch:start="touchStart" v-touch:end="touchEnd">
     <lms-currentcover></lms-currentcover>
-    <lms-mediasession></lms-mediasession>
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
@@ -152,7 +151,6 @@
   print("  <script src=\"html/js/currentcover.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/utils.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/lmsoptions.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/mediasession.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/toolbar.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/bottomnav.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/icon-mapping.js?r=$version\"></script>\n");

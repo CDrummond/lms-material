@@ -266,6 +266,10 @@ div.v-subheader {
  height:calc(var(--list-elem-3line-height) - 1px) !important;
 }
 
+.lms-list-item {
+ border-bottom: 1px solid var(--list-item-border-color);
+}
+
 /* Make action buttons in lists closer together */
 .list__tile__action {
  min-width:48px !important;

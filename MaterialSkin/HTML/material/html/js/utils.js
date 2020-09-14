@@ -27,6 +27,19 @@ const RATINGS=["",         // 0
                "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
                "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
 
+const PASSIVE_SUPPORTED = browserSupportsPassiveScroll();
+function browserSupportsPassiveScroll() {
+  let passiveSupported = false;
+  try {
+    const options = { get passive() { passiveSupported = true; return false;} };
+    window.addEventListener("test", null, options);
+    window.removeEventListener("test", null, options);
+  } catch (err) {
+    passiveSupported = false;
+  }
+  return passiveSupported;
+}
+
 var bus = new Vue();
 var queryParams = parseQueryParams();
 var canUseCache = true;

@@ -117,7 +117,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="showLaunchPlayer">
      <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
       <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}}{{showLsAndNotif ? (' ' +i18n('Lock screen and notification controls will be disabled whilst player is active.')) : ''}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -125,24 +125,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="hasPassword"></v-divider>
     <v-list-tile v-if="hasPassword">
      <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
-    </v-list-tile>
-
-    <div class="dialog-padding" v-if="showLsAndNotif"></div>
-    <v-header class="dialog-section-header" v-if="showLsAndNotif">{{i18n('Lock screen and notification')}}</v-header>
-    <v-list-tile v-if="showLsAndNotif">
-     <v-list-tile-content @click="lsAndNotif = !lsAndNotif" class="switch-label">
-      <v-list-tile-title>{{i18n('Show controls')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show playback controls and details of current track on Android's lock screen and notifications.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="lsAndNotif"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider v-if="showLsAndNotif"></v-divider>
-    <v-list-tile v-if="showLsAndNotif">
-     <v-list-tile-content @click="lsAndNotifPlaySilence = !lsAndNotifPlaySilence" class="switch-label">
-      <v-list-tile-title>{{i18n('Play silence')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Enable this option to have a dummy silence file played whilst LMS is playing music. This is required for some browsers (e.g. Chrome) to keep the notifications alive and for correct operation of the play/pause button. If you toggle this setting you will need to reload your browser session.')}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="lsAndNotifPlaySilence"></v-switch></v-list-tile-action>
     </v-list-tile>
 
     <div class="dialog-padding"></div>
@@ -405,8 +387,6 @@ Vue.component('lms-ui-settings', {
             skipSecondsOptions: [ ],
             skipSeconds: 30,
             showPlayerMenuEntry: false,
-            lsAndNotif: true,
-            lsAndNotifPlaySilence: false,
             menuIcons: true,
             allowLayoutAdjust: window.location.href.indexOf('?layout=')<0 && window.location.href.indexOf('&layout=')<0,
             sortHome: IS_IPHONE,
@@ -420,7 +400,6 @@ Vue.component('lms-ui-settings', {
                 halfLen: 0
             },
             screensaver: false,
-            showLsAndNotif: IS_ANDROID && !queryParams.hide.has('notif'),
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
             showScale: !queryParams.hide.has('scale'),
             serverName: "",
@@ -445,7 +424,6 @@ Vue.component('lms-ui-settings', {
     mounted() {
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
-            this.lsAndNotifPlaySilence = getLocalStorageBool('playSilence', false);
             this.readStore();
             this.password = getLocalStorageVal('password', '');
             if (this.allowLayoutAdjust) {
@@ -556,7 +534,6 @@ Vue.component('lms-ui-settings', {
             this.swipeVolume = this.$store.state.swipeVolume;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
-            this.lsAndNotif=this.$store.state.lsAndNotif;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
@@ -604,7 +581,6 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             this.showMenu = false;
-            setLocalStorageVal('playSilence', this.lsAndNotifPlaySilence);
             this.$store.commit('setUiSettings', { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                                   color:this.color,
                                                   largerElements:this.largerElements,
@@ -628,7 +604,6 @@ Vue.component('lms-ui-settings', {
                                                   queueThreeLines:this.queueThreeLines,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
-                                                  lsAndNotif:this.lsAndNotif,
                                                   menuIcons:this.menuIcons,
                                                   hidden:this.hiddenItems(),
                                                   skipSeconds:this.skipSeconds,
@@ -675,7 +650,6 @@ Vue.component('lms-ui-settings', {
                                      queueThreeLines:this.queueThreeLines,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
-                                     lsAndNotif:this.lsAndNotif,
                                      menuIcons:this.menuIcons,
                                      hidden:Array.from(this.hiddenItems()),
                                      skipSeconds:this.skipSeconds,

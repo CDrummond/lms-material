@@ -83,7 +83,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
   </template>
  </div>
- <div class="lms-list bgnd-cover" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1}">
+ <div class="lms-list bgnd-cover" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1}">
   <div :style="lrViewportStyle">
    <div :style="lrSpacerStyle" v-if="grid.use">
 

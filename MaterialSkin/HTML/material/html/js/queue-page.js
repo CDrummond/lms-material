@@ -317,14 +317,17 @@ var lmsQueue = Vue.component("lms-queue", {
         lrItemHeight() {
             return this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE;
         },
+        lrBuffer() {
+            return Math.ceil(LMS_RECYCLER_BUFFER / this.lrItemHeight);
+        },
         lrStartIndex() {
-            return Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - LMS_RECYCLER_BUFFER);
+            return this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? 0 : Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - this.lrBuffer);
         },
         lrVisibleNodeCount() {
-            return Math.min(this.items.length - this.lrStartIndex, Math.ceil(this.lr.viewHeight / this.lrItemHeight) + (LMS_RECYCLER_BUFFER*2));
+            return Math.min(this.items.length - this.lrStartIndex, Math.ceil(this.lr.viewHeight / this.lrItemHeight) + (this.lrBuffer*2));
         },
         lrVisibleItems() {
-            return this.items.slice(this.lrStartIndex, this.lrStartIndex + this.lrVisibleNodeCount);
+            return this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.lrStartIndex, this.lrStartIndex + this.lrVisibleNodeCount);
         },
         lrOffsetY() {
             return this.lrStartIndex * this.lrItemHeight;

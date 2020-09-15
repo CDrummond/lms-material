@@ -9,6 +9,7 @@
 
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 500;
+const LMS_MAX_NON_SCROLLER_ITEMS = 75;
 const LMS_MAX_PLAYERS = 100;
 const LMS_IMAGE_SZ = 300
 const LMS_IMAGE_SIZE = "_"+LMS_IMAGE_SZ+"x"+LMS_IMAGE_SZ+"_f";
@@ -20,7 +21,7 @@ const LMS_MATERIAL_DEFAULT_ITEMS_PREF = "plugin.material-skin:items";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
 const LMS_CACHE_VERSION = 12;
-const LMS_RECYCLER_BUFFER = 10;
+const LMS_RECYCLER_BUFFER = 100; // px
 const LMS_LIST_ELEMENT_SIZE = 48;
 const LMS_LIST_3LINE_ELEMENT_SIZE = 68;
 const LMS_BLANK_COVER = "/music/0/cover";

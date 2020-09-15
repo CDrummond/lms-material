@@ -302,16 +302,19 @@ var lmsBrowse = Vue.component("lms-browse", {
         lrItemHeight() {
             return this.grid.use ? this.grid.ih - (this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF) : LMS_LIST_ELEMENT_SIZE;
         },
+        lrBuffer() {
+            return Math.ceil(LMS_RECYCLER_BUFFER / this.lrItemHeight);
+        },
         lrStartIndex() {
-            return Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - LMS_RECYCLER_BUFFER);
+            return !this.grid.use && this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? 0 : Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) -  this.lrBuffer);
         },
         lrVisibleNodeCount() {
-            return Math.min((this.grid.use ? this.grid.rows.length : this.items.length) - this.lrStartIndex, Math.ceil(this.lr.viewHeight / this.lrItemHeight) + (LMS_RECYCLER_BUFFER*2));
+            return Math.min((this.grid.use ? this.grid.rows.length : this.items.length) - this.lrStartIndex, Math.ceil(this.lr.viewHeight / this.lrItemHeight) + ( this.lrBuffer*2));
         },
         lrVisibleItems() {
             return this.grid.use
                     ? this.grid.rows.slice(this.lrStartIndex, this.lrStartIndex + this.lrVisibleNodeCount)
-                    : this.items.slice(this.lrStartIndex, this.lrStartIndex + this.lrVisibleNodeCount);
+                    : (this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.lrStartIndex, this.lrStartIndex + this.lrVisibleNodeCount));
         },
         lrOffsetY() {
             return this.lrStartIndex * this.lrItemHeight;

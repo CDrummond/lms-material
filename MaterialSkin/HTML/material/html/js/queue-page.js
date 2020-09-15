@@ -245,23 +245,25 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="lms-list bgnd-cover" id="queue-list" v-bind:class="{'lms-list3':threeLines}">
   <div :style="lrViewportStyle">
    <div :style="lrSpacerStyle">
-    <v-list-tile v-for="(item, index) in lrVisibleItems" :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+(lrStartIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
-     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
-      <v-icon v-if="item.selected">check_box</v-icon>
-      <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
-     </v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title v-html="item.title"></v-list-tile-title>
-      <v-list-tile-sub-title v-if="!threeLines" v-html="item.subtitle"></v-list-tile-sub-title>
-      <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[0]"></v-list-tile-sub-title>
-      <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[1]"></v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
-     </v-list-tile-action>
-     <div class="pq-current-indicator" v-if="index==currentIndex"></div>
-    </v-list-tile>
+    <template v-for="(item, index) in lrVisibleItems" :key="item.key">
+     <v-list-tile avatar v-bind:class="{'pq-current': (lrStartIndex+index)==currentIndex}" :id="'track'+(lrStartIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
+      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+       <v-icon v-if="item.selected">check_box</v-icon>
+       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
+      </v-list-tile-avatar>
+      <v-list-tile-content>
+       <v-list-tile-title v-html="item.title"></v-list-tile-title>
+       <v-list-tile-sub-title v-if="!threeLines" v-html="item.subtitle"></v-list-tile-sub-title>
+       <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[0]"></v-list-tile-sub-title>
+       <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[1]"></v-list-tile-sub-title>
+      </v-list-tile-content>
+      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+       <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+      </v-list-tile-action>
+      <div class="pq-current-indicator" v-if="(lrStartIndex+index)==currentIndex"></div>
+     </v-list-tile>
+    </template>
    </div>
   </div>
  </div>

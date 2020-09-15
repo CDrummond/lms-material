@@ -994,14 +994,13 @@ var lmsQueue = Vue.component("lms-queue", {
                     var pos = this.currentIndex>3 ? (this.currentIndex-3)*this.lrItemHeight : 0;
                     setScrollTop(this, pos>0 ? pos : 0);
                     setTimeout(function () {
-                        setScrollTop(this, pos>0 ? pos : 0);
                         if (pulse) {
                             var elem=document.getElementById('track'+this.currentIndex);
                             if (elem) {
                                 animate(elem, 1.0, 0.2);
                             }
                         }
-                    }.bind(this), 100);
+                    }.bind(this), 500);
                 } else if (scroll) {
                     this.autoScrollRequired = true;
                     this.fetchItems();

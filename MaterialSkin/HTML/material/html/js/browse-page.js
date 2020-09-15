@@ -303,9 +303,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.grid.use ? this.grid.ih - (this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF) : LMS_LIST_ELEMENT_SIZE;
         },
         lrStartIndex() {
-            let idx = Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - LMS_RECYCLER_BUFFER);
-            let halfBuf = LMS_RECYCLER_BUFFER/2;
-            return idx==0 ? 0 : Math.floor(Math.floor(idx / halfBuf) * halfBuf);
+            return Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - LMS_RECYCLER_BUFFER);
         },
         lrVisibleNodeCount() {
             return Math.min((this.grid.use ? this.grid.rows.length : this.items.length) - this.lrStartIndex, Math.ceil(this.lr.viewHeight / this.lrItemHeight) + (LMS_RECYCLER_BUFFER*2));

@@ -316,9 +316,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE;
         },
         lrStartIndex() {
-            let idx = Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - LMS_RECYCLER_BUFFER);
-            let halfBuf = LMS_RECYCLER_BUFFER/2;
-            return idx==0 ? 0 : Math.floor(Math.floor(idx / halfBuf) * halfBuf);
+            return Math.max(0, Math.floor(this.lr.scrollTop / this.lrItemHeight) - LMS_RECYCLER_BUFFER);
         },
         lrVisibleNodeCount() {
             return Math.min(this.items.length - this.lrStartIndex, Math.ceil(this.lr.viewHeight / this.lrItemHeight) + (LMS_RECYCLER_BUFFER*2));

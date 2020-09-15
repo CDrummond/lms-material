@@ -248,8 +248,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile v-for="(item, index) in lrVisibleItems" :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+(lrStartIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
-      <img v-else :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
-      <!-- <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"> -->
+      <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title v-html="item.title"></v-list-tile-title>

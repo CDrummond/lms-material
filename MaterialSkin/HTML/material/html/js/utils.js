@@ -396,14 +396,17 @@ function homeScreenSort(a, b) {
     return at<bt ? -1 : 1;
 }
 
-function setScrollTop(el, val) {
+function setScrollTop(view, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.
     window.requestAnimationFrame(function () {
         // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
-        el.style['-webkit-overflow-scrolling'] = 'auto';
-        el.scrollTop=val;
-        el.style['-webkit-overflow-scrolling'] = 'touch';
+        view.scrollElement.style['-webkit-overflow-scrolling'] = 'auto';
+        view.scrollElement.scrollTop=val;
+        view.scrollElement.style['-webkit-overflow-scrolling'] = 'touch';
+        if (undefined!=view.lr) {
+            view.lr.scrollTop = val;
+        }
     });
 }
 

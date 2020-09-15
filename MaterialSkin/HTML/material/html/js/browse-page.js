@@ -878,7 +878,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setBgndCover();
                     this.filterJumplist();
                     this.layoutGrid(true);
-                    setScrollTop(this.scrollElement, 0);
+                    setScrollTop(this, 0);
                 });
             }
         },
@@ -973,7 +973,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
                         this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                     }
-                    setScrollTop(this.scrollElement, 0);
+                    setScrollTop(this, 0);
                 } else if (this.selection.size>0) {
                     this.select(item, index, event);
                 } else if (this.$store.state.showMenuAudio) {
@@ -1019,7 +1019,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Browse music library");
                 this.current = item;
-                setScrollTop(this.scrollElement, 0);
+                setScrollTop(this, 0);
                 this.isTop = false;
                 this.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
             } else if (RANDOM_MIX_ID==item.id) {
@@ -1078,7 +1078,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 this.headerTitle = item.title;
                 this.headerSubTitle = i18n("Select category");
-                setScrollTop(this.scrollElement, 0);
+                setScrollTop(this, 0);
                 this.isTop = false;
                 this.jumplist = this.filteredJumplist = [];
             } else if (item.weblink) {
@@ -1715,7 +1715,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.$forceUpdate();
                     // Scroll to top. Without this, on iPad with iOS12 at least, grid->list scroll becomes slugish.
                     // But if user clicks on jumplist (which would call setScrollTop) then scrolling improves???
-                    setScrollTop(this.scrollElement, 0);
+                    setScrollTop(this, 0);
                 });
             }
         },
@@ -1734,7 +1734,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.headerSubTitle=0==this.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", this.items.length);
                 }
                 this.$nextTick(function () {
-                    setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                    setScrollTop(this, pos>0 ? pos : 0);
                     this.filterJumplist();
                 });
                 this.fetchingItems = false;
@@ -1776,7 +1776,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.inGenre = undefined;
             this.$nextTick(function () {
                 this.setBgndCover();
-                setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                setScrollTop(this, prev.pos>0 ? prev.pos : 0);
             });
             bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
         },
@@ -1855,7 +1855,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setBgndCover();
                     this.filterJumplist();
                     this.layoutGrid(true);
-                    setScrollTop(this.scrollElement, prev.pos>0 ? prev.pos : 0);
+                    setScrollTop(this, prev.pos>0 ? prev.pos : 0);
                 });
             }
             bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
@@ -2813,7 +2813,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var pos = this.grid.use
                         ? Math.floor(item.index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
                         : item.index*LMS_LIST_ELEMENT_SIZE;
-            setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+            setScrollTop(this, pos>0 ? pos : 0);
         },
         filterJumplist() {
             if (this.items.length<=25) {
@@ -2865,7 +2865,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         scrollList(step) {
             var pos = this.scrollElement.scrollTop + step;
-            setScrollTop(this.scrollElement, pos);
+            setScrollTop(this, pos);
             if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
                 this.stopScrolling = true;
             }
@@ -2940,7 +2940,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.setLibrary();
 
         this.$nextTick(function () {
-            setScrollTop(this.scrollElement, 0);
+            setScrollTop(this, 0);
         });
 
         bus.$on('splitterChanged', function() {

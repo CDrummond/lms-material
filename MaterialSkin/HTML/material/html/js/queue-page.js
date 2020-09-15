@@ -485,7 +485,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.setBgndCover();
         this.$nextTick(function () {
-            setScrollTop(this.scrollElement, 0);
+            setScrollTop(this, 0);
             // In case we missed the initial status update, ask for one now - so that we get queue quicker
             bus.$emit('refreshStatus');
             this.setBgndCover();
@@ -529,7 +529,7 @@ var lmsQueue = Vue.component("lms-queue", {
             let pos = this.scrollElement.scrollTop;
             if (pos>0) {
                 this.$nextTick(function () {
-                    setScrollTop(this.scrollElement, pos);
+                    setScrollTop(this, pos);
                 });
             }
         }.bind(this));
@@ -964,7 +964,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.selection = sel;
                     }
                     this.$nextTick(function () {
-                        setScrollTop(this.scrollElement, currentPos>0 ? currentPos : 0);
+                        setScrollTop(this, currentPos>0 ? currentPos : 0);
                     });
 
                     if (needUpdate) {
@@ -993,9 +993,9 @@ var lmsQueue = Vue.component("lms-queue", {
             if (scroll || (pulse && this.items.length>0)) {
                 if (this.currentIndex<this.items.length) {
                     var pos = this.currentIndex>3 ? (this.currentIndex-3)*this.lrItemHeight : 0;
-                    setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                    setScrollTop(this, pos>0 ? pos : 0);
                     setTimeout(function () {
-                        setScrollTop(this.scrollElement, pos>0 ? pos : 0);
+                        setScrollTop(this, pos>0 ? pos : 0);
                         if (pulse) {
                             var elem=document.getElementById('track'+this.currentIndex);
                             if (elem) {
@@ -1040,7 +1040,7 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         scrollList(step) {
             var pos = this.scrollElement.scrollTop + step;
-            setScrollTop(this.scrollElement, pos);
+            setScrollTop(this, pos);
             if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
                 this.stopScrolling = true;
             }

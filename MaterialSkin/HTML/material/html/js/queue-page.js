@@ -477,7 +477,7 @@ var lmsQueue = Vue.component("lms-queue", {
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         window.addEventListener("resize", this.handleResize, PASSIVE_SUPPORTED ? { passive: true } : false);
-        requestAnimationFrame(() => { this.handleResize()});
+        bus.$on('fullyLoaded', function() { this.handleResize(); }.bind(this));
 
         if (!IS_MOBILE) {
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {

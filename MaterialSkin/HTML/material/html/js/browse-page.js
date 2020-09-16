@@ -2909,7 +2909,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.scrollElement = document.getElementById("browse-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         window.addEventListener("resize", this.handleResize, PASSIVE_SUPPORTED ? { passive: true } : false);
-        requestAnimationFrame(() => { this.handleResize()});
+        bus.$on('fullyLoaded', function() { this.handleResize(); }.bind(this));
         bus.$on('pageChanged', function(page) {
             if ('browse'==page) {
                 this.$nextTick(function () { this.handleResize(); });

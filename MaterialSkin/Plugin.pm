@@ -39,6 +39,7 @@ my $NOW_PLAYING_URL_PARSER_RE = qr{now-playing}i;
 my $MOBILE_URL_PARSER_RE = qr{mobile}i;
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
+my $JS_URL_PARSER_RE = qr{material/custom.js}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
@@ -91,6 +92,7 @@ sub initPlugin {
 
         Slim::Web::Pages->addRawFunction($SVG_URL_PARSER_RE, \&_svgHandler);
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
+        Slim::Web::Pages->addRawFunction($JS_URL_PARSER_RE, \&_customJsHandler);
         Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
         Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
@@ -953,6 +955,24 @@ sub _customCssHandler {
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
     } else {
         $response->content_type('text/css');
+        $response->header('Connection' => 'close');
+        $response->content("");
+        $httpClient->send_response($response);
+        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+    }
+}
+
+sub _customJsHandler{
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/custom.js";
+    $response->code(RC_OK);
+    if (-e $filePath) {
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/javascript', $filePath, '', 'noAttachment' );
+    } else {
+        $response->content_type('application/javascript');
         $response->header('Connection' => 'close');
         $response->content("");
         $httpClient->send_response($response);

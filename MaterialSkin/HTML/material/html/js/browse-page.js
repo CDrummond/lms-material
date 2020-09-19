@@ -296,7 +296,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     computed: {
-        /* recycler... */
+        /* virtual scroller... */
         vsViewportHeight() {
             return (this.grid.use ? this.grid.rows.length : this.items.length) * this.vsItemHeight;
         },
@@ -326,7 +326,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         vsViewportStyle() {
             return { overflow: "hidden", height: this.vsViewportHeight + "px", position: "relative" };
         },
-        /* ...recycler */
+        /* ...virtual scroller */
         darkUi() {
             return this.$store.state.darkUi
         },

@@ -311,7 +311,7 @@ var lmsQueue = Vue.component("lms-queue", {
         }
     },
     computed: {
-        /* recycler... */
+        /* virtual scroller... */
         vsViewportHeight() {
             return this.items.length * this.vsItemHeight;
         },
@@ -339,7 +339,7 @@ var lmsQueue = Vue.component("lms-queue", {
         vsViewportStyle() {
             return { overflow: "hidden", height: this.vsViewportHeight + "px", position: "relative" };
         },
-        /* ...recycler */
+        /* ...virtual scroller */
         darkUi () {
             return this.$store.state.darkUi
         },

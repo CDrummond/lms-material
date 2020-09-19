@@ -1,0 +1,4 @@
+Vuetify 1.5.24 built to stripout unused modules. index.ts is taken from
+vuetify-1.5.24/packages/vuetify/src/components/index.ts and unused modules
+have been commented out. Vuetify is then built. To trim even more from its
+CSS file, trim.py is used to remove extra colours, etc.

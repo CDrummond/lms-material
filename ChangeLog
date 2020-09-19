@@ -1,6 +1,7 @@
 DEV
 -----
 1. Replace vue-virtual-scroll library with custom implementation.
+2. Use custom vuetify build to trim out unused components.
 
 1.9.0
 -----

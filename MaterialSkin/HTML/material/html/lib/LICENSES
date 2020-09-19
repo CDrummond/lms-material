@@ -42,9 +42,11 @@ vue-touch-events:
     Notes: Set disableClick:true
 
 vuetify
-    Version: 1.5.23
+    Version: 1.5.24trim
     URL: https://github.com/vuetifyjs/vuetify
     License: MIT
+    NOTES: Custom build with unused components removed. See tools/vuetify for
+           details.
 
 vuex    
     Version: 3.3.0

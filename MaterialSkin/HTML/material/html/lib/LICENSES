@@ -15,11 +15,6 @@ idb-keyval:
     URL: https://github.com/jakearchibald/idb-keyval
     License: Apache License Version 2.0
 
-intersection-observer
-    Version: 0.5.0
-    URL: https://github.com/w3c/IntersectionObserver
-    License: W3C Software and Document License.
-
 moustrap:
     Version: a4098
     URL: https://craig.is/killing/mice
@@ -45,11 +40,6 @@ vue-touch-events:
     URL: https://github.com/jerrybendy/vue-touch-events
     License: MIT
     Notes: Set disableClick:true
-
-vue-virtual-scroller:
-    Version: 1.0.4
-    URL: https://github.com/Akryum/vue-virtual-scroller
-    License: MIT
 
 vuetify
     Version: 1.5.23

@@ -677,7 +677,7 @@ Vue.component('lms-manage-players', {
                 this.scrollElement = document.getElementById("player-manager-list");
             }
             var pos = this.scrollElement.scrollTop + step;
-            setScrollTop(this.scrollElement, pos);
+            setScrollTop(this, pos);
             if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
                 this.stopScrolling = true;
             }

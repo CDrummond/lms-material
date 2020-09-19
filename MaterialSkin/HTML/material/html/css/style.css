@@ -266,6 +266,10 @@ div.v-subheader {
  height:calc(var(--list-elem-3line-height) - 1px) !important;
 }
 
+.lms-list-item {
+ border-bottom: 1px solid var(--list-item-border-color);
+}
+
 /* Make action buttons in lists closer together */
 .list__tile__action {
  min-width:48px !important;
@@ -295,14 +299,6 @@ div.v-subheader {
 
 .lms-image-grid table {
  border-spacing:0px !important;
-}
-
-.lms-image-grid .vue-recycle-scroller__item-view {
- border-bottom: 0px;
-}
-
-.vue-recycle-scroller__item-view, .lms-list-item {
- border-bottom: 1px solid var(--list-item-border-color);
 }
 
 .image-grid-item-img {
@@ -625,7 +621,7 @@ div.v-subheader {
  }
 }
 
-.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .vue-recycle-scroller, .lms-list, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
+.v-list, .v-list>div, .v-list__tile, .v-list__tile__title, .v-list__tile__sub-title, .lms-list, .v-card, .v-progress-linear__bar, .v-progress-linear__bar__determinate, .v-progress-linear__background, .v-btn__content {
  transition:none !important;
 }
 

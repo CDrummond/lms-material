@@ -188,6 +188,8 @@ var app = new Vue({
             document.attachEvent('onclick', this.clickListener);
         }
 
+        document.onreadystatechange = () => { if (document.readyState == 'complete') bus.$emit('fullyLoaded'); };
+
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {
             if (!modifier && 'backspace'==key) {

@@ -27,6 +27,19 @@ const RATINGS=["",         // 0
                "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
                "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
 
+const PASSIVE_SUPPORTED = browserSupportsPassiveScroll();
+function browserSupportsPassiveScroll() {
+  let passiveSupported = false;
+  try {
+    const options = { get passive() { passiveSupported = true; return false;} };
+    window.addEventListener("test", null, options);
+    window.removeEventListener("test", null, options);
+  } catch (err) {
+    passiveSupported = false;
+  }
+  return passiveSupported;
+}
+
 var bus = new Vue();
 var queryParams = parseQueryParams();
 var canUseCache = true;
@@ -383,14 +396,17 @@ function homeScreenSort(a, b) {
     return at<bt ? -1 : 1;
 }
 
-function setScrollTop(el, val) {
+function setScrollTop(view, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.
     window.requestAnimationFrame(function () {
         // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
-        el.style['-webkit-overflow-scrolling'] = 'auto';
-        el.scrollTop=val;
-        el.style['-webkit-overflow-scrolling'] = 'touch';
+        view.scrollElement.style['-webkit-overflow-scrolling'] = 'auto';
+        view.scrollElement.scrollTop=val;
+        view.scrollElement.style['-webkit-overflow-scrolling'] = 'touch';
+        if (undefined!=view.lr) {
+            view.lr.scrollTop = val;
+        }
     });
 }
 

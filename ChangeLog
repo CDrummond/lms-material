@@ -1,3 +1,7 @@
+1.9.1
+-----
+1. Re-add 'Go home' button.
+
 1.9.0
 -----
  1. Allow specifying theme, and colour, via URL query. e.g.

@@ -32,11 +32,12 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
-   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon @click="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field @results="handleListResponse"></lms-search-field>
   </v-layout>
   <v-layout v-else-if="headerTitle">
-   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-if="history.length>0" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
+   <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && libraryName && showLibraryName">{{SEPARATOR+libraryName}}</small></v-flex>
@@ -314,7 +315,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             fetchingItems: false,
             hoverBtns: false,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
-                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goBack:undefined,
+                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, sources: undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
@@ -597,7 +598,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goBack:i18n("Go back"), sources:i18n("Music sources") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -1756,6 +1757,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
             });
         },
+        homeBtnPressed() {
+            if (this.$store.state.visibleMenus.size<1) {
+                this.goHome();
+            }
+        },
         goHome() {
             this.searchActive = false;
             if (this.history.length==0) {
@@ -1807,13 +1813,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        backBtnPressed(longPress) {
+        backBtnPressed() {
             if (this.$store.state.visibleMenus.size<1) {
-                if (longPress) {
-                    this.goHome();
-                } else {
-                    this.goBack();
-                }
+                this.goBack();
             }
         },
         goBack(refresh) {

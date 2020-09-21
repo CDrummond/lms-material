@@ -33,7 +33,7 @@
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- padding:2px 4px 0px 10px;
+ padding:2px 4px 0px 12px;
  z-index:1;
  float:left;
 }
@@ -254,10 +254,6 @@
  /* Adjust dialog toolbar, so that menu icon aligns with main menu icon */
  .dialog-toolbar > .v-toolbar__content {
   margin-right: -12px !important;
- }
-
- .subtoolbar {
-  padding:2px 0px 0px 6px;
  }
 
  .maintoolbar-player-icon {

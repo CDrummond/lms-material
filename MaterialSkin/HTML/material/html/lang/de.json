@@ -468,8 +468,10 @@
 "Plugins":"",
 "Radio":"",
 "Server":"",
+"Show home button":"",
 "Start":"",
 "URL":"",
 "Version":"",
+"When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.":"",
 "⌘+%1":""
 }

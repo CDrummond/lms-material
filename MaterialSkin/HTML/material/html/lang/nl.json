@@ -471,5 +471,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"NOTE: Folders are always sorted, this setting only affects non-folder items.":""
+"NOTE: Folders are always sorted, this setting only affects non-folder items.":"",
+"Show home button":"",
+"When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.":""
 }

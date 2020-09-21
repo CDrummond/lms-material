@@ -131,6 +131,15 @@ Vue.component('lms-ui-settings', {
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
     <v-list-tile>
+     <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
+      <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="homeButton"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
       <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-sub-title>
@@ -404,7 +413,8 @@ Vue.component('lms-ui-settings', {
             showScale: !queryParams.hide.has('scale'),
             serverName: "",
             showRating: true,
-            queueShowRating: true
+            queueShowRating: true,
+            homeButton: false
         }
     },
     computed: {
@@ -548,6 +558,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowRating = this.$store.state.queueShowRating;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
+            this.homeButton = this.$store.state.homeButton;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
@@ -609,6 +620,7 @@ Vue.component('lms-ui-settings', {
                                                   skipSeconds:this.skipSeconds,
                                                   disabledBrowseModes:this.disabledBrowseModes(),
                                                   screensaver:this.screensaver,
+                                                  homeButton:this.homeButton,
                                                   showRating:this.showRating,
                                                   queueShowRating:this.queueShowRating
                                                 } );
@@ -655,6 +667,7 @@ Vue.component('lms-ui-settings', {
                                      skipSeconds:this.skipSeconds,
                                      disabledBrowseModes:Array.from(this.disabledBrowseModes()),
                                      screensaver:this.screensaver,
+                                     homeButton:this.homeButton,
                                      showRating:this.showRating,
                                      queueShowRating:this.queueShowRating
                                    };

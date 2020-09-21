@@ -36,8 +36,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <lms-search-field @results="handleListResponse"></lms-search-field>
   </v-layout>
   <v-layout v-else-if="headerTitle">
-   <v-btn v-if="history.length>0" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
-   <v-btn flat icon @click="backBtnPressed()" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-if="history.length>0 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
+   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && libraryName && showLibraryName">{{SEPARATOR+libraryName}}</small></v-flex>
@@ -364,6 +364,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         ratingsSupport() {
             return this.$store.state.ratingsSupport
+        },
+        homeButton() {
+            return this.$store.state.homeButton
         }
     },
     created() {
@@ -1813,9 +1816,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goBack();
             }
         },
-        backBtnPressed() {
+        backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
-                this.goBack();
+                if (longPress && !this.$store.state.homeButton) {
+                    this.goHome();
+                } else {
+                    this.goBack();
+                }
             }
         },
         goBack(refresh) {

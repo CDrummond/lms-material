@@ -1,6 +1,6 @@
 1.9.1
 -----
-1. Re-add 'Go home' button.
+1. Add option to show 'Go home' button.
 2. No need to scroll search field into view if its in subtoolbar.
 3. Fix rating HTML being displayed when a queue item's rating is updated and
    'More' selected.

@@ -145,6 +145,10 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('screensaver', state.screensaver);
         bus.$emit('screensaverDisplayChanged');
     }
+    if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
+        state.homeButton = val.homeButton;
+        setLocalStorageVal('homeButton', state.homeButton);
+    }
     if (undefined!=val.showRating && state.showRating!=val.showRating) {
         state.showRating = val.showRating;
         setLocalStorageVal('showRating', state.showRating);
@@ -246,7 +250,8 @@ const store = new Vuex.Store({
         activeDialog: undefined,
         unlockAll: false,
         skipSeconds: 30,
-        screensaver: false
+        screensaver: false,
+        homeButton: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -423,6 +428,7 @@ const store = new Vuex.Store({
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
+            state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             // NOTE: volumeStep is defined in utils.js
             volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
@@ -536,6 +542,7 @@ const store = new Vuex.Store({
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
+                                     homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
                                      showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      queueShowRating: getLocalStorageBool('queueShowRating', undefined==prefs.queueShowRating ? state.queueShowRating : prefs.queueShowRating) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {

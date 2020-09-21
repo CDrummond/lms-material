@@ -466,10 +466,12 @@
 "Remove duplicate tracks?":"",
 "Remove duplicates":"",
 "Search on...":"",
+"Show home button":"",
 "Show rating":"",
 "Smart crossfade":"",
 "This will remove tracks with the same artist and title.":"",
 "Transfer queue to another player":"",
+"When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.":"",
 "Zap":"",
 "Zapped '%1'":""
 }

@@ -471,7 +471,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"NOTE: Folders are always sorted, this setting only affects non-folder items.":"",
+"NOTE: Folders are always sorted, this setting only affects playable items.":"",
 "Show home button":"",
-"When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.":""
+"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigatting home can be achieved via a long-press on the back button.":""
 }

@@ -461,7 +461,7 @@
 "IP: %1":"",
 "Information":"",
 "Mon":"",
-"NOTE: Folders are always sorted, this setting only affects non-folder items.":"",
+"NOTE: Folders are always sorted, this setting only affects playable items.":"",
 "Name":"",
 "OK":"",
 "Pause":"",
@@ -472,6 +472,6 @@
 "Start":"",
 "URL":"",
 "Version":"",
-"When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.":"",
+"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigatting home can be achieved via a long-press on the back button.":"",
 "⌘+%1":""
 }

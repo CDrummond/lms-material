@@ -456,7 +456,7 @@
 "Follow link":"",
 "Move the queue to:":"",
 "Music sources":"",
-"NOTE: Folders are always sorted, this setting only affects non-folder items.":"",
+"NOTE: Folders are always sorted, this setting only affects playable items.":"",
 "No results found":"",
 "Playing %1":"",
 "Playing %1 by %2":"",
@@ -471,7 +471,7 @@
 "Smart crossfade":"",
 "This will remove tracks with the same artist and title.":"",
 "Transfer queue to another player":"",
-"When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.":"",
+"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigatting home can be achieved via a long-press on the back button.":"",
 "Zap":"",
 "Zapped '%1'":""
 }

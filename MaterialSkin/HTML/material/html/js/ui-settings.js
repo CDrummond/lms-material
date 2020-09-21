@@ -133,7 +133,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
       <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When navigating into lists, show a hoem button to quickly navigate home. Otherwise long-press on back button will go home.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigatting home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="homeButton"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -160,7 +160,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects non-folder items.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
     </v-list-tile>

@@ -4,6 +4,8 @@
 2. No need to scroll search field into view if its in subtoolbar.
 3. Fix rating HTML being displayed when a queue item's rating is updated and
    'More' selected.
+4. Add note to sort-favourites config item stating that folders are always
+   sorted.
 
 1.9.0
 -----

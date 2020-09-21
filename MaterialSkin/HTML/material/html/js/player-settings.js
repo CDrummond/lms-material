@@ -55,7 +55,7 @@ Vue.component('lms-player-settings', {
     <v-list-tile :disabled="0==crossfade" v-bind:class="{'disabled':0==crossfade}">
      <v-list-tile-content @click="smartCrossfade = !smartCrossfade" class="switch-label">
       <v-list-tile-title>{{i18n('Smart crossfade')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Do not crossfade successive tracks from the same album.")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Do not crossfade successive tracks from the same album.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="smartCrossfade"></v-switch></v-list-tile-action>
     </v-list-tile>

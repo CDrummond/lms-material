@@ -6,6 +6,8 @@
    'More' selected.
 4. Add note to sort-favourites config item stating that folders are always
    sorted.
+5. Move ratings in portrait now-playing to bottom of cover.
+6. Fix position of ratings in landscape now-playing.
 
 1.9.0
 -----

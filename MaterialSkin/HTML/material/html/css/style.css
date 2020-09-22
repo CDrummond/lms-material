@@ -861,7 +861,7 @@ div.v-subheader {
  position:fixed;
  width:100vw;
  left:0px;
- top:var(--main-toolbar-height);
+ top:var(--np-portrait-image-size);
  text-shadow: 2px 2px 5px var(--text-shadow-color);
 }
 
@@ -1023,6 +1023,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .np-controls-wide {
  font-weight:var(--std-weight);
  padding:8px;
+ margin-left:8px;
+ margin-right:8px;
  width:calc(50vw - 16px);
  position:absolute;
  bottom:0px;

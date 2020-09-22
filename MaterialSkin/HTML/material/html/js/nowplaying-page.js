@@ -160,10 +160,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       </div>
      </div>
 
-     <div v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value" class="np-text-landscape">
+     <v-layout text-xs-center v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value">
+      <v-flex xs12>
       <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
       <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
-     </div>
+      </v-flex>
+     </v-layout>
      <div v-if="wide>1">
 
       <v-layout text-xs-center row wrap class="np-controls-wide">

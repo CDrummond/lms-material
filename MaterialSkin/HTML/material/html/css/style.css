@@ -126,6 +126,11 @@ html, .mini-player {
  background-color:transparent!important;
 }
 
+.lms-toolbar .v-toolbar__title i.amber {
+ color:#ffc107 !important;
+ background-color:transparent!important;
+}
+
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
  margin-left:-10px !important;

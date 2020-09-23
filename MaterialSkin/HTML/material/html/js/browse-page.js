@@ -1925,15 +1925,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     cmd.params = [];
                     var addedParams = new Set();
-                    if (command.params) {
-                        for (var key in command.params) {
-                            if (command.params[key]!=undefined && command.params[key]!=null && (""+command.params[key]).length>0) {
-                                var param = key+":"+command.params[key];
-                                cmd.params.push(param);
-                                addedParams.add(param);
-                             }
+                    [command.params, item.commonParams].forEach(p => {
+                        if (p) {
+                            for (var key in p) {
+                                if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0) {
+                                    var param = key+":"+p[key];
+                                    cmd.params.push(param);
+                                    addedParams.add(param);
+                                 }
+                            }
                         }
-                    }
+                    });
                     if (command.itemsParams && item[command.itemsParams]) {
                         /*var isMore = "more" == commandName;*/
                         for(var key in item[command.itemsParams]) {

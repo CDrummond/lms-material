@@ -9,6 +9,8 @@
 5. Move ratings in portrait now-playing to bottom of cover.
 6. Fix position of ratings in landscape now-playing.
 7. Fix track title mangling when adding single tracks to the queue.
+8. When building command use 'commonParams' from item if it exists - fixes
+   playing tracks from top/flop tracks.
 
 1.9.0
 -----

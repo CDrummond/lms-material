@@ -8,6 +8,7 @@
    sorted.
 5. Move ratings in portrait now-playing to bottom of cover.
 6. Fix position of ratings in landscape now-playing.
+7. Fix track title mangling when adding single tracks to the queue.
 
 1.9.0
 -----

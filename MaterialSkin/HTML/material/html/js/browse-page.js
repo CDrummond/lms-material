@@ -2063,7 +2063,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         buildFullCommand(item, act) {
             var command = this.buildCommand(item, ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
-                if (item.url && (!item.id || !item.id.startsWith("playlist_id:"))) {
+                if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];

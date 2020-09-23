@@ -2236,8 +2236,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.icon = undefined;
                             } else if (c.id.startsWith("myMusicTopTracks")) {
                                 item.icon = "arrow_upward";
+                                item.limit = 200;
                             } else if (c.id.startsWith("myMusicFlopTracks")) {
                                 item.icon = "arrow_downward";
+                                item.limit = 200;
                             } else if (c.icon) {
                                 if (c.icon.endsWith("/albums.png")) {
                                     item.icon = "album";

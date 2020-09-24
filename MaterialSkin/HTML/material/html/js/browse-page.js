@@ -2370,6 +2370,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         updateTopList(items) {
+            let extras = undefined;
+            for (let i=0; len=this.top.length && undefined==extras; ++i) {
+                if (this.top[i].id==TOP_EXTRAS_ID) {
+                    extras = this.top[i];
+                }
+            }
             this.top=items;
             this.initItems();
             let hasExtras = false;
@@ -2386,6 +2392,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     hasExtras = true;
                 }
             }
+            if (!hasExtras && undefined!=extras) {
+                this.top.push(extras);
+            }
             for (var i=0, len=this.top.length; i<len; ++i) {
                 if (this.top[i].id==TOP_ID_PREFIX+"ps") {
                     this.top.splice(i, 1);
@@ -2394,11 +2403,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.$store.state.sortHome) {
                 this.top.sort(homeScreenSort);
-            }
-            if (hasExtras) {
-                this.disabled.delete(TOP_EXTRAS_ID);
-            } else {
-                this.disabled.add(TOP_EXTRAS_ID);
             }
         },
         saveTopList() {

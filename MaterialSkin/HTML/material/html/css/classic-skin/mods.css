@@ -31,14 +31,18 @@ div#browsedbList {
 
 /* hide add/play/fav and next-page images */
 .browsedbLeftControls > a > img,
-.browsedbControls > a > img  {
+.browsedbRightControls > a > img,
+.browsedbControls > a > img {
  display:none;
 }
 .browsedbLeftControls > a.loadtracks:before,
 .browsedbControls > a.loadtracks:before,
 .browsedbLeftControls > a.addtracks:before,
 .browsedbControls > a.addtracks:before,
-.browsedbControls > a.edititem:before {
+.browsedbControls > a.edititem:before,
+.browsedbRightControls > a.edititem:before,
+.browsedbRightControls > a.heartitem:before,
+.browsedbRightControls > a.removeitem:before, {
  font-family: "Material Icons";
  font-size:24px;
  margin-right:4px;
@@ -57,8 +61,15 @@ div#browsedbList {
  content:"\e148";
 }
 /* Set edit icon */
-.browsedbControls > a.edititem:before {
+.browsedbControls > a.edititem:before,
+.browsedbRightControls > a.edititem:before {
  content:"edit";
+}
+.browsedbRightControls > a.heartitem:before {
+ content:"favorite";
+}
+.browsedbRightControls > a.removeitem:before {
+ content:"close";
 }
 @media (hover: none) and (pointer: coarse) { /* Touch devices */
  .browsedbLeftControls > a.loadtracks:before {

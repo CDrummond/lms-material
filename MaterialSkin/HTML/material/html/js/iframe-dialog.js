@@ -85,8 +85,7 @@ function fixSearchControls(elem) {
     }
 }
 
-function fixOtherIcons(elem) {
-    var elems = elem.querySelectorAll('.browsedbControls a');
+function fixControlsIcons(elems) {
     if (undefined!=elems) {
         for (var i=0, len=elems.length; i<len; ++i) {
             var img = elems[i].querySelectorAll('img');
@@ -97,10 +96,20 @@ function fixOtherIcons(elem) {
                     elems[i].classList.add("addtracks");
                 } else if (img[0].src.indexOf("b_edit.gif")>0) {
                     elems[i].classList.add("edititem");
+                } else if (img[0].src.indexOf("b_favorite.gif")>0) {
+                    elems[i].classList.add("heartitem");
+                } else if (img[0].src.indexOf("b_delete.gif")>0) {
+                    elems[i].classList.add("removeitem");
                 }
             }
         }
     }
+}
+
+function fixOtherIcons(elem) {
+    fixControlsIcons(elem.querySelectorAll('.browsedbControls a'));
+    fixControlsIcons(elem.querySelectorAll('.browsedbLeftControls a'));
+    fixControlsIcons(elem.querySelectorAll('.browsedbRightControls a'));  
 }
 
 function otherClickHandler(e) {

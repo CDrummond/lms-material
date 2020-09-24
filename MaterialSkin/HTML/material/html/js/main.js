@@ -219,6 +219,12 @@ var app = new Vue({
         bus.$on('changeLayout', function(layout) {
             this.setLayout(layout);
         }.bind(this));
+
+        bus.$on('setSplitter', function(pc) {
+            this.splitterPercent = pc;
+            this.splitter = this.splitterPercent;
+            document.documentElement.style.setProperty('--splitter-pc', this.splitter);
+        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -232,6 +238,9 @@ var app = new Vue({
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        showQueue() {
+            return this.$store.state.showQueue
         }
     },
     methods: {
@@ -296,7 +305,7 @@ var app = new Vue({
             }
         },
         splitterResized(val) {
-            if (!this.$store.state.desktopLayout) {
+            if (!this.$store.state.desktopLayout || !this.$store.state.showQueue) {
                 return;
             }
             var f = Math.floor(val/2)*2;

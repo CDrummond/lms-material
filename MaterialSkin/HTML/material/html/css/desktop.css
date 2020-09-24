@@ -32,19 +32,18 @@
  margin-left:-4px !important;
 }
 
-.subtoolbar {
- height:var(--sub-toolbar-height) !important;
- white-space:nowrap;
- overflow-x:hidden;
- overflow-y:hidden;
- padding:2px 4px 0px 12px;
+#browse-view .subtoolbar {
+ padding:2px 1px 0px 12px;
 }
 
 .lms-list {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  overflow:auto;
  backface-visibility:hidden;
- margin:0px;
+}
+
+#browse-view .lms-list {
+ margin-right:-3px!important;
 }
 
 .lms-jumplist {
@@ -264,13 +263,7 @@
 }
 
 #letterOverlay {
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
- width:calc(1vw * var(--splitter-pc));
-}
-
-#volumeOverlay, #keyboardVolumeOverlay  {
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
- width:100%;
+ width:calc(1vw * var(--splitter-pc)) !important;
 }
 
 .ios-vcard-text-workaround {
@@ -294,9 +287,6 @@
  .v-dialog__content .v-dialog .screensaver-bgnd {
   display:none;
  }
- .vol-fixed-label {
-  right:96px;
- }
  .vol-sheet {
   top:0px;
  }
@@ -316,8 +306,8 @@
  min-width:80px!important;
 }
 
-.right-pane, .left-pane {
- min-width:370px!important;
+.right-pane {
+ min-width:0px!important;
 }
 
 .left-pane {

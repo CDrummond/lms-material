@@ -201,6 +201,7 @@ function storeCurrentPlayer(player) {
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
+        showQueue: getLocalStorageBool('showQueue', true),
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
@@ -659,6 +660,19 @@ const store = new Vuex.Store({
                 if (playerIcon.id==state.players[i].id) {
                     state.players[i].icon=playerIcon.icon;
                 }
+            }
+        },
+        setShowQueue(state, val) {
+            if (val!=state.showQueue) {
+                let pc = getLocalStorageVal("splitter", undefined);
+                state.showQueue = val;
+                setLocalStorageVal('showQueue', state.showQueue);
+                if (val && undefined!=pc) {
+                    bus.$emit('setSplitter', pc);
+                } else if (!val) {
+                    document.documentElement.style.setProperty('--splitter-pc', 100);
+                }
+                bus.$emit('showQueue', val);
             }
         }
     }

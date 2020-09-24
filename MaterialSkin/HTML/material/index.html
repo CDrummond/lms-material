@@ -57,9 +57,9 @@
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
-    <vue-splitter :margin="desktopLayout ? 20 : 0" :percent="desktopLayout ? splitterPercent : 0" @resize="splitterResized" class="hide-for-mini">
+    <vue-splitter :margin="(desktopLayout && showQueue) ? 20 : 0" :percent="desktopLayout ? showQueue ? splitterPercent : 100 : 0" @resize="splitterResized" class="hide-for-mini">
      <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
-     <div slot="right-pane"><lms-queue v-show="desktopLayout || page=='queue'"></lms-queue></div>
+     <div slot="right-pane"><lms-queue v-show="(desktopLayout && showQueue) || page=='queue'"></lms-queue></div>
     </vue-splitter>
     <lms-now-playing v-show="desktopLayout || page=='now-playing'"></lms-now-playing>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>

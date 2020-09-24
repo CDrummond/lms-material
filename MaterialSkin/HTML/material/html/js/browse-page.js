@@ -523,6 +523,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('windowHeightChanged', function() {
             this.filterJumplist();
         }.bind(this));
+        bus.$on('showQueue', function(val) {
+            this.$nextTick(function () {this.layoutGrid(); });
+        }.bind(this));
 
         if (!IS_MOBILE) {
             bindKey('home');

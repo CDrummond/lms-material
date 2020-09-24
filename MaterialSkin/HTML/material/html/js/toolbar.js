@@ -77,8 +77,10 @@ Vue.component('lms-toolbar', {
  <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="showVolumeSlider" :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (showVolumeSlider)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
+ <div v-show="showVolumeSlider">
+  <v-slider :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+  <div v-show="!playerDvc" class="vol-fixed-label">{{trans.fixedVol}}</div>
+ </div>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="showVolumeSlider" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
  <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
@@ -102,6 +104,7 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
+ <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini"><v-icon v-bind:class="{'active-btn':showQueue}">queue_music</v-icon></v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
@@ -188,7 +191,8 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, fixedVol:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined},
+                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined, toggleQueue:undefined,
+                        toggleQueueShortcut:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -378,6 +382,7 @@ Vue.component('lms-toolbar', {
             bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
             bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
+            bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
             bindKey('1', 'alt');
             bindKey('2', 'alt');
             bindKey('3', 'alt');
@@ -424,6 +429,8 @@ Vue.component('lms-toolbar', {
                             this.setPlayer(id);
                         }
                     }
+                } else if ('mod+shift'==modifier && LMS_TOGGLE_QUEUE_KEYBOARD==key && this.$store.state.desktopLayout) {
+                    this.toggleQueue();
                 }
             }.bind(this));
         }
@@ -448,7 +455,7 @@ Vue.component('lms-toolbar', {
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
-                          appSettings:i18n('Application settings'), appQuit:i18n('Quit')};
+                          appSettings:i18n('Application settings'), appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -655,6 +662,9 @@ Vue.component('lms-toolbar', {
         },
         doCustomAction(action) {
             performCustomAction(this, action, this.$store.state.player);
+        },
+        toggleQueue() {
+            this.$store.commit('setShowQueue', !this.$store.state.showQueue);
         }
     },
     computed: {
@@ -705,6 +715,9 @@ Vue.component('lms-toolbar', {
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        showQueue() {
+            return this.$store.state.showQueue
         },
         showVolumeSlider() {
             return this.width>=(this.$store.state.desktopLayout ? 600 : (this.$store.state.nowPlayingClock ? 1300 : 850))

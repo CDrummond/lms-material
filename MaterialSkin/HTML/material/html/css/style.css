@@ -220,7 +220,7 @@ div.v-subheader {
 }
 
 .v-divider--vertical {
- margin:8px 0px 8px 0px !important;
+ margin:8px -1px 8px -1px !important;
 }
 
 .v-divider, .pmgr-divider {
@@ -471,6 +471,11 @@ div.v-subheader {
  background-color:var(--sub-toolbar-color) !important;
  border-bottom:1px solid var(--sub-toolbar-border-color);
  box-shadow:none!important;
+ height:var(--sub-toolbar-height) !important;
+ white-space:nowrap;
+ overflow-x:hidden;
+ overflow-y:hidden;
+ padding:2px 4px 0px 12px;
 }
 
 .subtoolbar-title {
@@ -550,28 +555,21 @@ div.v-subheader {
 }
 
 .vol-fixed-label {
- margin:-8px 0px 0px 0px;
- padding:0px;
+ margin:-16px 0px 0px 0px;
+ padding-top:4px;
  font-size:var(--small-font-size);
  text-align:center;
  text-overflow:ellipsis;
  vertical-align:bottom;
- position:fixed;
+ position:relative;
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
  height:calc(var(--small-font-size) + 4px) !important;
+ width:100%;
  line-height:calc(var(--small-font-size) + 4px) !important;
- top:36px;
- right:calc(243px + ((var(--icon-size) - 24px)*5));
- width:200px;
- z-index:-1;
  opacity:var(--sub-opacity);
  color:var(--top-toolbar-text-color);
-}
-
-.vol-fixed-label-noinf {
- right:calc(198px + ((var(--icon-size) - 24px)*5));
 }
 
 .vol-sheet .vol-btn div i {
@@ -1601,6 +1599,8 @@ div.v-subheader {
  pointer-events:none;
  opacity:0.5;
  text-shadow: 0px 0px 8px var(--text-shadow-color);
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
+ width:100%;
 }
 
 #volumeOverlay, #keyboardVolumeOverlay {

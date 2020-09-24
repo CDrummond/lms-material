@@ -9,8 +9,8 @@
  --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
  --bottom-nav-pad:0px;
- --bottom-nav-height:calc(var(--bottom-nav-pad) + 52px);
- --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 210px)), 100vw);
+ --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
+ --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px)), 100vw);
 }
 
 /* For old browser's that dont support min() */
@@ -20,7 +20,7 @@
  }
  @media (min-aspect-ratio: 68/100) {
   :root {
-   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 210px));
+   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px));
   }
  }
 }
@@ -29,11 +29,6 @@
  position:fixed;
  top:var(--main-toolbar-height);
  width:100vw;
- height:var(--sub-toolbar-height) !important;
- white-space:nowrap;
- overflow-x:hidden;
- overflow-y:hidden;
- padding:2px 4px 0px 10px;
  z-index:1;
  float:left;
 }
@@ -44,14 +39,14 @@
  width:100%;
  padding:0px !important;
  margin:0px !important;
- height:var(--bottom-nav-height) !important;
+ height:var(--bottom-toolbar-height) !important;
  box-shadow:none;
 }
 
 .lms-footer .lms-bottom-nav {
  position:fixed;
- bottom:calc(var(--bottom-nav-height) + 8px - var(--bottom-nav-pad)) !important;
- height:var(--bottom-nav-height) !important;
+ bottom:calc(var(--bottom-toolbar-height) + 8px - var(--bottom-nav-pad)) !important;
+ height:var(--bottom-toolbar-height) !important;
  box-shadow:none;
 }
 
@@ -63,7 +58,7 @@
 
 .lms-bottom-nav-button {
  width:33.3333% !important;
- height:var(--bottom-nav-height) !important;
+ height:var(--bottom-toolbar-height) !important;
  max-width:250px !important;
  transition:none !important;
  padding:0px 0px var(--bottom-nav-pad) 0px !important;
@@ -81,7 +76,7 @@
 }
 
 .lms-bottom-nav-button .v-btn__content {
- height:calc(var(--bottom-nav-height) - 2px)
+ height:calc(var(--bottom-toolbar-height) - 2px)
  margin:0px;
  padding:0px;
 }
@@ -101,7 +96,7 @@
 .lms-list {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -120,14 +115,14 @@
 .lms-jumplist {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  left:0px;
 }
 
 .lms-image-grid {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -151,14 +146,14 @@
 .np-page {
  position:fixed;
  top:var(--main-toolbar-height);
- bottom:var(--bottom-nav-height);
+ bottom:var(--bottom-toolbar-height);
  width:100%;
 }
 
 .np-image-landscape {
  padding:16px 16px 0px 16px;
  object-fit:contain;
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 118px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 118px));
  width:50vw;
  margin-left:auto;
  margin-right:auto;
@@ -166,11 +161,11 @@
 }
 
 .np-image-landscape-wide {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 16px)) !important;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 16px)) !important;
 }
 
 .np-details-landscape {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-height) + 118px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 118px));
  width:50vw;
  display:flex;
  justify-content:center;
@@ -213,11 +208,6 @@
 
 .vol-btn {
  margin-top:-8px;
-}
-
-#letterOverlay, #volumeOverlay, #keyboardVolumeOverlay {
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height)))/2) - 60px));
- width:100%;
 }
 
 .ios-vcard-text-workaround {

@@ -419,7 +419,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.initItems();
 
-        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_EXTRAS_ID, TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
+        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
@@ -2404,6 +2404,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.$store.state.sortHome) {
                 this.top.sort(homeScreenSort);
             }
+            console.log("X", JSON.stringify(this.top));
         },
         saveTopList() {
             if (this.$store.state.sortHome) {

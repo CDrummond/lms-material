@@ -53,7 +53,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="colorToolbars = !colorToolbars" class="switch-label">
       <v-list-tile-title>{{i18n('Color toolbars')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="colorToolbars"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -67,7 +67,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="showScale">
      <v-list-tile-content @click="largerElements = !largerElements" class="switch-label">
       <v-list-tile-title>{{i18n('Larger fonts and icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="largerElements"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -76,7 +76,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
       <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -90,7 +90,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="!IS_MOBILE">
      <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
       <v-list-tile-title>{{i18n('Keyboard shortcuts')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="keyboardControl"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -99,7 +99,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="menuIcons = !menuIcons" class="switch-label">
       <v-list-tile-title>{{i18n('Menu icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show icons next to popup menu entries.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show icons next to popup menu entries.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="menuIcons"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -108,7 +108,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
       <v-list-tile-title>{{i18n('Screensaver')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="screensaver"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -117,7 +117,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="showLaunchPlayer">
      <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
       <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -131,9 +131,18 @@ Vue.component('lms-ui-settings', {
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
     <v-list-tile>
+     <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
+      <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="homeButton"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
       <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="letterOverlay"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -142,7 +151,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
       <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -151,7 +160,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -169,7 +178,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="browseBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -178,7 +187,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
       <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="sortHome"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -187,7 +196,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-sub-title>
      <v-list-tile-content/>
     </v-list-tile>
    
@@ -205,7 +214,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
       <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="techInfo"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -214,7 +223,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="ratingsSupport">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -223,7 +232,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
       <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -232,7 +241,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="swipeVolume = !swipeVolume" class="switch-label">
       <v-list-tile-title>{{i18n('Swipe to change volume')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="swipeVolume"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -245,7 +254,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
       <v-list-tile-title>{{i18n('Show current date and time')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingClock"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -254,7 +263,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="nowPlayingBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -265,7 +274,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="autoScrollQueue = !autoScrollQueue" class="switch-label">
       <v-list-tile-title>{{i18n('Auto-scroll to current track')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Scroll play queue when current track changes.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="autoScrollQueue"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -274,7 +283,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="showMenuAudioQueue = !showMenuAudioQueue" class="switch-label">
       <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showMenuAudioQueue"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -283,7 +292,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="ratingsSupport">
      <v-list-tile-content @click="queueShowRating = !queueShowRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueShowRating"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -292,7 +301,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
       <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueShowTrackNum"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -301,7 +310,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
       <v-list-tile-title>{{i18n('Three lines')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -319,7 +328,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -330,7 +339,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="infoPlugin">
      <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -424,7 +433,8 @@ Vue.component('lms-ui-settings', {
             showScale: !queryParams.hide.has('scale'),
             serverName: "",
             showRating: true,
-            queueShowRating: true
+            queueShowRating: true,
+            homeButton: false
         }
     },
     computed: {
@@ -570,6 +580,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowRating = this.$store.state.queueShowRating;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
+            this.homeButton = this.$store.state.homeButton;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
@@ -634,6 +645,7 @@ Vue.component('lms-ui-settings', {
                                                   skipSeconds:this.skipSeconds,
                                                   disabledBrowseModes:this.disabledBrowseModes(),
                                                   screensaver:this.screensaver,
+                                                  homeButton:this.homeButton,
                                                   showRating:this.showRating,
                                                   queueShowRating:this.queueShowRating
                                                 } );
@@ -682,6 +694,7 @@ Vue.component('lms-ui-settings', {
                                      skipSeconds:this.skipSeconds,
                                      disabledBrowseModes:Array.from(this.disabledBrowseModes()),
                                      screensaver:this.screensaver,
+                                     homeButton:this.homeButton,
                                      showRating:this.showRating,
                                      queueShowRating:this.queueShowRating
                                    };

@@ -6,6 +6,22 @@ DEV
 4. Make cover-art in browse and queue views optional.
 5. Support 'Extras' section by using iframe.
 
+1.9.1
+-----
+1. Add option to show 'Go home' button.
+2. No need to scroll search field into view if its in subtoolbar.
+3. Fix rating HTML being displayed when a queue item's rating is updated and
+   'More' selected.
+4. Add note to sort-favourites config item stating that folders are always
+   sorted.
+5. Move ratings in portrait now-playing to bottom of cover.
+6. Fix position of ratings in landscape now-playing.
+7. Fix track title mangling when adding single tracks to the queue.
+8. When building command use 'commonParams' from item if it exists - fixes
+   playing tracks from top/flop tracks.
+9. Restrict top/flop tracks to 200 items.
+>>>>>>> master
+
 1.9.0
 -----
  1. Allow specifying theme, and colour, via URL query. e.g.

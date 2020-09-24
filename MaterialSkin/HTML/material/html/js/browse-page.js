@@ -32,10 +32,11 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
-   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon @click="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field @results="handleListResponse"></lms-search-field>
   </v-layout>
   <v-layout v-else-if="headerTitle">
+   <v-btn v-if="history.length>0 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
@@ -275,7 +276,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             fetchingItems: false,
             hoverBtns: false,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
-                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goBack:undefined,
+                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, sources: undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
@@ -359,6 +360,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         ratingsSupport() {
             return this.$store.state.ratingsSupport
+        },
+        homeButton() {
+            return this.$store.state.homeButton
         }
     },
     created() {
@@ -596,7 +600,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), albumRating:i18n("Set rating for all tracks"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goBack:i18n("Go back"), sources:i18n("Music sources") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -1767,6 +1771,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItems = false;
             });
         },
+        homeBtnPressed() {
+            if (this.$store.state.visibleMenus.size<1) {
+                this.goHome();
+            }
+        },
         goHome() {
             this.searchActive = false;
             if (this.history.length==0) {
@@ -1819,7 +1828,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
-                if (longPress) {
+                if (longPress && !this.$store.state.homeButton) {
                     this.goHome();
                 } else {
                     this.goBack();
@@ -1922,15 +1931,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     cmd.params = [];
                     var addedParams = new Set();
-                    if (command.params) {
-                        for (var key in command.params) {
-                            if (command.params[key]!=undefined && command.params[key]!=null && (""+command.params[key]).length>0) {
-                                var param = key+":"+command.params[key];
-                                cmd.params.push(param);
-                                addedParams.add(param);
-                             }
+                    [command.params, item.commonParams].forEach(p => {
+                        if (p) {
+                            for (var key in p) {
+                                if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0) {
+                                    var param = key+":"+p[key];
+                                    cmd.params.push(param);
+                                    addedParams.add(param);
+                                 }
+                            }
                         }
-                    }
+                    });
                     if (command.itemsParams && item[command.itemsParams]) {
                         /*var isMore = "more" == commandName;*/
                         for(var key in item[command.itemsParams]) {
@@ -2060,7 +2071,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         buildFullCommand(item, act) {
             var command = this.buildCommand(item, ACTIONS[act].cmd);
             if (command.command.length<1) { // Non slim-browse command
-                if (item.url && (!item.id || !item.id.startsWith("playlist_id:"))) {
+                if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
                     command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
                 } else if (item.app && item.id) {
                     command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
@@ -2231,8 +2242,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 item.icon = undefined;
                             } else if (c.id.startsWith("myMusicTopTracks")) {
                                 item.icon = "arrow_upward";
+                                item.limit = 200;
                             } else if (c.id.startsWith("myMusicFlopTracks")) {
                                 item.icon = "arrow_downward";
+                                item.limit = 200;
                             } else if (c.icon) {
                                 if (c.icon.endsWith("/albums.png")) {
                                     item.icon = "album";

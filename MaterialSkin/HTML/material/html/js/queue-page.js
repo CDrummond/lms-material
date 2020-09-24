@@ -181,7 +181,6 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: haveRating ? ratingString(title, i.rating) : title,
-                              origTitle: haveRating ? title : undefined,
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
@@ -425,7 +424,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
                     if (this.$store.state.ratingsSupport && this.$store.state.queueShowRating && undefined!=i.rating) {
-                        title=ratingString(title, i.rating);
+                        title = ratingString(title, i.rating);
                     }
                     var subtitle = buildSubtitle(i, this.$store.state.queueThreeLines);
                     var remoteTitle = checkRemoteTitle(i);
@@ -742,9 +741,10 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_ALBUM_ACTION==act) {
                 bus.$emit('playerCommand', ["playlistcontrol", "cmd:delete", "album_id:"+item.album_id]);
             } else if (MORE_ACTION===act) {
-                if (undefined!=item.origTitle) { // Need to remove ratings stars...
+                if (item.title.indexOf("<i class=\"rstar\">")>0) { // Need to remove ratings stars...
                     let clone = JSON.parse(JSON.stringify(item));
-                    clone.title = clone.origTitle;
+                    clone.title = item.title.split(SEPARATOR+"<i class=\"rstar\">")[0];
+                    console.log(item.title, clone.title);
                     bus.$emit('trackInfo', clone, index, 'queue');
                 } else {
                     bus.$emit('trackInfo', item, index, 'queue');

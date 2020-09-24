@@ -149,14 +149,21 @@ var app = new Vue({
                 if (IS_MOBILE && (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA")) {
                     let elem = document.activeElement;
                     let found = false;
+                    let makeVisible = true;
                     for (let i=0; i<10 && !found && elem; ++i) {
-                        if (elem.classList.contains("lms-list-item") || elem.classList.contains("subtoolbar")) {
+                        if (elem.classList.contains("lms-list-item")) {
                             found = true;
+                        } else if (elem.classList.contains("subtoolbar")) {
+                            // No need to scroll an input field in subtoolbar into view - see #342
+                            found = true;
+                            makeVisible = false;
                         } else {
                             elem = elem.parentElement;
                         }
                     }
-                    ensureVisible(found ? elem : document.activeElement);
+                    if (makeVisible) {
+                        ensureVisible(found ? elem : document.activeElement);
+                    }
                 }
             }, 50);
         }, false);

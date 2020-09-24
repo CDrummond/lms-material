@@ -138,7 +138,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
        <v-icon>check_box</v-icon>
       </v-list-tile-avatar>
-      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
+      <v-list-tile-avatar v-else-if="item.image && (artwork || isTop)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
        <img v-if="items.length<=LMS_MAX_NON_SCROLLER_ITEMS" :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
        <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
       </v-list-tile-avatar>
@@ -338,6 +338,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         sortHome() {
             return this.$store.state.sortHome
+        },
+        artwork() {
+            return this.$store.state.browseArtwork
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -741,6 +744,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (SEARCH_ID!=item.id || undefined==this.current || SEARCH_ID!=this.current.id) {
                     this.addHistory();
                 }
+                resp.canUseGrid = resp.canUseGrid && (this.$store.state.browseArtwork || resp.forceGrid);
                 this.searchActive = item.id.startsWith(SEARCH_ID);
                 this.command = command;
                 this.currentBaseActions = this.baseActions;

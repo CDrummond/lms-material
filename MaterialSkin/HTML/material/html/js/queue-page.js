@@ -247,8 +247,9 @@ var lmsQueue = Vue.component("lms-queue", {
    <div :style="vsSpacerStyle">
     <template v-for="(item, index) in vsVisibleItems" :key="item.key">
      <v-list-tile avatar v-bind:class="{'pq-current': (vsStartIndex+index)==currentIndex}" :id="'track'+(vsStartIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
-      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar" v-if="artwork || selection.size>0">
        <v-icon v-if="item.selected">check_box</v-icon>
+       <v-icon v-else-if="!artwork">check_box_outline_blank</v-icon>
        <img v-else-if="items.length<=LMS_MAX_NON_SCROLLER_ITEMS" :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
        <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
       </v-list-tile-avatar>
@@ -262,7 +263,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
        <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
       </v-list-tile-action>
-      <div class="pq-current-indicator" v-if="(vsStartIndex+index)==currentIndex"></div>
+      <div class="pq-current-indicator" v-if="(vsStartIndex+index)==currentIndex && artwork"></div>
      </v-list-tile>
     </template>
    </div>
@@ -349,6 +350,9 @@ var lmsQueue = Vue.component("lms-queue", {
         threeLines() {
             return this.$store.state.queueThreeLines
         },
+        artwork() {
+            return this.$store.state.queueArtwork
+        },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
         },
@@ -377,11 +381,6 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('playerChanged', function() {
             this.items=[];
             this.timestamp=0;
-        }.bind(this));
-        bus.$on('queueDisplayChanged', function() {
-            this.items=[];
-            this.timestamp=0;
-            this.updateItems();
         }.bind(this));
         bus.$on('playerChanged', function() {
             this.clearSelection();

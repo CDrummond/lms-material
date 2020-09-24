@@ -158,6 +158,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="browseArtwork = !browseArtwork" class="switch-label">
+      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="browseArtwork"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-title>
@@ -299,6 +308,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="queueArtwork = !queueArtwork" class="switch-label">
+      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Display covers, station logos, etc.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueArtwork"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-title>
@@ -376,6 +394,8 @@ Vue.component('lms-ui-settings', {
             swipeVolume:false,
             keyboardControl:true,
             queueThreeLines:false,
+            queueArtwork:false,
+            browseArtwork:false,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -534,6 +554,8 @@ Vue.component('lms-ui-settings', {
             this.swipeVolume = this.$store.state.swipeVolume;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
+            this.queueArtwork = this.$store.state.queueArtwork;
+            this.browseArtwork = this.$store.state.browseArtwork;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
@@ -602,6 +624,8 @@ Vue.component('lms-ui-settings', {
                                                   swipeVolume:this.swipeVolume,
                                                   keyboardControl:this.keyboardControl,
                                                   queueThreeLines:this.queueThreeLines,
+                                                  queueArtwork:this.queueArtwork,
+                                                  browseArtwork:this.browseArtwork,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   menuIcons:this.menuIcons,
@@ -648,6 +672,8 @@ Vue.component('lms-ui-settings', {
                                      swipeVolume:this.swipeVolume,
                                      keyboardControl:this.keyboardControl,
                                      queueThreeLines:this.queueThreeLines,
+                                     queueArtwork:this.queueArtwork,
+                                     browseArtwork:this.browseArtwork,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      menuIcons:this.menuIcons,

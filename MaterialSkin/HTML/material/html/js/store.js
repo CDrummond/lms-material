@@ -134,7 +134,14 @@ function updateUiSettings(state, val) {
     if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
         state.queueThreeLines = val.queueThreeLines;
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
-        bus.$emit('queueDisplayChanged');
+    }
+    if (undefined!=val.queueArtwork && state.queueArtwork!=val.queueArtwork) {
+        state.queueArtwork = val.queueArtwork;
+        setLocalStorageVal('queueArtwork', state.queueArtwork);
+    }
+    if (undefined!=val.browseArtwork && state.browseArtwork!=val.browseArtwork) {
+        state.browseArtwork = val.browseArtwork;
+        setLocalStorageVal('browseArtwork', state.browseArtwork);
     }
     if (undefined!=val.skipSeconds && state.skipSeconds!=val.skipSeconds) {
         state.skipSeconds = val.skipSeconds;
@@ -243,6 +250,8 @@ const store = new Vuex.Store({
         keyboardControl: true,
         updatesAvailable: new Set(),
         queueThreeLines: false,
+        queueArtwork: true,
+        browseArtwork: true,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -422,6 +431,8 @@ const store = new Vuex.Store({
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
+            state.queueArtwork = getLocalStorageBool('queueArtwork', state.queueArtwork);
+            state.browseArtwork = getLocalStorageBool('browseArtwork', state.browseArtwork);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
@@ -535,6 +546,8 @@ const store = new Vuex.Store({
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
+                                     queueArtwork: getLocalStorageBool('queueArtwork', undefined==prefs.queueArtwork ? state.queueArtwork : prefs.queueArtwork),
+                                     browseArtwork: getLocalStorageBool('browseArtwork', undefined==prefs.browseArtwork ? state.browseArtwork : prefs.browseArtwork),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),

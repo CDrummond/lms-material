@@ -415,6 +415,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.initItems();
 
+        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_EXTRAS_ID, TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
@@ -437,8 +438,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         } else {
             this.updateTopList(savedItems);
         }
-
-        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
 
         this.nowPlayingExpanded = false; // Keep track so that we know when to ignore 'esc'=>goback
         bus.$on('nowPlayingExpanded', function(val) {
@@ -629,17 +628,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                               weight: 4,
                               id: TOP_APPS_ID,
                               section: SECTION_APPS },
+                            { command: ["material-skin", "extras"],
+                              params: [],
+                              icon: "extension",
+                              type: "group",
+                              weight: 5,
+                              id: TOP_EXTRAS_ID },
                             { command: ["cdplayer", "items"],
                               params: ["menu:1"],
                               svg: "cd-player",
                               type: "group",
-                              weight: 5,
+                              weight: 6,
                               id: TOP_CDPLAYER_ID },
                             { command: ["selectRemoteLibrary", "items"],
                               params: ["menu:selectRemoteLibrary", "menu:1"],
                               icon: "cloud",
                               type: "group",
-                              weight: 6,
+                              weight: 7,
                               id: TOP_REMOTE_ID }
                            ];
             }
@@ -652,11 +657,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 ? i18n("Favorites")
                                 : this.top[i].id==TOP_APPS_ID
                                     ? i18n("Apps")
-                                    : this.top[i].id==TOP_CDPLAYER_ID
-                                        ? i18n("CD Player")
-                                        : this.top[i].id==TOP_REMOTE_ID
-                                            ? i18n("Remote Libraries")
-                                            : this.top[i].title;
+                                    : this.top[i].id==TOP_EXTRAS_ID
+                                        ? i18n("Extras")
+                                        :this.top[i].id==TOP_CDPLAYER_ID
+                                            ? i18n("CD Player")
+                                            : this.top[i].id==TOP_REMOTE_ID
+                                                ? i18n("Remote Libraries")
+                                                : this.top[i].title;
             }
 
             if (this.history.length<1) {
@@ -1017,6 +1024,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.doTextClick(item);
                 } else if (item.isPodcast) {
                     this.fetchUrlItems(item.id, 'rss', item);
+                }
+                return;
+            }
+            if (item.type=="extra") {
+                if (this.$store.state.player) {
+                    bus.$emit('dlg.open', 'iframe', item.id+'player='+this.$store.state.player.id, item.title+SEPARATOR+this.$store.state.player.name);
+                } else {
+                    bus.$emit('showError', undefined, i18n("No Player"));
                 }
                 return;
             }
@@ -2344,6 +2359,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         updateTopList(items) {
             this.top=items;
             this.initItems();
+            let hasExtras = false;
             for (var i=0, len=this.top.length; i<len; ++i) {
                 if (!this.top[i].id.startsWith(TOP_ID_PREFIX)) {
                     this.options.pinned.add(this.top[i].id);
@@ -2353,6 +2369,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.top[i].icon=undefined; this.top[i].svg="radio-tower";
                 } else if (this.top[i].id==TOP_MYMUSIC_ID) {
                     this.top[i].menu=undefined;
+                } else if (this.top[i].id==TOP_EXTRAS_ID) {
+                    hasExtras = true;
                 }
             }
             for (var i=0, len=this.top.length; i<len; ++i) {
@@ -2363,6 +2381,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.$store.state.sortHome) {
                 this.top.sort(homeScreenSort);
+            }
+            if (hasExtras) {
+                this.disabled.delete(TOP_EXTRAS_ID);
+            } else {
+                this.disabled.add(TOP_EXTRAS_ID);
             }
         },
         saveTopList() {

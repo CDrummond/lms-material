@@ -4,6 +4,7 @@ DEV
 2. Use custom vuetify build to trim out unused components.
 3. Add button to toggle queue visibility on desktop layout.
 4. Make cover-art in browse and queue views optional.
+5. Support 'Extras' section by using iframe.
 
 1.9.0
 -----

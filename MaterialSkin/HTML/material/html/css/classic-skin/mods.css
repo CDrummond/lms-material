@@ -30,24 +30,35 @@ div#browsedbList {
 }
 
 /* hide add/play/fav and next-page images */
-.browsedbLeftControls > a > img {
+.browsedbLeftControls > a > img,
+.browsedbControls > a > img  {
  display:none;
 }
-/* Set play icon */
-.browsedbLeftControls > a.loadtracks:before {
+.browsedbLeftControls > a.loadtracks:before,
+.browsedbControls > a.loadtracks:before,
+.browsedbLeftControls > a.addtracks:before,
+.browsedbControls > a.addtracks:before,
+.browsedbControls > a.edititem:before {
  font-family: "Material Icons";
  font-size:24px;
- content:"\e039";
  margin-right:4px;
  text-decoration:none;
+ color:var(--text-color);
+}
+
+/* Set play icon */
+.browsedbLeftControls > a.loadtracks:before,
+.browsedbControls > a.loadtracks:before {
+ content:"\e039";
 }
 /* Set add icon */
-.browsedbLeftControls > a.addtracks:before {
- font-family: "Material Icons";
- font-size:24px;
+.browsedbLeftControls > a.addtracks:before,
+.browsedbControls > a.addtracks:before {
  content:"\e148";
- margin-right:4px;
- text-decoration:none;
+}
+/* Set edit icon */
+.browsedbControls > a.edititem:before {
+ content:"edit";
 }
 @media (hover: none) and (pointer: coarse) { /* Touch devices */
  .browsedbLeftControls > a.loadtracks:before {

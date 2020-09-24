@@ -6,7 +6,7 @@
  */
 'use strict';
 
-function clickHandler(e) {
+function searchClickHandler(e) {
     var target = e.target || e.srcElement;
     var href = undefined;
     if (target.tagName === 'A') {
@@ -85,6 +85,37 @@ function fixSearchControls(elem) {
     }
 }
 
+function fixOtherIcons(elem) {
+    var elems = elem.querySelectorAll('.browsedbControls a');
+    if (undefined!=elems) {
+        for (var i=0, len=elems.length; i<len; ++i) {
+            var img = elems[i].querySelectorAll('img');
+            if (img && img.length==1) {
+                if (img[0].src.indexOf("b_play.gif")>0) {
+                    elems[i].classList.add("loadtracks");
+                } else if (img[0].src.indexOf("b_add.gif")>0) {
+                    elems[i].classList.add("addtracks");
+                } else if (img[0].src.indexOf("b_edit.gif")>0) {
+                    elems[i].classList.add("edititem");
+                }
+            }
+        }
+    }
+}
+
+function otherClickHandler(e) {
+    var target = e.target || e.srcElement;
+    var href = undefined;
+    if (target.tagName === 'A') {
+        href = target.getAttribute('href');
+    } else if (target.tagName === 'SPAN' || target.tagName === 'IMG') {
+        href = target.parentElement.getAttribute('href');
+    }
+    if (href) {
+        bus.$emit('iframe-href', href);
+    }
+}
+
 function hideClassicSkinElems(page) {
     if (!page) {
         return;
@@ -97,15 +128,25 @@ function hideClassicSkinElems(page) {
         }
         if ('search'==page) {
             if (iframe.contentDocument.addEventListener) {
-                iframe.contentDocument.addEventListener('click', clickHandler);
+                iframe.contentDocument.addEventListener('click', searchClickHandler);
             } else if (iframe.contentDocument.attachEvent) {
-                iframe.contentDocument.attachEvent('onclick', clickHandler);
+                iframe.contentDocument.attachEvent('onclick', searchClickHandler);
             }
 
             var res = iframe.contentDocument.getElementById("browsedbList");
             if (res) {
                 res.scrollIntoView(true);
                 fixSearchControls(res);
+            }
+        } else if ('other'==page) {
+            if (iframe.contentDocument.addEventListener) {
+                iframe.contentDocument.addEventListener('click', otherClickHandler);
+            } else if (iframe.contentDocument.attachEvent) {
+                iframe.contentDocument.attachEvent('onclick', otherClickHandler);
+            }
+            var res = iframe.contentDocument.getElementById("browsedbList");
+            if (res) {
+                fixOtherIcons(res);
             }
         }
         if (undefined!=toHide) {
@@ -129,7 +170,7 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBack"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
@@ -171,7 +212,8 @@ Vue.component('lms-iframe-dialog', {
             snackbar:{show:false, msg:undefined},
             loaded:false,
             actions: [],
-            customActions: []
+            customActions: [],
+            history: []
         }
     },
     mounted() {
@@ -190,9 +232,14 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
+            this.history=[];
         }.bind(this));
-            bus.$on('iframe-loaded', function() {
+        bus.$on('iframe-loaded', function() {
             this.loaded = true;
+        }.bind(this));
+        bus.$on('iframe-href', function(ref) {
+            this.history.push(this.src);
+            this.src = ref;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
@@ -236,6 +283,14 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
     },
     methods: {
+        goBack(longpress) {
+            if (longpress || this.history.length<1) {
+                this.close();
+            } else {
+                this.loaded = false;
+                this.src = this.history.pop();
+            }
+        },
         close() {
             this.show=false;
             this.showMenu = false;

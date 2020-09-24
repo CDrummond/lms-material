@@ -862,6 +862,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[idx].h=0;
                 }
             }
+        } else if (data.result.extras_loop) {
+            for (var idx=0, loop=data.result.extras_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                i.type="extra";
+                mapIcon(i, undefined, {icon:"extension", svg:undefined});
+                resp.items.push(i);
+            }
+            resp.items.sort(titleSort);
+            resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

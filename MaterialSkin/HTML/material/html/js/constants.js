@@ -81,6 +81,7 @@ const TOP_ID_PREFIX = "top:/";
 const TOP_MYMUSIC_ID = TOP_ID_PREFIX+"mm";
 const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
+const TOP_EXTRAS_ID  = TOP_ID_PREFIX+"extra";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";

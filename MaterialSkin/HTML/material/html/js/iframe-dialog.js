@@ -82,6 +82,10 @@ function remapClassicSkinIcons(doc, col) {
                        imgList[i].classList.add("msk-cs-touch-img");
                    }
                    break;
+                } else if (imgList[i].src.endsWith("/star_noborder.gif")) {
+                    imgList[i].src="/material/svg/cs-star?c="+col;
+                    imgList[i].width="18";
+                    imgList[i].height="18";
                 }
             }
         }

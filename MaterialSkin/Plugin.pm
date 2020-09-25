@@ -462,7 +462,8 @@ sub _cliCommand {
                 my $cnt = 0;
                 foreach my $key (keys %$menuItems) {
                     if (not exists($EXCLUDE_EXTRAS{$key})) {
-                        $request->addResultLoop("extras_loop", $cnt, "id", $menuItems->{$key});
+                        $request->addResultLoop("extras_loop", $cnt, "id", $key);
+                        $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
                         $request->addResultLoop("extras_loop", $cnt, "title", string($key));
                         if ($icons and $icons->{$key}) {
                             $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});

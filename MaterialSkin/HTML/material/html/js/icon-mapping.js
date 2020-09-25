@@ -141,6 +141,9 @@ function mapIcon(item, app, fallback) {
     if (item.image && item.image.startsWith("html/images/") && mapIconType(item, app, "image")) {
         return true;
     }
+    if (app=='lms-extras' && mapIconType(item, app, "id")) {
+        return true;
+    }
     if (undefined!=fallback) {
         item.icon=fallback.icon; item.svg=fallback.svg; item.image=undefined;
         return true;

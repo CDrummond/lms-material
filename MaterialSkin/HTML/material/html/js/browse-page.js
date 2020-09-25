@@ -1036,7 +1036,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (item.type=="extra") {
                 if (this.$store.state.player) {
-                    bus.$emit('dlg.open', 'iframe', item.id+'player='+this.$store.state.player.id, item.title+SEPARATOR+this.$store.state.player.name, undefined, true);
+                    bus.$emit('dlg.open', 'iframe', item.url+'player='+this.$store.state.player.id, item.title+SEPARATOR+this.$store.state.player.name, undefined, true);
                 } else {
                     bus.$emit('showError', undefined, i18n("No Player"));
                 }

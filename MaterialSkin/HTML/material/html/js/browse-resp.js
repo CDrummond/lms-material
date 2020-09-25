@@ -866,7 +866,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.extras_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 i.type="extra";
-                mapIcon(i, undefined, {icon:"extension", svg:undefined});
+                mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 resp.items.push(i);
             }
             resp.items.sort(titleSort);

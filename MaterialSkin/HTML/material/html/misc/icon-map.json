@@ -84,7 +84,12 @@
     "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"},
     "/TVH/icon.png":{"svg":"tvheadend"},
     "plugins/InfoBrowser/html/images/icon.png":{"icon":"info"},
-    "html/images/cover.png":{"icon":"album"}
+    "html/images/cover.png":{"icon":"album"},
+    "plugins/InguzEQ/inguz.png":{"icon":"equalizer"},
+    "PLUGIN_MULTILIBRARY":{"icon":"library_music"},
+    "PLUGIN_SQLPLAYLIST":{"icon":"list"},
+    "PLUGIN_PLAYLISTGENERATOR":{"icon":"list"},
+    "PLUGIN_DATABASEQUERY":{"svg":"database-search"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

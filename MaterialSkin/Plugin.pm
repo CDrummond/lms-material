@@ -475,17 +475,15 @@ sub _cliCommand {
                         $cnt++;
                     }
                 }
-            } elsif ($menu eq 'browse') {
+            } elsif ($menu eq 'browseiPeng') {
                 foreach my $key (keys %$menuItems) {
-                    if (_startsWith($key, 'PLUGIN_SUGARCUBE')) {
-                        $request->addResultLoop("extras_loop", $cnt, "id", $key);
-                        $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
-                        $request->addResultLoop("extras_loop", $cnt, "title", string($key));
-                        if ($icons and $icons->{$key}) {
-                            $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
-                        }
-                        $cnt++;
+                    $request->addResultLoop("extras_loop", $cnt, "id", $key);
+                    $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
+                    $request->addResultLoop("extras_loop", $cnt, "title", string($key));
+                    if ($icons and $icons->{$key}) {
+                        $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
                     }
+                    $cnt++;
                 }
             }
         }

@@ -10,6 +10,7 @@ DEV
 7. If configured to show home button, then also show in titlebar of advanced
    search and extras pages.
 8. Show SugarCube pages in 'Extras' if it is installed.
+9. Show 'Dynmaic Playlists' and 'TrackStat' under 'Extras'
 
 1.9.1
 -----

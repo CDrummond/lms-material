@@ -89,7 +89,9 @@
     "PLUGIN_MULTILIBRARY":{"icon":"library_music"},
     "PLUGIN_SQLPLAYLIST":{"icon":"list"},
     "PLUGIN_PLAYLISTGENERATOR":{"icon":"list"},
-    "PLUGIN_DATABASEQUERY":{"svg":"database-search"}
+    "PLUGIN_DATABASEQUERY":{"svg":"database-search"},
+    "PLUGIN_TRACKSTAT":{"icon":"bar_chart"},
+    "PLUGIN_DYNAMICPLAYLIST":{"svg":"dice-list"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

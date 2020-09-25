@@ -73,20 +73,39 @@ function remapClassicSkinIcons(doc, col) {
     var imgList = doc.getElementsByTagName('img');
     if (imgList) {
         for (var i = 0, len=imgList.length; i < len; i++) {
-            for (var m = 0, mlen = ICONS.length; m<mlen; ++m) {
+            var replaced = false;
+            for (var m = 0, mlen = ICONS.length; m<mlen && !replaced; ++m) {
                 if (imgList[i].src.endsWith("/html/images/b_" + ICONS[m] + ".gif")) {
-                   imgList[i].src="/material/svg/cs-"+ICONS[m]+"?c="+col;
-                   imgList[i].width="24";
-                   imgList[i].height="24";
-                   if (IS_MOBILE) {
-                       imgList[i].classList.add("msk-cs-touch-img");
-                   }
-                   break;
-                } else if (imgList[i].src.endsWith("/star_noborder.gif")) {
-                    imgList[i].src="/material/svg/cs-star?c="+col;
-                    imgList[i].width="18";
-                    imgList[i].height="18";
+                    imgList[i].src="/material/svg/cs-"+ICONS[m]+"?c="+col;
+                    if (IS_MOBILE) {
+                        imgList[i].classList.add("msk-cs-touch-img");
+                    }
+                    replaced = true;
                 }
+            }
+            if (!replaced) {
+                if (imgList[i].src.endsWith("/star_noborder.gif") || imgList[i].src.endsWith("/star.gif")) {
+                    imgList[i].src="/material/svg/cs-star?c="+col;
+                    replaced = true;
+                } else if (imgList[i].src.endsWith("/plugins/TrackStat/html/images/empty.gif")) {
+                    imgList[i].src="/material/svg/cs-star_outline?c="+col;
+                    replaced = true;
+                }
+            }
+            if (replaced) {
+                imgList[i].width="24";
+                imgList[i].height="24";
+            }
+        }
+    }
+}
+
+function fixClassicSkinRefs(doc) {
+    var refList = doc.getElementsByTagName('a');
+    if (refList) {
+        for (var i = 0, len=refList.length; i < len; i++) {
+            if (refList[i].target=='browser' && refList[i].href && refList[i].href.startsWith(window.location)) {
+                refList[i].removeAttribute('target');
             }
         }
     }
@@ -111,24 +130,26 @@ function hideClassicSkinElems(page, textCol) {
     }
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
-        remapClassicSkinIcons(iframe.contentDocument, textCol);
+        var content = iframe.contentDocument;
+        fixClassicSkinRefs(content);
+        remapClassicSkinIcons(content, textCol);
 
         let toHide = undefined;
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
         }
         if ('search'==page) {
-            if (iframe.contentDocument.addEventListener) {
-                iframe.contentDocument.addEventListener('click', searchClickHandler);
-            } else if (iframe.contentDocument.attachEvent) {
-                iframe.contentDocument.attachEvent('onclick', searchClickHandler);
+            if (content.addEventListener) {
+                content.addEventListener('click', searchClickHandler);
+            } else if (content.attachEvent) {
+                content.attachEvent('onclick', searchClickHandler);
             }
         } else if ('other'==page) {
-            if (iframe.contentDocument) {
-                if (iframe.contentDocument.addEventListener) {
-                    iframe.contentDocument.addEventListener('click', otherClickHandler);
-                } else if (iframe.contentDocument.attachEvent) {
-                    iframe.contentDocument.attachEvent('onclick', otherClickHandler);
+            if (content) {
+                if (content.addEventListener) {
+                    content.addEventListener('click', otherClickHandler);
+                } else if (content.attachEvent) {
+                    content.attachEvent('onclick', otherClickHandler);
                 }
             } else if (iframe.contentWindow) {
                 // Text files?
@@ -136,7 +157,7 @@ function hideClassicSkinElems(page, textCol) {
             }
         }
         if (undefined!=toHide) {
-            var select = iframe.contentDocument.getElementById("choose_setting");
+            var select = content.getElementById("choose_setting");
             if (undefined!=select) {
                 for (let i=select.length-1; i>=0; i--) {
                     if (toHide.has(select.options[i].value)) {

@@ -21,6 +21,7 @@
  --toolbar-button-margin:4px;
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
  --fade-size:16px;
+ --jump-list-width:32px; /* must match that in browse-page.js */
 }
 
 .note {
@@ -1455,9 +1456,12 @@ div.v-subheader {
 }
 
 .lms-jumplist {
+ position:fixed;
+ top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
+ left:0px;
  padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;
- width:32px; /* must match that in browse-page.js */
+ width:var(--jump-list-width);
  float:left;
  display:grid;
  grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));

@@ -68,36 +68,24 @@ function searchClickHandler(e) {
     }
 }
 
-function remapClassicSkinIcons(elems) {
-    if (undefined!=elems) {
-        for (var i=0, len=elems.length; i<len; ++i) {
-            var img = elems[i].querySelectorAll('img');
-            if (img && img.length==1) {
-                if (img[0].src.indexOf("b_play.gif")>0) {
-                    elems[i].classList.add("loadtracks");
-                } else if (img[0].src.indexOf("b_add.gif")>0) {
-                    elems[i].classList.add("addtracks");
-                } else if (img[0].src.indexOf("b_edit.gif")>0) {
-                    elems[i].classList.add("edititem");
-                } else if (img[0].src.indexOf("b_favorite.gif")>0) {
-                    elems[i].classList.add("heartitem");
-                } else if (img[0].src.indexOf("b_delete.gif")>0) {
-                    elems[i].classList.add("removeitem");
-                } else if (img[0].src.indexOf("b_first.gif")>0) {
-                    elems[i].classList.add("firstitem");
-                } else if (img[0].src.indexOf("b_last.gif")>0) {
-                    elems[i].classList.add("lastitem");
+function remapClassicSkinIcons(doc, col) {
+    const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev"];
+    var imgList = doc.getElementsByTagName('img');
+    if (imgList) {
+        for (var i = 0, len=imgList.length; i < len; i++) {
+            for (var m = 0, mlen = ICONS.length; m<mlen; ++m) {
+                if (imgList[i].src.endsWith("/html/images/b_" + ICONS[m] + ".gif")) {
+                   imgList[i].src="/material/svg/cs-"+ICONS[m]+"?c="+col;
+                   imgList[i].width="24";
+                   imgList[i].height="24";
+                   if (IS_MOBILE) {
+                       imgList[i].classList.add("msk-cs-touch-img");
+                   }
+                   break;
                 }
             }
         }
     }
-}
-
-function fixClassicSkinIcons(elem) {
-    remapClassicSkinIcons(elem.querySelectorAll('.browsedbControls a'));
-    remapClassicSkinIcons(elem.querySelectorAll('.browsedbLeftControls a'));
-    remapClassicSkinIcons(elem.querySelectorAll('.browsedbRightControls a'));
-    remapClassicSkinIcons(elem.querySelectorAll('.pagebar a'));
 }
 
 function otherClickHandler(e) {
@@ -113,12 +101,14 @@ function otherClickHandler(e) {
     }
 }
 
-function hideClassicSkinElems(page) {
+function hideClassicSkinElems(page, textCol) {
     if (!page) {
         return;
     }
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
+        remapClassicSkinIcons(iframe.contentDocument, textCol);
+
         let toHide = undefined;
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
@@ -129,12 +119,6 @@ function hideClassicSkinElems(page) {
             } else if (iframe.contentDocument.attachEvent) {
                 iframe.contentDocument.attachEvent('onclick', searchClickHandler);
             }
-
-            var res = iframe.contentDocument.getElementById("browsedbList");
-            if (res) {
-                res.scrollIntoView(true);
-                fixClassicSkinIcons(res);
-            }
         } else if ('other'==page) {
             if (iframe.contentDocument) {
                 if (iframe.contentDocument.addEventListener) {
@@ -142,12 +126,6 @@ function hideClassicSkinElems(page) {
                 } else if (iframe.contentDocument.attachEvent) {
                     iframe.contentDocument.attachEvent('onclick', otherClickHandler);
                 }
-                ['browsedbList', 'mainbody'].forEach(t => {
-                    var res = iframe.contentDocument.getElementById(t);
-                    if (res) {
-                        fixClassicSkinIcons(res);
-                    }
-                });
             } else if (iframe.contentWindow) {
                 // Text files?
                 iframe.className="iframe-plain-text";
@@ -200,7 +178,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page, textCol)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -219,7 +197,8 @@ Vue.component('lms-iframe-dialog', {
             actions: [],
             customActions: [],
             history: [],
-            showHome:false
+            showHome:false,
+            textCol: undefined
         }
     },
     mounted() {
@@ -240,6 +219,7 @@ Vue.component('lms-iframe-dialog', {
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
             this.history = [];
             this.showHome = showHome;
+            this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
         }.bind(this));
         bus.$on('iframe-loaded', function() {
             this.loaded = true;

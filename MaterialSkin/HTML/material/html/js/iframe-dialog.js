@@ -148,14 +148,19 @@ function hideClassicSkinElems(page) {
                 fixSearchControls(res);
             }
         } else if ('other'==page) {
-            if (iframe.contentDocument.addEventListener) {
-                iframe.contentDocument.addEventListener('click', otherClickHandler);
-            } else if (iframe.contentDocument.attachEvent) {
-                iframe.contentDocument.attachEvent('onclick', otherClickHandler);
-            }
-            var res = iframe.contentDocument.getElementById("browsedbList");
-            if (res) {
-                fixOtherIcons(res);
+            if (iframe.contentDocument) {
+                if (iframe.contentDocument.addEventListener) {
+                    iframe.contentDocument.addEventListener('click', otherClickHandler);
+                } else if (iframe.contentDocument.attachEvent) {
+                    iframe.contentDocument.attachEvent('onclick', otherClickHandler);
+                }
+                var res = iframe.contentDocument.getElementById("browsedbList");
+                if (res) {
+                    fixOtherIcons(res);
+                }
+            } else if (iframe.contentWindow) {
+                // Text files?
+                iframe.className="iframe-plain-text";
             }
         }
         if (undefined!=toHide) {

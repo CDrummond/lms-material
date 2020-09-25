@@ -1625,7 +1625,11 @@ div.v-subheader {
 }
 
 .iframe-text {
- background-color:#ddd;
+ background-color:var(--background-color)!important;
+}
+
+.iframe-plain-text {
+ background-color:#ddd!important;
 }
 
 .transparent {

@@ -179,7 +179,8 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon v-longpress="goBack"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="close(); bus.$emit('browse-home')" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
@@ -222,11 +223,12 @@ Vue.component('lms-iframe-dialog', {
             loaded:false,
             actions: [],
             customActions: [],
-            history: []
+            history: [],
+            showHome:false
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, actions) {
+        bus.$on('iframe.open', function(page, title, actions, showHome) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -241,7 +243,8 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
-            this.history=[];
+            this.history = [];
+            this.showHome = showHome;
         }.bind(this));
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
@@ -334,6 +337,9 @@ Vue.component('lms-iframe-dialog', {
         darkUi () {
             return this.$store.state.darkUi
         },
+        homeButton() {
+            return this.$store.state.homeButton
+        }
     },
     filters: {
         svgIcon: function (name, dark) {

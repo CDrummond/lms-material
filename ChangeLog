@@ -5,6 +5,10 @@ DEV
 3. Add button to toggle queue visibility on desktop layout.
 4. Make cover-art in browse and queue views optional.
 5. Support 'Extras' section by using iframe.
+6. Place home button, if shown, to the right of the back button (matches
+   browsers, etc.)
+7. If configured to show home button, then also show in titlebar of advanced
+   search and extras pages.
 
 1.9.1
 -----

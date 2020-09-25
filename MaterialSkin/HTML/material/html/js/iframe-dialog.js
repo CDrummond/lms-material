@@ -68,24 +68,7 @@ function searchClickHandler(e) {
     }
 }
 
-function fixSearchControls(elem) {
-    var elems = elem.querySelectorAll('.browsedbLeftControls a');
-    if (undefined!=elems) {
-        for (var i=0, len=elems.length; i<len; ++i) {
-            if (undefined==elems[i].href || elems[i].href.indexOf("command=playlist&subcommand=")<0) {
-                elems[i].style.display="none";
-            } else if (elems[i].href.indexOf("subcommand=addtracks")>0) {
-                elems[i].href=elems[i].href.replace("subcommand=addtracks", "subcommand=loadtracks");
-                elems[i].classList.add("loadtracks");
-            } else if (elems[i].href.indexOf("subcommand=loadtracks")>0) {
-                elems[i].href=elems[i].href.replace("subcommand=loadtracks", "subcommand=addtracks");
-                elems[i].classList.add("addtracks");
-            }
-        }
-    }
-}
-
-function fixControlsIcons(elems) {
+function remapClassicSkinIcons(elems) {
     if (undefined!=elems) {
         for (var i=0, len=elems.length; i<len; ++i) {
             var img = elems[i].querySelectorAll('img');
@@ -100,16 +83,21 @@ function fixControlsIcons(elems) {
                     elems[i].classList.add("heartitem");
                 } else if (img[0].src.indexOf("b_delete.gif")>0) {
                     elems[i].classList.add("removeitem");
+                } else if (img[0].src.indexOf("b_first.gif")>0) {
+                    elems[i].classList.add("firstitem");
+                } else if (img[0].src.indexOf("b_last.gif")>0) {
+                    elems[i].classList.add("lastitem");
                 }
             }
         }
     }
 }
 
-function fixOtherIcons(elem) {
-    fixControlsIcons(elem.querySelectorAll('.browsedbControls a'));
-    fixControlsIcons(elem.querySelectorAll('.browsedbLeftControls a'));
-    fixControlsIcons(elem.querySelectorAll('.browsedbRightControls a'));  
+function fixClassicSkinIcons(elem) {
+    remapClassicSkinIcons(elem.querySelectorAll('.browsedbControls a'));
+    remapClassicSkinIcons(elem.querySelectorAll('.browsedbLeftControls a'));
+    remapClassicSkinIcons(elem.querySelectorAll('.browsedbRightControls a'));
+    remapClassicSkinIcons(elem.querySelectorAll('.pagebar a'));
 }
 
 function otherClickHandler(e) {
@@ -145,7 +133,7 @@ function hideClassicSkinElems(page) {
             var res = iframe.contentDocument.getElementById("browsedbList");
             if (res) {
                 res.scrollIntoView(true);
-                fixSearchControls(res);
+                fixClassicSkinIcons(res);
             }
         } else if ('other'==page) {
             if (iframe.contentDocument) {
@@ -154,10 +142,12 @@ function hideClassicSkinElems(page) {
                 } else if (iframe.contentDocument.attachEvent) {
                     iframe.contentDocument.attachEvent('onclick', otherClickHandler);
                 }
-                var res = iframe.contentDocument.getElementById("browsedbList");
-                if (res) {
-                    fixOtherIcons(res);
-                }
+                ['browsedbList', 'mainbody'].forEach(t => {
+                    var res = iframe.contentDocument.getElementById(t);
+                    if (res) {
+                        fixClassicSkinIcons(res);
+                    }
+                });
             } else if (iframe.contentWindow) {
                 // Text files?
                 iframe.className="iframe-plain-text";

@@ -867,6 +867,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var i = loop[idx];
                 i.type="extra";
                 mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
+                i.id="extras:"+i.id;
+                i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];
                 resp.items.push(i);
             }
             resp.items.sort(titleSort);

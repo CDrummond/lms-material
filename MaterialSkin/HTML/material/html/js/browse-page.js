@@ -1008,7 +1008,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index, event);
                 return;
             }
-            if (item.isPinned && undefined!=item.url) { // Radio
+            if (item.isPinned && undefined!=item.url && "extra"!=item.type) { // Radio
                 this.itemMenu(item, index, event);
                 return;
             }
@@ -2465,6 +2465,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,
                                      url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION],
                                      weight: undefined==item.weight ? 10000 : item.weight});
+                } else if (item.type=='extra') {
+                    this.top.splice(lastPinnedIndex+1, 0,
+                                    {id: item.id, title: item.title, icon: item.icon, svg: item.svg, url: item.url, isPinned: true, type:item.type,
+                                     menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
                 } else {
                     var command = this.buildCommand(item, undefined, false);
                     this.top.splice(lastPinnedIndex+1, 0,

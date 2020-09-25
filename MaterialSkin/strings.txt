@@ -14,7 +14,7 @@ PLUGIN_MATERIAL_SKIN_BT_PLAYERS
 	NL	Bluetooth spelers
 
 PLUGIN_MATERIAL_BT_PLAYERS_GENRES_DESC
-	EN	Comma-separated list of Bluetooth player IDs (MAC address). These players will be give an Bluetooth icon in the Material UI.
+	EN	Comma-separated list of Bluetooth player IDs (MAC address). These players will be give a Bluetooth icon in the Material UI.
 	FR	Liste des identifiants des platines Bluetooth (adresses MAC), séparés par des virgules. Ces platines se verront attribuer un icône Bluetooth dans l'interface utilisateur 'Material Skin'.
 	NL	Komma gescheiden lijst van bluetooth spelers (MAC adres). Deze spelers krijgen een bluetooth icon in Material Skin.
 

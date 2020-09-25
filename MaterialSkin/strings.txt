@@ -11,10 +11,12 @@ PLUGIN_MATERIAL_SKIN
 PLUGIN_MATERIAL_SKIN_BT_PLAYERS
 	EN	Bluetooth players
 	FR	Platines Bluetooth
+	NL	Bluetooth spelers
 
 PLUGIN_MATERIAL_BT_PLAYERS_GENRES_DESC
 	EN	Comma-separated list of Bluetooth player IDs (MAC address). These players will be give an Bluetooth icon in the Material UI.
 	FR	Liste des identifiants des platines Bluetooth (adresses MAC), séparés par des virgules. Ces platines se verront attribuer un icône Bluetooth dans l'interface utilisateur 'Material Skin'.
+	NL	Komma gescheiden lijst van bluetooth spelers (MAC adres). Deze spelers krijgen een bluetooth icon in Material Skin.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen
@@ -26,7 +28,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	DE	Komma-getrennte Liste von Stilrichtungen, die Komponisten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Komponisten durchsuchen willst.
 	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par compositeur.
-	NL	Comma gesepareerde lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
+	NL	Komma gescheiden lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	DE	Dirigent Stilrichtungen
@@ -38,22 +40,26 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	DE	Komma-getrennte Liste von Stilrichtungen, die Dirigenten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Dirigenten durchsuchen willst.
 	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
-	NL	Comma gesepareerde lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
+	NL	Komma gescheiden lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Jazz, Mittelalterlich, Medieval, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	FR	Jazz, Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
+	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Mittelalterlich, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	FR	Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
+	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password
 	FR	Mot de passe
+	NL	Wachtwoord
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	EN	Set a password to control access to alarms and server settings.
 	FR	Définir un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.
+	NL	Stel een wachtwoord in om de toegang tot wekkers en serverinstellingen te regelen.

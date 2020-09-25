@@ -91,7 +91,8 @@
     "PLUGIN_PLAYLISTGENERATOR":{"icon":"list"},
     "PLUGIN_DATABASEQUERY":{"svg":"database-search"},
     "PLUGIN_TRACKSTAT":{"icon":"bar_chart"},
-    "PLUGIN_DYNAMICPLAYLIST":{"svg":"dice-list"}
+    "PLUGIN_DYNAMICPLAYLIST":{"svg":"dice-list"},
+    "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

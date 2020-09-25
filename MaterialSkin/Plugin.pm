@@ -141,6 +141,10 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
 }
 
+sub _startsWith {
+    return substr($_[0], 0, length($_[1])) eq $_[1];
+}
+
 sub _cliCommand {
     my $request = shift;
 
@@ -450,6 +454,7 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'extras') {
+        my $cnt = 0;
         my $icons;
         while (my ($menu, $menuItems) = each %Slim::Web::Pages::additionalLinks ) {
             if ($menu eq 'icons') {
@@ -459,9 +464,20 @@ sub _cliCommand {
 
         while (my ($menu, $menuItems) = each %Slim::Web::Pages::additionalLinks ) {
             if ($menu eq 'plugins') {
-                my $cnt = 0;
                 foreach my $key (keys %$menuItems) {
                     if (not exists($EXCLUDE_EXTRAS{$key})) {
+                        $request->addResultLoop("extras_loop", $cnt, "id", $key);
+                        $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
+                        $request->addResultLoop("extras_loop", $cnt, "title", string($key));
+                        if ($icons and $icons->{$key}) {
+                            $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
+                        }
+                        $cnt++;
+                    }
+                }
+            } elsif ($menu eq 'browse') {
+                foreach my $key (keys %$menuItems) {
+                    if (_startsWith($key, 'PLUGIN_SUGARCUBE')) {
                         $request->addResultLoop("extras_loop", $cnt, "id", $key);
                         $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
                         $request->addResultLoop("extras_loop", $cnt, "title", string($key));

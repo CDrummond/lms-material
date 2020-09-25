@@ -93,6 +93,7 @@
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},
-    "/Spotty/html/images/":{"svg":"spotify"}
+    "/Spotty/html/images/":{"svg":"spotify"},
+    "PLUGIN_SUGARCUBE":{"svg":"spicefly-sugarcube"}
   }
 }

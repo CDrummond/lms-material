@@ -2296,8 +2296,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                                                          icon: "music_note"
                                                         };
 
-                                            if (c.id == "dynamicplaylist" || c.id.startsWith("trackstat")) { // Shown in 'Extras'
-                                                continue;
+                                            if (c.id == "dynamicplaylist") {
+                                                item.svg = "dice-list";
+                                                item.icon = undefined;
+                                            } else if (c.id.startsWith("trackstat")) {
+                                                item.icon = "bar_chart";
                                             } else if (c.id.startsWith("artist")) {
                                                 item.svg = "artist";
                                                 item.icon = undefined;

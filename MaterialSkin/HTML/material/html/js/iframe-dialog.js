@@ -83,7 +83,7 @@ function remapClassicSkinIcons(doc, col) {
                     replaced = true;
                 }
             }
-            if (!replaced) {
+            /*if (!replaced) {
                 if (imgList[i].src.endsWith("/star_noborder.gif") || imgList[i].src.endsWith("/star.gif")) {
                     imgList[i].src="/material/svg/cs-star?c="+col;
                     replaced = true;
@@ -91,7 +91,7 @@ function remapClassicSkinIcons(doc, col) {
                     imgList[i].src="/material/svg/cs-star_outline?c="+col;
                     replaced = true;
                 }
-            }
+            }*/
             if (replaced) {
                 imgList[i].width="24";
                 imgList[i].height="24";

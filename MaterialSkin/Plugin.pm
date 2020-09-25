@@ -52,7 +52,7 @@ my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GE
 my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'myMusicArtistsAllArtists', 'myMusicAlbums',
                              'myMusicGenres', 'myMusicYears', 'myMusicNewMusic','myMusicPlaylists', 'myMusicAlbumsVariousArtists' );
 
-my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_DSTM', 'MUSICSOURCE' );
+my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_DSTM', 'MUSICSOURCE', 'PLUGIN_TRACKSTAT', 'PLUGIN_DYNAMICPLAYLIST' );
 
 sub initPlugin {
     my $class = shift;
@@ -477,13 +477,15 @@ sub _cliCommand {
                 }
             } elsif ($menu eq 'browseiPeng') {
                 foreach my $key (keys %$menuItems) {
-                    $request->addResultLoop("extras_loop", $cnt, "id", $key);
-                    $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
-                    $request->addResultLoop("extras_loop", $cnt, "title", string($key));
-                    if ($icons and $icons->{$key}) {
-                        $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
+                    if (not exists($EXCLUDE_EXTRAS{$key})) {
+                        $request->addResultLoop("extras_loop", $cnt, "id", $key);
+                        $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
+                        $request->addResultLoop("extras_loop", $cnt, "title", string($key));
+                        if ($icons and $icons->{$key}) {
+                            $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
+                        }
+                        $cnt++;
                     }
-                    $cnt++;
                 }
             }
         }

@@ -105,8 +105,8 @@ var lmsBrowse = Vue.component("lms-browse", {
          <img :src="items[idx].emblem | emblem()"></img>
         </div>
         <div v-if="hoverBtns && selection.size==0 && (undefined!=items[idx].stdItem || (items[idx].menu && items[idx].menu.length>0 && (items[idx].menu[0]==PLAY_ACTION || items[idx].menu[0]==PLAY_ALL_ACTION)))" class="grid-btns">
-         <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, items[idx], idx, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
          <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, items[idx], idx, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+         <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, items[idx], idx, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
         </div>
        </div>
       </div>
@@ -127,8 +127,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile v-else-if="item.header" class="lms-list-item browse-header" @click="click(item, index+vsStartIndex, $event)"><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
       <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 (Menu)', item.title)">
        <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)" class="list-btns">
-        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
         <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        </div>
        <v-btn icon @click.stop="itemMenu(item, index+vsStartIndex, $event)">
         <v-icon>more_vert</v-icon>
@@ -168,8 +168,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
       <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
        <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)" class="list-btns">
-        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
         <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        </div>
        <v-btn icon @click.stop="itemMenu(item, index+vsStartIndex, $event)" :title="i18n('%1 (Menu)', item.title)">
         <v-icon>more_vert</v-icon>
@@ -836,7 +836,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                 if (item.id.startsWith(SEARCH_ID)) {
                     if (this.items.length>0 && this.items[0].id.startsWith("track_id:")) {
-                        this.tbarActions=[SEARCH_LIB_ACTION, ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                        this.tbarActions=[SEARCH_LIB_ACTION, PLAY_ALL_ACTION, ADD_ALL_ACTION];
                     } else {
                         this.tbarActions=[SEARCH_LIB_ACTION];
                     }
@@ -845,14 +845,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
                     this.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
                 } else if (SECTION_PLAYLISTS==this.current.section && this.current.id.startsWith("playlist_id:")) {
-                    this.tbarActions=[REMOVE_DUPES_ACTION, ADD_ACTION, PLAY_ACTION];
+                    this.tbarActions=[REMOVE_DUPES_ACTION, PLAY_ACTION, ADD_ACTION];
                 } else if (this.allSongsItem) {
-                    this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                    this.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
                 } else if (this.items.length>0 && (!(this.current && this.current.isPodcast) || addAndPlayAllActions(command))) {
                     if (this.current && this.current.menu) {
                         for (var i=0, len=this.current.menu.length; i<len; ++i) {
                             if (this.current.menu[i]==ADD_ACTION || this.current.menu[i]==PLAY_ACTION) {
-                                this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                                this.tbarActions=[PLAY_ACTION, ADD_ACTION];
                                 break;
                             }
                         }
@@ -860,14 +860,14 @@ var lmsBrowse = Vue.component("lms-browse", {
 
                     // Select track -> More -> Album:AlbumTitle -> Tracks
                     if (this.tbarActions.length==0 && this.current && ((this.current.actions && this.current.actions.play) || this.current.stdItem)) {
-                        this.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                        this.tbarActions=[PLAY_ACTION, ADD_ACTION];
                     }
 
                     // No menu actions? If have 3..200 audio tracks, add a PlayAll/AddAll to toolbar. This will add each item individually
                     // 3..200 is chosen so that we dont add these to bandcamp when it shows "Listen as podcast" and "Listen to songs" entries...
                     if (this.tbarActions.length==0 && resp.numAudioItems>2 && resp.numAudioItems<=200 &&
                         this.command.command.length>0 && ALLOW_ADD_ALL.has(this.command.command[0]) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
-                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                        this.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
                     }
                 }
                 if (resp.canUseGrid && !resp.forceGrid) {
@@ -994,7 +994,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.current = item;
                     this.searchActive = false;
                     if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
-                        this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                        this.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
                     }
                     setScrollTop(this, 0);
                 } else if (this.selection.size>0) {

@@ -1858,11 +1858,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 .add-btn:after {
- content:"\e148";
+ content:"add_circle_outline";
 }
 
 .play-btn:after {
- content:"\e039";
+ content:"play_circle_outline";
 }
 
 .check-btn {

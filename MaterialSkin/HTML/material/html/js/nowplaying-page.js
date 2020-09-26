@@ -519,19 +519,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (playerStatus.playlist.count!=this.playerStatus.playlist.count) {
                 this.playerStatus.playlist.count = playerStatus.playlist.count;
             }
-            var technical = [];
-            if (playerStatus.current.bitrate) {
-                technical.push(playerStatus.current.bitrate);
-            }
-            if (playerStatus.current.samplerate) {
-                technical.push((playerStatus.current.samplerate/1000)+"kHz");
-            }
-            if (playerStatus.current.type) {
-                var bracket = playerStatus.current.type.indexOf(" (");
-                var type = bracket>0 ? playerStatus.current.type.substring(0, bracket) : playerStatus.current.type;
-                technical.push(type.length<=4 ? type.toUpperCase() : type);
-            }
-            technical=technical.join(", ");
+            var technical = formatTechInfo(playerStatus.current);
             if (technical!=this.playerStatus.current.technicalInfo) {
                 this.playerStatus.current.technicalInfo = technical;
             }

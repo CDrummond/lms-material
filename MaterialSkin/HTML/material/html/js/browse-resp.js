@@ -659,11 +659,20 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         discs.set(i.disc, {pos: resp.items.length, total:1, duration:duration});
                     }
                 }
-                totalDuration+=duration;
+                totalDuration += duration>0 ? duration : 0;
+                var subtitle = duration>0 ? formatSeconds(duration) : undefined;
+                var techInfo = lmsOptions.browseTechInfo ? formatTechInfo(i) : undefined;
+                if (techInfo) {
+                    if (subtitle) {
+                        subtitle+=SEPARATOR+techInfo;
+                    } else {
+                        subtitle=techInfo;
+                    }
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              subtitle: undefined!=i.rating ? ratingString(formatSeconds(i.duration), i.rating) : formatSeconds(i.duration),
+                              subtitle: undefined!=i.rating ? ratingString(subtitle, i.rating) : subtitle,
                               //icon: "music_note",
                               stdItem: stdItem,
                               type: "track",
@@ -748,6 +757,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var duration = parseFloat(i.duration || 0);
                 totalDuration+=duration;
                 var subtitle = duration>0 ? formatSeconds(duration) : undefined;
+                var techInfo = lmsOptions.browseTechInfo ? formatTechInfo(i) : undefined;
+                if (techInfo) {
+                    if (subtitle) {
+                        subtitle+=SEPARATOR+techInfo;
+                    } else {
+                        subtitle=techInfo;
+                    }
+                }
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+i.album;

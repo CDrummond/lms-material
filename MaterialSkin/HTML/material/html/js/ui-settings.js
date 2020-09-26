@@ -158,6 +158,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
+      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc. next to track duration.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="browseTechInfo"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
@@ -388,6 +397,7 @@ Vue.component('lms-ui-settings', {
             largerElements: false,
             letterOverlay:false,
             showMenuAudio:true,
+            browseTechInfo:false,
             sortFavorites:true,
             autoScrollQueue:true,
             stopButton:false,
@@ -570,6 +580,7 @@ Vue.component('lms-ui-settings', {
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
+            this.browseTechInfo = this.$store.state.browseTechInfo;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
             this.skipSeconds = this.$store.state.skipSeconds;
             // NOTE: volumeStep is defined in utils.js
@@ -623,6 +634,7 @@ Vue.component('lms-ui-settings', {
                                                   sortFavorites:this.sortFavorites,
                                                   sortHome:this.sortHome,
                                                   showMenuAudio:this.showMenuAudio,
+                                                  browseTechInfo:this.browseTechInfo,
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
@@ -672,6 +684,7 @@ Vue.component('lms-ui-settings', {
                                      sortFavorites:this.sortFavorites,
                                      sortHome:this.sortHome,
                                      showMenuAudio:this.showMenuAudio,
+                                     browseTechInfo:this.browseTechInfo,
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,

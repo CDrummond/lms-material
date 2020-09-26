@@ -148,6 +148,22 @@ function logAndShowError(err, message, command, params, start, count) {
     bus.$emit('showError', err, message);
 }
 
+function formatTechInfo(item) {
+    let technical = [];
+    if (item.bitrate) {
+        technical.push(item.bitrate);
+    }
+    if (item.samplerate) {
+        technical.push((item.samplerate/1000)+"kHz");
+    }
+    if (item.type) {
+        var bracket = item.type.indexOf(" (");
+        var type = bracket>0 ? item.type.substring(0, bracket) : item.type;
+        technical.push(type.length<=4 ? type.toUpperCase() : type);
+    }
+    return technical.length>0 ? technical.join(", ") : undefined;
+}
+
 function formatSeconds(secs, showDays) {
     var numSeconds = parseInt(secs, 10)
     var days       = showDays ? Math.floor(numSeconds / (3600*24)) : 0;

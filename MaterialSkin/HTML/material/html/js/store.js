@@ -55,6 +55,10 @@ function updateUiSettings(state, val) {
         state.showMenuAudio = val.showMenuAudio;
         setLocalStorageVal('showMenuAudio', state.showMenuAudio);
     }
+    if (undefined!=val.browseTechInfo && state.browseTechInfo!=val.browseTechInfo) {
+        state.browseTechInfo = val.browseTechInfo;
+        setLocalStorageVal('browseTechInfo', state.browseTechInfo);
+    }
     if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
         state.stopButton = val.stopButton;
         setLocalStorageVal('stopButton', state.stopButton);
@@ -173,6 +177,8 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
+    lmsOptions.browseTechInfo = state.browseTechInfo;
+    lmsOptions.infoPlugin = state.infoPlugin;
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -224,6 +230,7 @@ const store = new Vuex.Store({
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
+        browseTechInfo:false,
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
@@ -411,8 +418,8 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
+            state.browseTechInfo = getLocalStorageBool('browseTechInfo', state.browseTechInfo);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
-            lmsOptions.infoPlugin = state.infoPlugin;
             state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
             state.customSkipPlugin = getLocalStorageBool('customSkipPlugin', state.customSkipPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
@@ -452,6 +459,8 @@ const store = new Vuex.Store({
             if (state.largerElements) {
                 setElemSizes(state.largerElements);
             }
+        lmsOptions.browseTechInfo = state.browseTechInfo;
+        lmsOptions.infoPlugin = state.infoPlugin;
 
             // Get server prefs  for:
             //   All Artists + Album Artists, or just Artists?
@@ -535,6 +544,7 @@ const store = new Vuex.Store({
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                      showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
+                                     browseTechInfo: getLocalStorageBool('browseTechInfo', undefined==prefs.browseTechInfo ? state.browseTechInfo : prefs.browseTechInfo),
                                      stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
                                      browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                      queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),

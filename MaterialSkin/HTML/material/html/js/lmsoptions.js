@@ -13,4 +13,5 @@ var lmsOptions = {newMusicLimit: 100,
                   artistImages: getLocalStorageBool('artistImages', false),
                   noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                   noRoleFilter: getLocalStorageBool('noRoleFilter', false),
-                  serviceEmblems: getLocalStorageBool('serviceEmblems', true)};
+                  serviceEmblems: getLocalStorageBool('serviceEmblems', true),
+                  browseTechInfo: getLocalStorageBool('browseTechInfo', false)};

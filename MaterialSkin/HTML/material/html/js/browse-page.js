@@ -305,9 +305,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         vsBuffer() {
             return Math.max( this.grid.use
-                                ? this.grid.numColumns < 6
+                                ? this.grid.numColumns <= 2
                                     ? 8
-                                    : 4
+                                    : this.grid.numColumns <= 4
+                                        ? 4
+                                        : 2
                                 : 10,
                              Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
         },

@@ -94,7 +94,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="idx>=items.length" class="image-grid-item defcursor" v-bind:class="{'image-grid-item-with-sub':grid.haveSubtitle}"></div>
        <div v-else class="image-grid-item" v-bind:class="[{'image-grid-item-few':grid.few},{'image-grid-item-with-sub':grid.haveSubtitle}]" @click="click(items[idx], idx, $event)" :title="items[idx] | itemTooltip">
         <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(items[idx], idx, $event)" :title="ACTIONS[items[idx].selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':items[idx].selected}"></div>
-        <img v-if="items[idx].image" :src="items[idx].image" onerror="this.src='html/images/radio.png'" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></img>
+        <v-img v-if="items[idx].image" :src="items[idx].image" onerror="this.src='html/images/radio.png'" cover position="top center" v-bind:class="{'radio-img': SECTION_RADIO==items[idx].section}" class="image-grid-item-img"></v-img>
         <v-icon v-else-if="items[idx].icon" class="image-grid-item-img image-grid-item-icon">{{items[idx].icon}}</v-icon>
         <img v-else-if="items[idx].svg" class="image-grid-item-img" :src="items[idx].svg | svgIcon(darkUi)"></img>
         <img v-else class="image-grid-item-img" :src="'image' | svgIcon(darkUi)"></img>
@@ -140,8 +140,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>check_box</v-icon>
       </v-list-tile-avatar>
       <v-list-tile-avatar v-else-if="item.image && (artwork || isTop)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
-       <img v-if="items.length<=LMS_MAX_NON_SCROLLER_ITEMS" :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
-       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
+       <v-img :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" cover position="top center"></v-img>
       </v-list-tile-avatar>
       <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
        <v-icon>{{item.icon}}</v-icon>
@@ -305,10 +304,20 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.grid.use ? this.grid.ih - (this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF) : LMS_LIST_ELEMENT_SIZE;
         },
         vsBuffer() {
-            return Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight);
+            return Math.max( this.grid.use
+                                ? this.grid.numColumns < 6
+                                    ? 8
+                                    : 4
+                                : 10,
+                             Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
         },
         vsStartIndex() {
-            return !this.grid.use && this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? 0 : Math.max(0, Math.floor(this.vs.scrollTop / this.vsItemHeight) -  this.vsBuffer);
+            if (!this.grid.use && this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS) {
+                return 0;
+            }
+            let idx = Math.max(0, Math.floor(this.vs.scrollTop / this.vsItemHeight) -  this.vsBuffer);
+            let halfBuf = this.vsBuffer/2;
+            return idx==0 ? 0 : Math.floor(Math.floor(idx / halfBuf) * halfBuf);
         },
         vsVisibleNodeCount() {
             return Math.min((this.grid.use ? this.grid.rows.length : this.items.length) - this.vsStartIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + ( this.vsBuffer*2));

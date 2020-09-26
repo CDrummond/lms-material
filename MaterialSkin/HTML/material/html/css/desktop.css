@@ -42,10 +42,6 @@
  backface-visibility:hidden;
 }
 
-#browse-view .lms-list {
- margin-right:-3px!important;
-}
-
 .lms-jumplist {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
 }

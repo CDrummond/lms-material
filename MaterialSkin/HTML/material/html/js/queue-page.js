@@ -249,8 +249,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar" v-if="artwork || selection.size>0">
        <v-icon v-if="item.selected">check_box</v-icon>
        <v-icon v-else-if="!artwork">check_box_outline_blank</v-icon>
-       <img v-else-if="items.length<=LMS_MAX_NON_SCROLLER_ITEMS" :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
-       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
+       <v-img :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" cover position="top center"></v-img>
       </v-list-tile-avatar>
       <v-list-tile-content>
        <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -319,10 +318,15 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE;
         },
         vsBuffer() {
-            return Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight);
+            return Math.max( 10, Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
         },
         vsStartIndex() {
-            return this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? 0 : Math.max(0, Math.floor(this.vs.scrollTop / this.vsItemHeight) - this.vsBuffer);
+            if (this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS) {
+                return 0;
+            }
+            let idx = Math.max(0, Math.floor(this.vs.scrollTop / this.vsItemHeight) -  this.vsBuffer);
+            let halfBuf = this.vsBuffer/2;
+            return idx==0 ? 0 : Math.floor(Math.floor(idx / halfBuf) * halfBuf);
         },
         vsVisibleNodeCount() {
             return Math.min(this.items.length - this.vsStartIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + (this.vsBuffer*2));

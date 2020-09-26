@@ -262,7 +262,6 @@ div.v-subheader {
 
 .lms-list {
  padding:0px;
- overflow-x:hidden;
 }
 
 .lms-list .v-list__tile {
@@ -312,12 +311,7 @@ div.v-subheader {
  object-fit:cover;
  object-position:50% 0%;
  display:block;
- margin-bottom: 4px;
- height:calc(135px + (5px * var(--image-grid-factor))) !important;
- width:calc(135px + (5px * var(--image-grid-factor))) !important;
-}
-
-.image-grid-item .v-image__image--cover {
+ margin-bottom:4px;
  height:calc(135px + (5px * var(--image-grid-factor))) !important;
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
 }
@@ -358,7 +352,7 @@ div.v-subheader {
  position:absolute;
  width:32px !important;
  height:32px !important;
- bottom:12px !important;
+ bottom:10px !important;
  right:-10px !important;
 }
 

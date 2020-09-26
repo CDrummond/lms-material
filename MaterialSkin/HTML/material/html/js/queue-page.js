@@ -249,7 +249,8 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar" v-if="artwork || selection.size>0">
        <v-icon v-if="item.selected">check_box</v-icon>
        <v-icon v-else-if="!artwork">check_box_outline_blank</v-icon>
-       <v-img :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" cover position="top center"></v-img>
+       <img v-else-if="items.length<=LMS_MAX_NON_SCROLLER_ITEMS" :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
+       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
       </v-list-tile-avatar>
       <v-list-tile-content>
        <v-list-tile-title v-html="item.title"></v-list-tile-title>

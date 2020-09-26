@@ -2693,7 +2693,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleScroll() {
             this.menu.show = false;
-            requestAnimationFrame(() => {
+            if (undefined!=this.scrollAnim) {
+                cancelAnimationFrame(this.scrollAnim);
+            }
+            this.scrollAnim = requestAnimationFrame(() => {
+                this.scrollAnim = undefined;
                 this.vs.scrollTop = this.scrollElement.scrollTop;
                 if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1) {
                     if (undefined!==this.letterTimeout) {
@@ -2734,7 +2738,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         handleResize() {
-            requestAnimationFrame(() => {
+            if (undefined!=this.resizeAnim) {
+                cancelAnimationFrame(this.resizeAnim);
+            }
+            this.resizeAnim = requestAnimationFrame(() => {
+                this.resizeAnim = undefined;
                 this.vs.viewHeight = this.scrollElement.offsetHeight;
                 if (0==this.vs.viewHeight && (this.$store.state.desktopLayout || 'browse'==this.$store.state.page)) {
                     setTimeout(function () {

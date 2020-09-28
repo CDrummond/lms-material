@@ -22,7 +22,7 @@ var app = new Vue({
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         this.$store.commit('initUiSettings');
-
+        this.$store.commit('setShowQueue', getLocalStorageBool('showQueue', true));
         if (queryParams.player) {
             document.title += SEPARATOR + unescape(queryParams.player);
         }

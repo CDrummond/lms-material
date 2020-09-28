@@ -10,6 +10,7 @@
  --sub-toolbar-height:48px;
  --bottom-toolbar-height:80px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
+ --splitter-width:3px;
 }
 
 /* For old browser's that dont support min() */
@@ -67,6 +68,7 @@
  border-left:1px solid var(--background-color);
  border-right:1px solid var(--background-color);
  background-color:var(--splitter-color) !important;
+ width:var(--splitter-width)!important;
 }
 
 @media (hover: hover) {

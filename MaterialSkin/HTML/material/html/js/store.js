@@ -218,7 +218,7 @@ function storeCurrentPlayer(player) {
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
-        showQueue: getLocalStorageBool('showQueue', true),
+        showQueue: true,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
@@ -459,8 +459,8 @@ const store = new Vuex.Store({
             if (state.largerElements) {
                 setElemSizes(state.largerElements);
             }
-        lmsOptions.browseTechInfo = state.browseTechInfo;
-        lmsOptions.infoPlugin = state.infoPlugin;
+            lmsOptions.browseTechInfo = state.browseTechInfo;
+            lmsOptions.infoPlugin = state.infoPlugin;
 
             // Get server prefs  for:
             //   All Artists + Album Artists, or just Artists?
@@ -703,6 +703,7 @@ const store = new Vuex.Store({
                     document.documentElement.style.setProperty('--splitter-pc', 100);
                 }
                 bus.$emit('showQueue', val);
+                document.documentElement.style.setProperty('--splitter-width', val ? '3px' : '0px');
             }
         }
     }

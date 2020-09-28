@@ -116,7 +116,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
    <div :style="vsSpacerStyle" v-else>
     <template v-for="(item, index) in vsVisibleItems" :key="item.id">
-     <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index+vsStartIndex, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="itemMenu(item, index+vsStartIndex, $event)">
+     <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index+vs.startIndex, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="itemMenu(item, index+vs.startIndex, $event)">
       <v-list-tile-content>
        <v-list-tile-title>{{item.title}}</v-list-tile-title>
        <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
@@ -124,18 +124,18 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile>
      <v-list-tile v-else-if="item.type=='html'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
      <v-list-tile v-else-if="item.type=='text'" class="lms-list-item browse-text">{{item.title}}</v-list-tile>
-     <v-list-tile v-else-if="item.header" class="lms-list-item browse-header" @click="click(item, index+vsStartIndex, $event)"><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
+     <v-list-tile v-else-if="item.header" class="lms-list-item browse-header" @click="click(item, index+vs.startIndex, $event)"><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
       <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 (Menu)', item.title)">
        <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)" class="list-btns">
-        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
-        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
+        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index+vs.startIndex, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index+vs.startIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        </div>
-       <v-btn icon @click.stop="itemMenu(item, index+vsStartIndex, $event)">
+       <v-btn icon @click.stop="itemMenu(item, index+vs.startIndex, $event)">
         <v-icon>more_vert</v-icon>
        </v-btn>
       </v-list-tile-action>
      </v-list-tile>
-     <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index+vsStartIndex, $event)" class="lms-avatar lms-list-item" :id="'item'+(index+vsStartIndex)" @dragstart="dragStart(index+vsStartIndex, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index+vsStartIndex, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index+vsStartIndex, $event)">
+     <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index+vs.startIndex, $event)" class="lms-avatar lms-list-item" :id="'item'+(index+vs.startIndex)" @dragstart="dragStart(index+vs.startIndex, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index+vs.startIndex, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index+vs.startIndex, $event)">
       <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
        <v-icon>check_box</v-icon>
       </v-list-tile-avatar>
@@ -154,24 +154,24 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-list-tile-avatar>
 
       <v-list-tile-content v-if="item.type=='search'">
-       <v-text-field :autofocus="index+vsStartIndex==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
+       <v-text-field :autofocus="index+vs.startIndex==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
       </v-list-tile-content>
 
       <v-list-tile-content v-else-if="item.type=='entry'">
-       <v-text-field :autofocus="index+vsStartIndex==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
+       <v-text-field :autofocus="index+vs.startIndex==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
       </v-list-tile-content>
 
       <v-list-tile-content v-else>
        <v-list-tile-title>{{item.title}}</v-list-tile-title>
-       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index+vsStartIndex, $event)"></v-list-tile-sub-title>
+       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index+vs.startIndex, $event)"></v-list-tile-sub-title>
       </v-list-tile-content>
 
       <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
        <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)" class="list-btns">
-        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
-        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index+vsStartIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
+        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index+vs.startIndex, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index+vs.startIndex, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        </div>
-       <v-btn icon @click.stop="itemMenu(item, index+vsStartIndex, $event)" :title="i18n('%1 (Menu)', item.title)">
+       <v-btn icon @click.stop="itemMenu(item, index+vs.startIndex, $event)" :title="i18n('%1 (Menu)', item.title)">
         <v-icon>more_vert</v-icon>
        </v-btn>
       </v-list-tile-action>
@@ -293,7 +293,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             disabled: new Set(),
             wide: false,
             searchActive: false,
-            vs: {scrollTop:0, viewHeight:100}
+            vs: {startIndex:0, viewHeight:100}
         }
     },
     computed: {
@@ -307,31 +307,23 @@ var lmsBrowse = Vue.component("lms-browse", {
         vsBuffer() {
             return Math.max( this.grid.use
                                 ? this.grid.numColumns <= 2
-                                    ? 8
+                                    ? 12
                                     : this.grid.numColumns <= 4
-                                        ? 4
-                                        : 2
-                                : 10,
+                                        ? 8
+                                        : 4
+                                : 20,
                              Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
         },
-        vsStartIndex() {
-            if (!this.grid.use && this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS) {
-                return 0;
-            }
-            let idx = Math.max(0, Math.floor(this.vs.scrollTop / this.vsItemHeight) -  this.vsBuffer);
-            let halfBuf = this.vsBuffer/2;
-            return idx==0 ? 0 : Math.floor(Math.floor(idx / halfBuf) * halfBuf);
-        },
         vsVisibleNodeCount() {
-            return Math.min((this.grid.use ? this.grid.rows.length : this.items.length) - this.vsStartIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + ( this.vsBuffer*2));
+            return Math.min((this.grid.use ? this.grid.rows.length : this.items.length) - this.vs.startIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + ( this.vsBuffer*2));
         },
         vsVisibleItems() {
             return this.grid.use
-                    ? this.grid.rows.slice(this.vsStartIndex, this.vsStartIndex + this.vsVisibleNodeCount)
-                    : (this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.vsStartIndex, this.vsStartIndex + this.vsVisibleNodeCount));
+                    ? this.grid.rows.slice(this.vs.startIndex, this.vs.startIndex + this.vsVisibleNodeCount)
+                    : (this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.vs.startIndex, this.vs.startIndex + this.vsVisibleNodeCount));
         },
         vsOffsetY() {
-            return this.vsStartIndex * this.vsItemHeight;
+            return this.vs.startIndex * this.vsItemHeight;
         },
         vsSpacerStyle() {
             return { transform: "translateY(" + this.vsOffsetY + "px)" };
@@ -2710,7 +2702,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.scrollAnim = requestAnimationFrame(() => {
                 this.scrollAnim = undefined;
-                this.vs.scrollTop = this.scrollElement.scrollTop;
+                let startIndex = 0;
+                if (this.grid.use || this.items.length > LMS_MAX_NON_SCROLLER_ITEMS) {
+                    startIndex = Math.max(0, Math.floor(this.scrollElement.scrollTop / this.vsItemHeight) -  this.vsBuffer);
+                    if (startIndex != 0) {
+                        let halfBuf = this.vsBuffer/2;
+                        startIndex = Math.floor(Math.floor(startIndex / halfBuf) * halfBuf);
+                    }
+                }
+                this.vs.startIndex = startIndex;
                 if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1) {
                     if (undefined!==this.letterTimeout) {
                         clearTimeout(this.letterTimeout);

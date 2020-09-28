@@ -245,7 +245,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <div :style="vsViewportStyle">
    <div :style="vsSpacerStyle">
     <template v-for="(item, index) in vsVisibleItems" :key="item.key">
-     <v-list-tile avatar v-bind:class="{'pq-current': (vsStartIndex+index)==currentIndex}" :id="'track'+(vsStartIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
+     <v-list-tile avatar v-bind:class="{'pq-current': (vs.startIndex+index)==currentIndex}" :id="'track'+(vs.startIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
       <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar" v-if="artwork || selection.size>0">
        <v-icon v-if="item.selected">check_box</v-icon>
        <v-icon v-else-if="!artwork">check_box_outline_blank</v-icon>
@@ -262,7 +262,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
        <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
       </v-list-tile-action>
-      <div class="pq-current-indicator" v-if="(vsStartIndex+index)==currentIndex && artwork"></div>
+      <div class="pq-current-indicator" v-if="(vs.startIndex+index)==currentIndex && artwork"></div>
      </v-list-tile>
     </template>
    </div>
@@ -307,7 +307,7 @@ var lmsQueue = Vue.component("lms-queue", {
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0,
             dstm: false,
-            vs: {scrollTop:0, viewHeight:100}
+            vs: {startIndex:0, viewHeight:100}
         }
     },
     computed: {
@@ -319,24 +319,16 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE;
         },
         vsBuffer() {
-            return Math.max( 10, Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
-        },
-        vsStartIndex() {
-            if (this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS) {
-                return 0;
-            }
-            let idx = Math.max(0, Math.floor(this.vs.scrollTop / this.vsItemHeight) -  this.vsBuffer);
-            let halfBuf = this.vsBuffer/2;
-            return idx==0 ? 0 : Math.floor(Math.floor(idx / halfBuf) * halfBuf);
+            return Math.max( 20, Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
         },
         vsVisibleNodeCount() {
-            return Math.min(this.items.length - this.vsStartIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + (this.vsBuffer*2));
+            return Math.min(this.items.length - this.vs.startIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + (this.vsBuffer*2));
         },
         vsVisibleItems() {
-            return this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.vsStartIndex, this.vsStartIndex + this.vsVisibleNodeCount);
+            return this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.vs.startIndex, this.vs.startIndex + this.vsVisibleNodeCount);
         },
         vsOffsetY() {
-            return this.vsStartIndex * this.vsItemHeight;
+            return this.vs.startIndex * this.vsItemHeight;
         },
         vsSpacerStyle() {
             return { transform: "translateY(" + this.vsOffsetY + "px)" };
@@ -615,6 +607,16 @@ var lmsQueue = Vue.component("lms-queue", {
             this.scrollAnim = requestAnimationFrame(() => {
                 this.scrollAnim = undefined;
                 this.vs.scrollTop = this.scrollElement.scrollTop;
+
+                let startIndex = 0;
+                if (this.grid.use || this.items.length > LMS_MAX_NON_SCROLLER_ITEMS) {
+                    startIndex = Math.max(0, Math.floor(this.scrollElement.scrollTop / this.vsItemHeight) -  this.vsBuffer);
+                    if (startIndex != 0) {
+                        let halfBuf = this.vsBuffer/2;
+                        startIndex = Math.floor(Math.floor(startIndex / halfBuf) * halfBuf);
+                    }
+                }
+                this.vs.startIndex = startIndex;
 
                 // Fetch more items?
                 if (this.fetchingItems || this.listSize<=this.items.length) {
@@ -1024,7 +1026,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         dragStart(which, ev) {
-            which+=this.vsStartIndex;
+            which+=this.vs.startIndex;
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);
             ev.dataTransfer.setDragImage(document.getElementById('track'+which), 0, 0);
@@ -1067,7 +1069,7 @@ var lmsQueue = Vue.component("lms-queue", {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            to+=this.vsStartIndex;
+            to+=this.vs.startIndex;
             if (this.dragIndex!=undefined && to!=this.dragIndex) {
                 if (this.selection.size>0) {
                     if (!this.selection.has(to)) {

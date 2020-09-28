@@ -2702,15 +2702,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.scrollAnim = requestAnimationFrame(() => {
                 this.scrollAnim = undefined;
-                let startIndex = 0;
-                if (this.grid.use || this.items.length > LMS_MAX_NON_SCROLLER_ITEMS) {
-                    startIndex = Math.max(0, Math.floor(this.scrollElement.scrollTop / this.vsItemHeight) -  this.vsBuffer);
-                    if (startIndex != 0) {
-                        let halfBuf = this.vsBuffer/2;
-                        startIndex = Math.floor(Math.floor(startIndex / halfBuf) * halfBuf);
-                    }
-                }
-                this.vs.startIndex = startIndex;
+                setVirtualScrollStartIndex(this);
                 if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1) {
                     if (undefined!==this.letterTimeout) {
                         clearTimeout(this.letterTimeout);

@@ -412,6 +412,19 @@ function homeScreenSort(a, b) {
     return at<bt ? -1 : 1;
 }
 
+function setVirtualScrollStartIndex(view) {
+    view.vs.scrollTop = view.scrollElement.scrollTop;
+    let startIndex = 0;
+    if ((undefined!=view.grid && view.grid.use) || view.items.length > LMS_MAX_NON_SCROLLER_ITEMS) {
+        startIndex = Math.max(0, Math.floor(view.scrollElement.scrollTop / view.vsItemHeight) -  view.vsBuffer);
+        if (startIndex != 0) {
+            let halfBuf = view.vsBuffer/2;
+            startIndex = Math.floor(Math.floor(startIndex / halfBuf) * halfBuf);
+        }
+    }
+    view.vs.startIndex = startIndex;
+}
+
 function setScrollTop(view, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.
@@ -420,8 +433,8 @@ function setScrollTop(view, val) {
         view.scrollElement.style['-webkit-overflow-scrolling'] = 'auto';
         view.scrollElement.scrollTop=val;
         view.scrollElement.style['-webkit-overflow-scrolling'] = 'touch';
-        if (undefined!=view.lr) {
-            view.lr.scrollTop = val;
+        if (undefined!=view.vs) {
+            setVirtualScrollStartIndex(view);
         }
     });
 }

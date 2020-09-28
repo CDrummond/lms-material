@@ -606,17 +606,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.scrollAnim = requestAnimationFrame(() => {
                 this.scrollAnim = undefined;
-                this.vs.scrollTop = this.scrollElement.scrollTop;
-
-                let startIndex = 0;
-                if (this.grid.use || this.items.length > LMS_MAX_NON_SCROLLER_ITEMS) {
-                    startIndex = Math.max(0, Math.floor(this.scrollElement.scrollTop / this.vsItemHeight) -  this.vsBuffer);
-                    if (startIndex != 0) {
-                        let halfBuf = this.vsBuffer/2;
-                        startIndex = Math.floor(Math.floor(startIndex / halfBuf) * halfBuf);
-                    }
-                }
-                this.vs.startIndex = startIndex;
+                setVirtualScrollStartIndex(this);
 
                 // Fetch more items?
                 if (this.fetchingItems || this.listSize<=this.items.length) {

@@ -175,7 +175,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         <v-icon>more_vert</v-icon>
        </v-btn>
       </v-list-tile-action>
-      <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+      <div class="emblem" v-if="item.emblem && artwork" :style="{background: item.emblem.bgnd}">
        <img :src="item.emblem | emblem()"></img>
       </div>
      </v-list-tile>

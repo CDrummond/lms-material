@@ -241,33 +241,62 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
- <div class="lms-list bgnd-cover" id="queue-list" v-bind:class="{'lms-list3':threeLines}">
-  <div :style="vsViewportStyle">
-   <div :style="vsSpacerStyle">
-    <template v-for="(item, index) in vsVisibleItems" :key="item.key">
-     <v-list-tile avatar v-bind:class="{'pq-current': (vs.startIndex+index)==currentIndex}" :id="'track'+(vs.startIndex+index)" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
-      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar" v-if="artwork || selection.size>0">
-       <v-icon v-if="item.selected">check_box</v-icon>
-       <v-icon v-else-if="!artwork">check_box_outline_blank</v-icon>
-       <img v-else-if="items.length<=LMS_MAX_NON_SCROLLER_ITEMS" :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
-       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
-      </v-list-tile-avatar>
-      <v-list-tile-content>
-       <v-list-tile-title v-html="item.title"></v-list-tile-title>
-       <v-list-tile-sub-title v-if="!threeLines" v-html="item.subtitle"></v-list-tile-sub-title>
-       <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[0]"></v-list-tile-sub-title>
-       <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[1]"></v-list-tile-sub-title>
-      </v-list-tile-content>
-      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-       <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
-      </v-list-tile-action>
-      <div class="pq-current-indicator" v-if="(vs.startIndex+index)==currentIndex && artwork"></div>
-     </v-list-tile>
-    </template>
-   </div>
-  </div>
- </div>
+ <v-list class="lms-list bgnd-cover" id="queue-list" v-bind:class="{'lms-list3':threeLines}">
+ <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS && threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key">
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle[0]"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-html="item.subtitle[1]"></v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+    <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
+   </v-list-tile>
+  </RecycleScroller>
+  <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key">
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+    <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
+   </v-list-tile>
+  </RecycleScroller>
+  <template v-else v-for="(item, index) in items">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+     <v-icon v-if="item.selected">check_box</v-icon>
+     <img v-else :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-sub-title v-if="!threeLines" v-html="item.subtitle"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[0]"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[1]"></v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+    <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+     <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+    </v-list-tile-action>
+    <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
+   </v-list-tile>
+  </template>
+ </v-list>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
   <v-list v-if="menu.item">
@@ -306,37 +335,10 @@ var lmsQueue = Vue.component("lms-queue", {
             selection: new Set(),
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0,
-            dstm: false,
-            vs: {startIndex:0, viewHeight:100}
+            dstm: false
         }
     },
     computed: {
-        /* virtual scroller... */
-        vsViewportHeight() {
-            return this.items.length * this.vsItemHeight;
-        },
-        vsItemHeight() {
-            return this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE;
-        },
-        vsBuffer() {
-            return Math.max( 20, Math.ceil(LMS_RECYCLER_BUFFER / this.vsItemHeight) );
-        },
-        vsVisibleNodeCount() {
-            return Math.min(this.items.length - this.vs.startIndex, Math.ceil(this.vs.viewHeight / this.vsItemHeight) + (this.vsBuffer*2));
-        },
-        vsVisibleItems() {
-            return this.items.length <= LMS_MAX_NON_SCROLLER_ITEMS ? this.items : this.items.slice(this.vs.startIndex, this.vs.startIndex + this.vsVisibleNodeCount);
-        },
-        vsOffsetY() {
-            return this.vs.startIndex * this.vsItemHeight;
-        },
-        vsSpacerStyle() {
-            return { transform: "translateY(" + this.vsOffsetY + "px)" };
-        },
-        vsViewportStyle() {
-            return { overflow: "hidden", height: this.vsViewportHeight + "px", position: "relative" };
-        },
-        /* ...virtual scroller */
         darkUi () {
             return this.$store.state.darkUi
         },
@@ -374,6 +376,11 @@ var lmsQueue = Vue.component("lms-queue", {
         this.listSize=0;
         this.items=[];
         this.timestamp=0;
+        bus.$on('queueDisplayChanged', function() {
+            this.items=[];
+            this.timestamp=0;
+            this.updateItems();
+        }.bind(this));
         bus.$on('playerChanged', function() {
             this.items=[];
             this.timestamp=0;
@@ -471,8 +478,6 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
-        window.addEventListener("resize", this.handleResize, PASSIVE_SUPPORTED ? { passive: true } : false);
-        bus.$on('fullyLoaded', function() { this.handleResize(); }.bind(this));
 
         if (!IS_MOBILE) {
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -492,13 +497,10 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('pageChanged', function(page) {
             if ('queue'==page) {
                 this.$nextTick(function () {
-                    requestAnimationFrame(() => {
-                        if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
-                             this.scrollToCurrent();
-                        }
-                        this.updateMenu();
-                        this.handleResize();
-                    });
+                     if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
+                          this.scrollToCurrent();
+                     }
+                     this.updateMenu();
                 });
             }
         }.bind(this));
@@ -606,7 +608,6 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.scrollAnim = requestAnimationFrame(() => {
                 this.scrollAnim = undefined;
-                setVirtualScrollStartIndex(this);
 
                 // Fetch more items?
                 if (this.fetchingItems || this.listSize<=this.items.length) {
@@ -620,20 +621,6 @@ var lmsQueue = Vue.component("lms-queue", {
 
                 if (bottomOfPage || pageHeight < visible) {
                     this.fetchItems();
-                }
-            });
-        },
-        handleResize() {
-            if (undefined!=this.resizeAnim) {
-                cancelAnimationFrame(this.resizeAnim);
-            }
-            this.resizeAnim = requestAnimationFrame(() => {
-                this.resizeAnim = undefined;
-                this.vs.viewHeight = this.scrollElement.offsetHeight;
-                if (0==this.vs.viewHeight && (this.$store.state.desktopLayout || 'queue'==this.$store.state.page)) {
-                    setTimeout(function () {
-                        this.handleResize();
-                    }.bind(this), 25);
                 }
             });
         },
@@ -856,11 +843,17 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.items[index].selected = false;
                 }
             }
+            if (this.selection.size>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
+                this.$nextTick(function () {
+                    this.items = JSON.parse(JSON.stringify(this.items));
+                });
+            }
             this.selection = new Set();
         },
         select(item, index, event) {
             if (this.selection.size>0) {
                 this.itemAction(this.selection.has(index) ? UNSELECT_ACTION : SELECT_ACTION, item, index, event);
+                this.$forceUpdate();
             }
         },
         getDuration() {
@@ -999,16 +992,23 @@ var lmsQueue = Vue.component("lms-queue", {
             var scroll = this.items.length>5 && this.currentIndex>=0;
             if (scroll || (pulse && this.items.length>0)) {
                 if (this.currentIndex<this.items.length) {
-                    var pos = this.currentIndex>3 ? (this.currentIndex-3)*this.vsItemHeight : 0;
-                    setScrollTop(this, pos>0 ? pos : 0);
-                    setTimeout(function () {
-                        if (pulse) {
-                            var elem=document.getElementById('track'+this.currentIndex);
-                            if (elem) {
+                    if (this.items.length<=LMS_MAX_NON_SCROLLER_ITEMS) {
+                        var elem=document.getElementById('track'+this.currentIndex);
+                        if (elem) {
+                            if (scroll) {
+                                setScrollTop(this, (this.currentIndex>3 ? this.currentIndex-3 : 0)*(elem.clientHeight+1));
+                            }
+                            if (pulse) {
                                 animate(elem, 1.0, 0.2);
                             }
                         }
-                    }.bind(this), 500);
+                    } else if (scroll) { // TODO: pulse not implemented!
+                        var pos = this.currentIndex>3 ? (this.currentIndex-3)*(this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE) : 0;
+                        setScrollTop(this, pos>0 ? pos : 0);
+                        setTimeout(function () {
+                            setScrollTop(this, pos>0 ? pos : 0);
+                        }.bind(this), 100);
+                    }
                 } else if (scroll) {
                     this.autoScrollRequired = true;
                     this.fetchItems();
@@ -1016,10 +1016,8 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         dragStart(which, ev) {
-            which+=this.vs.startIndex;
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);
-            ev.dataTransfer.setDragImage(document.getElementById('track'+which), 0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && !this.selection.has(which)) {
@@ -1059,7 +1057,6 @@ var lmsQueue = Vue.component("lms-queue", {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            to+=this.vs.startIndex;
             if (this.dragIndex!=undefined && to!=this.dragIndex) {
                 if (this.selection.size>0) {
                     if (!this.selection.has(to)) {
@@ -1154,7 +1151,6 @@ var lmsQueue = Vue.component("lms-queue", {
         if (undefined!=this.scrollElement) {
             this.scrollElement.removeEventListener("scroll", this.handleScroll);
         }
-        window.removeEventListener("resize", this.handleResize);
     }
 });
 

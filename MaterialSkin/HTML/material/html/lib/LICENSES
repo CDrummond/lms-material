@@ -46,6 +46,11 @@ vue-touch-events:
     License: MIT
     Notes: Set disableClick:true
 
+vue-virtual-scroller:
+    Version: 1.0.4
+    URL: https://github.com/Akryum/vue-virtual-scroller
+    License: MIT
+
 vuetify
     Version: 1.5.24trim
     URL: https://github.com/vuetifyjs/vuetify

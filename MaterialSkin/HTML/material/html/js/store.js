@@ -138,6 +138,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
         state.queueThreeLines = val.queueThreeLines;
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
+        bus.$emit('queueDisplayChanged');
     }
     if (undefined!=val.queueArtwork && state.queueArtwork!=val.queueArtwork) {
         state.queueArtwork = val.queueArtwork;

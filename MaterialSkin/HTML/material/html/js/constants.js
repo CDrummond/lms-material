@@ -21,7 +21,6 @@ const LMS_MATERIAL_DEFAULT_ITEMS_PREF = "plugin.material-skin:items";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
 const LMS_CACHE_VERSION = 12;
-const LMS_RECYCLER_BUFFER = 250; // px
 const LMS_LIST_ELEMENT_SIZE = 48;
 const LMS_LIST_3LINE_ELEMENT_SIZE = 68;
 const LMS_BLANK_COVER = "/music/0/cover";

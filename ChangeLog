@@ -1,18 +1,17 @@
 2.0.0
 -----
- 1. Replace vue-virtual-scroll library with custom implementation.
- 2. Use custom vuetify build to trim out unused components.
- 3. Add button to toggle queue visibility on desktop layout.
- 4. Make cover-art in browse and queue views optional.
- 5. Support 'Extras' section by using iframe.
- 6. Place home button, if shown, to the right of the back button (matches
+ 1. Use custom vuetify build to trim out unused components.
+ 2. Add button to toggle queue visibility on desktop layout.
+ 3. Make cover-art in browse and queue views optional.
+ 4. Support 'Extras' section by using iframe.
+ 5. Place home button, if shown, to the right of the back button (matches
     browsers, etc.)
- 7. If configured to show home button, then also show in titlebar of advanced
+ 6. If configured to show home button, then also show in titlebar of advanced
     search and extras pages.
- 8. Show SugarCube pages in 'Extras' if it is installed.
- 9. Swap (+) and (>) buttons to match LMS's default order.
-10. Replace GIF images in Classic Skin with SVGs.
-11. Optionally display technical info when listing tracks in browse view.
+ 7. Show SugarCube pages in 'Extras' if it is installed.
+ 8. Swap (+) and (>) buttons to match LMS's default order.
+ 9. Replace GIF images in Classic Skin with SVGs.
+10. Optionally display technical info when listing tracks in browse view.
 
 1.9.1
 -----

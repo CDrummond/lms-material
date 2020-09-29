@@ -79,14 +79,14 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-icon class="browse-progress" v-if="fetchingItems" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
 
- <div v-if="grid.use">
-  <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
-   <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
-   </template>
-  </div>
-  <div class="lms-image-grid noselect bgnd-cover" id="browse-grid" style="overflow:auto;" v-bind:class="{'lms-image-grid-jump': filteredJumplist.length>1}">
-  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id">
+ <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
+  <template v-for="(item, index) in filteredJumplist">
+   <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
+  </template>
+ </div>
+ <div class="lms-list bgnd-cover" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1}">
+
+  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" v-if="grid.use">
    <div slot-scope="{item, index}" :class="[grid.few ? 'image-grid-few' : 'image-grid-full-width']">
     <div align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes" @contextmenu.prevent="itemMenu(items[idx], idx, $event)">
      <div v-if="idx>=items.length" class="image-grid-item defcursor" v-bind:class="{'image-grid-item-with-sub':grid.haveSubtitle}"></div>
@@ -110,17 +110,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     </div>
    </div>
   </RecycleScroller>
- </div></div>
- <div v-else>
 
- <div class="noselect bgnd-cover lms-jumplist" v-if="filteredJumplist.length>1">
-  <template v-for="(item, index) in filteredJumplist">
-   <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
-  </template>
- </div>
-
- <v-list class="bgnd-cover lms-list" v-bind:class="{'lms-list-jump': filteredJumplist.length>1}" id="browse-list">
-  <RecycleScroller v-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
+  <RecycleScroller v-else-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header}"@contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -221,7 +212,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </div>
    </v-list-tile>
   </template>
- </v-list>
+
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
@@ -787,7 +778,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.subtitleClickable = !IS_MOBILE && this.items.length>0 && undefined!=this.items[0].id && undefined!=this.items[0].artist_id && this.items[0].id.startsWith("album_id:");
                 var prevUseGrid = this.grid.use;
                 this.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-                var changedView = this.grid.use != prevUseGrid;
                 this.jumplistActive=0;
                 this.prevPage = prevPage;
                 this.hoverBtns = !IS_MOBILE && this.items.length>0 &&
@@ -906,9 +896,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.headerSubTitle=0==this.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", this.items.length);
                 }
                 this.$nextTick(function () {
-                    if (changedView) {
-                        this.setScrollElement();
-                    }
                     this.setBgndCover();
                     this.filterJumplist();
                     this.layoutGrid(true);
@@ -1872,7 +1859,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.selection = new Set();
             var prev = this.history.pop();
-            var changedView = this.grid.use != prev.grid.use;
             this.items = prev.items;
             this.allSongsItem = prev.allSongsItem;
             this.jumplist = prev.jumplist;
@@ -1900,9 +1886,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.refreshList();
             } else {
                 this.$nextTick(function () {
-                    if (changedView) {
-                        this.setScrollElement();
-                    }
                     this.setBgndCover();
                     this.filterJumplist();
                     this.layoutGrid(true);
@@ -2712,11 +2695,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('refreshStatus');
             }
         },
-        setScrollElement() {
-            this.scrollElement = document.getElementById(this.grid.use ? "browse-grid" : "browse-list");
-            this.scrollElement.removeEventListener('scroll', this.handleScroll);
-            this.scrollElement.addEventListener('scroll', this.handleScroll);
-        },
         handleScroll() {
             this.menu.show = false;
             if (undefined!=this.scrollAnim) {
@@ -3002,7 +2980,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.setLibrary();
 
-        this.setScrollElement();
+        this.scrollElement = document.getElementById("browse-list");
+        this.scrollElement.addEventListener('scroll', this.handleScroll);
         this.$nextTick(function () {
             setScrollTop(this, 0);
         });

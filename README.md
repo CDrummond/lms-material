@@ -32,10 +32,11 @@ This guide is on a separate github page, and is authored by Jim Gooch.
 15. Group player control; add, edit, delete
 16. Pin apps, etc., to main screen
 17. Swipe left/right to change views with mobile layout
-18. Lock screen controls when used with Chrome on Android (actually, Kiwi browser is better for this)
-19. Integrated support for "Music and Artist Information" plugin
-20. Search for podcasts on iTunes or GPodder
-21. Move queue between players
+18. Integrated support for "Music and Artist Information" plugin
+19. Search for podcasts on iTunes or GPodder
+20. Move queue between players
+21. Add tracks to playlists
+22. Remove duplicates from playlists
 
 ## Detailed information
 

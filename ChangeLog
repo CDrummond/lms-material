@@ -13,6 +13,10 @@
  9. Replace GIF images in Classic Skin with SVGs.
 10. Optionally display technical info when listing tracks in browse view.
 
+1.9.2
+-----
+1. Fix sort option when listing albums under years category.
+
 1.9.1
 -----
 1. Add option to show 'Go home' button.

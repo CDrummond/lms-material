@@ -1232,7 +1232,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 promptForText(i18n("Rename"), item.title, item.title, i18n("Rename")).then(resp => {
                     if (resp.ok && resp.value && resp.value.length>0 && resp.value!=item.title) {
                         if (item.isPinned) {
-                            item.title=str;
+                            item.title=resp.value;
                             this.saveTopList();
                         } else {
                             var command = SECTION_PLAYLISTS==item.section

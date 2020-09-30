@@ -302,7 +302,7 @@ Vue.component('lms-manage-players', {
             }
             for (var i=0, len=this.players.length; i<len; ++i) {
                 if (this.players[i].id==playerId) {
-                    let p = his.players[i];
+                    let p = this.players[i];
                     p.icon = icon;
                     this.$set(this.players, i, p);
                     break;

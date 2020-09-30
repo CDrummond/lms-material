@@ -12,6 +12,7 @@
  8. Swap (+) and (>) buttons to match LMS's default order.
  9. Replace GIF images in Classic Skin with SVGs.
 10. Optionally display technical info when listing tracks in browse view.
+11. Update version of vue-virtual-scroller, with hacky fix for issue 416.
 
 1.9.2
 -----

@@ -1,6 +1,7 @@
 1.9.2
 -----
 1. Fix sort option when listing albums under years category.
+2. Fix renaming pinned items.
 
 1.9.1
 -----

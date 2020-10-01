@@ -86,7 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <div class="lms-list bgnd-cover" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1}">
 
-  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" :buffer="LMS_SCROLLER_BUFFER" v-if="grid.use">
+  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
    <div slot-scope="{item, index}" :class="[grid.few ? 'image-grid-few' : 'image-grid-full-width']">
     <div align="center" style="vertical-align: top" v-for="(idx, cidx) in item.indexes" @contextmenu.prevent="itemMenu(items[idx], idx, $event)">
      <div v-if="idx>=items.length" class="image-grid-item defcursor" v-bind:class="{'image-grid-item-with-sub':grid.haveSubtitle}"></div>
@@ -111,7 +111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </div>
   </RecycleScroller>
 
-  <RecycleScroller v-else-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_BUFFER">
+  <RecycleScroller v-else-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header}"@contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>

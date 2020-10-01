@@ -315,10 +315,6 @@ div.v-subheader {
  border-bottom: 1px solid var(--list-item-border-color);
 }
 
-.lms-list .vue-recycle-scroller {
- height:100%; /*calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height)+var(--sub-toolbar-height)+var(--bottom-toolbar-height))) !important;*/
-}
-
 .image-grid-item-img {
  object-fit:cover;
  object-position:50% 0%;

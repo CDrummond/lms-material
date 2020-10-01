@@ -603,26 +603,25 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         handleScroll() {
             this.menu.show = false;
-            if (undefined!=this.scrollAnim) {
-                cancelAnimationFrame(this.scrollAnim);
+            if (undefined==this.scrollAnim) {
+                this.scrollAnim = requestAnimationFrame(() => {
+                    this.scrollAnim = undefined;
+
+                    // Fetch more items?
+                    if (this.fetchingItems || this.listSize<=this.items.length) {
+                        return;
+                    }
+                    const scrollY = this.scrollElement.scrollTop;
+                    const visible = this.scrollElement.clientHeight;
+                    const pageHeight = this.scrollElement.scrollHeight;
+                    const pad = (visible*2.5);
+                    const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+                    if (bottomOfPage || pageHeight < visible) {
+                        this.fetchItems();
+                    }
+                });
             }
-            this.scrollAnim = requestAnimationFrame(() => {
-                this.scrollAnim = undefined;
-
-                // Fetch more items?
-                if (this.fetchingItems || this.listSize<=this.items.length) {
-                    return;
-                }
-                const scrollY = this.scrollElement.scrollTop;
-                const visible = this.scrollElement.clientHeight;
-                const pageHeight = this.scrollElement.scrollHeight;
-                const pad = (visible*2.5);
-                const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
-
-                if (bottomOfPage || pageHeight < visible) {
-                    this.fetchItems();
-                }
-            });
         },
         droppedFileHandler(ev) {
             let dt = ev.dataTransfer

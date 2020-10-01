@@ -2697,25 +2697,29 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleScroll() {
             this.menu.show = false;
-            if (undefined!=this.scrollAnim) {
-                cancelAnimationFrame(this.scrollAnim);
-            }
-            this.scrollAnim = requestAnimationFrame(() => {
-                this.scrollAnim = undefined;
-                if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1) {
-                    if (undefined!==this.letterTimeout) {
-                        clearTimeout(this.letterTimeout);
-                    }
-                    var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
-                    var index = this.grid.use                                // Add 50 to take into account text size
-                                    ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (this.grid.ih-subMod))*this.grid.numColumns
-                                    : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
-                    if (this.$store.state.letterOverlay) {
-                        if (index>=0 && index<this.items.length) {
-                            var letter = this.items[index].textkey;
-                            if (this.letter!=letter) {
-                                this.letter = letter;
-                                this.letterOverlay.innerHTML = letter;
+            if (undefined==this.scrollAnim) {
+                this.scrollAnim = requestAnimationFrame(() => {
+                    this.scrollAnim = undefined;
+                    if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1) {
+                        if (undefined!==this.letterTimeout) {
+                            clearTimeout(this.letterTimeout);
+                        }
+                        var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
+                        var index = this.grid.use                                // Add 50 to take into account text size
+                                        ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (this.grid.ih-subMod))*this.grid.numColumns
+                                        : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                        if (this.$store.state.letterOverlay) {
+                            if (index>=0 && index<this.items.length) {
+                                var letter = this.items[index].textkey;
+                                if (this.letter!=letter) {
+                                    this.letter = letter;
+                                    this.letterOverlay.innerHTML = letter;
+                                }
+                                this.letterTimeout = setTimeout(function () {
+                                    this.letter = undefined;
+                                }.bind(this), 500);
+                            } else {
+                                this.letter = undefined;
                             }
                             this.letterTimeout = setTimeout(function () {
                                 this.letter = undefined;
@@ -2723,22 +2727,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                         } else {
                             this.letter = undefined;
                         }
-                        this.letterTimeout = setTimeout(function () {
-                            this.letter = undefined;
-                        }.bind(this), 500);
-                    } else {
-                        this.letter = undefined;
-                    }
-                    this.jumplistActive = 0;
-                    for (var i=0, len=this.filteredJumplist.length; i<len; ++i) {
-                        if (this.filteredJumplist[i].index<=index) {
-                            this.jumplistActive = i;
-                        } else {
-                            break;
+                        this.jumplistActive = 0;
+                        for (var i=0, len=this.filteredJumplist.length; i<len; ++i) {
+                            if (this.filteredJumplist[i].index<=index) {
+                                this.jumplistActive = i;
+                            } else {
+                                break;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         },
         calcSizes(quantity, listWidth) {
             var width = GRID_MIN_WIDTH;

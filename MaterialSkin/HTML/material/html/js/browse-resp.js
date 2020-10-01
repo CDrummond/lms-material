@@ -145,7 +145,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 i.text = undefined;
                 i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, LMS_IMAGE_SIZE);
-                i.icon = undefined;
 
                 if (!i.image && i.commonParams && i.commonParams.album_id) {
                     i.image = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);

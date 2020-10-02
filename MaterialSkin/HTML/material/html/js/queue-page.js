@@ -216,11 +216,11 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <v-layout row wrap v-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0">
+   <v-layout row wrap v-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" @click="showRemaining">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single}">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
    </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single" @click="showRemaining" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat</v-icon></v-btn>
@@ -1101,6 +1101,23 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
             } else {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
+            }
+        },
+        showRemaining() {
+            if (this.items.length>1 && this.items.length==this.listSize) {
+                var duration = 0;
+                var isValid = true;
+                for (var i=this.currentIndex; i<this.listSize && isValid; ++i) {
+                    if (this.items[i].duration!=undefined && this.items[i].duration>0) {
+                        duration += this.items[i].duration;
+                    } else {
+                        isValid = false;
+                    }
+                }
+                if (isValid) {
+                    duration -= currentPlayingTrackPosition;
+                    bus.$emit('showMessage', i18np("1 Track (%2) Remaining", "%1 Tracks (%2) Remaining", this.listSize-this.currentIndex, formatSeconds(duration)));
+                }
             }
         }
     },

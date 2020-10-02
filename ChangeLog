@@ -13,6 +13,8 @@
  9. Replace GIF images in Classic Skin with SVGs.
 10. Optionally display technical info when listing tracks in browse view.
 11. Update version of vue-virtual-scroller, with hacky fix for issue 416.
+12. Clicking duration in play queue will shown a message stating number of
+    tracks and duration remaining.
 
 1.9.2
 -----

@@ -17,6 +17,8 @@ const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
 const NP_CUSTOM = 100;
 
+var currentPlayingTrackPosition = 0;
+
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
@@ -1061,6 +1063,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     var current = new Date();
                     var diff = (current.getTime()-this.playerStatus.current.updated.getTime())/1000.0;
                     this.playerStatus.current.time = this.playerStatus.current.origTime + diff;
+                    currentPlayingTrackPosition = this.playerStatus.current.time;
                     this.setPosition();
                     if (this.playerStatus.current.duration && this.playerStatus.current.duration>0 &&
                         this.playerStatus.current.time>=(this.playerStatus.current.duration+2)) {

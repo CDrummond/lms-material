@@ -1825,6 +1825,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  text-decoration:none;
 }
 
+.list-btn {
+ margin-right:-4px;
+}
+
 .grid-btns {
  position:absolute;
  top:2px !important;
@@ -1832,7 +1836,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 .menu-btn:after {
- content:"\e5d4";
+ content:"more_vert";
 }
 
 .image-grid-item .grid-btns, .v-list__tile .list-btns {

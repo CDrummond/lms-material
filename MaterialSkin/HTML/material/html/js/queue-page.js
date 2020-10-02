@@ -255,7 +255,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+     <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
     </v-list-tile-action>
     <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
    </v-list-tile>
@@ -272,7 +272,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+     <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
     </v-list-tile-action>
     <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
    </v-list-tile>
@@ -291,7 +291,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-     <v-btn icon :title="i18n('%1 (Menu)', item.title)"><v-icon>more_vert</v-icon></v-btn>
+     <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
     </v-list-tile-action>
     <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
    </v-list-tile>

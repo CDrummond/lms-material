@@ -216,7 +216,11 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <v-layout row wrap v-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" @click="showRemaining">
+   <v-layout row wrap v-if="undefined!=remaining">
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single}">{{remaining}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{trans.remaining}}</v-flex>
+   </v-layout>
+   <v-layout row wrap v-else-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" @click="showRemaining">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single}">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
    </v-layout>
@@ -327,9 +331,10 @@ var lmsQueue = Vue.component("lms-queue", {
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
+            remaining: undefined,
             trans: { ok: undefined, cancel: undefined, save:undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined },
+                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, remaining:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
@@ -592,7 +597,7 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
-                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music")};
+                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), remaining:i18n("Remaining")};
         },
         updateMenu() {
             var wide = this.scrollElement.clientWidth >= 520 ? 2 : this.scrollElement.clientWidth>=340 ? 1 : 0;
@@ -1116,7 +1121,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
                 if (isValid) {
                     duration -= currentPlayingTrackPosition;
-                    bus.$emit('showMessage', i18np("1 Track (%2) Remaining", "%1 Tracks (%2) Remaining", this.listSize-this.currentIndex, formatSeconds(duration)));
+                    this.remaining = i18np("1 Track", "%1 Tracks", this.listSize - this.currentIndex) + " (" + formatSeconds(Math.floor(duration)) +")";
+                    setTimeout(function () {
+                        this.remaining = undefined;
+                    }.bind(this), 2000);
                 }
             }
         }

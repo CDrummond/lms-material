@@ -26,23 +26,16 @@ function i18n(str, val, val2, val3) {
     return rv;
 }
 
-function i18np(singular, plural, val, val2) {
-    let rv = undefined;
+function i18np(singular, plural, val) {
     if (1==val) {
         if (undefined==translation || !(singular in translation) || translation[singular]==="") {
-            rv = singular.replace("%1", val);
-        } else {
-            rv = translation[singular].replace("%1", val);
+            return singular.replace("%1", val);
         }
+        return translation[singular].replace("%1", val);
     } else {
         if (undefined==translation || !(plural in translation) || translation[plural]==="") {
-            rv = plural.replace("%1", val);
-        } else {
-            rv = translation[plural].replace("%1", val);
+            return plural.replace("%1", val);
         }
+        return translation[plural].replace("%1", val);
     }
-    if (undefined!=val2) {
-        rv = rv.replace("%2", val2);
-    }
-    return rv;
 }

@@ -189,8 +189,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
-                              album_id: i.album_id,
-                              selected: false
+                              album_id: i.album_id
                           });
                 index++;
             }

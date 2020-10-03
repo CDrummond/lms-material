@@ -825,7 +825,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, event) {
-            browseItemAction(this, item, index, event);
+            browseItemAction(this, act, item, index, event);
         },
         itemMoreAction(item, index) {
             this.doTextClick(item.moremenu[index], true);
@@ -999,9 +999,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         buildCommand(item, commandName, doReplacements) {
             return browseBuildCommand(this, item, commandName, doReplacements);
-        },
-        buildFullCommand(item, act) {
-            return browseBuildFullCommand(this, item, act);
         },
         replaceCommandTerms(cmd, item) {
             return browseReplaceCommandTerms(this, cmd, item);

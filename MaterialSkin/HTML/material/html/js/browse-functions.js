@@ -634,7 +634,7 @@ function browseItemAction(view, act, item, index, event) {
                 }
             }
         }
-        var command = view.buildFullCommand(view.current, PLAY_ACTION);
+        var command = browseBuildFullCommand(view, view.current, PLAY_ACTION);
         command.command.push("play_index:"+index);
         lmsCommand(view.playerId(), command.command).then(({data}) => {
             logJsonMessage("RESP", data);
@@ -738,7 +738,7 @@ function browseItemAction(view, act, item, index, event) {
             }
         });
     } else {
-        var command = view.buildFullCommand(item, act);
+        var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {
             bus.$emit('showError', undefined, i18n("Don't know how to handle view!"));
             return;
@@ -779,7 +779,7 @@ function browseItemMenu(view, item, index, event) {
         if (item.moremenu) {
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
         } else {
-            var command = view.buildFullCommand(item, item.menu[0]);
+            var command = browseBuildFullCommand(view, item, item.menu[0]);
             lmsList(view.playerId(), command.command, command.params, 0, 100, false).then(({data}) => {
                 var resp = parseBrowseResp(data, item, view.options, undefined);
                 if (resp.items.length>0) {
@@ -1101,100 +1101,6 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
     return cmd;
 }
 
-function browseBuildFullCommand(view, item, act) {
-    var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
-    if (command.command.length<1) { // Non slim-browse command
-        if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
-            command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
-        } else if (item.app && item.id) {
-            command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
-        } else if (item.isFolderItem || item.isUrl) {
-            command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
-        } else if (item.id) {
-            command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
-            if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
-                var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
-                for (var i=0, loop = params, len=loop.length; i<len; ++i) {
-                    if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
-                         (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||
-                         loop[i].startsWith("artist_id:")) {
-                        if (!item.id.startsWith("artist_id:") || !loop[i].startsWith("artist_id:")) {
-                            command.command.push(loop[i]);
-                        }
-                        if (loop[i].startsWith("artist_id:")) {
-                            command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
-                        }
-                    }
-                }
-            } else if (item.id.startsWith("genre_id:")) {
-                command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
-            }
-
-            command.command.push(originalId(item.id));
-        }
-        command=browseReplaceCommandTerms(view, command);
-    }
-
-    if (command.command.length===0) {
-        return command;
-    }
-
-    // Add params onto command...
-    if (command.params.length>0) {
-        command.params.forEach(i => {
-            command.command.push(i);
-        });
-    }
-    return command;
-}
-
-function browseReplaceCommandTerms(view, cmd, item) {
-    if (shouldAddLibraryId(cmd)) {
-        // Check if command already has library_id
-        var haveLibId = false;
-        for (var i=0, len=cmd.params.length; i<len; ++i) {
-            if (cmd.params[i].startsWith("library_id:")) {
-                let id = cmd.params[i].split(":")[1];
-                if (undefined!=id && (""+id)!="") {
-                    haveLibId = true;
-                    cmd.libraryId = id;
-                    break;
-                }
-            }
-        }
-        if (!haveLibId) { // Command does not have library_id. Use lib from parent command (if set), or user's chosen library
-            var libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
-            if (libId) {
-                cmd.params.push("library_id:"+libId);
-                cmd.libraryId = libId;
-            }
-        }
-    }
-
-    // Replace sort, search terms, and fix tags (ratings and online emblems)
-    if (cmd.params.length>0) {
-        var albumSort=getAlbumSort(cmd, view.inGenre);
-        for (var i=0, len=cmd.params.length; i<len; ++i) {
-            if (item && item.swapid && cmd.params[i]==item.id) {
-                cmd.params[i]=item.swapid;
-            } else {
-                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                           .replace(TERM_PLACEHOLDER, view.enteredTerm)
-                                           .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
-                                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
-                                           .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
-                                           .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
-                if (cmd.params[i].startsWith("tags:")) {
-                    cmd.params[i]+=(view.$store.state.ratingsSupport && "tracks"==cmd.command[0] ? "R" : "")+
-                                   (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
-                }
-            }
-        }
-    }
-    return cmd;
-}
-
 function browseMyMusicMenu(view) {
     if (view.myMusic.length>0 && !view.myMusic[0].needsUpdating) {
         return;
@@ -1475,6 +1381,100 @@ function browseUpdateItemPinnedState(view, item) {
     }
 }
 
+function browseReplaceCommandTerms(view, cmd, item) {
+    if (shouldAddLibraryId(cmd)) {
+        // Check if command already has library_id
+        var haveLibId = false;
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (cmd.params[i].startsWith("library_id:")) {
+                let id = cmd.params[i].split(":")[1];
+                if (undefined!=id && (""+id)!="") {
+                    haveLibId = true;
+                    cmd.libraryId = id;
+                    break;
+                }
+            }
+        }
+        if (!haveLibId) { // Command does not have library_id. Use lib from parent command (if set), or user's chosen library
+            var libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+            if (libId) {
+                cmd.params.push("library_id:"+libId);
+                cmd.libraryId = libId;
+            }
+        }
+    }
+
+    // Replace sort, search terms, and fix tags (ratings and online emblems)
+    if (cmd.params.length>0) {
+        var albumSort=getAlbumSort(cmd, view.inGenre);
+        for (var i=0, len=cmd.params.length; i<len; ++i) {
+            if (item && item.swapid && cmd.params[i]==item.id) {
+                cmd.params[i]=item.swapid;
+            } else {
+                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                                           .replace(TERM_PLACEHOLDER, view.enteredTerm)
+                                           .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
+                                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
+                                           .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
+                                           .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
+                if (cmd.params[i].startsWith("tags:")) {
+                    cmd.params[i]+=(view.$store.state.ratingsSupport && "tracks"==cmd.command[0] ? "R" : "")+
+                                   (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
+                }
+            }
+        }
+    }
+    return cmd;
+}
+
+function browseBuildFullCommand(view, item, act) {
+    var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
+    if (command.command.length<1) { // Non slim-browse command
+        if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
+            command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
+        } else if (item.app && item.id) {
+            command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
+        } else if (item.isFolderItem || item.isUrl) {
+            command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
+        } else if (item.id) {
+            command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
+            if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
+                var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
+                for (var i=0, loop = params, len=loop.length; i<len; ++i) {
+                    if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
+                         (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||
+                         loop[i].startsWith("artist_id:")) {
+                        if (!item.id.startsWith("artist_id:") || !loop[i].startsWith("artist_id:")) {
+                            command.command.push(loop[i]);
+                        }
+                        if (loop[i].startsWith("artist_id:")) {
+                            command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
+                        }
+                    }
+                }
+            } else if (item.id.startsWith("genre_id:")) {
+                command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
+            }
+
+            command.command.push(originalId(item.id));
+        }
+        command=browseReplaceCommandTerms(view, command);
+    }
+
+    if (command.command.length===0) {
+        return command;
+    }
+
+    // Add params onto command...
+    if (command.params.length>0) {
+        command.params.forEach(i => {
+            command.command.push(i);
+        });
+    }
+    return command;
+}
+
 function browseDoList(view, list, act/*, index*/) {
     act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act ? PLAY_ACTION : act;
     // Perform an action on a list of items. If these are tracks, then we can use 1 command...
@@ -1487,7 +1487,7 @@ function browseDoList(view, list, act/*, index*/) {
                 ids+=","+originalId(list[i].id).split(":")[1];
             }
         }
-        var command = view.buildFullCommand({id:ids}, /*PLAY_ACTION==act && undefined!=index ? ADD_ACTION :*/ act);
+        var command = browseBuildFullCommand(view, {id:ids}, /*PLAY_ACTION==act && undefined!=index ? ADD_ACTION :*/ act);
         if (command.command.length===0) {
             bus.$emit('showError', undefined, i18n("Don't know how to handle view!"));
             return;
@@ -1545,7 +1545,7 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
             return;
         }
         var cmd = commands.shift();
-        var command = view.buildFullCommand(cmd.item, cmd.act);
+        var command = browseBuildFullCommand(view, cmd.item, cmd.act);
         if (command.command.length===0) {
             bus.$emit('showError', undefined, i18n("Don't know how to handle view!"));
             return;

@@ -17,6 +17,7 @@
     duration.
 13. Combine library and material JS files into 1 for releases.
 14. Defer loading of some JS and CSS until page loaded.
+15. Split out functions from browse and now-playing pages that can be deferred.
 
 1.9.2
 -----

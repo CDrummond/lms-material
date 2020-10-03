@@ -83,14 +83,17 @@ var app = new Vue({
                     if (!LMS_SKIN_LANGUAGES.has(lang)) {
                         lang = lang.substr(0, 2);
                     }
-                    axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
-                        var trans = eval(resp.data);
-                        setLocalStorageVal('translation', JSON.stringify(trans));
-                        setTranslation(trans);
-                        bus.$emit('langChanged');
-                     }).catch(err => {
-                        window.console.error(err);
-                    });
+                    if (getLocalStorageVal("lang", "")!=(lang+"@"+LMS_MATERIAL_REVISION)) {
+                        axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+                            var trans = eval(resp.data);
+                            setLocalStorageVal('translation', JSON.stringify(trans));
+                            setLocalStorageVal('lang', lang+"@"+LMS_MATERIAL_REVISION);
+                            setTranslation(trans);
+                            bus.$emit('langChanged');
+                         }).catch(err => {
+                            window.console.error(err);
+                        });
+                    }
                 }
             }
         });

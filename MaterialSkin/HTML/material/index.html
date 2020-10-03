@@ -161,14 +161,14 @@
   <script src="material/custom.js"></script>
   <script type="text/javascript">
    // DEFFERED start
-   function addJsToDocument(js, rev, path) {
+   function addJsToDocument(path, js, rev) {
      for (let i=0, len=js.length; i<len; ++i) {
        var element = document.createElement("script");
        element.src = path+js[i]+".js?r="+rev;
        document.body.appendChild(element);
      }
    }
-   function addCssToDocument(css, rev, path) {
+   function addCssToDocument(path, css, rev) {
      for (let i=0, len=css.length; i<len; ++i) {
        var element = document.createElement("link");
        element.href = path+css[i]+".css?r="+rev;

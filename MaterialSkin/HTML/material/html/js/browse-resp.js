@@ -82,6 +82,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
+                i.selected = false;
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
@@ -532,7 +533,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               image: (lmsOptions.infoPlugin && lmsOptions.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: STD_ITEM_ARTIST,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              selected: false
                           };
                 resp.items.push(artist);
             }
@@ -597,7 +599,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               type: "group",
                               origTitle: i.album,
                               textkey: key,
-                              emblem: getEmblem(i.extid)
+                              emblem: getEmblem(i.extid),
+                              selected: false
                           };
                 resp.items.push(album);
             }
@@ -686,7 +689,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist: isSearchResult ? i.artist : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
-                              url: i.url
+                              url: i.url,
+                              selected: false
                           });
             }
             if (sortTracks) {
@@ -718,7 +722,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               //icon: "label",
                               stdItem: STD_ITEM_GENRE,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              selected: false
                           });
             }
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
@@ -738,7 +743,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url,
-                              remotePlaylist: isRemote
+                              remotePlaylist: isRemote,
+                              selected: false
                           });
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
@@ -782,7 +788,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               //icon: "music_note",
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",
-                              draggable: !isRemote
+                              draggable: !isRemote,
+                              selected: false
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
@@ -802,7 +809,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               //icon: "date_range",
                               stdItem: STD_ITEM_YEAR,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              selected: false
                           });
             }
             resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length);
@@ -844,6 +852,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var mappedIcon = mapIcon(i);
                 i.title = itemText(i);
                 i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
+                i.selected = false;
                 if ("text"===i.type || "textarea"===i.type) {
                     if (i.title.length<75 && i.image) { // Possible image?
                         numImages++;

@@ -189,7 +189,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
-                              album_id: i.album_id
+                              album_id: i.album_id,
+                              selected: false
                           });
                 index++;
             }
@@ -846,11 +847,6 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     this.items[index].selected = false;
                 }
-            }
-            if (this.selection.size>0 && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS) {
-                this.$nextTick(function () {
-                    this.items = JSON.parse(JSON.stringify(this.items));
-                });
             }
             this.selection = new Set();
         },

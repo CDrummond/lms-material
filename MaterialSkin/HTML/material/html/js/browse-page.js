@@ -1114,11 +1114,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.items[index].selected = false;
                 }
             }
-            if (selection.length>0 && (this.items.length>LMS_MAX_NON_SCROLLER_ITEMS || this.grid.use)) {
-                this.$nextTick(function () {
-                    this.items = JSON.parse(JSON.stringify(this.items));
-                });
-            }
             this.selection = new Set();
             this.selectStart = undefined;
         },

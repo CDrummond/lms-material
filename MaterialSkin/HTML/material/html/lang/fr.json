@@ -471,7 +471,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"NOTE: Folders are always sorted, this setting only affects playable items.":"",
-"Show home button":"",
-"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.":""
+"NOTE: Folders are always sorted, this setting only affects playable items.":"REMARQUE: les dossiers sont toujours triés. (Ce paramètre n'affecte que les éléments jouables.)",
+"Show home button":"Afficher le bouton 'Accueil'",
+"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.":"Lors du parcours des listes, afficher un bouton permettant un accès rapide à l'écran d'accueil. Par défaut, le retour à l'écran d'accueil peut être effectué par un appui long sur le bouton de retour."
 }

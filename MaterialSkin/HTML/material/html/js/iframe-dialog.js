@@ -131,6 +131,9 @@ function hideClassicSkinElems(page, textCol) {
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
         var content = iframe.contentDocument;
+        if (undefined==content) {
+            return;
+        }
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
 

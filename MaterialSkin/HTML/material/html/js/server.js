@@ -339,7 +339,10 @@ var lmsServer = Vue.component('lms-server', {
                                        isgroup: 'group'===i.model,
                                        model: i.modelname,
                                        ip: i.ip,
-                                       icon: mapPlayerIcon(i)
+                                       icon: mapPlayerIcon(i),
+                                       link: ("squeezelite"==i.model && i.firmware.endsWith("-pCP")) ||
+                                              "squeezeesp32"==i.model
+                                                ? "http://"+i.ip.split(':')[0] : undefined
                                       });
                         ids.add(i.playerid);
                     }

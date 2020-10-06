@@ -11,7 +11,7 @@ const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "ifr
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link};
 }
 
 function updateUiSettings(state, val) {
@@ -291,6 +291,7 @@ const store = new Vuex.Store({
                     state.players[i].isconnected = players[i].isconnected;
                     state.players[i].isgroup = players[i].isgroup;
                     state.players[i].icon = players[i].icon;
+                    state.players[i].link = players[i].link;
                 }
                 return;
             }

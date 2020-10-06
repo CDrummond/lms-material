@@ -68,7 +68,8 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('Players')}}</p>
    <ul>
     <template v-for="(item, index) in players">
-     <li><v-icon v-if="item.icon.icon" style="margin-top:-4px">{{item.icon.icon}}</v-icon><img v-else class="svg-img" style="margin-top:-4px" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}
+     <li>
+      <div v-bind:class="{'link-item':item.link}" @click="openConfig(item)"><v-icon v-if="item.icon.icon" style="margin-top:-4px">{{item.icon.icon}}</v-icon><img v-else class="svg-img" style="margin-top:-4px" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}</div>
       <ul style="margin-bottom:16px">
        <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
       </ul>
@@ -247,7 +248,11 @@ Vue.component('lms-information-dialog', {
                                 info[5]=i18n("Signal Strength: %1%", prevStrengths[player.playerid]);
                             }
 
-                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player)});
+                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player),
+                                               link: ("squeezelite"==player.model && player.firmware.endsWith("-pCP")) ||
+                                                      "squeezeesp32"==player.model
+                                                        ? "http://"+player.ip.split(':')[0] : undefined});
+
                             if (!isgroup) {
                                 lmsCommand(player.playerid, ["signalstrength" ,"?"]).then(({data}) => {
                                     if (data && data.result && data.result._signalstrength>0) {
@@ -336,6 +341,11 @@ Vue.component('lms-information-dialog', {
                         // Keep in sync with toolbar.js!
                         [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
                          {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+        },
+        openConfig(player) {
+            if (player.link) {
+                bus.$emit('dlg.open', 'iframe', player.link, player.name+SEPARATOR+i18n("Config"));
+            }
         },
         rescan(item) {
             bus.$emit('showMessage', item.name);

@@ -401,7 +401,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {
-            nowplayingOnPlayerStatus(this, playerStatus);
+            try {
+                nowplayingOnPlayerStatus(this, playerStatus); // can be called before deferred JS is loaded...
+            } catch { // If error, get status 1 second later...
+                setTimeout(function () { bus.$emit('refreshStatus', this.$store.state.player.id); }.bind(this), 1000);
+            }
         }.bind(this));
 
         // Refresh status now, in case we were mounted after initial status call

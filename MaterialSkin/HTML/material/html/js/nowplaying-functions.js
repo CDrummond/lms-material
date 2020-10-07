@@ -252,24 +252,6 @@ function nowplayingMenuAction(view, item) {
     }
 }
 
-function nowplayingShowPic(view) {
-    view.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, [{src:changeImageSizing(view.coverUrl), w:0, h:0}], {index: 0});
-    view.gallery.listen('gettingData', function (index, item) {
-        if (item.w < 1 || item.h < 1) {
-            var img = new Image();
-            img.onload = function () {
-                item.w = view.width;
-                item.h = view.height;
-                view.gallery.updateSize(true);
-            };
-            img.src = item.src;
-        }
-    });
-    view.gallery.init();
-    view.$store.commit('dialogOpen', {name:'np-viewer', shown:true});
-    view.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
-}
-
 function nowplayingFetchLyrics(view) {
     if (view.info.tabs[LYRICS_TAB].artist!=view.infoTrack.artist || view.info.tabs[LYRICS_TAB].songtitle!=view.infoTrack.title ||
         view.info.tabs[LYRICS_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[LYRICS_TAB].artist_id!=view.infoTrack.artist_id) {

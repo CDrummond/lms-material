@@ -318,7 +318,7 @@ def combineFiles():
     info("......PhotoSwipe Skin")
     for entry in os.listdir("%s/lib/photoswipe/default-skin/" % HTML_FOLDER):
         if entry.endswith(".png") or entry.endswith(".svg") or  entry.endswith(".gif"):
-            os.rename("%s/lib/photoswipe/default-skin/%s" % (HTML_FOLDER, entry), "%s/js/%s" % (HTML_FOLDER, entry))
+            os.rename("%s/lib/photoswipe/default-skin/%s" % (HTML_FOLDER, entry), "%s/css/%s" % (HTML_FOLDER, entry))
     shutil.rmtree("%s/lib/" % HTML_FOLDER)
 
 

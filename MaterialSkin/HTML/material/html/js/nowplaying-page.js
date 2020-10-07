@@ -509,7 +509,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             nowplayingMenuAction(this, item);
         },
         showPic() {
-            nowplayingShowPic(this);
+            var npPage = this;
+            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, [{src:changeImageSizing(this.coverUrl), w:0, h:0}], {index: 0});
+            this.gallery.listen('gettingData', function (index, item) {
+                if (item.w < 1 || item.h < 1) {
+                    var img = new Image();
+                    img.onload = function () {
+                        item.w = this.width;
+                        item.h = this.height;
+                        npPage.gallery.updateSize(true);
+                    };
+                    img.src = item.src;
+                }
+            });
+            this.gallery.init();
+            this.$store.commit('dialogOpen', {name:'np-viewer', shown:true});
+            this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
         },
         doAction(command) {
             if (this.$store.state.visibleMenus.size>0) {

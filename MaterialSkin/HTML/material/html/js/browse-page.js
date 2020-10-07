@@ -970,7 +970,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         goHome() {
-            browseGoHome(this);
+            try { browseGoHome(this); } catch {} // goHome can be called (due to initUiSettings) before deferred JS is loaded...
         },
         goTo(index) {
             if (index>=this.history.length) {

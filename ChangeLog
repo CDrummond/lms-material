@@ -19,9 +19,7 @@
 14. Defer loading of some JS and CSS until page loaded.
 15. Split out functions from browse and now-playing pages that can be deferred.
 16. Only download translation if lang or Material version changed.
-17. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, show config page
-    when click on name in information dialog.
-18. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, add action to show
+17. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, add action to show
     config page in main menu of Player Settings dialog.
 
 1.9.2

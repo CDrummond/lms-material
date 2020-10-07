@@ -26,8 +26,8 @@ Vue.component('lms-player-settings', {
         <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
        <v-list-tile v-if="unlockAll && playerLink" @click="showConfig">
-        <v-list-tile-avatar v-if="menuIcons"><v-icon>settings</v-icon></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Config')}}</v-list-tile-title></v-list-tile-content>
+        <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
+        <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
        <v-divider v-if="unlockAll && (customActions && customActions.length>0)"></v-divider>
        <template v-for="(action, index) in customActions">
@@ -653,7 +653,7 @@ Vue.component('lms-player-settings', {
             bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
         },
         showConfig() {
-            bus.$emit('dlg.open', 'iframe', this.playerLink, this.playerName+SEPARATOR+i18n("Config"));
+            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName);
         },
         doCustomAction(action, player) {
             performCustomAction(this, action, player);

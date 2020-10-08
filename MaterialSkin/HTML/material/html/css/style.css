@@ -1362,10 +1362,8 @@ progress {
  margin-bottom:4px;
 }
 
-.pmgr-grp-title {
- padding-top:32px !important;
+.pmgr-other-title {
  margin-top:16px;
- border-top:1px solid var(--list-item-border-color);
 }
 
 .pmgr-synced-players {

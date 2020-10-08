@@ -8,6 +8,10 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
+// Disable ripple effect on buttons
+const VBtn = Vue.component('VBtn')
+VBtn.options.props.ripple.default = false;
+
 var app = new Vue({
     el: '#app',
     data() {

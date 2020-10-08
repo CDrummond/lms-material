@@ -26,6 +26,10 @@
 -----
 1. Fix sort option when listing albums under years category.
 2. Fix renaming pinned items.
+3. If writeError is returned when saving play queue then inform user that queue
+   was not saved.
+4. Disable ripple effect from buttons, works-around search button having
+   highlight when long-press back button to go home.
 
 1.9.1
 -----

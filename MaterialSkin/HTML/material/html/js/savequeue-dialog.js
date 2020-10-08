@@ -84,6 +84,9 @@ Vue.component('lms-savequeue', {
             }
             this.show=false;
             lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({data})=>{
+                if (data && data.result && data.result.writeError && 1==parseInt(data.result.writeError)) {
+                    bus.$emit('showError', undefined, i18n("Failed to save play queue!"));
+                }
                 bus.$emit('refreshPlaylist', name);
                 if (this.currentName!=name) {
                     // Refresh status to pick up new name quicker...

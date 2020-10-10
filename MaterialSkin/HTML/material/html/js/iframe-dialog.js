@@ -180,8 +180,8 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon v-longpress="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
-     <v-btn v-if="showHome && homeButton" flat icon @click="close(); bus.$emit('browse-home')" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBackLP" @click.stop="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
@@ -298,17 +298,36 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
     },
     methods: {
-        goBack(longpress) {
-            if (longpress || this.history.length<1) {
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                if (this.showHome) {
+                    this.goHome()
+                } else {
+                    this.close();
+                }
+            }
+        },
+        goBack() {
+            if (!this.show) {
+                return;
+            }
+            if (this.history.length<1) {
                 this.close();
             } else {
                 this.loaded = false;
                 this.src = this.history.pop();
             }
         },
+        goHome() {
+            this.close();
+            bus.$emit('browse-home');
+        },
         close() {
             this.show=false;
             this.showMenu = false;
+            this.history=[];
             bus.$emit('iframeClosed', this.isPlayer);
         },
         i18n(str, arg) {

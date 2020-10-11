@@ -21,6 +21,7 @@
 16. Only download translation if lang or Material version changed.
 17. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, add action to show
     config page in main menu of Player Settings dialog.
+18. Add BBC sounds logo.
 
 1.9.2
 -----

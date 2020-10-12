@@ -40,7 +40,7 @@ div#browsedbList {
 }
 
 #choose_setting {
- position:fixed;
+
  top:8px;
  left:18px;
  margin-left:-8px;
@@ -95,6 +95,14 @@ body {
  margin-top:0px;
 }
 
+@media screen and (min-width: 1300px) {
+ body {
+  max-width:1200px;
+  margin-left:auto;
+  margin-right:auto;
+ }
+}
+
 td input { /* Fix entry/combo alignment in additional browse modes */
  margin-bottom:-1px;
  padding-bottom:0px;
@@ -119,6 +127,12 @@ table {
 div#innerSettingsBlock {
  width:calc(100vw - 36px)!important;
  padding: 0px 21px 0px 7px;
+}
+
+@media screen and (min-width: 1300px) {
+ div#innerSettingsBlock {
+  width:100%!important;
+ }
 }
 
 *, body, table, input, select, textarea, p, l {

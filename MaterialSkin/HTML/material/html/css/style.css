@@ -16,7 +16,7 @@
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
  --image-grid-factor:0;
- --dialog-list-max-width:900px;
+ --dialog-list-max-width:1000px;
  --icon-size:24px;
  --toolbar-button-margin:4px;
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */

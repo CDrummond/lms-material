@@ -1852,7 +1852,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .list-btns {
  position:absolute;
  top:8px !important;
- right:38px !important;
+ right:50px !important;
 }
 
 .lms-list .v-list__tile__action .v-btn--icon {
@@ -1863,6 +1863,9 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:2px;
  float:left;
  color:rgba(255, 255, 255, 0.7);
+}
+
+.grid-btns .add-btn, .grid-btns .play-btn {
  background-color:rgba(64, 64, 64, 0.75)!important;
 }
 
@@ -1870,7 +1873,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:8px;
 }
 
-.add-btn:hover, .play-btn:hover {
+.grid-btns .add-btn:hover, .grid-btns .play-btn:hover {
  color:white;
  background-color:rgba(16, 16, 16, 0.75)!important;
 }

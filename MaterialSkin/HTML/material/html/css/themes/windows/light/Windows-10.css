@@ -46,7 +46,7 @@
 }
 
 @media (hover: hover) {
- .menu-btn:hover {
+ .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover {
   background-color:rgba(128, 128, 128, 0.5);
  }
 }

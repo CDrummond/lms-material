@@ -1570,6 +1570,10 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
+.browse-header {
+ background-color:var(--browse-header-color);
+}
+ 
 .queue-action {
  min-width:44px !important;
 }

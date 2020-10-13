@@ -124,6 +124,35 @@ function otherClickHandler(e) {
     }
 }
 
+function clickDirSelect(elem) {
+    var i = elem.srcElement.id.split('.')[1];
+    var path = elem.srcElement.ownerDocument.getElementById('mediadirs'+i);
+    bus.$emit('dlg.open', 'dirselect', path);
+}
+
+function addDirSelectButtons(doc) {
+    for (var i=0; i<20; ++i) {
+        var elem = doc.getElementById("mediadirs"+i);
+        if (undefined==elem) {
+            return;
+        }
+        if (0==i) {
+            // Insert a blank header between "Folder" and "Music"
+            var th = doc.createElement("th");
+            elem.parentNode.parentNode.parentNode.firstChild.insertBefore(th, elem.parentNode.parentNode.parentNode.firstChild.childNodes[2]);
+        }
+        var td = doc.createElement("td");
+        td.classList = elem.parentNode.classList;
+        var btn = doc.createElement("div");
+        btn.id="msk-dir-btn."+i;
+        btn.classList.add("msk-dir-btn");
+        btn.addEventListener("click", clickDirSelect);
+        td.appendChild(btn);
+        // Append our icon after path field
+        elem.parentNode.parentNode.insertBefore(td, elem.parentNode.nextSibling);
+    }
+}
+
 function hideClassicSkinElems(page, textCol) {
     if (!page) {
         return;
@@ -140,8 +169,9 @@ function hideClassicSkinElems(page, textCol) {
         let toHide = undefined;
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
-        }
-        if ('search'==page) {
+        } else if ('server'==page) {
+            addDirSelectButtons(content);
+        } else if ('search'==page) {
             if (content.addEventListener) {
                 content.addEventListener('click', searchClickHandler);
             } else if (content.attachEvent) {

@@ -22,6 +22,7 @@
 17. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, add action to show
     config page in main menu of Player Settings dialog.
 18. Add BBC sounds logo.
+19. Add directory browser for media paths in server settings.
 
 1.9.2
 -----

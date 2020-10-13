@@ -40,7 +40,6 @@ div#browsedbList {
 }
 
 #choose_setting {
-
  top:8px;
  left:18px;
  margin-left:-8px;
@@ -210,13 +209,28 @@ input[type=checkbox], input[type=radio] {
  height:24px;
 }
 
+.msk-dir-btn:before, input[type=checkbox]:before, input[type=radio]:before {
+ vertical-align: middle!important;
+ font-family: "Material Icons"!important;
+ font-size:24px!important;
+ line-height:24px!important;
+ text-decoration:none!important;
+}
+
+.msk-dir-btn:before {
+ content:"folder";
+ line-height:32px!important;
+}
+
+.msk-dir-btn {
+ padding-left:4px;
+ width:28px;
+ height:32px;
+ border-radius:50%;
+}
+
 input[type=checkbox]:before {
- font-family: "Material Icons";
- font-size:24px;
- line-height:24px;
  content:"check_box_outline_blank";
- /*margin-right:4px;*/
- text-decoration:none;
 }
 
 input[type=checkbox]:checked:before {
@@ -233,13 +247,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 input[type=radio]:before {
- vertical-align: middle;
- font-family: "Material Icons";
- font-size:24px;
- line-height:24px;
  content:"radio_button_unchecked";
- /*margin-right:4px;*/
- text-decoration:none;
 }
 
 input[type=radio]:checked:before {

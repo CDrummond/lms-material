@@ -1982,3 +1982,9 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 #back-button {
  margin-right:14px !important;
 }
+
+.dir-select-list {
+  height:600px;
+  max-height:calc((var(--vh, 1vh)*100) - 170px);
+  overflow:auto;
+}

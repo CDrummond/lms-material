@@ -227,6 +227,7 @@ input[type=checkbox], input[type=radio] {
  width:28px;
  height:32px;
  border-radius:50%;
+ float:left;
 }
 
 input[type=checkbox]:before {

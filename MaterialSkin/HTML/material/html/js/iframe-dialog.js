@@ -125,31 +125,29 @@ function otherClickHandler(e) {
 }
 
 function clickDirSelect(elem) {
-    var i = elem.srcElement.id.split('.')[1];
-    var path = elem.srcElement.ownerDocument.getElementById('mediadirs'+i);
-    bus.$emit('dlg.open', 'dirselect', path);
+    var id = elem.srcElement.id.split('.')[1];
+    bus.$emit('dlg.open', 'dirselect', elem.srcElement.ownerDocument.getElementById(id));
+}
+
+function addDirSelectButton(doc, name) {
+    var elem = doc.getElementById(name);
+    if (elem) {
+        var btn = doc.createElement("div");
+        btn.id="msk-dir-btn."+name;
+        btn.classList.add("msk-dir-btn");
+        btn.addEventListener("click", clickDirSelect);
+        // Append our icon after path field
+        elem.parentNode.insertBefore(btn, elem.nextSibling);
+    }
+    return elem;
 }
 
 function addDirSelectButtons(doc) {
+    addDirSelectButton(doc, "playlistdir");
     for (var i=0; i<20; ++i) {
-        var elem = doc.getElementById("mediadirs"+i);
-        if (undefined==elem) {
+        if (undefined== addDirSelectButton(doc, "mediadirs"+i)) {
             return;
         }
-        if (0==i) {
-            // Insert a blank header between "Folder" and "Music"
-            var th = doc.createElement("th");
-            elem.parentNode.parentNode.parentNode.firstChild.insertBefore(th, elem.parentNode.parentNode.parentNode.firstChild.childNodes[2]);
-        }
-        var td = doc.createElement("td");
-        td.classList = elem.parentNode.classList;
-        var btn = doc.createElement("div");
-        btn.id="msk-dir-btn."+i;
-        btn.classList.add("msk-dir-btn");
-        btn.addEventListener("click", clickDirSelect);
-        td.appendChild(btn);
-        // Append our icon after path field
-        elem.parentNode.parentNode.insertBefore(td, elem.parentNode.nextSibling);
     }
 }
 

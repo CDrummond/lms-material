@@ -10,7 +10,7 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
   template: `
 <v-dialog v-model="show" v-if="show" persistent max-width="600">
  <v-card>
-  <v-card-title>{{i18n('Select desired folder')}}</v-card-title>
+  <v-card-title>{{i18n('Select folder')}}</v-card-title>
   <v-card-text class="dir-select-list">
    <v-treeview :items="items" :load-children="fetch" open-on-click :open.sync="open">
     <template v-slot:prepend="{ item }" style="width:22px">
@@ -39,7 +39,32 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
                 this.show = true;
                 this.fetch(null);
                 this.elem = elem;
-                // TODO: Expand current path?
+                var chosenPath = elem.value;
+                if (undefined!=chosenPath) {
+                    console.log("CURRENT", chosenPath);
+                    var parts = undefined;
+                    var unix = true;
+                    if (chosenPath.indexOf('/')>=0) {
+                        parts = chosenPath.split('/');
+                    } else if (chosenPath.indexOf('\\')>=0) {
+                        parts = chosenPath.split('\\');
+                        unix = false;
+                    }
+                    if (undefined!=parts && parts.length>0) {
+                        var usable = [];
+                        for (var i=0, len=parts.length; i<len; ++i) {
+                            if (parts[i]!="") {
+                                usable.push(parts[i]);
+                            }
+                        }
+                        if (usable.length>0) {
+                            if (unix) {
+                                usable.unshift("/");
+                            }
+                            this.expand(chosenPath, usable, unix);
+                        }
+                    }
+                }
             }
         }.bind(this));
         bus.$on('esc', function() {
@@ -54,29 +79,52 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
             this.items=[];
             this.elem=undefined;
             this.show=false;
+            this.selected=undefined;
         },
         setPath() {
             if (undefined!=this.selected) {
+                console.log("SELECTED PATH", this.selected);
                 this.elem.value=this.selected;
                 this.close();
             }
         },
+        parseResp(data, item) {
+            var items = [];
+            if (undefined!=data.result.fsitems_loop) {
+                for (var i=0, loop=data.result.fsitems_loop, len=loop.length; i<len; ++i) {
+                    items.push({name:loop[i].name, id:loop[i].path, children:[]});
+                }
+            } else {
+                items.push({name:i18n('Empty'), id:(undefined==item ? 'root' : item.id)+".empty"});
+            }
+            if (undefined==item) {
+                this.items = items;
+            } else {
+                item.children = items;
+                this.open.push(item.id);
+            }
+            return items;
+        },
+        expand(chosenPath, parts, unix, current, item) {
+            let dir = parts.shift();
+            let path = (current ? current : "") + (unix ? (dir=="/" || current=="/" ? "" : "/") : (current ? "\\" : "")) + dir;
+            if (path==chosenPath) {
+                this.selected = chosenPath;
+            } else {
+                lmsList("", ["readdirectory"], ["filter:foldersonly", "folder:"+path], 0, 500).then(({data}) => {
+                    var items = this.parseResp(data, item);
+                    for (var i=0, len=items.length; i<len; ++i) {
+                        if (items[i].name==parts[0]) {
+                            this.expand(chosenPath, parts, unix, path, items[i]);
+                            return;
+                        }
+                    }
+                });
+            }
+        },
         async fetch(item) {
             lmsList("", ["readdirectory"], ["filter:foldersonly", undefined==item ? "folder:/" : ("folder:"+item.id)], 0, 500).then(({data}) => {
-                var items = [];
-                if (undefined!=data.result.fsitems_loop) {
-                    for (var i=0, loop=data.result.fsitems_loop, len=loop.length; i<len; ++i) {
-                        items.push({name:loop[i].name, id:loop[i].path, children:[]});
-                    }
-                } else {
-                    items.push({name:i18n('Empty'), id:item.id+".empty"});
-                }
-                if (undefined==item) {
-                    this.items = items;
-                } else {
-                    item.children = items;
-                    this.open.push(item.id);
-                }
+                this.parseResp(data, item);
             }).catch(err => {
                 bus.$emit('showError', i18n('Failed to get folder listing'));
             });

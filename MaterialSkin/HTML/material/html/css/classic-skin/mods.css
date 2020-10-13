@@ -36,7 +36,8 @@ div#browsedbList {
  height:24px!important;
 }
 #statusarea {
- padding-top:16px;
+ padding-top:52px;
+ font-weight:bold;
 }
 
 #choose_setting {

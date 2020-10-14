@@ -126,32 +126,42 @@ function otherClickHandler(e) {
 
 function clickDirSelect(elem) {
     var id = elem.srcElement.id.split('.')[1];
-    bus.$emit('dlg.open', 'dirselect', elem.srcElement.ownerDocument.getElementById(id));
+    console.log("DIR SELECT");
+    bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), true);
 }
 
-function addDirSelectButton(doc, elem) {
+function clickFileSelect(elem) {
+    var id = elem.srcElement.id.split('.')[1];
+    console.log("FILE SELECT");
+    bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), false);
+}
+
+function addFsSelectButton(doc, elem, isDir) {
     if (elem && undefined==doc.getElementById("mskdirbtn."+elem.id)) {
         var btn = doc.createElement("div");
         btn.id="mskdirbtn."+elem.id;
         btn.classList.add("msk-dir-btn");
-        btn.addEventListener("click", clickDirSelect);
+        btn.addEventListener("click", isDir ? clickDirSelect : clickFileSelect);
         // Append our icon after path field
         elem.parentNode.insertBefore(btn, elem.nextSibling);
     }
     return elem;
 }
 
-function addDirSelectButtons(doc) {
-    var elems = doc.getElementsByClassName("selectFolder");
-    if (elems!=undefined) {
-        for(var i=0, len=elems.length; i<len; ++i) {
-            addDirSelectButton(doc, elems[i]);
+function addFsSelectButtons(doc) {
+    var types=["selectFolder", "selectFile"];
+    for (var t=0; t<types.length; ++t) {
+        var elems = doc.getElementsByClassName(types[t]);
+        if (elems!=undefined) {
+            for(var i=0, len=elems.length; i<len; ++i) {
+                addFsSelectButton(doc, elems[i], 0==t);
+            }
         }
     }
 }
 
 function selectChanged(elem) {
-    setTimeout(function () { addDirSelectButtons(elem.srcElement.ownerDocument); }, 250);
+    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 250);
 }
 
 function hideClassicSkinElems(page, textCol) {
@@ -171,7 +181,7 @@ function hideClassicSkinElems(page, textCol) {
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
         } else if ('server'==page) {
-            addDirSelectButtons(content);
+            addFsSelectButtons(content);
             var selector=content.getElementById("choose_setting");
             if (undefined!=selector) {
                 selector.addEventListener("change", selectChanged);

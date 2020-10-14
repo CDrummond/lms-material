@@ -6,42 +6,45 @@
  */
 'use strict';
 
-var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
+var lmsPromptDialog = Vue.component("lms-file-dialog", {
   template: `
 <v-dialog v-model="show" v-if="show" persistent max-width="600">
  <v-card>
-  <v-card-title>{{i18n('Select folder')}}</v-card-title>
+  <v-card-title>{{isDir ? i18n('Select folder') : i18n('Select file')}}</v-card-title>
   <v-card-text class="dir-select-list">
    <v-treeview :items="items" :load-children="fetch" open-on-click :open.sync="open">
     <template v-slot:prepend="{ item }" style="width:22px">
-     <v-icon v-if="item.children" @click.stop="selected=item.id">{{selected==item.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>
+     <v-icon v-if="item.canselect" @click.stop="selected=item.id">{{selected==item.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>
     </template>
    </v-treeview>
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat :disabled="undefined==selected" @click.native="setPath()">{{i18n('Set Path')}}</v-btn>
+   <v-btn flat :disabled="undefined==selected" @click.native="useSelected()">{{i18n('Use Selected')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>`,
     data() {
         return {
             show:false,
+            isDir: true,
             open: [],
             items: [{name:i18n("Loading..."), id:"<initial>"}],
             selected: undefined
         }
     },
     mounted() {
-        bus.$on('dirselect.open', function(elem) {
+        bus.$on('file.open', function(elem, isDir) {
             if (undefined!=elem) {
                 this.show = true;
                 this.fetch(null);
                 this.elem = elem;
+                this.isDir = isDir;
+                console.log(elem, isDir);
                 var chosenPath = elem.value;
                 if (undefined!=chosenPath) {
-                    console.log("CURRENT", chosenPath);
+                    console.log("CURRENT", chosenPath, isDir);
                     var parts = undefined;
                     var unix = true;
                     if (chosenPath.indexOf('/')>=0) {
@@ -81,7 +84,7 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
             this.show=false;
             this.selected=undefined;
         },
-        setPath() {
+        useSelected() {
             if (undefined!=this.selected) {
                 console.log("SELECTED PATH", this.selected);
                 this.elem.value=this.selected;
@@ -92,7 +95,11 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
             var items = [];
             if (undefined!=data.result.fsitems_loop) {
                 for (var i=0, loop=data.result.fsitems_loop, len=loop.length; i<len; ++i) {
-                    items.push({name:loop[i].name, id:loop[i].path, children:[]});
+                    if (1==parseInt(loop[i].isfolder)) {
+                        items.push({name:loop[i].name, id:loop[i].path, children:[], canselect:this.isDir});
+                    } else {
+                        items.push({name:loop[i].name, id:loop[i].path, canselect:!this.isDir});
+                    }
                 }
             } else {
                 items.push({name:i18n('Empty'), id:(undefined==item ? 'root' : item.id)+".empty"});
@@ -106,12 +113,16 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
             return items;
         },
         expand(chosenPath, parts, unix, current, item) {
-            let dir = parts.shift();
-            let path = (current ? current : "") + (unix ? (dir=="/" || current=="/" ? "" : "/") : (current ? "\\" : "")) + dir;
+            let part = parts.shift();
+            let path = (current ? current : "") + (unix ? (part=="/" || current=="/" ? "" : "/") : (current ? "\\" : "")) + part;
             if (path==chosenPath) {
                 this.selected = chosenPath;
             } else {
-                lmsList("", ["readdirectory"], ["filter:foldersonly", "folder:"+path], 0, 500).then(({data}) => {
+                var params = ["folder:"+path];
+                if (this.isDir) {
+                    params.push("filter:foldersonly");
+                }
+                lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
                     var items = this.parseResp(data, item);
                     for (var i=0, len=items.length; i<len; ++i) {
                         if (items[i].name==parts[0]) {
@@ -123,7 +134,11 @@ var lmsPromptDialog = Vue.component("lms-dirselect-dialog", {
             }
         },
         async fetch(item) {
-            lmsList("", ["readdirectory"], ["filter:foldersonly", undefined==item ? "folder:/" : ("folder:"+item.id)], 0, 500).then(({data}) => {
+            var params = [undefined==item ? "folder:/" : ("folder:"+item.id)];
+            if (this.isDir) {
+                params.push("filter:foldersonly");
+            }
+            lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
                 this.parseResp(data, item);
             }).catch(err => {
                 bus.$emit('showError', i18n('Failed to get folder listing'));

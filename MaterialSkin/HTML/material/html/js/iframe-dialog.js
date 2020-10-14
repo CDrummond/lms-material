@@ -131,7 +131,14 @@ function clickDirSelect(elem) {
 
 function clickFileSelect(elem) {
     var id = elem.srcElement.id.split('.')[1];
-    bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), false);
+    var entry = elem.srcElement.ownerDocument.getElementById(id);
+    var types = [];
+    for (var i=0, loop=entry.classList, len=loop.length; i<len; ++i) {
+        if (loop[i].startsWith("selectFile_")) {
+            types.push(loop[i].substring(11));
+        }
+    }
+    bus.$emit('dlg.open', 'file', entry, false, types);
 }
 
 function addFsSelectButton(doc, elem, isDir) {

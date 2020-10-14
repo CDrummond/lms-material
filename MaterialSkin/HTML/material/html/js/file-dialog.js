@@ -11,10 +11,11 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
 <v-dialog v-model="show" v-if="show" persistent max-width="600">
  <v-card>
   <v-card-title>{{isDir ? i18n('Select folder') : i18n('Select file')}}</v-card-title>
-  <v-card-text class="dir-select-list">
+  <v-card-text class="file-dialog-select-list">
    <v-treeview :items="items" :load-children="fetch" open-on-click :open.sync="open">
     <template v-slot:prepend="{ item }" style="width:22px">
      <v-icon v-if="item.canselect" @click.stop="selected=item.id">{{selected==item.id ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon>
+     <div @click="select(item)" style="margin-left:8px">{{item.name}}</div>
     </template>
    </v-treeview>
   </v-card-text>
@@ -35,15 +36,16 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
         }
     },
     mounted() {
-        bus.$on('file.open', function(elem, isDir) {
+        bus.$on('file.open', function(elem, isDir, types) {
             if (undefined!=elem) {
                 this.show = true;
-                this.fetch(null);
                 this.elem = elem;
                 this.isDir = isDir;
+                this.types = types;
                 var chosenPath = elem.value;
+                this.fetch(null);
                 if (undefined!=chosenPath) {
-                    console.log("CURRENT", chosenPath, isDir);
+                    console.log("CURRENT", chosenPath, this.isDir, types);
                     var parts = undefined;
                     var unix = true;
                     if (chosenPath.indexOf('/')>=0) {
@@ -100,8 +102,6 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
                         items.push({name:loop[i].name, id:loop[i].path, canselect:!this.isDir});
                     }
                 }
-            } else {
-                items.push({name:i18n('Empty'), id:(undefined==item ? 'root' : item.id)+".empty"});
             }
             if (undefined==item) {
                 this.items = items;
@@ -120,6 +120,8 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
                 var params = ["folder:"+path];
                 if (this.isDir) {
                     params.push("filter:foldersonly");
+                } else if (this.types.length>0) {
+                    params.push("filter:filetype:("+this.types.join("|")+")");
                 }
                 lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
                     var items = this.parseResp(data, item);
@@ -136,12 +138,19 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
             var params = [undefined==item ? "folder:/" : ("folder:"+item.id)];
             if (this.isDir) {
                 params.push("filter:foldersonly");
+            } else if (this.types.length>0) {
+                params.push("filter:filetype:("+this.types.join("|")+")");
             }
             lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
                 this.parseResp(data, item);
             }).catch(err => {
                 bus.$emit('showError', i18n('Failed to get folder listing'));
             });
+        },
+        select(item) {
+            if (undefined==item.children && item.canselect) {
+                this.selected = item.id;
+            }
         }
     },
     watch: {

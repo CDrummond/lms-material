@@ -1983,8 +1983,13 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:14px !important;
 }
 
-.dir-select-list {
+.file-dialog-select-list {
+  padding: 0px 16px 16px 16px;
   height:600px;
   max-height:calc((var(--vh, 1vh)*100) - 170px);
   overflow:auto;
+}
+
+.file-dialog-select-list .v-treeview-node__label {
+ display:none;
 }

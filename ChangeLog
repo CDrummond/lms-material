@@ -23,6 +23,7 @@
     config page in main menu of Player Settings dialog.
 18. Add BBC sounds logo.
 19. Add directory browser for media paths in server settings.
+20. Fix player icon colour when using light themes with coloured toolbar.
 
 1.9.2
 -----

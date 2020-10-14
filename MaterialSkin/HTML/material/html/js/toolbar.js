@@ -12,8 +12,6 @@ var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  svg: "player-manager" };
 
-var lmsUpdateToolbarBtnColor = LMS_UPDATE_SVG;
-
 Vue.component('lms-toolbar', {
     template: `
 <div>
@@ -25,7 +23,7 @@ Vue.component('lms-toolbar', {
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
-   <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi)"></img>
+   <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -106,7 +104,7 @@ Vue.component('lms-toolbar', {
  </v-btn>
  <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini"><v-icon v-bind:class="{'active-btn':showQueue}">queue_music</v-icon></v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true)"></img><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -206,7 +204,8 @@ Vue.component('lms-toolbar', {
                  date: undefined,
                  time: undefined,
                  appSettings: queryParams.appSettings,
-                 appQuit: queryParams.appQuit
+                 appQuit: queryParams.appQuit,
+                 coloredToolbars: false
                }
     },
     mounted() {
@@ -371,9 +370,9 @@ Vue.component('lms-toolbar', {
             this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
         }.bind(this));
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
-        lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
+        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         bus.$on('themeChanged', function() {
-            lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
+            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         }.bind(this));
 
         if (!IS_MOBILE) {
@@ -743,8 +742,8 @@ Vue.component('lms-toolbar', {
             }
             return (isNaN(value) ? 0 : (value<0 ? -1*value : value))+"%";
         },
-        svgIcon: function (name, dark, update, toolbar, active) {
-            return "/material/svg/"+name+"?c="+(update ? toolbar ? lmsUpdateToolbarBtnColor : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, update, toolbar, active, coloredToolbars) {
+            return "/material/svg/"+name+"?c="+(update ? toolbar ? (coloredToolbars ? "fff" : LMS_UPDATE_SVG) : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcut : str;

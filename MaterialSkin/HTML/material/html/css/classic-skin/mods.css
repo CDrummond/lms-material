@@ -224,11 +224,11 @@ input[type=checkbox], input[type=radio] {
 }
 
 .msk-dir-btn {
- padding-left:4px;
- width:28px;
+ width:32px;
  height:32px;
  border-radius:50%;
- float:left;
+ display:inline-block;
+ text-align:center;
 }
 
 input[type=checkbox]:before {

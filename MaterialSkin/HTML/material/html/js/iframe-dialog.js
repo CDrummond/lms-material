@@ -129,11 +129,10 @@ function clickDirSelect(elem) {
     bus.$emit('dlg.open', 'dirselect', elem.srcElement.ownerDocument.getElementById(id));
 }
 
-function addDirSelectButton(doc, name) {
-    var elem = doc.getElementById(name);
-    if (elem) {
+function addDirSelectButton(doc, elem) {
+    if (elem && undefined==doc.getElementById("mskdirbtn."+elem.id)) {
         var btn = doc.createElement("div");
-        btn.id="msk-dir-btn."+name;
+        btn.id="mskdirbtn."+elem.id;
         btn.classList.add("msk-dir-btn");
         btn.addEventListener("click", clickDirSelect);
         // Append our icon after path field
@@ -143,12 +142,16 @@ function addDirSelectButton(doc, name) {
 }
 
 function addDirSelectButtons(doc) {
-    addDirSelectButton(doc, "playlistdir");
-    for (var i=0; i<20; ++i) {
-        if (undefined== addDirSelectButton(doc, "mediadirs"+i)) {
-            return;
+    var elems = doc.getElementsByClassName("selectFolder");
+    if (elems!=undefined) {
+        for(var i=0, len=elems.length; i<len; ++i) {
+            addDirSelectButton(doc, elems[i]);
         }
     }
+}
+
+function selectChanged(elem) {
+    setTimeout(function () { addDirSelectButtons(elem.srcElement.ownerDocument); }, 250);
 }
 
 function hideClassicSkinElems(page, textCol) {
@@ -169,6 +172,10 @@ function hideClassicSkinElems(page, textCol) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
         } else if ('server'==page) {
             addDirSelectButtons(content);
+            var selector=content.getElementById("choose_setting");
+            if (undefined!=selector) {
+                selector.addEventListener("change", selectChanged);
+            }
         } else if ('search'==page) {
             if (content.addEventListener) {
                 content.addEventListener('click', searchClickHandler);

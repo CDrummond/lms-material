@@ -126,13 +126,11 @@ function otherClickHandler(e) {
 
 function clickDirSelect(elem) {
     var id = elem.srcElement.id.split('.')[1];
-    console.log("DIR SELECT");
     bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), true);
 }
 
 function clickFileSelect(elem) {
     var id = elem.srcElement.id.split('.')[1];
-    console.log("FILE SELECT");
     bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), false);
 }
 

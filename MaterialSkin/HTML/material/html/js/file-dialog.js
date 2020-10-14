@@ -41,7 +41,6 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
                 this.fetch(null);
                 this.elem = elem;
                 this.isDir = isDir;
-                console.log(elem, isDir);
                 var chosenPath = elem.value;
                 if (undefined!=chosenPath) {
                     console.log("CURRENT", chosenPath, isDir);

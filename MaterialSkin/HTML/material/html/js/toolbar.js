@@ -12,8 +12,6 @@ var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  svg: "player-manager" };
 
-var lmsUpdateToolbarBtnColor = LMS_UPDATE_SVG;
-
 Vue.component('lms-toolbar', {
     template: `
 <div>
@@ -25,7 +23,7 @@ Vue.component('lms-toolbar', {
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
-   <v-icon v-if="noPlayer" color="orange darken-2" class="maintoolbar-player-icon">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi)"></img>
+   <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon><v-icon v-else-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!noPlayer" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon">link</v-icon></div>
    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -77,8 +75,10 @@ Vue.component('lms-toolbar', {
  <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
- <v-slider v-show="showVolumeSlider" :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
- <div v-show="!playerDvc && (showVolumeSlider)" :class="['vol-fixed-label', !desktopLayout || !infoPlugin ? 'vol-fixed-label-noinf' : '']">{{trans.fixedVol}}</div>
+ <div v-show="showVolumeSlider">
+  <v-slider :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+  <div v-show="!playerDvc" class="vol-fixed-label">{{trans.fixedVol}}</div>
+ </div>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="showVolumeSlider" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume}}</p>
  <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
@@ -94,16 +94,17 @@ Vue.component('lms-toolbar', {
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
-  <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
+  <v-icon v-bind:class="{'active-btn':infoOpen, 'dimmed':coloredToolbars && !infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
-  <v-icon>fullscreen</v-icon>
+  <v-icon v-bind:class="{'dimmed':coloredToolbars}">fullscreen</v-icon>
  </v-btn>
  <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
+ <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini"><v-icon v-bind:class="{'active-btn':showQueue, 'dimmed':coloredToolbars && !showQueue}">queue_music</v-icon></v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true)"></img><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
@@ -188,7 +189,8 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, fixedVol:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined},
+                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined, toggleQueue:undefined,
+                        toggleQueueShortcut:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -202,7 +204,8 @@ Vue.component('lms-toolbar', {
                  date: undefined,
                  time: undefined,
                  appSettings: queryParams.appSettings,
-                 appQuit: queryParams.appQuit
+                 appQuit: queryParams.appQuit,
+                 coloredToolbars: false
                }
     },
     mounted() {
@@ -367,9 +370,9 @@ Vue.component('lms-toolbar', {
             this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
         }.bind(this));
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
-        lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
+        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         bus.$on('themeChanged', function() {
-            lmsUpdateToolbarBtnColor = this.$store.state.theme.endsWith("-colored") ? "fff" : LMS_UPDATE_SVG;
+            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         }.bind(this));
 
         if (!IS_MOBILE) {
@@ -378,6 +381,7 @@ Vue.component('lms-toolbar', {
             bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
             bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
+            bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
             bindKey('1', 'alt');
             bindKey('2', 'alt');
             bindKey('3', 'alt');
@@ -424,6 +428,8 @@ Vue.component('lms-toolbar', {
                             this.setPlayer(id);
                         }
                     }
+                } else if ('mod+shift'==modifier && LMS_TOGGLE_QUEUE_KEYBOARD==key && this.$store.state.desktopLayout) {
+                    this.toggleQueue();
                 }
             }.bind(this));
         }
@@ -448,7 +454,7 @@ Vue.component('lms-toolbar', {
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           fixedVol:i18n("Fixed Volume"), decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
-                          appSettings:i18n('Application settings'), appQuit:i18n('Quit')};
+                          appSettings:i18n('Application settings'), appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -655,6 +661,9 @@ Vue.component('lms-toolbar', {
         },
         doCustomAction(action) {
             performCustomAction(this, action, this.$store.state.player);
+        },
+        toggleQueue() {
+            this.$store.commit('setShowQueue', !this.$store.state.showQueue);
         }
     },
     computed: {
@@ -706,6 +715,9 @@ Vue.component('lms-toolbar', {
         desktopLayout() {
             return this.$store.state.desktopLayout
         },
+        showQueue() {
+            return this.$store.state.showQueue
+        },
         showVolumeSlider() {
             return this.width>=(this.$store.state.desktopLayout ? 600 : (this.$store.state.nowPlayingClock ? 1300 : 850))
         },
@@ -730,8 +742,8 @@ Vue.component('lms-toolbar', {
             }
             return (isNaN(value) ? 0 : (value<0 ? -1*value : value))+"%";
         },
-        svgIcon: function (name, dark, update, toolbar, active) {
-            return "/material/svg/"+name+"?c="+(update ? toolbar ? lmsUpdateToolbarBtnColor : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, update, toolbar, active, coloredToolbars) {
+            return "/material/svg/"+name+"?c="+(update ? toolbar ? (coloredToolbars ? "fff" : LMS_UPDATE_SVG) : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcut : str;

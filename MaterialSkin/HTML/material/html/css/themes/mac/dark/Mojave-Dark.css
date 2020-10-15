@@ -36,6 +36,7 @@
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
  --inactive-nav-opacity:0.75;
+ --browse-header-color:rgba(64, 64, 64, 0.35);
 }
 
 .np-info-cover {
@@ -43,7 +44,7 @@
 }
 
 @media (hover: hover) {
- .menu-btn:hover {
+ .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover {
   background-color:rgba(128, 128, 128, 0.5);
  }
 }

@@ -52,6 +52,8 @@ my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GE
 my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'myMusicArtistsAllArtists', 'myMusicAlbums',
                              'myMusicGenres', 'myMusicYears', 'myMusicNewMusic','myMusicPlaylists', 'myMusicAlbumsVariousArtists' );
 
+my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_DSTM', 'PLUGIN_TRACKSTAT', 'PLUGIN_DYNAMICPLAYLIST' );
+
 sub initPlugin {
     my $class = shift;
 
@@ -139,6 +141,10 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
 }
 
+sub _startsWith {
+    return substr($_[0], 0, length($_[1])) eq $_[1];
+}
+
 sub _cliCommand {
     my $request = shift;
 
@@ -151,7 +157,7 @@ sub _cliCommand {
     my $cmd = $request->getParam('_cmd');
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
-                                                  'plugins', 'plugins-status', 'plugins-update', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
+                                                  'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
         $request->setStatusBadParams();
         return;
@@ -445,6 +451,46 @@ sub _cliCommand {
             $request->setStatusDone();
             return;
         }
+    }
+
+    if ($cmd eq 'extras') {
+        my $cnt = 0;
+        my $icons;
+        while (my ($menu, $menuItems) = each %Slim::Web::Pages::additionalLinks ) {
+            if ($menu eq 'icons') {
+                $icons = $menuItems;
+            }
+        }
+
+        while (my ($menu, $menuItems) = each %Slim::Web::Pages::additionalLinks ) {
+            if ($menu eq 'plugins') {
+                foreach my $key (keys %$menuItems) {
+                    if (not exists($EXCLUDE_EXTRAS{$key})) {
+                        $request->addResultLoop("extras_loop", $cnt, "id", $key);
+                        $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
+                        $request->addResultLoop("extras_loop", $cnt, "title", string($key));
+                        if ($icons and $icons->{$key}) {
+                            $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
+                        }
+                        $cnt++;
+                    }
+                }
+            } elsif ($menu eq 'browseiPeng') {
+                foreach my $key (keys %$menuItems) {
+                    if (not exists($EXCLUDE_EXTRAS{$key})) {
+                        $request->addResultLoop("extras_loop", $cnt, "id", $key);
+                        $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
+                        $request->addResultLoop("extras_loop", $cnt, "title", string($key));
+                        if ($icons and $icons->{$key}) {
+                            $request->addResultLoop("extras_loop", $cnt, "icon", $icons->{$key});
+                        }
+                        $cnt++;
+                    }
+                }
+            }
+        }
+        $request->setStatusDone();
+        return;
     }
 
     if ($cmd eq 'delete-vlib') {

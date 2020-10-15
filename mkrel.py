@@ -22,9 +22,13 @@ BUILD_FOLDER = "build"
 HTML_FOLDER = BUILD_FOLDER + "/MaterialSkin/HTML/material/html"
 INSTALL_XML = BUILD_FOLDER + "/MaterialSkin/install.xml"
 JS_COMPILER = "tools/closure-compiler/closure-compiler-v20181008.jar"
-MATERIAL_SINGLE_JS = "material.min.js"
-LIB_SINGLE_JS = "lib.min.js"
-LIB_SINGLE_CSS = "lib.min.css"
+MATERIAL_JS = "material-skin.min.js"
+MATERIAL_DEFERRED_JS = "material-skin-deffered.min.js"
+LIB_CSS = "lib.min.css"
+LIB_DEFERRED_CSS = "lib-deferred.min.css"
+JS_FILE = "material.min.js"
+JS_DEFERRED_FILE = "material-deferred.min.js"
+
 
 def info(s):
     print("INFO: %s" %s)
@@ -189,21 +193,25 @@ def trim(path):
 
 def minifyJs():
     info("...JS")
-    scripts=[]
-    jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, MATERIAL_SINGLE_JS)]
+    jsCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, MATERIAL_JS)]
+    jsDeferredCommand = ["java", "-jar", JS_COMPILER, "--js_output_file=%s/js/%s" % (HTML_FOLDER, MATERIAL_DEFERRED_JS)]
     with open("%s/../index.html" % HTML_FOLDER, "r") as f:
         for line in f.readlines():
-            start = line.find("html/js/")
-            if start>0:
-                start+=len("html/js/")
-                end = line.find("?r=", start)
-                if end>0:
-                    script=line[start:end]
-                    if not script in scripts:
+            if "addJsToDocument" in line and "html/js/" in line:
+                for script in line.split('[')[1].split(']')[0].replace('"', '').replace(' ', '').split(','):
+                    jsDeferredCommand.append("%s/js/%s.js" % (HTML_FOLDER, script))
+                    trim("%s/js/%s.js" % (HTML_FOLDER, script))
+            else:
+                start = line.find("html/js/")
+                if start>0:
+                    start+=len("html/js/")
+                    end = line.find("?r=", start)
+                    if end>0:
+                        script=line[start:end]
                         jsCommand.append("%s/js/%s" % (HTML_FOLDER, script))
                         trim("%s/js/%s" % (HTML_FOLDER, script))
-                        scripts.append(script)
     subprocess.call(jsCommand, shell=False)
+    subprocess.call(jsDeferredCommand, shell=False)
 
 
 def minifyCssFiles(d):
@@ -246,46 +254,72 @@ def removeUnminified():
             os.remove("%s/js/%s" % (HTML_FOLDER, entry))
 
 
-def combineLib():
-    info("...Combining library files")
+def combineFiles():
+    info("...Combining files")
     scripts=[]
     css=[]
+    deferredScripts=[]
+    deferredCss=[]
     with open("%s/../index.html" % HTML_FOLDER, "r") as f:
         for line in f.readlines():
-            start = line.find("html/lib/")
-            if start>0:
-                start+=len("html/lib/")
-                end = line.find("?r=", start)
-                if end<=0:
-                    end = line.find('"', start)
-                if end>0:
-                    file=line[start:end]
-                    if file.endswith(".js"):
-                        if not file in scripts:
-                            scripts.append(file)
-                    elif file.endswith(".css"):
-                        if not file in css:
-                            css.append(file)
+            if "addCssToDocument" in line and "html/lib/photoswipe/" in line:
+                for file in line.split('[')[1].split(']')[0].replace('"', '').replace(' ', '').split(','):
+                    deferredCss.append("%s/lib/photoswipe/%s.css" % (HTML_FOLDER, file))
+            elif "addJsToDocument" in line and "html/lib/photoswipe/" in line:
+                for file in line.split('[')[1].split(']')[0].replace('"', '').replace(' ', '').split(','):
+                    deferredScripts.append("%s/lib/photoswipe/%s.js" % (HTML_FOLDER, file))
+            else:
+                start = line.find("html/lib/")
+                if start>0:
+                    start+=len("html/lib/")
+                    end = line.find("?r=", start)
+                    if end<=0:
+                        end = line.find('"', start)
+                    if end>0:
+                        file=line[start:end]
+                        if file.endswith(".js"):
+                            scripts.append("%s/lib/%s" % (HTML_FOLDER, file))
+                        elif file.endswith(".css"):
+                            css.append("%s/lib/%s" % (HTML_FOLDER, file))
+    scripts.append("%s/js/%s" % (HTML_FOLDER, MATERIAL_JS))
+    deferredScripts.append("%s/js/%s" % (HTML_FOLDER, MATERIAL_DEFERRED_JS))
     info("......JS")
-    with open("%s/lib/%s" % (HTML_FOLDER, LIB_SINGLE_JS), "w") as out:
+    with open("%s/js/%s" % (HTML_FOLDER, JS_FILE), "w") as out:
         for script in scripts:
-            with open("%s/lib/%s" % (HTML_FOLDER, script), "r") as f:
+            with open(script, "r") as f:
                 out.writelines(f.readlines())
                 out.write("\n")
             info("......... %s" % script)
-            os.remove("%s/lib/%s" % (HTML_FOLDER, script))
+            os.remove(script)
+    info("......Deferred JS")
+    with open("%s/js/%s" % (HTML_FOLDER, JS_DEFERRED_FILE), "w") as out:
+        for script in deferredScripts:
+            with open(script, "r") as f:
+                out.writelines(f.readlines())
+                out.write("\n")
+            info("......... %s" % script)
+            os.remove(script)
     info("......CSS")
-    with open("%s/lib/%s" % (HTML_FOLDER, LIB_SINGLE_CSS), "w") as out:
+    with open("%s/css/%s" % (HTML_FOLDER, LIB_CSS), "w") as out:
         for c in css:
-            with open("%s/lib/%s" % (HTML_FOLDER, c), "r") as f:
+            with open(c, "r") as f:
                 out.writelines(f.readlines())
                 out.write("\n")
             info("......... %s" % c)
-            os.remove("%s/lib/%s" % (HTML_FOLDER, c))
+            os.remove(c)
+    info("......Deferred CSS")
+    with open("%s/css/%s" % (HTML_FOLDER, LIB_DEFERRED_CSS), "w") as out:
+        for c in deferredCss:
+            with open(c, "r") as f:
+                out.writelines(f.readlines())
+                out.write("\n")
+            info("......... %s" % c)
+            os.remove(c)
     info("......PhotoSwipe Skin")
     for entry in os.listdir("%s/lib/photoswipe/default-skin/" % HTML_FOLDER):
-        os.rename("%s/lib/photoswipe/default-skin/%s" % (HTML_FOLDER, entry), "%s/lib/%s" % (HTML_FOLDER, entry))
-    shutil.rmtree("%s/lib/photoswipe" % HTML_FOLDER)
+        if entry.endswith(".png") or entry.endswith(".svg") or  entry.endswith(".gif"):
+            os.rename("%s/lib/photoswipe/default-skin/%s" % (HTML_FOLDER, entry), "%s/css/%s" % (HTML_FOLDER, entry))
+    shutil.rmtree("%s/lib/" % HTML_FOLDER)
 
 
 def fixHtml(version):
@@ -296,22 +330,35 @@ def fixHtml(version):
             path = "%s/../%s" % (HTML_FOLDER, entry)
             inJs = False
             inCss = False
+            inDeferred = False
             with open(path, "r") as f:
                 lines=f.readlines()
             for line in lines:
                 if "<!--CSS start-->" in line:
                     inCss = True
-                    fixedLines.append('  <link href="html/lib/%s?r=%s" rel="stylesheet">\n' % (LIB_SINGLE_CSS, version))
+                    fixedLines.append('  <link href="html/css/%s?r=%s" rel="stylesheet">\n' % (LIB_CSS, version))
                 elif "<!--CSS end-->" in line:
                     inCss = False
                 elif "<!--JS start-->" in line:
                     inJs = True
                     fixedLines.append('  <script>const LMS_MATERIAL_REVISION="%s";</script>\n' % version)
-                    fixedLines.append('  <script src="html/lib/%s?r=%s"></script>\n' % (LIB_SINGLE_JS, version))
-                    fixedLines.append('  <script src="html/js/%s?r=%s"></script>\n' % (MATERIAL_SINGLE_JS, version))
+                    fixedLines.append('  <script src="html/js/%s?r=%s"></script>\n' % (JS_FILE, version))
                 elif "<!--JS end-->" in line:
                     inJs = False
-                elif not inCss and not inJs:
+                elif "// DEFFERED start" in line:
+                    inDeferred = True
+                    fixedLines.append('  function loadOtherFiles() {\n')
+                    fixedLines.append('    var script = document.createElement("script");\n')
+                    fixedLines.append('    script.src = "html/js/%s?r=%s";\n' % (JS_DEFERRED_FILE, version))
+                    fixedLines.append('    document.body.appendChild(script);\n')
+                    fixedLines.append('    var link = document.createElement("link");\n')
+                    fixedLines.append('    link.href = "html/css/%s?r=%s";\n' % (LIB_DEFERRED_CSS, version))
+                    fixedLines.append('    link.rel = "stylesheet";\n')
+                    fixedLines.append('    document.body.appendChild(link);\n')
+                    fixedLines.append('  }\n')
+                elif "// DEFFERED end" in line:
+                    inDeferred = False
+                elif not inCss and not inJs and not inDeferred:
                     if "print" in line: # Perl block...
                         line=line.replace(".css", ".min.css")
                     fixedLines.append(line)
@@ -328,9 +375,8 @@ def minify(version):
     minifyJs()
     minifyCss()
     removeUnminified()
-    combineLib()
+    combineFiles()
     fixHtml(version)
-
 
 def createZip(version):
     info("Creating ZIP")

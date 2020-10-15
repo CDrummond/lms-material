@@ -47,14 +47,18 @@ vue-touch-events:
     Notes: Set disableClick:true
 
 vue-virtual-scroller:
-    Version: 1.0.4
+    Version: 1.0.10mod
     URL: https://github.com/Akryum/vue-virtual-scroller
     License: MIT
+    NOTES: Modified min.js to result issue 416. Modified from char 12053, changed
+    "if(o)" to "if(o&&y.start!=this.$_lastUpdateScrollPosition)"
 
 vuetify
-    Version: 1.5.23
+    Version: 1.5.24trim
     URL: https://github.com/vuetifyjs/vuetify
     License: MIT
+    NOTES: Custom build with unused components removed. See tools/vuetify for
+           details.
 
 vuex    
     Version: 3.3.0

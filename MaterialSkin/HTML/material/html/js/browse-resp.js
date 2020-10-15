@@ -658,11 +658,20 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         discs.set(i.disc, {pos: resp.items.length, total:1, duration:duration});
                     }
                 }
-                totalDuration+=duration;
+                totalDuration += duration>0 ? duration : 0;
+                var subtitle = duration>0 ? formatSeconds(duration) : undefined;
+                var techInfo = lmsOptions.browseTechInfo ? formatTechInfo(i) : undefined;
+                if (techInfo) {
+                    if (subtitle) {
+                        subtitle+=SEPARATOR+techInfo;
+                    } else {
+                        subtitle=techInfo;
+                    }
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              subtitle: undefined!=i.rating ? ratingString(formatSeconds(i.duration), i.rating) : formatSeconds(i.duration),
+                              subtitle: undefined!=i.rating ? ratingString(subtitle, i.rating) : subtitle,
                               //icon: "music_note",
                               stdItem: stdItem,
                               type: "track",
@@ -747,6 +756,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var duration = parseFloat(i.duration || 0);
                 totalDuration+=duration;
                 var subtitle = duration>0 ? formatSeconds(duration) : undefined;
+                var techInfo = lmsOptions.browseTechInfo ? formatTechInfo(i) : undefined;
+                if (techInfo) {
+                    if (subtitle) {
+                        subtitle+=SEPARATOR+techInfo;
+                    } else {
+                        subtitle=techInfo;
+                    }
+                }
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+i.album;
@@ -862,6 +879,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[idx].h=0;
                 }
             }
+        } else if (data.result.extras_loop) {
+            for (var idx=0, loop=data.result.extras_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                i.type="extra";
+                mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
+                i.id="extras:"+i.id;
+                i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];
+                resp.items.push(i);
+            }
+            resp.items.sort(titleSort);
+            resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

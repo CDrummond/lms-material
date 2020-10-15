@@ -16,11 +16,12 @@
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
  --image-grid-factor:0;
- --dialog-list-max-width:900px;
+ --dialog-list-max-width:1000px;
  --icon-size:24px;
  --toolbar-button-margin:4px;
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
  --fade-size:16px;
+ --jump-list-width:32px; /* must match that in browse-page.js */
 }
 
 .note {
@@ -126,6 +127,11 @@ html, .mini-player {
  background-color:transparent!important;
 }
 
+.lms-toolbar .v-toolbar__title i.amber {
+ color:#ffc107 !important;
+ background-color:transparent!important;
+}
+
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
  margin-left:-10px !important;
@@ -215,7 +221,7 @@ div.v-subheader {
 }
 
 .v-divider--vertical {
- margin:8px 0px 8px 0px !important;
+ margin:8px -1px 8px -1px !important;
 }
 
 .v-divider, .pmgr-divider {
@@ -264,6 +270,10 @@ div.v-subheader {
 
 .lms-list3 .v-list__tile {
  height:calc(var(--list-elem-3line-height) - 1px) !important;
+}
+
+.lms-list-item {
+ border-bottom: 1px solid var(--list-item-border-color);
 }
 
 /* Make action buttons in lists closer together */
@@ -470,6 +480,11 @@ div.v-subheader {
  background-color:var(--sub-toolbar-color) !important;
  border-bottom:1px solid var(--sub-toolbar-border-color);
  box-shadow:none!important;
+ height:var(--sub-toolbar-height) !important;
+ white-space:nowrap;
+ overflow-x:hidden;
+ overflow-y:hidden;
+ padding:2px 4px 0px 12px;
 }
 
 .subtoolbar-title {
@@ -549,28 +564,21 @@ div.v-subheader {
 }
 
 .vol-fixed-label {
- margin:-8px 0px 0px 0px;
- padding:0px;
+ margin:-16px 0px 0px 0px;
+ padding-top:4px;
  font-size:var(--small-font-size);
  text-align:center;
  text-overflow:ellipsis;
  vertical-align:bottom;
- position:fixed;
+ position:relative;
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
  height:calc(var(--small-font-size) + 4px) !important;
+ width:100%;
  line-height:calc(var(--small-font-size) + 4px) !important;
- top:36px;
- right:calc(243px + ((var(--icon-size) - 24px)*5));
- width:200px;
- z-index:-1;
  opacity:var(--sub-opacity);
  color:var(--top-toolbar-text-color);
-}
-
-.vol-fixed-label-noinf {
- right:calc(198px + ((var(--icon-size) - 24px)*5));
 }
 
 .vol-sheet .vol-btn div i {
@@ -1037,7 +1045,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .np-info-text {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-nav-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
  overflow:auto;
  max-width:1000px;
  margin-left:auto;
@@ -1354,10 +1362,8 @@ progress {
  margin-bottom:4px;
 }
 
-.pmgr-grp-title {
- padding-top:32px !important;
+.pmgr-other-title {
  margin-top:16px;
- border-top:1px solid var(--list-item-border-color);
 }
 
 .pmgr-synced-players {
@@ -1456,9 +1462,12 @@ div.v-subheader {
 }
 
 .lms-jumplist {
+ position:fixed;
+ top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
+ left:0px;
  padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;
- width:32px; /* must match that in browse-page.js */
+ width:var(--jump-list-width);
  float:left;
  display:grid;
  grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));
@@ -1561,6 +1570,10 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
+.browse-header {
+ background-color:var(--browse-header-color);
+}
+ 
 .queue-action {
  min-width:44px !important;
 }
@@ -1602,6 +1615,8 @@ div.v-subheader {
  pointer-events:none;
  opacity:0.5;
  text-shadow: 0px 0px 8px var(--text-shadow-color);
+ top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
+ width:100%;
 }
 
 #volumeOverlay, #keyboardVolumeOverlay {
@@ -1624,7 +1639,11 @@ div.v-subheader {
 }
 
 .iframe-text {
- background-color:#ddd;
+ background-color:var(--background-color)!important;
+}
+
+.iframe-plain-text {
+ background-color:#ddd!important;
 }
 
 .transparent {
@@ -1808,6 +1827,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  text-decoration:none;
 }
 
+.list-btn {
+ margin-right:-4px;
+}
+
 .grid-btns {
  position:absolute;
  top:2px !important;
@@ -1815,7 +1838,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 .menu-btn:after {
- content:"\e5d4";
+ content:"more_vert";
 }
 
 .image-grid-item .grid-btns, .v-list__tile .list-btns {
@@ -1829,7 +1852,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .list-btns {
  position:absolute;
  top:8px !important;
- right:38px !important;
+ right:50px !important;
 }
 
 .lms-list .v-list__tile__action .v-btn--icon {
@@ -1840,6 +1863,9 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:2px;
  float:left;
  color:rgba(255, 255, 255, 0.7);
+}
+
+.grid-btns .add-btn, .grid-btns .play-btn {
  background-color:rgba(64, 64, 64, 0.75)!important;
 }
 
@@ -1847,17 +1873,17 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:8px;
 }
 
-.add-btn:hover, .play-btn:hover {
+.grid-btns .add-btn:hover, .grid-btns .play-btn:hover {
  color:white;
  background-color:rgba(16, 16, 16, 0.75)!important;
 }
 
 .add-btn:after {
- content:"\e148";
+ content:"add_circle_outline";
 }
 
 .play-btn:after {
- content:"\e039";
+ content:"play_circle_outline";
 }
 
 .check-btn {
@@ -1955,4 +1981,15 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 #back-button {
  margin-right:14px !important;
+}
+
+.file-dialog-select-list {
+  padding: 0px 16px 16px 16px;
+  height:600px;
+  max-height:calc((var(--vh, 1vh)*100) - 170px);
+  overflow:auto;
+}
+
+.file-dialog-select-list .v-treeview-node__label {
+ display:none;
 }

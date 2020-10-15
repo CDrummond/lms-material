@@ -104,7 +104,7 @@ Vue.component('lms-manage-players', {
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && firstGroupIndex>=0" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
-      <v-flex xs12 v-if="player.isgroup && index==firstGroupIndex" v-bind:class="{'pmgr-grp-title':index>0}" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="player.isgroup && index==firstGroupIndex" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
@@ -150,7 +150,7 @@ Vue.component('lms-manage-players', {
      </div>
      
     <div v-for="(player, index) in otherPlayers" :key="player.id" style="width:100%">
-     <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-grp-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
+     <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-other-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
       <v-flex xs12 style="padding:0px;">
       <v-list style="padding:0px;">
        <v-list-tile @click="movePlayer(player)">
@@ -677,7 +677,7 @@ Vue.component('lms-manage-players', {
                 this.scrollElement = document.getElementById("player-manager-list");
             }
             var pos = this.scrollElement.scrollTop + step;
-            setScrollTop(this.scrollElement, pos);
+            setScrollTop(this, pos);
             if (pos<=0 || pos>=this.scrollElement.scrollTopMax) {
                 this.stopScrolling = true;
             }

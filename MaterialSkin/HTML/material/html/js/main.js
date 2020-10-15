@@ -16,9 +16,9 @@ var app = new Vue({
     el: '#app',
     data() {
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
-                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false,
-                            movequeue: false, podcast: false, podcastsearch: false, iteminfo: false, iframe: false,
-                            dstm: false, savequeue: false, icon: false, prompt:false, addtoplaylist: false } }
+                            manage: false, rndmix: false, favorite: false, rating: false, sleep: false, movequeue: false,
+                            podcast: false, podcastsearch: false, iteminfo: false, iframe: false, dstm: false, savequeue: false,
+                            icon: false, prompt:false, addtoplaylist: false, file: false } }
     },
     created() {
         this.autoLayout = true;
@@ -26,7 +26,7 @@ var app = new Vue({
         this.splitter = this.splitterPercent;
         document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         this.$store.commit('initUiSettings');
-
+        this.$store.commit('setShowQueue', getLocalStorageBool('showQueue', true));
         if (queryParams.player) {
             document.title += SEPARATOR + unescape(queryParams.player);
         }
@@ -87,14 +87,17 @@ var app = new Vue({
                     if (!LMS_SKIN_LANGUAGES.has(lang)) {
                         lang = lang.substr(0, 2);
                     }
-                    axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
-                        var trans = eval(resp.data);
-                        setLocalStorageVal('translation', JSON.stringify(trans));
-                        setTranslation(trans);
-                        bus.$emit('langChanged');
-                     }).catch(err => {
-                        window.console.error(err);
-                    });
+                    if (getLocalStorageVal("lang", "")!=(lang+"@"+LMS_MATERIAL_REVISION)) {
+                        axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+                            var trans = eval(resp.data);
+                            setLocalStorageVal('translation', JSON.stringify(trans));
+                            setLocalStorageVal('lang', lang+"@"+LMS_MATERIAL_REVISION);
+                            setTranslation(trans);
+                            bus.$emit('langChanged');
+                         }).catch(err => {
+                            window.console.error(err);
+                        });
+                    }
                 }
             }
         });
@@ -228,6 +231,12 @@ var app = new Vue({
         bus.$on('changeLayout', function(layout) {
             this.setLayout(layout);
         }.bind(this));
+
+        bus.$on('setSplitter', function(pc) {
+            this.splitterPercent = pc;
+            this.splitter = this.splitterPercent;
+            document.documentElement.style.setProperty('--splitter-pc', this.splitter);
+        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -241,6 +250,9 @@ var app = new Vue({
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        showQueue() {
+            return this.$store.state.showQueue
         }
     },
     methods: {
@@ -305,7 +317,7 @@ var app = new Vue({
             }
         },
         splitterResized(val) {
-            if (!this.$store.state.desktopLayout) {
+            if (!this.$store.state.desktopLayout || !this.$store.state.showQueue) {
                 return;
             }
             var f = Math.floor(val/2)*2;

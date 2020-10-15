@@ -1,3 +1,34 @@
+2.0.0
+-----
+ 1. Use custom vuetify build to trim out unused components.
+ 2. Add button to toggle queue visibility on desktop layout.
+ 3. Make cover-art in browse and queue views optional.
+ 4. Support 'Extras' section by using iframe.
+ 5. Place home button, if shown, to the right of the back button (matches
+    browsers, etc.)
+ 6. If configured to show home button, then also show in titlebar of advanced
+    search and extras pages.
+ 7. Show SugarCube pages in 'Extras' if it is installed.
+ 8. Swap (+) and (>) buttons to match LMS's default order.
+ 9. Replace GIF images in Classic Skin with SVGs.
+10. Optionally display technical info when listing tracks in browse view.
+11. Update version of vue-virtual-scroller, with hacky fix for issue 416.
+12. Clicking duration in play queue will briefly show remaining track count and
+    duration.
+13. Combine library and material JS files into 1 for releases.
+14. Defer loading of some JS and CSS until page loaded.
+15. Split out functions from browse and now-playing pages that can be deferred.
+16. Only download translation if lang or Material version changed.
+17. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, add action to show
+    config page in main menu of Player Settings dialog.
+18. Add BBC sounds logo.
+19. Add file and directory browser for media paths in server settings.
+20. Fix player icon colour when using light themes with coloured toolbar.
+21. Darken background of 'Dark' theme so as to work-around Chrome changing
+    certain colours if its force dark mode is enabled.
+22. Use dimmed icon for non-active icons in main toolbar when this is
+    coloured.
+
 1.9.2
 -----
 1. Fix sort option when listing albums under years category.

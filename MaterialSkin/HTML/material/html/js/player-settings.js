@@ -25,6 +25,10 @@ Vue.component('lms-player-settings', {
         <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
+       <v-list-tile v-if="unlockAll && playerLink" @click="showConfig">
+        <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
+        <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
+       </v-list-tile>
        <v-divider v-if="unlockAll && (customActions && customActions.length>0)"></v-divider>
        <template v-for="(action, index) in customActions">
         <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
@@ -196,6 +200,7 @@ Vue.component('lms-player-settings', {
             show: false,
             playerName: undefined,
             playerIcon: undefined,
+            playerLink: undefined,
             crossfade: undefined,
             smartCrossfade: false,
             replaygain: undefined,
@@ -340,6 +345,7 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerIcon = player.icon;
+            this.playerLink = player.link;
             this.orig = { player: {name:player.name, icon:player.icon}, dstm:"",
                           alarms: { fade:false, timeout:0, snooze:0, on:false, volume:0 },
                           library:"", crossfade:"0", smartCrossfade:false, replaygain:"" };
@@ -645,6 +651,9 @@ Vue.component('lms-player-settings', {
         },
         showExtraSettings() {
             bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
+        },
+        showConfig() {
+            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName);
         },
         doCustomAction(action, player) {
             performCustomAction(this, action, player);

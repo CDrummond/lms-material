@@ -10,6 +10,8 @@
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 500;
 const LMS_MAX_NON_SCROLLER_ITEMS = 100;
+const LMS_SCROLLER_LIST_BUFFER = 500; // px
+const LMS_SCROLLER_GRID_BUFFER = 750; // px
 const LMS_MAX_PLAYERS = 100;
 const LMS_IMAGE_SZ = 300
 const LMS_IMAGE_SIZE = "_"+LMS_IMAGE_SZ+"x"+LMS_IMAGE_SZ+"_f";
@@ -51,6 +53,7 @@ const LMS_PLAY_KEYBOARD = "P"; // + shift
 const LMS_APPEND_KEYBOARD = "A"; // + shift
 const LMS_ADD_ITEM_ACTION_KEYBOARD = "C";
 const LMS_CREATE_FAV_FOLDER_KEYBOARD = "M"; // +shift
+const LMS_TOGGLE_QUEUE_KEYBOARD = "Q"; // +shift
 
 const SEARCH_OTHER_ID = "search.other";
 
@@ -79,6 +82,7 @@ const TOP_ID_PREFIX = "top:/";
 const TOP_MYMUSIC_ID = TOP_ID_PREFIX+"mm";
 const TOP_FAVORITES_ID = TOP_ID_PREFIX+"fav";
 const TOP_APPS_ID  = TOP_ID_PREFIX+"apps";
+const TOP_EXTRAS_ID  = TOP_ID_PREFIX+"extra";
 const TOP_RADIO_ID  = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";

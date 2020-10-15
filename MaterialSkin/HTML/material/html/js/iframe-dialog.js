@@ -6,7 +6,7 @@
  */
 'use strict';
 
-function clickHandler(e) {
+function searchClickHandler(e) {
     var target = e.target || e.srcElement;
     var href = undefined;
     if (target.tagName === 'A') {
@@ -68,48 +68,149 @@ function clickHandler(e) {
     }
 }
 
-function fixSearchControls(elem) {
-    var elems = elem.querySelectorAll('.browsedbLeftControls a');
-    if (undefined!=elems) {
-        for (var i=0, len=elems.length; i<len; ++i) {
-            if (undefined==elems[i].href || elems[i].href.indexOf("command=playlist&subcommand=")<0) {
-                elems[i].style.display="none";
-            } else if (elems[i].href.indexOf("subcommand=addtracks")>0) {
-                elems[i].href=elems[i].href.replace("subcommand=addtracks", "subcommand=loadtracks");
-                elems[i].classList.add("loadtracks");
-            } else if (elems[i].href.indexOf("subcommand=loadtracks")>0) {
-                elems[i].href=elems[i].href.replace("subcommand=loadtracks", "subcommand=addtracks");
-                elems[i].classList.add("addtracks");
+function remapClassicSkinIcons(doc, col) {
+    const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev"];
+    var imgList = doc.getElementsByTagName('img');
+    if (imgList) {
+        for (var i = 0, len=imgList.length; i < len; i++) {
+            var replaced = false;
+            for (var m = 0, mlen = ICONS.length; m<mlen && !replaced; ++m) {
+                if (imgList[i].src.endsWith("/html/images/b_" + ICONS[m] + ".gif")) {
+                    imgList[i].src="/material/svg/cs-"+ICONS[m]+"?c="+col;
+                    if (IS_MOBILE) {
+                        imgList[i].classList.add("msk-cs-touch-img");
+                    }
+                    replaced = true;
+                }
+            }
+            /*if (!replaced) {
+                if (imgList[i].src.endsWith("/star_noborder.gif") || imgList[i].src.endsWith("/star.gif")) {
+                    imgList[i].src="/material/svg/cs-star?c="+col;
+                    replaced = true;
+                } else if (imgList[i].src.endsWith("/plugins/TrackStat/html/images/empty.gif")) {
+                    imgList[i].src="/material/svg/cs-star_outline?c="+col;
+                    replaced = true;
+                }
+            }*/
+            if (replaced) {
+                imgList[i].width="24";
+                imgList[i].height="24";
             }
         }
     }
 }
 
-function hideClassicSkinElems(page) {
+function fixClassicSkinRefs(doc) {
+    var refList = doc.getElementsByTagName('a');
+    if (refList) {
+        for (var i = 0, len=refList.length; i < len; i++) {
+            if (refList[i].target=='browser' && refList[i].href && refList[i].href.startsWith(window.location)) {
+                refList[i].removeAttribute('target');
+            }
+        }
+    }
+}
+
+function otherClickHandler(e) {
+    var target = e.target || e.srcElement;
+    var href = undefined;
+    if (target.tagName === 'A') {
+        href = target.getAttribute('href');
+    } else if (target.tagName === 'SPAN' || target.tagName === 'IMG') {
+        href = target.parentElement.getAttribute('href');
+    }
+    if (href) {
+        bus.$emit('iframe-href', href);
+    }
+}
+
+function clickDirSelect(elem) {
+    var id = elem.srcElement.id.split('.')[1];
+    bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), true);
+}
+
+function clickFileSelect(elem) {
+    var id = elem.srcElement.id.split('.')[1];
+    var entry = elem.srcElement.ownerDocument.getElementById(id);
+    var types = [];
+    for (var i=0, loop=entry.classList, len=loop.length; i<len; ++i) {
+        if (loop[i].startsWith("selectFile_")) {
+            types.push(loop[i].substring(11));
+        }
+    }
+    bus.$emit('dlg.open', 'file', entry, false, types);
+}
+
+function addFsSelectButton(doc, elem, isDir) {
+    if (elem && undefined==doc.getElementById("mskdirbtn."+elem.id)) {
+        var btn = doc.createElement("div");
+        btn.id="mskdirbtn."+elem.id;
+        btn.classList.add("msk-dir-btn");
+        btn.addEventListener("click", isDir ? clickDirSelect : clickFileSelect);
+        // Append our icon after path field
+        elem.parentNode.insertBefore(btn, elem.nextSibling);
+    }
+    return elem;
+}
+
+function addFsSelectButtons(doc) {
+    var types=["selectFolder", "selectFile"];
+    for (var t=0; t<types.length; ++t) {
+        var elems = doc.getElementsByClassName(types[t]);
+        if (elems!=undefined) {
+            for(var i=0, len=elems.length; i<len; ++i) {
+                addFsSelectButton(doc, elems[i], 0==t);
+            }
+        }
+    }
+}
+
+function selectChanged(elem) {
+    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 250);
+}
+
+function hideClassicSkinElems(page, textCol) {
     if (!page) {
         return;
     }
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
+        var content = iframe.contentDocument;
+        if (undefined==content) {
+            return;
+        }
+        fixClassicSkinRefs(content);
+        remapClassicSkinIcons(content, textCol);
+
         let toHide = undefined;
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
-        }
-        if ('search'==page) {
-            if (iframe.contentDocument.addEventListener) {
-                iframe.contentDocument.addEventListener('click', clickHandler);
-            } else if (iframe.contentDocument.attachEvent) {
-                iframe.contentDocument.attachEvent('onclick', clickHandler);
+        } else if ('server'==page) {
+            addFsSelectButtons(content);
+            var selector=content.getElementById("choose_setting");
+            if (undefined!=selector) {
+                selector.addEventListener("change", selectChanged);
             }
-
-            var res = iframe.contentDocument.getElementById("browsedbList");
-            if (res) {
-                res.scrollIntoView(true);
-                fixSearchControls(res);
+        } else if ('search'==page) {
+            if (content.addEventListener) {
+                content.addEventListener('click', searchClickHandler);
+            } else if (content.attachEvent) {
+                content.attachEvent('onclick', searchClickHandler);
+            }
+        } else if ('other'==page) {
+            if (content) {
+                if (content.addEventListener) {
+                    content.addEventListener('click', otherClickHandler);
+                } else if (content.attachEvent) {
+                    content.attachEvent('onclick', otherClickHandler);
+                }
+            } else if (iframe.contentWindow) {
+                // Text files?
+                iframe.className="iframe-plain-text";
             }
         }
         if (undefined!=toHide) {
-            var select = iframe.contentDocument.getElementById("choose_setting");
+            var select = content.getElementById("choose_setting");
             if (undefined!=select) {
                 for (let i=select.length-1; i>=0; i--) {
                     if (toHide.has(select.options[i].value)) {
@@ -129,7 +230,8 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBackLP" @click.stop="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
@@ -154,7 +256,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page, textCol)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -171,11 +273,14 @@ Vue.component('lms-iframe-dialog', {
             snackbar:{show:false, msg:undefined},
             loaded:false,
             actions: [],
-            customActions: []
+            customActions: [],
+            history: [],
+            showHome:false,
+            textCol: undefined
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, actions) {
+        bus.$on('iframe.open', function(page, title, actions, showHome) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -190,9 +295,16 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
+            this.history = [];
+            this.showHome = showHome;
+            this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
         }.bind(this));
-            bus.$on('iframe-loaded', function() {
+        bus.$on('iframe-loaded', function() {
             this.loaded = true;
+        }.bind(this));
+        bus.$on('iframe-href', function(ref) {
+            this.history.push(this.src);
+            this.src = ref;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
@@ -236,9 +348,36 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
     },
     methods: {
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                if (this.showHome) {
+                    this.goHome()
+                } else {
+                    this.close();
+                }
+            }
+        },
+        goBack() {
+            if (!this.show) {
+                return;
+            }
+            if (this.history.length<1) {
+                this.close();
+            } else {
+                this.loaded = false;
+                this.src = this.history.pop();
+            }
+        },
+        goHome() {
+            this.close();
+            bus.$emit('browse-home');
+        },
         close() {
             this.show=false;
             this.showMenu = false;
+            this.history=[];
             bus.$emit('iframeClosed', this.isPlayer);
         },
         i18n(str, arg) {
@@ -270,6 +409,9 @@ Vue.component('lms-iframe-dialog', {
         darkUi () {
             return this.$store.state.darkUi
         },
+        homeButton() {
+            return this.$store.state.homeButton
+        }
     },
     filters: {
         svgIcon: function (name, dark) {

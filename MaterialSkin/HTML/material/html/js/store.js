@@ -11,7 +11,7 @@ const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "ifr
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link};
 }
 
 function updateUiSettings(state, val) {
@@ -54,6 +54,10 @@ function updateUiSettings(state, val) {
     if (undefined!=val.showMenuAudio && state.showMenuAudio!=val.showMenuAudio) {
         state.showMenuAudio = val.showMenuAudio;
         setLocalStorageVal('showMenuAudio', state.showMenuAudio);
+    }
+    if (undefined!=val.browseTechInfo && state.browseTechInfo!=val.browseTechInfo) {
+        state.browseTechInfo = val.browseTechInfo;
+        setLocalStorageVal('browseTechInfo', state.browseTechInfo);
     }
     if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
         state.stopButton = val.stopButton;
@@ -136,6 +140,14 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
         bus.$emit('queueDisplayChanged');
     }
+    if (undefined!=val.queueArtwork && state.queueArtwork!=val.queueArtwork) {
+        state.queueArtwork = val.queueArtwork;
+        setLocalStorageVal('queueArtwork', state.queueArtwork);
+    }
+    if (undefined!=val.browseArtwork && state.browseArtwork!=val.browseArtwork) {
+        state.browseArtwork = val.browseArtwork;
+        setLocalStorageVal('browseArtwork', state.browseArtwork);
+    }
     if (undefined!=val.skipSeconds && state.skipSeconds!=val.skipSeconds) {
         state.skipSeconds = val.skipSeconds;
         setLocalStorageVal('skipSeconds', state.skipSeconds);
@@ -166,6 +178,8 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
+    lmsOptions.browseTechInfo = state.browseTechInfo;
+    lmsOptions.infoPlugin = state.infoPlugin;
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     }
@@ -205,6 +219,7 @@ function storeCurrentPlayer(player) {
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
+        showQueue: true,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
@@ -216,6 +231,7 @@ const store = new Vuex.Store({
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
+        browseTechInfo:false,
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
@@ -246,6 +262,8 @@ const store = new Vuex.Store({
         keyboardControl: true,
         updatesAvailable: new Set(),
         queueThreeLines: false,
+        queueArtwork: true,
+        browseArtwork: true,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -273,6 +291,7 @@ const store = new Vuex.Store({
                     state.players[i].isconnected = players[i].isconnected;
                     state.players[i].isgroup = players[i].isgroup;
                     state.players[i].icon = players[i].icon;
+                    state.players[i].link = players[i].link;
                 }
                 return;
             }
@@ -401,8 +420,8 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
+            state.browseTechInfo = getLocalStorageBool('browseTechInfo', state.browseTechInfo);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
-            lmsOptions.infoPlugin = state.infoPlugin;
             state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
             state.customSkipPlugin = getLocalStorageBool('customSkipPlugin', state.customSkipPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
@@ -422,10 +441,12 @@ const store = new Vuex.Store({
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
-            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', "[]")));
+            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
+            state.queueArtwork = getLocalStorageBool('queueArtwork', state.queueArtwork);
+            state.browseArtwork = getLocalStorageBool('browseArtwork', state.browseArtwork);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
@@ -440,6 +461,8 @@ const store = new Vuex.Store({
             if (state.largerElements) {
                 setElemSizes(state.largerElements);
             }
+            lmsOptions.browseTechInfo = state.browseTechInfo;
+            lmsOptions.infoPlugin = state.infoPlugin;
 
             // Get server prefs  for:
             //   All Artists + Album Artists, or just Artists?
@@ -523,6 +546,7 @@ const store = new Vuex.Store({
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                      showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
+                                     browseTechInfo: getLocalStorageBool('browseTechInfo', undefined==prefs.browseTechInfo ? state.browseTechInfo : prefs.browseTechInfo),
                                      stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
                                      browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                      queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
@@ -540,6 +564,8 @@ const store = new Vuex.Store({
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
+                                     queueArtwork: getLocalStorageBool('queueArtwork', undefined==prefs.queueArtwork ? state.queueArtwork : prefs.queueArtwork),
+                                     browseArtwork: getLocalStorageBool('browseArtwork', undefined==prefs.browseArtwork ? state.browseArtwork : prefs.browseArtwork),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
@@ -666,6 +692,20 @@ const store = new Vuex.Store({
                 if (playerIcon.id==state.players[i].id) {
                     state.players[i].icon=playerIcon.icon;
                 }
+            }
+        },
+        setShowQueue(state, val) {
+            if (val!=state.showQueue) {
+                let pc = getLocalStorageVal("splitter", undefined);
+                state.showQueue = val;
+                setLocalStorageVal('showQueue', state.showQueue);
+                if (val && undefined!=pc) {
+                    bus.$emit('setSplitter', pc);
+                } else if (!val) {
+                    document.documentElement.style.setProperty('--splitter-pc', 100);
+                }
+                bus.$emit('showQueue', val);
+                document.documentElement.style.setProperty('--splitter-width', val ? '3px' : '0px');
             }
         }
     }

@@ -10,6 +10,7 @@
  --sub-toolbar-height:48px;
  --bottom-toolbar-height:80px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
+ --splitter-width:3px;
 }
 
 /* For old browser's that dont support min() */
@@ -32,19 +33,14 @@
  margin-left:-4px !important;
 }
 
-.subtoolbar {
- height:var(--sub-toolbar-height) !important;
- white-space:nowrap;
- overflow-x:hidden;
- overflow-y:hidden;
- padding:2px 4px 0px 12px;
+#browse-view .subtoolbar {
+ padding:2px 1px 0px 12px;
 }
 
 .lms-list {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  overflow:auto;
  backface-visibility:hidden;
- margin:0px;
 }
 
 .lms-jumplist {
@@ -58,6 +54,10 @@
  margin:0px;
 }
 
+.lms-image-grid-jump, .lms-list-jump {
+ margin-left:var(--jump-list-width);
+}
+
 .browse-progress {
  position:fixed;
  top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 32px));
@@ -68,6 +68,7 @@
  border-left:1px solid var(--background-color);
  border-right:1px solid var(--background-color);
  background-color:var(--splitter-color) !important;
+ width:var(--splitter-width)!important;
 }
 
 @media (hover: hover) {
@@ -218,7 +219,7 @@
  left:0px;
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  width:100vw;
- overflow:auto;
+ overflow:hidden;
  backface-visibility:hidden;
  z-index:0;
 }
@@ -264,13 +265,7 @@
 }
 
 #letterOverlay {
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
- width:calc(1vw * var(--splitter-pc));
-}
-
-#volumeOverlay, #keyboardVolumeOverlay  {
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
- width:100%;
+ width:calc(1vw * var(--splitter-pc)) !important;
 }
 
 .ios-vcard-text-workaround {
@@ -294,9 +289,6 @@
  .v-dialog__content .v-dialog .screensaver-bgnd {
   display:none;
  }
- .vol-fixed-label {
-  right:96px;
- }
  .vol-sheet {
   top:0px;
  }
@@ -316,8 +308,8 @@
  min-width:80px!important;
 }
 
-.right-pane, .left-pane {
- min-width:370px!important;
+.right-pane {
+ min-width:0px!important;
 }
 
 .left-pane {

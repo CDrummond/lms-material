@@ -114,7 +114,7 @@ function mapIconType(item, app, type) {
         }
     }
     for (const [key, value] of Object.entries(iconMap["indexOf"])) {
-        if (lmsIcon.indexOf(key)>0) {
+        if (lmsIcon.indexOf(key)>=0) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
             if (entry['icon']) {
                 item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
@@ -139,6 +139,9 @@ function mapIcon(item, app, fallback) {
         return true;
     }
     if (item.image && item.image.startsWith("html/images/") && mapIconType(item, app, "image")) {
+        return true;
+    }
+    if (app=='lms-extras' && mapIconType(item, app, "id")) {
         return true;
     }
     if (undefined!=fallback) {

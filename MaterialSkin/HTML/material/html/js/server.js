@@ -339,7 +339,10 @@ var lmsServer = Vue.component('lms-server', {
                                        isgroup: 'group'===i.model,
                                        model: i.modelname,
                                        ip: i.ip,
-                                       icon: mapPlayerIcon(i)
+                                       icon: mapPlayerIcon(i),
+                                       link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) ||
+                                              "squeezeesp32"==i.model
+                                                ? "http://"+i.ip.split(':')[0] : undefined
                                       });
                         ids.add(i.playerid);
                     }
@@ -497,13 +500,15 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         getPlayerPrefs() {
-            bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0, this.$store.state.player.id); // reset
-            if (this.$store.state.dstmPlugin && this.$store.state.player) {
-                lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
-                    if (data && data.result && undefined!=data.result._p2) {
-                        bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2, this.$store.state.player.id);
-                    }
-                });
+            if (undefined!=this.$store.state.player) {
+                bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0, this.$store.state.player.id); // reset
+                if (this.$store.state.dstmPlugin && this.$store.state.player) {
+                    lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result._p2) {
+                            bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2, this.$store.state.player.id);
+                        }
+                    });
+                }
             }
         },
         handleServerPrefs(data) {

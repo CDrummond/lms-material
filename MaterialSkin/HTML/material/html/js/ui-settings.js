@@ -158,11 +158,29 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
+      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc. next to track duration.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="browseTechInfo"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="browseArtwork = !browseArtwork" class="switch-label">
+      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="browseArtwork"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -308,6 +326,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="queueArtwork = !queueArtwork" class="switch-label">
+      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Display covers, station logos, etc.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="queueArtwork"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
@@ -370,6 +397,7 @@ Vue.component('lms-ui-settings', {
             largerElements: false,
             letterOverlay:false,
             showMenuAudio:true,
+            browseTechInfo:false,
             sortFavorites:true,
             autoScrollQueue:true,
             stopButton:false,
@@ -385,6 +413,8 @@ Vue.component('lms-ui-settings', {
             swipeVolume:false,
             keyboardControl:true,
             queueThreeLines:false,
+            queueArtwork:false,
+            browseArtwork:false,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -544,10 +574,13 @@ Vue.component('lms-ui-settings', {
             this.swipeVolume = this.$store.state.swipeVolume;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
+            this.queueArtwork = this.$store.state.queueArtwork;
+            this.browseArtwork = this.$store.state.browseArtwork;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
+            this.browseTechInfo = this.$store.state.browseTechInfo;
             this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
             this.skipSeconds = this.$store.state.skipSeconds;
             // NOTE: volumeStep is defined in utils.js
@@ -563,7 +596,8 @@ Vue.component('lms-ui-settings', {
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
-                            {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)}];
+                            {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
+                            {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
             if (!disabled.has(TOP_CDPLAYER_ID)) {
                 this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
             }
@@ -600,6 +634,7 @@ Vue.component('lms-ui-settings', {
                                                   sortFavorites:this.sortFavorites,
                                                   sortHome:this.sortHome,
                                                   showMenuAudio:this.showMenuAudio,
+                                                  browseTechInfo:this.browseTechInfo,
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
@@ -613,6 +648,8 @@ Vue.component('lms-ui-settings', {
                                                   swipeVolume:this.swipeVolume,
                                                   keyboardControl:this.keyboardControl,
                                                   queueThreeLines:this.queueThreeLines,
+                                                  queueArtwork:this.queueArtwork,
+                                                  browseArtwork:this.browseArtwork,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   menuIcons:this.menuIcons,
@@ -647,6 +684,7 @@ Vue.component('lms-ui-settings', {
                                      sortFavorites:this.sortFavorites,
                                      sortHome:this.sortHome,
                                      showMenuAudio:this.showMenuAudio,
+                                     browseTechInfo:this.browseTechInfo,
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,
@@ -660,6 +698,8 @@ Vue.component('lms-ui-settings', {
                                      swipeVolume:this.swipeVolume,
                                      keyboardControl:this.keyboardControl,
                                      queueThreeLines:this.queueThreeLines,
+                                     queueArtwork:this.queueArtwork,
+                                     browseArtwork:this.browseArtwork,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      menuIcons:this.menuIcons,
@@ -756,6 +796,9 @@ Vue.component('lms-ui-settings', {
             list.push(shortcutStr(ACTIONS[PQ_MOVE_QUEUE_ACTION].key)+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title);
             list.push(shortcutStr(ACTIONS[PQ_ADD_URL_ACTION].key)+SEPARATOR+ACTIONS[PQ_ADD_URL_ACTION].title);
             list.push(shortcutStr(ACTIONS[PQ_SCROLL_ACTION].key)+SEPARATOR+ACTIONS[PQ_SCROLL_ACTION].title);
+            if (this.$store.state.desktopLayout) {
+                list.push(shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)+SEPARATOR+i18n("Toggle queue"));
+            }
             list.push(shortcutStr(LMS_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title);
             list.push(shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title);
             if (this.$store.state.unlockAll) {

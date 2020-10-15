@@ -36,6 +36,7 @@
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
  --inactive-nav-opacity:0.75;
+ --browse-header-color:rgba(248, 248, 248, 0.35);
 }
 
 .np-info-cover {
@@ -43,7 +44,7 @@
 }
 
 @media (hover: hover) {
- .menu-btn:hover {
+ .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover {
   background-color:rgba(184, 184, 184, 0.5);
  }
 }
@@ -58,8 +59,7 @@
  background-color:rgba(240, 240, 240, 0.75)!important;
 }
 
-#browse-grid .add-btn:hover, #browse-grid .play-btn:hover,
-#browse-list .add-btn:hover, #browse-list .play-btn:hover {
+#browse-grid .add-btn:hover, #browse-grid .play-btn:hover {
  color:#333;
  background-color:rgba(240, 240, 240, 0.75)!important;
 }

@@ -13,10 +13,8 @@
   <title>Logitech Media Server</title>
   <link href="html/font/font.css?r=49" rel="stylesheet">
   <!--CSS start-->
-  <link href="html/lib/vuetify.min.css?r=1.5.24" rel="stylesheet">
-  <link href="html/lib/vue-virtual-scroller.css?r=1.0.4" rel="stylesheet">
-  <link href="html/lib/photoswipe/photoswipe.min.css?r=4.1.2" rel="stylesheet">
-  <link href="html/lib/photoswipe/default-skin/default-skin.min.css?r=4.1.2" rel="stylesheet">
+  <link href="html/lib/vuetify.min.css?r=1.5.24trim" rel="stylesheet">
+  <link href="html/lib/vue-virtual-scroller.css?r=1.0.10mod" rel="stylesheet">
   <!--CSS end-->
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
@@ -58,9 +56,9 @@
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
-    <vue-splitter :margin="desktopLayout ? 20 : 0" :percent="desktopLayout ? splitterPercent : 0" @resize="splitterResized" class="hide-for-mini">
+    <vue-splitter :margin="(desktopLayout && showQueue) ? 20 : 0" :percent="desktopLayout ? showQueue ? splitterPercent : 100 : 0" @resize="splitterResized" class="hide-for-mini">
      <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
-     <div slot="right-pane"><lms-queue v-show="desktopLayout || page=='queue'"></lms-queue></div>
+     <div slot="right-pane"><lms-queue v-show="(desktopLayout && showQueue) || page=='queue'"></lms-queue></div>
     </vue-splitter>
     <lms-now-playing v-show="desktopLayout || page=='now-playing'"></lms-now-playing>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>
@@ -86,6 +84,7 @@
     <lms-icon-dialog v-if="dialogs.icon"></lms-icon-dialog>
     <lms-prompt-dialog v-if="dialogs.prompt"></lms-prompt-dialog>
     <lms-addtoplaylist-dialog v-if="dialogs.addtoplaylist"></lms-addtoplaylist-dialog>
+    <lms-file-dialog v-if="dialogs.file"></lms-file-dialog>
     <lms-screensaver></lms-screensaver>
     <lms-volumeoverlay></lms-volumeoverlay>
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
@@ -128,13 +127,11 @@
   <script src="html/lib/libcometd.min.js?r=4.0.3mod2"></script>
   <script src="html/lib/idb-keyval-iife.min.js?r=3.1.0p50"></script>
   <script src="html/lib/vue.min.js?r=2.6.11"></script>
-  <script src="html/lib/vuetify.min.js?r=1.5.24"></script>
+  <script src="html/lib/vuetify.min.js?r=1.5.24trim"></script>
   <script src="html/lib/vuex.min.js?r=3.3.0"></script>
-  <script src="html/lib/vue-lazyload.js?r=1.3.3"></script>
   <script src="html/lib/intersection-observer.min.js?r=0.5.0"></script>
-  <script src="html/lib/vue-virtual-scroller.min.js?r=1.0.4"></script>
-  <script src="html/lib/photoswipe/photoswipe.min.js?r=4.1.2"></script>
-  <script src="html/lib/photoswipe/photoswipe-ui-default.min.js?r=4.1.2"></script>
+  <script src="html/lib/vue-virtual-scroller.min.js?r=1.0.10mod"></script>
+  <script src="html/lib/vue-lazyload.js?r=1.3.3"></script>
   <script src="html/lib/vue-splitter.js?r=1.3.0m1"></script>
   <script src="html/lib/vue-touch-events.min.js?r=2.2.1pre1502"></script>
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
@@ -144,9 +141,7 @@
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/actions.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/constants.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/prompt-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/customactions.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/standarditems.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/emblems.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/currentcover.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/utils.js?r=$version\"></script>\n");
@@ -154,40 +149,52 @@
   print("  <script src=\"html/js/toolbar.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/bottomnav.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/icon-mapping.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/browse-resp.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/browse-page.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/nowplaying-page.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/queue-page.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/sync-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/groupplayers-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/server.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/ui-settings.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/player-settings.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/volume.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/information.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/randommix-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/rating-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/manage-players.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/favorite-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/sleep-dialog.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/search-field.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/movequeue-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/podcast-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/podcast-search-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/info-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/iframe-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/icon-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/dstm-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/savequeue-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/addtoplaylist-dialog.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/screensaver.js?r=$version\"></script>\n");
-  print("  <script src=\"html/js/volume-overlay.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/i18n.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/store.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/main.js?r=$version\"></script>");
   [% END %]
   <!--JS end-->
   <script src="material/custom.js"></script>
+  <script type="text/javascript">
+   // DEFFERED start
+   function addJsToDocument(path, js, rev) {
+     for (let i=0, len=js.length; i<len; ++i) {
+       var element = document.createElement("script");
+       element.src = path+js[i]+".js?r="+rev;
+       document.body.appendChild(element);
+     }
+   }
+   function addCssToDocument(path, css, rev) {
+     for (let i=0, len=css.length; i<len; ++i) {
+       var element = document.createElement("link");
+       element.href = path+css[i]+".css?r="+rev;
+       element.rel = "stylesheet";
+       document.body.appendChild(element);
+     }
+   }
+   function loadOtherFiles() {
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "podcast-dialog", "podcast-search-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "screensaver", "volume-overlay", "file-dialog"],
+     [% PERL %]
+     my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
+     print("                \"$version\", )");
+     [% END %]
+     addCssToDocument("html/lib/photoswipe/", ["photoswipe.min", "default-skin/default-skin.min"], "4.1.2");
+     addJsToDocument("html/lib/photoswipe/", ["photoswipe.min", "photoswipe-ui-default.min"], "4.1.2");
+   }
+   // DEFFERED end
+   if (window.addEventListener) {
+     window.addEventListener("load", loadOtherFiles, false);
+   } else if (window.attachEvent) {
+     window.attachEvent("onload", loadOtherFiles);
+   } else {
+     window.onload = loadOtherFiles;
+   }
+  </script>
  </body>
 </html>
 

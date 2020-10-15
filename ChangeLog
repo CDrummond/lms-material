@@ -24,6 +24,8 @@
 18. Add BBC sounds logo.
 19. Add file and directory browser for media paths in server settings.
 20. Fix player icon colour when using light themes with coloured toolbar.
+21. Darken background of 'Dark' theme so as to work-around Chrome changing
+    certain colours if its force dark mode is enabled.
 
 1.9.2
 -----

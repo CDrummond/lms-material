@@ -166,7 +166,9 @@ function addFsSelectButtons(doc) {
 }
 
 function selectChanged(elem) {
+    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 100);
     setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 250);
+    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 500);
 }
 
 function hideClassicSkinElems(page, textCol) {

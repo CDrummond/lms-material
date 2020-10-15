@@ -26,6 +26,8 @@
 20. Fix player icon colour when using light themes with coloured toolbar.
 21. Darken background of 'Dark' theme so as to work-around Chrome changing
     certain colours if its force dark mode is enabled.
+22. Use dimmed icon for non-active icons in main toolbar when this is
+    coloured.
 
 1.9.2
 -----

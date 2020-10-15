@@ -94,15 +94,15 @@ Vue.component('lms-toolbar', {
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
-  <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
+  <v-icon v-bind:class="{'active-btn':infoOpen, 'dimmed':coloredToolbars && !infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
-  <v-icon>fullscreen</v-icon>
+  <v-icon v-bind:class="{'dimmed':coloredToolbars}">fullscreen</v-icon>
  </v-btn>
  <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
- <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini"><v-icon v-bind:class="{'active-btn':showQueue}">queue_music</v-icon></v-btn>
+ <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini"><v-icon v-bind:class="{'active-btn':showQueue, 'dimmed':coloredToolbars && !showQueue}">queue_music</v-icon></v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>

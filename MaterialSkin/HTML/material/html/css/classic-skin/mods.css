@@ -41,10 +41,9 @@ div#browsedbList {
 }
 
 #choose_setting {
- top:8px;
- left:18px;
  margin-left:-8px;
  margin-bottom:8px;
+ margin-top:8px;
  font-size:16px !important;
  font-weight:500 !important;
  border-radius: 0px;

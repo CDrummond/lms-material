@@ -98,7 +98,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
                 // Artist from online service, but no albums? Add links to services...
                 if (listingArtistAlbums && view.items.length==0) {
-                    view.items.push({id:"intro", title:i18n("No albums have been favorited for view artist. Please use the entries below to look for albums on your online services."), type:"text"});
+                    view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
                     for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
                         view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
                     }
@@ -537,7 +537,7 @@ function browseItemAction(view, act, item, index, event) {
             return;
         }
         confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
-                                             : i18n("Delete '%1'?", item.title)+addNote(i18n("view will remove the folder, and any favorites contained within.")),
+                                             : i18n("Delete '%1'?", item.title)+addNote(i18n("This will remove the folder, and any favorites contained within.")),
                 act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete")).then(res => {
             if (res) {
                 view.clearSelection();
@@ -721,7 +721,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
         bus.$emit('dlg.open', 'addtoplaylist', [item]);
     } else if (REMOVE_DUPES_ACTION==act) {
-        confirm(i18n("Remove duplicate tracks?")+addNote(i18n("view will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
+        confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
             if (res) {
                 if (view.items[0].id.startsWith("playlist_id:")) { // Showing playlists, so need to get track list...
                     lmsList("", ["playlists", "tracks"], [item.id, PLAYLIST_TRACK_TAGS]).then(({data}) => {
@@ -740,7 +740,7 @@ function browseItemAction(view, act, item, index, event) {
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {
-            bus.$emit('showError', undefined, i18n("Don't know how to handle view!"));
+            bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
             return;
         }
         lmsCommand(view.playerId(), command.command).then(({data}) => {
@@ -1489,7 +1489,7 @@ function browseDoList(view, list, act/*, index*/) {
         }
         var command = browseBuildFullCommand(view, {id:ids}, /*PLAY_ACTION==act && undefined!=index ? ADD_ACTION :*/ act);
         if (command.command.length===0) {
-            bus.$emit('showError', undefined, i18n("Don't know how to handle view!"));
+            bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
             return;
         }
         if (!command.command.includes(ids)) { // Selection from MusicIP mix does not get IDs???
@@ -1547,7 +1547,7 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
         var cmd = commands.shift();
         var command = browseBuildFullCommand(view, cmd.item, cmd.act);
         if (command.command.length===0) {
-            bus.$emit('showError', undefined, i18n("Don't know how to handle view!"));
+            bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
             return;
         }
 

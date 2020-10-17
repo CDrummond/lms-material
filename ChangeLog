@@ -36,6 +36,7 @@
     highlight when long-press back button to go home.
 27. Make save-queue dialog similar to add-to-playlist dialog; use a combobox to
     display list of existing playlists.
+28. Improve speed of grid view.
 
 1.9.1
 -----

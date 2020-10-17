@@ -1588,15 +1588,15 @@ function browseLayoutGrid(view, force) {
     if (force || sz.nc != view.grid.numColumns) { // Need to re-layout...
         changed = true;
         view.grid.rows=[];
-        for (var i=0; i<view.items.length; i+=sz.nc) {
-            var indexes=[]
+        for (var i=0, row=0; i<view.items.length; i+=sz.nc, ++row) {
+            var items=[]
             for (var j=0; j<sz.nc; ++j) {
-                indexes.push(i+j);
+                items.push((i+j)<view.items.length ? view.items[i+j] : undefined);
                 if (!haveSubtitle && (i+j)<view.items.length && view.items[i+j].subtitle) {
                     haveSubtitle = true;
                 }
             }
-            view.grid.rows.push({id:"row."+i+"."+sz.nc, indexes:indexes});
+            view.grid.rows.push({id:"row."+i+"."+sz.nc, items:items, r:row, rs:sz.nc*row});
         }
         view.grid.numColumns = sz.nc;
     } else { // Need to check if have subtitles...

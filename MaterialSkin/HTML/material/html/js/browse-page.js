@@ -32,7 +32,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
-   <v-btn flat icon @click="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field @results="handleListResponse"></lms-search-field>
   </v-layout>
   <v-layout v-else-if="headerTitle">

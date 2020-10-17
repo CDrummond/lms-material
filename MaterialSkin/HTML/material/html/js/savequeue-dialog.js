@@ -39,6 +39,7 @@ Vue.component('lms-savequeue', {
     },
     mounted() {
         this.existing = new Set();
+        this.existingLower = new Set();
         bus.$on('savequeue.open', function(name) {
             this.show = true;
             this.name = name;
@@ -50,10 +51,13 @@ Vue.component('lms-savequeue', {
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;
                     var names = new Set();
+                    var lowerNames = new Set();
                     for (var i=0, len=loop.length; i<len; ++i) {
                         names.add(loop[i].playlist);
+                        lowerNames.add(loop[i].playlist.toLowerCase());
                     }
                     this.existing = names;
+                    this.existingLower = lowerNames;
                     this.checkExists();
                 }
             });
@@ -71,7 +75,16 @@ Vue.component('lms-savequeue', {
         checkExists() {
             var name = this.name ? this.name.trim() : "";
             this.nameExists = this.existing.has(name);
-            this.errorMessages = this.nameExists ? i18n("A playlist with this name already exists") : "";
+            if (this.nameExists) {
+                this.errorMessages = i18n("A playlist with this name already exists");
+            } else {
+                this.nameExists = this.existingLower.has(name.toLowerCase());
+                if (this.nameExists) {
+                    this.errorMessages = i18n("A playlist with a similar name already exists");
+                } else {
+                    this.errorMessages = "";
+                }
+            }
             return this.nameExists;
         },
         cancel() {

@@ -34,8 +34,8 @@
     queue was not saved.
 26. Disable ripple effect from buttons, works-around search button having
     highlight when long-press back button to go home.
-27. When saving queue, if entered name only matches an existing playlist
-    case-insensitively, then state that a playlist with a 'similar' name exists.
+27. Make save-queue dialog similar to add-to-playlist dialog; use a combobox to
+    display list of existing playlists.
 
 1.9.1
 -----

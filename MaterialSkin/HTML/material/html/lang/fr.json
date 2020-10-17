@@ -6,7 +6,6 @@
 "%1 until sleep":"%1 jusqu'à mise en veille",
 "(+%1 others)":"(+%1 autres)",
 "(Currently only 'SB Player' is supported.)":"(Actuellement, seul 'SB Player' est supporté.)",
-"A playlist with this name already exists":"Une liste de lecture de même nom existe déjà",
 "About":"A propos",
 "Add":"Ajouter",
 "Add URL to queue":"Ajouter une URL à la liste de lecture",
@@ -241,7 +240,6 @@
 "Only showing %1 items":"Afficher seulement %1 éléments",
 "Open mini-player":"Ouvrir le mini-lecteur",
 "Options":"Options",
-"Overwrite":"Ecraser",
 "Pause":"Pause",
 "Pin to home screen":"Ajouter à l'écran d'accueil",
 "Pinned '%1' to home screen.":"'%1' ajouté à l'écran d'accueil.",
@@ -485,6 +483,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"A playlist with a similar name already exists":""
+"%1 days":"%1 jours"
 }

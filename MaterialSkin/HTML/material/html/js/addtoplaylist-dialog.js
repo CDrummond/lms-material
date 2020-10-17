@@ -37,7 +37,6 @@ Vue.component('lms-addtoplaylist-dialog', {
         }
     },
     mounted() {
-        this.existingSet = new Set();
         bus.$on('addtoplaylist.open', function(items) {
             this.show = true;
             this.items = items;
@@ -46,10 +45,8 @@ Vue.component('lms-addtoplaylist-dialog', {
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;
                     this.existing = [];
-                    this.existingSet = new Set();
                     for (var i=0, len=loop.length; i<len; ++i) {
                         this.existing.push(loop[i].playlist);
-                        this.existingSet.add(loop[i].playlist);
                     }
                     this.existing.sort();
                 }
@@ -69,7 +66,7 @@ Vue.component('lms-addtoplaylist-dialog', {
             this.show=false;
         },
         save() {
-            // For some reason 'this.name' is not updated if th ecombo has focus when the
+            // For some reason 'this.name' is not updated if the combo has focus when the
             // button is pressed. Work-around this by getting the element's value...
             var elem = document.getElementById('addtoplaylist-name');
             var name = elem && elem.value ? elem.value.trim() : "";

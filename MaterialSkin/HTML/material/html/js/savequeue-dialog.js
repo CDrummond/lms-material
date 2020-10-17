@@ -15,7 +15,7 @@ Vue.component('lms-savequeue', {
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
-      <v-text-field clearable :label="i18n('Name')" v-model="name" class="lms-search" ref="entry" :rules="[checkExists]" :error-messages="errorMessages"></v-text-field>
+      <v-combobox v-model="name" :items="existing" :label="i18n('Name')" class="lms-search" ref="entry" id="savequeue-name"></v-combobox>
      </v-list-tile-content>
     </v-list-tile>
    </v-list>
@@ -23,7 +23,7 @@ Vue.component('lms-savequeue', {
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="save()">{{nameExists ? i18n('Overwrite') : i18n('Save')}}</v-btn>
+   <v-btn flat @click.native="save()">{{i18n('Save')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -33,32 +33,23 @@ Vue.component('lms-savequeue', {
         return {
             show: false,
             name: "",
-            nameExists: false,
-            errorMessages: undefined
+            existing: []
         }
     },
     mounted() {
-        this.existing = new Set();
-        this.existingLower = new Set();
         bus.$on('savequeue.open', function(name) {
             this.show = true;
             this.name = name;
             this.currentName = ""+name;
-            this.errorMessages = undefined;
             focusEntry(this);
-            this.checkExists();
             lmsCommand("", ["playlists", 0, 10000]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;
-                    var names = new Set();
-                    var lowerNames = new Set();
+                    this.existing = [];
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        names.add(loop[i].playlist);
-                        lowerNames.add(loop[i].playlist.toLowerCase());
+                        this.existing.push(loop[i].playlist);
                     }
-                    this.existing = names;
-                    this.existingLower = lowerNames;
-                    this.checkExists();
+                    this.existing.sort();
                 }
             });
         }.bind(this));
@@ -72,26 +63,14 @@ Vue.component('lms-savequeue', {
         }.bind(this));
     },
     methods: {
-        checkExists() {
-            var name = this.name ? this.name.trim() : "";
-            this.nameExists = this.existing.has(name);
-            if (this.nameExists) {
-                this.errorMessages = i18n("A playlist with this name already exists");
-            } else {
-                this.nameExists = this.existingLower.has(name.toLowerCase());
-                if (this.nameExists) {
-                    this.errorMessages = i18n("A playlist with a similar name already exists");
-                } else {
-                    this.errorMessages = "";
-                }
-            }
-            return this.nameExists;
-        },
         cancel() {
             this.show=false;
         },
         save() {
-            var name = this.name ? this.name.trim() : "";
+            // For some reason 'this.name' is not updated if the combo has focus when the
+            // button is pressed. Work-around this by getting the element's value...
+            var elem = document.getElementById('savequeue-name');
+            var name = elem && elem.value ? elem.value.trim() : "";
             if (name.length<1) {
                 return;
             }

@@ -165,10 +165,45 @@ function addFsSelectButtons(doc) {
     }
 }
 
-function selectChanged(elem) {
-    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 100);
-    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 250);
-    setTimeout(function () { addFsSelectButtons(elem.srcElement.ownerDocument); }, 500);
+var iframeInfo = {
+  action:undefined,
+  actionCheckInterval: undefined,
+  actionChecks: 0
+};
+
+/* Check for file-entry fields each time form's action is changed */
+function iframeActionCheck() {
+    iframeInfo.actionChecks++;
+    var iframe = document.getElementById("embeddedIframe");
+    if (iframe) {
+        var content = iframe.contentDocument;
+        if (content) {
+            var settingsForm = content.getElementById("settingsForm");
+            if (settingsForm) {
+                if (settingsForm.action!=iframeInfo.action) {
+                    iframeInfo.action = settingsForm.action;
+                    addFsSelectButtons(content);
+                } else if (iframeInfo.actionChecks<200) {
+                    return;
+                }
+            }
+        }
+    }
+    clearInterval(iframeInfo.actionCheckInterval);
+    iframeInfo.actionCheckInterval = undefined;
+    iframeInfo.actionChecks = 0;
+}
+
+function selectChanged() {
+    if (undefined!=iframeInfo.actionCheckInterval) {
+        clearInterval(iframeInfo.actionCheckInterval);
+    }
+    console.log("START");
+    iframeInfo.actionChecks = 0;
+    iframeInfo.actionCheckInterval = setInterval(function () {
+        iframeActionCheck();
+    }, 100);
+    iframeActionCheck();
 }
 
 function hideClassicSkinElems(page, textCol) {
@@ -188,10 +223,10 @@ function hideClassicSkinElems(page, textCol) {
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
         } else if ('server'==page) {
-            addFsSelectButtons(content);
             var selector=content.getElementById("choose_setting");
             if (undefined!=selector) {
                 selector.addEventListener("change", selectChanged);
+                selectChanged();
             }
         } else if ('search'==page) {
             if (content.addEventListener) {

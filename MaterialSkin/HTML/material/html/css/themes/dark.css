@@ -12,19 +12,19 @@
  --scrollbar-track-color:#3f3f3f;
  --scrollbar-corner-color:#333;
  --background-color:#323232;
- --background-shadow-color:rgba(72, 72, 72, 0.9);
+ --background-shadow-color:rgba(53, 53, 53, 0.9);
  --dialog-toolbar-color:#212121;
  --bottom-toolbar-color:#212121;
  --top-toolbar-color:#212121;
- --sub-toolbar-color:#313131;
+ --sub-toolbar-color:#2e2e2e;
  --bottom-toolbar-border-color:#212121;
  --top-toolbar-border-color:#212121;
- --sub-toolbar-border-color:#333;
+ --sub-toolbar-border-color:#212121;
  --dialog-toolbar-border-color:#212121;
- --splitter-color:var(--sub-toolbar-color);
+ --splitter-color:var(--sub-toolbar-border-color);
  --icon-color:#fff;
  --dlg-icon-color:#fff;
- --list-item-border-color:#5c5c5c;
+ --list-item-border-color:#404040;
  --subheader-color:#fff;
  --text-shadow-color:#000;
  --text-color:#fff;
@@ -52,3 +52,4 @@
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;
 }
+

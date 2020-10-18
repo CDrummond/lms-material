@@ -324,6 +324,15 @@ div.v-subheader {
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
 }
 
+.image-grid-item-svg {
+ object-fit:cover;
+ object-position:50% 0%;
+ display:block;
+ margin:10px 10px 14px 10px;
+ height:calc(115px + (5px * var(--image-grid-factor))) !important;
+ width:calc(115px + (5px * var(--image-grid-factor))) !important;
+}
+
 .radio-img {
  object-fit:contain !important;
  object-position:50% 50% !important;
@@ -370,12 +379,12 @@ div.v-subheader {
 
 .image-grid-item-icon {
  display:block;
- text-align:center;
- vertical-align:middle;
+ text-align:center!important;
  font-size:calc(110px + (5px * var(--image-grid-factor))) !important;
  margin-bottom:4px;
  height:calc(135px + (5px * var(--image-grid-factor))) !important;
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
+ line-height:calc(135px + (5px * var(--image-grid-factor))) !important;
 }
 
 .grid-no-subtitle {

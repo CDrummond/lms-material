@@ -94,8 +94,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
       <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src='html/images/radio.png'" v-bind:class="{'radio-img': SECTION_RADIO==citem.section}" class="image-grid-item-img" loading="lazy"></img>
       <v-icon v-else-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
-      <img v-else-if="citem.svg" class="image-grid-item-img" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
-      <img v-else class="image-grid-item-img" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
+      <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
+      <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
       <div class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{citem.subtitle}}</div>
       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', citem.title)"></div>

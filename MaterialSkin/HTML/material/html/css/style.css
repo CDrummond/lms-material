@@ -408,10 +408,11 @@ div.v-subheader {
  left:4px !important;
 }
 
-.image-grid-item .emblem {
+.lms-list .image-grid-item .emblem {
  position:absolute;
  top:2px !important;
  right:4px !important;
+ left:auto!important; /* required to negate lms-list .emblem left */
  width:32px !important;
  height:32px !important;
  border-radius:50% !important;
@@ -422,7 +423,7 @@ div.v-subheader {
  opacity:0.75;
 }
 
-.image-grid-item .emblem img {
+.lms-list .image-grid-item .emblem img {
  width:26px !important;
  height:26px !important;
 }

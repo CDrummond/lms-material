@@ -37,6 +37,7 @@
 27. Make save-queue dialog similar to add-to-playlist dialog; use a combobox to
     display list of existing playlists.
 28. Improve speed of grid view.
+29. Fix position and size of SVG icons in grid.
 
 1.9.1
 -----

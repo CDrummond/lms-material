@@ -327,8 +327,7 @@ div.v-subheader {
 .image-grid-item-svg {
  object-fit:cover;
  object-position:50% 0%;
- display:block;
- margin:10px 10px 14px 10px;
+ margin:10px 10px 8px 10px;
  height:calc(115px + (5px * var(--image-grid-factor))) !important;
  width:calc(115px + (5px * var(--image-grid-factor))) !important;
 }

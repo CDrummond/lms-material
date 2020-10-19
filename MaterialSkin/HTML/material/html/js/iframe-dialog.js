@@ -69,7 +69,7 @@ function searchClickHandler(e) {
 }
 
 function remapClassicSkinIcons(doc, col) {
-    const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev"];
+    const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev", "queue"];
     var imgList = doc.getElementsByTagName('img');
     if (imgList) {
         for (var i = 0, len=imgList.length; i < len; i++) {

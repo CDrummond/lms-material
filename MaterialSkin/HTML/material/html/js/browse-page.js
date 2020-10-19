@@ -73,6 +73,13 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="toolbar-nobtn-pad"></div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
    <v-spacer></v-spacer>
+   <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
+      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
+    </v-btn>
+   </template>
+   <v-divider vertical v-if="desktopLayout && settingsMenuActions.length>0"></v-divider>
    <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>
@@ -96,7 +103,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
       <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
       <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
-      <div class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
+      <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
+      <div v-else class="image-grid-text">{{citem.title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{citem.subtitle}}</div>
       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', citem.title)"></div>
       <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
@@ -296,7 +304,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             current: undefined,
             currentActions: {show:false, items:[]},
             items: [],
-            grid: {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
+            grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
             hoverBtns: false,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined, albumRating:undefined,
@@ -386,147 +394,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.headerTitle = null;
         this.headerSubTitle=null;
         this.tbarActions=[];
-        this.settingsMenuActions=[];
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-
-        // Clicking on 'browse' nav button whilst in browse page goes back.
-        bus.$on('nav', function(page, longPress) {
-            if ('browse'==page && this.history.length>0) {
-                if (longPress) {
-                    this.goHome();
-                } else {
-                    this.goBack();
-                }
-            }
-        }.bind(this));
-        bus.$on('settingsMenuAction:browse', function(action) {
-            this.headerAction(action);
-        }.bind(this));
-
-        bus.$on('langChanged', function() {
-            this.initItems();
-        }.bind(this));
-        this.initItems();
-
-        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
-        var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
-        if (savedItems.length==0) {
-            savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
-            if (savedItems.length==0) {
-                lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
-                    if (data && data.result && data.result._p2) {
-                        this.updateTopList(JSON.parse(data.result._p2));
-                        this.saveTopList();
-                    } else {
-                        lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
-                            if (data && data.result && data.result._p2) {
-                                this.addPinned(JSON.parse(data.result._p2));
-                            }
-                        });
-                    }
-                });
-            } else {
-                this.addPinned(savedItems);
-            }
-        } else {
-            this.updateTopList(savedItems);
-        }
-
-        this.nowPlayingExpanded = false; // Keep track so that we know when to ignore 'esc'=>goback
-        bus.$on('nowPlayingExpanded', function(val) {
-            this.nowPlayingExpanded = val;
-        }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
-                this.menu.show = false;
-            } else if ( (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') &&
-                        // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
-                        (undefined==this.$store.state.lastDialogClose || (new Date().getTime()-this.$store.state.lastDialogClose)>250) ) {
-                this.goBack();
-            }
-        }.bind(this));
-        bus.$on('browse-home', function() {
-            this.goHome();
-        }.bind(this));
-
-        bus.$on('prefset', function(pref, value) {
-            if (this.myMusic.length>0 && ('plugin.material-skin:enabledBrowseModes'==pref || 'server:useUnifiedArtistsList'==pref)) {
-                this.myMusic[0].needsUpdating=true;
-            }
-        }.bind(this));
-
-        bus.$on('trackInfo', function(item, index, page) {
-            if (!this.$store.state.desktopLayout) {
-                this.$store.commit('setPage', 'browse');
-            }
-            if (this.history.length>=50) {
-                this.goHome();
-            }
-            this.itemMoreMenu(item, index, page);
-        }.bind(this));
-        bus.$on('browse-search', function(text, page) {
-            if (!this.$store.state.desktopLayout) {
-                this.$store.commit('setPage', 'browse');
-            }
-            if (this.history.length>=50) {
-                this.goHome();
-            }
-            this.searchActive = true;
-            this.$nextTick(function () {
-                bus.$emit('search-for', text, page);
-            });
-        }.bind(this));
-
-        bus.$on('browse', function(cmd, params, title, page) {
-            if (!this.$store.state.desktopLayout) {
-                this.$store.commit('setPage', 'browse');
-            }
-            this.goHome();
-            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
-        }.bind(this));
-
-        bus.$on('refreshList', function(section) {
-            if (section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
-                this.refreshList();
-            }
-        }.bind(this));
-        bus.$on('refreshPlaylist', function(name) {
-            if (this.current && this.current.section==SECTION_PLAYLISTS) {
-                if (this.current.id.startsWith(MUSIC_ID_PREFIX) || this.current.title==name) {
-                    this.refreshList();
-                }
-                if (!this.current.id.startsWith(MUSIC_ID_PREFIX) && this.history.length>0) {
-                    this.history[this.history.length-1].needsRefresh = true;
-                }
-            }
-        }.bind(this));
-        bus.$on('ratingsSet', function(ids, value) {
-            this.refreshList();
-        }.bind(this));
-        bus.$on('ratingChanged', function(track, album) {
-            if (this.current && this.current.id==("album_id:"+album)) {
-                this.refreshList();
-            }
-        }.bind(this));
-        bus.$on('closeLibSearch', function() {
-            this.goBack();
-        }.bind(this));
-        bus.$on('searchPodcasts', function(url, term, provider) {
-            this.enteredTerm = term;
-            this.fetchUrlItems(url, provider);
-        }.bind(this));
-        bus.$on('showLinkMenu.browse', function(x, y, menu) {
-            showMenu(this, {linkItems: menu, x:x, y:y, show:true});
-        }.bind(this));
-        bus.$on('windowHeightChanged', function() {
-            this.filterJumplist();
-        }.bind(this));
-        bus.$on('showQueue', function(val) {
-            this.$nextTick(function () {this.layoutGrid(); });
-        }.bind(this));
+        this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
 
         if (!IS_MOBILE) {
             bindKey('home');
@@ -667,6 +539,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             if (this.history.length<1) {
                 this.items = this.top;
+                this.layoutGrid(true);
             }
         },
         playerId() {
@@ -787,11 +660,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             // so ignores the event. Hacky, but works.
             this.gallery.listen('close', function() { setTimeout(function () { bus.$emit('dialogOpen', 'browse-viewer', false); }, 500); });
         },
-        search(event, item) {
+        search(event, item, text) {
             if (this.fetchingItems) {
                 return;
             }
-            this.enteredTerm = event.target._value;
+            this.enteredTerm = undefined==event ? text : event.target._value;
             if (undefined==this.enteredTerm) {
                 return
             }
@@ -801,11 +674,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.fetchItems(this.buildCommand(item), item);
         },
-        entry(event, item) {
+        entry(event, item, text) {
             if (this.fetchingItems) {
                 return;
             }
-            this.enteredTerm = event.target._value;
+            this.enteredTerm = undefined==event ? text : event.target._value;
             this.doTextClick(item);
         },
         itemMoreMenu(item, queueIndex, page) {
@@ -923,7 +796,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$nextTick(function () {
                     this.setBgndCover();
                     this.layoutGrid(true);
-                    setUseGrid(this.command, this.grid.use);
+                    setUseGrid(this.isTop || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use);
                     var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
                     var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
                     for (var i=0, len=this.settingsMenuActions.length; i<len; ++i) {
@@ -1029,6 +902,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
+                this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+                this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+                this.layoutGrid(true);
+                bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
                 this.history[1].items = this.myMusic;
             }
@@ -1234,20 +1111,88 @@ var lmsBrowse = Vue.component("lms-browse", {
             var width = GRID_MIN_WIDTH;
             var height = GRID_MIN_HEIGHT;
             var steps = 0;
-            while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=GRID_MAX_WIDTH) {
-                width += GRID_STEP;
-                height += GRID_STEP;
-                steps++;
+            if (0!=quantity) {
+                while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=GRID_MAX_WIDTH) {
+                    width += GRID_STEP;
+                    height += GRID_STEP;
+                    steps++;
+                }
             }
-
-            var haveSubtitle = false;
             // How many columns?
             var maxColumns = Math.floor(listWidth / width);
             var numColumns = Math.max(Math.min(maxColumns, 20), 1);
             return {w: width, h: height, s: steps, mc: maxColumns, nc: numColumns}
         },
         layoutGrid(force) {
-            browseLayoutGrid(this, force);
+            if (!this.grid.use) {
+                return;
+            }
+
+            const JUMP_LIST_WIDTH = 32;
+            const this_RIGHT_PADDING = 4;
+            var changed = false;
+            var haveSubtitle = false;
+            var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
+            var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + this_RIGHT_PADDING);
+
+            // Calculate what grid item size we should use...
+            var iconOnly = true;
+            for (var i=0,len=this.items.length; i<len && iconOnly; i++) {
+                if (undefined!=this.items[i].image) {
+                    iconOnly = false;
+                }
+            }
+            var sz = iconOnly ? this.calcSizes(0, listWidth) : undefined;
+            if (!iconOnly) {
+                for (var i=4; i>=1; --i) {
+                    sz = this.calcSizes(i, listWidth, iconOnly);
+                    if (sz.mc>=i) {
+                        break;
+                    }
+                }
+            }
+            if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
+                changed = true;
+                this.grid.rows=[];
+                for (var i=0, row=0, len=this.items.length; i<len; i+=sz.nc, ++row) {
+                    var items=[]
+                    for (var j=0; j<sz.nc; ++j) {
+                        items.push((i+j)<this.items.length ? this.items[i+j] : undefined);
+                        if (!haveSubtitle && (i+j)<this.items.length && this.items[i+j].subtitle) {
+                            haveSubtitle = true;
+                        }
+                    }
+                    this.grid.rows.push({id:"row."+i+"."+sz.nc, items:items, r:row, rs:sz.nc*row});
+                }
+                this.grid.numColumns = sz.nc;
+            } else { // Need to check if have subtitles...
+                for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
+                    if (this.items[i].subtitle) {
+                        haveSubtitle = true;
+                    }
+                }
+            }
+
+            if (this.grid.haveSubtitle != haveSubtitle) {
+                this.grid.haveSubtitle = haveSubtitle;
+                changed = true;
+            }
+            if (this.grid.ih != sz.h) {
+                this.grid.ih = sz.h;
+                changed = true;
+                document.documentElement.style.setProperty('--image-grid-factor', sz.s);
+            } else if (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--image-grid-factor'))!=sz.s) {
+                changed = true;
+                document.documentElement.style.setProperty('--image-grid-factor', sz.s);
+            }
+            var few = 1==this.grid.rows.length && (1==this.items.length || ((this.items.length*sz.w)*1.20)<listWidth);
+            if (this.grid.few != few) {
+                this.grid.few = few;
+                changed = true;
+            }
+            if (changed) {
+                this.$forceUpdate();
+            }
         },
         setBgndCover() {
             var url = this.$store.state.browseBackdrop && this.current && this.current.image ? this.current.image : undefined;
@@ -1385,6 +1330,143 @@ var lmsBrowse = Vue.component("lms-browse", {
     },
     mounted() {
         this.pageElement = document.getElementById("browse-view");
+
+        // Clicking on 'browse' nav button whilst in browse page goes back.
+        bus.$on('nav', function(page, longPress) {
+            if ('browse'==page && this.history.length>0) {
+                if (longPress) {
+                    this.goHome();
+                } else {
+                    this.goBack();
+                }
+            }
+        }.bind(this));
+        bus.$on('settingsMenuAction:browse', function(action) {
+            this.headerAction(action);
+        }.bind(this));
+
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
+
+        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
+        var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
+        if (savedItems.length==0) {
+            savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
+            if (savedItems.length==0) {
+                lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2) {
+                        this.updateTopList(JSON.parse(data.result._p2));
+                        this.saveTopList();
+                    } else {
+                        lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
+                            if (data && data.result && data.result._p2) {
+                                this.addPinned(JSON.parse(data.result._p2));
+                            }
+                        });
+                    }
+                });
+            } else {
+                this.addPinned(savedItems);
+            }
+        } else {
+            this.updateTopList(savedItems);
+        }
+
+        this.nowPlayingExpanded = false; // Keep track so that we know when to ignore 'esc'=>goback
+        bus.$on('nowPlayingExpanded', function(val) {
+            this.nowPlayingExpanded = val;
+        }.bind(this));
+        bus.$on('esc', function() {
+            if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
+                this.menu.show = false;
+            } else if ( (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') &&
+                        // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
+                        (undefined==this.$store.state.lastDialogClose || (new Date().getTime()-this.$store.state.lastDialogClose)>250) ) {
+                this.goBack();
+            }
+        }.bind(this));
+        bus.$on('browse-home', function() {
+            this.goHome();
+        }.bind(this));
+
+        bus.$on('prefset', function(pref, value) {
+            if (this.myMusic.length>0 && ('plugin.material-skin:enabledBrowseModes'==pref || 'server:useUnifiedArtistsList'==pref)) {
+                this.myMusic[0].needsUpdating=true;
+            }
+        }.bind(this));
+
+        bus.$on('trackInfo', function(item, index, page) {
+            if (!this.$store.state.desktopLayout) {
+                this.$store.commit('setPage', 'browse');
+            }
+            if (this.history.length>=50) {
+                this.goHome();
+            }
+            this.itemMoreMenu(item, index, page);
+        }.bind(this));
+        bus.$on('browse-search', function(text, page) {
+            if (!this.$store.state.desktopLayout) {
+                this.$store.commit('setPage', 'browse');
+            }
+            if (this.history.length>=50) {
+                this.goHome();
+            }
+            this.searchActive = true;
+            this.$nextTick(function () {
+                bus.$emit('search-for', text, page);
+            });
+        }.bind(this));
+
+        bus.$on('browse', function(cmd, params, title, page) {
+            if (!this.$store.state.desktopLayout) {
+                this.$store.commit('setPage', 'browse');
+            }
+            this.goHome();
+            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+        }.bind(this));
+
+        bus.$on('refreshList', function(section) {
+            if (section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
+                this.refreshList();
+            }
+        }.bind(this));
+        bus.$on('refreshPlaylist', function(name) {
+            if (this.current && this.current.section==SECTION_PLAYLISTS) {
+                if (this.current.id.startsWith(MUSIC_ID_PREFIX) || this.current.title==name) {
+                    this.refreshList();
+                }
+                if (!this.current.id.startsWith(MUSIC_ID_PREFIX) && this.history.length>0) {
+                    this.history[this.history.length-1].needsRefresh = true;
+                }
+            }
+        }.bind(this));
+        bus.$on('ratingsSet', function(ids, value) {
+            this.refreshList();
+        }.bind(this));
+        bus.$on('ratingChanged', function(track, album) {
+            if (this.current && this.current.id==("album_id:"+album)) {
+                this.refreshList();
+            }
+        }.bind(this));
+        bus.$on('closeLibSearch', function() {
+            this.goBack();
+        }.bind(this));
+        bus.$on('searchPodcasts', function(url, term, provider) {
+            this.enteredTerm = term;
+            this.fetchUrlItems(url, provider);
+        }.bind(this));
+        bus.$on('showLinkMenu.browse', function(x, y, menu) {
+            showMenu(this, {linkItems: menu, x:x, y:y, show:true});
+        }.bind(this));
+        bus.$on('windowHeightChanged', function() {
+            this.filterJumplist();
+        }.bind(this));
+        bus.$on('showQueue', function(val) {
+            this.$nextTick(function () {this.layoutGrid(); });
+        }.bind(this));
+
         this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], TOP_REMOTE_ID);
         this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
         this.onlineServices=[];
@@ -1414,6 +1496,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.scrollElement.addEventListener('scroll', this.handleScroll);
         this.$nextTick(function () {
             setScrollTop(this, 0);
+            bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
         });
 
         bus.$on('splitterChanged', function() {

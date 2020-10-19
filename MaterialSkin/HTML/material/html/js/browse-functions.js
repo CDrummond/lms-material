@@ -52,8 +52,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.settingsMenuActions=[];
         view.isTop = false;
         view.subtitleClickable = !IS_MOBILE && view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:");
-        var prevUseGrid = view.grid.use;
-        view.grid = {allowed:resp.canUseGrid, use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(command)), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.grid = {allowed:resp.canUseGrid,
+                     use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command)),
+                     numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         view.jumplistActive=0;
         view.prevPage = prevPage;
         view.hoverBtns = !IS_MOBILE && view.items.length>0 &&
@@ -219,7 +220,7 @@ function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
 }
 
 function browseClick(view, item, index, event) {
-    if (view.fetchingItems || "search"==item.type || "entry"==item.type || "html"==item.type) {
+    if (view.fetchingItems || "html"==item.type) {
          return;
     }
     if (view.menu.show) {
@@ -227,6 +228,20 @@ function browseClick(view, item, index, event) {
         return;
     }
     if (view.$store.state.visibleMenus.size>0) {
+        return;
+    }
+    if ("search"==item.type || "entry"==item.type) {
+        if (view.grid.use) {
+            promptForText(item.title, "", "").then(resp => {
+                if (resp.ok && resp.value && resp.value.length>0) {
+                    if ("search"==item.type) {
+                        view.search(undefined, item, resp.value);
+                    } else {
+                        view.entry(undefined, item, resp.value);
+                    }
+                }
+            });
+        }
         return;
     }
     if (item.header) {
@@ -296,6 +311,10 @@ function browseClick(view, item, index, event) {
         setScrollTop(view, 0);
         view.isTop = false;
         view.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
+        view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+        view.layoutGrid(true);
+        bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix');
     } else if (!item.genreArtists && STD_ITEM_GENRE==item.stdItem && view.current && view.current.id==GENRES_ID) {
@@ -355,6 +374,10 @@ function browseClick(view, item, index, event) {
         setScrollTop(view, 0);
         view.isTop = false;
         view.jumplist = view.filteredJumplist = [];
+        view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+        view.layoutGrid(true);
+        bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (item.weblink) {
         if (!IS_IOS && view.current && view.current.actions && view.current.actions.go && view.current.actions.go.params &&
             view.current.actions.go.params.folder && view.current.actions.go.cmd && view.current.actions.go.cmd.length>=2 &&
@@ -851,9 +874,9 @@ function browseGoHome(view) {
     view.currentBaseActions=[];
     view.currentActions={show:false, items:[]};
     view.tbarActions=[];
-    view.settingsMenuActions=[];
     view.isTop = true;
-    view.grid = {allowed:false, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
     view.hoverBtns = false;
     view.command = undefined;
     view.showRatingButton = false;
@@ -861,6 +884,8 @@ function browseGoHome(view) {
     view.inGenre = undefined;
     view.$nextTick(function () {
         view.setBgndCover();
+        view.filterJumplist();
+        view.layoutGrid(true);
         setScrollTop(view, prev.pos>0 ? prev.pos : 0);
     });
     bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
@@ -1562,69 +1587,5 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
         });
     } else {
         bus.$emit('refreshStatus');
-    }
-}
-
-function browseLayoutGrid(view, force) {
-    if (!view.grid.use) {
-        return;
-    }
-
-    const JUMP_LIST_WIDTH = 32;
-    const VIEW_RIGHT_PADDING = 4;
-    var changed = false;
-    var haveSubtitle = false;
-    var viewWidth = view.$store.state.desktopLayout ? view.pageElement.scrollWidth : window.innerWidth;
-    var listWidth = viewWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*view.filteredJumplist.length>1 && view.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + VIEW_RIGHT_PADDING);
-
-    // Calculate what grid item size we should use...
-    var sz = undefined;
-    for (var i=4; i>=1; --i) {
-        sz = view.calcSizes(i, listWidth);
-        if (sz.mc>=i) {
-            break;
-        }
-    }
-    if (force || sz.nc != view.grid.numColumns) { // Need to re-layout...
-        changed = true;
-        view.grid.rows=[];
-        for (var i=0, row=0; i<view.items.length; i+=sz.nc, ++row) {
-            var items=[]
-            for (var j=0; j<sz.nc; ++j) {
-                items.push((i+j)<view.items.length ? view.items[i+j] : undefined);
-                if (!haveSubtitle && (i+j)<view.items.length && view.items[i+j].subtitle) {
-                    haveSubtitle = true;
-                }
-            }
-            view.grid.rows.push({id:"row."+i+"."+sz.nc, items:items, r:row, rs:sz.nc*row});
-        }
-        view.grid.numColumns = sz.nc;
-    } else { // Need to check if have subtitles...
-        for (var i=0; i<view.items.length && !haveSubtitle; ++i) {
-            if (view.items[i].subtitle) {
-                haveSubtitle = true;
-            }
-        }
-    }
-
-    if (view.grid.haveSubtitle != haveSubtitle) {
-        view.grid.haveSubtitle = haveSubtitle;
-        changed = true;
-    }
-    if (view.grid.ih != sz.h) {
-        view.grid.ih = sz.h;
-        changed = true;
-        document.documentElement.style.setProperty('--image-grid-factor', sz.s);
-    } else if (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--image-grid-factor'))!=sz.s) {
-        changed = true;
-        document.documentElement.style.setProperty('--image-grid-factor', sz.s);
-    }
-    var few = 1==view.grid.rows.length && (1==view.items.length || ((view.items.length*sz.w)*1.20)<listWidth);
-    if (view.grid.few != few) {
-        view.grid.few = few;
-        changed = true;
-    }
-    if (changed) {
-        view.$forceUpdate();
     }
 }

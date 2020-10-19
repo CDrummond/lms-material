@@ -67,7 +67,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var radioImages = new Set();
             var numImages = 0;
 
-            resp.canUseGrid = maybeAllowGrid && data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu") ? true : false;
+            resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -427,10 +427,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (!isFavorites && parent && parent.section == SECTION_FAVORITES && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
                 resp.baseActions = [];
             }
-            if (resp.canUseGrid && (types.has("text") || types.has("search") || types.has("entry"))) {
+            if (resp.canUseGrid && (types.has("text") /*|| types.has("search") || types.has("entry")*/)) {
                 resp.canUseGrid = false;
             } else if (!resp.canUseGrid && maybeAllowGrid && haveWithIcons && 1==types.size &&
-               (!types.has("text") && !types.has("search") && !types.has("entry") && !types.has(undefined))) {
+               (!types.has("text") /*&& !types.has("search") && !types.has("entry")*/ && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }
             if (playAction && resp.numAudioItems>2 && undefined==resp.allSongsItem &&
@@ -449,7 +449,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 for (var i=0, len=resp.items.length; i<len; ++i) {
                     var item=resp.items[i];
-                    if (!item.image) {
+                    if (!item.image && !item.icon && !item.svg) {
                         if (item.type=="album" || (item.window && (item.window.titleStyle=="album" && item.window.menuStyle=="album") && item.actions && item.actions.go)) {
                             item.image = defAlbumCover;
                         } else if (item.type=="artist") {
@@ -890,6 +890,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             resp.items.sort(titleSort);
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
+            resp.canUseGrid=true;
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

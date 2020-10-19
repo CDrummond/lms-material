@@ -67,8 +67,8 @@ var LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES
 const GRID_MIN_WIDTH = 139;
 const GRID_MIN_HEIGHT = 195;
 const GRID_MAX_WIDTH = 208; // 183
-const GRID_MAX_HEIGHT = 260;  // 235
 const GRID_STEP = 5;
+const GRID_OTHER = {command:['other']};
 
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";

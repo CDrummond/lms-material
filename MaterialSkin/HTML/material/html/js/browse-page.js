@@ -100,9 +100,11 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip">
       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
       <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src='html/images/radio.png'" v-bind:class="{'radio-img': SECTION_RADIO==citem.section}" class="image-grid-item-img" loading="lazy"></img>
-      <v-icon v-else-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
-      <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
-      <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
+      <div class="image-grid-item-icon" v-else>
+       <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
+       <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
+       <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
+      </div>
       <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
       <div v-else class="image-grid-text">{{citem.title}}</div>
       <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{citem.subtitle}}</div>
@@ -1136,19 +1138,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + this_RIGHT_PADDING);
 
             // Calculate what grid item size we should use...
-            var iconOnly = true;
-            for (var i=0,len=this.items.length; i<len && iconOnly; i++) {
-                if (undefined!=this.items[i].image) {
-                    iconOnly = false;
-                }
-            }
-            var sz = iconOnly ? this.calcSizes(0, listWidth) : undefined;
-            if (!iconOnly) {
-                for (var i=4; i>=1; --i) {
-                    sz = this.calcSizes(i, listWidth, iconOnly);
-                    if (sz.mc>=i) {
-                        break;
-                    }
+            var sz = undefined;
+            for (var i=4; i>=1; --i) {
+                sz = this.calcSizes(i, listWidth);
+                if (sz.mc>=i) {
+                    break;
                 }
             }
             if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...

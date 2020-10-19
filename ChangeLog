@@ -38,8 +38,8 @@
     display list of existing playlists.
 28. Improve speed of grid view.
 29. Fix position and size of SVG icons in grid.
-30. Use smaller item size if grid is just icons.
-31. Allow using grid in mode places; Home, My Music, etc.
+30. Use fixed size for icons in grid, otherwise can be too large.
+31. Allow using grid in more places; Home, My Music, etc.
 
 1.9.1
 -----

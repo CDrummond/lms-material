@@ -324,12 +324,27 @@ div.v-subheader {
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
 }
 
-.image-grid-item-svg {
- object-fit:cover;
- object-position:50% 0%;
- margin:10px 10px 8px 10px;
- height:calc(115px + (5px * var(--image-grid-factor))) !important;
- width:calc(115px + (5px * var(--image-grid-factor))) !important;
+.image-grid-item-icon {
+ display:block;
+ height:calc(135px + (5px * var(--image-grid-factor))) !important;
+ width:calc(135px + (5px * var(--image-grid-factor))) !important;
+}
+
+.image-grid-item-icon .image-grid-item-svg {
+ object-fit:contain;
+ height:100% !important;
+ width:115px !important;
+ margin:auto;
+}
+
+.image-grid-item-icon .image-grid-item-icon {
+ text-align:center!important;
+ font-size:110px !important;
+ height:100% !important;
+ width:100% !important;
+ line-height:100% !important;
+ vertical-align: middle;
+ display: inline-flex;
 }
 
 .radio-img {
@@ -374,16 +389,6 @@ div.v-subheader {
 
 .image-grid-with-sub .image-grid-btn, .image-grid-with-sub .image-grid-btn:hover {
  bottom:30px !important;
-}
-
-.image-grid-item-icon {
- display:block;
- text-align:center!important;
- font-size:calc(110px + (5px * var(--image-grid-factor))) !important;
- margin-bottom:4px;
- height:calc(135px + (5px * var(--image-grid-factor))) !important;
- width:calc(135px + (5px * var(--image-grid-factor))) !important;
- line-height:calc(135px + (5px * var(--image-grid-factor))) !important;
 }
 
 .grid-no-subtitle {

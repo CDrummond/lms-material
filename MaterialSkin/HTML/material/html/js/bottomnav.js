@@ -82,7 +82,7 @@ Vue.component('lms-bottomnav', {
             }
             let activeColor = getComputedStyle(document.documentElement).getPropertyValue('--active-nav-btn-color');
             let inactiveColor = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-text-color');
-            // Check if properties have ben set yet, if not tray again a bit later...
+            // Check if properties have been set yet, if not try again a bit later...
             if (""==activeColor || ""==inactiveColor) {
                 if (undefined!=this.colorTimer) {
                     clearTimeout(this.colorTimer);
@@ -96,8 +96,12 @@ Vue.component('lms-bottomnav', {
                 return;
             }
 
+            if (getLocalStorageVal('theme', 'x').endsWith('-colored')) {
+                activeColor = inactiveColor;
+            }
             let libraryActiveSvg = LIBRARY_SVG.replace('%23000', '%23'+activeColor.replace('#', ''));
-            let libraryInactiveSvg = LIBRARY_SVG.replace('%23000', '%23'+inactiveColor.replace('#', ''));
+            let libraryInactiveSvg = LIBRARY_SVG.replace('%23000', '%23'+inactiveColor.replace('#', ''))
+
             if (libraryActiveSvg!=this.libraryActiveSvg) {
                 this.libraryActiveSvg = libraryActiveSvg;
                 setLocalStorageVal("lib-active-svg", this.libraryActiveSvg);

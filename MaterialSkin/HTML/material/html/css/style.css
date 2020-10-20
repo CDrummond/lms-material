@@ -22,6 +22,7 @@
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
  --fade-size:16px;
  --jump-list-width:32px; /* must match that in browse-page.js */
+ --inactive-nav-opacity:0.5;
 }
 
 .note {

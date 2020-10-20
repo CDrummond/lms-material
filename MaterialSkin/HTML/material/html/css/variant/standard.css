@@ -4,7 +4,11 @@
  * Copyright (c) 2018-2020 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
- 
+
+:root {
+ --inactive-nav-opacity:1.0;
+}
+
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;
 }

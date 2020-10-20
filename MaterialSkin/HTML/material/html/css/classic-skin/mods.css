@@ -260,7 +260,7 @@ input[type=radio]:checked:before {
 }
 
 #saveSettings {
- color: #fff !important;
+ color: #edece7 !important;
  background-color: var(--primary-color) !important;
  margin-top:8px;
 }

@@ -236,6 +236,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.icon="favorite";
                             i.image=undefined;
                         }
+                        if (i.presetParams.favorites_url.startsWith("http:") || i.presetParams.favorites_url.startsWith("https:")) {
+                            i.id = i.presetParams.favorites_url;
+                            i.isRadio = true;
+                            if (!addedDivider && i.menu.length>0) {
+                                i.menu.push(DIVIDER);
+                                addedDivider = true;
+                            }
+                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                        }
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;

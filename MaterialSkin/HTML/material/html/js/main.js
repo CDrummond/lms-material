@@ -214,10 +214,14 @@ var app = new Vue({
         }.bind(this));
 
         bus.$on('dlg.open', function(name, a, b, c, d, e, f, g, h) {
-            this.dialogs[name] = true; // Mount
-            this.$nextTick(function () {
-                bus.$emit(name+".open", a, b, c, d, e, f, g, h);
-            });
+            if (typeof DEFERRED_LOADED != 'undefined') {
+                this.dialogs[name] = true; // Mount
+                this.$nextTick(function () {
+                    bus.$emit(name+".open", a, b, c, d, e, f, g, h);
+                });
+            } else {
+                console.warn("Ignoring dialog request, as deferred JS files not yet loaded");
+            }
         }.bind(this));
         if (queryParams.actions.length>0) {
             this.$nextTick(function () {

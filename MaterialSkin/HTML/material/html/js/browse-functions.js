@@ -1589,3 +1589,5 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
         bus.$emit('refreshStatus');
     }
 }
+
+const DEFERRED_LOADED = true;

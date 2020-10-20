@@ -166,7 +166,7 @@ select::-ms-expand {
  display: none;
 }
 
-select {
+select:not([multiple]) {
  border: none;
  text-overflow:ellipsis;
  overflow:hidden;
@@ -180,8 +180,16 @@ select {
  padding-right:25px;
 }
 
-select:focus {
+select:not([multiple]):focus {
  outline: none;
+}
+
+select[multiple] {
+ border: 1px solid var(--text-color);
+}
+
+select[multiple]:focus {
+ border: 1px solid var(--active-color);
 }
 
 input[type="text"], input[type="password"], input[type="stdedit"] {

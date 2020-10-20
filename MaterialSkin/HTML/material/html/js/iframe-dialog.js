@@ -198,7 +198,6 @@ function selectChanged() {
     if (undefined!=iframeInfo.actionCheckInterval) {
         clearInterval(iframeInfo.actionCheckInterval);
     }
-    console.log("START");
     iframeInfo.actionChecks = 0;
     iframeInfo.actionCheckInterval = setInterval(function () {
         iframeActionCheck();

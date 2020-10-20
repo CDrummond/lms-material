@@ -473,7 +473,7 @@ function changeLink(href, id) {
 function setTheme(theme, color) {
     if (theme!=undefined) {
         let t = theme.split('-');
-        let variant = t.length>1 && ('colored'==t[1] || 'standard'==t[1]) ? t.pop() : 'standard';
+        let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
         let themeName = t.join('-');
 
         if (themeName.startsWith("user:")) {

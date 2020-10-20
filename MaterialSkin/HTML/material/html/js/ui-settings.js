@@ -556,7 +556,7 @@ Vue.component('lms-ui-settings', {
     methods: {
         readStore() {
             let themeParts = this.$store.state.theme ? this.$store.state.theme.split('-') : ['dark'];
-            let variant = themeParts.length>1 && ('colored'==themeParts[1] || 'standard'==themeParts[1]) ? themeParts.pop() : 'standard';
+            let variant = themeParts.length>1 && ('colored'==themeParts[themeParts.length-1] || 'standard'==themeParts[themeParts.length-1]) ? themeParts.pop() : 'standard';
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;

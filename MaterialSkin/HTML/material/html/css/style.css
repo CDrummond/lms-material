@@ -1149,7 +1149,7 @@ progress {
  margin-right:-16px;
  opacity:var(--sub-opacity);
  min-width:44px;
- vertical-align:middle !important;
+ margin-top:calc(19px - var(--std-font-size));
 }
 
 .lms-list3 .pq-time {

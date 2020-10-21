@@ -2008,3 +2008,20 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .file-dialog-select-list .v-treeview-node__label {
  display:none;
 }
+
+.time-picker-actions {
+ width:100%!important;
+ background:transparent!important;
+ background-color:transparent!important;
+ padding:0px!important;
+ margin:0px!important;
+}
+.time-picker-actions .v-list__tile {
+ padding:0px!important;
+}
+.time-picker-actions .v-list__tile__content {
+ margin-left:-20px;
+}
+.time-picker-actions .v-list__tile__action {
+ padding-right:16px;
+}

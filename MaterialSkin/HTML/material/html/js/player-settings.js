@@ -92,7 +92,7 @@ Vue.component('lms-player-settings', {
      <v-subheader class="alarm-sched-header" v-if="unlockAll">{{i18n('Scheduled alarms')}}</v-subheader>
      <template v-for="(item, index) in alarms.scheduled" v-if="unlockAll">
       <v-list-tile class="alarm-entry">
-       <v-checkbox v-model="item.enabled" :label="item | formatAlarm" @click.stop="toggleAlarm(item)"></v-checkbox>
+       <v-checkbox v-model="item.enabled" :label="item | formatAlarm(twentyFourHour)" @click.stop="toggleAlarm(item)"></v-checkbox>
        <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
        <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
       </v-list-tile>
@@ -135,10 +135,23 @@ Vue.component('lms-player-settings', {
     <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
               persistent lazy full-width max-width="290px">
      <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
-     <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width>
-      <v-spacer></v-spacer>
-      <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
-      <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
+     <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width :format="twentyFourHour?'24hr':'ampm'">
+      <v-list class="time-picker-actions">
+       <v-list-tile>
+        <v-divider></v-divider>
+        <v-list-tile-content @click="twentyFourHour = !twentyFourHour" class="switch-label">
+         <v-list-tile-title>{{i18n('24hr')}}</v-list-tile-title>
+         <v-list-tile-sub-title>{{i18n('Use twenty-four hour clock.')}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+        <v-list-tile-action><v-switch v-model="twentyFourHour"></v-switch></v-list-tile-action>
+       </v-list-tile>
+<v-list-tile></v-list-tile>
+       <v-list-tile>
+        <v-spacer></v-spacer>
+        <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+        <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
+       </v-list-tile>
+      </v-list>
      </v-time-picker>
     </v-dialog>
    </v-list-tile>
@@ -233,7 +246,8 @@ Vue.component('lms-player-settings', {
             trans:{dstm:undefined},
             libraries:[],
             library:undefined,
-            customActions:undefined
+            customActions:undefined,
+            twentyFourHour: true,
         }
     },
     computed: {
@@ -242,7 +256,7 @@ Vue.component('lms-player-settings', {
                 return "";
             }
             var parts = this.alarmDialog.time.split(":");
-            return formatTime((parseInt(parts[0])*60*60)+(parseInt(parts[1])*60), false);
+            return formatTime((parseInt(parts[0])*60*60)+(parseInt(parts[1])*60), this.twentyFourHour);
         },
         unlockAll() {
             return this.$store.state.unlockAll
@@ -255,6 +269,7 @@ Vue.component('lms-player-settings', {
         }
     },
     mounted() {
+        this.twentyFourHour = getLocalStorageBool("twentyFourHour", this.twentyFourHour);
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -660,7 +675,7 @@ Vue.component('lms-player-settings', {
         }
     },
     filters: {
-        formatAlarm: function (value) {
+        formatAlarm: function (value, twentyFourHour) {
             var days=[];
             // LMS has Sun->Sat, but I prefer Mon->Sun. So, if Sun is used, place at end
             var haveSun=false;
@@ -674,7 +689,7 @@ Vue.component('lms-player-settings', {
             if (haveSun) {
                 days.push(DAYS_OF_WEEK[0]);
             }
-            return formatTime(value.time, false)+" "+days.join(", ")+(value.repeat ? " (" + i18n("Repeat") + ")" : "");
+            return formatTime(value.time, twentyFourHour)+" "+days.join(", ")+(value.repeat ? " (" + i18n("Repeat") + ")" : "");
         },
         displayTime: function (value) {
             if (undefined==value) {
@@ -695,6 +710,9 @@ Vue.component('lms-player-settings', {
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'playersettings', shown:val});
+        },
+        'twentyFourHour': function(val) {
+            setLocalStorageVal('twentyFourHour', val);
         }
     }
 })

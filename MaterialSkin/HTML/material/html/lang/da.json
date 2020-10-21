@@ -442,6 +442,7 @@
 "1 day":"1 dag",
 "%1 days":"%1 dage",
 "(+%1 others)":"",
+"24hr":"",
 "Add to playlist":"",
 "Added to '%1'":"",
 "All duplicates removed":"",
@@ -481,6 +482,7 @@
 "Toggle queue":"",
 "Transfer queue to another player":"",
 "Use Selected":"",
+"Use twenty-four hour clock.":"",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.":"",
 "Zap":"",
 "Zapped '%1'":""

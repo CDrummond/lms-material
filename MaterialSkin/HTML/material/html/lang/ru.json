@@ -473,6 +473,7 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней",
+"24hr":"",
 "Configuration":"",
 "Display covers, artist images, station logos, etc.":"",
 "Display covers, station logos, etc.":"",
@@ -483,5 +484,6 @@
 "Show artwork":"",
 "Show file type, bitrate, etc. next to track duration.":"",
 "Toggle queue":"",
-"Use Selected":""
+"Use Selected":"",
+"Use twenty-four hour clock.":""
 }

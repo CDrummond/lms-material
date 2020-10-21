@@ -64,7 +64,7 @@ var ACTIONS=[
     {cmd:"playall",      icon:"play_circle_outline"},
     {cmd:"add",          icon:"add_circle_outline"},
     {cmd:"addall",       icon:"add_circle_outline"},
-    {cmd:"add-hold",     icon:"format_indent_increase"},
+    {cmd:"add-hold",     svg: "playnext"},
     {cmd:"more",         svg: "more"},
     {cmd:"lib-more",     svg: "more"},
     {cmd:"random",       svg: "dice-album"},
@@ -101,7 +101,7 @@ var ACTIONS=[
     {cmd:"pq-rmalbum",   icon: "album"},
     {cmd:"pq-zap",       icon: "flash_on"},
 
-    {cmd:"insert-all",   icon:"format_indent_increase"},
+    {cmd:"insert-all",   svg: "playnext"},
 
     {cmd:"goto-artist",  svg:"artist"},
     {cmd:"goto-album",   icon:"album"},

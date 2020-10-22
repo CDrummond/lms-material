@@ -1148,15 +1148,25 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
-                for (var i=0, row=0, len=this.items.length; i<len; i+=sz.nc, ++row) {
-                    var items=[]
+                var items = [];
+                if (this.isTop) {
+                    for (var i=0, len=this.items.length; i<len; ++i) {
+                        if (!this.disabled.has(this.items[i].id) && !this.hidden.has(this.items[i].id)) {
+                            items.push(this.items[i]);
+                        }
+                    }
+                } else {
+                    items=this.items;
+                }
+                for (var i=0, row=0, len=items.length; i<len; i+=sz.nc, ++row) {
+                    var rowItems=[]
                     for (var j=0; j<sz.nc; ++j) {
-                        items.push((i+j)<this.items.length ? this.items[i+j] : undefined);
-                        if (!haveSubtitle && (i+j)<this.items.length && this.items[i+j].subtitle) {
+                        rowItems.push((i+j)<items.length ? items[i+j] : undefined);
+                        if (!haveSubtitle && (i+j)<items.length && items[i+j].subtitle) {
                             haveSubtitle = true;
                         }
                     }
-                    this.grid.rows.push({id:"row."+i+"."+sz.nc, items:items, r:row, rs:sz.nc*row});
+                    this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row});
                 }
                 this.grid.numColumns = sz.nc;
             } else { // Need to check if have subtitles...
@@ -1480,6 +1490,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.saveTopList();
             }
             this.goHome();
+            if (this.grid.use) {
+                this.layoutGrid(true);
+            }
         }.bind(this));
         bus.$on('libraryChanged', function() {
             this.setLibrary();

@@ -269,7 +269,9 @@ const store = new Vuex.Store({
         unlockAll: false,
         skipSeconds: 30,
         screensaver: false,
-        homeButton: false
+        homeButton: false,
+        lang: 'en-US',
+        twentyFourHour: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -409,6 +411,9 @@ const store = new Vuex.Store({
             updateUiSettings(state, val);
         },
         initUiSettings(state) {
+            state.lang = (window.navigator.userLanguage || window.navigator.language);
+            var timeStr = new Date('January 01, 1971 06:00:00').toLocaleTimeString(state.lang, { hour: 'numeric', minute: 'numeric' });
+            state.twentyFourHour = !(timeStr.endsWith("AM") || timeStr.endsWith("PM"));
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', state.theme);

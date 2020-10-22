@@ -136,22 +136,9 @@ Vue.component('lms-player-settings', {
               persistent lazy full-width max-width="290px">
      <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
      <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width :format="twentyFourHour?'24hr':'ampm'">
-      <v-list class="time-picker-actions">
-       <v-list-tile>
-        <v-divider></v-divider>
-        <v-list-tile-content @click="twentyFourHour = !twentyFourHour" class="switch-label">
-         <v-list-tile-title>{{i18n('24hr')}}</v-list-tile-title>
-         <v-list-tile-sub-title>{{i18n('Use twenty-four hour clock.')}}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action><v-switch v-model="twentyFourHour"></v-switch></v-list-tile-action>
-       </v-list-tile>
-<v-list-tile></v-list-tile>
-       <v-list-tile>
-        <v-spacer></v-spacer>
-        <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
-        <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
-       </v-list-tile>
-      </v-list>
+      <v-spacer></v-spacer>
+      <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+      <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
      </v-time-picker>
     </v-dialog>
    </v-list-tile>
@@ -246,8 +233,7 @@ Vue.component('lms-player-settings', {
             trans:{dstm:undefined},
             libraries:[],
             library:undefined,
-            customActions:undefined,
-            twentyFourHour: true,
+            customActions:undefined
         }
     },
     computed: {
@@ -256,7 +242,7 @@ Vue.component('lms-player-settings', {
                 return "";
             }
             var parts = this.alarmDialog.time.split(":");
-            return formatTime((parseInt(parts[0])*60*60)+(parseInt(parts[1])*60), this.twentyFourHour);
+            return formatTime((parseInt(parts[0])*60*60)+(parseInt(parts[1])*60), this.$store.state.twentyFourHour);
         },
         unlockAll() {
             return this.$store.state.unlockAll
@@ -266,10 +252,12 @@ Vue.component('lms-player-settings', {
         },
         menuIcons() {
             return this.$store.state.menuIcons
+        },
+        twentyFourHour() {
+            return this.$store.state.twentyFourHour
         }
     },
     mounted() {
-        this.twentyFourHour = getLocalStorageBool("twentyFourHour", this.twentyFourHour);
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -710,9 +698,6 @@ Vue.component('lms-player-settings', {
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'playersettings', shown:val});
-        },
-        'twentyFourHour': function(val) {
-            setLocalStorageVal('twentyFourHour', val);
         }
     }
 })

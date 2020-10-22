@@ -42,7 +42,7 @@
 31. Allow using grid in more places; Home, My Music, etc.
 32. Fix coloured toolbars setting with themes which have a dash in their name.
 33. Allow stream in favourites to be pinned to home screen.
-34. Add 24Hr / AM-PM toggle in alarm time-picker.
+34. If browser's locale time string ends with AM or PM then use 12hour clock.
 
 1.9.1
 -----

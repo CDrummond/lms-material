@@ -651,8 +651,8 @@ Vue.component('lms-toolbar', {
         },
         updateClock() {
             var date = new Date();
-            this.date = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
-            this.time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
+            this.date = date.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
+            this.time = date.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
 
             if (undefined!==this.clockTimer) {
                 clearTimeout(this.clockTimer);

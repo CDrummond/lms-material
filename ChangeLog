@@ -21,7 +21,7 @@
 16. Only download translation if lang or Material version changed.
 17. For piCorePlayer and SqueezeAMP (SqueezeESP32) players, add action to show
     config page in main menu of Player Settings dialog.
-18. Add BBC sounds logo.
+18. Add BBC sounds and Times Radio icons.
 19. Add file and directory browser for media paths in server settings.
 20. Fix player icon colour when using light themes with coloured toolbar.
 21. Darken background of 'Dark' theme so as to work-around Chrome changing

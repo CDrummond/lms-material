@@ -469,7 +469,6 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"24hr":"",
 "Configuration":"",
 "Display covers, artist images, station logos, etc.":"",
 "Display covers, station logos, etc.":"",
@@ -484,6 +483,5 @@
 "Show home button":"",
 "Toggle queue":"",
 "Use Selected":"",
-"Use twenty-four hour clock.":"",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.":""
 }

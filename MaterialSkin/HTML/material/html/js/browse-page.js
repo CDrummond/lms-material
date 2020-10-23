@@ -971,11 +971,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.selection = new Set();
             for (var i=0, len=this.items.length; i<len; ++i) {
-                if (this.items[i].selected) {
-                    this.items[i].selected = false;
-                } else {
-                    this.selection.add(i);
-                    this.items[i].selected = true;
+                if (!this.items[i].header) {
+                    if (this.items[i].selected) {
+                        this.items[i].selected = false;
+                    } else {
+                        this.selection.add(i);
+                        this.items[i].selected = true;
+                    }
                 }
             }
         },
@@ -1269,7 +1271,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
-            ev.dataTransfer.setData('Text', this.id);
+            ev.dataTransfer.setData('browse-item', '');
+            ev.dataTransfer.setData(this.items[which].id, '');
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && (!this.selection.has(which) || this.current.isFavFolder)) {
@@ -1310,23 +1313,26 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.stopScrolling = true;
             ev.preventDefault();
             if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                var sel = Array.from(this.selection);
-                this.clearSelection();
-                if (sel.length>0) {
-                    if (this.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
-                        bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                var item = this.items[this.dragIndex];
+                if (this.isTop || (this.current && (this.current.section==SECTION_FAVORITES || (this.current.section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {
+                    var sel = Array.from(this.selection);
+                    this.clearSelection();
+                    if (sel.length>0) {
+                        if (this.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
+                            bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                        }
+                    } else if (this.isTop) {
+                        this.items = arrayMove(this.top, this.dragIndex, to);
+                        this.saveTopList();
+                    } else if (this.current && (this.current.section==SECTION_FAVORITES || this.current.section==SECTION_PLAYLISTS)) {
+                        var command = this.current.section==SECTION_FAVORITES
+                                        ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
+                                               this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
+                                        : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
+                        lmsCommand(this.playerId(), command).then(({data}) => {
+                            this.refreshList();
+                        });
                     }
-                } else if (this.isTop) {
-                    this.items = arrayMove(this.top, this.dragIndex, to);
-                    this.saveTopList();
-                } else if (this.current && (this.current.section==SECTION_FAVORITES || this.current.section==SECTION_PLAYLISTS)) {
-                    var command = this.current.section==SECTION_FAVORITES
-                                    ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
-                                           this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
-                                    : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
-                    lmsCommand(this.playerId(), command).then(({data}) => {
-                        this.refreshList();
-                    });
                 }
             }
             this.dragIndex = undefined;
@@ -1527,6 +1533,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.setBgndCover();
         this.letterOverlay=document.getElementById("letterOverlay");
+        bus.$on('browseQueueDrop', function(id, index, queueSize) {
+            browseInsertQueue(this, id, index, queueSize);
+        }.bind(this));
     },
     filters: {
         itemTooltip: function (item) {

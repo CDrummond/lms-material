@@ -45,6 +45,7 @@
 34. If browser's locale time string ends with AM or PM then use 12hour clock.
 35. Hide 'Music Folders' from 'My Music' by default, use config dialog to
     enable.
+36. Allow drag'n'drop of tracks from browse page onto queue.
 
 1.9.1
 -----

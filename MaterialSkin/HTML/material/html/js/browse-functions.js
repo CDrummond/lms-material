@@ -1570,13 +1570,17 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
             return;
         }
         var cmd = commands.shift();
-        var command = browseBuildFullCommand(view, cmd.item, cmd.act);
-        if (command.command.length===0) {
-            bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
-            return;
+        // browseInsertQueue calls thos function with pre-built commands, in wicch case cmd.act is undefined...
+        if (undefined!=cmd.act) {
+            var command = undefined==cmd.act ? cmd : browseBuildFullCommand(view, cmd.item, cmd.act);
+            if (command.command.length===0) {
+                bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
+                return;
+            }
+            cmd = command.command;
         }
 
-        lmsCommand(view.playerId(), command.command).then(({data}) => {
+        lmsCommand(view.playerId(), cmd).then(({data}) => {
             logJsonMessage("RESP", data);
             if (npAfterLast && 0==commands.length && !view.$store.state.desktopLayout) {
                 view.$store.commit('setPage', 'now-playing');
@@ -1588,6 +1592,23 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
     } else {
         bus.$emit('refreshStatus');
     }
+}
+
+function browseInsertQueue(view, id, index, queueSize) {
+    var commands = [];
+    if (view.selection.size>1) {
+        var sel = Array.from(view.selection);
+        sel.sort(function(a, b) { return a<b ? 1 : -1; });
+        for (var i=0, len=sel.length; i<len; ++i) {
+            commands.push(["playlistcontrol", "cmd:add", view.items[sel[i]].id]);
+            commands.push(["playlist", "move", queueSize+i, index]);
+        }
+    } else {
+        commands = [["playlistcontrol","cmd:add", id],
+                    ["playlist", "move", queueSize, index]];
+    }
+    browseDoCommands(view, commands, false, false, 0, true);
+    view.clearSelection();
 }
 
 const DEFERRED_LOADED = true;

@@ -418,6 +418,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (isFavorites) {
                     i.draggable = true;
                     i.realIndex = resp.items.length; // So items are deleted in correct order, even when list is sorted.
+                } else if (isAudioTrack(i)) {
+                    i.draggable = true;
                 }
                 if (i.type=="text" && i.title.startsWith("<")) {
                     i.type="html";
@@ -695,7 +697,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist: isSearchResult ? i.artist : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
-                              url: i.url
+                              url: i.url,
+                              draggable: true
                           });
             }
             if (sortTracks) {
@@ -791,7 +794,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               //icon: "music_note",
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",
-                              draggable: !isRemote
+                              draggable: true
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);

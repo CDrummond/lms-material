@@ -1066,6 +1066,8 @@ var lmsQueue = Vue.component("lms-queue", {
                     bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
                 }
                 this.clearSelection();
+            } else if (ev.dataTransfer && ev.dataTransfer.types && ev.dataTransfer.types[0]=='browse-item' && 2==ev.dataTransfer.types.length) {
+                bus.$emit('browseQueueDrop', ev.dataTransfer.types[1], to, this.listSize);
             }
             this.dragIndex = undefined;
         },

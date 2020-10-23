@@ -1594,20 +1594,52 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
     }
 }
 
+function browseInsertQueueAlbums(view, ids, index, queueSize, tracks) {
+    if (ids.length==0) {
+        var commands = [];
+        for (let len=tracks.length, i=len-1; i>=0; --i, ++queueSize) {
+            commands.push(["playlistcontrol", "cmd:add", "track_id:"+tracks[i]]);
+            commands.push(["playlist", "move", queueSize, index]);
+        }
+        browseDoCommands(view, commands, false, false, 0, true);
+    } else {
+        let id = ids.pop();
+        lmsCommand("", ["tracks", 0, 1000, id, "tags:u"]).then(({data})=>{
+            if (data && data.result && data.result.titles_loop) {
+                for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
+                console.log(loop[i].title);
+                    tracks.push(loop[i].id);
+                }
+            }
+            browseInsertQueueAlbums(view, ids, index, queueSize, tracks);
+        }).catch(err => {
+            logError(err);
+        });
+    }
+}
+
 function browseInsertQueue(view, id, index, queueSize) {
     var commands = [];
+    var ids = [];
     if (view.selection.size>1) {
         var sel = Array.from(view.selection);
         sel.sort(function(a, b) { return a<b ? 1 : -1; });
         for (var i=0, len=sel.length; i<len; ++i) {
-            commands.push(["playlistcontrol", "cmd:add", view.items[sel[i]].id]);
-            commands.push(["playlist", "move", queueSize+i, index]);
+            ids.push(view.items[sel[i]].id);
         }
     } else {
-        commands = [["playlistcontrol","cmd:add", id],
-                    ["playlist", "move", queueSize, index]];
+        ids=[id];
     }
-    browseDoCommands(view, commands, false, false, 0, true);
+
+    if (ids[0].startsWith("album_id:")) {
+        browseInsertQueueAlbums(view, ids, index, queueSize, []);
+    } else {
+        for (let i=0, len=ids.length; i<len; ++i, ++queueSize) {
+            commands.push(["playlistcontrol", "cmd:add", ids[i]]);
+            commands.push(["playlist", "move", queueSize, index]);
+        }
+        browseDoCommands(view, commands, false, false, 0, true);
+    }
     view.clearSelection();
 }
 

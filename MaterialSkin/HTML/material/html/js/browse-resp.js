@@ -608,7 +608,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               type: "group",
                               origTitle: i.album,
                               textkey: key,
-                              emblem: getEmblem(i.extid)
+                              emblem: getEmblem(i.extid),
+                              draggable: true
                           };
                 resp.items.push(album);
             }

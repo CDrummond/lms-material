@@ -1271,9 +1271,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
-            ev.dataTransfer.clearData();
-            ev.dataTransfer.setData('browse-item', '');
-            ev.dataTransfer.setData(which, '');
+            ev.dataTransfer.setData('browse-item', which);
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && (!this.selection.has(which) || this.current.isFavFolder)) {

@@ -742,7 +742,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act==GOTO_ALBUM_ACTION) {
         view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, TRACK_TAGS, SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
-        bus.$emit('dlg.open', 'addtoplaylist', [item]);
+        bus.$emit('dlg.open', 'addtoplaylist', [item], [browseBuildCommand(view, item)]);
     } else if (REMOVE_DUPES_ACTION==act) {
         confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
             if (res) {
@@ -1594,49 +1594,52 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
     }
 }
 
-function browseInsertQueueAlbums(view, ids, index, queueSize, tracks) {
-    if (ids.length==0) {
+function browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, tracks) {
+    if (indexes.length==0) {
         var commands = [];
         for (let len=tracks.length, i=len-1; i>=0; --i, ++queueSize) {
             commands.push(["playlistcontrol", "cmd:add", "track_id:"+tracks[i]]);
-            commands.push(["playlist", "move", queueSize, index]);
+            commands.push(["playlist", "move", queueSize, queueIndex]);
         }
         browseDoCommands(view, commands, false, false, 0, true);
     } else {
-        let id = ids.pop();
-        lmsCommand("", ["tracks", 0, 1000, id, "tags:u"]).then(({data})=>{
+        let index = indexes.pop();
+        var cmd = ["tracks", 0, 1000];
+        var itemCommand = browseBuildCommand(view, view.items[index]);
+        for (var i=0, loop=itemCommand.params, len=loop.length; i<len; ++i) {
+            if (!loop[i].startsWith("tags:")) {
+                cmd.push(loop[i]);
+            }
+        }
+        lmsCommand("", cmd).then(({data})=>{
             if (data && data.result && data.result.titles_loop) {
                 for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
-                console.log(loop[i].title);
                     tracks.push(loop[i].id);
                 }
             }
-            browseInsertQueueAlbums(view, ids, index, queueSize, tracks);
+            browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, tracks);
         }).catch(err => {
             logError(err);
         });
     }
 }
 
-function browseInsertQueue(view, id, index, queueSize) {
+function browseInsertQueue(view, index, queueIndex, queueSize) {
     var commands = [];
-    var ids = [];
+    var indexes = [];
     if (view.selection.size>1) {
         var sel = Array.from(view.selection);
-        sel.sort(function(a, b) { return a<b ? 1 : -1; });
-        for (var i=0, len=sel.length; i<len; ++i) {
-            ids.push(view.items[sel[i]].id);
-        }
+        indexes = sel.sort(function(a, b) { return a<b ? 1 : -1; });
     } else {
-        ids=[id];
+        indexes=[index];
     }
 
-    if (ids[0].startsWith("album_id:")) {
-        browseInsertQueueAlbums(view, ids, index, queueSize, []);
+    if (view.items[indexes[0]].id.startsWith("album_id:")) {
+        browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, []);
     } else {
-        for (let i=0, len=ids.length; i<len; ++i, ++queueSize) {
-            commands.push(["playlistcontrol", "cmd:add", ids[i]]);
-            commands.push(["playlist", "move", queueSize, index]);
+        for (let i=0, len=indexes.length; i<len; ++i, ++queueSize) {
+            commands.push(["playlistcontrol", "cmd:add", view.items[indexes[i]].id]);
+            commands.push(["playlist", "move", queueSize, queueIndex]);
         }
         browseDoCommands(view, commands, false, false, 0, true);
     }

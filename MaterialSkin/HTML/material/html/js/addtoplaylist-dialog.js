@@ -37,9 +37,10 @@ Vue.component('lms-addtoplaylist-dialog', {
         }
     },
     mounted() {
-        bus.$on('addtoplaylist.open', function(items) {
+        bus.$on('addtoplaylist.open', function(items, itemCommands) {
             this.show = true;
             this.items = items;
+            this.itemCommands = itemCommands;
             focusEntry(this);
             lmsCommand("", ["playlists", 0, 10000]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
@@ -95,7 +96,13 @@ Vue.component('lms-addtoplaylist-dialog', {
             }
         },
         saveAlbumToPlaylist(name, albumId) {
-            lmsCommand("", ["tracks", 0, 1000, albumId, "tags:u"]).then(({data})=>{
+            var cmd = ["tracks", 0, 1000, "tags:u"];
+            for (var i=0, loop=this.itemCommands[0].params, len=loop.length; i<len; ++i) {
+                if (!loop[i].startsWith("tags:")) {
+                    cmd.push(loop[i]);
+                }
+            }
+            lmsCommand("", cmd).then(({data})=>{
                 var tracks = [];
                 if (data && data.result && data.result.titles_loop) {
                     for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {

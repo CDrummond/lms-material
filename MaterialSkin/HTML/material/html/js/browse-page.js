@@ -1272,7 +1272,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('browse-item', '');
-            ev.dataTransfer.setData(this.items[which].id, '');
+            ev.dataTransfer.setData(which, '');
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && (!this.selection.has(which) || this.current.isFavFolder)) {
@@ -1533,8 +1533,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.setBgndCover();
         this.letterOverlay=document.getElementById("letterOverlay");
-        bus.$on('browseQueueDrop', function(id, index, queueSize) {
-            browseInsertQueue(this, id, index, queueSize);
+        bus.$on('browseQueueDrop', function(browseIndex, queueIndex, queueSize) {
+            if (browseIndex>=0 && browseIndex<this.items.length) {
+                browseInsertQueue(this, browseIndex, queueIndex, queueSize);
+            }
         }.bind(this));
     },
     filters: {

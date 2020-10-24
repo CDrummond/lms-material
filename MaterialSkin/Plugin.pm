@@ -158,7 +158,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'actions', 'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
+                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -444,6 +444,7 @@ sub _cliCommand {
             my $updating = 0;
             my $plugins = eval { from_json( $json ) };
             for my $plugin (@{$plugins}) {
+            print("\n\nNAME:" . $plugin->{'name'} . " URL:" . $plugin->{'url'} . "\n\n");
                 Slim::Utils::PluginDownloader->install({ name => $plugin->{'name'}, url => $plugin->{'url'}, sha => $plugin->{'sha'} });
                 $updating++;
             }
@@ -554,88 +555,6 @@ sub _cliCommand {
                 $request->addResultLoop("modes_loop", $cnt, "icon", $node->{'icon'});
             }
             $cnt++;
-        }
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'actions') {
-        my $artist_id = $request->getParam('artist_id');
-        my $artist = $request->getParam('artist');
-        my $album_id = $request->getParam('album_id');
-        my $album = $request->getParam('album');
-
-        my $cnt = 0;
-
-        if (!$artist || !($artist eq string('VARIOUSARTISTS'))) {
-            if (Slim::Utils::PluginManager->isEnabled('Plugins::MusicArtistInfo::Plugin')) {
-                if ($artist_id || $artist) {
-                    $request->addResultLoop("actions_loop", $cnt, "title", string('PLUGIN_MUSICARTISTINFO_BIOGRAPHY'));
-                    $request->addResultLoop("actions_loop", $cnt, "icon", "menu_book");
-                    if ($artist_id) {
-                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "biography", "html:1", "artist_id:" . $artist_id], params => [] });
-                    } else {
-                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "biography", "html:1", "artist:" . $artist], params => [] });
-                    }
-                    $request->addResultLoop("actions_loop", $cnt, "weight", 0);
-                    $cnt++;
-                    $request->addResultLoop("actions_loop", $cnt, "title", string('PLUGIN_MUSICARTISTINFO_ARTISTPICTURES'));
-                    $request->addResultLoop("actions_loop", $cnt, "icon", "insert_photo");
-                    if ($artist_id) {
-                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "artistphotos", "artist_id:" . $artist_id], params => [] });
-                    } else {
-                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "artistphotos", "artist:" . $artist], params => [] });
-                    }
-                    $request->addResultLoop("actions_loop", $cnt, "weight", 1);
-                    $cnt++;
-                }
-                if ($album_id || ($album && ($artist_id || $artist))) {
-                    $request->addResultLoop("actions_loop", $cnt, "title", string('PLUGIN_MUSICARTISTINFO_ALBUMREVIEW'));
-                    $request->addResultLoop("actions_loop", $cnt, "icon", "local_library");
-
-                    if ($album_id) {
-                        $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album_id:" . $album_id], params => [] });
-                    } else {
-                        if ($artist_id) {
-                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist_id:" . $artist_id],
-                                                                                  params => [] });
-                        } else {
-                            $request->addResultLoop("actions_loop", $cnt, "do", { command => ["musicartistinfo", "albumreview", "album:" . $album, "artist:" . $artist],
-                                                                                  params => [] });
-                        }
-                    }
-                    $request->addResultLoop("actions_loop", $cnt, "weight", 0);
-                    $cnt++;
-                }
-            }
-            if (Slim::Utils::PluginManager->isEnabled('Plugins::YouTube::Plugin')) {
-                if ($artist) {
-                    $request->addResultLoop("actions_loop", $cnt, "title", "YouTube");
-                    $request->addResultLoop("actions_loop", $cnt, "svg", "youtube");
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["youtube","items"], params=> ["want_url:1", "item_id:3", "search:" . $artist, "menu:youtube"] });
-                    $request->addResultLoop("actions_loop", $cnt, "weight", 10);
-                    $cnt++;
-                }
-            }
-
-            if ($artist_id && !$album_id) {
-                my $role_id = $request->getParam('role_id');
-                my $genre_id = $request->getParam('genre_id');
-                $request->addResultLoop("actions_loop", $cnt, "title", string('ALL_SONGS'));
-                $request->addResultLoop("actions_loop", $cnt, "icon", "music_note");
-
-                if ($role_id && $genre_id) {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id, "role_id:" . $role_id, "genre_id:" . $genre_id] });
-                } elsif ($role_id) {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id, "role_id:" . $role_id] });
-                } elsif ($genre_id) {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id, "genre_id:" . $genre_id] });
-                } else {
-                    $request->addResultLoop("actions_loop", $cnt, "do", { command => ["tracks"], params=> ["sort:albumtrack", "tags:cdrilstyE", "artist_id:" . $artist_id] });
-                }
-                $request->addResultLoop("actions_loop", $cnt, "weight", 3);
-                $cnt++;
-            }
         }
         $request->setStatusDone();
         return;

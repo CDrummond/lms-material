@@ -9,6 +9,7 @@
 var lmsOptions = {newMusicLimit: 100,
                   useMySqueezeboxImageProxy: getLocalStorageBool('useMySqueezeboxImageProxy', true),
                   infoPlugin: getLocalStorageBool('infoPlugin', false),
+                  youTubePlugin: getLocalStorageBool('youTubePlugin', false),
                   separateArtists: getLocalStorageBool('separateArtists', false),
                   artistImages: getLocalStorageBool('artistImages', false),
                   noGenreFilter: getLocalStorageBool('noGenreFilter', false),

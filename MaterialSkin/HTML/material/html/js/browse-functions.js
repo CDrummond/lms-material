@@ -26,6 +26,55 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
+function browseActions(args) {
+    var actions=[];
+    if (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists')) {
+        if (lmsOptions.infoPlugin) {
+            if (undefined!=args['artist_id'] || undefined!=args['artist']) {
+                actions.push({title:i18n('Artist biography'), icon:'menu_book',
+                              do:{ command: undefined!=args['artist_id']
+                                                ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
+                                                : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],
+                                   params:[]},
+                              weight:0});
+                actions.push({title:i18n('Pictures'), icon:'insert_photo',
+                              do:{ command: undefined!=args['artist_id']
+                                                ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+args['artist_id']]
+                                                : ['musicartistinfo', 'artistphotos', 'html:1', 'artist:'+args['artist']],
+                                   params:[]},
+                              weight:0});
+            }
+            if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
+                actions.push({title:i18n('Album review'), icon:'local_library',
+                              do:{ command: undefined!=args['album_id']
+                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
+                                                : undefined!=args['artist_id']
+                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+args['artist_id']]
+                                                    : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
+                                   params:[]},
+                              weight:0});
+            }
+        }
+        if (lmsOptions.youTubePlugin && undefined!=args['artist']) {
+            actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
+                          do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+args['artist'], 'menu:youtube']},
+                          weight:10});
+        }
+
+        if (undefined!=args['artist_id'] && undefined!=args['album_id']) {
+            var params = ['sort:albumtrack', 'tags:cdrilstyE', 'artist_id:'+args['artist_id']];
+            if (undefined!=args['role_id']) {
+                params.push('role_id:'+args['role_id']);
+            }
+            if (undefined!=args['genre_id']) {
+                params.push('genre_id:'+args['genre_id']);
+            }
+            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:3});
+        }
+    }
+    return actions;
+}
+
 function browseHandleListResponse(view, item, command, resp, prevPage) {
     if (resp && resp.items) {
         // Only add history if view is not a search response replacing a search response...
@@ -66,47 +115,38 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.currentActions={show:false, items:[]};
         var listingArtistAlbums = view.current.id.startsWith("artist_id:");
         if ((view.current.id.startsWith("artist_id:") && view.command.command[0]=="albums") || (view.current.id.startsWith("album_id:") && view.command.command[0]=="tracks")) {
-            var cmd = ["material-skin", "actions", view.current.id];
+            var actParams = new Map();
+            actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
             if (listingArtistAlbums) {
-                cmd.push("artist:"+view.current.title);
+                actParams['artist']=view.current.title;
                 var field = getField(view.command, "role_id:");
                 if (field>=0) {
-                    cmd.push(view.command.params[field]);
+                    actParams['role_id']=view.command.params[field];
                 }
                 field = getField(view.command, "genre_id:");
                 if (field>=0) {
-                    cmd.push(view.command.params[field]);
+                    actParams['genre_id']=view.command.params[field];
                 }
             } else {
-                cmd.push("album:"+view.current.title);
+                actParams['album']=view.current.title;
             }
-            lmsCommand("", cmd).then(({data}) => {
-                logJsonMessage("RESP", data);
-                // check view response is for curent listing
-                if (!data || !data.params || data.params.length<2 || data.params[1].length<3 || data.params[1][2]!=view.current.id) {
-                    return;
+            view.currentActions.items = browseActions(actParams);
+            if (listingArtistAlbums) {
+                for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
+                    var emblem = getEmblem(loop[i]+':');
+                    view.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
+                                                    weight:10, svg:emblem ? emblem.name : undefined, id:loop[i]});
                 }
-                if (data && data.result && data.result.actions_loop) {
-                    view.currentActions.items = data.result.actions_loop;
+            }
+            view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+            // Artist from online service, but no albums? Add links to services...
+            if (listingArtistAlbums && view.items.length==0) {
+                view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
+                for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
+                    view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
                 }
-                if (listingArtistAlbums) {
-                    for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
-                        var emblem = getEmblem(loop[i]+':');
-                        view.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                        weight:10, svg:emblem ? emblem.name : undefined, id:loop[i]});
-                    }
-                }
-                view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
-                // Artist from online service, but no albums? Add links to services...
-                if (listingArtistAlbums && view.items.length==0) {
-                    view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
-                    for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
-                        view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
-                    }
-                }
-                view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
-            }).catch(err => {
-            });
+            }
+            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
         }
 
         if (item.id.startsWith(SEARCH_ID)) {

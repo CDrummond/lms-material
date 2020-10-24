@@ -492,8 +492,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
                            next:i18n("Next track") };
             this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
-            this.info.tabs[BIO_TAB].title=i18n("Artist Biography");
-            this.info.tabs[REVIEW_TAB].title=i18n("Album Review");
+            this.info.tabs[BIO_TAB].title=i18n("Artist biography");
+            this.info.tabs[REVIEW_TAB].title=i18n("Album review");
         },
         showContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {

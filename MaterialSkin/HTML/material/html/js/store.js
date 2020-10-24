@@ -513,6 +513,14 @@ const store = new Vuex.Store({
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
                 lmsOptions.infoPlugin = state.infoPlugin;
             });
+            // YouTube plugin installled?
+            lmsCommand("", ["can", "youtube", "items", "?"]).then(({data}) => {
+                lmsOptions.youTubePlugin = data && data.result && data.result._can ? true : false;
+                setLocalStorageVal('youTubePlugin', lmsOptions.youTubePlugin);
+            }).catch(err => {
+                lmsOptions.youTubePlugin = false;
+                setLocalStorageVal('youTubePlugin', lmsOptions.youTubePlugin);
+            });
             // Don't Stop The Music installed?
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
                 state.dstmPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;

@@ -46,6 +46,8 @@
 35. Hide 'Music Folders' from 'My Music' by default, use config dialog to
     enable.
 36. Allow drag'n'drop of albums and tracks from browse page onto queue.
+37. Move artist/album action code from Perl into Javascript, to save button
+    appearing after view loaded.
 
 1.9.1
 -----

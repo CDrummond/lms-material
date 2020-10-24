@@ -48,6 +48,7 @@
 36. Allow drag'n'drop of albums and tracks from browse page onto queue.
 37. Move artist/album action code from Perl into Javascript, to save button
     appearing after view loaded.
+38. Use 'medium small white circle' for jumplist to help appearance on iOS.
 
 1.9.1
 -----

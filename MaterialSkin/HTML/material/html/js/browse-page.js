@@ -1260,7 +1260,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.jumplist = [];
                 var jump = this.items.length/10.0;
                 for (var i=0; i<10; ++i) {
-                    this.jumplist.push({key:'\u25cf', alt:'\u25cb', index: Math.round(i*jump)});
+                    this.jumplist.push({key:'\u25cf', alt:'\u26ac', index: Math.round(i*jump)});
                 }
             }
             if (undefined==this.jumplist || this.jumplist.length<1) {

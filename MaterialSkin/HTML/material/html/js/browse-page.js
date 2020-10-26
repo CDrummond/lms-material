@@ -121,7 +121,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </div>
   </RecycleScroller>
 
-  <RecycleScroller v-else-if="!isTop && ((grid.allowed && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID) || items.length>LMS_MAX_NON_SCROLLER_ITEMS)" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
+  <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver($event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header}"@contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
@@ -365,6 +365,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         homeButton() {
             return this.$store.state.homeButton
+        },
+        useRecyclerForLists() {
+            return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
         }
     },
     created() {

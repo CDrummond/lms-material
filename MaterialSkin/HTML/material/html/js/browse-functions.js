@@ -271,7 +271,7 @@ function browseClick(view, item, index, event) {
         return;
     }
     if ("search"==item.type || "entry"==item.type) {
-        if (view.grid.use) {
+        if (view.grid.use || view.useRecyclerForLists) {
             promptForText(item.title, "", "").then(resp => {
                 if (resp.ok && resp.value && resp.value.length>0) {
                     if ("search"==item.type) {

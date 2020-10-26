@@ -282,8 +282,8 @@ function nameSort(a, b) {
 }
 
 function fixedSort(a, b) {
-    var titleA = fixTitle(a.toLowerCase());
-    var titleB = fixTitle(b.toLowerCase());
+    var titleA = undefined==a ? undefined : fixTitle(a.toLowerCase());
+    var titleB = undefined==b ? undefined : fixTitle(b.toLowerCase());
     if (titleA < titleB) {
         return -1;
     }

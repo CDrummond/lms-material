@@ -3,6 +3,7 @@
 1. Update translations.
 2. Fix search field in various lists (e.g. Qobuz, Spotty).
 3. Fix some icons in Spotty.
+4. Fix subtoolbar left-padding when window width 370px or less.
 
 2.0.0
 -----

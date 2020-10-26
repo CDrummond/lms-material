@@ -246,6 +246,10 @@
   padding-left:10px;
  }
 
+ .subtoolbar {
+  padding:2px 4px 0px 8px;
+ }
+
  .lms-list .v-list__tile {
   padding:0 12px !important;
  }

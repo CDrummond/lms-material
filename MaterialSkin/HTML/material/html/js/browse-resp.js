@@ -58,7 +58,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isMusicIpMix = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix";
-
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -365,7 +364,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
                         i.id = "item_id:"+i.actions.go.params.item_id;
                     }
-                    mapIcon(i);
+                    mapIcon(i, command);
                 }
 
                 if (!i.id) {

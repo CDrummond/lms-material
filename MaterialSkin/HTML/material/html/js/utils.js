@@ -423,21 +423,18 @@ function setScrollTop(view, val) {
     });
 }
 
-var lmsFakeStorage={};
 function getLocalStorageBool(key, def) {
-    var val = undefined==window.localStorage ? lmsFakeStorage[LS_PREFIX+key] : window.localStorage.getItem(LS_PREFIX+key);
+    var val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? "true" == val : def;
 }
 
 function getLocalStorageVal(key, def) {
-    var val = undefined==window.localStorage ? lmsFakeStorage[LS_PREFIX+key] : window.localStorage.getItem(LS_PREFIX+key);
+    var val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? val : def;
 }
 
 function setLocalStorageVal(key, val) {
-    if (undefined==window.localStorage) {
-        lmsFakeStorage[LS_PREFIX+key]=val;
-    } else {
+    if (undefined!=window.localStorage) {
         window.localStorage.setItem(LS_PREFIX+key, val);
     }
 }

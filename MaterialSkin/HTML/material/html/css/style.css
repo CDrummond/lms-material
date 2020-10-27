@@ -982,6 +982,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
+.lib-search {
+ margin-left:4px;
+}
+
 .lib-search .v-label:not(.v-label--active) {
  margin-top:-3px; /* Align non-focused subtoolbar 'Search' label with back arrow */
 }
@@ -1996,7 +2000,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  }
 }
 
-#back-button {
+.back-button {
  margin-right:14px !important;
 }
 

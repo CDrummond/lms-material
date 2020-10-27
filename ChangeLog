@@ -7,6 +7,7 @@
 5. Give hover-buttons a background in lists, otherwise text can show through.
 6. Darken background of 'Adwaita-Dark' theme so as to work-around Chrome
    changing certain colours if its force dark mode is enabled.
+7. Fix margins of back button when home button is visible.
 
 2.0.0
 -----

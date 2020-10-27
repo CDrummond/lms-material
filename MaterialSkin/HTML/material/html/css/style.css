@@ -1865,8 +1865,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .list-btns {
  position:absolute;
- top:8px !important;
- right:50px !important;
+ top:6px !important;
+ right:44px !important;
+ background-color:var(--background-color);
+ padding:2px;
+ border-radius:8px;
 }
 
 .lms-list .v-list__tile__action .v-btn--icon {

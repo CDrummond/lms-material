@@ -4,6 +4,7 @@
 2. Fix search field in various lists (e.g. Qobuz, Spotty).
 3. Fix some icons in Spotty.
 4. Fix subtoolbar left-padding when window width 370px or less.
+5. Give hover-buttons a background in lists, otherwise text can show through.
 
 2.0.0
 -----

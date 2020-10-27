@@ -423,22 +423,29 @@ function setScrollTop(view, val) {
     });
 }
 
+var lmsFakeStorage={};
 function getLocalStorageBool(key, def) {
-    var val = window.localStorage.getItem(LS_PREFIX+key);
+    var val = undefined==window.localStorage ? lmsFakeStorage[LS_PREFIX+key] : window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? "true" == val : def;
 }
 
 function getLocalStorageVal(key, def) {
-    var val = window.localStorage.getItem(LS_PREFIX+key);
+    var val = undefined==window.localStorage ? lmsFakeStorage[LS_PREFIX+key] : window.localStorage.getItem(LS_PREFIX+key);
     return undefined!=val ? val : def;
 }
 
 function setLocalStorageVal(key, val) {
-    window.localStorage.setItem(LS_PREFIX+key, val);
+    if (undefined==window.localStorage) {
+        lmsFakeStorage[LS_PREFIX+key]=val;
+    } else {
+        window.localStorage.setItem(LS_PREFIX+key, val);
+    }
 }
 
 function removeLocalStorage(key) {
-    window.localStorage.removeItem(LS_PREFIX+key);
+    if (undefined!=window.localStorage) {
+        window.localStorage.removeItem(LS_PREFIX+key);
+    }
 }
 
 function replaceNewLines(str) {

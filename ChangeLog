@@ -8,6 +8,8 @@
 6. Darken background of 'Adwaita-Dark' theme so as to work-around Chrome
    changing certain colours if its force dark mode is enabled.
 7. Fix margins of back button when home button is visible.
+8. If window.localStorage is undefined, then create an object to store temporary
+   settings.
 
 2.0.0
 -----

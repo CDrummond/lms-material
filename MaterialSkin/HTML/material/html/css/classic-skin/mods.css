@@ -138,7 +138,7 @@ div#innerSettingsBlock {
  font-size:16px !important;
  font-family:Roboto,sans-serif !important;
  text-rendering: optimizeLegibility;
- line-height: 1.5;
+ line-height: 1.2;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
 }
@@ -192,15 +192,17 @@ select[multiple]:focus {
  border: 1px solid var(--active-color);
 }
 
-input[type="text"], input[type="password"], input[type="stdedit"] {
+input[type="text"], input[type="password"], input[type="stdedit"], input.stdedit {
  border: none;
+ border-bottom: 1px solid var(--text-color);
  min-width:80px;
  max-width:calc(100vw - 32px);
  border-radius: 0px;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, input[type=checkbox]:focus, input[type=radio]:focus {
- outline: none;
+input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, input.stdedit:focus, input[type=checkbox]:focus, input[type=radio]:focus {
+ outline: none!important;
+ border-bottom: 1px solid var(--active-color);
 }
 
 input[type="submit"], input[type="button"] {
@@ -419,4 +421,9 @@ div#Info0, div#Info1, div#Info2, div#Info3, div#Info4, div#Info5, div#Info6, div
 #homeMenu table.topside thead th {
  border-radius:0px;
  text-align:initial;
+}
+
+/* Inguz */
+.songInfoText .stdclick {
+ width:initial!important;
 }

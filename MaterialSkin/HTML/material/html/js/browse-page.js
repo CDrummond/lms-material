@@ -122,7 +122,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'drop-target': index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
+   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -174,7 +174,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
     </v-list-tile-action>
    </v-list-tile>
-   <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': index==dropIndex}">
+   <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex}">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -327,6 +327,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             disabled: new Set(),
             wide: false,
             searchActive: false,
+            dragActive: false,
             dropIndex: -1
         }
     },
@@ -405,6 +406,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.previousScrollPos=0;
         this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+        this.canDrop = false;
 
         if (!IS_MOBILE) {
             bindKey('home');
@@ -1274,6 +1276,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
         },
         dragStart(which, ev) {
+            bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('browse-item', which);
             if (!this.grid.use) {
@@ -1289,22 +1292,24 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;
-            bus.$emit('dragEnd');
+            bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
-            this.dropIndex = index;
-            // Drag over item at top/bottom of list to start scrolling
-            this.stopScrolling = true;
-            if (ev.clientY < 110) {
-                this.stopScrolling = false;
-                this.scrollList(-5)
-            }
+            if (this.canDrop) {
+                this.dropIndex = index;
+                // Drag over item at top/bottom of list to start scrolling
+                this.stopScrolling = true;
+                if (ev.clientY < 110) {
+                    this.stopScrolling = false;
+                    this.scrollList(-5)
+                }
 
-            if (ev.clientY > (window.innerHeight - 70)) {
-                this.stopScrolling = false;
-                this.scrollList(5)
+                if (ev.clientY > (window.innerHeight - 70)) {
+                    this.stopScrolling = false;
+                    this.scrollList(5)
+                }
+                ev.preventDefault(); // Otherwise drop is never called!
             }
-            ev.preventDefault(); // Otherwise drop is never called!
         },
         scrollList(step) {
             var pos = this.scrollElement.scrollTop + step;
@@ -1547,8 +1552,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 browseInsertQueue(this, browseIndex, queueIndex, queueSize);
             }
         }.bind(this));
-        bus.$on('dragEnd', function() {
-            this.dropIndex = -1;
+        bus.$on('dragActive', function(act) {
+            this.dragActive = act;
+            if (!act) {
+                this.dropIndex = -1;
+            }
         }.bind(this));
     },
     filters: {

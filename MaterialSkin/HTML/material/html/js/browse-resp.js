@@ -24,7 +24,7 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0 };
+    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false };
 
     try {
     if (data && data.result) {
@@ -67,6 +67,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var numImages = 0;
 
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
+            resp.canDrop = isFavorites;
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -798,6 +799,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                           });
             }
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+            resp.canDrop = !isRemote;
             if (totalDuration>0) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
             }

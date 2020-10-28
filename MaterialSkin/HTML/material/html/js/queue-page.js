@@ -247,7 +247,7 @@ var lmsQueue = Vue.component("lms-queue", {
  </div>
  <v-list class="lms-list bgnd-cover" id="queue-list" v-bind:class="{'lms-list3':threeLines}">
  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS && threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" loading="lazy"></img>
@@ -265,7 +265,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile>
   </RecycleScroller>
   <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" loading="lazy"></img>
@@ -282,7 +282,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile>
   </RecycleScroller>
   <template v-else v-for="(item, index) in items">
-   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': index==dropIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
+   <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
@@ -341,6 +341,7 @@ var lmsQueue = Vue.component("lms-queue", {
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0,
             dstm: false,
+            dragActive: false,
             dropIndex: -1
         }
     },
@@ -591,8 +592,11 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }.bind(this));
         }
-        bus.$on('dragEnd', function() {
-            this.dropIndex = -1;
+        bus.$on('dragActive', function(act) {
+            this.dragActive = act;
+            if (!act) {
+                this.dropIndex = -1;
+            }
         }.bind(this));
     },
     methods: {
@@ -1019,6 +1023,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         dragStart(which, ev) {
+            bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);
             ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
@@ -1032,7 +1037,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;
-            bus.$emit('dragEnd');
+            bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
             this.dropIndex = index;

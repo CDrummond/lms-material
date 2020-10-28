@@ -22,6 +22,7 @@ function browseAddHistory(view) {
     prev.allSearchResults = view.allSearchResults;
     prev.inGenre = view.inGenre;
     prev.searchActive = view.searchActive;
+    prev.canDrop = view.canDrop;
     view.prevPage = undefined;
     view.history.push(prev);
 }
@@ -82,6 +83,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             view.addHistory();
         }
         resp.canUseGrid = resp.canUseGrid && (view.$store.state.browseArtwork || resp.forceGrid);
+        view.canDrop = resp.canDrop;
         view.searchActive = item.id.startsWith(SEARCH_ID);
         view.command = command;
         view.currentBaseActions = view.baseActions;
@@ -922,6 +924,7 @@ function browseGoHome(view) {
     view.showRatingButton = false;
     view.subtitleClickable = false;
     view.inGenre = undefined;
+    view.canDrop = false;
     view.$nextTick(function () {
         view.setBgndCover();
         view.filterJumplist();
@@ -976,6 +979,7 @@ function browseGoBack(view, refresh) {
     view.allSearchResults = prev.allSearchResults;
     view.inGenre = prev.inGenre;
     view.searchActive = prev.searchActive && !searchWasActive;
+    view.canDrop = prev.canDrop;
 
     if (refresh || prev.needsRefresh) {
         view.refreshList();

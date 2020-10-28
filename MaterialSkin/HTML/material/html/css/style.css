@@ -2031,3 +2031,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .time-picker-actions .v-list__tile__action {
  padding-right:16px;
 }
+
+.drop-target {
+ background-color:var(--drop-target-color)!important;
+}

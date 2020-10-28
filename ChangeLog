@@ -1,15 +1,16 @@
 2.0.1
 -----
-1. Update translations.
-2. Fix search field in various lists (e.g. Qobuz, Spotty).
-3. Fix some icons in Spotty.
-4. Fix subtoolbar left-padding when window width 370px or less.
-5. Give hover-buttons a background in lists, otherwise text can show through.
-6. Darken background of 'Adwaita-Dark' theme so as to work-around Chrome
-   changing certain colours if its force dark mode is enabled.
-7. Fix margins of back button when home button is visible.
-8. Check if window.localStorage is undefined, if so cannot use.
-9. Fix drag'n'drop of playlist track onto queue.
+ 1. Update translations.
+ 2. Fix search field in various lists (e.g. Qobuz, Spotty).
+ 3. Fix some icons in Spotty.
+ 4. Fix subtoolbar left-padding when window width 370px or less.
+ 5. Give hover-buttons a background in lists, otherwise text can show through.
+ 6. Darken background of 'Adwaita-Dark' theme so as to work-around Chrome
+    changing certain colours if its force dark mode is enabled.
+ 7. Fix margins of back button when home button is visible.
+ 8. Check if window.localStorage is undefined, if so cannot use.
+ 9. Fix drag'n'drop of playlist track onto queue.
+10. Highlight drop target.
 
 2.0.0
 -----

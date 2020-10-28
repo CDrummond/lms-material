@@ -7,6 +7,7 @@
 
 :root {
  --pq-current-color:rgba(198,40,40,0.2);
+ --drop-target-color:rgba(198,40,40,0.5);
  --primary-color:#c62828;
  --accent-color:#ff5f52;
 }

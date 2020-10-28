@@ -9,6 +9,7 @@
    changing certain colours if its force dark mode is enabled.
 7. Fix margins of back button when home button is visible.
 8. Check if window.localStorage is undefined, if so cannot use.
+9. Fix drag'n'drop of playlist track onto queue.
 
 2.0.0
 -----

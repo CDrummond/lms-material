@@ -1678,7 +1678,7 @@ function browseInsertQueue(view, index, queueIndex, queueSize) {
         browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, []);
     } else {
         for (let i=0, len=indexes.length; i<len; ++i, ++queueSize) {
-            commands.push(["playlistcontrol", "cmd:add", view.items[indexes[i]].id]);
+            commands.push(["playlistcontrol", "cmd:add", originalId(view.items[indexes[i]].id)]);
             commands.push(["playlist", "move", queueSize, queueIndex]);
         }
         browseDoCommands(view, commands, false, false, 0, true);

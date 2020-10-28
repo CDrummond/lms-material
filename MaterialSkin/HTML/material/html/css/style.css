@@ -1973,7 +1973,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .highlight-drop {
  border-radius:4px;
- background-color:var(--pq-current-color);
+ background-color:var(--drop-target-color)!important;
 }
 
 .highlight-drag {

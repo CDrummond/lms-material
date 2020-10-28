@@ -12,6 +12,7 @@
  9. Fix drag'n'drop of playlist track onto queue.
 10. Highlight drop target.
 11. Fix drag image when start drag on list image.
+12. Fix list hover buttons for light themes.
 
 2.0.0
 -----

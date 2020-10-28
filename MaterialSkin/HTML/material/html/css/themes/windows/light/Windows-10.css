@@ -45,8 +45,11 @@
 }
 
 @media (hover: hover) {
+ .list-btns .add-btn, .list-btns .play-btn {
+  background-color:var(--background-color)!important;
+ }
  .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover {
-  background-color:rgba(128, 128, 128, 0.5);
+  background-color:rgba(184, 184, 184, 0.5)!important;
  }
 }
 

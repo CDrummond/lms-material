@@ -1869,10 +1869,6 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  visibility: visible;
 }
 
-.v-list__tile:hover .list-btns .play-btn:not(:hover), .v-list__tile:hover .list-btns .add-btn:not(:hover) {
- background-color:var(--background-color);
-}
-
 .list-btns {
  position:absolute;
  top:8px !important;
@@ -1886,20 +1882,20 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .add-btn, .play-btn {
  margin-right:2px;
  float:left;
- color:rgba(255, 255, 255, 0.7);
+ color:var(--text-color);
+ background-color:rgba(110, 110, 110, 0.65);
 }
 
 .grid-btns .add-btn, .grid-btns .play-btn {
- background-color:rgba(64, 64, 64, 0.75)!important;
+ color:var(--light-text-color);
 }
 
 .list-btns .play-btn {
  margin-right:8px;
 }
 
-.grid-btns .add-btn:hover, .grid-btns .play-btn:hover {
- color:white;
- background-color:rgba(16, 16, 16, 0.75)!important;
+.add-btn:hover, .play-btn:hover {
+ background-color:rgba(110, 110, 110, 0.95);
 }
 
 .add-btn:after {

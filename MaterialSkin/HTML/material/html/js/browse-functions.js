@@ -62,13 +62,13 @@ function browseActions(args) {
                           weight:10});
         }
 
-        if (undefined!=args['artist_id'] && undefined!=args['album_id']) {
+        if (undefined!=args['artist_id'] && undefined==args['album_id']) {
             var params = ['sort:albumtrack', 'tags:cdrilstyE', 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {
-                params.push('role_id:'+args['role_id']);
+                params.push(args['role_id']);
             }
             if (undefined!=args['genre_id']) {
-                params.push('genre_id:'+args['genre_id']);
+                params.push(args['genre_id']);
             }
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:3});
         }

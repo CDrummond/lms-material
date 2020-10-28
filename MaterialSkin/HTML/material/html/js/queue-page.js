@@ -1063,16 +1063,18 @@ var lmsQueue = Vue.component("lms-queue", {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                if (this.selection.size>0) {
-                    if (!this.selection.has(to)) {
-                        var selection = Array.from(this.selection);
-                        bus.$emit('moveQueueItems', selection.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+            if (this.dragIndex!=undefined) {
+                if (to!=this.dragIndex) {
+                    if (this.selection.size>0) {
+                        if (!this.selection.has(to)) {
+                            var selection = Array.from(this.selection);
+                            bus.$emit('moveQueueItems', selection.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                        }
+                    } else {
+                        bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
                     }
-                } else {
-                    bus.$emit('playerCommand', ["playlist", "move", this.dragIndex, to]);
+                    this.clearSelection();
                 }
-                this.clearSelection();
             } else if (ev.dataTransfer) {
                 var browseIndex = ev.dataTransfer.getData('browse-item');
                 if (undefined!=browseIndex) {

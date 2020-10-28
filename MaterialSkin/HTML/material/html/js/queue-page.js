@@ -1021,6 +1021,7 @@ var lmsQueue = Vue.component("lms-queue", {
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);
+            ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && !this.selection.has(which)) {

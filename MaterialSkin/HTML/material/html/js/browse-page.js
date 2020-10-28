@@ -122,7 +122,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </RecycleScroller>
 
   <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(inedx, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'drop-target': index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
+   <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'drop-target': index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
      <v-icon>check_box</v-icon>
     </v-list-tile-avatar>
@@ -1276,6 +1276,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('browse-item', which);
+            if (!this.grid.use) {
+                ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
+            }
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && (!this.selection.has(which) || this.current.isFavFolder)) {

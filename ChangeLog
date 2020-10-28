@@ -11,6 +11,7 @@
  8. Check if window.localStorage is undefined, if so cannot use.
  9. Fix drag'n'drop of playlist track onto queue.
 10. Highlight drop target.
+11. Fix drag image when start drag on list image.
 
 2.0.0
 -----

@@ -23,6 +23,8 @@
  --fade-size:16px;
  --jump-list-width:32px; /* must match that in browse-page.js */
  --inactive-nav-opacity:0.5;
+ --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
+ --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
 }
 
 .note {

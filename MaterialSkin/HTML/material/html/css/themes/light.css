@@ -23,7 +23,7 @@
  --dialog-toolbar-border-color:#e0e0e0;
  --splitter-color:#e0e0e0;
  --icon-color:#333;
- --dlg-icon-color:#fff;
+ --dlg-icon-color:var(--light-text-color);
  --list-item-border-color:#e0e0e0;
  --subheader-color:rgba(0, 0, 0, 0.87);
  --text-shadow-color:#fff;

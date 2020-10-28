@@ -6,19 +6,19 @@
  */
 
 :root {
- --active-toolbar-color:#fff;
+ --active-toolbar-color:var(--light-text-color);
  --dialog-toolbar-color:var(--primary-color);
  --bottom-toolbar-color:var(--primary-color);
  --top-toolbar-color:var(--primary-color);
  --bottom-toolbar-border-color:var(--primary-color);
  --top-toolbar-border-color:var(--primary-color);
  --dialog-toolbar-border-color:var(--primary-color);
- --dialog-toolbar-text-color:#fff;
- --top-toolbar-text-color:#fff;
- --bottom-toolbar-text-color:#fff;
- --active-nav-btn-color:#fff;
- --toolbar-volume-color:#fff;
- --bottom-position-slider-color:#fff;
+ --dialog-toolbar-text-color:var(--light-text-color);
+ --top-toolbar-text-color:var(--light-text-color);
+ --bottom-toolbar-text-color:var(--light-text-color);
+ --active-nav-btn-color:var(--light-text-color);
+ --toolbar-volume-color:var(--light-text-color);
+ --bottom-position-slider-color:var(--light-text-color);
 }
 
 .lms-toolbar .v-input--slider .v-slider__track,
@@ -28,7 +28,7 @@
 }
 
 .lms-toolbar .v-btn__content i.active-btn, .maintoolbar-player-icon {
- color:#fff !important;
+ color:var(--light-text-color) !important;
 }
 
 @media (hover: hover) {

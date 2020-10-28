@@ -62,7 +62,7 @@ function browseActions(args) {
                           weight:10});
         }
 
-        if (undefined!=args['artist_id'] && undefined==args['album_id']) {
+        if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
             var params = ['sort:albumtrack', 'tags:cdrilstyE', 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {
                 params.push(args['role_id']);
@@ -121,6 +121,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
             if (listingArtistAlbums) {
                 actParams['artist']=view.current.title;
+                actParams['count']=resp.items.length;
                 var field = getField(view.command, "role_id:");
                 if (field>=0) {
                     actParams['role_id']=view.command.params[field];

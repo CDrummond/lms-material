@@ -13,8 +13,8 @@
 10. Highlight drop target.
 11. Fix drag image when start drag on list image.
 12. Fix list hover buttons for light themes.
-13. Lighter list separator for Mojave.
-14. Fix 'All songs' missing from artist actions.
+13. Fix 'All songs' missing from artist actions.
+14. Only show 'All songs' if artist has more than 1 album.
 
 2.0.0
 -----

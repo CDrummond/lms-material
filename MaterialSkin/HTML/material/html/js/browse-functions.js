@@ -82,7 +82,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         if (SEARCH_ID!=item.id || undefined==view.current || SEARCH_ID!=view.current.id) {
             view.addHistory();
         }
-        resp.canUseGrid = resp.canUseGrid && (view.$store.state.browseArtwork || resp.forceGrid);
+        resp.canUseGrid = resp.canUseGrid && (view.$store.state.showArtwork || resp.forceGrid);
         view.canDrop = resp.canDrop;
         view.searchActive = item.id.startsWith(SEARCH_ID);
         view.command = command;

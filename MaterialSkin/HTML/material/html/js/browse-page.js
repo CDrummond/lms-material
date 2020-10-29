@@ -345,7 +345,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.sortHome
         },
         artwork() {
-            return this.$store.state.browseArtwork
+            return this.$store.state.showArtwork
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

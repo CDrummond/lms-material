@@ -96,7 +96,7 @@ function buildStdItemCommand(item, parentCommand) {
     for (var i=0, list=STD_ITEMS[item.stdItem].params, len=list.length; i<len; ++i) {
         command.params.push(list[i]);
     }
-    if (lmsOptions.browseTechInfo && (STD_ITEM_ALBUM==item.stdItem || STD_ITEM_PLAYLIST==item.stdItem || STD_ITEM_REMOTE_PLAYLIST==item.stdItem)) {
+    if (lmsOptions.techInfo && (STD_ITEM_ALBUM==item.stdItem || STD_ITEM_PLAYLIST==item.stdItem || STD_ITEM_REMOTE_PLAYLIST==item.stdItem)) {
         for (var i=0, list=command.params, len=list.length; i<len; ++i) {
             if (command.params[i].startsWith("tags:")) {
                 command.params[i]+="lorT";

@@ -55,10 +55,6 @@ function updateUiSettings(state, val) {
         state.showMenuAudio = val.showMenuAudio;
         setLocalStorageVal('showMenuAudio', state.showMenuAudio);
     }
-    if (undefined!=val.browseTechInfo && state.browseTechInfo!=val.browseTechInfo) {
-        state.browseTechInfo = val.browseTechInfo;
-        setLocalStorageVal('browseTechInfo', state.browseTechInfo);
-    }
     if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
         state.stopButton = val.stopButton;
         setLocalStorageVal('stopButton', state.stopButton);
@@ -70,10 +66,6 @@ function updateUiSettings(state, val) {
     if (undefined!=val.queueBackdrop && state.queueBackdrop!=val.queueBackdrop) {
         state.queueBackdrop = val.queueBackdrop;
         setLocalStorageVal('queueBackdrop', state.queueBackdrop);
-    }
-    if (undefined!=val.showMenuAudioQueue && state.showMenuAudioQueue!=val.showMenuAudioQueue) {
-        state.showMenuAudioQueue = val.showMenuAudioQueue;
-        setLocalStorageVal('showMenuAudioQueue', state.showMenuAudioQueue);
     }
     if (undefined!=val.nowPlayingBackdrop && state.nowPlayingBackdrop!=val.nowPlayingBackdrop) {
         state.nowPlayingBackdrop = val.nowPlayingBackdrop;
@@ -140,13 +132,9 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
         bus.$emit('queueDisplayChanged');
     }
-    if (undefined!=val.queueArtwork && state.queueArtwork!=val.queueArtwork) {
-        state.queueArtwork = val.queueArtwork;
-        setLocalStorageVal('queueArtwork', state.queueArtwork);
-    }
-    if (undefined!=val.browseArtwork && state.browseArtwork!=val.browseArtwork) {
-        state.browseArtwork = val.browseArtwork;
-        setLocalStorageVal('browseArtwork', state.browseArtwork);
+    if (undefined!=val.showArtwork && state.showArtwork!=val.showArtwork) {
+        state.showArtwork = val.showArtwork;
+        setLocalStorageVal('showArtwork', state.showArtwork);
     }
     if (undefined!=val.skipSeconds && state.skipSeconds!=val.skipSeconds) {
         state.skipSeconds = val.skipSeconds;
@@ -165,10 +153,6 @@ function updateUiSettings(state, val) {
         state.showRating = val.showRating;
         setLocalStorageVal('showRating', state.showRating);
     }
-    if (undefined!=val.queueShowRating && state.queueShowRating!=val.queueShowRating) {
-        state.queueShowRating = val.queueShowRating;
-        setLocalStorageVal('queueShowRating', state.queueShowRating);
-    }
     if (undefined!=val.disabledBrowseModes) {
         var diff = new Set([...val.disabledBrowseModes].filter(x => !state.disabledBrowseModes.has(x)));
         var diff2 = new Set([...state.disabledBrowseModes].filter(x => !val.disabledBrowseModes.has(x)));
@@ -178,7 +162,7 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
-    lmsOptions.browseTechInfo = state.browseTechInfo;
+    lmsOptions.techInfo = state.techInfo;
     lmsOptions.infoPlugin = state.infoPlugin;
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
@@ -231,7 +215,6 @@ const store = new Vuex.Store({
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
-        browseTechInfo:false,
         autoScrollQueue:true,
         library: null,
         infoPlugin: false,
@@ -240,7 +223,6 @@ const store = new Vuex.Store({
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
-        showMenuAudioQueue: true,
         nowPlayingBackdrop: false,
         infoBackdrop: true,
         techInfo: false,
@@ -250,7 +232,6 @@ const store = new Vuex.Store({
         ratingsSupport: false,
         maxRating: 5,
         showRating: true,
-        queueShowRating: true,
         showPlayerMenuEntry: false,
         page:'browse',
         menuIcons: true,
@@ -262,8 +243,7 @@ const store = new Vuex.Store({
         keyboardControl: true,
         updatesAvailable: new Set(),
         queueThreeLines: false,
-        queueArtwork: true,
-        browseArtwork: true,
+        showArtwork: true,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -425,14 +405,12 @@ const store = new Vuex.Store({
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
             state.showMenuAudio = getLocalStorageBool('showMenuAudio', state.showMenuAudio);
-            state.browseTechInfo = getLocalStorageBool('browseTechInfo', state.browseTechInfo);
             state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
             state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
             state.customSkipPlugin = getLocalStorageBool('customSkipPlugin', state.customSkipPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
-            state.showMenuAudioQueue = getLocalStorageBool('showMenuAudioQueue', state.showMenuAudioQueue);
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
             state.techInfo = getLocalStorageBool('techInfo', state.techInfo);
@@ -442,7 +420,6 @@ const store = new Vuex.Store({
             state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showRating = getLocalStorageBool('showRating', state.showRating);
-            state.queueShowRating = getLocalStorageBool('queueShowRating', state.queueShowRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
             state.menuIcons = getLocalStorageBool('menuIcons', state.menuIcons);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
@@ -450,8 +427,7 @@ const store = new Vuex.Store({
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
-            state.queueArtwork = getLocalStorageBool('queueArtwork', state.queueArtwork);
-            state.browseArtwork = getLocalStorageBool('browseArtwork', state.browseArtwork);
+            state.showArtwork = getLocalStorageBool('showArtwork', state.showArtwork);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
@@ -466,7 +442,7 @@ const store = new Vuex.Store({
             if (state.largerElements) {
                 setElemSizes(state.largerElements);
             }
-            lmsOptions.browseTechInfo = state.browseTechInfo;
+            lmsOptions.techInfo = state.techInfo;
             lmsOptions.infoPlugin = state.infoPlugin;
 
             // Get server prefs  for:
@@ -559,11 +535,9 @@ const store = new Vuex.Store({
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
                                      showMenuAudio: getLocalStorageBool('showMenuAudio', undefined==prefs.showMenuAudio ? state.showMenuAudio : prefs.showMenuAudio),
-                                     browseTechInfo: getLocalStorageBool('browseTechInfo', undefined==prefs.browseTechInfo ? state.browseTechInfo : prefs.browseTechInfo),
                                      stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
                                      browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                      queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
-                                     showMenuAudioQueue: getLocalStorageBool('showMenuAudioQueue', undefined==prefs.showMenuAudioQueue ? state.showMenuAudioQueue : prefs.showMenuAudioQueue),
                                      nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
                                      infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
                                      techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
@@ -577,13 +551,11 @@ const store = new Vuex.Store({
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
-                                     queueArtwork: getLocalStorageBool('queueArtwork', undefined==prefs.queueArtwork ? state.queueArtwork : prefs.queueArtwork),
-                                     browseArtwork: getLocalStorageBool('browseArtwork', undefined==prefs.browseArtwork ? state.browseArtwork : prefs.browseArtwork),
+                                     showArtwork: getLocalStorageBool('showArtwork', undefined==prefs.showArtwork ? state.showArtwork : prefs.showArtwork),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
-                                     showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
-                                     queueShowRating: getLocalStorageBool('queueShowRating', undefined==prefs.queueShowRating ? state.queueShowRating : prefs.queueShowRating) };
+                                     showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

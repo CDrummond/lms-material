@@ -672,7 +672,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 totalDuration += duration>0 ? duration : 0;
                 var subtitle = duration>0 ? formatSeconds(duration) : undefined;
-                var techInfo = lmsOptions.browseTechInfo ? formatTechInfo(i) : undefined;
+                var techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
                 if (techInfo) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+techInfo;
@@ -769,7 +769,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var duration = parseFloat(i.duration || 0);
                 totalDuration+=duration;
                 var subtitle = duration>0 ? formatSeconds(duration) : undefined;
-                var techInfo = lmsOptions.browseTechInfo ? formatTechInfo(i) : undefined;
+                var techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
                 if (techInfo) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+techInfo;

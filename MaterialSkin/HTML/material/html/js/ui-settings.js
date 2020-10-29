@@ -122,6 +122,41 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-list-tile>
+     <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
+      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="techInfo"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="showArtwork = !showArtwork" class="switch-label">
+      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showArtwork"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile v-if="ratingsSupport">
+     <v-list-tile-content @click="showRating = !showRating" class="switch-label">
+      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider v-if="ratingsSupport"></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
+      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
     <v-divider v-if="hasPassword"></v-divider>
     <v-list-tile v-if="hasPassword">
      <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
@@ -149,38 +184,11 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
-      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
-      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc. next to track duration.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="browseTechInfo"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="sortFavorites"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="browseArtwork = !browseArtwork" class="switch-label">
-      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="browseArtwork"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -219,24 +227,6 @@ Vue.component('lms-ui-settings', {
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Now Playing')}}</v-header>
-
-    <v-list-tile>
-     <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
-      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="techInfo"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile v-if="ratingsSupport">
-     <v-list-tile-content @click="showRating = !showRating" class="switch-label">
-      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider v-if="ratingsSupport"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
@@ -290,24 +280,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="showMenuAudioQueue = !showMenuAudioQueue" class="switch-label">
-      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showMenuAudioQueue"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile v-if="ratingsSupport">
-     <v-list-tile-content @click="queueShowRating = !queueShowRating" class="switch-label">
-      <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueShowRating"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider v-if="ratingsSupport"></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
       <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-sub-title>
@@ -322,15 +294,6 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="queueThreeLines"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="queueArtwork = !queueArtwork" class="switch-label">
-      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Display covers, station logos, etc.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="queueArtwork"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -397,13 +360,11 @@ Vue.component('lms-ui-settings', {
             largerElements: false,
             letterOverlay:false,
             showMenuAudio:true,
-            browseTechInfo:false,
             sortFavorites:true,
             autoScrollQueue:true,
             stopButton:false,
             browseBackdrop:true,
             queueBackdrop:true,
-            showMenuAudioQueue:true,
             nowPlayingBackdrop:false,
             infoBackdrop:true,
             techInfo:false,
@@ -413,8 +374,7 @@ Vue.component('lms-ui-settings', {
             swipeVolume:false,
             keyboardControl:true,
             queueThreeLines:false,
-            queueArtwork:false,
-            browseArtwork:false,
+            showArtwork:false,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -443,7 +403,6 @@ Vue.component('lms-ui-settings', {
             showScale: !queryParams.hide.has('scale'),
             serverName: "",
             showRating: true,
-            queueShowRating: true,
             homeButton: false
         }
     },
@@ -574,21 +533,17 @@ Vue.component('lms-ui-settings', {
             this.swipeVolume = this.$store.state.swipeVolume;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
-            this.queueArtwork = this.$store.state.queueArtwork;
-            this.browseArtwork = this.$store.state.browseArtwork;
+            this.showArtwork = this.$store.state.showArtwork;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
-            this.browseTechInfo = this.$store.state.browseTechInfo;
-            this.showMenuAudioQueue = this.$store.state.showMenuAudioQueue;
             this.skipSeconds = this.$store.state.skipSeconds;
             // NOTE: volumeStep is defined in utils.js
             this.volumeStep = volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
             this.showRating = this.$store.state.showRating;
-            this.queueShowRating = this.$store.state.queueShowRating;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
             this.homeButton = this.$store.state.homeButton;
@@ -634,11 +589,9 @@ Vue.component('lms-ui-settings', {
                                                   sortFavorites:this.sortFavorites,
                                                   sortHome:this.sortHome,
                                                   showMenuAudio:this.showMenuAudio,
-                                                  browseTechInfo:this.browseTechInfo,
                                                   stopButton:this.stopButton,
                                                   browseBackdrop:this.browseBackdrop,
                                                   queueBackdrop:this.queueBackdrop,
-                                                  showMenuAudioQueue:this.showMenuAudioQueue,
                                                   nowPlayingBackdrop:this.nowPlayingBackdrop,
                                                   infoBackdrop:this.infoBackdrop,
                                                   techInfo:this.techInfo,
@@ -648,8 +601,7 @@ Vue.component('lms-ui-settings', {
                                                   swipeVolume:this.swipeVolume,
                                                   keyboardControl:this.keyboardControl,
                                                   queueThreeLines:this.queueThreeLines,
-                                                  queueArtwork:this.queueArtwork,
-                                                  browseArtwork:this.browseArtwork,
+                                                  showArtwork:this.showArtwork,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   menuIcons:this.menuIcons,
@@ -658,8 +610,7 @@ Vue.component('lms-ui-settings', {
                                                   disabledBrowseModes:this.disabledBrowseModes(),
                                                   screensaver:this.screensaver,
                                                   homeButton:this.homeButton,
-                                                  showRating:this.showRating,
-                                                  queueShowRating:this.queueShowRating
+                                                  showRating:this.showRating
                                                 } );
 
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
@@ -684,11 +635,9 @@ Vue.component('lms-ui-settings', {
                                      sortFavorites:this.sortFavorites,
                                      sortHome:this.sortHome,
                                      showMenuAudio:this.showMenuAudio,
-                                     browseTechInfo:this.browseTechInfo,
                                      stopButton:this.stopButton,
                                      browseBackdrop:this.browseBackdrop,
                                      queueBackdrop:this.queueBackdrop,
-                                     showMenuAudioQueue:this.showMenuAudioQueue,
                                      nowPlayingBackdrop:this.nowPlayingBackdrop,
                                      infoBackdrop:this.infoBackdrop,
                                      techInfo:this.techInfo,
@@ -698,8 +647,7 @@ Vue.component('lms-ui-settings', {
                                      swipeVolume:this.swipeVolume,
                                      keyboardControl:this.keyboardControl,
                                      queueThreeLines:this.queueThreeLines,
-                                     queueArtwork:this.queueArtwork,
-                                     browseArtwork:this.browseArtwork,
+                                     showArtwork:this.showArtwork,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      menuIcons:this.menuIcons,
@@ -708,8 +656,7 @@ Vue.component('lms-ui-settings', {
                                      disabledBrowseModes:Array.from(this.disabledBrowseModes()),
                                      screensaver:this.screensaver,
                                      homeButton:this.homeButton,
-                                     showRating:this.showRating,
-                                     queueShowRating:this.queueShowRating
+                                     showRating:this.showRating
                                    };
                     for (var key in window.localStorage) {
                         if (key.startsWith(LS_PREFIX+ALBUM_SORT_KEY) || key.startsWith(LS_PREFIX+ARTIST_ALBUM_SORT_KEY)) {

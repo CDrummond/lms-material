@@ -356,7 +356,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.queueThreeLines
         },
         artwork() {
-            return this.$store.state.queueArtwork
+            return this.$store.state.showArtwork
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -434,7 +434,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
-                    if (this.$store.state.ratingsSupport && this.$store.state.queueShowRating && undefined!=i.rating) {
+                    if (this.$store.state.ratingsSupport && this.$store.state.showRating && undefined!=i.rating) {
                         title = ratingString(title, i.rating);
                     }
                     var subtitle = buildSubtitle(i, this.$store.state.queueThreeLines);
@@ -725,7 +725,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         singleClick(item, index, event) {
-            if (this.$store.state.showMenuAudioQueue && (!lastQueueItemClick || ((new Date())-lastQueueItemClick)>500)) {
+            if (this.$store.state.showMenuAudio && (!lastQueueItemClick || ((new Date())-lastQueueItemClick)>500)) {
                 lastQueueItemClick = undefined;
                 this.itemMenu(item, index, event);
             }
@@ -911,8 +911,8 @@ var lmsQueue = Vue.component("lms-queue", {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
-            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.ratingsSupport && this.$store.state.queueShowRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.ratingsSupport && this.$store.state.queueShowRating, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
+            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.ratingsSupport && this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.ratingsSupport && this.$store.state.showRating, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -949,9 +949,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevIndex = this.currentIndex;
                 this.fetchingItems = true;
                 var prevTimestamp = this.timestamp;
-                lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.ratingsSupport && this.$store.state.queueShowRating ? "R" : "")], 0,
+                lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.ratingsSupport && this.$store.state.showRating ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.ratingsSupport && this.$store.state.queueShowRating, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.ratingsSupport && this.$store.state.showRating, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;

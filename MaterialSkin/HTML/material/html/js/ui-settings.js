@@ -140,14 +140,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="ratingsSupport">
+    <v-list-tile>
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{ratingsSupport ? "" : (" "+i18n("NOTE: The 'TrackStat' plugin is required to enable changing of song ratings."))}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="ratingsSupport"></v-divider>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">

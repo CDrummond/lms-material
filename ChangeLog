@@ -1,6 +1,7 @@
 2.1.0
 -----
 1. Merge some options; e.g. show ratings, show tech info, etc.
+2. Allow showing of rarings even if TrackStat is not installed.
 
 2.0.1
 -----

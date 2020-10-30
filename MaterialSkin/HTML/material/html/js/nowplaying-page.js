@@ -73,13 +73,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
-     <div v-if="(techInfo || ratingsSupported) && wide>0">
+     <div v-if="(techInfo || showRatings) && wide>0">
       <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div>
-      <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
+      <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
      </div>
      <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop" @click="toggleTime()">{{formattedTime}}</div>
      <div v-else class="np-tech-desktop">&nbsp;</div>
-     <div v-if="((techInfo || ratingsSupported) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-if="((techInfo || showRatings) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
      <div v-else class="np-time-desktop" @click="toggleTime()">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
     </v-list-tile-action>
    </v-list-tile>
@@ -164,8 +164,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <v-layout text-xs-center v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value">
       <v-flex xs12>
-      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
-      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
+      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
+      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
       </v-flex>
      </v-layout>
      <div v-if="wide>1">
@@ -232,8 +232,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text np-portrait-rating">
-     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating"></v-rating>
-     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating"></v-rating>
+     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
+     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
     </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
@@ -954,7 +954,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.ratingsSupport && this.$store.state.showRating
         },
         showRatings() {
-            return this.$store.state.ratingsSupport && this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&
+            return this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&
                    this.playerStatus.current.duration && this.playerStatus.current.duration>0 && undefined!=this.playerStatus.current.id &&
                    !(""+this.playerStatus.current.id).startsWith("-");
         },

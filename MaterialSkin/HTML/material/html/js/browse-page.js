@@ -406,7 +406,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.previousScrollPos=0;
         this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
-        this.canDrop = false;
+        this.canDrop = true;
 
         if (!IS_MOBILE) {
             bindKey('home');
@@ -1295,7 +1295,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
-            if (this.canDrop) {
+            var browseItem = ev.dataTransfer.getData('browse-item')
+            if (this.canDrop && undefined!=browseItem && ""!=browseItem) {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;

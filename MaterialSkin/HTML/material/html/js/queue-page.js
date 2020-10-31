@@ -1083,7 +1083,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             } else if (ev.dataTransfer) {
                 var browseIndex = ev.dataTransfer.getData('browse-item');
-                if (undefined!=browseIndex) {
+                if (undefined!=browseIndex && ""!=browseIndex) {
                     bus.$emit('browseQueueDrop', browseIndex, to, this.listSize);
                 }
             }

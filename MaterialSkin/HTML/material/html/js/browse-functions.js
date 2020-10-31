@@ -925,7 +925,7 @@ function browseGoHome(view) {
     view.showRatingButton = false;
     view.subtitleClickable = false;
     view.inGenre = undefined;
-    view.canDrop = false;
+    view.canDrop = true;
     view.$nextTick(function () {
         view.setBgndCover();
         view.filterJumplist();

@@ -1296,7 +1296,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         dragOver(index, ev) {
             var browseItem = ev.dataTransfer.getData('browse-item')
-            if (this.canDrop && undefined!=browseItem && ""!=browseItem) {
+            if (this.canDrop && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites) && undefined!=browseItem && ""!=browseItem) {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;

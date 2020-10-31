@@ -1,6 +1,7 @@
 2.0.2
 -----
 1. Fix drag'n'drop of homescreen items.
+2. Don't allow favourites to be dropped if sorting is enabled.
 
 2.0.1
 -----

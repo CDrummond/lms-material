@@ -1278,7 +1278,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         dragStart(which, ev) {
             bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
-            ev.dataTransfer.setData('browse-item', which);
+            ev.dataTransfer.setData('Text', this.items[which].title);
+            window.mskBrowseDrag=which;
             if (!this.grid.use) {
                 ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
             }
@@ -1292,11 +1293,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;
+            window.mskBrowseDrag = undefined;
             bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
-            var browseItem = ev.dataTransfer.getData('browse-item')
-            if (this.canDrop && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites) && undefined!=browseItem && ""!=browseItem) {
+            if (this.canDrop && undefined!=window.mskBrowseDrag && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites)) {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;

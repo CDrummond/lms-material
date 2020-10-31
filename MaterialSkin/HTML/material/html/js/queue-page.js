@@ -1082,9 +1082,8 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.clearSelection();
                 }
             } else if (ev.dataTransfer) {
-                var browseIndex = ev.dataTransfer.getData('browse-item');
-                if (undefined!=browseIndex && ""!=browseIndex) {
-                    bus.$emit('browseQueueDrop', browseIndex, to, this.listSize);
+                if (undefined!=window.mskBrowseDrag) {
+                    bus.$emit('browseQueueDrop', window.mskBrowseDrag, to, this.listSize);
                 }
             }
             this.dragIndex = undefined;

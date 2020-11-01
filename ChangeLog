@@ -4,6 +4,7 @@
 2. Don't allow favourites to be dropped if sorting is enabled.
 3. Fix drag'n'drop of favourites.
 4. Fix drag'n'drop on mobile.
+5. Set light background for text files.
 
 2.0.1
 -----

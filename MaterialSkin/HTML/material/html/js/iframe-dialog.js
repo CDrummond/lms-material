@@ -213,10 +213,6 @@ function hideClassicSkinElems(page, textCol) {
     if (iframe) {
         var content = iframe.contentDocument;
         if (undefined==content) {
-            if ('other'==page && iframe.contentWindow) {
-                // Text files?
-                iframe.className="iframe-plain-text";
-            }
             return;
         }
         fixClassicSkinRefs(content);

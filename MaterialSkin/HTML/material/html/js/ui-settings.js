@@ -753,11 +753,14 @@ Vue.component('lms-ui-settings', {
             }
             list.push(shortcutStr(LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
             list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
-            list.push(i18n("Alt+N")+SEPARATOR+i18n("Switch to Nth player"));
+            list.push(i18n("Alt+(N)")+SEPARATOR+i18n("Switch to Nth player"));
             if (!this.$store.state.desktopLayout) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));
                 list.push("F2"+SEPARATOR+i18n("Playing"));
                 list.push("F3"+SEPARATOR+i18n("Queue"));
+            }
+            if (this.$store.state.ratingsSupport && this.$store.state.showRating) {
+                list.push(shortcutStr("(N)", true)+SEPARATOR+i18n("Set rating (0..5)"));
             }
             bus.$emit('dlg.open', 'iteminfo', { list:list });
         },

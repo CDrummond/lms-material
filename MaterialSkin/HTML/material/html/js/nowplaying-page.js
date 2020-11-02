@@ -469,6 +469,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         if (!IS_MOBILE) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
             bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod+shift');
+            if (this.$store.state.ratingsSupport) {
+                for (var i=0; i<=6; ++i) {
+                    bindKey(''+i, 'mod+shift');
+                }
+            }
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.$store.state.desktopLayout && this.$store.state.page!="now-playing")) {
                     return;
@@ -476,9 +481,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog') && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show)) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
-                } else if ('mod+shift'==modifier && LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
-                    this.info.show = false;
-                    this.largeView = !this.largeView;
+                } else if ('mod+shift'==modifier) {
+                    if (LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
+                        this.info.show = false;
+                        this.largeView = !this.largeView;
+                    } else if (1==key.length && !isNaN(key) && this.$store.state.ratingsSupport && this.$store.state.showRating) {
+                        this.rating.value = parseInt(key)*2;
+                        this.setRating();
+                    }
                 }
             }.bind(this));
         }

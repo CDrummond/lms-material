@@ -2,6 +2,7 @@
 -----
 1. Merge some options; e.g. show ratings, show tech info, etc.
 2. Allow showing of rarings even if TrackStat is not installed.
+3. Use Ctrl+Shift+(N) to set rating.
 
 2.0.1
 -----

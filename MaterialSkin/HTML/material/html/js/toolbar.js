@@ -385,16 +385,9 @@ Vue.component('lms-toolbar', {
             bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
             bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
             bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
-            bindKey('1', 'alt');
-            bindKey('2', 'alt');
-            bindKey('3', 'alt');
-            bindKey('4', 'alt');
-            bindKey('5', 'alt');
-            bindKey('6', 'alt');
-            bindKey('7', 'alt');
-            bindKey('8', 'alt');
-            bindKey('9', 'alt');
-            bindKey('0', 'alt');
+            for (var i=0; i<=9; ++i) {
+                bindKey(''+i, 'alt');
+            }
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0) {
                     return;

@@ -240,9 +240,6 @@ function hideClassicSkinElems(page, textCol) {
                 } else if (content.attachEvent) {
                     content.attachEvent('onclick', otherClickHandler);
                 }
-            } else if (iframe.contentWindow) {
-                // Text files?
-                iframe.className="iframe-plain-text";
             }
         }
         if (undefined!=toHide) {

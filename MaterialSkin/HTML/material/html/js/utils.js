@@ -52,7 +52,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -74,6 +74,7 @@ function parseQueryParams() {
         } else if ("action"==kv[0]) {
             resp.actions.push(kv[1]);
         } else if("css"==kv[0]) {
+            resp.css = kv[1];
             changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
@@ -499,7 +500,9 @@ function setTheme(theme, color) {
 
 function setLayout(useDesktop) {
     changeLink("html/css/" + (useDesktop ? "desktop" : "mobile") + ".css?r=" + LMS_MATERIAL_REVISION, "layoutcss");
-    changeLink("/material/customcss/" + (useDesktop ? "desktop" : "mobile"), "customcss");
+    if (undefined==queryParams.css) {
+        changeLink("/material/customcss/" + (useDesktop ? "desktop" : "mobile"), "customcss");
+    }
 }
 
 function openWindow(page) {

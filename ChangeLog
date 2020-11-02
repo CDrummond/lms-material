@@ -4,6 +4,14 @@
 2. Allow showing of rarings even if TrackStat is not installed.
 3. Use Ctrl+Shift+(N) to set rating.
 
+2.0.2
+-----
+1. Fix drag'n'drop of homescreen items.
+2. Don't allow favourites to be dropped if sorting is enabled.
+3. Fix drag'n'drop of favourites.
+4. Fix drag'n'drop on mobile.
+5. Set light background for text files.
+
 2.0.1
 -----
  1. Update translations.
@@ -21,6 +29,7 @@
 12. Fix list hover buttons for light themes.
 13. Fix 'All songs' missing from artist actions.
 14. Only show 'All songs' if artist has more than 1 album.
+15. Fix usage of custom css.
 
 2.0.0
 -----

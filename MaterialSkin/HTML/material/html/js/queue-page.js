@@ -247,7 +247,7 @@ var lmsQueue = Vue.component("lms-queue", {
  </div>
  <v-list class="lms-list bgnd-cover" id="queue-list" v-bind:class="{'lms-list3':threeLines}">
  <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS && threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+   <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
     <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected">check_box</v-icon>
      <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" loading="lazy"></img>
@@ -1082,9 +1082,8 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.clearSelection();
                 }
             } else if (ev.dataTransfer) {
-                var browseIndex = ev.dataTransfer.getData('browse-item');
-                if (undefined!=browseIndex) {
-                    bus.$emit('browseQueueDrop', browseIndex, to, this.listSize);
+                if (undefined!=window.mskBrowseDrag) {
+                    bus.$emit('browseQueueDrop', window.mskBrowseDrag, to, this.listSize);
                 }
             }
             this.dragIndex = undefined;

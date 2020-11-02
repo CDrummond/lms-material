@@ -406,7 +406,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.previousScrollPos=0;
         this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
-        this.canDrop = false;
+        this.canDrop = true;
 
         if (!IS_MOBILE) {
             bindKey('home');
@@ -1278,7 +1278,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         dragStart(which, ev) {
             bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
-            ev.dataTransfer.setData('browse-item', which);
+            ev.dataTransfer.setData('Text', this.items[which].title);
+            window.mskBrowseDrag=which;
             if (!this.grid.use) {
                 ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
             }
@@ -1292,10 +1293,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;
+            window.mskBrowseDrag = undefined;
             bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
-            if (this.canDrop) {
+            if (this.canDrop && undefined!=window.mskBrowseDrag && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites)) {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;
@@ -1338,14 +1340,24 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else if (this.isTop) {
                         this.items = arrayMove(this.top, this.dragIndex, to);
                         this.saveTopList();
-                    } else if (this.current && (this.current.section==SECTION_FAVORITES || this.current.section==SECTION_PLAYLISTS)) {
-                        var command = this.current.section==SECTION_FAVORITES
-                                        ? ["favorites", "move", this.items[this.dragIndex].id.replace("item_id:", "from_id:"),
-                                               this.items[to].id.replace("item_id:", "to_id:")+(this.items[to].isFavFolder ? ".0" : "")]
-                                        : ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
-                        lmsCommand(this.playerId(), command).then(({data}) => {
-                            this.refreshList();
-                        });
+                    } else if (this.current) {
+                        var command = [];
+                        if (this.current.section==SECTION_FAVORITES) {
+                            var fromId = this.items[this.dragIndex].id.startsWith("item_id:")
+                                            ? this.items[this.dragIndex].id.replace("item_id:", "from_id:")
+                                            : "from_id:"+this.items[this.dragIndex].params.item_id;
+                            var toId = this.items[to].id.startsWith("item_id:")
+                                            ? this.items[to].id.replace("item_id:", "to_id:")
+                                            : "to_id:"+this.items[to].params.item_id;
+                            command = ["favorites", "move", fromId, toId+(this.items[to].isFavFolder ? ".0" : "")];
+                        } else if (this.current.section==SECTION_PLAYLISTS) {
+                            command = ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
+                        }
+                        if (command.length>0) {
+                            lmsCommand(this.playerId(), command).then(({data}) => {
+                                this.refreshList();
+                            });
+                        }
                     }
                 }
             }

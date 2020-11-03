@@ -486,7 +486,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         this.info.show = false;
                         this.largeView = !this.largeView;
                     } else if (1==key.length && !isNaN(key) && this.$store.state.ratingsSupport && this.$store.state.showRating) {
-                        this.rating.value = parseInt(key)*2;
+                        this.rating.value = parseInt(key);
                         this.setRating();
                     }
                 }

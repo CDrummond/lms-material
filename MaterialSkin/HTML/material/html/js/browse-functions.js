@@ -1691,4 +1691,12 @@ function browseInsertQueue(view, index, queueIndex, queueSize) {
     view.clearSelection();
 }
 
+function browsePlayerChanged(view) {
+    if (view.current && view.current.id==TOP_APPS_ID) {
+        view.refreshList();
+    } else if (view.history.length>1 && view.history[1].current.id==TOP_APPS_ID) {
+        view.history[1].needsRefresh = true;
+    }
+}
+
 const DEFERRED_LOADED = true;

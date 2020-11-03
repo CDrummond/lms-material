@@ -5,6 +5,8 @@
 3. Fix drag'n'drop of favourites.
 4. Fix drag'n'drop on mobile.
 5. Set light background for text files.
+6. Refresh apps list if change player whilst listing apps.
+7. Mark apps list as needing refreshing if change player whilst browsing in app.
 
 2.0.1
 -----

@@ -7,6 +7,7 @@
 5. Set light background for text files.
 6. Refresh apps list if change player whilst listing apps.
 7. Mark apps list as needing refreshing if change player whilst browsing in app.
+8. Disable 'Toggle queue' button if now-playing is expanded or info is open.
 
 2.0.1
 -----

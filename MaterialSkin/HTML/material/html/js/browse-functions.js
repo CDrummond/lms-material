@@ -382,7 +382,7 @@ function browseClick(view, item, index, event) {
         view.items.push({ title: i18n("Albums"),
                       command: ["albums"],
                       params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-                      menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                      menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION],
                       icon: "album",
                       type: "group",
                       id: uniqueId(item.id, view.items.length)});
@@ -639,6 +639,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act===ADD_RANDOM_ALBUM_ACTION) {
         var params = [];
         buildStdItemCommand(item, view.command).params.forEach(p => { if (!p.startsWith("sort:")) { params.push(p); } });
+        params=browseReplaceCommandTerms(view, {command:[], params:params}).params;
         params.push(SORT_KEY+"random");
         lmsList(view.playerId(), ["albums"], params, 0, 1).then(({data}) => {
             var resp = parseBrowseResp(data, view.current, view.options);

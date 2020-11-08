@@ -1385,6 +1385,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.initItems();
         }.bind(this));
         this.initItems();
+        bus.$on('playerChanged', function() {
+            try { browsePlayerChanged(this); } catch (e) {}
+        }.bind(this));
 
         this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));

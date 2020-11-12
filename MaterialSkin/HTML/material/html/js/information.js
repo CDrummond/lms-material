@@ -24,7 +24,7 @@ Vue.component('lms-information-dialog', {
 
    <div v-if="server.length>0">
     <p class="about-header">{{i18n('Server')}}</p>
-    <p v-if="updates.server"><b>{{i18n('New version available')}}</b></p>
+    <p v-if="updates.server"><b @click="showUpdateInfo" class="link-item">{{i18n('New version available')}}</b></p>
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
@@ -342,6 +342,9 @@ Vue.component('lms-information-dialog', {
         rescan(item) {
             bus.$emit('showMessage', item.name);
             lmsCommand('', item.cmd);
+        },
+        showUpdateInfo() {
+            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'));
         }
     },
     beforeDestroy() {

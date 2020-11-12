@@ -4,6 +4,8 @@
 2. Allow showing of ratings even if TrackStat is not installed.
 3. Use Ctrl+Shift+(N) to set rating.
 4. Add 'Append random album' to a genre's 'Albums' context menu.
+5. Make 'New version available', in information dialog, a link to
+   '/updateinfo.html'
 
 2.0.2
 -----

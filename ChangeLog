@@ -7,6 +7,7 @@
 5. Make 'New version available', in information dialog, a link to
    '/updateinfo.html'
 6. Allow adding custom actions to artist and album action menus.
+7. Move 'Set rating for all tracks' action into album action menu.
 
 2.0.2
 -----

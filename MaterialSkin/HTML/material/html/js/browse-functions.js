@@ -72,6 +72,16 @@ function browseActions(args) {
             }
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:3});
         }
+        if (undefined!=args['artist_id'] || undefined!=args['album_id']) {
+            var custom = getCustomActions(undefined!=args['album_id'] ? "album" : "artist", false);
+            if (undefined!=custom) {
+                for (var i=0, len=custom.length; i<len; ++i) {
+                    custom[i].weight=100;
+                    custom[i].custom=true;
+                    actions.push(custom[i]);
+                }
+            }
+        }
     }
     return actions;
 }

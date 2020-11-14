@@ -718,7 +718,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             showMenu(this, {show:true, currentActions:this.currentActions.items, x:event.clientX, y:event.clientY});
         },
         currentAction(act, index) {
-            if (undefined!=act.do) {
+            if (act.custom) {
+                doCustomAction(act, this.$store.state.player, this.current);
+            } else if (undefined!=act.do) {
                 this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, this.current.id, "menu:1"]};

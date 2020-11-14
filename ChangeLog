@@ -6,6 +6,7 @@
 4. Add 'Append random album' to a genre's 'Albums' context menu.
 5. Make 'New version available', in information dialog, a link to
    '/updateinfo.html'
+6. Allow adding custom actions to artist and album action menus.
 
 2.0.2
 -----

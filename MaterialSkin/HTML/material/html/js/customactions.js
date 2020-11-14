@@ -35,68 +35,86 @@ function getCustomActions(id, lockedActions) {
         } else if (id.endsWith('-dialog')) {
             getSectionActions(id, actions, lockedActions);
         } else {
-            getSectionActions('allplayers', actions, lockedActions);
+            if ("item"!=id && "artist"!=id && "album"!=id) {
+                getSectionActions('allplayers', actions, lockedActions);
+            }
             getSectionActions(id, actions, lockedActions);
         }
     }
     return actions.length>0 ? actions : undefined;
 }
 
-function performCustomAction(obj, action, player, track) {
+function performCustomAction(obj, action, player, item) {
     if (undefined!=action.prompt) {
         confirm(action.prompt, i18n('Yes')).then(res => {
             if (res) {
-                doCustomAction(action, player, track);
+                doCustomAction(action, player, item);
             }
         });
     } else {
-        doCustomAction(action, player, track);
+        doCustomAction(action, player, item);
     }
 }
 
-function doReplacements(string, player, track) {
+function doReplacements(string, player, item) {
     let val = ''+string;
     if (undefined!=player) {
         val=val.replace("$ID", player.id).replace("$NAME", player.name);
     }
-    if (undefined!=track) {
-        if (undefined!=track.artist_id) {
-            val=val.replace("$ARTISTID", track.artist_id);
+    if (undefined!=item) {
+        if (undefined!=item.artist_id) {
+            val=val.replace("$ARTISTID", item.artist_id);
         }
-        if (undefined!=track.album_id) {
-            val=val.replace("$ALBUMID", track.album_id);
+        if (undefined!=item.album_id) {
+            val=val.replace("$ALBUMID", item.album_id);
         }
-        if (undefined!=track.id) {
-            val=val.replace("$TRACKID", track.id);
+        if (undefined!=item.id) {
+            if (item.id.startsWith("artist_id:")) {
+                val=val.replace("$ARTISTID", item.id);
+            } else if (item.id.startsWith("album_id:")) {
+                val=val.replace("$ALBUMID", item.id);
+            } else {
+                val=val.replace("$TRACKID", item.id);
+            }
         }
-        if (undefined!=track.artist) {
-            val=val.replace("$ARTISTNAME", track.artist);
+        if (undefined!=item.artist) {
+            val=val.replace("$ARTISTNAME", item.artist);
         }
-        if (undefined!=track.album_id) {
-            val=val.replace("$ALBUMNAME", track.album);
+        if (undefined!=item.album_id) {
+            val=val.replace("$ALBUMNAME", item.album);
         }
-        if (undefined!=track.title) {
-            val=val.replace("$TRACKNAME", track.title);
+        if (undefined!=item.title) {
+            if (undefined!=item.id) {
+                if (item.id.startsWith("artist_id:")) {
+                    val=val.replace("$ARTISTNAME", item.title);
+                } else if (item.id.startsWith("album_id:")) {
+                    val=val.replace("$ALBUMNAME", item.title);
+                } else {
+                    val=val.replace("$TRACKNAME", item.title);
+                }
+            } else {
+                val=val.replace("$TRACKNAME", item.title);
+            }
         }
-        if (undefined!=track.composer) {
-            val=val.replace("$COMPOSER", track.composer);
+        if (undefined!=item.composer) {
+            val=val.replace("$COMPOSER", item.composer);
         }
     }
     return val;
 }
 
-function doCustomAction(action, player, track) {
+function doCustomAction(action, player, item) {
     if (action.iframe) {
         let title = action.title;
         if (action.toolbar && action.toolbar.title) {
             title = action.toolbar.title;
         }
-        bus.$emit('dlg.open', 'iframe', doReplacements(action.iframe, player, track), doReplacements(title, player, track));
+        bus.$emit('dlg.open', 'iframe', doReplacements(action.iframe, player, item), doReplacements(title, player, item));
     } else if (action.weblink) {
-        window.open(doReplacements(action.weblink, player, track));
+        window.open(doReplacements(action.weblink, player, item));
     } else if (action.command) {
-        lmsCommand("", ["material-skin", "command", "cmd:"+doReplacements(action.command, player, track)]);
+        lmsCommand("", ["material-skin", "command", "cmd:"+doReplacements(action.command, player, item)]);
     } else if (action.script) {
-        eval(doReplacements(action.script, player, track));
+        eval(doReplacements(action.script, player, item));
     }
 }

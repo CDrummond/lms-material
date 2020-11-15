@@ -55,6 +55,9 @@ function browseActions(args) {
                                    params:[]},
                               weight:0});
             }
+            if (undefined!=args['path']) {
+                actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:2});
+            }
         }
         if (lmsOptions.youTubePlugin && undefined!=args['artist']) {
             actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
@@ -142,6 +145,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }
             } else {
                 actParams['album']=view.current.title;
+                if (view.items.length>0) {
+                    actParams['path']=decodeURIComponent(view.items[0].url.substring(0, view.items[0].url.lastIndexOf('/'))+'/').substring(7);
+                }
             }
             view.currentActions.items = browseActions(actParams);
             if (listingArtistAlbums) {
@@ -162,6 +168,19 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }
             }
             view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
+            if (undefined!=actParams['path']) {
+                // Check we have some localfiles, if not hide entry!
+                lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
+                    if (!data || !data.result || !data.result.item_loop) {
+                        for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
+                            if (loop[i].localfiles) {
+                                loop.splice(i, 1);
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         if (item.id.startsWith(SEARCH_ID)) {
@@ -434,9 +453,7 @@ function browseClick(view, item, index, event) {
         view.layoutGrid(true);
         bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (item.weblink) {
-        if (!IS_IOS && view.current && view.current.actions && view.current.actions.go && view.current.actions.go.params &&
-            view.current.actions.go.params.folder && view.current.actions.go.cmd && view.current.actions.go.cmd.length>=2 &&
-            view.current.actions.go.cmd[0]=="musicartistinfo" && view.current.actions.go.cmd[1]=="localfiles") {
+        if (!IS_IOS) {
             bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, true);
         } else {
             window.open(item.weblink);

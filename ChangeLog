@@ -8,6 +8,8 @@
    '/updateinfo.html'
 6. Allow adding custom actions to artist and album action menus.
 7. Move 'Set rating for all tracks' action into album action menu.
+8. Add 'Local files' action to album action menu - if localfiles are found
+   in the path of the 1st track.
 
 2.0.2
 -----

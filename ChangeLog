@@ -10,6 +10,8 @@
 7. Move 'Set rating for all tracks' action into album action menu.
 8. Add 'Local files' action to album action menu - if localfiles are found
    in the path of the 1st track.
+9. Allow marking custom action commands as 'localonly', in which case they will
+   only be shown if 'localhost' or '127.0.0.1' is the URL hostname.
 
 2.0.2
 -----

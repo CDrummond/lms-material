@@ -20,7 +20,7 @@ function initCustomActions() {
 function getSectionActions(section, actions, lockedActions) {
     if (customActions[section]) {
         for (let i=0, sect=customActions[section], len=sect.length; i<len; ++i) {
-            if (lockedActions || !sect[i].locked) {
+            if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname)) {
                 actions.push(sect[i]);
             }
         }
@@ -69,12 +69,13 @@ function doReplacements(string, player, item) {
             val=val.replace("$ALBUMID", item.album_id);
         }
         if (undefined!=item.id) {
-            if (item.id.startsWith("artist_id:")) {
-                val=val.replace("$ARTISTID", item.id);
-            } else if (item.id.startsWith("album_id:")) {
-                val=val.replace("$ALBUMID", item.id);
+            let id = ''+item.id;
+            if (id.startsWith("artist_id:")) {
+                val=val.replace("$ARTISTID", id);
+            } else if (id.startsWith("album_id:")) {
+                val=val.replace("$ALBUMID", id);
             } else {
-                val=val.replace("$TRACKID", item.id);
+                val=val.replace("$TRACKID", id);
             }
         }
         if (undefined!=item.artist) {
@@ -85,9 +86,10 @@ function doReplacements(string, player, item) {
         }
         if (undefined!=item.title) {
             if (undefined!=item.id) {
-                if (item.id.startsWith("artist_id:")) {
+                let id = ''+item.id;
+                if (id.startsWith("artist_id:")) {
                     val=val.replace("$ARTISTNAME", item.title);
-                } else if (item.id.startsWith("album_id:")) {
+                } else if (id.startsWith("album_id:")) {
                     val=val.replace("$ALBUMNAME", item.title);
                 } else {
                     val=val.replace("$TRACKNAME", item.title);

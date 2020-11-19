@@ -147,6 +147,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 actParams['album']=view.current.title;
                 if (view.items.length>0) {
                     actParams['path']=decodeURIComponent(view.items[0].url.substring(0, view.items[0].url.lastIndexOf('/'))+'/').substring(7);
+                    // if we have (e.g.) /c:/path change to c:/path
+                    if (/^\/[a-zA-Z]:\/.+/.test(actParams['path'])) {
+                        actParams['path'] = actParams['path'].substring(1);
+                    }
                 }
             }
             view.currentActions.items = browseActions(actParams);

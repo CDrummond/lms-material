@@ -57,6 +57,7 @@ const REMOVE_DUPES_ACTION     = 44;
 
 const FOLLOW_LINK_ACTION      = 45;
 const SEARCH_TEXT_ACTION      = 46;
+const RELOAD_ACTION           = 47;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -110,7 +111,9 @@ var ACTIONS=[
     {cmd:"rem-dup",      svg:"remove-duplicates"},
 
     {cmd:"follow-link",  icon:"public"},
-    {cmd:"search-text",  icon:"search"}
+    {cmd:"search-text",  icon:"search"},
+
+    {cmd:"refresh",      icon:"refresh"}
 ];
 
 function updateActionStrings() {
@@ -168,5 +171,6 @@ function updateActionStrings() {
     ACTIONS[REMOVE_DUPES_ACTION].title=i18n("Remove duplicates");
     ACTIONS[FOLLOW_LINK_ACTION].title=i18n("Follow link");
     ACTIONS[SEARCH_TEXT_ACTION].title=i18n("Search");
+    ACTIONS[RELOAD_ACTION].title=i18n("Reload");
 }
 

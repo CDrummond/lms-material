@@ -14,6 +14,7 @@
     only be shown if 'localhost' or '127.0.0.1' is the URL hostname.
 10. Remove play/add actions from context menu, and subtoolbar, for 'Albums' and
     'Random Albums' within a genre.
+11. Add action to reload random albums lists.
 
 2.0.2
 -----

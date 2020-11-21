@@ -186,7 +186,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 });
             }
         }
-
         if (item.id.startsWith(SEARCH_ID)) {
             if (view.items.length>0 && view.items[0].id.startsWith("track_id:")) {
                 view.tbarActions=[SEARCH_LIB_ACTION, PLAY_ALL_ACTION, ADD_ALL_ACTION];
@@ -201,6 +200,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             view.tbarActions=[REMOVE_DUPES_ACTION, PLAY_ACTION, ADD_ACTION];
         } else if (view.allSongsItem) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
+        } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
+            view.tbarActions=[RELOAD_ACTION];
         } else if (view.items.length>0 && (!(view.current && view.current.isPodcast) || addAndPlayAllActions(command))) {
             if (view.current && view.current.menu) {
                 for (var i=0, len=view.current.menu.length; i<len; ++i) {
@@ -923,6 +924,8 @@ function browseHeaderAction(view, act, event) {
                               goAction:view.items[0].goAction, params:view.items[0].params, section:view.items[0].section});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
         bus.$emit('dlg.open', 'addtoplaylist', view.items);
+    } else if (RELOAD_ACTION==act) {
+        view.refreshList(true);
     } else {
         view.itemAction(act, view.current);
     }
@@ -1727,7 +1730,7 @@ function browseInsertQueue(view, index, queueIndex, queueSize) {
 
 function browsePlayerChanged(view) {
     if (view.current && view.current.id==TOP_APPS_ID) {
-        view.refreshList();
+        view.refreshList(true);
     } else if (view.history.length>1 && view.history[1].current.id==TOP_APPS_ID) {
         view.history[1].needsRefresh = true;
     }

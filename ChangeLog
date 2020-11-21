@@ -1,17 +1,19 @@
 2.1.0
 -----
-1. Merge some options; e.g. show ratings, show tech info, etc.
-2. Allow showing of ratings even if TrackStat is not installed.
-3. Use Ctrl+Shift+(N) to set rating.
-4. Add 'Append random album' to a genre's 'Albums' context menu.
-5. Make 'New version available', in information dialog, a link to
-   '/updateinfo.html'
-6. Allow adding custom actions to artist and album action menus.
-7. Move 'Set rating for all tracks' action into album action menu.
-8. Add 'Local files' action to album action menu - if localfiles are found
-   in the path of the 1st track.
-9. Allow marking custom action commands as 'localonly', in which case they will
-   only be shown if 'localhost' or '127.0.0.1' is the URL hostname.
+ 1. Merge some options; e.g. show ratings, show tech info, etc.
+ 2. Allow showing of ratings even if TrackStat is not installed.
+ 3. Use Ctrl+Shift+(N) to set rating.
+ 4. Add 'Append random album' to a genre's 'Albums' context menu.
+ 5. Make 'New version available', in information dialog, a link to
+    '/updateinfo.html'
+ 6. Allow adding custom actions to artist and album action menus.
+ 7. Move 'Set rating for all tracks' action into album action menu.
+ 8. Add 'Local files' action to album action menu - if localfiles are found
+    in the path of the 1st track.
+ 9. Allow marking custom action commands as 'localonly', in which case they will
+    only be shown if 'localhost' or '127.0.0.1' is the URL hostname.
+10. Remove play/add actions from context menu, and subtoolbar, for 'Albums' and
+    'Random Albums' within a genre.
 
 2.0.2
 -----

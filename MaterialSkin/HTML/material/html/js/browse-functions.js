@@ -417,14 +417,14 @@ function browseClick(view, item, index, event) {
         view.items.push({ title: i18n("Albums"),
                       command: ["albums"],
                       params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-                      menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION],
+                      menu: [],
                       icon: "album",
                       type: "group",
                       id: uniqueId(item.id, view.items.length)});
         view.items.push({ title: i18n("Random Albums"),
                       command: ["albums"],
                       params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
-                      menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                      menu: [],
                       svg: "dice-album",
                       type: "group",
                       id: uniqueId(item.id, view.items.length)});

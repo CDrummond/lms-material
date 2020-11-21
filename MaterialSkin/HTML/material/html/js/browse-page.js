@@ -831,6 +831,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;
                 this.filteredJumplist = [];
+                this.layoutGrid(true);
                 if (resp.subtitle) {
                     this.headerSubTitle=resp.subtitle;
                 } else {

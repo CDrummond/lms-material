@@ -15,6 +15,7 @@
 10. Remove play/add actions from context menu, and subtoolbar, for 'Albums' and
     'Random Albums' within a genre.
 11. Add action to reload random albums lists.
+12. Re-layout grid items if refresh list.
 
 2.0.2
 -----

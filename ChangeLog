@@ -16,6 +16,7 @@
     'Random Albums' within a genre.
 11. Add action to reload random albums lists.
 12. Re-layout grid items if refresh list.
+13. Fix deleting http/https favourites.
 
 2.0.2
 -----

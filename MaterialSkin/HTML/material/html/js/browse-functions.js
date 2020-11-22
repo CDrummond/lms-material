@@ -632,7 +632,7 @@ function browseItemAction(view, act, item, index, event) {
             logError(err, command);
         });
     } else if (act===REMOVE_FROM_FAV_ACTION || act==DELETE_FAV_FOLDER_ACTION) {
-        var id = SECTION_FAVORITES==view.current.section ? (undefined==item.params || undefined==item.params.item_id ? item.id : "item_id:"+item.params.item_id): "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
+        var id = SECTION_FAVORITES==view.current.section ? item.id : "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
         if (undefined==id) {
             return;
         }
@@ -1419,7 +1419,7 @@ function browsePin(view, item, add, mapped) {
     var index = -1;
     var lastPinnedIndex = -1;
     for (var i=0, len=view.top.length; i<len; ++i) {
-        if (view.top[i].id == item.id) {
+        if (view.top[i].id == (item.isRadio ? item.presetParams.favorites_url : item.id)) {
             index = i;
             break;
         } else if (!view.top[i].id.startsWith(TOP_ID_PREFIX)) {

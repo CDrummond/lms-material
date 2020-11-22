@@ -18,7 +18,7 @@
 12. Re-layout grid items if refresh list.
 13. Fix deleting http/https favourites.
 14. Add padding to main icon, so that it looks better in macOS dock.
-15. If favourite item has ID of abdef.N then change to just N
+15. Fix favourite ID calculation - revert to pre 2.0.0 code.
 
 2.0.2
 -----

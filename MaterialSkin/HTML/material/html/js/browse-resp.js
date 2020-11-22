@@ -237,32 +237,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         }
                         if (i.presetParams.favorites_url.startsWith("http:") || i.presetParams.favorites_url.startsWith("https:")) {
-                            i.id = i.presetParams.favorites_url;
                             i.isRadio = true;
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);
                                 addedDivider = true;
                             }
-                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                            i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;
-                    }
-                    // Sometimes favourites have ID such as abcdef.1 where we just 1
-                    // See: https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=995830&viewfull=1#post995830
-                    if (undefined!=i.params && undefined!=i.params.item_id) {
-                        let parts = (""+i.params.item_id).split('.');
-                        if (parts.length>1 && parts[0].length>4) {
-                            parts.shift();
-                            i.params.item_id = parts.join('.');
-                        }
-                    } else if (undefined!=i.actions && undefined!=i.actions.go && undefined!=i.actions.go.params && undefined!=i.actions.go.params.item_id) {
-                        let parts = (""+i.actions.go.params.item_id).split('.');
-                        if (parts.length>1 && parts[0].length>4) {
-                            parts.shift();
-                            i.actions.go.params.item_id = parts.join('.');
-                        }
                     }
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {
@@ -350,7 +334,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 addedDivider = true;
                             }
                             i.isRadio = true;
-                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                            i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                         } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                             i.id = 'radio:'+i.actions.go.params.menu;
                             i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);

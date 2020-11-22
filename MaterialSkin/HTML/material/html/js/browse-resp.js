@@ -430,6 +430,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.stdItem = STD_ITEM_TRACK;
                     i.type = i.presetParams = i.commonParams = i.menu = i.playallParams = i.addallParams = i.goAction = i.style = undefined;
                 }
+                console.log("T", i.title, "I", i.id, "J", JSON.stringify(i));
                 resp.items.push(i);
                 types.add(i.type);
             }

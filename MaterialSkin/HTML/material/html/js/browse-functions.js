@@ -636,6 +636,7 @@ function browseItemAction(view, act, item, index, event) {
         if (undefined==id) {
             return;
         }
+        console.log("DEL", view.current.section, item.id, id);
         confirm(act===REMOVE_FROM_FAV_ACTION ? i18n("Remove '%1' from favorites?", item.title)
                                              : i18n("Delete '%1'?", item.title)+addNote(i18n("This will remove the folder, and any favorites contained within.")),
                 act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete")).then(res => {

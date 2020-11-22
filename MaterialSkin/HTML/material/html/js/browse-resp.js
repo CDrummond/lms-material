@@ -244,6 +244,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 addedDivider = true;
                             }
                             i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
+                            // Sometimes favourites have ID such as abcdef.1 where we just 1
+                            // See: https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=995830&viewfull=1#post995830
+                            if (isFavorites && parent.id == TOP_FAVORITES_ID && i.params && i.params.item_id) {
+                                let parts = i.params.item_id.split('.');
+                                if (parts.length==2) {
+                                    i.params.item_id = parts[1];
+                                }
+                            }
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";

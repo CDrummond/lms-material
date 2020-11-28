@@ -402,7 +402,7 @@ Vue.component('lms-ui-settings', {
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
             showScale: !queryParams.hide.has('scale'),
             serverName: "",
-            showRating: true,
+            showRating: false,
             homeButton: false
         }
     },

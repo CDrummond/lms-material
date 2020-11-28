@@ -231,7 +231,7 @@ const store = new Vuex.Store({
         nowPlayingClock: false,
         ratingsSupport: false,
         maxRating: 5,
-        showRating: true,
+        showRating: false,
         showPlayerMenuEntry: false,
         page:'browse',
         menuIcons: true,

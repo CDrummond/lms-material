@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const SEARCH_OTHER = new Set(['Deezer', 'Qobuz', 'Spotty', 'Tidal', 'YouTube']);
+const SEARCH_OTHER = new Set(['BBC Sounds', 'Deezer', 'Qobuz', 'Spotty', 'Tidal', 'YouTube']);
 
 let seachReqId = 0;
 Vue.component('lms-search-field', {

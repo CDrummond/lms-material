@@ -40,7 +40,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Sorter favoritter alfabetisk i stedet for at bruge rækkefølgen angivet af serveren",
 "Already in favorites":"Er allerede en favorit",
 "Alt+%1":"Alt+%1",
-"Alt+N":"Alt+N",
 "Always show menu":"Vis altid menu",
 "Append random album to queue":"Tilføj tilfældigt album til menuen",
 "Append to queue":"Tilføj til kø",
@@ -108,7 +107,6 @@
 "Description":"Beskrivelse",
 "Disc %1":"Skive",
 "Display covers, artist images, station logos, etc.":"Vis albumomslag, kunstnerbilleder, logoer, m.v.",
-"Display covers, station logos, etc.":"Vis albumomslag, logoer, m.v.",
 "Display rating stars.":"Vis vurderingsstjerner",
 "Display technical info":"Vis teknisk information",
 "Do not crossfade successive tracks from the same album.":"Lav ikke glidende overgang (crossfade) mellem numre fra samme album",
@@ -342,7 +340,6 @@
 "Show current date and time in main toolbar if there is sufficient space.":"Vis dato og tid i hovedværktøjslinjen hvis der er plads",
 "Show current track information":"Vis information om aktuelle nummer",
 "Show file type, bitrate, etc.":"Vis filtype, bithastighed m.v.",
-"Show file type, bitrate, etc. next to track duration.":"Vis filtype, bitrate, m.v. ved siden af nummerets varighed",
 "Show home button":"Vis hjem knap",
 "Show icons next to popup menu entries.":"Vis ikoner inden i pop-up menuer",
 "Show image":"Vis billede",
@@ -486,5 +483,11 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Alt+(N)":"",
+"Local files":"",
+"NOTE: The 'TrackStat' plugin is required to enable changing of song ratings.":"",
+"Reload":"",
+"Set rating (0..5)":"",
+"Update information":""
 }

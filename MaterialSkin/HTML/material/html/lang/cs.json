@@ -40,7 +40,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Řadit oblíbené dle abecedy namísto pořadí poskytnutého serverem.",
 "Already in favorites":"Již v oblíbených",
 "Alt+%1":"Alt+%1",
-"Alt+N":"Alt+N",
 "Always show menu":"Vždy zobrazit nabídku",
 "Append random album to queue":"Přidat náhodné album do fronty",
 "Append to queue":"Přidat do fronty",
@@ -108,7 +107,6 @@
 "Description":"Popis",
 "Disc %1":"Disk %1",
 "Display covers, artist images, station logos, etc.":"Zobrazit obaly, obrázky umělců, loga stanic atd.",
-"Display covers, station logos, etc.":"Zobrazit obaly, loga stanic atd.",
 "Display rating stars.":"Zobrazit hvězdičky hodnocení.",
 "Display technical info":"Zobrazit technické informace",
 "Do not crossfade successive tracks from the same album.":"Neprolínat navazující skladby ze stejného alba.",
@@ -342,7 +340,6 @@
 "Show current date and time in main toolbar if there is sufficient space.":"Zobrazit aktuální datum a čas v hlavní liště, pokud je dostatek místa.",
 "Show current track information":"Zobrazit informace o aktuální skladbě",
 "Show file type, bitrate, etc.":"Zobrazit typ souboru, datový tok, atd.",
-"Show file type, bitrate, etc. next to track duration.":"Zobrazit typ souboru, datový tok, atd. vedle stopáže skladby.",
 "Show home button":"Zobrazit domovské tlačítko",
 "Show icons next to popup menu entries.":"Zobrazit ikony u položek vyskakovacího menu.",
 "Show image":"Zobrazit grafiku",
@@ -486,5 +483,11 @@
 "1 Year":"1 rok",
 "%1 Years":"%1 roků",
 "1 day":"1 den",
-"%1 days":"%1 dní"
+"%1 days":"%1 dní",
+"Alt+(N)":"",
+"Local files":"",
+"NOTE: The 'TrackStat' plugin is required to enable changing of song ratings.":"",
+"Reload":"",
+"Set rating (0..5)":"",
+"Update information":""
 }

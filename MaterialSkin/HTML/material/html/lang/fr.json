@@ -40,7 +40,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Trier les favoris par ordre alphabétique plutôt que dans l'ordre fourni par le serveur.",
 "Already in favorites":"Déjà présent dans les favoris",
 "Alt+%1":"Alt+%1",
-"Alt+N":"Alt+N",
 "Always show menu":"Toujours afficher le menu",
 "Append random album to queue":"Ajouter un album aléatoire à la liste de lecture",
 "Append to queue":"Ajouter à la liste de lecture",
@@ -108,7 +107,6 @@
 "Description":"Description",
 "Disc %1":"Disque %1",
 "Display covers, artist images, station logos, etc.":"Afficher les pochettes, les photos d'artistes, les logos de stations, etc.",
-"Display covers, station logos, etc.":"Afficher les pochettes, les logos de stations, etc.",
 "Display rating stars.":"Afficher les étoiles de notation.",
 "Display technical info":"Afficher les informations techniques",
 "Do not crossfade successive tracks from the same album.":"Ne pas effectuer de fondu enchaîné entre les morceaux successifs d'un même album.",
@@ -342,7 +340,6 @@
 "Show current date and time in main toolbar if there is sufficient space.":"Afficher la date et l'heure actuelles dans la barre d'outils principale s'il y a suffisamment de place.",
 "Show current track information":"Afficher les informations du morceau en cours",
 "Show file type, bitrate, etc.":"Afficher le type de fichier, la fréquence d'échantillonnage, etc.",
-"Show file type, bitrate, etc. next to track duration.":"Afficher le type de fichier, le débit binaire, etc. à côté de la durée du morceau.",
 "Show home button":"Afficher le bouton 'Accueil'",
 "Show icons next to popup menu entries.":"Afficher des icônes à côté des éléments des menus contextuels.",
 "Show image":"Afficher l'image",
@@ -486,5 +483,11 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Alt+(N)":"",
+"Local files":"",
+"NOTE: The 'TrackStat' plugin is required to enable changing of song ratings.":"",
+"Reload":"",
+"Set rating (0..5)":"",
+"Update information":""
 }

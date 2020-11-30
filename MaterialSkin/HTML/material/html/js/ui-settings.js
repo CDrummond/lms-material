@@ -143,7 +143,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{ratingsSupport ? "" : (" "+i18n("NOTE: The 'TrackStat' plugin is required to enable changing of song ratings."))}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==ratingsPlugin  ? (" "+i18n("Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -416,8 +416,8 @@ Vue.component('lms-ui-settings', {
         displayMenuIcons() {
             return this.$store.state.menuIcons
         },
-        ratingsSupport() {
-            return this.$store.state.ratingsSupport
+        ratingsPlugin() {
+            return this.$store.state.ratingsPlugin
         }
     },
     mounted() {
@@ -759,7 +759,7 @@ Vue.component('lms-ui-settings', {
                 list.push("F2"+SEPARATOR+i18n("Playing"));
                 list.push("F3"+SEPARATOR+i18n("Queue"));
             }
-            if (this.$store.state.ratingsSupport && this.$store.state.showRating) {
+            if (undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
                 list.push(shortcutStr("(N)", true)+SEPARATOR+i18n("Set rating (0..5)"));
             }
             bus.$emit('dlg.open', 'iteminfo', { list:list });

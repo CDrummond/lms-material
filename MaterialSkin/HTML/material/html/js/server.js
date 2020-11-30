@@ -558,7 +558,7 @@ var lmsServer = Vue.component('lms-server', {
         },
         updatePlayer(id) {
             logJsonMessage("UPDATING ("+id+")");
-            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : "")]).then(({data}) => {
+            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")]).then(({data}) => {
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
                 }
@@ -573,7 +573,7 @@ var lmsServer = Vue.component('lms-server', {
             if (!this.subscribedPlayers.has(id)) {
                 logCometdDebug("Subscribe: "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : ""), "subscribe:30"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : ""), "subscribe:30"]]}});
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerprefs/'+id, request:[id, ['prefset']]}});
@@ -820,7 +820,7 @@ var lmsServer = Vue.component('lms-server', {
 
         // Set DSTM. If player is synced, then set for all others in sync group...
         bus.$on('dstm', function(player, value) {
-            lmsCommand(player, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.ratingsSupport ? "R" : "")]).then(({data}) => {
+            lmsCommand(player, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")]).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.sync_master && data.result.sync_master!=player) {
                         lmsCommand(data.result.sync_master, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {

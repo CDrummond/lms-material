@@ -242,7 +242,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==RATING_ACTION ? ratingsSupport : true" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==RATING_ACTION ? undefined!=ratingsPlugin : true" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -360,8 +360,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                      (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
                      (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) )
         },
-        ratingsSupport() {
-            return this.$store.state.ratingsSupport
+        ratingsPlugin() {
+            return this.$store.state.ratingsPlugin
         },
         homeButton() {
             return this.$store.state.homeButton

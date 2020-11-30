@@ -85,7 +85,7 @@ Vue.component('lms-search-field', {
                 this.commands=[];
                 this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
                 this.commands.push({cat:2, command:["albums"], params:[ALBUM_TAGS+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
-                this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+(this.$store.state.ratingsSupport ? "R" : "")+
+                this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+(this.$store.state.showRating ? "R" : "")+
                                                                                          (lmsOptions.serviceEmblems ? "E" : ""), "search:"+this.str]});
                 this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
                 this.commands.push({cat:5, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});

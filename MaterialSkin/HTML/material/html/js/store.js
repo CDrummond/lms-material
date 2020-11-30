@@ -229,7 +229,7 @@ const store = new Vuex.Store({
         queueShowTrackNum: true,
         nowPlayingTrackNum: false,
         nowPlayingClock: false,
-        ratingsSupport: false,
+        ratingsPlugin: undefined,
         maxRating: 5,
         showRating: false,
         showPlayerMenuEntry: false,
@@ -417,7 +417,7 @@ const store = new Vuex.Store({
             state.queueShowTrackNum = getLocalStorageBool('queueShowTrackNum', state.queueShowTrackNum);
             state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
             state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
-            state.ratingsSupport = getLocalStorageBool('ratingsSupport', state.ratingsSupport);
+            state.ratingsPlugin = getLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showRating = getLocalStorageBool('showRating', state.showRating);
             state.showPlayerMenuEntry = getLocalStorageBool('showPlayerMenuEntry', state.showPlayerMenuEntry);
@@ -579,10 +579,10 @@ const store = new Vuex.Store({
             });
 
             lmsCommand("", ["can", "trackstat", "getrating", "?"]).then(({data}) => {
-                if (data && data.result && undefined!=data.result._can) {
-                    state.ratingsSupport = 1==data.result._can;
-                    setLocalStorageVal('ratingsSupport', state.ratingsSupport);
-                    if (state.ratingsSupport) {
+                if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
+                    state.ratingsPlugin = "trackstat";
+                    setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
+                    if (state.ratingsPlugin) {
                         lmsCommand("", ["pref", "plugin.trackstat:rating_10scale", "?"]).then(({data}) => {
                             if (data && data.result && data.result._p2 != null) {
                                 state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
@@ -590,6 +590,21 @@ const store = new Vuex.Store({
                             }
                         });
                     }
+                } else {
+                    lmsCommand("", ["can", "ratingslight", "getrating", "?"]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
+                            state.ratingsPlugin = "ratingslight";
+                            setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
+                            if (state.ratingsPlugin) {
+                                lmsCommand("", ["pref", "plugin.ratingslight:rating_10scale", "?"]).then(({data}) => {
+                                    if (data && data.result && data.result._p2 != null) {
+                                        state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
+                                        setLocalStorageVal('maxRating', state.maxRating);
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
             });
         },

@@ -75,7 +75,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-list-tile-action>
      <div v-if="(techInfo || showRatings) && wide>0">
       <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div>
-      <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
+      <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="undefined==ratingsPlugin"></v-rating>
      </div>
      <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop" @click="toggleTime()">{{formattedTime}}</div>
      <div v-else class="np-tech-desktop">&nbsp;</div>
@@ -164,8 +164,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <v-layout text-xs-center v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value">
       <v-flex xs12>
-      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
-      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
+      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="undefined==ratingsPlugin"></v-rating>
+      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating" :readonly="undefined==ratingsPlugin"></v-rating>
       </v-flex>
      </v-layout>
      <div v-if="wide>1">
@@ -232,8 +232,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text np-portrait-rating">
-     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
-     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating" :readonly="!ratingsSupported"></v-rating>
+     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating" :readonly="undefined==ratingsPlugin"></v-rating>
+     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
@@ -469,7 +469,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         if (!IS_MOBILE) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
             bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod+shift');
-            if (this.$store.state.ratingsSupport) {
+            if (undefined!=this.$store.state.ratingsPlugin) {
                 for (var i=0; i<=6; ++i) {
                     bindKey(''+i, 'mod+shift');
                 }
@@ -485,7 +485,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
                         this.info.show = false;
                         this.largeView = !this.largeView;
-                    } else if (1==key.length && !isNaN(key) && this.$store.state.ratingsSupport && this.$store.state.showRating) {
+                    } else if (1==key.length && !isNaN(key) && undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
                         this.rating.value = parseInt(key);
                         this.setRating();
                     }
@@ -745,7 +745,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         setRating() {
             // this.rating.value is updated *before* this setRating click handler is called, so we can use its model value to update LMS
-            lmsCommand(this.$store.state.player.id, ["trackstat", "setrating", this.playerStatus.current.id, this.rating.value]).then(({data}) => {
+            lmsCommand(this.$store.state.player.id, [this.$store.state.ratingsPlugin, "setrating", this.playerStatus.current.id, this.rating.value]).then(({data}) => {
                 logJsonMessage("RESP", data);
                 bus.$emit('refreshStatus');
                 bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
@@ -960,8 +960,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         darkUi() {
             return this.$store.state.darkUi
         },
-        ratingsSupported() {
-            return this.$store.state.ratingsSupport && this.$store.state.showRating
+        ratingsPlugin() {
+            return this.$store.state.ratingsPlugin
         },
         showRatings() {
             return this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&

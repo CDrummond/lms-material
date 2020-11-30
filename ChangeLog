@@ -18,6 +18,7 @@
 12. Re-layout grid items if refresh list.
 13. Add padding to main icon, so that it looks better in macOS dock.
 14. Fix favourite ID calculation - revert to pre 2.0.0 code.
+15. Change dot to a dash for window title.
 
 2.0.2
 -----

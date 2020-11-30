@@ -20,6 +20,7 @@
 14. Fix favourite ID calculation - revert to pre 2.0.0 code.
 15. Change dot to a dash for window title.
 16. Add 'BBC Sounds' to search.
+17. Fix showing audio menu for tracks of favourite albums.
 
 2.0.2
 -----

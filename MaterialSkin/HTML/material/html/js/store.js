@@ -215,7 +215,7 @@ function setRatingsPlugin(state, plugins) {
                 }
             });
         } else if (plugins.length>0) {
-            setRatingsPlugin(state, plugin);
+            setRatingsPlugin(state, plugins);
         }
     });
 }

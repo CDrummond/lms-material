@@ -200,6 +200,26 @@ function storeCurrentPlayer(player) {
     }
 }
 
+function setRatingsPlugin(state, plugins) {
+    let plugin = plugins.shift();
+    lmsCommand("", ["can", plugin, "setrating", "?"]).then(({data}) => {
+        if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
+            state.ratingsPlugin = plugin;
+            setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
+            state.maxRating = 5;
+            setLocalStorageVal('maxRating', state.maxRating);
+            lmsCommand("", ["pref", "plugin."+plugin+":rating_10scale", "?"]).then(({data}) => {
+                if (data && data.result && data.result._p2 != null) {
+                    state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
+                    setLocalStorageVal('maxRating', state.maxRating);
+                }
+            });
+        } else if (plugins.length>0) {
+            setRatingsPlugin(state, plugin);
+        }
+    });
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -578,35 +598,7 @@ const store = new Vuex.Store({
                 }
             });
 
-            lmsCommand("", ["can", "trackstat", "setrating", "?"]).then(({data}) => {
-                if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
-                    state.ratingsPlugin = "trackstat";
-                    setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
-                    if (state.ratingsPlugin) {
-                        lmsCommand("", ["pref", "plugin.trackstat:rating_10scale", "?"]).then(({data}) => {
-                            if (data && data.result && data.result._p2 != null) {
-                                state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
-                                setLocalStorageVal('maxRating', state.maxRating);
-                            }
-                        });
-                    }
-                } else {
-                    lmsCommand("", ["can", "ratingslight", "setrating", "?"]).then(({data}) => {
-                        if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
-                            state.ratingsPlugin = "ratingslight";
-                            setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
-                            if (state.ratingsPlugin) {
-                                lmsCommand("", ["pref", "plugin.ratingslight:rating_10scale", "?"]).then(({data}) => {
-                                    if (data && data.result && data.result._p2 != null) {
-                                        state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
-                                        setLocalStorageVal('maxRating', state.maxRating);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            });
+            setRatingsPlugin(state, ["trackstat", "ratingslight"]);
         },
         setLibrary(state, lib) {
             if (state.library!=lib) {

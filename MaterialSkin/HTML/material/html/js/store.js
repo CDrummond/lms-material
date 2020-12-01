@@ -578,7 +578,7 @@ const store = new Vuex.Store({
                 }
             });
 
-            lmsCommand("", ["can", "trackstat", "getrating", "?"]).then(({data}) => {
+            lmsCommand("", ["can", "trackstat", "setrating", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
                     state.ratingsPlugin = "trackstat";
                     setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
@@ -591,7 +591,7 @@ const store = new Vuex.Store({
                         });
                     }
                 } else {
-                    lmsCommand("", ["can", "ratingslight", "getrating", "?"]).then(({data}) => {
+                    lmsCommand("", ["can", "ratingslight", "setrating", "?"]).then(({data}) => {
                         if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
                             state.ratingsPlugin = "ratingslight";
                             setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);

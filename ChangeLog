@@ -22,6 +22,7 @@
 16. Add 'BBC Sounds' to search.
 17. Fix showing audio menu for tracks of favourite albums.
 18. Support ratingslight plugin.
+19. Add Bandcamp emblem.
 
 2.0.2
 -----
@@ -726,7 +727,7 @@
    command.
 2. Fix activation of queue actions moved to main menu when using desktop
    layout.
-3. Update German translation - thanks to dolodobendan 
+3. Update German translation - thanks to dolodobendan
 4. If custom actions file not found, return empty JSON response.
 5. Immediately action the 'Enable alarms' action - to be consistent with the
    individual alarm toggles.

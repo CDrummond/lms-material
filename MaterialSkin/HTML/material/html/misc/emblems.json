@@ -18,6 +18,11 @@
     "name":"deezer",
     "bgnd":"#fb8715",
     "color":"#fff"
+  },
+  "bandcamp":{
+    "name":"bc",
+    "bgnd":"#61929c",
+    "color":"#fff"
   }
 }
 

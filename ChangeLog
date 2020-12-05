@@ -1,6 +1,7 @@
 2.1.1
 -----
 1. Fix track listing when shown multi-disc albums as one.
+2. Fix track count in rating dialog for multi-disc albums shown as one.
 
 2.1.0
 -----

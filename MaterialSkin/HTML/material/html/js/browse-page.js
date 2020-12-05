@@ -1220,10 +1220,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             var rating = 0;
             var count = 0;
             this.items.forEach(i => {
-                ids.push(i.id);
-                if (i.rating && i.rating>0) {
-                    rating+=i.rating;
-                    count++;
+                if (!i.header) {
+                    ids.push(i.id);
+                    if (i.rating && i.rating>0) {
+                        rating+=i.rating;
+                        count++;
+                    }
                 }
             });
             bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));

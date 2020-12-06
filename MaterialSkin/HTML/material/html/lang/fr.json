@@ -484,10 +484,10 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Alt+(N)":"",
-"Local files":"",
-"NOTE: Changing ratings requires an additional plugin.":"",
-"Reload":"",
-"Set rating (0..5)":"",
-"Update information":""
+"Alt+(N)":"Alt+(N)",
+"Local files":"Fichiers locaux",
+"NOTE: Changing ratings requires an additional plugin.":"REMARQUE : la modification des notes nécessite un plugin supplémentaire.",
+"Reload":"Recharger",
+"Set rating (0..5)":"Définir la notation (0..5)",
+"Update information":"Mettre à jour les informations"
 }

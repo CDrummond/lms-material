@@ -484,10 +484,10 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Alt+(N)":"",
-"Local files":"",
-"NOTE: Changing ratings requires an additional plugin.":"",
-"Reload":"",
-"Set rating (0..5)":"",
-"Update information":""
+"Alt+(N)":"Alt+(N)",
+"Local files":"Lokale bestanden",
+"NOTE: Changing ratings requires an additional plugin.":"Opmerking: Het wijzigen van ratings vereist een additionele plugin.",
+"Reload":"Herladen",
+"Set rating (0..5)":"Kies rating (0..5)",
+"Update information":"Update informatie"
 }

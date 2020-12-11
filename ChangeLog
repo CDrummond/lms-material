@@ -3,6 +3,7 @@
 1. Fix track listing when multi-disc albums shown as one.
 2. Fix track count in rating dialog for multi-disc albums shown as one.
 3. Translation update.
+4. Show descriptions in settings dialogs even for mobile.
 
 2.1.0
 -----

@@ -1,5 +1,5 @@
 div.prefDesc, p, td[colspan="5"] { /* colspan=5 for additional browse modes */
- color:rgba(255, 255, 255, 0.7) !important;
+ color:rgba(238, 236, 231, 0.6) !important;
 }
 
 select:not([multiple]) {

@@ -2,6 +2,8 @@
 -----
 1. If composer, or conductor, genre list set to '*' then apply to all genres.
 2. Add support for listing 'band' under certain genres, and in the queue.
+3. Save composer, conductor, and band genres to local storage so that they are
+   accessible at start-up if queue is obtained before preferences read.
 
 2.1.1
 -----

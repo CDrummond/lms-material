@@ -102,12 +102,25 @@ var app = new Vue({
             }
         });
 
+        var genres = splitString(getLocalStorageVal("composergenres", ""));
+        if (genres.length>0) {
+            LMS_COMPOSER_GENRES = new Set(genres);
+        }
+        genres = splitString(getLocalStorageVal("conductorgenres", ""));
+        if (genres.length>0) {
+            LMS_CONDUCTOR_GENRES = new Set(genres);
+        }
+        genres = splitString(getLocalStorageVal("bandgenres", ""));
+        if (genres.length>0) {
+            LMS_BAND_GENRES = new Set(genres);
+        }
         lmsCommand("", ["pref", "plugin.material-skin:composergenres", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2 != null) {
                 var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
                 if (genres.length>0) {
                     LMS_COMPOSER_GENRES = new Set(genres);
                     logJsonMessage("COMPOSER_GENRES", genres);
+                    setLocalStorageVal("composergenres", data.result._p2);
                 }
             }
         });
@@ -117,6 +130,7 @@ var app = new Vue({
                 if (genres.length>0) {
                     LMS_CONDUCTOR_GENRES = new Set(genres);
                     logJsonMessage("CONDUCTOR_GENRES", genres);
+                    setLocalStorageVal("conductorgenres", data.result._p2);
                 }
             }
         });
@@ -126,6 +140,7 @@ var app = new Vue({
                 if (genres.length>0) {
                     LMS_BAND_GENRES = new Set(genres);
                     logJsonMessage("BAND_GENRES", genres);
+                    setLocalStorageVal("bandgenres", data.result._p2);
                 }
             }
         });

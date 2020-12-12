@@ -451,6 +451,15 @@ function browseClick(view, item, index, event) {
                                 type: "group",
                                 id: uniqueId(item.id, view.items.length)});
         }
+        if (useBand(item.title)) {
+            view.items.push({ title: i18n("Band"),
+                                command: ["artists"],
+                                params: ["role_id:BAND", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                cancache: true,
+                                svg: "trumpet",
+                                type: "group",
+                                id: uniqueId(item.id, view.items.length)});
+        }
         view.headerTitle = item.title;
         view.headerSubTitle = i18n("Select category");
         setScrollTop(view, 0);

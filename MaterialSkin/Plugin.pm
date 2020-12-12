@@ -48,6 +48,7 @@ my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
+my $DEFAULT_BAND_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES');
 
 my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'myMusicArtistsAllArtists', 'myMusicAlbums',
                              'myMusicGenres', 'myMusicYears', 'myMusicNewMusic','myMusicPlaylists', 'myMusicAlbumsVariousArtists' );
@@ -65,9 +66,14 @@ sub initPlugin {
         $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES) if $conductorgenres eq '';
     }
 
+    if (my $bandgenres = $prefs->get('bandgenres')) {
+        $prefs->set('bandgenres', $DEFAULT_BAND_GENRES) if $bandgenres eq '';
+    }
+
     $prefs->init({
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
+        bandgenres => $DEFAULT_BAND_GENRES,
         password => ''
     });
 

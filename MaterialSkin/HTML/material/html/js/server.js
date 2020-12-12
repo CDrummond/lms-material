@@ -496,6 +496,11 @@ var lmsServer = Vue.component('lms-server', {
                     if (genres.length>0) {
                         LMS_CONDUCTOR_GENRES = new Set(genres);
                     }
+                } else if (data[2]=="bandgenres") {
+                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                    if (genres.length>0) {
+                        LMS_BAND_GENRES = new Set(genres);
+                    }
                 }
             }
         },

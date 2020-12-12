@@ -62,6 +62,7 @@ var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Cham
                                   "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
 var LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);
+var LMS_BAND_GENRES = new Set();
 
 // Browse page
 const GRID_MIN_WIDTH = 139;

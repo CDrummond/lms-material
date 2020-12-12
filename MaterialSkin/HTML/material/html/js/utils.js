@@ -1074,3 +1074,7 @@ function useComposer(genre) {
 function useConductor(genre) {
     return (genre && LMS_CONDUCTOR_GENRES.has(genre)) || (1==LMS_CONDUCTOR_GENRES.size && LMS_CONDUCTOR_GENRES.has('*'));
 }
+
+function useBand(genre) {
+    return (genre && LMS_BAND_GENRES.has(genre)) || (1==LMS_BAND_GENRES.size && LMS_BAND_GENRES.has('*'));
+}

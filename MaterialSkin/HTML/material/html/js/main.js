@@ -120,6 +120,15 @@ var app = new Vue({
                 }
             }
         });
+        lmsCommand("", ["pref", "plugin.material-skin:bandgenres", "?"]).then(({data}) => {
+            if (data && data.result && data.result._p2 != null) {
+                var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
+                if (genres.length>0) {
+                    LMS_BAND_GENRES = new Set(genres);
+                    logJsonMessage("BAND_GENRES", genres);
+                }
+            }
+        });
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

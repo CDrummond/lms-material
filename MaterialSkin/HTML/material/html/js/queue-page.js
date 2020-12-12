@@ -88,6 +88,14 @@ function showComposer(id, title) {
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), 'queue');
 }
 
+function showComposer(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), 'queue');
+}
+
 function getId(item, idType) {
     if (undefined!=item[idType]) {
         return item[idType];
@@ -104,6 +112,14 @@ function getId(item, idType) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
+    if (i.band && i.band!=i.artist && useComposer(i.genre)) {
+        let id = IS_MOBILE ? undefined : getId(i, 'band_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showBand("+id+",\'"+escape(i.band)+"\')\">" + i.band + "</obj>");
+        } else {
+            subtitle=addPart(subtitle, i.band);
+        }
+    }
     if (i.composer && i.composer!=i.artist && useComposer(i.genre)) {
         let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
         if (undefined!=id) {

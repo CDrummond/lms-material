@@ -83,13 +83,20 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     var artistAndComposer;
     var useComposer = playerStatus.current.composer && useComposer(playerStatus.current.genre);
+    var useBand = playerStatus.current.band && useComposer(playerStatus.current.genre);
+
+    artistAndComposer = view.playerStatus.current.artist;
     if (useComposer && playerStatus.current.composer!=view.playerStatus.current.artist) {
-        artistAndComposer = addPart(playerStatus.current.composer, view.playerStatus.current.artist);
-    } else {
-        artistAndComposer = view.playerStatus.current.artist;
+        artistAndComposer = addPart(playerStatus.current.composer, artistAndComposer);
+    }
+    if (useBand && playerStatus.current.band!=view.playerStatus.current.artist) {
+        artistAndComposer = addPart(playerStatus.current.band, artistAndComposer);
     }
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;
+    }
+    if (playerStatus.current.band!=view.playerStatus.current.band) {
+        view.playerStatus.current.band = playerStatus.current.band;
     }
     let composer_id = useComposer
                         ? playerStatus.current.composer_id
@@ -100,6 +107,16 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
                         : undefined;
     if (composer_id!=view.playerStatus.current.composer_id) {
         view.playerStatus.current.composer_id = composer_id;
+    }
+    let band_id = useBand
+                        ? playerStatus.current.band_id
+                            ? playerStatus.current.band_id
+                            : playerStatus.current.band_ids
+                                ? playerStatus.current.band_ids.split(",")[0]
+                                : undefined
+                        : undefined;
+    if (band_id!=view.playerStatus.current.band_id) {
+        view.playerStatus.current.band_id = band_id;
     }
     if (playerStatus.current.genre!=view.playerStatus.current.genre) {
         view.playerStatus.current.genre = playerStatus.current.genre;
@@ -198,6 +215,9 @@ function nowplayingShowMenu(view, event) {
             }
             if (view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
+            }
+            if (view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
+                view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
             }
             if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
                 view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:view.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});

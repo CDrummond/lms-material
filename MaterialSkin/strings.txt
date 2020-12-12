@@ -11,6 +11,12 @@ PLUGIN_MATERIAL_SKIN
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	EN	NOTE: In the genre lists, below, to apply to all genres then use a single asterisk (*)
 
+PLUGIN_MATERIAL_SKIN_BAND_GENRES
+	EN	Band genres
+
+PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
+	EN	Comma-separated list of genres supporting band. When entering one of these genres, you will be asked if you wish to browse by band.
+
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen
 	EN	Composer genres
@@ -46,6 +52,9 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	FR	Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
+
+PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
+	EN	Classical
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password

@@ -1066,3 +1066,11 @@ function removeDuplicates(playistId, items) {
         bus.$emit('showMessage', i18n('Playlist has no duplicates'));
     }
 }
+
+function useComposer(genre) {
+    return (genre && LMS_COMPOSER_GENRES.has(genre)) || (1==LMS_COMPOSER_GENRES.size && LMS_COMPOSER_GENRES.has('*'));
+}
+
+function useConductor(genre) {
+    return (genre && LMS_CONDUCTOR_GENRES.has(genre)) || (1==LMS_CONDUCTOR_GENRES.size && LMS_CONDUCTOR_GENRES.has('*'));
+}

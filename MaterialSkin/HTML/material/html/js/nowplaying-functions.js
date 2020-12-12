@@ -82,7 +82,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         trackChanged = true;
     }
     var artistAndComposer;
-    var useComposer = playerStatus.current.composer && playerStatus.current.genre && LMS_COMPOSER_GENRES.has(playerStatus.current.genre);
+    var useComposer = playerStatus.current.composer && useComposer(playerStatus.current.genre);
     if (useComposer && playerStatus.current.composer!=view.playerStatus.current.artist) {
         artistAndComposer = addPart(playerStatus.current.composer, view.playerStatus.current.artist);
     } else {
@@ -196,7 +196,7 @@ function nowplayingShowMenu(view, event) {
                     view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
                 }
             }
-            if (view.playerStatus.current.composer && view.playerStatus.current.composer_id && view.playerStatus.current.genre && LMS_COMPOSER_GENRES.has(view.playerStatus.current.genre)) {
+            if (view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
             }
             if (view.playerStatus.current.album_id && view.playerStatus.current.album) {

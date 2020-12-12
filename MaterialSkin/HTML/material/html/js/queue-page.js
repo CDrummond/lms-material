@@ -104,7 +104,7 @@ function getId(item, idType) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
-    if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre) && i.composer!=i.artist) {
+    if (i.composer && i.composer!=i.artist && useComposer(i.genre)) {
         let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
         if (undefined!=id) {
             subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</obj>");

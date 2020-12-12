@@ -433,7 +433,7 @@ function browseClick(view, item, index, event) {
                       type: "group",
                       id: uniqueId(item.id, view.items.length)});
         view.inGenre = item.title;
-        if (LMS_COMPOSER_GENRES.has(item.title)) {
+        if (useComposer(item.title)) {
             view.items.push({ title: i18n("Composers"),
                                 command: ["artists"],
                                 params: ["role_id:COMPOSER", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
@@ -442,7 +442,7 @@ function browseClick(view, item, index, event) {
                                 type: "group",
                                 id: uniqueId(item.id, view.items.length)});
         }
-        if (LMS_CONDUCTOR_GENRES.has(item.title)) {
+        if (useConductor(item.title)) {
             view.items.push({ title: i18n("Conductors"),
                                 command: ["artists"],
                                 params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],

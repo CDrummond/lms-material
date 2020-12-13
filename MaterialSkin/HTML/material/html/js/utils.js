@@ -820,12 +820,16 @@ function mapArtistIcon(params, item) {
                 item.svg="conductor";
                 return;
             }
-            if (params[i]=="role_id:ALBUMARTIST") {
+            if (params[i]=="role_id:ALBUMARTIST" || params[i]=="role_id:5") {
                 item.svg="albumartist";
                 return;
             }
-            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:PERFORMER") {
+            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:TRACKARTIST" || params[i]=="role_id:PERFORMER" || params[i]=="role_id:1" || params[i]=="role_id:6") {
                 break;
+            }
+            if (params[i]=="role_id:BAND" || params[i]=="role_id:4") {
+                item.svg="trumpet";
+                return;
             }
         }
     }

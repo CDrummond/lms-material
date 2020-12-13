@@ -855,9 +855,9 @@ function browseItemAction(view, act, item, index, event) {
                 if (act===PLAY_ACTION) {
                     view.$store.commit('setPage', 'now-playing');
                 } else if (act===ADD_ACTION) {
-                    bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));
+                    bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title && this.current ? this.current.title : item.title));
                 } else if (act===INSERT_ACTION) {
-                    bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", item.title));
+                    bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", undefined==item.title && this.current ? this.current.title : item.title));
                 }
             }
         }).catch(err => {

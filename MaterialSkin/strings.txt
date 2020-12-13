@@ -9,7 +9,7 @@ PLUGIN_MATERIAL_SKIN
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
-	EN	NOTE: In the genre lists, below, to apply to all genres then use a single asterisk (*)
+	EN	NOTE: In the genre lists, below, to apply to all genres then use a single asterisk (*). To apply to no genres, use any string (e.g. 'N/A') that does not match any of your genres.
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	EN	Band genres
@@ -54,7 +54,10 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
+	DE	Klassik
 	EN	Classical
+	FR	Classique
+	NL	Klassiek
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password

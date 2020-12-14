@@ -83,13 +83,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     var artistAndComposer;
     var useComposer = playerStatus.current.composer && useComposer(playerStatus.current.genre);
-    var useBand = playerStatus.current.band && useComposer(playerStatus.current.genre);
+    var useBand = playerStatus.current.band && useBand(playerStatus.current.genre);
 
     artistAndComposer = view.playerStatus.current.artist;
     if (useComposer && playerStatus.current.composer!=view.playerStatus.current.artist) {
         artistAndComposer = addPart(playerStatus.current.composer, artistAndComposer);
     }
-    if (useBand && playerStatus.current.band!=view.playerStatus.current.artist) {
+    if (useBand && playerStatus.current.band!=view.playerStatus.current.artist && playerStatus.current.band!=view.playerStatus.current.composer) {
         artistAndComposer = addPart(playerStatus.current.band, artistAndComposer);
     }
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {

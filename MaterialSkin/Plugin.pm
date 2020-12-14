@@ -60,10 +60,14 @@ sub initPlugin {
 
     if (my $composergenres = $prefs->get('composergenres')) {
         $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
+    } else {
+        $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES);
     }
 
     if (my $conductorgenres = $prefs->get('conductorgenres')) {
         $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES) if $conductorgenres eq '';
+    } else {
+        $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES);
     }
 
     if (my $bandgenres = $prefs->get('bandgenres')) {

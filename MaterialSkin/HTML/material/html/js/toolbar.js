@@ -270,18 +270,11 @@ Vue.component('lms-toolbar', {
                 this.playerStatus.current.title=playerStatus.current.title;
                 this.playerStatus.current.artist=playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
                 this.playerStatus.current.album=playerStatus.current.album;
-
-                if (this.playerStatus.current.title) {
-                    if (this.playerStatus.current.artist) {
-                        this.songInfo=this.playerStatus.current.title+SEPARATOR+this.playerStatus.current.artist;
-                    } else {
-                        this.songInfo=this.playerStatus.current.title;
-                    }
-                } else if (this.playerStatus.current.artist) {
-                    this.songInfo=this.playerStatus.current.artist;
-                } else {
-                    this.songInfo=undefined;
+                var artistComp = this.playerStatus.current.artist;
+                if (playerStatus.current.composer && playerStatus.current.genre && LMS_COMPOSER_GENRES.has(playerStatus.current.genre) && playerStatus.current.composer!=this.playerStatus.current.artist) {
+                    artistComp = addPart(playerStatus.current.composer, artistComp);
                 }
+                this.songInfo = addPart(this.playerStatus.current.title, artistComp);
                 if (!IS_MOBILE) {
                     var title = (undefined==this.songInfo ? "" : (this.songInfo.replace(SEPARATOR, " - ") + " :: ")) + "Logitech Media Server";
                     if (title!=document.title) {

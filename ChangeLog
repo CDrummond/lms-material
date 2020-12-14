@@ -3,6 +3,8 @@
 1. Translation updates.
 2. Check if item's title is undefined and if so use current item's title for
    'Appended XXX to the play queue' message.
+3. Show cimposer in toolbar, and window titlebar, if track's genre is in
+   composer genres.
 
 2.1.1
 -----

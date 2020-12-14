@@ -54,10 +54,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
-	DE	Klassik
-	EN	Classical
-	FR	Classique
-	NL	Klassiek
+	EN	N/A
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password

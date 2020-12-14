@@ -72,6 +72,8 @@ sub initPlugin {
 
     if (my $bandgenres = $prefs->get('bandgenres')) {
         $prefs->set('bandgenres', $DEFAULT_BAND_GENRES) if $bandgenres eq '';
+    } else {
+        $prefs->set('bandgenres', $DEFAULT_BAND_GENRES);
     }
 
     $prefs->init({

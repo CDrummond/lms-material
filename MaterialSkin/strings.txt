@@ -9,7 +9,7 @@ PLUGIN_MATERIAL_SKIN
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
-	EN	NOTE: In the genre lists, below, to apply to all genres then use a single asterisk (*). To apply to no genres, use any string (e.g. 'N/A') that does not match any of your genres.
+	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	EN	Band genres

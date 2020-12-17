@@ -6,6 +6,8 @@
    accessible at start-up if queue is obtained before preferences read.
 4. If a the 'default' player re-appears in LMS's players list, then switch to
    this player.
+5. If no 'default' player set, but player ID passed as a query parameter, then
+   if this player re-appears in LMS's players list switch to it.
 
 2.1.2
 -----

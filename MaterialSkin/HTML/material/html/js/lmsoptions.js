@@ -18,4 +18,7 @@ var lmsOptions = {newMusicLimit: 100,
                   techInfo: getLocalStorageBool('techInfo', false),
                   conductorGenres: new Set(),
                   composerGenres: new Set(),
-                  bandGenres: new Set()};
+                  bandGenres: new Set(),
+                  showConductor: getLocalStorageBool('showConductor', false),
+                  showComposer: getLocalStorageBool('showComposer', true),
+                  showBand: getLocalStorageBool('showBand', true)};

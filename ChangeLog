@@ -8,6 +8,8 @@
    this player.
 5. If no 'default' player set, but player ID passed as a query parameter, then
    if this player re-appears in LMS's players list switch to it.
+6. Add server-side settings to control wether composer, conductor, and band
+   tags are shown in queue and now-playing.
 
 2.1.2
 -----

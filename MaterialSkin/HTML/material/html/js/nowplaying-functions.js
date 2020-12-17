@@ -82,15 +82,19 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         trackChanged = true;
     }
     var artistAndComposer;
-    var useComposer = playerStatus.current.composer && useComposer(playerStatus.current.genre);
-    var useBand = playerStatus.current.band && useBand(playerStatus.current.genre);
+    var useComposer = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
+    var useConductor = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
+    var useBand = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
     artistAndComposer = view.playerStatus.current.artist;
-    if (useComposer && playerStatus.current.composer!=view.playerStatus.current.artist) {
-        artistAndComposer = addPart(playerStatus.current.composer, artistAndComposer);
-    }
     if (useBand && playerStatus.current.band!=view.playerStatus.current.artist && playerStatus.current.band!=view.playerStatus.current.composer) {
-        artistAndComposer = addPart(playerStatus.current.band, artistAndComposer);
+        artistAndComposer = addPart(artistAndComposer, playerStatus.current.band);
+    }
+    if (useComposer && playerStatus.current.composer!=view.playerStatus.current.artist) {
+        artistAndComposer = addPart(artistAndComposer, playerStatus.current.composer);
+    }
+    if (useConductor && playerStatus.current.conductor!=view.playerStatus.current.artist) {
+        artistAndComposer = addPart(artistAndComposer, playerStatus.current.conductor);
     }
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;
@@ -103,6 +107,16 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
                             ? playerStatus.current.composer_id
                             : playerStatus.current.composer_ids
                                 ? playerStatus.current.composer_ids.split(",")[0]
+                                : undefined
+                        : undefined;
+    if (composer_id!=view.playerStatus.current.composer_id) {
+        view.playerStatus.current.composer_id = composer_id;
+    }
+    let conductor_id = useConductor
+                        ? playerStatus.current.conductor_id
+                            ? playerStatus.current.conductor_id
+                            : playerStatus.current.conductor_ids
+                                ? playerStatus.current.conductor_ids.split(",")[0]
                                 : undefined
                         : undefined;
     if (composer_id!=view.playerStatus.current.composer_id) {
@@ -215,6 +229,9 @@ function nowplayingShowMenu(view, event) {
             }
             if (view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
+            }
+            if (view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
+                view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.composer}, svg:"conductor"});
             }
             if (view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});

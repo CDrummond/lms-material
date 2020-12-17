@@ -56,6 +56,24 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	EN	N/A
 
+PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
+	EN	Show composer
+
+PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
+	EN	If a song's genre matches the list above and it has a composer tag, then show this in the queue and now-playing.
+
+PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
+	EN	Show conductor
+
+PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
+	EN	If a song's genre matches the list above and it has a conductor tag, then show this in the queue and now-playing.
+
+PLUGIN_MATERIAL_SKIN_SHOW_BAND
+	EN	Show band
+
+PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
+	EN	If a song's genre matches the list above and it has a band tag, then show this in the queue and now-playing.
+
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password
 	FR	Mot de passe

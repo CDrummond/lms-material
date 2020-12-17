@@ -103,8 +103,8 @@ var app = new Vue({
         });
 
         lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
-                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
-                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
+                                              "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                              "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
         lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
 
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
@@ -118,6 +118,11 @@ var app = new Vue({
                             logJsonMessage(tags[t].toUpperCase()+"_GENRES", genres);
                             setLocalStorageVal(tags[t]+"genres", data.result[tags[t]+'genres']);
                         }
+                    }
+                    if (undefined!=data.result['show'+tags[t]]) {
+                        var optName = 'show'+tags[t].charAt(0).toUpperCase()+tags[t].slice(1);
+                        lmsOptions[optName] = 1 == parseInt(data.result['show'+tags[t]]);
+                        setLocalStorageVal(optName, lmsOptions[optName]);
                     }
                 }
             }

@@ -80,6 +80,9 @@ sub initPlugin {
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
         bandgenres => $DEFAULT_BAND_GENRES,
+        showcomposer => 1,
+        showconductor => 0,
+        showband => 1,
         password => ''
     });
 
@@ -179,6 +182,9 @@ sub _cliCommand {
         $request->addResult('composergenres', $prefs->get('composergenres'));
         $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
         $request->addResult('bandgenres', $prefs->get('bandgenres'));
+        $request->addResult('showcomposer', $prefs->get('showcomposer'));
+        $request->addResult('showconductor', $prefs->get('showconductor'));
+        $request->addResult('showband', $prefs->get('showband'));
         $request->setStatusDone();
         return;
     }

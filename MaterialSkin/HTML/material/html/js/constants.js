@@ -57,13 +57,6 @@ const LMS_TOGGLE_QUEUE_KEYBOARD = "Q"; // +shift
 
 const SEARCH_OTHER_ID = "search.other";
 
-// Semi-constant :-)
-var LMS_CONDUCTOR_GENRES = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
-                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
-                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
-var LMS_COMPOSER_GENRES = new Set([...new Set(["Jazz"]), ...LMS_CONDUCTOR_GENRES]);
-var LMS_BAND_GENRES = new Set();
-
 // Browse page
 const GRID_MIN_WIDTH = 139;
 const GRID_MIN_HEIGHT = 195;

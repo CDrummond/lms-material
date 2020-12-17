@@ -12,6 +12,23 @@ Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 const VBtn = Vue.component('VBtn')
 VBtn.options.props.ripple.default = false;
 
+function readGenrePref(tag) {
+    var genres = splitString(getLocalStorageVal(tag+"genres", ""));
+    if (genres.length>0) {
+        lmsOptions[tag+'Genres'] = new Set(genres);
+    }
+    lmsCommand("", ["pref", "plugin.material-skin:"+tag+"genres", "?"]).then(({data}) => {
+        if (data && data.result && data.result._p2 != null) {
+            var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
+            if (genres.length>0) {
+                lmsOptions[tag+'Genres'] = new Set(genres);
+                logJsonMessage(tag.toUpperCase()+"_GENRES", genres);
+                setLocalStorageVal(tag+"genres", data.result._p2);
+            }
+        }
+    });
+}
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -102,48 +119,14 @@ var app = new Vue({
             }
         });
 
-        var genres = splitString(getLocalStorageVal("composergenres", ""));
-        if (genres.length>0) {
-            LMS_COMPOSER_GENRES = new Set(genres);
-        }
-        genres = splitString(getLocalStorageVal("conductorgenres", ""));
-        if (genres.length>0) {
-            LMS_CONDUCTOR_GENRES = new Set(genres);
-        }
-        genres = splitString(getLocalStorageVal("bandgenres", ""));
-        if (genres.length>0) {
-            LMS_BAND_GENRES = new Set(genres);
-        }
-        lmsCommand("", ["pref", "plugin.material-skin:composergenres", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 != null) {
-                var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_COMPOSER_GENRES = new Set(genres);
-                    logJsonMessage("COMPOSER_GENRES", genres);
-                    setLocalStorageVal("composergenres", data.result._p2);
-                }
-            }
-        });
-        lmsCommand("", ["pref", "plugin.material-skin:conductorgenres", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 != null) {
-                var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_CONDUCTOR_GENRES = new Set(genres);
-                    logJsonMessage("CONDUCTOR_GENRES", genres);
-                    setLocalStorageVal("conductorgenres", data.result._p2);
-                }
-            }
-        });
-        lmsCommand("", ["pref", "plugin.material-skin:bandgenres", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 != null) {
-                var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_BAND_GENRES = new Set(genres);
-                    logJsonMessage("BAND_GENRES", genres);
-                    setLocalStorageVal("bandgenres", data.result._p2);
-                }
-            }
-        });
+        lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
+                                  "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
+        lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
+
+        readGenrePref("composer");
+        readGenrePref("conductor");
+        readGenrePref("band");
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

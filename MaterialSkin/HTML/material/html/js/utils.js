@@ -785,7 +785,7 @@ function commandAlbumSortKey(command, genre) {
         }
     }
     var baseSort = isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
-    if (undefined!=genre && (LMS_COMPOSER_GENRES.has(genre)) || LMS_CONDUCTOR_GENRES.has(genre)) {
+    if (undefined!=genre && (lmsOptions.composerGenres.has(genre)) || lmsOptions.conductorGenres.has(genre) || lmsOptions.bandGenres.has(genre)) {
         return baseSort+"C";
     }
     return baseSort;
@@ -1071,14 +1071,18 @@ function removeDuplicates(playistId, items) {
     }
 }
 
+function useArtistTagType(genre, genres) {
+    return (genre && genres.has(genre)) || (1==genres.size && genres.has('*'));
+}
+
 function useComposer(genre) {
-    return (genre && LMS_COMPOSER_GENRES.has(genre)) || (1==LMS_COMPOSER_GENRES.size && LMS_COMPOSER_GENRES.has('*'));
+    return useArtistTagType(lmsOptions.composerGenres);
 }
 
 function useConductor(genre) {
-    return (genre && LMS_CONDUCTOR_GENRES.has(genre)) || (1==LMS_CONDUCTOR_GENRES.size && LMS_CONDUCTOR_GENRES.has('*'));
+    return useArtistTagType(lmsOptions.conductoeGenres);
 }
 
 function useBand(genre) {
-    return (genre && LMS_BAND_GENRES.has(genre)) || (1==LMS_BAND_GENRES.size && LMS_BAND_GENRES.has('*'));
+    return useArtistTagType(lmsOptions.bandGenres);
 }

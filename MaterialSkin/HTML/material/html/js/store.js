@@ -324,7 +324,7 @@ const store = new Vuex.Store({
 
             // If default player re-appears (#387) then switch to this
             var defaultSet = false;
-            var autoSelect = undefined!=state.defaultPlayer ? state.defaultPlayer : queryParams.player;
+            var autoSelect = undefined!=queryParams.player && queryParams.player.indexOf(':')>0 ? queryParams.player : state.defaultPlayer;
             if (undefined!=autoSelect && added.has(autoSelect)) {
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === autoSelect) {

@@ -168,10 +168,18 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
         $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'prefs') {
+        $request->addResult('composergenres', $prefs->get('composergenres'));
+        $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
+        $request->addResult('bandgenres', $prefs->get('bandgenres'));
+        $request->setStatusDone();
         return;
     }
 

@@ -12,23 +12,6 @@ Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 const VBtn = Vue.component('VBtn')
 VBtn.options.props.ripple.default = false;
 
-function readGenrePref(tag) {
-    var genres = splitString(getLocalStorageVal(tag+"genres", ""));
-    if (genres.length>0) {
-        lmsOptions[tag+'Genres'] = new Set(genres);
-    }
-    lmsCommand("", ["pref", "plugin.material-skin:"+tag+"genres", "?"]).then(({data}) => {
-        if (data && data.result && data.result._p2 != null) {
-            var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
-            if (genres.length>0) {
-                lmsOptions[tag+'Genres'] = new Set(genres);
-                logJsonMessage(tag.toUpperCase()+"_GENRES", genres);
-                setLocalStorageVal(tag+"genres", data.result._p2);
-            }
-        }
-    });
-}
-
 var app = new Vue({
     el: '#app',
     data() {
@@ -124,9 +107,21 @@ var app = new Vue({
                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
         lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
 
-        readGenrePref("composer");
-        readGenrePref("conductor");
-        readGenrePref("band");
+        lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
+            if (data && data.result) {
+                var tags = ['composer', 'conductor', 'band'];
+                for (var t=0, len=tags.length; t<len; ++t ) {
+                    if (data.result[tags[t]+'genres']) {
+                        var genres = splitString(data.result[tags[t]+'genres'].split("\r").join("").split("\n").join(","));
+                        if (genres.length>0) {
+                            lmsOptions[tags[t]+'Genres'] = new Set(genres);
+                            logJsonMessage(tags[t].toUpperCase()+"_GENRES", genres);
+                            setLocalStorageVal(tags[t]+"genres", data.result[tags[t]+'genres']);
+                        }
+                    }
+                }
+            }
+        });
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

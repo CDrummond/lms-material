@@ -1076,13 +1076,13 @@ function useArtistTagType(genre, genres) {
 }
 
 function useComposer(genre) {
-    return useArtistTagType(lmsOptions.composerGenres);
+    return useArtistTagType(genre, lmsOptions.composerGenres);
 }
 
 function useConductor(genre) {
-    return useArtistTagType(lmsOptions.conductoeGenres);
+    return useArtistTagType(genre, lmsOptions.conductorGenres);
 }
 
 function useBand(genre) {
-    return useArtistTagType(lmsOptions.bandGenres);
+    return useArtistTagType(genre, lmsOptions.bandGenres);
 }

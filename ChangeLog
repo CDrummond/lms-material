@@ -6,6 +6,7 @@
 3. Show cimposer in toolbar, and window titlebar, if track's genre is in
    composer genres.
 4. If list of composer, or conductor, genres is empty then set to default.
+5. Fix ratings not showing in track list whist browsing.
 
 2.1.1
 -----

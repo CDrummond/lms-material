@@ -139,7 +139,7 @@ function buildSubtitle(i, threeLines) {
     if (i.conductor && i.conductor!=i.artist && lmsOptions.showConductor && useConductor(i.genre)) {
         let id = IS_MOBILE ? undefined : getId(i, 'conductor_id');
         if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showConductor("+id+",\'"+escape(i.conductor)+"\')\">" + i.composer + "</obj>");
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showConductor("+id+",\'"+escape(i.conductor)+"\')\">" + i.conductor + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.conductor);
         }

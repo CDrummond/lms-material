@@ -70,8 +70,8 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
-   <v-spacer></v-spacer>
+   <div @click="itemAction(SEARCH_LIB_ACTION, $event)" class="ellipsis subtoolbar-title subtoolbar-title-single pointer">{{trans.sources}}</div>
+   <v-spacer @click="itemAction(SEARCH_LIB_ACTION, $event)" class="pointer"></v-spacer>
    <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>

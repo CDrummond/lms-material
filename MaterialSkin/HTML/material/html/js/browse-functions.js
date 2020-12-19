@@ -1538,7 +1538,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                 if (cmd.params[i].startsWith("tags:")) {
-                    cmd.params[i]+=(view.$store.state.showRatings && "tracks"==cmd.command[0] ? "R" : "")+
+                    cmd.params[i]+=(view.$store.state.showRating && "tracks"==cmd.command[0] ? "R" : "")+
                                    (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
                 }
             }

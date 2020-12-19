@@ -14,11 +14,11 @@
 2.1.2
 -----
 1. Translation updates.
-2. Check if item's title is undefined and if so use current item's title for
-   'Appended XXX to the play queue' message.
-3. Show cimposer in toolbar, and window titlebar, if track's genre is in
+2. Fix title (sometimes) missing from 'Appended XXX to the play queue' message.
+3. Show composer in toolbar, and window titlebar, if track's genre is in
    composer genres.
 4. If list of composer, or conductor, genres is empty then set to default.
+5. Fix ratings not showing in track list whist browsing.
 
 2.1.1
 -----

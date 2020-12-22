@@ -2,6 +2,8 @@
 -----
 1. Add meta tag for IE11
 2. Fix light themes for embedded pages - always use main light variant.
+3. Use primary colour for active items with all light themes, as accent is too
+   light.
 
 2.1.2
 -----

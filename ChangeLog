@@ -1,6 +1,7 @@
 2.1.3
 -----
 1. Add meta tag for IE11
+2. Fix light themes for embedded pages - always use main light variant.
 
 2.1.2
 -----

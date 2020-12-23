@@ -6,7 +6,6 @@
  */
 
 :root {
- --active-toolbar-color:var(--light-text-color);
  --dialog-toolbar-color:var(--primary-color);
  --bottom-toolbar-color:var(--primary-color);
  --top-toolbar-color:var(--primary-color);

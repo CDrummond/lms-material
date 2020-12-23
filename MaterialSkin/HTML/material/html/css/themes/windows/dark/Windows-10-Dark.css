@@ -7,7 +7,6 @@
 
 :root {
  --active-color:var(--accent-color);
- --active-toolbar-color:var(--active-color);
  --scrollbar-thumb-color:#4d4d4d;
  --scrollbar-track-color:#171717;
  --scrollbar-corner-color:#171717;

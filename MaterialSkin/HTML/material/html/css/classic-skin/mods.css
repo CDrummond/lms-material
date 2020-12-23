@@ -284,6 +284,11 @@ input[type=radio]:checked:before {
  max-width:10px;
 }
 
+html, body {
+ overflow: unset!important;
+}
+
+
 html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
  background-color:var(--background-color) !important;
 }

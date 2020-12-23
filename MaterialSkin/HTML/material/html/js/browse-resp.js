@@ -110,7 +110,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert commands
-                    if (i.style && MORE_COMMANDS.has(i.style)) {
+                    if ( (i.style && MORE_COMMANDS.has(i.style)) ||
+                          // Some responses don't have 'style' set for 'Play Next'??? So, if we have an item between 'item_add' and 'itemplay' assume its 'Play Next'
+                          (idx<10 && idx>0 && idx<loopLen-1 && loop[idx-1].style && loop[idx+1].style && loop[idx-1].style=='item_add' && loop[idx+1].style=='itemplay' &&
+                            i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.cmd && i.actions.go.params.cmd=='insert')) {
                         data.result.count--;
                         continue;
                     }

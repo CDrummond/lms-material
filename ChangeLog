@@ -5,6 +5,7 @@
 3. Use primary colour for active items with all light themes, as accent is too
    light.
 4. Hide 'Move to next in queue' menu item for current track.
+5. Try to hide 'Play Next' in 'More' list even if it has no 'style'
 
 2.1.2
 -----

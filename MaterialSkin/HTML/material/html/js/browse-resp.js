@@ -372,7 +372,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 if (!i.id || isFavorites) {
                     if (i.params && i.params.track_id) {
-                        i.id = uniqueId("track_id:"+i.params.track_id); // Incase of duplicates?
+                        i.id = uniqueId("track_id:"+i.params.track_id, resp.items.length); // Incase of duplicates?
                     } else if (parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+resp.items.length;
                     } else {

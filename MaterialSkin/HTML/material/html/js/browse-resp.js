@@ -57,7 +57,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
-            var isMusicIpMix = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix";
+            var isMusicMix = (command == "musicip" || command == "musicsimilarity") && data.params[1].length>0 && data.params[1][1]=="mix";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -390,7 +390,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    if ((isMusicIpMix && i.trackType && i.trackType == "local") /*||
+                    if ((isMusicMix && i.trackType && i.trackType == "local") /*||
                         (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
                         i.saveableTrack = true; // Can save track list to playlist...
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
@@ -502,7 +502,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.canUseGrid = false;
                     }
                 }
-                if (isMusicIpMix) {
+                if (isMusicMix) {
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {

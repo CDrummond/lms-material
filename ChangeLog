@@ -18,6 +18,10 @@
 2. Fix light themes for embedded pages - always use main light variant.
 3. Use primary colour for active items with all light themes, as accent is too
    light.
+4. Hide 'Move to next in queue' menu item for current track.
+5. Try to hide 'Play Next' in 'More' list even if it has no 'style'
+6. Allow LMS docs accessed via http://SERVER:9000/html/docs/ to scroll when
+   Material set as default.
 
 2.1.2
 -----

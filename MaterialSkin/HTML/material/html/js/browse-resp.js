@@ -57,7 +57,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
-            var isMusicIpMix = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix";
+            var isMusicMix = (command == "musicip" || command == "musicsimilarity") && data.params[1].length>0 && data.params[1][1]=="mix";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -110,7 +110,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert commands
-                    if (i.style && MORE_COMMANDS.has(i.style)) {
+                    if ( (i.style && MORE_COMMANDS.has(i.style)) ||
+                          // Some responses don't have 'style' set for 'Play Next'??? So, if we have an item between 'item_add' and 'itemplay' assume its 'Play Next'
+                          (idx<10 && idx>0 && idx<loopLen-1 && loop[idx-1].style && loop[idx+1].style && loop[idx-1].style=='item_add' && loop[idx+1].style=='itemplay' &&
+                            i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.cmd && i.actions.go.params.cmd=='insert')) {
                         data.result.count--;
                         continue;
                     }
@@ -369,7 +372,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 if (!i.id || isFavorites) {
                     if (i.params && i.params.track_id) {
-                        i.id = uniqueId("track_id:"+i.params.track_id); // Incase of duplicates?
+                        i.id = uniqueId("track_id:"+i.params.track_id, resp.items.length); // Incase of duplicates?
                     } else if (parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+resp.items.length;
                     } else {
@@ -387,7 +390,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    if ((isMusicIpMix && i.trackType && i.trackType == "local") /*||
+                    if ((isMusicMix && i.trackType && i.trackType == "local") /*||
                         (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
                         i.saveableTrack = true; // Can save track list to playlist...
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
@@ -499,7 +502,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.canUseGrid = false;
                     }
                 }
-                if (isMusicIpMix) {
+                if (isMusicMix) {
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {

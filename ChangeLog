@@ -11,6 +11,8 @@
 6. Add server-side settings to control wether composer, conductor, and band
    tags are shown in queue and now-playing.
 7. Clicking anywhere in "Music sources" subtoolbar will open search field.
+8. Add items from an arist's or album's context menu to the 'More' menu shown
+   in the subtoolbar.
 
 2.1.3
 -----

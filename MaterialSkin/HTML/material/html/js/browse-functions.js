@@ -27,7 +27,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(args) {
+function browseActions(view, item, args) {
     var actions=[];
     if (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists')) {
         if (lmsOptions.infoPlugin) {
@@ -84,6 +84,11 @@ function browseActions(args) {
                     actions.push(custom[i]);
                 }
             }
+        }
+    }
+    if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
+        for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
+            actions.push({action:loop[i], weight:300+1});
         }
     }
     return actions;
@@ -156,12 +161,12 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                     }
                 }
             }
-            view.currentActions.items = browseActions(actParams);
+            view.currentActions.items = browseActions(view, resp.items.length>0 ? item : undefined, actParams);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');
                     view.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                    weight:10, svg:emblem ? emblem.name : undefined, id:loop[i]});
+                                                    weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true});
                 }
             } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
                 view.currentActions.items.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});
@@ -171,7 +176,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             if (listingArtistAlbums && view.items.length==0) {
                 view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
                 for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
-                    view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
+                    if (loop[i].isService) {
+                        view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
+                    }
                 }
             }
             view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;

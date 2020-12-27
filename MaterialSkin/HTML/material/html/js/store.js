@@ -321,7 +321,22 @@ const store = new Vuex.Store({
             }
 
             state.players=players;
-            if (state.player) {
+
+            // If default player re-appears (#387) then switch to this
+            var defaultSet = false;
+            var autoSelect = undefined!=queryParams.player && queryParams.player.indexOf(':')>0 ? queryParams.player : state.defaultPlayer;
+            if (undefined!=autoSelect && added.has(autoSelect)) {
+                for (var i=0, len=state.players.length; i<len; ++i) {
+                    if (state.players[i].id === autoSelect) {
+                        state.player = copyPlayer(state.players[i]);
+                        storeCurrentPlayer(state.player);
+                        defaultSet = true;
+                        break;
+                    }
+                }
+            }
+
+            if (state.player && !defaultSet) {
                 // Check current player is still valid
                 var found = false;
                 if (players) {
@@ -338,8 +353,8 @@ const store = new Vuex.Store({
                 }
             }
 
-            if (players && !state.player) {
-                if (!state.player && state.players.length>0 && undefined!=state.defaultPlayer) {
+            if (!state.player && state.players && state.players.length>0) {
+                if (undefined!=state.defaultPlayer) {
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
                             state.player = copyPlayer(state.players[i]);
@@ -348,7 +363,7 @@ const store = new Vuex.Store({
                         }
                     }
                 }
-                if (!state.player && state.players.length>0) {
+                if (!state.player) {
                     var config = getLocalStorageVal('player');
                     if (config) {
                         for (var i=0, len=state.players.length; i<len; ++i) {
@@ -360,7 +375,7 @@ const store = new Vuex.Store({
                         }
                     }
                 }
-                if (!state.player && state.players.length>0) {
+                if (!state.player) {
                     // Auto-select a player:
                     //  1. First powered on standard player
                     //  2. First powerer off standard player

@@ -102,21 +102,28 @@ var app = new Vue({
             }
         });
 
-        lmsCommand("", ["pref", "plugin.material-skin:composergenres", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 != null) {
-                var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_COMPOSER_GENRES = new Set(genres);
-                    logJsonMessage("COMPOSER_GENRES", genres);
-                }
-            }
-        });
-        lmsCommand("", ["pref", "plugin.material-skin:conductorgenres", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2 != null) {
-                var genres = splitString(data.result._p2.split("\r").join("").split("\n").join(","));
-                if (genres.length>0) {
-                    LMS_CONDUCTOR_GENRES = new Set(genres);
-                    logJsonMessage("CONDUCTOR_GENRES", genres);
+        lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
+                                              "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                              "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
+        lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
+
+        lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
+            if (data && data.result) {
+                var tags = ['composer', 'conductor', 'band'];
+                for (var t=0, len=tags.length; t<len; ++t ) {
+                    if (data.result[tags[t]+'genres']) {
+                        var genres = splitString(data.result[tags[t]+'genres'].split("\r").join("").split("\n").join(","));
+                        if (genres.length>0) {
+                            lmsOptions[tags[t]+'Genres'] = new Set(genres);
+                            logJsonMessage(tags[t].toUpperCase()+"_GENRES", genres);
+                            setLocalStorageVal(tags[t]+"genres", data.result[tags[t]+'genres']);
+                        }
+                    }
+                    if (undefined!=data.result['show'+tags[t]]) {
+                        var optName = 'show'+tags[t].charAt(0).toUpperCase()+tags[t].slice(1);
+                        lmsOptions[optName] = 1 == parseInt(data.result['show'+tags[t]]);
+                        setLocalStorageVal(optName, lmsOptions[optName]);
+                    }
                 }
             }
         });

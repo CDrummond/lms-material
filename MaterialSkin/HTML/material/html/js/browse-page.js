@@ -70,8 +70,8 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
-   <v-spacer></v-spacer>
+   <div @click="itemAction(SEARCH_LIB_ACTION, $event)" class="ellipsis subtoolbar-title subtoolbar-title-single pointer">{{trans.sources}}</div>
+   <v-spacer @click="itemAction(SEARCH_LIB_ACTION, $event)" class="pointer"></v-spacer>
    <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -277,7 +277,22 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
-    <v-list-tile @click="currentAction(item, index)">
+    <v-divider v-if="DIVIDER==item.action"></v-divider>
+    <v-list-tile v-else-if="item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="itemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
+      <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
+    </v-list-tile>
+    <v-list-tile v-else-if="undefined!=item.action" @click="itemAction(item.action, current, undefined, $event)">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon v-if="undefined==ACTIONS[item.action].svg">{{ACTIONS[item.action].icon}}</v-icon>
+      <img v-else class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{ACTIONS[item.action].title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile v-else @click="currentAction(item, index)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -873,7 +888,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (longPress && !this.$store.state.homeButton) {
                     this.goHome();
                 } else {
-                    this.goBack();
+                    // This timeout is a hacky fix for touch devices. When search is opened from home page (where 'Music sources' reacts
+                    // to clicks) and the back button is clicked to close - then the click 'seems' to fall through to 'Music sources' and
+                    // the search widget re-shown! Delaying processing this click by 50ms seems to resolve this - as, I assume, the touch
+                    // event finishes before we close the search widget and show 'Music sources'
+                    setTimeout(function () {this.goBack();}.bind(this), 50);
                 }
             }
         },

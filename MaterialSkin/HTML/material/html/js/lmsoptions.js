@@ -15,4 +15,10 @@ var lmsOptions = {newMusicLimit: 100,
                   noGenreFilter: getLocalStorageBool('noGenreFilter', false),
                   noRoleFilter: getLocalStorageBool('noRoleFilter', false),
                   serviceEmblems: getLocalStorageBool('serviceEmblems', true),
-                  techInfo: getLocalStorageBool('techInfo', false)};
+                  techInfo: getLocalStorageBool('techInfo', false),
+                  conductorGenres: new Set(),
+                  composerGenres: new Set(),
+                  bandGenres: new Set(),
+                  showConductor: getLocalStorageBool('showConductor', false),
+                  showComposer: getLocalStorageBool('showComposer', true),
+                  showBand: getLocalStorageBool('showBand', true)};

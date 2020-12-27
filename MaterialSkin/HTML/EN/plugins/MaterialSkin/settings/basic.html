@@ -4,12 +4,34 @@
         <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
     [% END %]
 
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES" desc="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC" %]
-        <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="8">[% prefs.composergenres %]</textarea>
+    <br/><hr class="main-sep"/><br/>
+    [% WRAPPER setting title="" desc="" %]
+    <div><i>[% "PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE" | string %]</i></div>
     [% END %]
+    <hr style="opacity:0.4" class="sub-sep"/><br/>
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES" desc="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC" %]
+        <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="7">[% prefs.composergenres %]</textarea>
+    [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC" %]
+        <input type="checkbox" [% IF prefs.pref_showcomposer %]checked [% END %] class="stdedit" name="pref_showcomposer" value="1"/>
+    [% END %]
+    <hr style="opacity:0.4" class="sub-sep"/><br/>
+
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES" desc="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC" %]
-        <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="8">[% prefs.conductorgenres %]</textarea>
+        <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="7">[% prefs.conductorgenres %]</textarea>
+    [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC" %]
+        <input type="checkbox" [% IF prefs.pref_showconductor %]checked [% END %] class="stdedit" name="pref_showconductor" value="1"/>
+    [% END %]
+    <hr style="opacity:0.4" class="sub-sep"/><br/>
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_BAND_GENRES" desc="PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC" %]
+        <textarea class="stdedit" name="pref_bandgenres" id="bandgenres" cols="45" rows="7">[% prefs.bandgenres %]</textarea>
+    [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC" %]
+        <input type="checkbox" [% IF prefs.pref_showband %]checked [% END %] class="stdedit" name="pref_showband" value="1"/>
     [% END %]
 
 [% PROCESS settings/footer.html %]

@@ -88,6 +88,22 @@ function showComposer(id, title) {
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), 'queue');
 }
 
+function showConductor(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), 'queue');
+}
+
+function showBand(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
+    }
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), 'queue');
+}
+
 function getId(item, idType) {
     if (undefined!=item[idType]) {
         return item[idType];
@@ -104,12 +120,28 @@ function getId(item, idType) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
-    if (i.composer && i.genre && LMS_COMPOSER_GENRES.has(i.genre) && i.composer!=i.artist) {
+    if (i.band && i.band!=i.artist && lmsOptions.showBand && useBand(i.genre)) {
+        let id = IS_MOBILE ? undefined : getId(i, 'band_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showBand("+id+",\'"+escape(i.band)+"\')\">" + i.band + "</obj>");
+        } else {
+            subtitle=addPart(subtitle, i.band);
+        }
+    }
+    if (i.composer && i.composer!=i.artist && lmsOptions.showComposer && useComposer(i.genre)) {
         let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
         if (undefined!=id) {
             subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.composer);
+        }
+    }
+    if (i.conductor && i.conductor!=i.artist && lmsOptions.showConductor && useConductor(i.genre)) {
+        let id = IS_MOBILE ? undefined : getId(i, 'conductor_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showConductor("+id+",\'"+escape(i.conductor)+"\')\">" + i.conductor + "</obj>");
+        } else {
+            subtitle=addPart(subtitle, i.conductor);
         }
     }
 

@@ -785,7 +785,7 @@ function commandAlbumSortKey(command, genre) {
         }
     }
     var baseSort = isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
-    if (undefined!=genre && (LMS_COMPOSER_GENRES.has(genre)) || LMS_CONDUCTOR_GENRES.has(genre)) {
+    if (undefined!=genre && (lmsOptions.composerGenres.has(genre)) || lmsOptions.conductorGenres.has(genre) || lmsOptions.bandGenres.has(genre)) {
         return baseSort+"C";
     }
     return baseSort;
@@ -820,12 +820,16 @@ function mapArtistIcon(params, item) {
                 item.svg="conductor";
                 return;
             }
-            if (params[i]=="role_id:ALBUMARTIST") {
+            if (params[i]=="role_id:ALBUMARTIST" || params[i]=="role_id:5") {
                 item.svg="albumartist";
                 return;
             }
-            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:PERFORMER") {
+            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:TRACKARTIST" || params[i]=="role_id:PERFORMER" || params[i]=="role_id:1" || params[i]=="role_id:6") {
                 break;
+            }
+            if (params[i]=="role_id:BAND" || params[i]=="role_id:4") {
+                item.svg="trumpet";
+                return;
             }
         }
     }
@@ -1065,4 +1069,20 @@ function removeDuplicates(playistId, items) {
     } else {
         bus.$emit('showMessage', i18n('Playlist has no duplicates'));
     }
+}
+
+function useArtistTagType(genre, genres) {
+    return (genre && genres.has(genre)) || (1==genres.size && genres.has('*'));
+}
+
+function useComposer(genre) {
+    return useArtistTagType(genre, lmsOptions.composerGenres);
+}
+
+function useConductor(genre) {
+    return useArtistTagType(genre, lmsOptions.conductorGenres);
+}
+
+function useBand(genre) {
+    return useArtistTagType(genre, lmsOptions.bandGenres);
 }

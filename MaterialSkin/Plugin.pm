@@ -48,6 +48,7 @@ my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
+my $DEFAULT_BAND_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES');
 
 my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'myMusicArtistsAllArtists', 'myMusicAlbums',
                              'myMusicGenres', 'myMusicYears', 'myMusicNewMusic','myMusicPlaylists', 'myMusicAlbumsVariousArtists' );
@@ -69,9 +70,19 @@ sub initPlugin {
         $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES);
     }
 
+    if (my $bandgenres = $prefs->get('bandgenres')) {
+        $prefs->set('bandgenres', $DEFAULT_BAND_GENRES) if $bandgenres eq '';
+    } else {
+        $prefs->set('bandgenres', $DEFAULT_BAND_GENRES);
+    }
+
     $prefs->init({
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
+        bandgenres => $DEFAULT_BAND_GENRES,
+        showcomposer => 1,
+        showconductor => 0,
+        showband => 1,
         password => ''
     });
 
@@ -160,10 +171,21 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
         $request->setStatusBadParams();
+        return;
+    }
+
+    if ($cmd eq 'prefs') {
+        $request->addResult('composergenres', $prefs->get('composergenres'));
+        $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
+        $request->addResult('bandgenres', $prefs->get('bandgenres'));
+        $request->addResult('showcomposer', $prefs->get('showcomposer'));
+        $request->addResult('showconductor', $prefs->get('showconductor'));
+        $request->addResult('showband', $prefs->get('showband'));
+        $request->setStatusDone();
         return;
     }
 

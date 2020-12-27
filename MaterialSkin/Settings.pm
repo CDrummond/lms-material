@@ -23,7 +23,7 @@ sub page {
 }
 
 sub prefs {
-	return ($prefs, 'composergenres', 'conductorgenres', 'password');
+	return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showcomposer', 'showconductor', 'showband', 'password');
 }
 
 1;

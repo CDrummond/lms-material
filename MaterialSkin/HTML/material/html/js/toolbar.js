@@ -212,7 +212,7 @@ Vue.component('lms-toolbar', {
                }
     },
     mounted() {
-        setInterval(function () {
+        setTimeout(function () {
             this.width = Math.floor(window.innerWidth/50)*50;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {

@@ -33,7 +33,8 @@ Vue.component('lms-randommix', {
    </div>
   </v-card-text>
   <v-card-actions>
-   <v-btn flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
+   <v-btn v-if="isWide" flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
+   <v-btn v-else flat icon @click.native="showAll=!showAll" :title="showAll ? i18n('Basic options') : i18n('All options')"><v-icon>{{showAll ? 'expand_more' : 'expand_less'}}</v-icon></v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
    <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
@@ -56,7 +57,8 @@ Vue.component('lms-randommix', {
             library: undefined,
             continuous: true,
             oldTracks: 10,
-            newTracks: 10
+            newTracks: 10,
+            isWide: true
         }
     },
     computed: {
@@ -153,6 +155,10 @@ Vue.component('lms-randommix', {
             if (this.$store.state.activeDialog == 'rndmix') {
                 this.show=false;
             }
+        }.bind(this));
+        this.isWide = window.innerWidth>=450;
+        bus.$on('windowWidthChanged', function() {
+            this.isWide = window.innerWidth>=450;
         }.bind(this));
     },
     methods: {

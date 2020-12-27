@@ -13,6 +13,8 @@
 7. Clicking anywhere in "Music sources" subtoolbar will open search field.
 8. Add items from an arist's or album's context menu to the 'More' menu shown
    in the subtoolbar.
+9. If screen width is less than 450px show down/up arrow in 'Random Mix'
+   dialog to show/hide advanced options.
 
 2.1.3
 -----

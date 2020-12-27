@@ -62,6 +62,7 @@
 "Auto-scroll to current track":"Vis automatisk næste nummer i køen",
 "Automatic":"Automatisk",
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Sorter automatisk menupunkter for forsiden. Krævet på iPhone da denne ikke understøtter træk-og-slip.",
+"Bands":"Grupper",
 "Basic options":"Grundlæggende indstillinger",
 "Black":"Sort",
 "Browse":"Gennemse musikbibliotek",
@@ -172,7 +173,9 @@
 "Go home":"Gå til forsiden",
 "Go to album":"Gå til album",
 "Go to artist":"Gå til kunstner",
+"Go to band":"Gå til gruppe",
 "Go to composer":"Gå til komponist",
+"Go to conductor":"Gå til dirigent",
 "Go to homescreen":"Gå til forsiden",
 "Group Players":"Gruppeafspillere",
 "Group members":"Gruppemedlemmer",
@@ -464,8 +467,8 @@
 "%1 Albums":"%1 albums",
 "1 Artist":"1 kunstner",
 "%1 Artists":"%1 kunstnere",
-"1 Band":"1 band",
-"%1 Bands":"%1 bands",
+"1 Band":"1 gruppe",
+"%1 Bands":"%1 grupper",
 "1 Composer":"1 komponist",
 "%1 Composers":"%1 komponister",
 "1 Conductor":"1 dirigent",
@@ -489,8 +492,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Bands":"",
-"Go to band":"",
-"Go to conductor":""
+"%1 days":"%1 dage"
 }

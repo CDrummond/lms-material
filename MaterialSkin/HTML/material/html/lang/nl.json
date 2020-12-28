@@ -431,7 +431,7 @@
 "Update information when song changes":"Update informatie als nummer verandert",
 "Update plugins":"Bijwerken plugins",
 "Updates available":"Updates beschikbaar",
-"Updating plugins.":"Plugins aan het bijwerken.",
+"Updating plugins.":"Plugins aan het bijwerken...",
 "Use Selected":"Gebruik Geselecteerd",
 "Use artist, or album, images as background.":"Gebruik artiest of album afbeelding als achtergrond.",
 "Use chosen color for toolbars.":"Gebruik gekozen kleur voor taakbalk.",
@@ -460,7 +460,7 @@
 "Zapped '%1'":"Gezapt '%1'",
 "⌘+%1":"⌘+%1",
 "⌘+Shift+%1":"⌘+Shift+%1",
-"1 Album":"Één Album",
+"1 Album":"1 Album",
 "%1 Albums":"%1 Albums",
 "1 Artist":"1 Artiest",
 "%1 Artists":"%1 Artiesten",
@@ -490,7 +490,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Bands":"",
-"Go to band":"",
-"Go to conductor":""
+"Bands":"Band",
+"Go to band":"Ga naar band",
+"Go to conductor":"Ga naar dirigent"
 }

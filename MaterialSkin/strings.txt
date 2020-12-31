@@ -10,12 +10,15 @@ PLUGIN_MATERIAL_SKIN
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
+	FR	REMARQUE : Dans les listes de genres ci-dessous, pour cibler tous les genres, utiliser le caractère générique astérisque (*). Pour ne cibler aucun genre, saisir une chaîne de caractères qui ne correspond à aucun de vos genres (par exemple, «N/A»).
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	EN	Band genres
+	FR	Genres concernés par le tag "band" (groupe/orchestre)
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	EN	Comma-separated list of genres supporting band. When entering one of these genres, you will be asked if you wish to browse by band.
+	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par groupe/orchestre.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen
@@ -55,24 +58,31 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	EN	N/A
+	FR	N/A
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	EN	Show composer
+	FR	Afficher le compositeur
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	EN	If a song's genre matches the list above and it has a composer tag, then show this in the queue and now-playing.
+	FR	Si le tag "genre" d'un morceau apartient à la liste ci-dessus et que le morceau a un tag "composer", afficher le compositeur dans la liste de lecture et la vue "lecture en cours".
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	EN	Show conductor
+	FR	Afficher le chef d'orchestre
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	EN	If a song's genre matches the list above and it has a conductor tag, then show this in the queue and now-playing.
+	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "conductor", afficher le chef d'orchestre dans la liste de lecture et la vue "lecture en cours".
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	EN	Show band
+	FR	Afficher le groupe/orchestre
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	EN	If a song's genre matches the list above and it has a band tag, then show this in the queue and now-playing.
+	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "band", afficher le groupe/orchestre dans la liste de lecture et la vue "lecture en cours".
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password

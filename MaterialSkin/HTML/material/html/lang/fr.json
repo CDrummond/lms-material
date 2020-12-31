@@ -464,8 +464,8 @@
 "%1 Albums":"%1 albums",
 "1 Artist":"1 artiste",
 "%1 Artists":"%1 artistes",
-"1 Band":"1 groupe",
-"%1 Bands":"%1 groupes",
+"1 Band":"1 groupe/orchestre",
+"%1 Bands":"%1 groupes/orchestres",
 "1 Composer":"1 compositeur",
 "%1 Composers":"%1 compositeurs",
 "1 Conductor":"1 chef d'orchestre",
@@ -490,7 +490,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Bands":"",
-"Go to band":"",
-"Go to conductor":""
+"Bands":"Groupes/Orchestres",
+"Go to band":"Aller au groupe/orchestre",
+"Go to conductor":"Aller au chef d'orchestre"
 }

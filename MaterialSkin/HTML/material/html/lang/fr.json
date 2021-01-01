@@ -62,6 +62,7 @@
 "Auto-scroll to current track":"Aller automatiquement au morceau en cours",
 "Automatic":"Automatique",
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Tri automatique des éléments de l'écran d'accueil. Nécessaire pour l'iPhone car il ne prend pas en charge le glisser-déposer.",
+"Bands":"Groupes/Orchestres",
 "Basic options":"Options de base",
 "Black":"Noir",
 "Browse":"Bibliothèque",
@@ -172,7 +173,9 @@
 "Go home":"Retour à l'accueil",
 "Go to album":"Aller à l'album",
 "Go to artist":"Aller à l'artiste",
+"Go to band":"Aller au groupe/orchestre",
 "Go to composer":"Aller au compositeur",
+"Go to conductor":"Aller au chef d'orchestre",
 "Go to homescreen":"Aller à l'écran d'accueil",
 "Group Players":"Groupes de platines",
 "Group members":"Membres du groupe",
@@ -489,8 +492,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Bands":"Groupes/Orchestres",
-"Go to band":"Aller au groupe/orchestre",
-"Go to conductor":"Aller au chef d'orchestre"
+"%1 days":"%1 jours"
 }

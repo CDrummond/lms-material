@@ -62,6 +62,7 @@
 "Auto-scroll to current track":"Automatisch naar het huidige nummer gaan",
 "Automatic":"Automatisch",
 "Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.":"Automatisch sorteren van items op startpagina. Verplicht voor iPhone aangezien drag-en-drop niet wordt ondersteund.",
+"Bands":"Band",
 "Basic options":"Basis opties",
 "Black":"Zwart",
 "Browse":"Bladeren",
@@ -172,7 +173,9 @@
 "Go home":"Ga naar hoofdmenu",
 "Go to album":"Ga naar album",
 "Go to artist":"Ga naar artiest",
+"Go to band":"Ga naar band",
 "Go to composer":"Ga naar componist",
+"Go to conductor":"Ga naar dirigent",
 "Go to homescreen":"Ga naar startpagina",
 "Group Players":"Groep muziekspelers",
 "Group members":"Groep deelnemers",
@@ -489,8 +492,5 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen",
-"Bands":"Band",
-"Go to band":"Ga naar band",
-"Go to conductor":"Ga naar dirigent"
+"%1 days":"%1 dagen"
 }

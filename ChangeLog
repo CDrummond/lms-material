@@ -1,16 +1,17 @@
 2.2.0
 -----
- 1. If composer, or conductor, genre list set to '*' then apply to all genres.
- 2. Add support for listing 'band' under certain genres, and in the queue.
+ 1. Add support for listing 'band' under certain genres, and in the queue.
+ 2. If composer, conductor, or band, genre list set to '*' then apply to all
+    genres.
  3. Save composer, conductor, and band genres to local storage so that they are
     accessible at start-up if queue is obtained before preferences read.
  4. If a the 'default' player re-appears in LMS's players list, then switch to
     this player.
  5. If no 'default' player set, but player ID passed as a query parameter, then
     if this player re-appears in LMS's players list switch to it.
- 6. Add server-side settings to control wether composer, conductor, and band
+ 6. Add server-side settings to control whether composer, conductor, and band
     tags are shown in queue and now-playing.
- 7. Clicking anywhere in "Music sources" subtoolbar will open search field.
+ 7. Clicking anywhere in 'Music sources' subtoolbar will open search field.
  8. Add items from an arist's or album's context menu to the 'More' menu shown
     in the subtoolbar.
  9. If screen width is less than 450px show down/up arrow in 'Random Mix'

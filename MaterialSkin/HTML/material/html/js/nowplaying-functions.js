@@ -81,19 +81,18 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.rating.value = rv;
         trackChanged = true;
     }
-    var artistAndComposer;
-    var useComposer = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
-    var useConductor = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
-    var useBand = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
+    var artistAndComposer = view.playerStatus.current.artist;
+    var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
+    var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
+    var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
-    artistAndComposer = view.playerStatus.current.artist;
-    if (useBand && playerStatus.current.band!=view.playerStatus.current.artist && playerStatus.current.band!=view.playerStatus.current.composer) {
+    if (useBandTag && playerStatus.current.band!=view.playerStatus.current.artist && playerStatus.current.band!=view.playerStatus.current.composer) {
         artistAndComposer = addPart(artistAndComposer, playerStatus.current.band);
     }
-    if (useComposer && playerStatus.current.composer!=view.playerStatus.current.artist) {
+    if (useComposerTag && playerStatus.current.composer!=view.playerStatus.current.artist) {
         artistAndComposer = addPart(artistAndComposer, playerStatus.current.composer);
     }
-    if (useConductor && playerStatus.current.conductor!=view.playerStatus.current.artist) {
+    if (useConductorTag && playerStatus.current.conductor!=view.playerStatus.current.artist) {
         artistAndComposer = addPart(artistAndComposer, playerStatus.current.conductor);
     }
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {

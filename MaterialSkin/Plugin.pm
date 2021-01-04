@@ -82,7 +82,7 @@ sub initPlugin {
         bandgenres => $DEFAULT_BAND_GENRES,
         showcomposer => 1,
         showconductor => 0,
-        showband => 1,
+        showband => 0,
         password => ''
     });
 

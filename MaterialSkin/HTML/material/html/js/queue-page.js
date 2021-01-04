@@ -120,6 +120,30 @@ function getId(item, idType) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
+
+    if (i.artist) {
+        let id = IS_MOBILE ? undefined : getId(i, 'artist_id');
+        if (!IS_MOBILE && undefined!=id) {
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</obj>");
+        } else {
+            subtitle=addPart(subtitle, i.artist);
+        }
+    } else if (i.trackartist) {
+        let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</obj>");
+        } else {
+            subtitle=addPart(subtitle, i.trackartist);
+        }
+    } else if (i.albumartist) {
+        let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
+        if (undefined!=id) {
+            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\',true)\">" + i.albumartist + "</obj>");
+        } else {
+            subtitle=addPart(subtitle, i.albumartist);
+        }
+    }
+
     if (i.band && i.band!=i.artist && lmsOptions.showBand && useBand(i.genre)) {
         let id = IS_MOBILE ? undefined : getId(i, 'band_id');
         if (undefined!=id) {
@@ -142,29 +166,6 @@ function buildSubtitle(i, threeLines) {
             subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showConductor("+id+",\'"+escape(i.conductor)+"\')\">" + i.conductor + "</obj>");
         } else {
             subtitle=addPart(subtitle, i.conductor);
-        }
-    }
-
-    if (i.artist) {
-        let id = IS_MOBILE ? undefined : getId(i, 'artist_id');
-        if (!IS_MOBILE && undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.artist);
-        }
-    } else if (i.trackartist) {
-        let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.trackartist);
-        }
-    } else if (i.albumartist) {
-        let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\',true)\">" + i.albumartist + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.albumartist);
         }
     }
 

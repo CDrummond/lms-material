@@ -17,6 +17,8 @@
  9. If screen width is less than 450px show down/up arrow in 'Random Mix'
     dialog to show/hide advanced options.
 10. Remove IE11 meta tag, doesn't work.
+11. Don't defer loading volume overlay and screensaver javascript files,
+    otherwise they do not work until change page.
 
 2.1.3
 -----

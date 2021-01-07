@@ -23,6 +23,7 @@
     pressed.
 13. If desktop layout is showing a single volume button, use mobile style.
 14. Increase minimum desktop layout width to 750px for volume slider.
+15. Fix layout of volume-dialog when used in desktop layout.
 
 2.1.3
 -----

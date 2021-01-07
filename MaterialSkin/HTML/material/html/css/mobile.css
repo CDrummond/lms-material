@@ -173,15 +173,6 @@
  margin-top:-14px;
 }
 
-.vol-text {
- font-size:var(--small-font-size);
- color:var(--text-color);
-}
-
-.vol-btn {
- margin-top:-8px;
-}
-
 .ios-vcard-text-workaround {
  top:var(--main-toolbar-height);
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));

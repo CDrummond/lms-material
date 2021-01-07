@@ -562,11 +562,6 @@ div.v-subheader {
  height:32px;
 }
 
-.vol-btn {
- width:32px;
- height:32px;
-}
-
 .vol-btn-label {
  position:relative;
  margin:-8px 0px 0px 0px;
@@ -619,6 +614,17 @@ div.v-subheader {
 
 .vol-sheet .vol-btn div i {
  color:var(--text-color) !important;
+}
+
+.vol-sheet .vol-btn {
+ width:32px;
+ height:32px;
+ margin-top:-8px;
+}
+
+.vol-sheet .vol-text {
+ font-size:var(--small-font-size);
+ color:var(--text-color);
 }
 
 .vol-sheet .vol-slider {

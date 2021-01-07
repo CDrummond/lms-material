@@ -21,6 +21,7 @@
     otherwise they do not work until change page.
 12. If 'Fixed volume' then send +/- volume-step when up/down volume button
     pressed.
+13. If desktop layout is showing a single volume button, use mobile style.
 
 2.1.3
 -----

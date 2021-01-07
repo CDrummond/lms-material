@@ -173,26 +173,6 @@
  margin-top:-14px;
 }
 
-.vol-label {
- position:relative;
- margin:-8px 0px 0px 0px;
- padding:0px;
- font-size:calc(var(--small-font-size)/1.75);
- text-align:center;
- vertical-align:bottom;
- position:fixed;
- white-space:nowrap;
- overflow-x:hidden;
- overflow-y:hidden;
- top:40px;
- width:36px !important;
- height:18px !important;
- line-height:18px !important;
- z-index:-1;
- opacity:var(--sub-opacity);
- color:var(--top-toolbar-text-color);
-}
-
 .vol-text {
  font-size:var(--small-font-size);
  color:var(--text-color);

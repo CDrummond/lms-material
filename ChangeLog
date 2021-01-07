@@ -12,7 +12,7 @@
  6. Add server-side settings to control whether composer, conductor, and band
     tags are shown in queue and now-playing.
  7. Clicking anywhere in 'Music sources' subtoolbar will open search field.
- 8. Add items from an arist's or album's context menu to the 'More' menu shown
+ 8. Add items from an artist's or album's context menu to the 'More' menu shown
     in the subtoolbar.
  9. If screen width is less than 450px show down/up arrow in 'Random Mix'
     dialog to show/hide advanced options.
@@ -22,6 +22,7 @@
 12. If 'Fixed volume' then send +/- volume-step when up/down volume button
     pressed.
 13. If desktop layout is showing a single volume button, use mobile style.
+14. Increase minimum desktop layout width to 750px for volume slider.
 
 2.1.3
 -----

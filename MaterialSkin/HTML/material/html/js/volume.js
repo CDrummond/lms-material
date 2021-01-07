@@ -91,11 +91,11 @@ Vue.component('lms-volume', {
             this.cancelCloseTimer();
         },
         volumeDown() {
-            bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), false)]);
+            bus.$emit('playerCommand', ["mixer", "volume", this.dvc ? adjustVolume(Math.abs(this.playerVolume), false) : ("-"+lmsOptions.volumeStep)]);
             this.resetCloseTimer();
         },
         volumeUp() {
-            bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), true)]);
+            bus.$emit('playerCommand', ["mixer", "volume", this.dvc ? adjustVolume(Math.abs(this.playerVolume), true) : ("+"+lmsOptions.volumeStep)]);
             this.resetCloseTimer();
         },
         setVolume() {

@@ -43,7 +43,6 @@ function browserSupportsPassiveScroll() {
 var bus = new Vue();
 var queryParams = parseQueryParams();
 var canUseCache = true;
-var volumeStep = 5;
 
 function parseQueryParams() {
     var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
@@ -531,7 +530,7 @@ function setBgndCover(elem, coverUrl) {
 }
 
 function adjustVolume(vol, inc) {
-    if (1==volumeStep) {
+    if (1==lmsOptions.volumeStep) {
         if (inc) {
             return vol+1;
         } else if (0==vol) {
@@ -544,19 +543,19 @@ function adjustVolume(vol, inc) {
     if (inc) {
         // Always send volume up, even if at 100% already. Some users trap LMS
         // volume commands and forward on
-        return Math.floor((vol+volumeStep)/volumeStep)*volumeStep;
+        return Math.floor((vol+lmsOptions.volumeStep)/lmsOptions.volumeStep)*lmsOptions.volumeStep;
     }
 
-    if (vol<=volumeStep) {
+    if (vol<=lmsOptions.volumeStep) {
         return 0;
     }
 
-    var adj = Math.floor(vol/volumeStep)*volumeStep;
-    // If rounding down to volumeStep is 2% (or more) then use that, else make even lower
+    var adj = Math.floor(vol/lmsOptions.volumeStep)*lmsOptions.volumeStep;
+    // If rounding down to lmsOptions.volumeStep is 2% (or more) then use that, else make even lower
     if ((vol-adj)>=2) {
         return adj;
     }
-    return Math.floor((vol-volumeStep)/volumeStep)*volumeStep;
+    return Math.floor((vol-lmsOptions.volumeStep)/lmsOptions.volumeStep)*lmsOptions.volumeStep;
 }
 
 function isLandscape() {

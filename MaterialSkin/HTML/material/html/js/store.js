@@ -92,10 +92,9 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('nowPlayingClock', state.nowPlayingClock);
         bus.$emit('nowPlayingClockChanged');
     }
-    // NOTE: volumeStep is defined in utils.js
-    if (undefined!=val.volumeStep && volumeStep!=val.volumeStep) {
-        volumeStep = val.volumeStep;
-        setLocalStorageVal('volumeStep', volumeStep);
+    if (undefined!=val.volumeStep && lmsOptions.volumeStep!=val.volumeStep) {
+        lmsOptions.volumeStep = val.volumeStep;
+        setLocalStorageVal('volumeStep', lmsOptions.volumeStep);
     }
     if (undefined!=val.showPlayerMenuEntry && state.showPlayerMenuEntry!=val.showPlayerMenuEntry) {
         state.showPlayerMenuEntry = val.showPlayerMenuEntry;
@@ -467,8 +466,6 @@ const store = new Vuex.Store({
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
-            // NOTE: volumeStep is defined in utils.js
-            volumeStep = parseInt(getLocalStorageVal('volumeStep', volumeStep));
             // Ensure theme is in settings, so that it can be use in classic skin mods...
             if (undefined==getLocalStorageVal('theme')) {
                 setLocalStorageVal('theme', state.theme);
@@ -579,7 +576,7 @@ const store = new Vuex.Store({
                                      queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
                                      nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
                                      nowPlayingClock: getLocalStorageBool('nowPlayingClock', undefined==prefs.nowPlayingClock ? state.nowPlayingClock : prefs.nowPlayingClock),
-                                     volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? volumeStep : prefs.volumeStep)),
+                                     volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? lmsOptions.volumeStep : prefs.volumeStep)),
                                      showPlayerMenuEntry: getLocalStorageBool('showPlayerMenuEntry', undefined==prefs.showPlayerMenuEntry ? state.showPlayerMenuEntry : prefs.showPlayerMenuEntry),
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),

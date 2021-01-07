@@ -539,8 +539,7 @@ Vue.component('lms-ui-settings', {
             this.sortHome = this.$store.state.sortHome;
             this.showMenuAudio = this.$store.state.showMenuAudio;
             this.skipSeconds = this.$store.state.skipSeconds;
-            // NOTE: volumeStep is defined in utils.js
-            this.volumeStep = volumeStep;
+            this.volumeStep = lmsOptions.volumeStep;
             this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
             this.menuIcons = this.$store.state.menuIcons;
             this.showRating = this.$store.state.showRating;

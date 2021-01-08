@@ -423,6 +423,7 @@ var lmsServer = Vue.component('lms-server', {
             // Store volume, so that it can be accessed in 'adjustVolume' handler
             if (isCurrent) {
                 this.volume = player.volume;
+                this.dvc = player.dvc;
             }
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
                                 repeat: parseInt(data["playlist repeat"]),
@@ -696,18 +697,16 @@ var lmsServer = Vue.component('lms-server', {
                 }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
             }.bind(this), 500);
         },
-        adjustVolume(inc, steps) {
-            if (this.$store.state.player) {
-                if (undefined==steps) {
-                    steps = 1;
+        adjustVolume(inc) {
+            if (this.$store.state.player && undefined!=this.volume) {
+                if (undefined!=this.dvc && !this.dvc) {
+                    lmsCommand(this.$store.state.player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]);
+                } else {
+                    var val = adjustVolume(this.volume, inc);
+                    lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
+                        this.updateCurrentPlayer();
+                    });
                 }
-                var val = this.volume;
-                for (var i=0; i<steps; ++i) {
-                    val = adjustVolume(val, inc);
-                }
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
-                    this.updateCurrentPlayer();
-                });
             }
         }
     },
@@ -788,8 +787,8 @@ var lmsServer = Vue.component('lms-server', {
                 this.updateCurrentPlayer();
             });
         }.bind(this));
-        bus.$on('adjustVolume', function(inc, steps) {
-            this.adjustVolume(inc, steps);
+        bus.$on('adjustVolume', function(inc) {
+            this.adjustVolume(inc);
         }.bind(this));
         bus.$on('subscribeAll', function(all) {
             if (all==this.subscribeAll) {

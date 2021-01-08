@@ -25,6 +25,8 @@
 14. Increase minimum desktop layout width to 750px for volume slider.
 15. Fix layout of volume-dialog when used in desktop layout.
 16. Don't show "100%" label if fixed volume.
+17. Add server-side setting to control whether 'Fixed volume', and disabled
+    slider, is used for fixed volume players.
 
 2.1.3
 -----

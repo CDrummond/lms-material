@@ -93,3 +93,9 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	EN	Set a password to control access to alarms and server settings.
 	FR	Définir un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.
 	NL	Stel een wachtwoord in om de toegang tot wekkers en serverinstellingen te regelen.
+
+PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL
+	EN	Support fixed volume
+
+PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL_DESC
+	EN	Show 'Fixed volume', and disable volume slider, for players with fixed volume

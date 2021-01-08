@@ -119,11 +119,15 @@ var app = new Vue({
                             setLocalStorageVal(tags[t]+"genres", data.result[tags[t]+'genres']);
                         }
                     }
-                    if (undefined!=data.result['show'+tags[t]]) {
-                        var optName = 'show'+tags[t].charAt(0).toUpperCase()+tags[t].slice(1);
-                        lmsOptions[optName] = 1 == parseInt(data.result['show'+tags[t]]);
+                    var optName = 'show'+tags[t].charAt(0).toUpperCase()+tags[t].slice(1);
+                    if (undefined!=data.result[optName]) {
+                        lmsOptions[optName] = 1 == parseInt(optName);
                         setLocalStorageVal(optName, lmsOptions[optName]);
                     }
+                }
+                if (undefined!=data.result['respectFixedVol']) {
+                    lmsOptions.respectFixedVol = 1 == parseInt(data.result['respectFixedVol']);
+                    setLocalStorageVal('respectFixedVol', lmsOptions.respectFixedVol);
                 }
             }
         });

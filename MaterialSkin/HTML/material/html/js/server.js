@@ -393,7 +393,8 @@ var lmsServer = Vue.component('lms-server', {
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
-                           dvc: 1==parseInt(data.digital_volume_control),
+                           // If 'respectFixedVol' is false, then we treat fixed-volume players as normal - and enable all volume controls.
+                           dvc: !lmsOptions.respectFixedVol || 1==parseInt(data.digital_volume_control),
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                            current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,
@@ -502,6 +503,9 @@ var lmsServer = Vue.component('lms-server', {
                     if (genres.length>0) {
                         lmsOptions.bandGenres = new Set(genres);
                     }
+                } else if (undefined!=data[2] && null!=data[2] && undefined!=lmsOptions[data[2]]) {
+                    lmsOptions[data[2]] = 1 == parseInt(data[3]);
+                    setLocalStorageVal(data[2], lmsOptions[data[2]]);
                 }
             }
         },

@@ -4,6 +4,10 @@
         <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL_DESC" %]
+        <input type="checkbox" [% IF prefs.pref_respectFixedVol %]checked [% END %] class="stdedit" name="pref_respectFixedVol" value="1"/>
+    [% END %]
+
     <br/><hr class="main-sep"/><br/>
     [% WRAPPER setting title="" desc="" %]
     <div><i>[% "PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE" | string %]</i></div>
@@ -14,7 +18,7 @@
         <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="7">[% prefs.composergenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_showcomposer %]checked [% END %] class="stdedit" name="pref_showcomposer" value="1"/>
+        <input type="checkbox" [% IF prefs.pref_showComposer %]checked [% END %] class="stdedit" name="pref_showComposer" value="1"/>
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/><br/>
 
@@ -23,7 +27,7 @@
         <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="7">[% prefs.conductorgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_showconductor %]checked [% END %] class="stdedit" name="pref_showconductor" value="1"/>
+        <input type="checkbox" [% IF prefs.pref_showConductor %]checked [% END %] class="stdedit" name="pref_showConductor" value="1"/>
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/><br/>
 
@@ -31,7 +35,7 @@
         <textarea class="stdedit" name="pref_bandgenres" id="bandgenres" cols="45" rows="7">[% prefs.bandgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_showband %]checked [% END %] class="stdedit" name="pref_showband" value="1"/>
+        <input type="checkbox" [% IF prefs.pref_showBand %]checked [% END %] class="stdedit" name="pref_showBand" value="1"/>
     [% END %]
 
 [% PROCESS settings/footer.html %]

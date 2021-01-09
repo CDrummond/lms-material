@@ -421,11 +421,6 @@ var lmsServer = Vue.component('lms-server', {
 
             player.volume = !player.dvc ? 100 : undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
 
-            // Store volume, so that it can be accessed in 'adjustVolume' handler
-            if (isCurrent) {
-                this.volume = player.volume;
-                this.dvc = player.dvc;
-            }
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
                                 repeat: parseInt(data["playlist repeat"]),
                                 duration: undefined==data["playlist duration"] ? undefined : parseFloat(data["playlist duration"]),
@@ -702,15 +697,10 @@ var lmsServer = Vue.component('lms-server', {
             }.bind(this), 500);
         },
         adjustVolume(inc) {
-            if (this.$store.state.player && undefined!=this.volume) {
-                if (undefined!=this.dvc && !this.dvc) {
-                    lmsCommand(this.$store.state.player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]);
-                } else {
-                    var val = adjustVolume(this.volume, inc);
-                    lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
-                        this.updateCurrentPlayer();
-                    });
-                }
+            if (this.$store.state.player) {
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
+                    this.updateCurrentPlayer();
+                });
             }
         }
     },

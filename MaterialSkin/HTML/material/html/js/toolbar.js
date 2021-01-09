@@ -512,26 +512,16 @@ Vue.component('lms-toolbar', {
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer || undefined==el || undefined==el.id) {
                 return;
             }
-            if (this.playerDvc) {
-                if (toggleMute) {
-                    bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
-                } else if ("vol-up-btn"==el.id) {
-                    bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), true)]);
-                } else if ("vol-down-btn"==el.id) {
-                    bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), false)]);
-                } else if ("vol-btn"==el.id) {
-                    if (this.playerMuted) {
-                        bus.$emit('playerCommand', ['mixer', 'muting', 0]);
-                    } else {
-                        bus.$emit('dlg.open', 'volume');
-                    }
-                }
-            } else {
-                if ("vol-up-btn"==el.id) {
-                    bus.$emit('playerCommand', ["mixer", "volume", "+"+lmsOptions.volumeStep]);
-                } else if ("vol-down-btn"==el.id) {
-                    bus.$emit('playerCommand', ["mixer", "volume", "-"+lmsOptions.volumeStep]);
-                } else if ("vol-btn"==el.id) {
+            if (toggleMute && this.playerDvc) {
+                bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
+            } else if ("vol-up-btn"==el.id) {
+                bus.$emit('playerCommand', ["mixer", "volume", "+"+lmsOptions.volumeStep]);
+            } else if ("vol-down-btn"==el.id) {
+                bus.$emit('playerCommand', ["mixer", "volume", "-"+lmsOptions.volumeStep]);
+            } else if ("vol-btn"==el.id) {
+                if (this.playerMuted) {
+                    bus.$emit('playerCommand', ['mixer', 'muting', 0]);
+                } else {
                     bus.$emit('dlg.open', 'volume');
                 }
             }
@@ -547,9 +537,9 @@ Vue.component('lms-toolbar', {
         },
         volWheel(event) {
             if (event.deltaY<0) {
-                bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), true)]);
+                bus.$emit('playerCommand', ["mixer", "volume", "+"+lmsOptions.volumeStep]);
             } else if (event.deltaY>0) {
-                bus.$emit('playerCommand', ["mixer", "volume", adjustVolume(Math.abs(this.playerVolume), false)]);
+                bus.$emit('playerCommand', ["mixer", "volume", "-"+lmsOptions.volumeStep]);
             }
         },
         playPauseButton(long) {

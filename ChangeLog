@@ -19,8 +19,7 @@
 10. Remove IE11 meta tag, doesn't work.
 11. Don't defer loading volume overlay and screensaver javascript files,
     otherwise they do not work until change page.
-12. If 'Fixed volume' then send +/- volume-step when up/down volume button
-    pressed.
+12. Always send +/- volume-step when up/down volume button pressed.
 13. If desktop layout is showing a single volume button, use mobile style.
 14. Increase minimum desktop layout width to 750px for volume slider.
 15. Fix layout of volume-dialog when used in desktop layout.

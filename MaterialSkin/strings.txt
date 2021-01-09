@@ -96,6 +96,8 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 
 PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL
 	EN	Support fixed volume
+	FR	Gestion des platines à volume fixe
 
 PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL_DESC
 	EN	Disable volume slider, and hide volume level, for players with fixed volume.
+	FR	Désactiver le curseur de volume et masquer le niveau de volume pour les platines à volume fixe.

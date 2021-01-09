@@ -625,6 +625,7 @@ div.v-subheader {
 .vol-sheet .vol-text {
  font-size:var(--small-font-size);
  color:var(--text-color);
+ min-height:var(--small-font-size)!important;
 }
 
 .vol-sheet .vol-slider {

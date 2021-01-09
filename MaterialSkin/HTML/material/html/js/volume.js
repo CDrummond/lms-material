@@ -11,7 +11,7 @@ Vue.component('lms-volume', {
 <v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet">
  <v-container grid-list-md text-xs-center>
   <v-layout row wrap>
-   <v-flex xs12 class="vol-text">{{playerVolume|displayVolume(dvc)}}</v-flex>
+   <v-flex xs12><p class="vol-text">{{playerVolume|displayVolume(dvc)}}</p></v-flex>
    <v-flex xs12>
     <v-layout>
      <v-btn flat icon @wheel="volWheel($event)" @click.stop="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
@@ -181,10 +181,7 @@ Vue.component('lms-volume', {
     },
     filters: {
         displayVolume: function (value, dvc) {
-            if (!dvc) {
-                return i18n("Fixed Volume");
-            }
-            return value+'%';
+            return dvc ? value+'%' : '';
         },
     }
 })

@@ -80,10 +80,10 @@ sub initPlugin {
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
         bandgenres => $DEFAULT_BAND_GENRES,
-        showComposer => 1,
-        showConductor => 0,
-        showBand => 0,
-        respectFixedVol => 1,
+        showComposer => '1',
+        showConductor => '0',
+        showBand => '0',
+        respectFixedVol => '1',
         password => ''
     });
 

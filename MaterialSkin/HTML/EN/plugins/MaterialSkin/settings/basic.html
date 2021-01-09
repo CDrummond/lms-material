@@ -5,7 +5,10 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_respectFixedVol %]checked [% END %] class="stdedit" name="pref_respectFixedVol" value="1"/>
+        <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
+            <option [% IF NOT prefs.respectFixedVol %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.respectFixedVol %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
     [% END %]
 
     <br/><hr class="main-sep"/><br/>
@@ -18,7 +21,10 @@
         <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="7">[% prefs.composergenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_showComposer %]checked [% END %] class="stdedit" name="pref_showComposer" value="1"/>
+        <select class="stdedit" name="pref_showComposer" id="showComposer">
+            <option [% IF NOT prefs.showComposer %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.showComposer %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/><br/>
 
@@ -27,7 +33,10 @@
         <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="7">[% prefs.conductorgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_showConductor %]checked [% END %] class="stdedit" name="pref_showConductor" value="1"/>
+        <select class="stdedit" name="pref_showConductor" id="showConductor">
+            <option [% IF NOT prefs.showConductor %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.showConductor %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/><br/>
 
@@ -35,7 +44,10 @@
         <textarea class="stdedit" name="pref_bandgenres" id="bandgenres" cols="45" rows="7">[% prefs.bandgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC" %]
-        <input type="checkbox" [% IF prefs.pref_showBand %]checked [% END %] class="stdedit" name="pref_showBand" value="1"/>
+        <select class="stdedit" name="pref_showBand" id="showBand">
+            <option [% IF NOT prefs.showBand %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.showBand %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
     [% END %]
 
 [% PROCESS settings/footer.html %]

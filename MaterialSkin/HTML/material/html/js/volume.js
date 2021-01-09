@@ -181,7 +181,7 @@ Vue.component('lms-volume', {
     },
     filters: {
         displayVolume: function (value, dvc) {
-            return (dvc ? value : '100') +'%';
+            return dvc ? value+'%' : '';
         },
     }
 })

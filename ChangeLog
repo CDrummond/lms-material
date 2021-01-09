@@ -25,7 +25,8 @@
 15. Fix layout of volume-dialog when used in desktop layout.
 16. Add server-side setting to control whether 'Fixed volume', and disabled
     slider, is used for fixed volume players.
-17. Remove 'Fixed volume' label, just disable slider for fixed volume players.
+17. Remove 'Fixed volume' label, disable slider and hide value for fixed volume
+    players.
 
 2.1.3
 -----

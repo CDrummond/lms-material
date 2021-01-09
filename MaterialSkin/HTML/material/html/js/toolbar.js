@@ -201,6 +201,7 @@ Vue.component('lms-toolbar', {
                  snackbar:{ show: false, msg: undefined},
                  connected: true,
                  width: 100,
+                 height: 300,
                  updateProgress: {show:false, text:undefined},
                  showMiniLauncherButton: !queryParams.hide.has('mini'),
                  date: undefined,
@@ -213,11 +214,14 @@ Vue.component('lms-toolbar', {
     mounted() {
         setTimeout(function () {
             this.width = Math.floor(window.innerWidth/50)*50;
+            this.height = Math.floor(window.innerHeight/50)*50;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
             this.width = Math.floor(window.innerWidth/50)*50;
         }.bind(this));
-
+        bus.$on('windowHeightChanged', function() {
+            this.height = Math.floor(window.innerHeight/50)*50;
+        }.bind(this));
         bus.$on('settingsMenuActions', function(actions, page) {
             this.otherMenuItems[page]=[];
             for (var i=0, len=actions.length; i<len; ++i) {
@@ -710,7 +714,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.showQueue
         },
         showVolumeSlider() {
-            return this.width>=(this.$store.state.desktopLayout ? 750 : (this.$store.state.nowPlayingClock ? 1300 : 850))
+            return this.width>=(this.$store.state.desktopLayout ? (this.height>=200 ? 750 : 600) : (this.$store.state.nowPlayingClock ? 1300 : 850))
         },
         showUpdateProgress() {
             return (!this.$store.state.nowPlayingClock || (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : (this.$store.state.page != 'now-playing'))) && this.width>=1050

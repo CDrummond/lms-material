@@ -1271,7 +1271,7 @@ function browseMyMusicMenu(view) {
                         item.icon = "album";
                         item.cancache = true;
                     } else if (c.id.startsWith("myMusicGenres")) {
-                        item.svg = "treble-clef";
+                        item.svg = "guitar-acoustic";
                         item.icon = undefined;
                         item.cancache = true;
                         item.id = GENRES_ID;
@@ -1304,7 +1304,7 @@ function browseMyMusicMenu(view) {
                             item.svg = "artist";
                             item.icon = undefined;
                         } else if (c.icon.endsWith("/genres.png")) {
-                            item.svg = "treble-clef";
+                            item.svg = "guitar-acoustic";
                             item.icon = undefined;
                         }
                     }
@@ -1366,7 +1366,7 @@ function browseMyMusicMenu(view) {
                                             item.svg = "artist";
                                             item.icon = undefined;
                                         } else if (c.id.startsWith("genre")) {
-                                            item.svg = "treble-clef";
+                                            item.svg = "guitar-acoustic";
                                             item.icon = undefined;
                                         } else {
                                             item.icon = c.id.startsWith("new") ? "new_releases" :
@@ -1384,7 +1384,7 @@ function browseMyMusicMenu(view) {
                                             item.svg = "artist";
                                             item.icon = undefined;
                                         } else if (c.icon.endsWith("/genres.png")) {
-                                            item.svg = "treble-clef";
+                                            item.svg = "guitar-acoustic";
                                             item.icon = undefined;
                                         }
                                     }

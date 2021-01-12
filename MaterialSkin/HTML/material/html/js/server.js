@@ -393,7 +393,8 @@ var lmsServer = Vue.component('lms-server', {
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
-                           dvc: 1==parseInt(data.digital_volume_control),
+                           // If 'respectFixedVol' is false, then we treat fixed-volume players as normal - and enable all volume controls.
+                           dvc: !lmsOptions.respectFixedVol || 1==parseInt(data.digital_volume_control),
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                            current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,
@@ -420,10 +421,6 @@ var lmsServer = Vue.component('lms-server', {
 
             player.volume = !player.dvc ? 100 : undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
 
-            // Store volume, so that it can be accessed in 'adjustVolume' handler
-            if (isCurrent) {
-                this.volume = player.volume;
-            }
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
                                 repeat: parseInt(data["playlist repeat"]),
                                 duration: undefined==data["playlist duration"] ? undefined : parseFloat(data["playlist duration"]),
@@ -501,6 +498,9 @@ var lmsServer = Vue.component('lms-server', {
                     if (genres.length>0) {
                         lmsOptions.bandGenres = new Set(genres);
                     }
+                } else if (undefined!=data[2] && null!=data[2] && undefined!=lmsOptions[data[2]]) {
+                    lmsOptions[data[2]] = 1 == parseInt(data[3]);
+                    setLocalStorageVal(data[2], lmsOptions[data[2]]);
                 }
             }
         },
@@ -696,16 +696,9 @@ var lmsServer = Vue.component('lms-server', {
                 }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
             }.bind(this), 500);
         },
-        adjustVolume(inc, steps) {
+        adjustVolume(inc) {
             if (this.$store.state.player) {
-                if (undefined==steps) {
-                    steps = 1;
-                }
-                var val = this.volume;
-                for (var i=0; i<steps; ++i) {
-                    val = adjustVolume(val, inc);
-                }
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", val]).then(({data}) => {
+                lmsCommand(this.$store.state.player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
                     this.updateCurrentPlayer();
                 });
             }
@@ -788,8 +781,8 @@ var lmsServer = Vue.component('lms-server', {
                 this.updateCurrentPlayer();
             });
         }.bind(this));
-        bus.$on('adjustVolume', function(inc, steps) {
-            this.adjustVolume(inc, steps);
+        bus.$on('adjustVolume', function(inc) {
+            this.adjustVolume(inc);
         }.bind(this));
         bus.$on('subscribeAll', function(all) {
             if (all==this.subscribeAll) {

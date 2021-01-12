@@ -31,7 +31,7 @@ Vue.component('lms-volumeoverlay', {
                 }
             }.bind(this));
         }
-        bus.$on('adjustVolume', function(inc, steps) {
+        bus.$on('adjustVolume', function(inc) {
             this.startTimeout();
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {

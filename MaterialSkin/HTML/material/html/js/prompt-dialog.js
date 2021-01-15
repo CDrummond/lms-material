@@ -17,8 +17,9 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(false)">{{negativeButton}}</v-btn>
-   <v-btn flat @click.native="close(true)">{{positiveButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
+   <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>`,
@@ -30,11 +31,12 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             hint:undefined,
             positiveButton:undefined,
             negativeButton:undefined,
+            otherButton:undefined,
             type:'confirm'
         }
     },
     mounted() {
-        bus.$on('prompt.open', function(type, title, text, hint, positiveButton, negativeButton) {
+        bus.$on('prompt.open', function(type, title, text, hint, positiveButton, negativeButton, otherButton) {
             this.text = text ? text : "";
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
@@ -42,6 +44,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             this.hint = hint;
             this.positiveButton = undefined==positiveButton ? i18n('OK') : positiveButton;
             this.negativeButton = undefined==negativeButton ? i18n('Cancel') : negativeButton;
+            this.otherButton = otherButton;
             this.show = true;
             if ('confirm'!=type) {
                 focusEntry(this);
@@ -66,9 +69,9 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
     }
 });
 
-function confirm(text, positiveButton, negativeButton) {
+function confirm(text, positiveButton, negativeButton, otherButton) {
     return new Promise(function(response) {
-        bus.$emit('dlg.open', 'prompt', 'confirm', undefined, text, undefined, positiveButton, negativeButton);
+        bus.$emit('dlg.open', 'prompt', 'confirm', undefined, text, undefined, positiveButton, negativeButton, otherButton);
         bus.$once('prompt.resp', function(resp) {
             response(resp);
         });

@@ -531,15 +531,15 @@ function browseItemAction(view, act, item, index, event) {
         if (RANDOM_MIX_ID!=item.id && undefined!=view.current && view.current.id==TOP_MYMUSIC_ID && view.libraryName && item.params) {
             confirm(i18n("Store current library with pinned item?")+
                     addNote(i18n("If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.")),
-                    i18n("With Library"), i18n("Without Library")).then(res => {
-                if (res) {
+                    i18n("With"), undefined, i18n("Without")).then(res => {
+                if (1==res) {
                     var libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY
                     var copy = JSON.parse(JSON.stringify(item));
                     copy.id=libId+"::"+item.id;
                     copy.title=item.title+SEPARATOR+view.libraryName;
                     copy.params.push("library_id:"+libId);
                     view.pin(copy, true);
-                } else {
+                } else if (2==res) {
                     view.pin(item, true);
                 }
             });

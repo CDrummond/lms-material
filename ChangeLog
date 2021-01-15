@@ -28,6 +28,8 @@
 17. Remove 'Fixed volume' label, disable slider and hide value for fixed volume
     players.
 18. Use acoustic guitar for genres icon.
+19. When pinnnig a 'My Music' item prompt user if we should store the library_id
+    with this.
 
 2.1.3
 -----

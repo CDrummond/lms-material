@@ -30,6 +30,9 @@
 18. Use acoustic guitar for genres icon.
 19. When pinnnig a 'My Music' item prompt user if we should store the library_id
     with this.
+20. Add option to control whether all artists, album-artists, composers, etc.
+    are show when browsing albums, and (requires LMS 8.2) in now-playing and
+    queue.
 
 2.1.3
 -----

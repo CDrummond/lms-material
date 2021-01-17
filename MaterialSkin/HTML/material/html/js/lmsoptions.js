@@ -23,4 +23,5 @@ var lmsOptions = {newMusicLimit: 100,
                   showComposer: getLocalStorageBool('showComposer', true),
                   showBand: getLocalStorageBool('showBand', true),
                   volumeStep: parseInt(getLocalStorageVal('volumeStep', 5)),
-                  respectFixedVol: getLocalStorageBool('respectFixedVol', true)};
+                  respectFixedVol: getLocalStorageBool('respectFixedVol', true),
+                  showAllArtists: getLocalStorageBool('showAllArtists', true)};

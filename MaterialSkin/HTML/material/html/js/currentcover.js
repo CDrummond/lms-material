@@ -37,7 +37,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 }
                 if (undefined==coverUrl && this.$store.state.infoPlugin) {
                     if (playerStatus.current.artist_ids) {
-                        coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_ids.split(",")[0].trim() + "/image" + LMS_CURRENT_IMAGE_SIZE;
+                        coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE;
                     } else if (playerStatus.current.artist_id) {
                         coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_id + "/image" + LMS_CURRENT_IMAGE_SIZE;
                     }

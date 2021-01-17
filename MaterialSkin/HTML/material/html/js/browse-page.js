@@ -626,7 +626,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         doTextClick(item, isMoreMenu) {
             var command = this.buildCommand(item);
-            if (command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1] || "jiveplaylistparameters"==command.command[1])) {
+            if ((command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1] || "jiveplaylistparameters"==command.command[1])) ||
+                (command.command.length==1 && "albums"==command.command[0])) {
                 this.fetchingItems = true;
                 lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, undefined, this.nextReqId()).then(({data}) => {
                     if (this.isCurrentReq(data)) {
@@ -756,8 +757,17 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (IS_MOBILE && this.grid.use) {
                 this.itemMenu(item, index, event);
             } else if (!IS_MOBILE && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
-                this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
-                                {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
+                if (undefined!=item.artist_ids && item.artist_ids.length>1) {
+                    var entries = [];
+                    console.log(item.artist_ids, item.artist_ids.length);
+                    for (var i=0, len=item.artist_ids.length; i<len; ++i) {
+                        entries.push({id:"artist_id:"+item.artist_ids[i], title:item.artists[i], stdItem:STD_ITEM_ARTIST});
+                    }
+                    showMenu(this, {show:true, x:event.clientX, y:event.clientY, item:{moremenu:entries}});
+                } else {
+                    this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
+                                    {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
+                }
             } else {
                 this.click(item, index, event);
             }

@@ -87,6 +87,7 @@ const GENRES_ID = MUSIC_ID_PREFIX+"genres";
 const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlsyKS";
+const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlsyKSS";
 const ARTIST_ALBUM_TAGS = "tags:jlsyK";
 const TRACK_TAGS = "tags:distuAC";
 const PLAYLIST_TAGS = "tags:sux";
@@ -101,3 +102,6 @@ const SECTION_PODCASTS = 5; // Not a real 'section' but used to indicate when to
 const SECTION_NEWMUSIC = 6; // Not a real 'section' but used to indicate when to refresh...
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
+
+const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
+const MULTI_SPLIT_REGEX = new RegExp(/(?<!\s),(?!\s)/);

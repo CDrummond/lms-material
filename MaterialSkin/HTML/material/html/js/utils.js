@@ -1085,3 +1085,27 @@ function useConductor(genre) {
 function useBand(genre) {
     return useArtistTagType(genre, lmsOptions.bandGenres);
 }
+
+function splitMultiples(item) {
+    for (var i=0, len=ARTIST_TYPES.length; i<len; ++i) {
+        if (undefined!=item[ARTIST_TYPES[i]]) {
+            let idsKey = ARTIST_TYPES[i]+"_ids";
+            if (undefined!=item[idsKey]) {
+                // Split (e.g.) artist_ids so we have artist_id=first and artist_ids=all, lkewise for artist
+                let ids = item[idsKey].replaceAll(" ", "").split(",");
+                let values = item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX);
+
+                if (ids.length>1 && ids.length==values.length) {
+                    item[ARTIST_TYPES[i]+"_id"]=ids[0];
+                    item[idsKey] = lmsOptions.showAllArtists ? ids : undefined;
+
+                    item[ARTIST_TYPES[i]] = values[0];
+                    if (lmsOptions.showAllArtists) {
+                        item[ARTIST_TYPES[i]+"s"] = values;
+                    }
+                }
+            }
+        }
+    }
+}
+

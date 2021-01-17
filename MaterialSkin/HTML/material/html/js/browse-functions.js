@@ -1560,7 +1560,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
                                            .replace(TERM_PLACEHOLDER, view.enteredTerm)
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
-                                           .replace(ALBUM_TAGS_PLACEHOLDER, ALBUM_TAGS)
+                                           .replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS))
                                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                 if (cmd.params[i].startsWith("tags:")) {

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtyAKNS" : "tags:cdegilqtysAKNS";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtyAAKNSxx" : "tags:cdegilqtysAAKNSxx";
 
 function queueItemCover(item, infoPlugin) {
     if (item.artwork_url) {
@@ -60,16 +60,20 @@ function animate(elem, from, to) {
 
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
-function showArtist(id, title, isAlbumArtist) {
+function showArtist(id, title) {
     if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
-    var params = ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER];
-    if (isAlbumArtist) {
-        params.push("role_id:ALBUMARTIST");
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), 'queue');
+}
+
+function showAlbumArtist(id, title) {
+    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+        return;
     }
-    bus.$emit("browse", ["albums"], params, unescape(title), 'queue');
+    lastQueueItemClick = new Date();
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), 'queue');
 }
 
 function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
@@ -85,7 +89,7 @@ function showComposer(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), 'queue');
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), 'queue');
 }
 
 function showConductor(id, title) {
@@ -93,7 +97,7 @@ function showConductor(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), 'queue');
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), 'queue');
 }
 
 function showBand(id, title) {
@@ -101,72 +105,53 @@ function showBand(id, title) {
         return;
     }
     lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), 'queue');
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), 'queue');
 }
 
-function getId(item, idType) {
-    if (undefined!=item[idType]) {
-        return item[idType];
-    }
-    let plural = idType+"s";
-    if (undefined!=item[plural]) {
-        let ids = item[plural].split(",");
-        if (ids.length==1) {
-            return ids[0];
+function addArtistLink(item, subtitle, type, func) {
+    if (lmsOptions.showAllArtists && undefined!=item[type+"s"] && item[type+"s"].length>1) {
+        if (!IS_MOBILE && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
+            let vals = [];
+            for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
+                vals.push("<obj class=\"link-item\" onclick=\""+func+" ("+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\')\">" + loop[i] + "</obj>");
+            }
+            subtitle=addPart(subtitle, vals.join(", "));
+        } else {
+            subtitle=addPart(subtitle, item[type+"s"].join(", "));
+        }
+    } else {
+        let val = item[type];
+        if (undefined!=val) {
+            let id = IS_MOBILE ? undefined : item[type+"_id"];
+            if (undefined!=id) {
+                subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\""+func+" ("+id+",\'"+escape(val)+"\')\">" + val + "</obj>");
+            } else {
+                subtitle=addPart(subtitle, val);
+            }
         }
     }
-    return undefined;
+    return subtitle;
 }
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
 
     if (i.artist) {
-        let id = IS_MOBILE ? undefined : getId(i, 'artist_id');
-        if (!IS_MOBILE && undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.artist)+"\')\">" + i.artist + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.artist);
-        }
+        subtitle=addArtistLink(i, subtitle, "artist", "showArtist");
     } else if (i.trackartist) {
-        let id = IS_MOBILE ? undefined : getId(i, 'trackartist_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.trackartist)+"\')\">" + i.trackartist + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.trackartist);
-        }
+        subtitle=addArtistLink(i, subtitle, "trackartist", "showArtist");
     } else if (i.albumartist) {
-        let id = IS_MOBILE ? undefined : getId(i, 'albumartist_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showArtist("+id+",\'"+escape(i.albumartist)+"\',true)\">" + i.albumartist + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.albumartist);
-        }
+        subtitle=addArtistLink(i, subtitle, "albumartist", "showAlbumArtist");
     }
 
     if (i.band && i.band!=i.artist && lmsOptions.showBand && useBand(i.genre)) {
-        let id = IS_MOBILE ? undefined : getId(i, 'band_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showBand("+id+",\'"+escape(i.band)+"\')\">" + i.band + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.band);
-        }
+        subtitle=addArtistLink(i, subtitle, "band", "showBand");
     }
     if (i.composer && i.composer!=i.artist && lmsOptions.showComposer && useComposer(i.genre)) {
-        let id = IS_MOBILE ? undefined : getId(i, 'composer_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showComposer("+id+",\'"+escape(i.composer)+"\')\">" + i.composer + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.composer);
-        }
+        subtitle=addArtistLink(i, subtitle, "composer", "showComposer");
     }
     if (i.conductor && i.conductor!=i.artist && lmsOptions.showConductor && useConductor(i.genre)) {
-        let id = IS_MOBILE ? undefined : getId(i, 'conductor_id');
-        if (undefined!=id) {
-            subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\"showConductor("+id+",\'"+escape(i.conductor)+"\')\">" + i.conductor + "</obj>");
-        } else {
-            subtitle=addPart(subtitle, i.conductor);
-        }
+        subtitle=addArtistLink(i, subtitle, "conductor", "showConductor");
     }
 
     var lines = [];
@@ -204,6 +189,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
         if (data.result.playlist_loop) {
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
+                splitMultiples(i);
                 let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;

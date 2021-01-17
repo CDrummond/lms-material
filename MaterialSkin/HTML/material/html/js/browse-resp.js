@@ -598,11 +598,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }
 
+                var artist = undefined;
+                var artists = undefined;
+                if (lmsOptions.showAllArtists && i.artists) {
+                    artists = i.artists.split(MULTI_SPLIT_REGEX);
+                    artist = artists.join(", ");
+                } else {
+                    artist = i.artist;
+                }
                 var album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
+                              artist_ids: undefined==i.artist_ids ? undefined : i.artist_ids.split(","),
+                              artists: artists,
                               title: title,
-                              subtitle: i.artist ? i.artist : undefined,
+                              subtitle: artist,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : ("/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE),

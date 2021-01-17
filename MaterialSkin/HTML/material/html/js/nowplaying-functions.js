@@ -43,6 +43,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.dvc = playerStatus.dvc;
     }
     var artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
+    var artists = playerStatus.current.trackartists ? playerStatus.current.trackartists : playerStatus.current.artists;
     var artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;
     var artist_ids = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids : playerStatus.current.artist_ids;
     if (view.playerStatus.current.artist!=artist ||
@@ -81,19 +82,19 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.rating.value = rv;
         trackChanged = true;
     }
-    var artistAndComposer = view.playerStatus.current.artist;
+    var artistAndComposer = lmsOptions.showAllArtists && undefined!=artists ? artists.join(", ") : artists;
     var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
     var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
     var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
     if (useBandTag && playerStatus.current.band!=view.playerStatus.current.artist && playerStatus.current.band!=view.playerStatus.current.composer) {
-        artistAndComposer = addPart(artistAndComposer, playerStatus.current.band);
+        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.bands ? playerStatus.current.bands.join(", ") : playerStatus.current.bands);
     }
     if (useComposerTag && playerStatus.current.composer!=view.playerStatus.current.artist) {
-        artistAndComposer = addPart(artistAndComposer, playerStatus.current.composer);
+        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.composers ? playerStatus.current.composers.join(", ") : playerStatus.current.composers);
     }
     if (useConductorTag && playerStatus.current.conductor!=view.playerStatus.current.artist) {
-        artistAndComposer = addPart(artistAndComposer, playerStatus.current.conductor);
+        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.conductors ? playerStatus.current.conductors.join(", ") : playerStatus.current.conductors);
     }
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;
@@ -105,7 +106,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
                         ? playerStatus.current.composer_id
                             ? playerStatus.current.composer_id
                             : playerStatus.current.composer_ids
-                                ? playerStatus.current.composer_ids.split(",")[0]
+                                ? playerStatus.current.composer_ids[0]
                                 : undefined
                         : undefined;
     if (composer_id!=view.playerStatus.current.composer_id) {
@@ -115,7 +116,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
                         ? playerStatus.current.conductor_id
                             ? playerStatus.current.conductor_id
                             : playerStatus.current.conductor_ids
-                                ? playerStatus.current.conductor_ids.split(",")[0]
+                                ? playerStatus.current.conductor_ids[0]
                                 : undefined
                         : undefined;
     if (composer_id!=view.playerStatus.current.composer_id) {
@@ -125,7 +126,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
                         ? playerStatus.current.band_id
                             ? playerStatus.current.band_id
                             : playerStatus.current.band_ids
-                                ? playerStatus.current.band_ids.split(",")[0]
+                                ? playerStatus.current.band_ids[0]
                                 : undefined
                         : undefined;
     if (band_id!=view.playerStatus.current.band_id) {
@@ -214,13 +215,13 @@ function nowplayingShowMenu(view, event) {
                              {title:i18n("Show track information"), svg:"more", act:NP_INFO_ACT}];
 
             let artist_id = view.playerStatus.current.artist_ids
-                        ? view.playerStatus.current.artist_ids.split(",")[0].trim()
+                        ? view.playerStatus.current.artist_ids[0]
                         : view.playerStatus.current.artist_id;
             if (artist_id && view.playerStatus.current.artist && view.playerStatus.current.artist!="?") {
                 view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:view.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
             } else {
                 let albumartist_id = view.playerStatus.current.albumartist_ids
-                            ? view.playerStatus.current.albumartist_ids.split(",")[0].trim()
+                            ? view.playerStatus.current.albumartist_ids[0]
                             : view.playerStatus.current.albumartist_id;
                 if (albumartist_id && view.playerStatus.current.albumartist && view.playerStatus.current.albumartist!="?") {
                     view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});

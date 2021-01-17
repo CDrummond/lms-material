@@ -591,7 +591,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                              track_id: this.playerStatus.current.id,
                              artist: this.playerStatus.current.artist,
                              artist_id: this.playerStatus.current.artist_ids
-                                ? this.playerStatus.current.artist_ids.split(",")[0].trim()
+                                ? this.playerStatus.current.artist_ids[0]
                                 : this.playerStatus.current.artist_id,
                              artist_ids: this.playerStatus.current.artist_ids,
                              albumartist: this.playerStatus.current.albumartist,

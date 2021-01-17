@@ -132,6 +132,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="showAllArtists = !showAllArtists" class="switch-label">
+      <v-list-tile-title>{{i18n('Show all artists')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="showAllArtists"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="showArtwork = !showArtwork" class="switch-label">
       <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
@@ -375,6 +384,7 @@ Vue.component('lms-ui-settings', {
             keyboardControl:true,
             queueThreeLines:false,
             showArtwork:false,
+            showAllArtists:true,
             layout: null,
             layoutItems: [],
             volumeSteps: [ { value: 1,  label: "1%"},
@@ -491,6 +501,7 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+            this.showAllArtists = lmsOptions.showAllArtists;
             this.show = true;
         }.bind(this));
         bus.$on('esc', function() {
@@ -600,7 +611,7 @@ Vue.component('lms-ui-settings', {
                                                   swipeVolume:this.swipeVolume,
                                                   keyboardControl:this.keyboardControl,
                                                   queueThreeLines:this.queueThreeLines,
-                                                  showArtwork:this.showArtwork,
+                                                  showAllArtists:this.showAllArtists,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,
                                                   menuIcons:this.menuIcons,
@@ -612,6 +623,11 @@ Vue.component('lms-ui-settings', {
                                                   showRating:this.showRating
                                                 } );
 
+            if (lmsOptions.showAllArtists!=this.showAllArtists) {
+                setLocalStorageVal("showAllArtists", this.showAllArtists);
+                lmsOptions.showAllArtists=this.showAllArtists;
+                bus.$emit('updatePlayer');
+            }
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
                 bus.$emit('changeLayout', "desktop"==this.layout ? true : "mobile"==this.layout ? false : undefined);
@@ -647,6 +663,7 @@ Vue.component('lms-ui-settings', {
                                      keyboardControl:this.keyboardControl,
                                      queueThreeLines:this.queueThreeLines,
                                      showArtwork:this.showArtwork,
+                                     showAllArtists:this.showAllArtists,
                                      volumeStep:this.volumeStep,
                                      showPlayerMenuEntry:this.showPlayerMenuEntry,
                                      menuIcons:this.menuIcons,

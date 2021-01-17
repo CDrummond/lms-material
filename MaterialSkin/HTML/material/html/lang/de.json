@@ -475,6 +475,8 @@
 "Go to band":"",
 "Go to conductor":"",
 "IP: %1":"",
+"If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"",
+"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"",
 "Information":"",
 "Local files":"",
 "Mon":"",
@@ -487,9 +489,13 @@
 "Reload":"",
 "Server":"",
 "Set rating (0..5)":"",
+"Show all artists":"",
 "Start":"",
+"Store current library with pinned item?":"",
 "URL":"",
 "Update information":"",
 "Version":"",
+"With":"",
+"Without":"",
 "⌘+%1":""
 }

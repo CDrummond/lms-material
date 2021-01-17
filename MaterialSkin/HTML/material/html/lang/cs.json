@@ -487,9 +487,15 @@
 "Bands":"",
 "Go to band":"",
 "Go to conductor":"",
+"If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"",
+"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"",
 "Local files":"",
 "NOTE: Changing ratings requires an additional plugin.":"",
 "Reload":"",
 "Set rating (0..5)":"",
-"Update information":""
+"Show all artists":"",
+"Store current library with pinned item?":"",
+"Update information":"",
+"With":"",
+"Without":""
 }

@@ -82,7 +82,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.rating.value = rv;
         trackChanged = true;
     }
-    var artistAndComposer = lmsOptions.showAllArtists && undefined!=artists ? artists.join(", ") : artists;
+    var artistAndComposer = lmsOptions.showAllArtists && undefined!=artists ? artists.join(", ") : artist;
     var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
     var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
     var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);

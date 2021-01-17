@@ -88,13 +88,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
     if (useBandTag && playerStatus.current.band!=view.playerStatus.current.artist && playerStatus.current.band!=view.playerStatus.current.composer) {
-        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.bands ? playerStatus.current.bands.join(", ") : playerStatus.current.bands);
+        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.bands ? playerStatus.current.bands.join(", ") : playerStatus.current.band);
     }
     if (useComposerTag && playerStatus.current.composer!=view.playerStatus.current.artist) {
-        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.composers ? playerStatus.current.composers.join(", ") : playerStatus.current.composers);
+        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.composers ? playerStatus.current.composers.join(", ") : playerStatus.current.composer);
     }
     if (useConductorTag && playerStatus.current.conductor!=view.playerStatus.current.artist) {
-        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.conductors ? playerStatus.current.conductors.join(", ") : playerStatus.current.conductors);
+        artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.conductors ? playerStatus.current.conductors.join(", ") : playerStatus.current.conductor);
     }
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;

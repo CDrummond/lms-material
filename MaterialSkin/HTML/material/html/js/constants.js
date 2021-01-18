@@ -105,9 +105,12 @@ const GRID_SINGLE_LINE_DIFF = 20;
 
 const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
 var MULTI_SPLIT_REGEX = undefined;
-
 try {
-    MULTI_SPLIT_REGEX = new RegExp(/(?<!\s),(?!\s)/); // Safari on iOS and macOS does not support lookbehind?
+    // Safari on iOS and macOS does not support lookbehind
+    // ...so the following will throw an exception
+    new RegExp("(?<=)");
+    // ...and need to set in eval() as otherwise page fails to load!
+    eval("MULTI_SPLIT_REGEX = new RegExp(/(?<!\\s),(?!\\s)/);");
 } catch(e) {
-    MULTI_SPLIT_REGEX = new RegExp(/[^\s]+,[^\s]+/);
+    MULTI_SPLIT_REGEX = ",";
 }

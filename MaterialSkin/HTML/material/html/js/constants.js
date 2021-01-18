@@ -104,4 +104,10 @@ const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 
 const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
-const MULTI_SPLIT_REGEX = new RegExp(/(?<!\s),(?!\s)/);
+var MULTI_SPLIT_REGEX = undefined;
+
+try {
+    MULTI_SPLIT_REGEX = new RegExp(/(?<!\s),(?!\s)/); // Safari on iOS and macOS does not support lookbehind?
+} catch(e) {
+    MULTI_SPLIT_REGEX = new RegExp(/[^\s]+,[^\s]+/);
+}

@@ -491,11 +491,11 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней",
-"Alt+(N)":"",
-"If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"",
-"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"",
-"Show all artists":"",
-"Store current library with pinned item?":"",
-"With":"",
-"Without":""
+"Alt+(N)":"Alt+(N)",
+"If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого",
+"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"Если вы сохраняете библиотеку в режиме закрепления, то эта библиотека будет использоваться всегда, независимо от изменения библиотеки в «Моя музыка». Если вы решите не сохранять библиотеку, то изменение библиотеки в разделе «Моя музыка» повлияет на элементы, отображаемые в этом закрепленном элементе.",
+"Show all artists":"Показать всех исполнителей",
+"Store current library with pinned item?":"Сохранить текущую библиотеку с закрепленным элементом?",
+"With":"Вместе с",
+"Without":"Без"
 }

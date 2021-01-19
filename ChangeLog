@@ -33,6 +33,8 @@
 20. Add option to control whether all artists, album-artists, composers, etc.
     are show when browsing albums, and (requires LMS 8.2) in now-playing and
     queue.
+21. Respect LMS's 'Filter Genres at the Album & Track Level.' setting when using
+    'Append random album to queue' from a genre.
 
 2.1.3
 -----

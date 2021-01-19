@@ -718,6 +718,10 @@ function browseItemAction(view, act, item, index, event) {
             if (1===resp.items.length && resp.items[0].id) {
                 var item = resp.items[0];
                 var command = ["playlistcontrol", "cmd:add", item.id];
+                var genrePos = lmsOptions.noGenreFilter ? -1 : getField({params:params}, "genre_id:");
+                if (genrePos>=0) {
+                    command.push(params[genrePos]);
+                }
                 lmsCommand(view.playerId(), command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     bus.$emit('showMessage', i18n("Appended '%1' to the play queue", item.title));

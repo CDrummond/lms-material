@@ -55,7 +55,7 @@ function browseActions(view, item, args) {
                                    params:[]},
                               weight:0});
             }
-            if (undefined!=args['path']) {
+            if (undefined!=args['path'] && args['path'].length>0) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:2});
             }
         }
@@ -182,7 +182,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }
             }
             view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
-            if (undefined!=actParams['path']) {
+            if (undefined!=actParams['path'] && actParams['path'].length>0) {
                 // Check we have some localfiles, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
                     if (!data || !data.result || !data.result.item_loop) {

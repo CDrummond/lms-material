@@ -74,17 +74,17 @@ Vue.component('lms-toolbar', {
  <v-spacer></v-spacer>
  <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
- <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+ <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress:true="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <div v-show="showVolumeSlider">
   <v-slider :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  </div>
- <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-show="showVolumeSlider" class="vol-full-label" v-bind:class="{'disabled':noPlayer}" @click.middle="toggleMute">{{playerVolume|displayVolume(playerDvc)}}</p>
+ <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress:true="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+ <p v-show="showVolumeSlider" class="vol-full-label cursor" v-bind:class="{'disabled':noPlayer,'dimmed':playerMuted}" @click.middle="toggleMute" @click.stop="toggleMute">{{playerVolume|displayVolume(playerDvc)}}</p>
  <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
   <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
   <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
   <v-icon v-else>volume_off</v-icon>
-  <div v-if="playerDvc" v-bind:class="{'disabled':noPlayer,'vol-btn-label':!desktopLayout||!showVolumeSlider}">{{playerStatus.volume|displayVolume(playerDvc)}}</div>
+  <div v-if="playerDvc" v-bind:class="{'disabled':noPlayer,'vol-btn-label':!desktopLayout||!showVolumeSlider,'dimmed':playerMuted}" >{{playerStatus.volume|displayVolume(playerDvc)}}</div>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
@@ -511,19 +511,19 @@ Vue.component('lms-toolbar', {
                 newWindow.resizeTo(Math.round(620*newWindow.devicePixelRatio), newWindow.outerHeight-adjust);
             };
         },
-        volumeBtn(toggleMute, el) {
+        volumeBtn(longPress, el) {
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer || undefined==el || undefined==el.id) {
                 return;
             }
-            if (toggleMute && this.playerDvc) {
-                bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
-            } else if ("vol-up-btn"==el.id) {
+            if ("vol-up-btn"==el.id) {
                 bus.$emit('playerCommand', ["mixer", "volume", "+"+lmsOptions.volumeStep]);
             } else if ("vol-down-btn"==el.id) {
                 bus.$emit('playerCommand', ["mixer", "volume", "-"+lmsOptions.volumeStep]);
             } else if ("vol-btn"==el.id) {
                 if (this.playerMuted) {
                     bus.$emit('playerCommand', ['mixer', 'muting', 0]);
+                } else if (longPress && this.playerDvc) {
+                    bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
                 } else {
                     bus.$emit('dlg.open', 'volume');
                 }

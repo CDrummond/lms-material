@@ -35,6 +35,9 @@
     queue.
 21. Respect LMS's 'Filter Genres at the Album & Track Level.' setting when using
     'Append random album to queue' from a genre.
+22. Press-and-hold volume buttons to incrementally change volume.
+23. In desktop layout, click volume label to toggle mute.
+24. Dim volume label when muted.
 
 2.1.3
 -----

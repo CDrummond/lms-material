@@ -38,8 +38,8 @@
 22. Press-and-hold volume buttons to incrementally change volume.
 23. In desktop layout, click volume label to toggle mute.
 24. Dim volume label when muted.
-25. Indicate current player in player's menu, and 'Manage players' dialog, with
-    a dot next to icon.
+25. Embolden font of current player in player's menu, and 'Manage players'
+    dialog.
 26. Drag'n'drop from queue onto playlist.
 
 2.1.3

@@ -2058,6 +2058,14 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  background-color:var(--drop-target-color)!important;
 }
 
+.active-player {
+ background-color:var(--pq-current-color)!important;
+}
+
+.active-player div.v-list {
+ background-color:transparent!important;
+}
+
 .active-player-title {
  font-weight:var(--bold-weight);
 }

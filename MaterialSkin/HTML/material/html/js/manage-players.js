@@ -102,7 +102,7 @@ Vue.component('lms-manage-players', {
   <div class="ios-vcard-text-workaround">
    <v-container grid-list-md class="pmgr-container" id="player-manager-list">
     <v-layout row wrap>
-     <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player)}">
+     <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player), 'active-player':currentPlayer && currentPlayer.id === player.id}">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && firstGroupIndex>=0" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12 v-if="player.isgroup && index==firstGroupIndex" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12>
@@ -112,7 +112,7 @@ Vue.component('lms-manage-players', {
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content>
-          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon" v-bind:class="{'active-btn':currentPlayer && currentPlayer.id==player.id}">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi, currentPlayer && currentPlayer.id==player.id)"></img>
+          <v-list-tile-title style="cursor:pointer" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon">hotel</v-icon></v-list-tile-title>
           <v-list-tile-sub-title v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">{{player.track}}</v-list-tile-sub-title>
          </v-list-tile-content>

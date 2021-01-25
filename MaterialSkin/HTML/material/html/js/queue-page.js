@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtyAAKNSxx" : "tags:cdegilqtysAAKNSxx";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtuyAAKNSxx" : "tags:cdegilqtuysAAKNSxx";
 
 function queueItemCover(item, infoPlugin) {
     if (item.artwork_url) {
@@ -208,7 +208,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
-                              album_id: i.album_id
+                              album_id: i.album_id,
+                              url: i.url
                           });
                 index++;
             }
@@ -1048,14 +1049,26 @@ var lmsQueue = Vue.component("lms-queue", {
             ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
+            var selection = []
             if (this.selection.size>0 && !this.selection.has(which)) {
                 this.clearSelection();
+            }
+            if (this.selection.size>0) {
+                selection = Array.from(this.selection);
+                selection.sort(function(a, b) { return a<b ? -1 : 1; });
+            } else {
+                selection.push(which);
+            }
+            window.mskQueueDrag = [];
+            for (var i=0, len=selection.length; i<len; ++i) {
+                window.mskQueueDrag.push(this.items[selection[i]].url);
             }
         },
         dragEnd() {
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;
+            window.mskQueueDrag = undefined;
             bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {

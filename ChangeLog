@@ -40,7 +40,8 @@
 24. Dim volume label when muted.
 25. Indicate current player in player's menu, and 'Manage players' dialog, with
     a dot next to icon.
- 
+26. Drag'n'drop from queue onto playlist.
+
 2.1.3
 -----
 1. Add meta tag for IE11

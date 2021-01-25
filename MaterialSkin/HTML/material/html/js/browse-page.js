@@ -1322,7 +1322,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
-            if (this.canDrop && undefined!=window.mskBrowseDrag && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites)) {
+            if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites)) {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;
@@ -1383,6 +1383,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 this.refreshList();
                             });
                         }
+                    }
+                }
+            } else if (ev.dataTransfer) {
+                if (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS) {
+                    if (this.current.id.startsWith("playlist_id")) {
+                        browseAddToPlaylist(this, window.mskQueueDrag, this.current.id, to, this.items.length);
+                    } else {
+                        browseAddToPlaylist(this, window.mskQueueDrag, this.items[to].id);
                     }
                 }
             }
@@ -1498,7 +1506,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('refreshPlaylist', function(name) {
             if (this.current && this.current.section==SECTION_PLAYLISTS) {
-                if (this.current.id.startsWith(MUSIC_ID_PREFIX) || this.current.title==name) {
+                if (this.current.id.startsWith(MUSIC_ID_PREFIX) || undefined==name || this.current.title==name) {
                     this.refreshList();
                 }
                 if (!this.current.id.startsWith(MUSIC_ID_PREFIX) && this.history.length>0) {

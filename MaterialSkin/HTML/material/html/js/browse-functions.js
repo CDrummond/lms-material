@@ -1673,23 +1673,23 @@ function browseDoList(view, list, act/*, index*/) {
                 commands.push({act:PLAY_ACTION==act ? (0==commands.length ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
             }
         }
-        view.doCommands(commands, PLAY_ACTION==act);
+        view.doCommands(commands, PLAY_ACTION==act, false, 0, 'refreshStatus');
     }
 }
 
-function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount) {
+function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount, refreshSig) {
    if (commands.length>0) {
         if (undefined==actionedCount) {
             actionedCount = 0;
         } else {
             actionedCount++;
-            if (commands.length>10 && (2==actionedCount || 25==actionedCount || 50==actionedCount || 0===actionedCount%100)) {
-                bus.$emit('refreshStatus');
+            if (commands.length>10 && undefined!=refreshSig && (2==actionedCount || 25==actionedCount || 50==actionedCount || 0===actionedCount%100)) {
+                bus.$emit(refreshSig);
             }
         }
         if (!clearSent && PLAY_ACTION==commands[0].act) {
             lmsCommand(view.playerId(), ["playlist", "clear"]).then(({data}) => {
-                view.doCommands(commands, npAfterLast, true);
+                browseDoCommands(view, commands, npAfterLast, true, actionedCount, refreshSig);
             });
             return;
         }
@@ -1709,12 +1709,12 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount)
             if (npAfterLast && 0==commands.length && !view.$store.state.desktopLayout) {
                 view.$store.commit('setPage', 'now-playing');
             }
-            view.doCommands(commands, npAfterLast, clearSent, actionedCount);
+            browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount, refreshSig);
         }).catch(err => {
             logError(err, command.command);
         });
     } else {
-        bus.$emit('refreshStatus');
+        bus.$emit(refreshSig);
     }
 }
 
@@ -1725,7 +1725,7 @@ function browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, tracks) {
             commands.push(["playlistcontrol", "cmd:add", "track_id:"+tracks[i]]);
             commands.push(["playlist", "move", queueSize, queueIndex]);
         }
-        browseDoCommands(view, commands, false, false, 0, true);
+        browseDoCommands(view, commands, false, false, 0, 'refreshStatus');
     } else {
         let index = indexes.pop();
         var cmd = ["tracks", 0, 1000];
@@ -1765,7 +1765,7 @@ function browseInsertQueue(view, index, queueIndex, queueSize) {
             commands.push(["playlistcontrol", "cmd:add", originalId(view.items[indexes[i]].id)]);
             commands.push(["playlist", "move", queueSize, queueIndex]);
         }
-        browseDoCommands(view, commands, false, false, 0, true);
+        browseDoCommands(view, commands, false, false, 0, 'refreshStatus');
     }
     view.clearSelection();
 }
@@ -1776,6 +1776,20 @@ function browsePlayerChanged(view) {
     } else if (view.history.length>1 && view.history[1].current.id==TOP_APPS_ID) {
         view.history[1].needsRefresh = true;
     }
+}
+
+function browseAddToPlaylist(view, urls, playlist, pos, plen) {
+    var commands = [];
+    for (let i=0, len=urls.length; i<len; ++i) {
+        commands.push(["playlists", "edit", playlist, "cmd:add", "url:"+urls[i]]);
+        if (undefined!=pos && undefined!=plen) {
+            commands.push(["playlists", "edit", "cmd:move", playlist, "index:"+plen, "toindex:"+pos]);
+            plen++;
+            pos++;
+        }
+    }
+
+    browseDoCommands(view, commands, false, false, 0, undefined!=pos && undefined!=plen ? 'refreshPlaylist' : undefined);
 }
 
 const DEFERRED_LOADED = true;

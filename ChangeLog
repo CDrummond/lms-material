@@ -38,7 +38,9 @@
 22. Press-and-hold volume buttons to incrementally change volume.
 23. In desktop layout, click volume label to toggle mute.
 24. Dim volume label when muted.
-
+25. Indicate current player in player's menu, and 'Manage players' dialog, with
+    a dot next to icon.
+ 
 2.1.3
 -----
 1. Add meta tag for IE11

@@ -2057,3 +2057,18 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .drop-target {
  background-color:var(--drop-target-color)!important;
 }
+
+.active-player {
+ background-color:var(--active-color);
+ border-radius:50%;
+ width:7px;
+ height:7px;
+ position:fixed;
+ left:8px;
+}
+
+.pmgr-playerlist .active-player {
+ position:absolute;
+ left:64px;
+ top:10px;
+}

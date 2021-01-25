@@ -35,7 +35,8 @@ Vue.component('lms-toolbar', {
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)">
      <v-list-tile-avatar>
-      <v-icon v-if="item.icon.icon" v-bind:class="{'active-btn':player && item.id === player.id}">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi, undefined, undefined, player && item.id === player.id)"></img>
+      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
+      <div v-if="player && item.id === player.id" class="active-player"></div>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>

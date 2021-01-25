@@ -1407,6 +1407,7 @@ progress {
  font-weight:var(--bold-weight);
  width:100%;
  margin-bottom:4px;
+ background-color:var(--background-color)!important;
 }
 
 .pmgr-other-title {

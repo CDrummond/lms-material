@@ -113,13 +113,13 @@ function logJsonMessage(type, msg) {
 
 function logCometdMessage(type, msg) {
     if (queryParams.debug.has("cometd")) {
-        console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+type+(msg ? (": "+JSON.stringify(msg)) : ""));
+        console.log("[" + new Date().toLocaleTimeString()+"] COMETD "+type+(msg ? (": "+JSON.stringify(msg)) : ""));
     }
 }
 
 function logCometdDebug(msg) {
     if (queryParams.debug.has("cometd")) {
-        console.log("[" + new Date().toLocaleTimeString()+"] COMETED "+msg);
+        console.log("[" + new Date().toLocaleTimeString()+"] COMETD "+msg);
     }
 }
 

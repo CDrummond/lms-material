@@ -266,7 +266,7 @@
 "Playlist has no duplicates":"La liste de lecture n'a pas de doublon",
 "Playlist has no tracks":"La liste de lecture ne contient aucun morceau",
 "Plugins":"Plugins",
-"Power on all group members when playing to group.":"Allumer tous les membres du groupe lorsque vous utiliser un groupe.",
+"Power on all group members when playing to group.":"Allumer tous les membres du groupe lors de l'utilisation du groupe.",
 "Power on all upon play":"Allumer tout à la lecture",
 "Power on/off all":"Allumer/Eteindre tout",
 "Previous track":"Morceau précédent",
@@ -443,7 +443,7 @@
 "Use chosen color for toolbars.":"Utiliser la couleur choisie pour les barres d'outils.",
 "Use cover of current track as background.":"Utiliser la pochette du morceau en cours comme arrière-plan.",
 "Use desktop layout":"Utiliser la disposition pour ordinateur de bureau",
-"Use group player's power settings to control power of all members.":"Appliquer le volume du groupe à tous ses membres.",
+"Use group player's power settings to control power of all members.":"Utiliser le bouton d'alimentation du groupe pour allumer/éteindre tous ses membres.",
 "Use larger font sizes and larger icons.":"Utiliser des tailles de police plus grandes et des icônes plus grands.",
 "Use mobile layout":"Utiliser la disposition pour smartphone/tablette",
 "Use three lines (title, artist, album) to show track details.":"Utiliser les trois lignes (titre, artiste, album) pour afficher les détails du morceau.",
@@ -498,6 +498,6 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Replace player's icon in toolbar with a power button.":"",
-"Show power button":""
+"Replace player's icon in toolbar with a power button.":"Remplacer l'icône de la platine dans la barre d'outils par un bouton d'alimentation.",
+"Show power button":"Afficher le bouton d'alimentation"
 }

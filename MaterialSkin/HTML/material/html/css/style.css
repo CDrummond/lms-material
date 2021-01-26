@@ -1360,18 +1360,23 @@ progress {
 }
 
 .pmgr-sync {
- margin-top:-28px!important;
+ margin-top:-14px!important;
 }
 
 .pmgr-sync .v-list__tile {
  margin-left:56px;
- height:48px !important;
+ margin-top:-8px!important;
+ height:40px !important;
 }
 
 .pmgr-sync .pmgr-vol-dec-btn {
  margin-left:56px;
 }
 
+.pmgr-container .layout {
+ margin-bottom:-6px!important;
+}
+ 
 .pmgr-vol-dec-btn {
  margin-left:58px!important;
 }

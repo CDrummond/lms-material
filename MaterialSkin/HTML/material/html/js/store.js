@@ -11,7 +11,7 @@ const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "ifr
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link, ison:p.ison, isconnected:p.isconnected};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link, ison:p.ison, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
 }
 
 function updateUiSettings(state, val) {
@@ -148,6 +148,10 @@ function updateUiSettings(state, val) {
         state.homeButton = val.homeButton;
         setLocalStorageVal('homeButton', state.homeButton);
     }
+    if (undefined!=val.powerButton && state.powerButton!=val.powerButton) {
+        state.powerButton = val.powerButton;
+        setLocalStorageVal('powerButton', state.powerButton);
+    }
     if (undefined!=val.showRating && state.showRating!=val.showRating) {
         state.showRating = val.showRating;
         setLocalStorageVal('showRating', state.showRating);
@@ -270,7 +274,8 @@ const store = new Vuex.Store({
         screensaver: false,
         homeButton: false,
         lang: 'en-US',
-        twentyFourHour: false
+        twentyFourHour: false,
+        powerButton: false
     },
     mutations: {
         setPlayers(state, players) {
@@ -291,6 +296,7 @@ const store = new Vuex.Store({
                     state.players[i].model = players[i].model;
                     state.players[i].ip = players[i].ip;
                     state.players[i].ison = players[i].ison;
+                    state.players[i].canpoweroff = players[i].canpoweroff;
                     state.players[i].isconnected = players[i].isconnected;
                     state.players[i].isgroup = players[i].isgroup;
                     state.players[i].icon = players[i].icon;
@@ -468,6 +474,7 @@ const store = new Vuex.Store({
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
+            state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
             // Ensure theme is in settings, so that it can be use in classic skin mods...
             if (undefined==getLocalStorageVal('theme')) {
                 setLocalStorageVal('theme', state.theme);
@@ -589,7 +596,8 @@ const store = new Vuex.Store({
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
-                                     showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating) };
+                                     showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
+                                     powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

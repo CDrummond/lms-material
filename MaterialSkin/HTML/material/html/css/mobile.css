@@ -209,7 +209,7 @@
   margin-right: -12px !important;
  }
 
- .maintoolbar-player-icon {
+ .maintoolbar-player-icon, .maintoolbar-player-power-button {
   display:none!important;
  }
 

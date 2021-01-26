@@ -481,6 +481,12 @@ div.v-subheader {
  font-size:var(--small-font-size);
 }
 
+.maintoolbar-player-power-button, .maintoolbar-player-power-button:hover {
+ position:fixed;
+ left:24px;
+ z-index:5;
+}
+
 .noplayer-title {
  font-weight:var(--bold-weight);
 }

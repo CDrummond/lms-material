@@ -297,6 +297,7 @@
 "Repeat":"Gentagelse",
 "Repeat queue":"Gentag kø",
 "Repeat single track":"Gentag enkeltnummer",
+"Replace player's icon in toolbar with a power button.":"Udskift afspillerens ikon i værktøjslinjen med tænd/sluk-knap",
 "Rescan":"Skan igen",
 "Restart":"Genstart",
 "Restart Logitech Media Server?":"Genstart Logitech Media Server?",
@@ -354,6 +355,7 @@
 "Show icons next to popup menu entries.":"Vis ikoner inden i pop-up menuer",
 "Show image":"Vis billede",
 "Show information in tabs":"Vis information i faneblade",
+"Show power button":"Vis tænd/sluk-knap",
 "Show rating":"Vis vurdering",
 "Show track information":"Vis nummerinformation",
 "Show track number":"Vis albumsnummer",
@@ -497,7 +499,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Replace player's icon in toolbar with a power button.":"",
-"Show power button":""
+"%1 days":"%1 dage"
 }

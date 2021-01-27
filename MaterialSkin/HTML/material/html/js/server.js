@@ -420,6 +420,8 @@ var lmsServer = Vue.component('lms-server', {
             }
 
             player.volume = !player.dvc ? 100 : undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
+            player.muted = player.dvc && player.volume<0;
+            player.volume = Math.abs(player.volume);
 
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
                                 repeat: parseInt(data["playlist repeat"]),

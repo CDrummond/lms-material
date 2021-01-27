@@ -42,6 +42,8 @@
     player's menu, and 'Manage players' dialog.
 26. Drag'n'drop from queue onto playlist.
 27. Add option to replace player's icon in toolbar with a power button.
+28. Fix display of muted volume on 'Manage players' dialog.
+29. Add mute toggling to 'Manage players' dialog.
 
 2.1.3
 -----

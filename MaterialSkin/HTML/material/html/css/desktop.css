@@ -260,10 +260,6 @@
  flex-direction:column;
 }
 
-.cursor {
- cursor:pointer;
-}
-
 #letterOverlay {
  width:calc(1vw * var(--splitter-pc)) !important;
 }

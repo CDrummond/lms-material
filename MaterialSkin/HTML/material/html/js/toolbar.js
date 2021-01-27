@@ -82,11 +82,9 @@ Vue.component('lms-toolbar', {
   <v-slider :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  </div>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress:true="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
- <p v-show="showVolumeSlider" class="vol-full-label cursor" v-bind:class="{'disabled':noPlayer,'dimmed':playerMuted}" @click.middle="toggleMute" @click.stop="toggleMute">{{playerVolume|displayVolume(playerDvc)}}</p>
+ <p v-show="showVolumeSlider" class="vol-full-label link-item" v-bind:class="{'disabled':noPlayer,'dimmed':playerMuted}" @click.middle="toggleMute" @click.stop="toggleMute">{{playerVolume|displayVolume(playerDvc)}}</p>
  <v-btn v-show="!showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button" v-longpress="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-btn" :title="trans.showVol">
-  <v-icon v-if="playerStatus.volume>0">volume_up</v-icon>
-  <v-icon v-else-if="playerStatus.volume==0">volume_down</v-icon>
-  <v-icon v-else>volume_off</v-icon>
+  <v-icon>{{playerMuted ? 'volume_off' : playerStatus.volume>0 ? 'volume_up' : 'volume_down'}}</v-icon>
   <div v-if="playerDvc" v-bind:class="{'disabled':noPlayer,'vol-btn-label':!desktopLayout||!showVolumeSlider,'dimmed':playerMuted}" >{{playerStatus.volume|displayVolume(playerDvc)}}</div>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
@@ -294,8 +292,8 @@ Vue.component('lms-toolbar', {
 
             this.playerDvc = playerStatus.dvc;
             if (!this.movingVolumeSlider) {
-                this.playerMuted = playerStatus.volume<0;
-                var vol = Math.abs(playerStatus.volume);
+                this.playerMuted = playerStatus.muted;
+                var vol = playerStatus.volume;
                 if (vol != this.playerVolume) {
                     // Ignore changes to 'playerVolume' when switching players...
                     this.ignorePlayerVolChange = this.$store.state.player.id != this.playerId;
@@ -531,7 +529,7 @@ Vue.component('lms-toolbar', {
                 if (this.playerMuted) {
                     bus.$emit('playerCommand', ['mixer', 'muting', 0]);
                 } else if (longPress && this.playerDvc) {
-                    bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
+                    bus.$emit('playerCommand', ['mixer', 'muting', 1]);
                 } else {
                     bus.$emit('dlg.open', 'volume');
                 }
@@ -746,7 +744,7 @@ Vue.component('lms-toolbar', {
             if (undefined==value || !dvc) {
                 return '';
             }
-            return (isNaN(value) ? 0 : (value<0 ? -1*value : value))+"%";
+            return (isNaN(value) ? 0 : value)+"%";
         },
         svgIcon: function (name, dark, update, toolbar, active, coloredToolbars) {
             return "/material/svg/"+name+"?c="+(update ? toolbar ? (coloredToolbars ? "fff" : LMS_UPDATE_SVG) : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;

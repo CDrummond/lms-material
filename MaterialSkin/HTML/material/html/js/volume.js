@@ -41,8 +41,8 @@ Vue.component('lms-volume', {
         this.closeTimer = undefined;
         bus.$on('playerStatus', function(playerStatus) {
             if ((this.show || this.showing) && !this.movingVolumeSlider) {
-                this.muted = playerStatus.volume<0;
-                var vol = Math.abs(playerStatus.volume);
+                this.muted = playerStatus.muted;
+                var vol = playerStatus.volume;
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
                 }

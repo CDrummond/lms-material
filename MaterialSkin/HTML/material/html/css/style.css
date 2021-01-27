@@ -1452,7 +1452,7 @@ progress {
  cursor:pointer;
 }
 
-.link-item:hover {
+.link-item:hover, .np-bar .link-item:hover {
  color:var(--active-color)!important;
 }
 
@@ -2080,4 +2080,8 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .active-player-title {
  font-weight:var(--bold-weight);
+}
+
+.cursor {
+ cursor:pointer;
 }

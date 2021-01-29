@@ -103,12 +103,12 @@ function mapIconType(item, app, type) {
     }
     if (lmsIcon.includes("MTL_icon_")) {       
         item.image=item.svg=undefined; 
-        item.icon=lmsIcon.split("MTL_icon_").pop().split("_MTL_end")[0];
+        item.icon=lmsIcon.split("MTL_icon_").pop().split(".")[0];
         return true;
     }
     if (lmsIcon.includes("MTL_svg_")) {
         item.image=item.icon=undefined; 
-        item.svg=lmsIcon.split("MTL_svg_").pop().split("_MTL_end")[0];
+        item.svg=lmsIcon.split("MTL_svg_").pop().split(".")[0];
         return true;
     }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {

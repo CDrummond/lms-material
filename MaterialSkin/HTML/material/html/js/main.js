@@ -121,7 +121,7 @@ var app = new Vue({
                     }
                     var optName = 'show'+tags[t].charAt(0).toUpperCase()+tags[t].slice(1);
                     if (undefined!=data.result[optName]) {
-                        lmsOptions[optName] = 1 == parseInt(optName);
+                        lmsOptions[optName] = 1 == parseInt(data.result[optName]);
                         setLocalStorageVal(optName, lmsOptions[optName]);
                     }
                 }

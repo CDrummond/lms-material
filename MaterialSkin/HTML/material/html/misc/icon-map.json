@@ -95,21 +95,7 @@
     "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"},
     "MUSICSOURCE":{"svg":"music"},
     "/BBCSounds.png":{"svg":"bbc-sounds"},
-    "/TimesRadio.png":{"svg":"times-radio"},
-    "/BBCSoundsAllEpisodes.png":{"icon":"dynamic_feed"},
-    "/BBCSoundsBookmark.png":{"icon":"add"},
-    "/BBCSoundsBrowse.png":{"icon":"library_books"},
-    "/BBCSoundsContinue.png":{"icon":"subscriptions"},
-    "/BBCSoundsLatest.png":{"icon":"update"},
-    "/BBCSoundsMusic.png":{"svg":"music"},
-    "/BBCSoundsMySounds.png":{"icon":"recent_actors"},
-    "/BBCSoundsPlay.png":{"icon":"play_arrow"},
-    "/BBCSoundsSearch.png":{"icon":"search"},
-    "/BBCSoundsSpeech.png":{"icon":"format_quote"},
-    "/BBCSoundsStations.png":{"svg":"radio-tower"},
-    "/BBCSoundsSubscribe.png":{"icon":"rss_feed"},
-    "/BBCSoundsSynopsis.png":{"icon":"view_headline"},    
-    "/BBCSoundsTracks.png":{"icon":"album"}
+    "/TimesRadio.png":{"svg":"times-radio"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

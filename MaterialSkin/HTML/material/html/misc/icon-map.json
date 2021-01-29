@@ -95,12 +95,7 @@
     "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"},
     "MUSICSOURCE":{"svg":"music"},
     "/BBCSounds.png":{"svg":"bbc-sounds"},
-    "/TimesRadio.png":{"svg":"times-radio"},
-    "/BBCSoundsSearch.png":{"icon":"search"},
-    "/BBCSoundsMySounds.png":{"svg":"account-music-outline"},
-    "/BBCSoundsStations.png":{"svg":"radio-tower"},
-    "/BBCSoundsMusic.png":{"svg":"music"},
-    "/BBCSoundsBrowse.png":{"icon":"library_music"}
+    "/TimesRadio.png":{"svg":"times-radio"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

@@ -101,6 +101,16 @@ function mapIconType(item, app, type) {
     if (undefined==lmsIcon || (typeof lmsIcon !== 'string')) {
         return false;
     }
+    if (lmsIcon.includes("MTL_icon_")) {       
+        item.image=item.svg=undefined; 
+        item.icon=lmsIcon.split("MTL_icon_").pop().split(".")[0];
+        return true;
+    }
+    if (lmsIcon.includes("MTL_svg_")) {
+        item.image=item.icon=undefined; 
+        item.svg=lmsIcon.split("MTL_svg_").pop().split(".")[0];
+        return true;
+    }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {
         if (lmsIcon.endsWith(key) || (lmsIcon.indexOf('imageproxy')>0 && lmsIcon.endsWith(key.substring(1)+"/image.png"))) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;

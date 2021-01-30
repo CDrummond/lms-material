@@ -63,7 +63,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var menu = undefined;
             var types = new Set();
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
-            var radioImages = new Set();
             var numImages = 0;
 
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
@@ -349,7 +348,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                         mapIcon(i, undefined, {icon:undefined, svg:"radio-station"});
                     } else {
-                        radioImages.add(i.image);
+                        mapIcon(i);
                     }
                 } else if (isBmf) {
                     i.icon = i.type=="playlist"
@@ -450,12 +449,23 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
-            if (isRadios && !isRadiosTop && resp.items.length>1 && 1==radioImages.size) { // && parent && parent.id.startsWith("radio:")) {
+            if (isRadios && !isRadiosTop && resp.items.length>1 && resp.items.length<15) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-                for (var i=0, len=resp.items.length; i<len; ++i) {
-                    resp.items[i].image = resp.items[i].icon = undefined;
+                var image = undefined;
+                var diff = false;
+                for (var i=0, len=resp.items.length; i<len && !diff; ++i) {
+                    if (undefined==image) {
+                        image=resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg;
+                    } else if ((resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg)!=image) {
+                        diff=true;
+                    }
                 }
-                resp.canUseGrid=false;
+                if (!diff) {
+                    for (var i=0, len=resp.items.length; i<len; ++i) {
+                        resp.items[i].image = resp.items[i].icon = resp.items[i].svg = undefined;
+                    }
+                    resp.canUseGrid=false;
+                }
             } else if (haveWithoutIcons && haveWithIcons) {
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);

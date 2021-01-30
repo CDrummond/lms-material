@@ -367,7 +367,7 @@
 "Homepage":"",
 "IP: %1":"",
 "If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"",
-"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"",
+"If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"",
 "Increase volume":"",
 "Insufficient metadata to fetch information.":"",
 "Invalid URL":"",

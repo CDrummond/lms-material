@@ -2,6 +2,7 @@
 -----
 1. Fix page not loading in WebKit/iOS - due to WebKit not supporting lookbehind
    regex.
+2. Fix biographies and album reviews not showing.
 
 2.2.0
 -----

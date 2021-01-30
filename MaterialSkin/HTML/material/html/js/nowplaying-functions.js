@@ -346,7 +346,7 @@ function nowplayingFetchBio(view) {
         if (view.info.tabs[BIO_TAB].reqId>65535) {
             view.info.tabs[BIO_TAB].reqId = 0;
         }
-        var ids = view.infoTrack.artist_ids ? view.infoTrack.artist_ids.split(",") : [];
+        var ids = view.infoTrack.artist_ids;
         if (ids.length>1) {
             view.info.tabs[BIO_TAB].first = true;
             view.info.tabs[BIO_TAB].found = false;
@@ -394,7 +394,7 @@ function nowplayingFetchBio(view) {
                             view.info.tabs[BIO_TAB].artist.indexOf(view.info.tabs[BIO_TAB].albumartist)>=0) {
                             var command = ["musicartistinfo", "biography", "html:1"];
                             if (view.infoTrack.albumartist_ids!=undefined) {
-                                command.push("artist_id:"+view.infoTrack.albumartist_ids.split(", ")[0].trim());
+                                command.push("artist_id:"+view.infoTrack.albumartist_ids[0]);
                             } else if (view.infoTrack.albumartist!=undefined) {
                                 command.push("artist:"+view.infoTrack.albumartist);
                             }
@@ -451,7 +451,7 @@ function nowplayingFetchReview(view) {
                 command.push("album:"+view.infoTrack.album);
             }
             if (view.infoTrack.albumartist_ids!=undefined) {
-                command.push("artist_id:"+view.infoTrack.albumartist_ids.split(", ")[0].trim());
+                command.push("artist_id:"+view.infoTrack.albumartist_ids[0]);
             } else if (view.infoTrack.artist_id!=undefined) {
                 command.push("artist_id:"+view.infoTrack.artist_id);
             }

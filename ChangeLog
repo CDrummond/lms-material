@@ -3,6 +3,7 @@
 1. Fix page not loading in WebKit/iOS - due to WebKit not supporting lookbehind
    regex.
 2. Fix biographies and album reviews not showing.
+3. Require long-click on volume label to mute, but long or short to unmute.
 
 2.2.0
 -----

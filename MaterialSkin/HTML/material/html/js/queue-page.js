@@ -124,7 +124,7 @@ function addArtistLink(item, subtitle, type, func) {
         if (undefined!=val) {
             let id = IS_MOBILE ? undefined : item[type+"_id"];
             if (undefined==id && !IS_MOBILE && undefined!=item[type+"_ids"]) {
-                id = item[type+"_ids"].split(",")[0].trim();
+                id = item[type+"_ids"][0];
             }
             if (undefined!=id) {
                 subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\""+func+" ("+id+",\'"+escape(val)+"\')\">" + val + "</obj>");

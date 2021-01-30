@@ -1095,7 +1095,7 @@ function splitMultiples(item) {
                 let ids = item[idsKey].replaceAll(" ", "").split(",");
                 let values = item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX);
 
-                if (ids.length>1 && ids.length==values.length) {
+                if (ids.length>0 && ids.length==values.length) {
                     item[ARTIST_TYPES[i]+"_id"]=ids[0];
                     item[idsKey] = lmsOptions.showAllArtists ? ids : undefined;
 

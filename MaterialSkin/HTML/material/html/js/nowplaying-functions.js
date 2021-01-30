@@ -99,10 +99,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;
     }
+    if (playerStatus.current.conductor!=view.playerStatus.current.conductor) {
+        view.playerStatus.current.conductor = playerStatus.current.conductor;
+    }
     if (playerStatus.current.band!=view.playerStatus.current.band) {
         view.playerStatus.current.band = playerStatus.current.band;
     }
-    let composer_id = useComposer
+    let composer_id = useComposerTag
                         ? playerStatus.current.composer_id
                             ? playerStatus.current.composer_id
                             : playerStatus.current.composer_ids
@@ -112,17 +115,17 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (composer_id!=view.playerStatus.current.composer_id) {
         view.playerStatus.current.composer_id = composer_id;
     }
-    let conductor_id = useConductor
+    let conductor_id = useConductorTag
                         ? playerStatus.current.conductor_id
                             ? playerStatus.current.conductor_id
                             : playerStatus.current.conductor_ids
                                 ? playerStatus.current.conductor_ids[0]
                                 : undefined
                         : undefined;
-    if (composer_id!=view.playerStatus.current.composer_id) {
-        view.playerStatus.current.composer_id = composer_id;
+    if (conductor_id!=view.playerStatus.current.conductor_id) {
+        view.playerStatus.current.conductor_id = conductor_id;
     }
-    let band_id = useBand
+    let band_id = useBandTag
                         ? playerStatus.current.band_id
                             ? playerStatus.current.band_id
                             : playerStatus.current.band_ids
@@ -231,7 +234,7 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
             }
             if (view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
-                view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.composer}, svg:"conductor"});
+                view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.conductor_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor"});
             }
             if (view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});

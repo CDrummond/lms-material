@@ -138,7 +138,18 @@ function addArtistLink(item, subtitle, type, func) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
-    var artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
+    var artist = undefined;
+
+    if (i.artist) {
+        subtitle=addArtistLink(i, subtitle, "artist", "showArtist");
+        artist = i.artist;
+    } else if (i.trackartist) {
+        subtitle=addArtistLink(i, subtitle, "trackartist", "showArtist");
+        artist = i.trackartist;
+    } else if (i.albumartist) {
+        subtitle=addArtistLink(i, subtitle, "albumartist", "showAlbumArtist");
+        artist = i.albumartist;
+    }
 
     if (i.band && i.band!=artist && lmsOptions.showBand && useBand(i.genre)) {
         subtitle=addArtistLink(i, subtitle, "band", "showBand");
@@ -148,14 +159,6 @@ function buildSubtitle(i, threeLines) {
     }
     if (i.conductor && i.conductor!=artist && lmsOptions.showConductor && useConductor(i.genre)) {
         subtitle=addArtistLink(i, subtitle, "conductor", "showConductor");
-    }
-
-    if (i.artist) {
-        subtitle=addArtistLink(i, subtitle, "artist", "showArtist");
-    } else if (i.trackartist) {
-        subtitle=addArtistLink(i, subtitle, "trackartist", "showArtist");
-    } else if (i.albumartist) {
-        subtitle=addArtistLink(i, subtitle, "albumartist", "showAlbumArtist");
     }
 
     var lines = [];

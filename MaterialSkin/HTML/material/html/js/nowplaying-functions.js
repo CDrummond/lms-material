@@ -82,7 +82,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.rating.value = rv;
         trackChanged = true;
     }
-    var artistAndComposer = undefined;
+    var artistAndComposer = lmsOptions.showAllArtists && undefined!=artists ? artists.join(", ") : artist;
     var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
     var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
     var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
@@ -96,8 +96,6 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (useConductorTag && playerStatus.current.conductor!=view.playerStatus.current.artist) {
         artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=playerStatus.current.conductors ? playerStatus.current.conductors.join(", ") : playerStatus.current.conductor);
     }
-    artistAndComposer = addPart(artistAndComposer, lmsOptions.showAllArtists && undefined!=artists ? artists.join(", ") : artist);
-
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;
     }

@@ -138,22 +138,26 @@ function addArtistLink(item, subtitle, type, func) {
 
 function buildSubtitle(i, threeLines) {
     var subtitle = undefined;
+    var artist = undefined;
 
     if (i.artist) {
         subtitle=addArtistLink(i, subtitle, "artist", "showArtist");
+        artist = i.artist;
     } else if (i.trackartist) {
         subtitle=addArtistLink(i, subtitle, "trackartist", "showArtist");
+        artist = i.trackartist;
     } else if (i.albumartist) {
         subtitle=addArtistLink(i, subtitle, "albumartist", "showAlbumArtist");
+        artist = i.albumartist;
     }
 
-    if (i.band && i.band!=i.artist && lmsOptions.showBand && useBand(i.genre)) {
+    if (i.band && i.band!=artist && lmsOptions.showBand && useBand(i.genre)) {
         subtitle=addArtistLink(i, subtitle, "band", "showBand");
     }
-    if (i.composer && i.composer!=i.artist && lmsOptions.showComposer && useComposer(i.genre)) {
+    if (i.composer && i.composer!=artist && lmsOptions.showComposer && useComposer(i.genre)) {
         subtitle=addArtistLink(i, subtitle, "composer", "showComposer");
     }
-    if (i.conductor && i.conductor!=i.artist && lmsOptions.showConductor && useConductor(i.genre)) {
+    if (i.conductor && i.conductor!=artist && lmsOptions.showConductor && useConductor(i.genre)) {
         subtitle=addArtistLink(i, subtitle, "conductor", "showConductor");
     }
 

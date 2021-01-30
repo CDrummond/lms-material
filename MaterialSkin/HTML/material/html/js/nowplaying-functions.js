@@ -334,7 +334,7 @@ function nowplayingFetchLyrics(view) {
 
 function nowplayingFetchBio(view) {
     if (view.info.tabs[BIO_TAB].artist!=view.infoTrack.artist || view.info.tabs[BIO_TAB].artist_id!=view.infoTrack.artist_id ||
-        view.info.tabs[BIO_TAB].artist_ids!=view.infoTrack.artist_ids) {
+        (undefined!=view.info.tabs[BIO_TAB].artist_ids && undefined!=view.infoTrack.artist_ids && view.info.tabs[BIO_TAB].artist_ids.length!=view.infoTrack.artist_ids.length)) {
         view.info.tabs[BIO_TAB].text=i18n("Fetching...");
         view.info.tabs[BIO_TAB].isMsg=true;
         view.info.tabs[BIO_TAB].artist=view.infoTrack.artist;
@@ -429,13 +429,11 @@ function nowplayingFetchBio(view) {
 }
 
 function nowplayingFetchReview(view) {
-    if (view.info.tabs[REVIEW_TAB].albumartist!=view.infoTrack.albumartist || view.info.tabs[REVIEW_TAB].albumartist_ids!=view.infoTrack.albumartist_ids ||
-        view.info.tabs[REVIEW_TAB].artist_id!=view.infoTrack.artist_id || view.info.tabs[REVIEW_TAB].album!=view.infoTrack.album ||
-        view.info.tabs[REVIEW_TAB].album_id!=view.infoTrack.album_id) {
+    if (view.info.tabs[REVIEW_TAB].albumartist!=view.infoTrack.albumartist || view.info.tabs[REVIEW_TAB].artist_id!=view.infoTrack.artist_id ||
+        view.info.tabs[REVIEW_TAB].album!=view.infoTrack.album ||view.info.tabs[REVIEW_TAB].album_id!=view.infoTrack.album_id) {
         view.info.tabs[REVIEW_TAB].text=i18n("Fetching...");
         view.info.tabs[REVIEW_TAB].isMsg=true;
         view.info.tabs[REVIEW_TAB].albumartist=view.infoTrack.albumartist;
-        view.info.tabs[REVIEW_TAB].albumartist_ids=view.infoTrack.albumartist_ids;
         view.info.tabs[REVIEW_TAB].artist_id=view.infoTrack.artist_id;
         view.info.tabs[REVIEW_TAB].album=view.infoTrack.album;
         view.info.tabs[REVIEW_TAB].album_id=view.infoTrack.album_id;
@@ -450,9 +448,7 @@ function nowplayingFetchReview(view) {
             if (view.infoTrack.album!=undefined) {
                 command.push("album:"+view.infoTrack.album);
             }
-            if (view.infoTrack.albumartist_ids!=undefined) {
-                command.push("artist_id:"+view.infoTrack.albumartist_ids[0]);
-            } else if (view.infoTrack.artist_id!=undefined) {
+            if (view.infoTrack.artist_id!=undefined) {
                 command.push("artist_id:"+view.infoTrack.artist_id);
             }
             if (view.infoTrack.albumartist!=undefined) {
@@ -475,7 +471,7 @@ function nowplayingFetchReview(view) {
                 view.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
             });
         }
-    } else if (undefined==view.infoTrack.albumartist && undefined==view.infoTrack.albumartist_ids && undefined==view.infoTrack.artist_id &&
+    } else if (undefined==view.infoTrack.albumartist && undefined==view.infoTrack.artist_id &&
                undefined==view.infoTrack.album && undefined==view.infoTrack.album) {
         view.info.tabs[REVIEW_TAB].isMsg=true;
         view.info.tabs[REVIEW_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");

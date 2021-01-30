@@ -1,6 +1,7 @@
 2.2.2
 -----
 1. Fix icon mapping for BBC Sounds when placed within Radio section.
+2. Fix flickering of artist biography and album reviews.
 
 2.2.1
 -----

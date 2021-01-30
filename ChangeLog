@@ -4,6 +4,8 @@
    regex.
 2. Fix biographies and album reviews not showing.
 3. Require long-click on volume label to mute, but long or short to unmute.
+4. Fix position of power button on iOS when shown in place of player icon in
+   toolbar.
 
 2.2.0
 -----

@@ -1,3 +1,8 @@
+2.2.1
+-----
+1. Fix page not loading in WebKit/iOS - due to WebKit not supporting lookbehind
+   regex.
+
 2.2.0
 -----
  1. Add support for listing 'band' under certain genres, and in the queue.

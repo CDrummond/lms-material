@@ -104,13 +104,10 @@ const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 
 const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
-var MULTI_SPLIT_REGEX = undefined;
-try {
-    // Safari on iOS and macOS does not support lookbehind
-    // ...so the following will throw an exception
-    let test = new RegExp("(?<=)");
-    // ...and need to set in eval() as otherwise page fails to load!
-    eval("MULTI_SPLIT_REGEX = new RegExp(/(?<!\\s),(?!\\s)/);");
-} catch(e) {
-    MULTI_SPLIT_REGEX = ",";
-}
+var MULTI_SPLIT_REGEX = ";"
+
+// Safari on iOS and macOS does not support lookbehind. Looks like it can't even parse the line
+// so we need to tst for this in an eval. This way page loads, but MULTI_SPLIT_REGEX is not
+// changed. On other engines the eval succeeds and MULTI_SPLIT_REGEX is set correctly.
+try { eval('MULTI_SPLIT_REGEX = new RegExp(/(?<!\\s),(?!\\s)/);'); } catch(e) { }
+

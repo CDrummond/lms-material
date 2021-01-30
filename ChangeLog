@@ -2,6 +2,8 @@
 -----
 1. Fix icon mapping for BBC Sounds when placed within Radio section.
 2. Fix flickering of artist biography and album reviews.
+3. Use Band, Composer, Conductor, Artist, Album as order for now-playin and
+   queue.
 
 2.2.1
 -----

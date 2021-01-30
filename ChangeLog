@@ -28,7 +28,7 @@
 17. Remove 'Fixed volume' label, disable slider and hide value for fixed volume
     players.
 18. Use acoustic guitar for genres icon.
-19. When pinnig a 'My Music' item prompt user if we should store the library_id
+19. When pinning a 'My Music' item prompt user if we should store the library_id
     with this.
 20. Add option to control whether all artists, album-artists, composers, etc.
     are show when browsing albums, and (requires LMS 8.2) in now-playing and
@@ -2045,8 +2045,8 @@
  6. Fix multi-artist retrieval in now playing.
  7. Store command used to populate list, so that it can be re-used when
     fetching more.
- 8. Fix un-pinnig of items.
- 9. When un-pinnig an app, re-add 'Pin' menu entry.
+ 8. Fix un-pinning of items.
+ 9. When un-pinning an app, re-add 'Pin' menu entry.
 10. Only save the bare minimum of info required for pinned apps.
 11. Use item_id from actions to create pinning ID for mysqueezebox apps.
 

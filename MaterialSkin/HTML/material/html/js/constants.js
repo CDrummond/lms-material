@@ -108,7 +108,7 @@ var MULTI_SPLIT_REGEX = undefined;
 try {
     // Safari on iOS and macOS does not support lookbehind
     // ...so the following will throw an exception
-    new RegExp("(?<=)");
+    let test = new RegExp("(?<=)");
     // ...and need to set in eval() as otherwise page fails to load!
     eval("MULTI_SPLIT_REGEX = new RegExp(/(?<!\\s),(?!\\s)/);");
 } catch(e) {

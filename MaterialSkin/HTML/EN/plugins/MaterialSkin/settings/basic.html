@@ -50,4 +50,12 @@
         </select>
     [% END %]
 
+    <hr style="opacity:0.4" class="sub-sep"/><br/>
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC" %]
+        <select class="stdedit" name="pref_artistFirst" id="artistFirst">
+            <option [% IF NOT prefs.artistFirst %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.artistFirst %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+
 [% PROCESS settings/footer.html %]

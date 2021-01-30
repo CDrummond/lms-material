@@ -2,6 +2,8 @@
 -----
 1. Fix icon mapping for BBC Sounds when placed within Radio section.
 2. Fix flickering of artist biography and album reviews.
+3. Add a server-side config item to say whether artist should be shown before
+   Band, Composer, Conductor, or after.
 
 2.2.1
 -----

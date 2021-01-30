@@ -129,6 +129,10 @@ var app = new Vue({
                     lmsOptions.respectFixedVol = 1 == parseInt(data.result['respectFixedVol']);
                     setLocalStorageVal('respectFixedVol', lmsOptions.respectFixedVol);
                 }
+                if (undefined!=data.result['artistFirst']) {
+                    lmsOptions.artistFirst = 1 == parseInt(data.result['artistFirst']);
+                    setLocalStorageVal('artistFirst', lmsOptions.artistFirst);
+                }
             }
         });
 

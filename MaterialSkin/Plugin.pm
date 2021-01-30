@@ -84,6 +84,7 @@ sub initPlugin {
         showConductor => '0',
         showBand => '0',
         respectFixedVol => '1',
+        artistFirst => '1',
         password => ''
     });
 
@@ -187,6 +188,7 @@ sub _cliCommand {
         $request->addResult('showConductor', $prefs->get('showConductor'));
         $request->addResult('showBand', $prefs->get('showBand'));
         $request->addResult('respectFixedVol', $prefs->get('respectFixedVol'));
+        $request->addResult('artistFirst', $prefs->get('artistFirst'));
         $request->setStatusDone();
         return;
     }

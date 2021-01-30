@@ -297,6 +297,7 @@
 "Repeat":"Périodicité",
 "Repeat queue":"Répéter la liste de lecture",
 "Repeat single track":"Répéter le morceau en cours",
+"Replace player's icon in toolbar with a power button.":"Remplacer l'icône de la platine dans la barre d'outils par un bouton d'alimentation.",
 "Rescan":"Analyser à nouveau",
 "Restart":"Redémarrer",
 "Restart Logitech Media Server?":"Redémarrer Logitech Media Server ?",
@@ -354,6 +355,7 @@
 "Show icons next to popup menu entries.":"Afficher des icônes à côté des éléments des menus contextuels.",
 "Show image":"Afficher l'image",
 "Show information in tabs":"Afficher les informations dans des onglets",
+"Show power button":"Afficher le bouton d'alimentation",
 "Show rating":"Afficher la notation",
 "Show track information":"Afficher les informations du morceau",
 "Show track number":"Afficher le numéro du morceau",
@@ -497,7 +499,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Replace player's icon in toolbar with a power button.":"Remplacer l'icône de la platine dans la barre d'outils par un bouton d'alimentation.",
-"Show power button":"Afficher le bouton d'alimentation"
+"%1 days":"%1 jours"
 }

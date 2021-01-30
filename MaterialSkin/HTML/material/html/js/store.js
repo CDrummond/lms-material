@@ -614,10 +614,6 @@ const store = new Vuex.Store({
                                 }
                             }
                         }
-                        if (undefined!=prefs.showAllArtists) {
-                            setLocalStorageVal("showAllArtists", prefs.showAllArtists);
-                            lmsOptions.showAllArtists=prefs.showAllArtists;
-                        }
                     updateUiSettings(state, opts);
                     } catch(e) {
                     }

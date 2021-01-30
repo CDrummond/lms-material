@@ -51,6 +51,12 @@
     [% END %]
 
     <hr style="opacity:0.4" class="sub-sep"/><br/>
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS" desc="PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC" %]
+        <select class="stdedit" name="pref_showAllArtists" id="showAllArtists">
+            <option [% IF NOT prefs.showAllArtists %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.showAllArtists %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC" %]
         <select class="stdedit" name="pref_artistFirst" id="artistFirst">
             <option [% IF NOT prefs.artistFirst %]selected [% END %]value="0">[% 'NO' | getstring %]</option>

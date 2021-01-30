@@ -103,7 +103,21 @@ PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL_DESC
 	FR	Désactiver le curseur de volume et masquer le niveau de volume pour les platines à volume fixe.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
-	EN	Show artist first in now-playing and queue.
+	EN	Show artist first in now-playing and queue
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	EN	If a track has composer, conductor, or band, and these are configured (above) to be shown, then show artist before these, otherwise show after.
+
+PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
+	EN	Show all artists
+	DA	Vis alle kunstnere
+	FR	Afficher tous les artistes
+	NL	Toon alle artiesten
+	RU	Показать всех исполнителей
+
+PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
+	EN	If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.
+	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle mens der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.
+	FR	Si un morceau a plusieurs artistes ou artistes d'album, compositeurs, etc., choisir de les afficher tous (lors de la navigation dans les albums, pendant la lecture en cours et dans la liste de lecture) ou de n'afficher que le premier de chaque type.
+	NL	Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.
+	RU	Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого

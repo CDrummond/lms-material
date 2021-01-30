@@ -125,13 +125,12 @@ var app = new Vue({
                         setLocalStorageVal(optName, lmsOptions[optName]);
                     }
                 }
-                if (undefined!=data.result['respectFixedVol']) {
-                    lmsOptions.respectFixedVol = 1 == parseInt(data.result['respectFixedVol']);
-                    setLocalStorageVal('respectFixedVol', lmsOptions.respectFixedVol);
-                }
-                if (undefined!=data.result['artistFirst']) {
-                    lmsOptions.artistFirst = 1 == parseInt(data.result['artistFirst']);
-                    setLocalStorageVal('artistFirst', lmsOptions.artistFirst);
+                const BOOL_OPTS = ['showAllArtists', 'artistFirst', 'respectFixedVol'];
+                for (var i=0, len=BOOL_OPTS.length; i<len; ++i) {
+                    if (undefined!=data.result[BOOL_OPTS[i]]) {
+                        lmsOptions[BOOL_OPTS[i]] = 1 == parseInt(data.result[BOOL_OPTS[i]]);
+                        setLocalStorageVal(BOOL_OPTS[i], lmsOptions[BOOL_OPTS[i]]);
+                    }
                 }
             }
         });

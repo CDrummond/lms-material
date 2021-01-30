@@ -492,12 +492,12 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"",
-"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"",
-"Replace player's icon in toolbar with a power button.":"",
-"Show all artists":"",
-"Show power button":"",
-"Store current library with pinned item?":"",
-"With":"",
-"Without":""
+"If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.":"Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.",
+"If you store the library when pinnnig then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"Als je de muziekbibliotheek opslaat bij het vastpinnen, dan wordt deze muziekbibliotheek altijd gebruikt, ongeacht het wijzigen van de muziekbibliotheek in 'Mijn muziek'. Als je ervoor kiest om de muziekbibliotheek niet op te slaan, heeft het wijzigen van de bibliotheek onder 'Mijn muziek' effect op de items die binnen dit vastgezette item worden weergegeven.",
+"Replace player's icon in toolbar with a power button.":"Vervang de icon van de muziekspeler in de werkbalk door een aan/uit knop.",
+"Show all artists":"Toon alle artiesten",
+"Show power button":"Toon aan/uit knop",
+"Store current library with pinned item?":"Sla huidige muziekbibliotheek op bij het vastgezette item?",
+"With":"Met",
+"Without":"Zonder"
 }

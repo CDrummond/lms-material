@@ -5,6 +5,7 @@
 3. Add a server-side config item to say whether artist should be shown before
    Band, Composer, Conductor, or after.
 4. Move 'Show all artists' option to server-side.
+5. Fix 'Show artwork' setting not beeing persisted.
 
 2.2.1
 -----

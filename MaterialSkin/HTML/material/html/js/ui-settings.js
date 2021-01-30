@@ -611,6 +611,7 @@ Vue.component('lms-ui-settings', {
                                                   nowPlayingClock:this.nowPlayingClock,
                                                   swipeVolume:this.swipeVolume,
                                                   keyboardControl:this.keyboardControl,
+                                                  showArtwork:this.showArtwork,
                                                   queueThreeLines:this.queueThreeLines,
                                                   volumeStep:this.volumeStep,
                                                   showPlayerMenuEntry:this.showPlayerMenuEntry,

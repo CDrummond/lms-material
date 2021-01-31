@@ -107,8 +107,8 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	FR	Afficher l'artiste en premier dans la vue 'lecture en cours' et la liste de lecture
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
-	EN	If a track has composer, conductor, or band, and these are configured (above) to be shown, then show artist before these, otherwise show after.
-	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés (ci-dessus) pour être affichés, choisir de montrer l'artiste en premier ou pas.
+	EN	If a track has composer, conductor, or band, and these are configured to be shown, then show artist before these, otherwise show after.
+	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés pour être affichés, choisir de montrer l'artiste en premier ou pas.
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	EN	Show all artists

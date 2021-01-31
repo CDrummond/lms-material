@@ -10,6 +10,8 @@
 7. Fix splitting IDs for iOS, etc.
 8. Require long-click on volume label to mute, but long or short to unmute in
    'Manage players' dialog too.
+9. If Material's server-side password is changed, then check current password
+   validity.
 
 2.2.1
 -----

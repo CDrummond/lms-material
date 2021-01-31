@@ -501,6 +501,8 @@ var lmsServer = Vue.component('lms-server', {
                     if (genres.length>0) {
                         lmsOptions.bandGenres = new Set(genres);
                     }
+                } else if (data[2]=="password") {
+                    this.$store.commit('checkPassword', data[3]);
                 } else if (undefined!=data[2] && null!=data[2] && undefined!=lmsOptions[data[2]]) {
                     lmsOptions[data[2]] = 1 == parseInt(data[3]);
                     setLocalStorageVal(data[2], lmsOptions[data[2]]);

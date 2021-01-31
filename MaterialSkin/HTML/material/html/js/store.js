@@ -691,6 +691,17 @@ const store = new Vuex.Store({
             }).catch(err => {
             });
         },
+        checkPassword(state, srv) {
+            var pass = getLocalStorageVal('password', '-');
+            lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
+                var ok = 1==parseInt(data.result.ok);
+                if ( (ok && !state.unlockAll) || (!ok && state.unlockAll) ) {
+                    state.unlockAll = ok;
+                    bus.$emit('lockChanged');
+                }
+            }).catch(err => {
+            });
+        },
         setDesktopLayout(state, desktopLayout) {
             if (desktopLayout!=state.desktopLayout) {
                 state.desktopLayout = desktopLayout;

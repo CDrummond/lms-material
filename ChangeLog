@@ -8,6 +8,8 @@
 5. Fix 'Show artwork' setting not beeing persisted.
 6. Don't show http icons as vue icons.
 7. Fix splitting IDs for iOS, etc.
+8. Require long-click on volume label to mute, but long or short to unmute in
+   'Manage players' dialog too.
 
 2.2.1
 -----

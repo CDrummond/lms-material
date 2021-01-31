@@ -138,9 +138,13 @@ div#innerSettingsBlock {
  font-size:16px !important;
  font-family:Roboto,sans-serif !important;
  text-rendering: optimizeLegibility;
- line-height: 1.2;
+ line-height: 1.5;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
+}
+
+table td {
+  padding-bottom:8px;
 }
 
 .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead {
@@ -217,6 +221,18 @@ input[type=checkbox], input[type=radio] {
  vertical-align: middle;
  width:24px;
  height:24px;
+}
+
+#activePlugins input[type=checkbox],
+#inactivePlugins input[type=checkbox],
+#otherPlugins0 input[type=checkbox],
+#otherPlugins1 input[type=checkbox],
+#otherPlugins2 input[type=checkbox],
+#otherPlugins3 input[type=checkbox],
+#otherPlugins4 input[type=checkbox],
+#otherPlugins5 input[type=checkbox],
+#unsafePlugin input[type=checkbox] {
+ margin-top:-2px;
 }
 
 .msk-dir-btn:before, input[type=checkbox]:before, input[type=radio]:before {

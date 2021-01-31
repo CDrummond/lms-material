@@ -7,6 +7,7 @@
 4. Move 'Show all artists' option to server-side.
 5. Fix 'Show artwork' setting not beeing persisted.
 6. Don't show http icons as vue icons.
+7. Fix splitting IDs for iOS, etc.
 
 2.2.1
 -----

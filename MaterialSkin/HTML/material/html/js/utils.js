@@ -1092,7 +1092,7 @@ function splitMultiples(item) {
             let idsKey = ARTIST_TYPES[i]+"_ids";
             if (undefined!=item[idsKey]) {
                 // Split (e.g.) artist_ids so we have artist_id=first and artist_ids=all, lkewise for artist
-                let ids = item[idsKey].replaceAll(" ", "").split(",");
+                let ids = item[idsKey].split(",");
                 let values = item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX);
                 item[idsKey] = ids;
 

@@ -109,23 +109,18 @@ var app = new Vue({
 
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
             if (data && data.result) {
-                var tags = ['composer', 'conductor', 'band'];
-                for (var t=0, len=tags.length; t<len; ++t ) {
-                    if (data.result[tags[t]+'genres']) {
-                        var genres = splitString(data.result[tags[t]+'genres'].split("\r").join("").split("\n").join(","));
+                const GENRE_TAGS = ['composer', 'conductor', 'band'];
+                for (var t=0, len=GENRE_TAGS.length; t<len; ++t ) {
+                    if (data.result[GENRE_TAGS[t]+'genres']) {
+                        var genres = splitString(data.result[GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));
                         if (genres.length>0) {
-                            lmsOptions[tags[t]+'Genres'] = new Set(genres);
-                            logJsonMessage(tags[t].toUpperCase()+"_GENRES", genres);
-                            setLocalStorageVal(tags[t]+"genres", data.result[tags[t]+'genres']);
+                            lmsOptions[GENRE_TAGS[t]+'Genres'] = new Set(genres);
+                            logJsonMessage(GENRE_TAGS[t].toUpperCase()+"_GENRES", genres);
+                            setLocalStorageVal(GENRE_TAGS[t]+"genres", data.result[GENRE_TAGS[t]+'genres']);
                         }
                     }
-                    var optName = 'show'+tags[t].charAt(0).toUpperCase()+tags[t].slice(1);
-                    if (undefined!=data.result[optName]) {
-                        lmsOptions[optName] = 1 == parseInt(data.result[optName]);
-                        setLocalStorageVal(optName, lmsOptions[optName]);
-                    }
                 }
-                const BOOL_OPTS = ['showAllArtists', 'artistFirst', 'respectFixedVol'];
+                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'respectFixedVol', 'showAllArtists', 'artistFirst'];
                 for (var i=0, len=BOOL_OPTS.length; i<len; ++i) {
                     if (undefined!=data.result[BOOL_OPTS[i]]) {
                         lmsOptions[BOOL_OPTS[i]] = 1 == parseInt(data.result[BOOL_OPTS[i]]);

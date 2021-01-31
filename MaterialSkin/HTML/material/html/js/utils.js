@@ -723,6 +723,9 @@ function updateItemFavorites(item) {
 }
 
 function isInFavorites(item) {
+    if (undefined==item) {
+        return false;
+    }
     updateItemFavorites(item);
     return lmsFavorites.has(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
 }

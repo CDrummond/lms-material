@@ -1,17 +1,18 @@
 2.2.2
 -----
-1. Fix icon mapping for BBC Sounds when placed within Radio section.
-2. Fix flickering of artist biography and album reviews.
-3. Add a server-side config item to say whether artist should be shown before
-   Band, Composer, Conductor, or after.
-4. Move 'Show all artists' option to server-side.
-5. Fix 'Show artwork' setting not beeing persisted.
-6. Don't show http icons as vue icons.
-7. Fix splitting IDs for iOS, etc.
-8. Require long-click on volume label to mute, but long or short to unmute in
-   'Manage players' dialog too.
-9. If Material's server-side password is changed, then check current password
-   validity.
+ 1. Fix icon mapping for BBC Sounds when placed within Radio section.
+ 2. Fix flickering of artist biography and album reviews.
+ 3. Add a server-side config item to say whether artist should be shown before
+    Band, Composer, Conductor, or after.
+ 4. Move 'Show all artists' option to server-side.
+ 5. Fix 'Show artwork' setting not beeing persisted.
+ 6. Don't show http icons as vue icons.
+ 7. Fix splitting IDs for iOS, etc.
+ 8. Require long-click on volume label to mute, but long or short to unmute in
+    'Manage players' dialog too.
+ 9. If Material's server-side password is changed, then check current password
+    validity.
+10. Fix navigating back when select item from 'More' menu in album subtoolbar.
 
 2.2.1
 -----

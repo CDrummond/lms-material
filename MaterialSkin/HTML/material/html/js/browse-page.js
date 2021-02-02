@@ -895,15 +895,17 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
-                if (longPress && !this.$store.state.homeButton) {
-                    this.goHome();
-                } else {
-                    // This timeout is a hacky fix for touch devices. When search is opened from home page (where 'Music sources' reacts
-                    // to clicks) and the back button is clicked to close - then the click 'seems' to fall through to 'Music sources' and
-                    // the search widget re-shown! Delaying processing this click by 50ms seems to resolve this - as, I assume, the touch
-                    // event finishes before we close the search widget and show 'Music sources'
-                    setTimeout(function () {this.goBack();}.bind(this), 50);
-                }
+                // This timeout is a hacky fix for touch devices. When search is opened from home page (where 'Music sources' reacts
+                // to clicks) and the back button is clicked to close - then the click 'seems' to fall through to 'Music sources' and
+                // the search widget re-shown! Delaying processing this click by Xms seems to resolve this - as, I assume, the touch
+                // event finishes before we close the search widget and show 'Music sources'
+                setTimeout(function () {
+                    if (longPress && !this.$store.state.homeButton) {
+                        this.goHome();
+                    } else {
+                        this.goBack();
+                    }
+                }.bind(this), 75);
             }
         },
         goBack(refresh) {

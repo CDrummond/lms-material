@@ -1,3 +1,8 @@
+2.2.3
+-----
+1. Delay activating back-button on long press, to prevent search being
+   activated.
+
 2.2.2
 -----
  1. Fix icon mapping for BBC Sounds when placed within Radio section.

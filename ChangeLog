@@ -6,6 +6,7 @@
 3. Increase gap between volume buttons and slider.
 4. Prevent volume jumps from <= 70% to >= 90% by clicking on slider.
 5. Fix player refresh loop in manage players dialog.
+6. Fix blank queue when item has 'artist_ids' entry.
 
 2.2.2
 -----

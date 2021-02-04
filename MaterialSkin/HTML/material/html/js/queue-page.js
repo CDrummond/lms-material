@@ -17,7 +17,7 @@ function queueItemCover(item, infoPlugin) {
     }
     if (infoPlugin) {
         if (item.artist_ids) {
-            return "/imageproxy/mai/artist/" + item.artist_ids.split(",")[0].trim() + "/image" + LMS_IMAGE_SIZE;
+            return "/imageproxy/mai/artist/" + item.artist_ids[0] + "/image" + LMS_IMAGE_SIZE;
         } else if (item.artist_id) {
             return "/imageproxy/mai/artist/" + item.artist_id + "/image" + LMS_IMAGE_SIZE;
         }

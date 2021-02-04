@@ -42,10 +42,11 @@ Vue.component('lms-volume', {
     },
     mounted() {
         this.closeTimer = undefined;
+        this.lmsVol = 0;
         bus.$on('playerStatus', function(playerStatus) {
             if ((this.show || this.showing) && !this.movingVolumeSlider) {
                 this.muted = playerStatus.muted;
-                var vol = playerStatus.volume;
+                var vol = this.lmsVol = playerStatus.volume;
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
                 }
@@ -102,6 +103,11 @@ Vue.component('lms-volume', {
             this.resetCloseTimer();
         },
         setVolume() {
+            // Prevent large volume jumps
+            if (this.lmsVol<=70 && this.playerVolume>=90) {
+                this.playerVolume = this.lmsVol;
+                return;
+            }
             bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             this.resetCloseTimer();
         },

@@ -4,6 +4,7 @@
    activated.
 2. Increase gap between volume controls and 'Close' button in volume dialog.
 3. Increase gap between volume buttons and slider.
+4. Prevent volume jumps from <= 70% to >= 90% by clicking on slider.
 
 2.2.2
 -----

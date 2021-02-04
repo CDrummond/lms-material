@@ -213,6 +213,7 @@ Vue.component('lms-toolbar', {
                }
     },
     mounted() {
+        this.lmsVol = 0;
         setTimeout(function () {
             this.width = Math.floor(window.innerWidth/50)*50;
             this.height = Math.floor(window.innerHeight/50)*50;
@@ -293,7 +294,7 @@ Vue.component('lms-toolbar', {
             this.playerDvc = playerStatus.dvc;
             if (!this.movingVolumeSlider) {
                 this.playerMuted = playerStatus.muted;
-                var vol = playerStatus.volume;
+                var vol = this.lmsVol = playerStatus.volume;
                 if (vol != this.playerVolume) {
                     // Ignore changes to 'playerVolume' when switching players...
                     this.ignorePlayerVolChange = this.$store.state.player.id != this.playerId;
@@ -336,6 +337,7 @@ Vue.component('lms-toolbar', {
         bus.$on('playerChanged', function() {
             // Ensure we update volume when player changes.
             this.playerVolume = undefined;
+            this.lmsVol = 0;
         }.bind(this));
 
         bus.$on('nowPlayingClockChanged', function() {
@@ -536,6 +538,11 @@ Vue.component('lms-toolbar', {
             }
         },
         setVolume() {
+            // Prevent large volume jumps
+            if (this.lmsVol<=70 && this.playerVolume>=90) {
+                this.playerVolume = this.lmsVol;
+                return;
+            }
             bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
         },
         toggleMute() {

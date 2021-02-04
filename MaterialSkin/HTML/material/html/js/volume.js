@@ -14,9 +14,9 @@ Vue.component('lms-volume', {
    <v-flex xs12><p class="vol-text">{{playerVolume|displayVolume(dvc)}}</p></v-flex>
    <v-flex xs12>
     <v-layout>
-     <v-btn flat icon @wheel="volWheel($event)" v-longpress:true="volumeDown" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+     <v-btn flat icon @wheel="volWheel($event)" v-longpress:true="volumeDown" class="vol-btn vol-left"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
      <v-slider step="1" :disabled="!dvc" v-model="playerVolume" @wheel.native="volWheel($event)" @click.stop="setVolume" class="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
-     <v-btn flat icon @wheel="volWheel($event)" v-longpress:true="volumeUp" class="vol-btn"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+     <v-btn flat icon @wheel="volWheel($event)" v-longpress:true="volumeUp" class="vol-btn vol-right"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
     </v-layout>
    </v-flex>
    <v-flex xs12>

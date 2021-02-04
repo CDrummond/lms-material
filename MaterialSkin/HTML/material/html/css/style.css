@@ -669,6 +669,14 @@ div.v-subheader {
  height:24px;
 }
 
+.vol-left {
+ margin-right:16px!important;
+}
+
+.vol-right {
+ margin-left:16px!important;
+}
+
 .v-menu__content {
  max-height:calc((var(--vh, 1vh)*100) - var(--std-font-size));
  white-space:nowrap;

@@ -2,6 +2,7 @@
 -----
 1. Delay activating back-button on long press, to prevent search being
    activated.
+2. Increase gap between volume controls and 'Close' button in volume dialog.
 
 2.2.2
 -----

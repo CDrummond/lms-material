@@ -636,7 +636,7 @@ div.v-subheader {
 }
 
 .vol-sheet .vol-slider {
- margin:-6px 0px 0px 0px;
+ margin:-8px 0px 0px 0px;
  height:8px;
 }
 
@@ -663,6 +663,10 @@ div.v-subheader {
 
 .vol-sheet .v-card__actions {
  margin-top:-16px;
+}
+
+.vol-sheet .padding {
+ height:24px;
 }
 
 .v-menu__content {

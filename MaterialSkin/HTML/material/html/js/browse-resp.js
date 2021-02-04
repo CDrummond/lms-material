@@ -433,6 +433,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.type = i.presetParams = i.commonParams = i.menu = i.playallParams = i.addallParams = i.goAction = i.style = undefined;
                 }
                 resp.items.push(i);
+                console.log(i.title, i.id, undefined==i.params ? 'x' : i.params.item_id);
                 types.add(i.type);
             }
             /* ...continuation of favourited album add/play track issue... */

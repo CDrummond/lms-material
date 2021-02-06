@@ -721,8 +721,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         sourcesClicked() {
             // This timeout is a hacky fix for touch devices. When search is opened from home page (where 'Music sources' reacts
             // to clicks) and the back button is clicked to close - then the click 'seems' to fall through to 'Music sources' and
-            // the search widget re-shown! Therefore, ingore click events on 'Music sources' for the first 250ms it is shown.
-            if (undefined==this.backBtnPressTime || (new Date().getTime()-this.backBtnPressTime)>250) {
+            // the search widget re-shown! Therefore, ingore click events on 'Music sources' for the first 750ms it is shown.
+            if (undefined==this.backBtnPressTime || (new Date().getTime()-this.backBtnPressTime)>750) {
                 browseItemAction(this, SEARCH_LIB_ACTION);
             }
         },

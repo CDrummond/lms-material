@@ -351,7 +351,7 @@ function nowplayingFetchBio(view) {
             view.info.tabs[BIO_TAB].reqId = 0;
         }
         var ids = view.infoTrack.artist_ids;
-        if (ids.length>1) {
+        if (undefined!=ids && ids.length>1) {
             view.info.tabs[BIO_TAB].first = true;
             view.info.tabs[BIO_TAB].found = false;
             view.info.tabs[BIO_TAB].count = ids.length;

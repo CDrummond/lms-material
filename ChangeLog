@@ -7,6 +7,8 @@
 4. Prevent volume jumps from <= 70% to >= 90% by clicking on slider.
 5. Fix player refresh loop in manage players dialog.
 6. Fix blank queue when item has 'artist_ids' entry.
+7. Check for 'artist_ids' being undefined (which it is for streaming) when
+   fetching artist biographies.
 
 2.2.2
 -----

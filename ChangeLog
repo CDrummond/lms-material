@@ -1,3 +1,8 @@
+2.2.4
+-----
+1. Ignore click events on 'Music sources' for first 250ms after back button is
+   clicked - to try to prevent search being shown on back long/short click.
+
 2.2.3
 -----
 1. Delay activating back-button on long press, to prevent search being

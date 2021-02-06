@@ -70,7 +70,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <div @click="itemAction(SEARCH_LIB_ACTION, $event)" class="ellipsis subtoolbar-title subtoolbar-title-single pointer">{{trans.sources}}</div>
+   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single pointer">{{trans.sources}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, $event)" class="pointer"></v-spacer>
    <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
@@ -718,6 +718,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
         },
+        sourcesClicked() {
+            // This timeout is a hacky fix for touch devices. When search is opened from home page (where 'Music sources' reacts
+            // to clicks) and the back button is clicked to close - then the click 'seems' to fall through to 'Music sources' and
+            // the search widget re-shown! Therefore, ingore click events on 'Music sources' for the first 250ms it is shown.
+            if (undefined==this.backBtnPressTime || (new Date().getTime()-this.backBtnPressTime)>250) {
+                browseItemAction(this, SEARCH_LIB_ACTION);
+            }
+        },
         itemAction(act, item, index, event) {
             browseItemAction(this, act, item, index, event);
         },
@@ -895,17 +903,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
-                // This timeout is a hacky fix for touch devices. When search is opened from home page (where 'Music sources' reacts
-                // to clicks) and the back button is clicked to close - then the click 'seems' to fall through to 'Music sources' and
-                // the search widget re-shown! Delaying processing this click by Xms seems to resolve this - as, I assume, the touch
-                // event finishes before we close the search widget and show 'Music sources'
-                setTimeout(function () {
-                    if (longPress && !this.$store.state.homeButton) {
-                        this.goHome();
-                    } else {
-                        this.goBack();
-                    }
-                }.bind(this), 75);
+                this.backBtnPressTime = new Date().getTime(); // See sourcesClicked
+                if (longPress && !this.$store.state.homeButton) {
+                    this.goHome();
+                } else {
+                    this.goBack();
+                }
             }
         },
         goBack(refresh) {

@@ -9,6 +9,8 @@
 6. Fix blank queue when item has 'artist_ids' entry.
 7. Check for 'artist_ids' being undefined (which it is for streaming) when
    fetching artist biographies.
+8. Make desktop layout's bottom now-playing bar metrics consistent with and
+   without stop button being shown.
 
 2.2.2
 -----

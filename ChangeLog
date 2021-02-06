@@ -2,6 +2,8 @@
 -----
 1. Ignore click events on 'Music sources' for first 250ms after back button is
    clicked - to try to prevent search being shown on back long/short click.
+2. Don't bind 'Ctrl+C' for add favourite/podcast, this conflicts with 'Copy',
+   should have been using 'Ctrl+Shift+C'
 
 2.2.3
 -----

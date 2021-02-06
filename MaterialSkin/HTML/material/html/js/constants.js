@@ -51,7 +51,7 @@ const LMS_SEARCH_KEYBOARD = "F";
 const LMS_EXPAND_NP_KEYBOARD = "E"; // +shift
 const LMS_PLAY_KEYBOARD = "P"; // + shift
 const LMS_APPEND_KEYBOARD = "A"; // + shift
-const LMS_ADD_ITEM_ACTION_KEYBOARD = "C";
+const LMS_ADD_ITEM_ACTION_KEYBOARD = "C"; // + shift
 const LMS_CREATE_FAV_FOLDER_KEYBOARD = "M"; // +shift
 const LMS_TOGGLE_QUEUE_KEYBOARD = "Q"; // +shift
 

@@ -426,7 +426,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');
             bindKey(LMS_PLAY_KEYBOARD, 'mod+shift');
             bindKey(LMS_APPEND_KEYBOARD, 'mod+shift');
-            bindKey(LMS_ADD_ITEM_ACTION_KEYBOARD, 'mod');
+            bindKey(LMS_ADD_ITEM_ACTION_KEYBOARD, 'mod+shift');
             bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
             bindKey('pageup');
             bindKey('pagedown');

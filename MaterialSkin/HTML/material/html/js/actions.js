@@ -129,7 +129,7 @@ function updateActionStrings() {
     ACTIONS[RENAME_ACTION].title=i18n("Rename");
     ACTIONS[EDIT_ACTION].title=i18n("Edit");
     ACTIONS[ADD_FAV_ACTION].title=i18n("Add favorite");
-    ACTIONS[ADD_FAV_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD;
+    ACTIONS[ADD_FAV_ACTION].skey=LMS_ADD_ITEM_ACTION_KEYBOARD;
     ACTIONS[DELETE_ACTION].title=ACTIONS[DELETE_FAV_FOLDER_ACTION].title=i18n("Delete");
     ACTIONS[ADD_TO_FAV_ACTION].title=i18n("Add to favorites");
     ACTIONS[REMOVE_FROM_FAV_ACTION].title=i18n("Remove from favorites");
@@ -148,7 +148,7 @@ function updateActionStrings() {
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");
     ACTIONS[VLIB_ACTION].title=i18n("Change library");
     ACTIONS[ADD_PODCAST_ACTION].title=i18n("Add podcast");
-    ACTIONS[ADD_PODCAST_ACTION].key=LMS_ADD_ITEM_ACTION_KEYBOARD
+    ACTIONS[ADD_PODCAST_ACTION].skey=LMS_ADD_ITEM_ACTION_KEYBOARD
     ACTIONS[REMOVE_PODCAST_ACTION].title=i18n("Remove");
     ACTIONS[SEARCH_PODCAST_ACTION].title=i18n("Search for podcasts");
     ACTIONS[SEARCH_PODCAST_ACTION].key=LMS_SEARCH_KEYBOARD;

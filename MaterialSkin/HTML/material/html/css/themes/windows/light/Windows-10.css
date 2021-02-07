@@ -33,7 +33,7 @@
  --top-toolbar-text-color:var(--dark-text-color);
  --sub-toolbar-text-color:var(--dark-text-color);
  --bottom-toolbar-text-color:var(--dark-text-color);
- --active-nav-btn-color:var(--accent-color);
+ --active-nav-btn-color:var(--primary-color);
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
  --browse-header-color:rgba(248, 248, 248, 0.35);

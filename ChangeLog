@@ -5,6 +5,7 @@
 2. Don't bind 'Ctrl+C' for add favourite/podcast, this conflicts with 'Copy',
    should have been using 'Ctrl+Shift+C'
 3. Use primary, not accent, colour for active navbar with light themes.
+4. Attempt to handle errors thrown by decodeURIComponent()
 
 2.2.3
 -----

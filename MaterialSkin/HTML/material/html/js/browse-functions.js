@@ -153,10 +153,14 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 if (view.items.length>0) {
                     let url = view.items[0].header ? (view.items.length>1 ? view.items[1].url : undefined) : view.items[0].url;
                     if (undefined!=url) {
-                        actParams['path']=decodeURIComponent(url.substring(0, url.lastIndexOf('/'))+'/').substring(7);
-                        // if we have (e.g.) /c:/path change to c:/path
-                        if (/^\/[a-zA-Z]:\/.+/.test(actParams['path'])) {
-                            actParams['path'] = actParams['path'].substring(1);
+                        try {
+                            actParams['path']=decodeURIComponent(url.substring(0, url.lastIndexOf('/'))+'/').substring(7);
+                            // if we have (e.g.) /c:/path change to c:/path
+                            if (/^\/[a-zA-Z]:\/.+/.test(actParams['path'])) {
+                                actParams['path'] = actParams['path'].substring(1);
+                            }
+                        } catch(e) {
+                            logError(e);
                         }
                     }
                 }

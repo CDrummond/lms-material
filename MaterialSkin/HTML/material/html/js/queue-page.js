@@ -219,8 +219,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
@@ -246,6 +246,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.removeall" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
+   <v-btn :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="addSelectionToPlaylist()"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <v-divider vertical v-if="desktopLayout"></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -828,6 +829,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 lmsCommand(this.$store.state.player.id, ["playlist", "zap", index]).then(({data}) => {
                     bus.$emit('showMessage', i18n("Zapped '%1'", item.title));
                 });
+            } else if (ADD_TO_PLAYLIST_ACTION==act) {
+                bus.$emit('dlg.open', 'addtoplaylist', [item], []);
             }
         },
         headerAction(act) {
@@ -856,6 +859,15 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         itemMenu(item, index, event) {
             showMenu(this, {show:true, item:item, index:index, x:event.clientX, y:event.clientY});
+        },
+        addSelectionToPlaylist() {
+            var selection = Array.from(this.selection);
+            selection.sort(function(a, b) { return a<b ? -1 : 1; });
+            var items=[];
+            for (var i=0, len=selection.length; i<len; ++i) {
+                items.push(this.items[selection[i]]);
+            }
+            bus.$emit('dlg.open', 'addtoplaylist', items, []);
         },
         removeSelectedItems() {
             var selection = Array.from(this.selection);

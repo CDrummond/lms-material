@@ -1,3 +1,7 @@
+2.3.0
+-----
+1. Add 'Add to playlist' to queue items and subtoolbar (when have selection).
+
 2.2.4
 -----
 1. Ignore click events on 'Music sources' for first 750ms after back button is

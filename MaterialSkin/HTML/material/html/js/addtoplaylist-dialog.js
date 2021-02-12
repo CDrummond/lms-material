@@ -50,6 +50,9 @@ Vue.component('lms-addtoplaylist-dialog', {
                         this.existing.push(loop[i].playlist);
                     }
                     this.existing.sort();
+                    if (this.name.length<1 && this.existing.length>0) {
+                        this.name = this.existing[0];
+                    }
                 }
             });
         }.bind(this));

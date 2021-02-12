@@ -8,6 +8,7 @@
 4. Attempt to handle errors thrown by decodeURIComponent()
 5. Fix 'Add to playlist' not showing in subtoolbar when select items of
    multi-disc albums.
+6. Refresh playlist when add items.
 
 2.2.3
 -----

@@ -172,6 +172,7 @@ Vue.component('lms-addtoplaylist-dialog', {
                     this.savePlaylist(name, id, tracks);
                 } else {
                     bus.$emit('showMessage', i18n("Added to '%1'", name));
+                    bus.$emit('refreshPlaylist', name);
                 }
             }).catch(err => {
                 bus.$emit('showError', err, i18n("Failed to add to playlist!"));

@@ -2,6 +2,8 @@
 -----
 1. Add 'Add to playlist' to queue items and subtoolbar (when have selection).
 2. If playlist name is empty in 'Add to playlist' dialog, then select first.
+3. If previousplay list name is no longer valid when open 'Add to playlist'
+   dialog, then select first.
 
 2.2.4
 -----

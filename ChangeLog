@@ -4,6 +4,7 @@
 2. If playlist name is empty in 'Add to playlist' dialog, then select first.
 3. If previousplay list name is no longer valid when open 'Add to playlist'
    dialog, then select first.
+4. Set list item hover highlight for all themes.
 
 2.2.4
 -----

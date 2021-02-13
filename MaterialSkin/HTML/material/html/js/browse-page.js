@@ -242,7 +242,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==RATING_ACTION ? undefined!=ratingsPlugin : true" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==RATING_ACTION ? undefined!=ratingsPlugin : true" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -1039,6 +1039,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.selection = new Set();
             this.selectStart = undefined;
+            bus.$emit('browseSelection', false);
         },
         select(item, index, event) {
             if (this.selection.size>0) {
@@ -1601,7 +1602,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.setBgndCover();
         this.letterOverlay=document.getElementById("letterOverlay");
         bus.$on('browseQueueDrop', function(browseIndex, queueIndex, queueSize) {
-            if (browseIndex>=0 && browseIndex<this.items.length) {
+            if ((browseIndex>=0 && browseIndex<this.items.length) || (-1==browseIndex && this.selection.size>0)) {
                 browseInsertQueue(this, browseIndex, queueIndex, queueSize);
             }
         }.bind(this));
@@ -1609,6 +1610,19 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragActive = act;
             if (!act) {
                 this.dropIndex = -1;
+            }
+        }.bind(this));
+        this.browseSelection=false;
+        bus.$on('queueSelection', function(sel) {
+            this.queueSelection=sel;
+        }.bind(this));
+        bus.$on('queueSelectedUrls', function(urls, index, id) {
+            if (this.current.section==SECTION_PLAYLISTS) {
+                if (id.startsWith("playlist_id")) {
+                    browseAddToPlaylist(this, urls, id);
+                } else {
+                    browseAddToPlaylist(this, urls, this.current.id, index, this.items.length);
+                }
             }
         }.bind(this));
     },

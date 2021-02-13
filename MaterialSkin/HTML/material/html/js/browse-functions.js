@@ -741,6 +741,9 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (SELECT_ACTION===act) {
         if (!view.selection.has(index)) {
+            if (0==view.selection.size) {
+                bus.$emit('browseSelection', true);
+            }
             view.selection.add(index);
             item.selected = true;
             forceItemUpdate(view, item);
@@ -765,6 +768,9 @@ function browseItemAction(view, act, item, index, event) {
             view.selection.delete(index);
             item.selected = false;
             forceItemUpdate(view, item);
+            if (0==view.selection.size) {
+                bus.$emit('browseSelection', false);
+            }
         }
     } else if (MOVE_HERE_ACTION==act) {
         if (view.selection.size>0 && !view.selection.has(index)) {
@@ -884,6 +890,8 @@ function browseItemAction(view, act, item, index, event) {
                 }
             }
         });
+    } else if (BR_COPY_ACTION==act) {
+        bus.$emit('queueGetSelectedUrls', index, item.id);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {
@@ -1755,9 +1763,11 @@ function browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, tracks) {
 function browseInsertQueue(view, index, queueIndex, queueSize) {
     var commands = [];
     var indexes = [];
-    if (view.selection.size>1) {
+    if ((view.selection.size>1) || (-1==index && view.selection.size>0)) {
         var sel = Array.from(view.selection);
         indexes = sel.sort(function(a, b) { return a<b ? 1 : -1; });
+    } else if (-1==index) {
+        return;
     } else {
         indexes=[index];
     }

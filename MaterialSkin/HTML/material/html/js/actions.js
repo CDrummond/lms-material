@@ -58,6 +58,8 @@ const REMOVE_DUPES_ACTION     = 44;
 const FOLLOW_LINK_ACTION      = 45;
 const SEARCH_TEXT_ACTION      = 46;
 const RELOAD_ACTION           = 47;
+const BR_COPY_ACTION          = 48;
+const PQ_COPY_ACTION          = 49;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -113,7 +115,9 @@ var ACTIONS=[
     {cmd:"follow-link",  icon:"public"},
     {cmd:"search-text",  icon:"search"},
 
-    {cmd:"refresh",      icon:"refresh"}
+    {cmd:"refresh",      icon:"refresh"},
+    {cmd:"copy-here",    icon:"content_copy"},
+    {cmd:"copy-here",    icon:"content_copy"}
 ];
 
 function updateActionStrings() {
@@ -172,5 +176,7 @@ function updateActionStrings() {
     ACTIONS[FOLLOW_LINK_ACTION].title=i18n("Follow link");
     ACTIONS[SEARCH_TEXT_ACTION].title=i18n("Search");
     ACTIONS[RELOAD_ACTION].title=i18n("Reload");
+    ACTIONS[BR_COPY_ACTION].title=i18n("Copy queue selection here");
+    ACTIONS[PQ_COPY_ACTION].title=i18n("Copy browse selection here");
 }
 

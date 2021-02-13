@@ -219,8 +219,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
@@ -349,7 +349,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : (action==PQ_ZAP_ACTION ? customSkipPlugin : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex))" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : (action==PQ_ZAP_ACTION ? customSkipPlugin : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex))" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -635,6 +635,17 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.dropIndex = -1;
             }
         }.bind(this));
+        this.browseSelection=false;
+        bus.$on('browseSelection', function(sel) {
+            this.browseSelection=sel;
+        }.bind(this));
+        bus.$on('queueGetSelectedUrls', function(index, id) {
+            var urls = this.getSelectedUrls();
+            if (urls.length>0) {
+                bus.$emit('queueSelectedUrls', urls, index, id);
+                this.clearSelection();
+            }
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -795,6 +806,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             } else if (SELECT_ACTION===act) {
                 if (!this.selection.has(index)) {
+                    if (0==this.selection.size) {
+                        bus.$emit('queueSelection', true);
+                    }
                     this.selection.add(index);
                     item.selected = true;
                     forceItemUpdate(this, item);
@@ -819,6 +833,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.selection.delete(index);
                     item.selected = false;
                     forceItemUpdate(this, item);
+                    if (0==this.selection.size) {
+                        bus.$emit('queueSelection', false);
+                    }
                 }
             } else if (MOVE_HERE_ACTION==act) {
                 if (this.selection.size>0 && !this.selection.has(index)) {
@@ -831,6 +848,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             } else if (ADD_TO_PLAYLIST_ACTION==act) {
                 bus.$emit('dlg.open', 'addtoplaylist', [item], []);
+            } else if (PQ_COPY_ACTION==act) {
+                bus.$emit('browseQueueDrop', -1, index, this.listSize);
             }
         },
         headerAction(act) {
@@ -904,6 +923,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }
             this.selection = new Set();
+            bus.$emit('queueSelection', false);
         },
         select(item, index, event) {
             if (this.selection.size>0) {
@@ -1077,20 +1097,24 @@ var lmsQueue = Vue.component("lms-queue", {
             ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
-            var selection = []
             if (this.selection.size>0 && !this.selection.has(which)) {
                 this.clearSelection();
             }
+            window.mskQueueDrag = this.getSelectedUrls();
+        },
+        getSelectedUrls() {
+            var selection = []
             if (this.selection.size>0) {
                 selection = Array.from(this.selection);
                 selection.sort(function(a, b) { return a<b ? -1 : 1; });
             } else {
                 selection.push(which);
             }
-            window.mskQueueDrag = [];
+            var urls = [];
             for (var i=0, len=selection.length; i<len; ++i) {
-                window.mskQueueDrag.push(this.items[selection[i]].url);
+                urls.push(this.items[selection[i]].url);
             }
+            return urls;
         },
         dragEnd() {
             this.stopScrolling = true;

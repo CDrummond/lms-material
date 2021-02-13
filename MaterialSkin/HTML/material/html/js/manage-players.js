@@ -479,7 +479,7 @@ Vue.component('lms-manage-players', {
         },
         refreshPlayer(player, canChangeGroup, i) {
             bus.$emit('refreshStatus', player.id);
-            // If a groip we need to refresh all members
+            // If a group we need to refresh all members
             if (player.isgroup && player.syncslaves && canChangeGroup) {
                 for (var j=0, len=player.syncslaves.length; j<len; ++j) {
                     bus.$emit('refreshStatus', player.syncslaves[j]);

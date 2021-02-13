@@ -68,6 +68,7 @@
     <lms-sync-dialog v-if="dialogs.sync"></lms-sync-dialog>
     <lms-groupplayers-dialog v-if="dialogs.group"></lms-groupplayers-dialog>
     <lms-volume v-if="dialogs.volume"></lms-volume>
+    <lms-groupvolume v-if="dialogs.groupvolume"></lms-groupvolume>
     <lms-manage-players v-if="dialogs.manage"></lms-manage-players>
     <lms-randommix v-if="dialogs.rndmix"></lms-randommix>
     <lms-favorite v-if="dialogs.favorite"></lms-favorite>
@@ -180,7 +181,7 @@
      }
    }
    function loadOtherFiles() {
-     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "podcast-dialog", "podcast-search-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog"],
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "podcast-dialog", "podcast-search-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog"],
      [% PERL %]
      my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
      print("                \"$version\", )");

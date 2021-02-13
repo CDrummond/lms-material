@@ -7,6 +7,9 @@
 4. Set list item hover highlight for all themes.
 5. Add menu items to copy queue selection to playlist, and browse selection to
    queue.
+6. When showing volume-popup show all volumes if in sync group.
+7. If player is in sync group, then add a button next to volume-slider to show
+   volume-popup with all volumes.
 
 2.2.4
 -----

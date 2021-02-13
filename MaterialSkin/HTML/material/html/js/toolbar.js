@@ -77,6 +77,7 @@ Vue.component('lms-toolbar', {
  <v-spacer></v-spacer>
  <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
+ <v-btn v-show="playerStatus.synced && showVolumeSlider" icon flat class="toolbar-button hide-for-mini" id="vol-group-btn" :title="trans.groupVol" @click="bus.$emit('dlg.open', 'groupvolume', playerStatus)"><v-icon>speaker_group</v-icon></v-btn>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button vol-left" v-longpress:true="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <div v-show="showVolumeSlider">
   <v-slider :disabled="!playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
@@ -193,7 +194,7 @@ Vue.component('lms-toolbar', {
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
                         mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined, toggleQueue:undefined,
-                        toggleQueueShortcut:undefined},
+                        toggleQueueShortcut:undefined, groupVol:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -268,6 +269,12 @@ Vue.component('lms-toolbar', {
             this.controlSleepTimer(playerStatus.will_sleep_in);
             if (playerStatus.synced!=this.playerStatus.synced) {
                 this.playerStatus.synced = playerStatus.synced;
+            }
+            if (playerStatus.syncmaster!=this.playerStatus.syncmaster) {
+                this.playerStatus.syncmaster = playerStatus.syncmaster;
+            }
+            if (playerStatus.syncslaves!=this.playerStatus.syncslaves) {
+                this.playerStatus.syncslaves = playerStatus.syncslaves;
             }
             if (playerStatus.current.title!=this.playerStatus.current.title ||
                 (playerStatus.current.artist && playerStatus.current.artist!=this.playerStatus.current.artist) ||
@@ -452,7 +459,8 @@ Vue.component('lms-toolbar', {
                           groupPlayers:("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
-                          appSettings:i18n('Application settings'), appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)};
+                          appSettings:i18n('Application settings'), appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'),
+                          toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -533,7 +541,7 @@ Vue.component('lms-toolbar', {
                 } else if (longPress && this.playerDvc) {
                     bus.$emit('playerCommand', ['mixer', 'muting', 1]);
                 } else {
-                    bus.$emit('dlg.open', 'volume');
+                    bus.$emit('dlg.open', this.playerStatus.synced && window.innerHeight>600 ? 'groupvolume' : 'volume', this.playerStatus);
                 }
             }
         },

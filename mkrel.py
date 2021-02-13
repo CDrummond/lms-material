@@ -457,6 +457,6 @@ if version!="test":
     if os.path.exists(REPO_XML):
         updateRepoXml(REPO_XML, version, zipFile, sha1, "MaterialSkin")
     if os.path.exists(PUBLIC_XML):
-        updateRepoXml(PUBLIC_XML, version, zipFile, sha1)
+        updateRepoXml(PUBLIC_XML, version, zipFile, sha1, "MaterialSkin")
 cleanup()
 

@@ -68,8 +68,8 @@ Vue.component('lms-player-settings', {
 
     <v-list-tile class="other-setting">
      <v-list-tile-content>
-      <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
       <v-list-tile-title><v-btn flat @click="setSleep"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn></v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
      
@@ -119,14 +119,14 @@ Vue.component('lms-player-settings', {
      <v-header>{{i18n('Other settings')}}</v-header>
      <v-list-tile class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-sub-title>{{i18n('Extra player settings, such as synchronization options, player specific plugin settings, etc.')}}</v-list-tile-sub-title>
        <v-list-tile-title><v-btn flat @click="showExtraSettings"><img class="svg-img btn-icon" :src="'configure'| svgIcon(darkUi)"></img>{{i18n('Extra settings')}}</v-btn></v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Extra player settings, such as synchronization options, player specific plugin settings, etc.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>
      <v-list-tile v-if="playerLink" class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-sub-title>{{i18n('Player specific configuration UI, such as piCorePlayer or SqueezeAMP.')}}</v-list-tile-sub-title>
        <v-list-tile-title><v-btn flat @click="showConfig"><v-icon class="btn-icon">build</v-icon>{{i18n('Configuration')}}</v-btn></v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Player specific configuration UI, such as piCorePlayer or SqueezeAMP.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>
        

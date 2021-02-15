@@ -2105,8 +2105,9 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .other-setting .v-list__tile__sub-title {
  padding-left:24px;
+ padding-bottom:12px;
 }
 
 .other-setting .v-list__tile__title {
- height:52px;
+ height:48px;
 }

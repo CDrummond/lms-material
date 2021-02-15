@@ -2098,3 +2098,15 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .cursor {
  cursor:pointer;
 }
+
+.other-setting {
+ margin-left:-24px;
+}
+
+.other-setting .v-list__tile__sub-title {
+ padding-left:24px;
+}
+
+.other-setting .v-list__tile__title {
+ height:52px;
+}

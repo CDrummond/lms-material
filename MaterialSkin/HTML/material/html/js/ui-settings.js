@@ -27,19 +27,6 @@ Vue.component('lms-ui-settings', {
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-divider></v-divider>
-      <v-list-tile :href="appSettings" v-if="undefined!=appSettings">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="openPlayerSettings()">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{TB_PLAYER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile v-if="unlockAll" @click="openServerSettings()">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_SERVER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{TB_SERVER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
      </v-list>
     </v-menu>
    </v-toolbar>
@@ -337,6 +324,29 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <div class="dialog-padding"></div>
+    <v-header>{{i18n('Other settings')}}</v-header>
+    <v-list-tile v-if="unlockAll" class="other-setting">
+     <v-list-tile-content>
+      <v-list-tile-sub-title>{{i18n('LMS server settings, such as plugins, logging, etc.')}}</v-list-tile-sub-title>
+      <v-list-tile-title><v-btn flat @click="openServerSettings"><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn></v-list-tile-title>
+     </v-list-tile-content>
+    </v-list-tile>
+
+    <v-list-tile class="other-setting">
+     <v-list-tile-content>
+      <v-list-tile-sub-title>{{i18n('Player specifc settings, such as name, audio, alarms, etc.')}}</v-list-tile-sub-title>
+      <v-list-tile-title><v-btn @click="openPlayerSettings" flat><v-icon class="btn-icon">{{TB_PLAYER_SETTINGS.icon}}</v-icon>{{TB_PLAYER_SETTINGS.title}}</v-btn></v-list-tile-title>
+     </v-list-tile-content>
+    </v-list-tile>
+
+    <v-list-tile v-if="appSettings" class="other-setting">
+     <v-list-tile-content>
+      <v-list-tile-sub-title>{{i18n('Application specific settings, such as zoom scale, etc.')}}</v-list-tile-sub-title>
+      <v-list-tile-title><v-btn :href="appSettings" flat><v-icon class="btn-icon">settings_applications</v-icon>{{i18n('Application settings')}}</v-btn></v-list-tile-title>
+     </v-list-tile-content>
     </v-list-tile>
 
     <div class="dialog-padding"></div>

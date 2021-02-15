@@ -1,18 +1,20 @@
 2.3.0
 -----
-1. Add 'Add to playlist' to queue items and subtoolbar (when have selection).
-2. If playlist name is empty in 'Add to playlist' dialog, then select first.
-3. If previousplay list name is no longer valid when open 'Add to playlist'
-   dialog, then select first.
-4. Set list item hover highlight for all themes.
-5. Add menu items to copy queue selection to playlist, and browse selection to
-   queue.
-6. When showing volume-popup show all volumes if in sync group.
-7. If player is in sync group, then add a button next to volume-slider to show
-   volume-popup with all volumes.
-8. Add link to player settings from 'Information' dialog.
-9. Move 'Server settings', 'Player settings' and (for Android APK) 'Application
-   settings' from main menu into 'Settings' dialog.
+ 1. Add 'Add to playlist' to queue items and subtoolbar (when have selection).
+ 2. If playlist name is empty in 'Add to playlist' dialog, then select first.
+ 3. If previousplay list name is no longer valid when open 'Add to playlist'
+    dialog, then select first.
+ 4. Set list item hover highlight for all themes.
+ 5. Add menu items to copy queue selection to playlist, and browse selection to
+    queue.
+ 6. When showing volume-popup show all volumes if in sync group.
+ 7. If player is in sync group, then add a button next to volume-slider to show
+    volume-popup with all volumes.
+ 8. Add link to player settings from 'Information' dialog.
+ 9. Move 'Server settings', 'Player settings' and (for Android APK) 'Application
+    settings' from main menu into 'Settings' dialog.
+10. Move 'Extra settings' out of 'Player settings' dialog's menu and place as
+    button at bottom of dialog.
 
 2.2.4
 -----

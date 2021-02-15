@@ -18,18 +18,9 @@ Vue.component('lms-player-settings', {
      <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer v-if="unlockAll || (customActions && customActions.length>0)"></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="customActions || unlockAll">
+     <v-menu bottom left v-model="showMenu" v-if="customActions">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
-       <v-list-tile v-if="unlockAll" @click="showExtraSettings">
-        <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-       <v-list-tile v-if="unlockAll && playerLink" @click="showConfig">
-        <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-       <v-divider v-if="unlockAll && (customActions && customActions.length>0)"></v-divider>
        <template v-for="(action, index) in customActions">
         <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
          <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
@@ -75,9 +66,13 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
 
-    <v-list-tile>
-     <v-btn @click="setSleep()" flat style="margin-left:-8px"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn>
+    <v-list-tile class="other-setting">
+     <v-list-tile-content>
+      <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
+      <v-list-tile-title><v-btn flat @click="setSleep"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn></v-list-tile-title>
+     </v-list-tile-content>
     </v-list-tile>
+     
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header" v-if="unlockAll" id="alarms">{{i18n('Alarms')}}</v-header>
      <v-list-tile v-if="unlockAll">
@@ -120,6 +115,21 @@ Vue.component('lms-player-settings', {
       <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>
 
+     <div class="dialog-padding"></div>
+     <v-header>{{i18n('Other settings')}}</v-header>
+     <v-list-tile class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-sub-title>{{i18n('Extra player settings, such as synchronization options, player specific plugin settings, etc.')}}</v-list-tile-sub-title>
+       <v-list-tile-title><v-btn flat @click="showExtraSettings"><img class="svg-img btn-icon" :src="'configure'| svgIcon(darkUi)"></img>{{i18n('Extra settings')}}</v-btn></v-list-tile-title>
+      </v-list-tile-content>
+     </v-list-tile>
+     <v-list-tile v-if="playerLink" class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-sub-title>{{i18n('Player specific configuration UI, such as piCorePlayer or SqueezeAMP.')}}</v-list-tile-sub-title>
+       <v-list-tile-title><v-btn flat @click="showConfig"><v-icon class="btn-icon">build</v-icon>{{i18n('Configuration')}}</v-btn></v-list-tile-title>
+      </v-list-tile-content>
+     </v-list-tile>
+       
      <div class="dialog-padding"></div>
 
     </v-list>

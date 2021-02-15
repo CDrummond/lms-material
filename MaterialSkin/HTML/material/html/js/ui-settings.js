@@ -27,6 +27,19 @@ Vue.component('lms-ui-settings', {
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
+      <v-divider></v-divider>
+      <v-list-tile :href="appSettings" v-if="undefined!=appSettings">
+       <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="openPlayerSettings()">
+       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{TB_PLAYER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile v-if="unlockAll" @click="openServerSettings()">
+       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_SERVER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{TB_SERVER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
      </v-list>
     </v-menu>
    </v-toolbar>
@@ -414,7 +427,8 @@ Vue.component('lms-ui-settings', {
             serverName: "",
             showRating: false,
             homeButton: false,
-            powerButton: false
+            powerButton: false,
+            appSettings: queryParams.appSettings
         }
     },
     computed: {
@@ -429,6 +443,9 @@ Vue.component('lms-ui-settings', {
         },
         ratingsPlugin() {
             return this.$store.state.ratingsPlugin
+        },
+        unlockAll() {
+            return this.$store.state.unlockAll
         }
     },
     mounted() {
@@ -760,10 +777,6 @@ Vue.component('lms-ui-settings', {
                 list.push(shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)+SEPARATOR+i18n("Toggle queue"));
             }
             list.push(shortcutStr(LMS_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title);
-            list.push(shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title);
-            if (this.$store.state.unlockAll) {
-                list.push(shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD)+SEPARATOR+TB_SERVER_SETTINGS.title);
-            }
             list.push(shortcutStr(LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
             list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
             list.push(i18n("Alt+(N)")+SEPARATOR+i18n("Switch to Nth player"));
@@ -787,6 +800,15 @@ Vue.component('lms-ui-settings', {
         showBrowseModesDialog() {
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
+        },
+        openServerSettings() {
+            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName,
+                        // Keep in sync with information.js *!
+                        [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
+                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+        },
+        openPlayerSettings() {
+            bus.$emit('dlg.open', 'playersettings');
         }
     },
     watch: {

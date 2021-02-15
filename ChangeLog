@@ -11,6 +11,8 @@
 7. If player is in sync group, then add a button next to volume-slider to show
    volume-popup with all volumes.
 8. Add link to player settings from 'Information' dialog.
+9. Move 'Server settings', 'Player settings' and (for Android APK) 'Application
+   settings' from main menu into 'Settings' dialog.
 
 2.2.4
 -----

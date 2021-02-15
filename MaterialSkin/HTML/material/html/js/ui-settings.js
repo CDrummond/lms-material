@@ -328,24 +328,25 @@ Vue.component('lms-ui-settings', {
 
     <div class="dialog-padding"></div>
     <v-header>{{i18n('Other settings')}}</v-header>
-    <v-list-tile v-if="unlockAll" class="other-setting">
+
+    <v-list-tile v-if="appSettings" class="other-setting">
      <v-list-tile-content>
-      <v-list-tile-title><v-btn flat @click="openServerSettings"><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('LMS server settings, such as plugins, logging, etc.')}}</v-list-tile-sub-title>
+      <v-list-tile-title><v-btn :href="appSettings" flat><v-icon class="btn-icon">settings_applications</v-icon>{{i18n('Application settings')}}</v-btn></v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Application specific settings, such as zoom scale, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
 
-    <v-list-tile class="other-setting">
+    <v-list-tile v-if="player" class="other-setting">
      <v-list-tile-content>
       <v-list-tile-title><v-btn @click="openPlayerSettings" flat><v-icon class="btn-icon">{{TB_PLAYER_SETTINGS.icon}}</v-icon>{{TB_PLAYER_SETTINGS.title}}</v-btn></v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Player specifc settings, such as name, audio, alarms, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
 
-    <v-list-tile v-if="appSettings" class="other-setting">
+    <v-list-tile v-if="unlockAll" class="other-setting">
      <v-list-tile-content>
-      <v-list-tile-title><v-btn :href="appSettings" flat><v-icon class="btn-icon">settings_applications</v-icon>{{i18n('Application settings')}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Application specific settings, such as zoom scale, etc.')}}</v-list-tile-sub-title>
+      <v-list-tile-title><v-btn flat @click="openServerSettings"><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn></v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('LMS server settings, such as plugins, logging, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
 
@@ -456,6 +457,9 @@ Vue.component('lms-ui-settings', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        player() {
+            return this.$store.state.player
         }
     },
     mounted() {

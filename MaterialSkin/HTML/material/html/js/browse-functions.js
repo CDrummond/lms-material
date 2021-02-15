@@ -387,7 +387,7 @@ function browseClick(view, item, index, event) {
     }
     if (item.type=="extra") {
         if (view.$store.state.player) {
-            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, true);
+            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, 1);
         } else {
             bus.$emit('showError', undefined, i18n("No Player"));
         }
@@ -482,7 +482,7 @@ function browseClick(view, item, index, event) {
         bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (item.weblink) {
         if (!IS_IOS) {
-            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, true);
+            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, 1);
         } else {
             window.open(item.weblink);
         }

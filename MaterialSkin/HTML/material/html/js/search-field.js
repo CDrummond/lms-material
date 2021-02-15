@@ -65,7 +65,7 @@ Vue.component('lms-search-field', {
         },
         advanced() {
             bus.$emit('closeLibSearch');
-            bus.$emit('dlg.open', 'iframe', '/material/advanced_search.html?player='+this.$store.state.player.id, i18n('Advanced search')+SEPARATOR+this.$store.state.player.name, undefined, true);
+            bus.$emit('dlg.open', 'iframe', '/material/advanced_search.html?player='+this.$store.state.player.id, i18n('Advanced search')+SEPARATOR+this.$store.state.player.name, undefined, 1);
         },
         textChanged(event) {
             this.stopDebounce();

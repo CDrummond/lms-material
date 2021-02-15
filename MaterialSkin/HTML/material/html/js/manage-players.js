@@ -79,7 +79,7 @@ Vue.component('lms-manage-players', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)">
-    <v-btn flat v-if="!draggingSyncedPlayer" icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat v-if="!draggingSyncedPlayer" icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title class="ellipsis" style="width:100%; text-align:center" v-if="draggingSyncedPlayer">{{i18n('Drop here to remove from group')}}</v-toolbar-title>
     <v-toolbar-title class="ellipsis" v-else>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
     <v-spacer v-if="!draggingSyncedPlayer"></v-spacer>
@@ -359,7 +359,7 @@ Vue.component('lms-manage-players', {
             } else if (PMGR_SYNC_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'sync', player);
             } else if (PMGR_SETTINGS_ACTION.cmd==cmd) {
-                bus.$emit('dlg.open', 'playersettings', player);
+                bus.$emit('dlg.open', 'playersettings', player, undefined, true);
             } else if (PMGR_POWER_ON_ACTION.cmd==cmd || PMGR_POWER_OFF_ACTION.cmd==cmd) {
                 this.togglePower(player);
             } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
@@ -368,6 +368,13 @@ Vue.component('lms-manage-players', {
                 this.$store.commit('setDefaultPlayer', player.id);
             } else if (PMGR_UNSET_DEF_PLAYER_ACTION.cmd==cmd) {
                 this.$store.commit('setDefaultPlayer', undefined);
+            }
+        },
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                this.close();
             }
         },
         close() {

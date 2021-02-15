@@ -223,6 +223,13 @@ function setRatingsPlugin(state, plugins) {
     });
 }
 
+function closePrevDialog(state) {
+    if (state.openDialogs.length>0) {
+        bus.$emit('esc');
+        bus.$nextTick(() => { closePrevDialog(state) });
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -673,6 +680,9 @@ const store = new Vuex.Store({
                 }
                 emitToolbarColors(topColorVar, botColorVar);
             }
+        },
+        closeAllDialogs(state, val) {
+            closePrevDialog(state);
         },
         setUpdatesAvailable(state, val) {
             state.updatesAvailable = val;

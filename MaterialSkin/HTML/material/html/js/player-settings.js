@@ -15,7 +15,8 @@ Vue.component('lms-player-settings', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer v-if="unlockAll || (customActions && customActions.length>0)"></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="customActions">
@@ -243,7 +244,8 @@ Vue.component('lms-player-settings', {
             trans:{dstm:undefined},
             libraries:[],
             library:undefined,
-            customActions:undefined
+            customActions:undefined,
+            showHome:false
         }
     },
     computed: {
@@ -265,6 +267,9 @@ Vue.component('lms-player-settings', {
         },
         twentyFourHour() {
             return this.$store.state.twentyFourHour
+        },
+        homeButton() {
+            return this.$store.state.homeButton
         }
     },
     mounted() {
@@ -284,7 +289,7 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
 
-        bus.$on('playersettings.open', function(player, section) {
+        bus.$on('playersettings.open', function(player, section, showHome) {
             // Check if called via actions URL query. If so, need to map from mac/name to player instance
             if (typeof player === 'string' || player instanceof String) {
                 if ('-'==player) {
@@ -310,6 +315,7 @@ Vue.component('lms-player-settings', {
             } else if (!this.$store.state.player) {
                 bus.$emit('showError', undefined, i18n("No Player"));
             }
+            this.showHome=showHome;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=this.alarmDialog.show=false;
@@ -510,6 +516,21 @@ Vue.component('lms-player-settings', {
                 }
             });
         },
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                if (this.showHome) {
+                    this.goHome()
+                } else {
+                    this.close();
+                }
+            }
+        },
+        goHome() {
+            this.close();
+            this.$store.commit('closeAllDialogs', true);
+        },
         close() {
             this.show=false;
             this.showMenu = false;
@@ -663,10 +684,10 @@ Vue.component('lms-player-settings', {
             }
         },
         showExtraSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, 2);
         },
         showConfig() {
-            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName);
+            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, 2);
         },
         doCustomAction(action, player) {
             performCustomAction(this, action, player);

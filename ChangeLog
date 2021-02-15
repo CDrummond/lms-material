@@ -15,6 +15,11 @@
     settings' from main menu into 'Settings' dialog.
 10. Move 'Extra settings' out of 'Player settings' dialog's menu and place as
     button at bottom of dialog.
+11. Add long-press on back-button of full-screen dialogs to close all (e.g. if
+    had navigated Settings -> Player settings -> Extra settings then close
+    all).
+12. Add 'home' button to full-screen dialogs if set to show and more than 1
+    deep.
 
 2.2.4
 -----

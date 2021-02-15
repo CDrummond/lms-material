@@ -318,7 +318,7 @@ Vue.component('lms-iframe-dialog', {
             actions: [],
             customActions: [],
             history: [],
-            showHome:false,
+            showHome:0,
             textCol: undefined
         }
     },
@@ -415,10 +415,14 @@ Vue.component('lms-iframe-dialog', {
         },
         goHome() {
             this.close();
-            bus.$emit('browse-home');
+            if (2==this.showHome) {
+                this.$store.commit('closeAllDialogs', true);
+            } else {
+                bus.$emit('browse-home');
+            }
         },
         close() {
-            this.show=false;
+            this.show=0;
             this.showMenu = false;
             this.history=[];
             bus.$emit('iframeClosed', this.isPlayer);

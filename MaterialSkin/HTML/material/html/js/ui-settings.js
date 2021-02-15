@@ -13,7 +13,7 @@ Vue.component('lms-ui-settings', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar">
-    <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</b-icon></v-btn>
+    <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-menu bottom left v-model="showMenu">
@@ -170,10 +170,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="powerButton"></v-switch></v-list-tile-action>
     </v-list-tile>
-
-
-    <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
@@ -182,7 +179,9 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="homeButton"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+
+    <div class="dialog-padding"></div>
+    <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
     <v-list-tile>
      <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
@@ -620,6 +619,13 @@ Vue.component('lms-ui-settings', {
                                { value: 30, label: i18n("%1 seconds", 30)}
                              ];
         },
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                this.close();
+            }
+        },
         close() {
             this.show=false;
             this.showMenu = false;
@@ -819,10 +825,10 @@ Vue.component('lms-ui-settings', {
             bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName,
                         // Keep in sync with information.js *!
                         [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], 2);
         },
         openPlayerSettings() {
-            bus.$emit('dlg.open', 'playersettings');
+            bus.$emit('dlg.open', 'playersettings', undefined, undefined, true);
         }
     },
     watch: {

@@ -12,7 +12,7 @@ Vue.component('lms-information-dialog', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app class="dialog-toolbar">
-    <v-btn flat icon @click.native="close()" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')+serverName}}</div>
     </v-toolbar-title>
@@ -295,6 +295,13 @@ Vue.component('lms-information-dialog', {
                 }
             });
         },
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                this.close();
+            }
+        },
         close() {
             this.show = false;
             this.scanning = false;
@@ -338,17 +345,17 @@ Vue.component('lms-information-dialog', {
             bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName,
                         // Keep in sync with ui-setting.js *!
                         [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], 2);
         },
         openPlayerSettings(player) {
-            bus.$emit('dlg.open', 'playersettings', player);
+            bus.$emit('dlg.open', 'playersettings', player, undefined, true);
         },
         rescan(item) {
             bus.$emit('showMessage', item.name);
             lmsCommand('', item.cmd);
         },
         showUpdateInfo() {
-            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'));
+            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'), undefined, 2);
         }
     },
     beforeDestroy() {

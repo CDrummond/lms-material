@@ -10,6 +10,7 @@
 6. When showing volume-popup show all volumes if in sync group.
 7. If player is in sync group, then add a button next to volume-slider to show
    volume-popup with all volumes.
+8. Add link to player settings from 'Information' dialog.
 
 2.2.4
 -----

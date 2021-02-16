@@ -19,7 +19,7 @@ Vue.component('lms-player-settings', {
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="customActions && customActions.length>0">
+     <v-menu bottom left v-model="showMenu" v-if="(customActions && customActions.length>0) || unlockAll">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(action, index) in customActions">
@@ -28,6 +28,15 @@ Vue.component('lms-player-settings', {
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
+       <v-separator v-if="customActions && customActions.length>0 && unlockAll"></v-separator>
+       <v-list-tile v-if="unlockAll" @click="showExtraSettings">
+        <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
+        <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
+       </v-list-tile>
+       <v-list-tile v-if="unlockAll && playerLink" @click="showConfig">
+        <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
+        <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
+       </v-list-tile>
       </v-list>
      </v-menu>
     </v-toolbar>

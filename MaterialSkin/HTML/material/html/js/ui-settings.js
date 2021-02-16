@@ -325,8 +325,8 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding"></div>
-    <v-header>{{i18n('Other settings')}}</v-header>
+    <div class="dialog-padding" v-if="appSettings || player || unlockAll"></div>
+    <v-header v-if="appSettings || player || unlockAll">{{i18n('Other settings')}}</v-header>
 
     <v-list-tile v-if="appSettings" class="other-setting">
      <v-list-tile-content>

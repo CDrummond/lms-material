@@ -18,8 +18,8 @@ Vue.component('lms-player-settings', {
      <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
-     <v-spacer v-if="unlockAll || (customActions && customActions.length>0)"></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="customActions">
+     <v-spacer></v-spacer>
+     <v-menu bottom left v-model="showMenu" v-if="customActions && customActions.length>0">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(action, index) in customActions">
@@ -116,15 +116,15 @@ Vue.component('lms-player-settings', {
       <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>
 
-     <div class="dialog-padding"></div>
-     <v-header>{{i18n('Other settings')}}</v-header>
-     <v-list-tile class="other-setting">
+     <div class="dialog-padding" v-if="unlockAll"></div>
+     <v-header v-if="unlockAll">{{i18n('Other settings')}}</v-header>
+     <v-list-tile v-if="unlockAll" class="other-setting">
       <v-list-tile-content>
        <v-list-tile-title><v-btn flat @click="showExtraSettings"><img class="svg-img btn-icon" :src="'configure'| svgIcon(darkUi)"></img>{{i18n('Extra settings')}}</v-btn></v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Extra player settings, such as synchronization options, player specific plugin settings, etc.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>
-     <v-list-tile v-if="playerLink" class="other-setting">
+     <v-list-tile v-if="unlockAll && playerLink" class="other-setting">
       <v-list-tile-content>
        <v-list-tile-title><v-btn flat @click="showConfig"><v-icon class="btn-icon">build</v-icon>{{i18n('Configuration')}}</v-btn></v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Player specific configuration UI, such as piCorePlayer or SqueezeAMP.')}}</v-list-tile-sub-title>

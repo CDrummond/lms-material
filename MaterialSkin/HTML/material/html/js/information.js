@@ -86,6 +86,7 @@ Vue.component('lms-information-dialog', {
      <li><a class="lms-link" href="https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html" target="_blank">{{i18n('User guide')}}</a></li>
      <li><a class="lms-link" href="https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('LMS support forums')}}</a></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
+     <li><p class="lms-link cursor" @click="openTechInfo">{{i18n('LMS technical information')}}</li>
     </ul>
    </p>
 
@@ -349,6 +350,9 @@ Vue.component('lms-information-dialog', {
         },
         openPlayerSettings(player) {
             bus.$emit('dlg.open', 'playersettings', player, undefined, true);
+        },
+        openTechInfo() {
+            bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, 2);
         },
         rescan(item) {
             bus.$emit('showMessage', item.name);

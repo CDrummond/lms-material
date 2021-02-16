@@ -20,6 +20,7 @@
     all).
 12. Add 'home' button to full-screen dialogs if set to show and more than 1
     deep.
+13. Add link to LMS technical information in 'Information' dialog.
 
 2.2.4
 -----

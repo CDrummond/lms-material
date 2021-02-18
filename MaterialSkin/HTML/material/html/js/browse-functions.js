@@ -980,6 +980,21 @@ function browseHeaderAction(view, act, event) {
         bus.$emit('dlg.open', 'addtoplaylist', view.items);
     } else if (RELOAD_ACTION==act) {
         view.refreshList(true);
+    } else if (ADV_SEARCH_ACTION==act) {
+        bus.$emit('dlg.open', 'advancedsearch', false);
+    } else if (SAVE_VLIB_ACTION==act) {
+        promptForText(ACTIONS[SAVE_VLIB_ACTION].title, undefined, undefined, i18n("Save")).then(resp => {
+            if (resp.ok && resp.value && resp.value.length>0) {
+                var command = JSON.parse(JSON.stringify(view.command.command));
+                command.push("savelib:"+resp.value);
+                lmsCommand("", command).then(({data}) => {
+                    bus.$emit('showMessage', i18n("Saved virtual library."));
+                }).catch(err => {
+                    bus.$emit('showError', undefined, i18n("Failed to save virtual library!"));
+                    logError(err);
+                });
+            }
+        });
     } else {
         view.itemAction(act, view.current);
     }

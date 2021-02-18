@@ -60,6 +60,8 @@ const SEARCH_TEXT_ACTION      = 46;
 const RELOAD_ACTION           = 47;
 const BR_COPY_ACTION          = 48;
 const PQ_COPY_ACTION          = 49;
+const ADV_SEARCH_ACTION       = 50;
+const SAVE_VLIB_ACTION        = 51;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -117,7 +119,9 @@ var ACTIONS=[
 
     {cmd:"refresh",      icon:"refresh"},
     {cmd:"copy-here",    icon:"content_copy"},
-    {cmd:"copy-here",    icon:"content_copy"}
+    {cmd:"copy-here",    icon:"content_copy"},
+    {cmd:"adv-search",   svg:"database-search"},
+    {cmd:"save-vlib",    icon:"save"}
 ];
 
 function updateActionStrings() {
@@ -178,5 +182,7 @@ function updateActionStrings() {
     ACTIONS[RELOAD_ACTION].title=i18n("Reload");
     ACTIONS[BR_COPY_ACTION].title=i18n("Copy queue selection here");
     ACTIONS[PQ_COPY_ACTION].title=i18n("Copy browse selection here");
+    ACTIONS[ADV_SEARCH_ACTION].title=i18n("Advanced search");
+    ACTIONS[SAVE_VLIB_ACTION].title=i18n("Save as virtual library");
 }
 

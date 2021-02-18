@@ -169,7 +169,7 @@ Vue.component('lms-advancedsearch-dialog', {
         }
     },
     mounted() {
-        bus.$on('advancedsearch.open', function() {
+        bus.$on('advancedsearch.open', function(reset) {
             this.textOps=[{key:"LIKE", label:i18n("contains")},
                           {key:"NOT LIKE", label:i18n("doesn't contain")},
                           {key:"STARTS WITH", label:i18n("starts with")},
@@ -217,6 +217,25 @@ Vue.component('lms-advancedsearch-dialog', {
                              {key:2, label:i18n('Composer')},
                              {key:3, label:i18n('Conductor')},
                              {key:4, label:i18n('Band')}];
+            if (reset) {
+                this.me_titlesearch= {val:undefined, op:"LIKE"};
+                this.contributor_namesearch= {val:undefined, op:"LIKE", types:[1, 5]};
+                this.album_titlesearch= {val:undefined, op:"LIKE"};
+                this.secs= {val:undefined, op:">"};
+                this.tracknum= {val:undefined, op:"="};
+                this.year= {val:undefined, op:">"};
+                this.persistent_playcount= {val:undefined, op:">"};
+                this.persistent_rating= {val:undefined, op:"="};
+                this.timestamp= {val:undefined, op:"="};
+                this.bitrate= {val:0, op:">"};
+                this.samplerate= {val:0, op:">"};
+                this.samplesize= {val:0, op:">"};
+                this.content_type= "-";
+                this.url= {val:undefined, op:"LIKE"};
+                this.filesize= {val:undefined, op:">"};
+                this.comments_value= {val:undefined, op:"LIKE"};
+                this.lyrics= {val:undefined, op:"LIKE"};
+            }
             this.show = true;
             focusEntry(this);
         }.bind(this));
@@ -283,12 +302,8 @@ Vue.component('lms-advancedsearch-dialog', {
                     }
                 }
                 let item = {cancache:false, title:i18n("Advanced search results"), id:"adv"+SEARCH_ID, type:"search", libsearch:true};
-                if (0==results.length) {
-                    bus.$emit('showMessage', i18n('No results found'));
-                } else {
-                    bus.$emit('advSearchResults', item, {command:[], params:[]},
-                              { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
-                }
+                bus.$emit('advSearchResults', item, {command:command, params:[]},
+                          { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
                 this.searching = false;
                 this.show = false;
             }).catch(err => {

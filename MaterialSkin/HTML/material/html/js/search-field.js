@@ -62,7 +62,7 @@ Vue.component('lms-search-field', {
 <v-layout>
  <v-text-field :label="i18n('Search')" clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" ref="entry"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
- <v-btn v-else id="advanced-search-btn" :title="i18n('Advanced search')" flat icon class="toolbar-button" @click="advanced()"><img :src="'database-search' | svgIcon(darkUi)"></img></v-btn>
+ <v-btn v-else id="advanced-search-btn" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,
     props: [],
@@ -113,7 +113,7 @@ Vue.component('lms-search-field', {
         },
         advanced() {
             bus.$emit('closeLibSearch');
-            bus.$emit('dlg.open', 'advancedsearch');
+            bus.$emit('dlg.open', 'advancedsearch', true);
         },
         textChanged(event) {
             this.stopDebounce();

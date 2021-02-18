@@ -478,6 +478,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
         bus.$on('advSearchResults', function(item, command, resp) {
             this.handleListResponse(item, command, resp);
+            if (this.items.length>0) {
+                this.tbarActions.unshift(ADV_SEARCH_ACTION);
+                this.tbarActions.unshift(SAVE_VLIB_ACTION);
+            }
         }.bind(this));
     },
     methods: {

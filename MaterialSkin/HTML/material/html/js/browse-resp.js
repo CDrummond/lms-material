@@ -643,10 +643,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var totalDuration=0;
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
             var isAllSongs = parent && parent.id && parent.id.startsWith("currentaction:");
-            var showAlbumName = isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
+            var isSearchResult = options.isSearch;
+            var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
             var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year");
-            var isSearchResult = options.isSearch;
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {

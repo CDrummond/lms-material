@@ -217,24 +217,25 @@ Vue.component('lms-advancedsearch-dialog', {
                              {key:2, label:i18n('Composer')},
                              {key:3, label:i18n('Conductor')},
                              {key:4, label:i18n('Band')}];
+
             if (reset) {
-                this.me_titlesearch= {val:undefined, op:"LIKE"};
-                this.contributor_namesearch= {val:undefined, op:"LIKE", types:[1, 5]};
-                this.album_titlesearch= {val:undefined, op:"LIKE"};
-                this.secs= {val:undefined, op:">"};
-                this.tracknum= {val:undefined, op:"="};
-                this.year= {val:undefined, op:">"};
-                this.persistent_playcount= {val:undefined, op:">"};
-                this.persistent_rating= {val:undefined, op:"="};
-                this.timestamp= {val:undefined, op:"="};
-                this.bitrate= {val:0, op:">"};
-                this.samplerate= {val:0, op:">"};
-                this.samplesize= {val:0, op:">"};
-                this.content_type= "-";
-                this.url= {val:undefined, op:"LIKE"};
-                this.filesize= {val:undefined, op:">"};
-                this.comments_value= {val:undefined, op:"LIKE"};
-                this.lyrics= {val:undefined, op:"LIKE"};
+                this.params.me_titlesearch= {val:undefined, op:"LIKE"};
+                this.params.contributor_namesearch= {val:undefined, op:"LIKE", types:[1, 5]};
+                this.params.album_titlesearch= {val:undefined, op:"LIKE"};
+                this.params.secs= {val:undefined, op:">"};
+                this.params.tracknum= {val:undefined, op:"="};
+                this.params.year= {val:undefined, op:">"};
+                this.params.persistent_playcount= {val:undefined, op:">"};
+                this.params.persistent_rating= {val:undefined, op:"="};
+                this.params.timestamp= {val:undefined, op:"="};
+                this.params.bitrate= {val:0, op:">"};
+                this.params.samplerate= {val:0, op:">"};
+                this.params.samplesize= {val:0, op:">"};
+                this.params.content_type= "-";
+                this.params.url= {val:undefined, op:"LIKE"};
+                this.params.filesize= {val:undefined, op:">"};
+                this.params.comments_value= {val:undefined, op:"LIKE"};
+                this.params.lyrics= {val:undefined, op:"LIKE"};
             }
             this.show = true;
             focusEntry(this);

@@ -81,6 +81,7 @@ const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const PODCASTS_ID = "apps.podcasts";
 const MUSIC_ID_PREFIX = "mm:/";
 const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";
+const ADV_SEARCH_ID = MUSIC_ID_PREFIX+"lms-adv-search";
 const GENRES_ID = MUSIC_ID_PREFIX+"genres";
 const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ARTIST_TAGS = "tags:s";

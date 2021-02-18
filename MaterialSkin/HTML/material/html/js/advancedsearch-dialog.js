@@ -301,7 +301,7 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
-                let item = {cancache:false, title:i18n("Advanced search results"), id:"adv"+SEARCH_ID, type:"search", libsearch:true};
+                let item = {cancache:false, title:i18n("Advanced search results"), id:ADV_SEARCH_ID, type:"search", libsearch:true};
                 bus.$emit('advSearchResults', item, {command:command, params:[]},
                           { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
                 this.searching = false;

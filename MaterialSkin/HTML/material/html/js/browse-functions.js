@@ -97,7 +97,7 @@ function browseActions(view, item, args) {
 function browseHandleListResponse(view, item, command, resp, prevPage) {
     if (resp && resp.items) {
         // Only add history if view is not a search response replacing a search response...
-        if (SEARCH_ID!=item.id || undefined==view.current || SEARCH_ID!=view.current.id) {
+        if ((SEARCH_ID!=item.id && ADV_SEARCH_ID!=item.id) || undefined==view.current || (SEARCH_ID!=view.current.id && ADV_SEARCH_ID!=view.current.id)) {
             view.addHistory();
         }
         resp.canUseGrid = resp.canUseGrid && (view.$store.state.showArtwork || resp.forceGrid);

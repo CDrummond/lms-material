@@ -880,7 +880,7 @@ sub _cliCommand {
                 my $count = 0;
                 while (my $album = $albums->next) {
                     $request->addResultLoop('albums_loop', $count, 'id', $album->id);
-                    $request->addResultLoop('albums_loop', $count, 'title', $album->title);
+                    $request->addResultLoop('albums_loop', $count, 'album', $album->name);
                     if ($album->year) {
                         $request->addResultLoop('albums_loop', $count, 'year', $album->year);
                     }

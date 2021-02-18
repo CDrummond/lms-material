@@ -2114,9 +2114,15 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .avs-title {
  font-weight:var(--bold-weight);
- text-align:right;
+ text-align:left;
  margin-right:8px;
  padding-top:8px;
+}
+
+@media only screen and (min-width:600px) {
+ .avs-title {
+  text-align:right;
+ }
 }
 
 .avs-section .v-select {

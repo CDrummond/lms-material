@@ -8,6 +8,54 @@
 
 const SEARCH_OTHER = new Set(['BBC Sounds', 'Deezer', 'Qobuz', 'Spotty', 'Tidal', 'YouTube']);
 
+function buildSearchResp(results) {
+    let items=[];
+    let total=0;
+    for (let i=0, len=results.length; i<len; ++i) {
+        let all = [];
+        let numItems = results[i].resp.items.length;
+        let clamped = 5!=results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
+        let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
+        let titleParam = clamped ? limit+" / "+numItems : numItems;
+        let filter = undefined;
+
+        total+=numItems;
+        if (1==results[i].command.cat) {
+            filter = FILTER_PREFIX+"artist";
+            items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:filter, header:true,
+                        allSearchResults: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
+        } else if (2==results[i].command.cat) {
+            filter = FILTER_PREFIX+"album";
+            items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:filter, header:true,
+                        allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
+                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+        } else if (3==results[i].command.cat) {
+            filter = FILTER_PREFIX+"track";
+            items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true,
+                        allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
+                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+        } else if (4==results[i].command.cat) {
+            filter = FILTER_PREFIX+"playlist";
+            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
+                        allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
+                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+        } else if (5==results[i].command.cat) {
+            items.push({title: i18n("Search on..."), id:"search.other", header:true});
+        }
+        for (let idx=0, loop=results[i].resp.items; idx<numItems; ++idx) {
+            let itm = loop[idx];
+            itm.filter=filter;
+            if (idx<limit) {
+                items.push(itm);
+            }
+            if (clamped) {
+                all.push(itm);
+            }
+        }
+    }
+    return items;
+}
+
 let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
@@ -110,51 +158,7 @@ Vue.component('lms-search-field', {
                     bus.$emit('showMessage', i18n('No results found'));
                 } else {
                     this.results.sort(function(a, b) { return a.command.cat<b.command.cat ? -1 : 1; });
-                    let items=[];
-                    let total=0;
-                    for (let i=0, len=this.results.length; i<len; ++i) {
-                        let all = [];
-                        let numItems = this.results[i].resp.items.length;
-                        let clamped = 5!=this.results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
-                        let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
-                        let titleParam = clamped ? limit+" / "+numItems : numItems;
-                        let filter = undefined;
-
-                        total+=numItems;
-                        if (1==this.results[i].command.cat) {
-                            filter = FILTER_PREFIX+"artist";
-                            items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:filter, header:true,
-                                        allSearchResults: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
-                        } else if (2==this.results[i].command.cat) {
-                            filter = FILTER_PREFIX+"album";
-                            items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:filter, header:true,
-                                        allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
-                                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                        } else if (3==this.results[i].command.cat) {
-                            filter = FILTER_PREFIX+"track";
-                            items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true,
-                                        allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
-                                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                        } else if (4==this.results[i].command.cat) {
-                            filter = FILTER_PREFIX+"playlist";
-                            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
-                                        allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
-                                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                        } else if (5==this.results[i].command.cat) {
-                            items.push({title: i18n("Search on..."), id:"search.other", header:true});
-                        }
-                        for (let idx=0, loop=this.results[i].resp.items; idx<numItems; ++idx) {
-                            let itm = loop[idx];
-                            itm.filter=filter;
-                            if (idx<limit) {
-                                items.push(itm);
-                            }
-                            if (clamped) {
-                                all.push(itm);
-                            }
-                        }
-                    }
-                    this.$emit('results', item, {command:[], params:[]}, { items:items, baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
+                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this.results), baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
                 }
                 this.commands=[];
                 this.results=[];

@@ -15,23 +15,24 @@ Vue.component('lms-advancedsearch-dialog', {
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Track')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.track.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.track.val" class="lms-search" ref="entry"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.me_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.me_titlesearch.val" class="lms-search" ref="entry"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Artist')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.artist.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.artist.val" class="lms-search"></v-text-field></v-flex>
-    <!--
-    artist types
-    -->
+    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.contributor_namesearch.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.contributor_namesearch.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm2></v-flex>
+    <v-flex xs12 sm10>
+     <v-select chips deletable-chips multiple :items="artistTypes" v-model="params.contributor_namesearch.types" item-text="label" item-value="key"></v-select>
+    </v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Album')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.album.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.album.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.album_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.album_titlesearch.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
   
    <!--
@@ -39,14 +40,14 @@ Vue.component('lms-advancedsearch-dialog', {
    -->
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Duration')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.duration.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.duration.val" class="lms-search" :placeholder="i18n('seconds')"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.secs.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.secs.val" class="lms-search" :placeholder="i18n('seconds')"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Track#')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.tracknumber.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.tracknumber.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.tracknum.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.tracknum.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
@@ -57,20 +58,20 @@ Vue.component('lms-advancedsearch-dialog', {
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Play count')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.playcount.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.playcount.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_playcount.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.persistent_playcount.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Rating')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.rating.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.rating.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_rating.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.persistent_rating.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
   <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Date modified')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="dateOps" v-model="params.datemodified.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.datemodified.val" class="lms-search" placeholder="mm/dd/yyyy"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="dateOps" v-model="params.timestamp.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.timestamp.val" class="lms-search" placeholder="mm/dd/yyyy"></v-text-field></v-flex>
    </v-layout>
    
    <v-layout class="avs-section" wrap>
@@ -93,25 +94,25 @@ Vue.component('lms-advancedsearch-dialog', {
 
   <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('File format')}}</div></v-flex>
-    <v-flex xs12 sm10><v-select :items="fileFormats" v-model="params.fileformat" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm10><v-select :items="fileFormats" v-model="params.content_type" item-text="label" item-value="key"></v-select></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Path')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.path.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.path.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.url.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.url.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
   <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('File size')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.filelength.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.filelength.val" class="lms-search" :placeholder="i18n('bytes')"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.filesize.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.filesize.val" class="lms-search" :placeholder="i18n('bytes')"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Comment')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.comment.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.comment.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.comments_value.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.comments_value.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap>
@@ -145,23 +146,24 @@ Vue.component('lms-advancedsearch-dialog', {
             sampleSizes: [],
             bitrates: [],
             fileFormats: [],
+            artistTypes: [],
             params: {
-                track: {val:undefined, op:"LIKE"},
-                artist: {val:undefined, op:"LIKE", artist:true, albumartist:true, conductor:false, composer:false, band:false, trackartist:false},
-                album: {val:undefined, op:"LIKE"},
-                duration: {val:undefined, op:">"},
-                tracknumber: {val:undefined, op:"="},
+                me_titlesearch: {val:undefined, op:"LIKE"},
+                contributor_namesearch: {val:undefined, op:"LIKE", types:[1, 5]},
+                album_titlesearch: {val:undefined, op:"LIKE"},
+                secs: {val:undefined, op:">"},
+                tracknum: {val:undefined, op:"="},
                 year: {val:undefined, op:">"},
-                playcount: {val:undefined, op:">"},
-                rating: {val:undefined, op:"="},
-                datemodified: {val:undefined, op:"="},
+                persistent_playcount: {val:undefined, op:">"},
+                persistent_rating: {val:undefined, op:"="},
+                timestamp: {val:undefined, op:"="},
                 bitrate: {val:0, op:">"},
                 samplerate: {val:0, op:">"},
                 samplesize: {val:0, op:">"},
-                fileformat: "-",
-                path: {val:undefined, op:"LIKE"},
-                filelength: {val:undefined, op:">"},
-                comment: {val:undefined, op:"LIKE"},
+                content_type: "-",
+                url: {val:undefined, op:"LIKE"},
+                filesize: {val:undefined, op:">"},
+                comments_value: {val:undefined, op:"LIKE"},
                 lyrics: {val:undefined, op:"LIKE"}
             }
         }
@@ -209,6 +211,12 @@ Vue.component('lms-advancedsearch-dialog', {
                            {key:'flc', label:'FLC'},
                            {key:'mp3', label:'MP3'},
                            {key:'m4a', label:'M4A'}];
+            this.artistTypes=[{key:1, label:i18n('Artist')},
+                             {key:5, label:i18n('Album artist')},
+                             {key:6, label:i18n('Track artist')},
+                             {key:2, label:i18n('Composer')},
+                             {key:3, label:i18n('Conductor')},
+                             {key:4, label:i18n('Band')}];
             this.show = true;
             focusEntry(this);
         }.bind(this));
@@ -221,7 +229,6 @@ Vue.component('lms-advancedsearch-dialog', {
     methods: {
         cancel() {
             if (this.searching) {
-                this.results=[];
                 this.searching=false;
             } else {
                 this.show=false;
@@ -230,8 +237,60 @@ Vue.component('lms-advancedsearch-dialog', {
         search() {
             this.searching = true;
             var command = ["material-skin", "adv-search"];
+            // TODO: Genre
+            var ops = ['me_titlesearch', 'contributor_namesearch', 'album_titlesearch', 'secs', 'tracknum', 'year', 'persistent_playcount', 'persistent_rating', 'timestamp', 'url', 'filesize', 'comments_value', 'lyrics'];
+            var intOps = ['bitrate', 'samplerate', 'samplesize'];
+
+            for (var i=0, len=ops.length; i<len; ++i) {
+                var val = undefined==this.params[ops[i]].val ? "" : (""+this.params[ops[i]].val).trim();
+                if (val.length>0) {
+                    command.push(ops[i]+":"+val);
+                    command.push(ops[i]+".op:"+this.params[ops[i]].op);
+                }
+            }
+            for (var i=0, len=intOps.length; i<len; ++i) {
+                var val = undefined==this.params[intOps[i]].val ? 0 : parseInt((""+this.params[intOps[i]].val).trim());
+                if (val!=0) {
+                    command.push(intOps[i]+":"+val);
+                    command.push(intOps[i]+".op:"+this.params[intOps[i]].op);
+                }
+            }
+            for (var i=0, loop=this.params.contributor_namesearch.types, len=loop.length; i<len; ++i) {
+                command.push("contributor_namesearch.active"+loop[i]+":1");
+            }
+            if (this.params.content_type!="-") {
+                command.push("content_type:"+this.params.content_type);
+            }
+
             lmsCommand("", command).then(({data}) => {
+                let results = [];
+                let total = 0;
+
+                //parseBrowseResp looks for albums_loop before titles_loop, so must get albums first
+                if (data.result.albums_loop) {
+                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                    data.result.albums_loop = undefined;
+                    if (undefined!=resp) {
+                        results.push({resp:resp, command:{cat:2}});
+                        total+=resp.items.length;
+                    }
+                }
+                if (data.result.titles_loop) {
+                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                    if (undefined!=resp) {
+                        results.push({resp:resp, command:{cat:3}});
+                        total+=resp.items.length;
+                    }
+                }
+                let item = {cancache:false, title:i18n("Advanced search results"), id:"adv"+SEARCH_ID, type:"search", libsearch:true};
+                if (0==results.length) {
+                    bus.$emit('showMessage', i18n('No results found'));
+                } else {
+                    bus.$emit('advSearchResults', item, {command:[], params:[]},
+                              { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
+                }
                 this.searching = false;
+                this.show = false;
             }).catch(err => {
                 this.searching = false;
                 logError(err);

@@ -476,6 +476,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }.bind(this));
         }
+        bus.$on('advSearchResults', function(item, command, resp) {
+            this.handleListResponse(item, command, resp);
+        }.bind(this));
     },
     methods: {
         initItems() {

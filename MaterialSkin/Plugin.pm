@@ -23,6 +23,7 @@ use Slim::Utils::Strings qw(string cstring);
 use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
 use File::Slurp qw(read_file);
+use Plugins::MaterialSkin::Search;
 
 my $log = Slim::Utils::Log->addLogCategory({
     'category' => 'plugin.material-skin',
@@ -54,6 +55,11 @@ my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'my
                              'myMusicGenres', 'myMusicYears', 'myMusicNewMusic','myMusicPlaylists', 'myMusicAlbumsVariousArtists' );
 
 my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_CUSTOMBROWSE', 'PLUGIN_IPENG_CUSTOM_BROWSE_MORE', 'PLUGIN_DSTM', 'PLUGIN_TRACKSTAT', 'PLUGIN_DYNAMICPLAYLIST' );
+
+my @ADV_SEARCH_OPS = ('album_titlesearch', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
+                      'persistent_rating', 'samplerate', 'samplesize', 'secs', 'timestamp', 'tracknum', 'url', 'year' );
+my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contributor_namesearch.active2', 'contributor_namesearch.active3', 'contributor_namesearch.active4',
+                        'contributor_namesearch.active5', 'genre', 'genre_name' );
 
 sub initPlugin {
     my $class = shift;
@@ -176,7 +182,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls']) ) {
+                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls', 'adv-search']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -793,6 +799,109 @@ sub _cliCommand {
             $request->setStatusDone();
             return;
         }
+    }
+
+    if ($cmd eq 'adv-search') {
+        my $params = {};
+        #my $searchType = $request->getParam('type');
+        my $saveLib = $request->getParam('savelib');
+        #if (! $searchType) {
+        #    $searchType = 'Track';
+        #}
+        #$params->{'searchType'} = $searchType;
+
+        foreach my $term (@ADV_SEARCH_OPS) {
+            my $val = $request->getParam($term);
+            my $op = $request->getParam($term . '.op');
+            if ($op && $val) {
+                $params->{'search.' . $term} = $val;
+                $params->{'search.' . $term . '.op'} = $op;
+            }
+        }
+
+        foreach my $term (@ADV_SEARCH_OTHER) {
+            my $val = $request->getParam($term);
+            if ($val) {
+                $params->{'search.' . $term} = $val;
+            }
+        }
+
+        if ($saveLib) {
+            $params->{'action'} = 'saveLibraryView';
+            $params->{'saveSearch'} = $saveLib;
+        }
+
+        my ($tracks, $albums) = Plugins::MaterialSkin::Search::advancedSearch($params);
+
+        if (!$saveLib) {
+            if ($tracks) {
+                $tracks = $tracks->slice(0, 500);
+                my $count = 0;
+                while (my $track = $tracks->next) {
+                    $request->addResultLoop('titles_loop', $count, 'id', $track->id);
+                    $request->addResultLoop('titles_loop', $count, 'title', $track->title);
+                    if ($track->coverid) {
+                        $request->addResultLoop('titles_loop', $count, 'coverid', $track->coverid);
+                    }
+                    if ($track->tracknum) {
+                        $request->addResultLoop('titles_loop', $count, 'tracknum', $track->tracknum);
+                    }
+                    $request->addResultLoop('titles_loop', $count, 'url', $track->url);
+                    if ($track->year) {
+                        $request->addResultLoop('titles_loop', $count, 'year', $track->year);
+                    }
+                    if ($track->disc) {
+                        $request->addResultLoop('titles_loop', $count, 'disc', $track->disc);
+                    }
+                    if ($track->extid) {
+                        $request->addResultLoop('titles_loop', $count, 'extid', $track->extid);
+                    }
+                    $request->addResultLoop('titles_loop', $count, 'bitrate', $track->bitrate);
+                    $request->addResultLoop('titles_loop', $count, 'samplerate', $track->samplerate);
+                    $request->addResultLoop('titles_loop', $count, 'type', $track->content_type);
+                    $request->addResultLoop('titles_loop', $count, 'duration', $track->secs);
+                    if ($track->rating) {
+                        $request->addResultLoop('titles_loop', $count, 'rating', $track->rating);
+                    }
+                    if ($track->album) {
+                        $request->addResultLoop('titles_loop', $count, 'album', $track->album->name);
+                        $request->addResultLoop('titles_loop', $count, 'album_id', $track->album->id);
+                    }
+                    if ($track->artist) {
+                        $request->addResultLoop('titles_loop', $count, 'artist', $track->artist->name);
+                        $request->addResultLoop('titles_loop', $count, 'artist_id', $track->artist->id);
+                    }
+                    $count++;
+                    main::idleStreams() unless $count % 5;
+                }
+            }
+            if ($albums) {
+                $albums = $albums->slice(0, 500);
+                my $count = 0;
+                while (my $album = $albums->next) {
+                    $request->addResultLoop('albums_loop', $count, 'id', $album->id);
+                    $request->addResultLoop('albums_loop', $count, 'title', $album->title);
+                    if ($album->year) {
+                        $request->addResultLoop('albums_loop', $count, 'year', $album->year);
+                    }
+                    if ($album->artwork) {
+                        $request->addResultLoop('albums_loop', $count, 'artwork_track_id', $album->artwork);
+                    }
+                    if ($album->contributor) {
+                        $request->addResultLoop('albums_loop', $count, 'artist', $album->contributor->name);
+                        $request->addResultLoop('albums_loop', $count, 'artist_id', $album->contributor->id);
+                    }
+                    if ($album->extid) {
+                        $request->addResultLoop('albums_loop', $count, 'extid', $album->extid);
+                    }
+                    # TODO: artists, artwork_url ???
+                    $count++;
+                    main::idleStreams() unless $count % 5;
+                }
+            }
+        }
+        $request->setStatusDone();
+        return;
     }
 
     $request->setStatusBadParams();

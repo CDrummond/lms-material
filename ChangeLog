@@ -23,6 +23,7 @@
 13. Add link to LMS technical information in 'Information' dialog.
 14. When showing list of composers, conductors, or bands, check the numerical
     role_id as well as the text version so that the correct string is shown.
+15. Re-implement 'Advanced search'
 
 2.2.4
 -----

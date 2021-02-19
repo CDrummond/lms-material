@@ -121,7 +121,7 @@ var ACTIONS=[
     {cmd:"copy-here",    icon:"content_copy"},
     {cmd:"copy-here",    icon:"content_copy"},
     {cmd:"adv-search",   svg:"database-search"},
-    {cmd:"save-vlib",    icon:"save"}
+    {cmd:"save-vlib",    icon:"library_add"}
 ];
 
 function updateActionStrings() {

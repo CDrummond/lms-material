@@ -34,6 +34,7 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 
+my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{desktop}i;
 my $MINI_URL_PARSER_RE = qr{mini}i;
 my $NOW_PLAYING_URL_PARSER_RE = qr{now-playing}i;
@@ -835,7 +836,7 @@ sub _cliCommand {
 
         if (!$saveLib) {
             if ($tracks) {
-                $tracks = $tracks->slice(0, 500);
+                $tracks = $tracks->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $track = $tracks->next) {
                     $request->addResultLoop('titles_loop', $count, 'id', $track->id);
@@ -876,7 +877,7 @@ sub _cliCommand {
                 }
             }
             if ($albums) {
-                $albums = $albums->slice(0, 500);
+                $albums = $albums->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $album = $albums->next) {
                     $request->addResultLoop('albums_loop', $count, 'id', $album->id);

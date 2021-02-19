@@ -183,7 +183,7 @@ sub _cliCommand {
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls', 'adv-search']) ) {
+                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -901,6 +901,35 @@ sub _cliCommand {
                 }
             }
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'adv-search-params') {
+        my $params = Plugins::MaterialSkin::Search::options();
+        my $count = 0;
+        while (my $genre = $params->{'genres'}->next) {
+            $request->addResultLoop('genres_loop', $count, 'id', $genre->id);
+            $request->addResultLoop('genres_loop', $count, 'name', $genre->name);
+            $count++;
+        }
+        $count = 0;
+        foreach my $samplerate (@{$params->{'samplerates'}}) {
+            $request->addResultLoop('samplerates_loop', $count, 'rate', $samplerate);
+            $count++;
+        }
+        $count = 0;
+        foreach my $samplesize (@{$params->{'samplesizes'}}) {
+            $request->addResultLoop('samplesizes_loop', $count, 'size', $samplesize);
+            $count++;
+        }
+        $count = 0;
+        while (my ($k, $v) = each %{$params->{'fileTypes'}}) {
+            $request->addResultLoop('filetypes_loop', $count, 'id', $k);
+            $request->addResultLoop('filetypes_loop', $count, 'name', $v);
+            $count++;
+        }
+        $request->addResult('statistics', $params->{'statistics'});
         $request->setStatusDone();
         return;
     }

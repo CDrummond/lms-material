@@ -64,13 +64,13 @@ Vue.component('lms-advancedsearch-dialog', {
     <v-flex xs12 sm6><v-text-field clearable v-model="params.year.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap v-show="sections.stats.visible">
+   <v-layout class="avs-section" wrap v-show="stats && sections.stats.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Play count')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_playcount.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-text-field clearable v-model="params.persistent_playcount.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap v-show="sections.stats.visible">
+   <v-layout class="avs-section" wrap v-show="stats && sections.stats.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Rating')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_rating.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-text-field clearable v-model="params.persistent_rating.val" class="lms-search"></v-text-field></v-flex>
@@ -137,7 +137,7 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-btn icon slot="activator"><v-icon>settings</v-icon></v-btn>
    <v-list>
     <template v-for="(sect, index) in sections">
-     <v-list-tile @click="sect.visible=!sect.visible">
+     <v-list-tile @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
       <v-list-tile-avatar><v-icon>{{sect.visible ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{sect.label}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
@@ -192,8 +192,9 @@ Vue.component('lms-advancedsearch-dialog', {
             sections: {
                 tech:{visible: getLocalStorageBool('advs.tech', false), label:""},
                 file:{visible: getLocalStorageBool('advs.file', false), label:""},
-                stats:{visible: getLocalStorageBool('advs.stats', false), label:""}
-            }
+                stats:{visible: getLocalStorageBool('advs.stats', false), label:"", isstats: true}
+            },
+            stats: true
         }
     },
     mounted() {
@@ -216,14 +217,8 @@ Vue.component('lms-advancedsearch-dialog', {
                           {key:"<", label:i18n("before")},
                           {key:">", label:i18n("after")},
                           {key:"!=", label:i18n("is not")}];
-            this.sampleRates=[{key:0, label:i18n('any')},
-                              {key:44100, label:"44.1 kHz"},
-                              {key:48000, label:"48 kHz"},
-                              {key:96000, label:"96 kHz"},
-                              {key:192000, label:"192 kHz"}];
-            this.sampleSizes=[{key:0, label:i18n('any')},
-                              {key:16, label:'16'},
-                              {key:24, label:'24'}];
+            this.sampleRates=[{key:0, label:i18n('any')}];
+            this.sampleSizes=[{key:0, label:i18n('any')}];
             this.bitrates=[{key:0, label:i18n('any')},
                            {key:32, label:'32 kbps'},
                            {key:48, label:'48 kbps'},
@@ -234,12 +229,7 @@ Vue.component('lms-advancedsearch-dialog', {
                            {key:192, label:'192 kbps'},
                            {key:224, label:'224 kbps'},
                            {key:320, label:'320 kbps'}];
-            this.fileFormats=[{key:ADVS_ANY_CONTENT_TYPE, label:i18n('any')},
-                           {key:'acc', label:'AAC'},
-                           {key:'flc', label:'FLC'},
-                           {key:'mp3', label:'MP3'},
-                           {key:'m4a', label:'M4A'}];
-            // TODO: All file format types!
+            this.fileFormats=[{key:ADVS_ANY_CONTENT_TYPE, label:i18n('any')}];
             this.artistTypes=[{key:1, label:i18n('Artist')},
                              {key:5, label:i18n('Album artist')},
                              {key:6, label:i18n('Track artist')},
@@ -275,14 +265,36 @@ Vue.component('lms-advancedsearch-dialog', {
                 this.params.lyrics= {val:undefined, op:"LIKE"};
             }
 
-            lmsList(this.playerId, ["genres"], undefined, 0, 1000).then(({data}) => {
-                this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
-                             {key:ADVS_IN_GENRE, label:i18n('contains')},
-                             {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
-                if (data && data.result && data.result.genres_loop) {
-                    for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                        this.genres.push({key:loop[idx].id, label:loop[idx].genre});
+            lmsCommand("", ["material-skin", "adv-search-params"]).then(({data}) => {
+                if (data && data.result) {
+                    if (data.result.genres_loop) {
+                        this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
+                                     {key:ADVS_IN_GENRE, label:i18n('contains')},
+                                     {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
+                        for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            this.genres.push({key:loop[idx].id, label:loop[idx].genre});
+                        }
                     }
+                    if (data.result.filetypes_loop) {
+                        this.fileFormats=[{key:ADVS_ANY_CONTENT_TYPE, label:i18n('any')}];
+                        for (var idx=0, loop=data.result.filetypes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            this.fileFormats.push({key:loop[idx].id, label:loop[idx].name});
+                        }
+                    }
+                    if (data.result.samplerates_loop) {
+                        this.sampleRates=[{key:0, label:i18n('any')}];
+                        console.log(JSON.stringify(data.result.samplerates_loop));
+                        for (var idx=0, loop=data.result.samplerates_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            this.sampleRates.push({key:loop[idx].rate, label:((loop[idx].rate/1000.0).toFixed(1)+" kHz")});
+                        }
+                    }
+                    if (data.result.samplesizes_loop) {
+                        this.sampleSizes=[{key:0, label:i18n('any')}];
+                        for (var idx=0, loop=data.result.samplesizes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                            this.sampleSizes.push({key:loop[idx].size, label:""+loop[idx].size});
+                        }
+                    }
+                    this.stats = 1 == parseInt(data.result.statistics);
                 }
             });
             this.show = true;

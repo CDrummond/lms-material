@@ -187,37 +187,6 @@ sub advancedSearch {
 
 		$query{$newKey} = $params->{$key};
 	}
-	
-	# show list of file types we have in the DB
-	my $dbh = Slim::Schema->dbh;
-	my $cache = Slim::Utils::Cache->new();
-	my $prefix = Slim::Music::Import->lastScanTime() . '_advSearch_';
-		
-	if ( !($params->{'fileTypes'} = $cache->get($prefix . 'ctList')) ) {
-		foreach my $ct ( @{ $dbh->selectcol_arrayref('SELECT DISTINCT content_type FROM tracks WHERE audio = 1') } ) {
-			$params->{'fileTypes'} ||= {};
-			$params->{'fileTypes'}->{lc($ct)} = string(uc($ct));
-		}
-		
-		$cache->set($prefix . 'ctList', $params->{'fileTypes'}, 86400 * 7) if keys %{$params->{'fileTypes'}};
-	}
-	
-	# get available samplerates
-	if ( !($params->{'samplerates'} = $cache->get($prefix . 'samplerateList')) ) {
-		$params->{'samplerates'} = $dbh->selectcol_arrayref('SELECT DISTINCT samplerate FROM tracks WHERE samplerate > 0');
-		$cache->set($prefix . 'samplerateList', $params->{'samplerates'}, 86400 * 7) if scalar @{$params->{'samplerates'}};
-	}
-	
-	if ( !($params->{'samplesizes'} = $cache->get($prefix . 'samplesizeList')) ) {
-		$params->{'samplesizes'} = $dbh->selectcol_arrayref('SELECT DISTINCT samplesize FROM tracks WHERE samplesize > 0');
-		$cache->set($prefix . 'samplesizeList', $params->{'samplesizes'}, 86400 * 7) if scalar @{$params->{'samplesizes'}};
-	}
-	
-	# load up the genres we know about.
-	my $collate = Slim::Utils::OSDetect->getOS()->sqlHelperClass()->collate();
-	$params->{'genres'}     = Slim::Schema->search('Genre', undef, { 'order_by' => "namesort $collate" });
-	$params->{'statistics'} = 1 if main::STATISTICS;
-	$params->{'roles'}      = Slim::Schema::Contributor->roleToContributorMap;
 
 	# short-circuit the query
 	if (scalar keys %query == 0) {
@@ -324,7 +293,8 @@ sub advancedSearch {
 		'join'  => \@joins,
 		'joins' => \@joins,
 	);
-	
+
+	my $collate = Slim::Utils::OSDetect->getOS()->sqlHelperClass()->collate();
 	$attrs{'order_by'} = "me.disc, me.titlesort $collate"; #if $type eq 'Track';
 	
 	# Create a resultset - have fillInSearchResults do the actual search.
@@ -361,6 +331,40 @@ sub advancedSearch {
 	}
 
 	return ($tracksRs, $rs);
+}
+
+sub options {
+	# show list of file types we have in the DB
+	my $dbh = Slim::Schema->dbh;
+	my $cache = Slim::Utils::Cache->new();
+	my $prefix = Slim::Music::Import->lastScanTime() . '_advSearch_';
+	my $params = {};
+
+	if ( !($params->{'fileTypes'} = $cache->get($prefix . 'ctList')) ) {
+		foreach my $ct ( @{ $dbh->selectcol_arrayref('SELECT DISTINCT content_type FROM tracks WHERE audio = 1') } ) {
+			$params->{'fileTypes'} ||= {};
+			$params->{'fileTypes'}->{lc($ct)} = string(uc($ct));
+		}
+
+		$cache->set($prefix . 'ctList', $params->{'fileTypes'}, 86400 * 7) if keys %{$params->{'fileTypes'}};
+	}
+
+	# get available samplerates
+	if ( !($params->{'samplerates'} = $cache->get($prefix . 'samplerateList')) ) {
+		$params->{'samplerates'} = $dbh->selectcol_arrayref('SELECT DISTINCT samplerate FROM tracks WHERE samplerate > 0');
+		$cache->set($prefix . 'samplerateList', $params->{'samplerates'}, 86400 * 7) if scalar @{$params->{'samplerates'}};
+	}
+
+	if ( !($params->{'samplesizes'} = $cache->get($prefix . 'samplesizeList')) ) {
+		$params->{'samplesizes'} = $dbh->selectcol_arrayref('SELECT DISTINCT samplesize FROM tracks WHERE samplesize > 0');
+		$cache->set($prefix . 'samplesizeList', $params->{'samplesizes'}, 86400 * 7) if scalar @{$params->{'samplesizes'}};
+	}
+
+	# load up the genres we know about.
+	my $collate = Slim::Utils::OSDetect->getOS()->sqlHelperClass()->collate();
+	$params->{'genres'}     = Slim::Schema->search('Genre', undef, { 'order_by' => "namesort $collate" });
+	$params->{'statistics'} = 1 if main::STATISTICS;
+    return $params;
 }
 
 sub _initActiveRoles {

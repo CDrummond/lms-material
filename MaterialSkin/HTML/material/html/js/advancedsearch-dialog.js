@@ -257,6 +257,8 @@ Vue.component('lms-advancedsearch-dialog', {
                 this.params.me_titlesearch= {val:undefined, op:"LIKE"};
                 this.params.contributor_namesearch= {val:undefined, op:"LIKE", types:[1, 5]};
                 this.params.album_titlesearch= {val:undefined, op:"LIKE"};
+                this.params.genre= ADVS_ANY_GENRE;
+                this.params.genre_name= undefined;
                 this.params.secs= {val:undefined, op:">"};
                 this.params.tracknum= {val:undefined, op:"="};
                 this.params.year= {val:undefined, op:">"};
@@ -266,7 +268,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 this.params.bitrate= {val:0, op:">"};
                 this.params.samplerate= {val:0, op:">"};
                 this.params.samplesize= {val:0, op:">"};
-                this.params.content_type= "-";
+                this.params.content_type= ADVS_ANY_CONTENT_TYPE;
                 this.params.url= {val:undefined, op:"LIKE"};
                 this.params.filesize= {val:undefined, op:">"};
                 this.params.comments_value= {val:undefined, op:"LIKE"};
@@ -311,16 +313,17 @@ Vue.component('lms-advancedsearch-dialog', {
             this.searching = true;
             var ops = ['me_titlesearch', 'contributor_namesearch', 'album_titlesearch', 'secs', 'tracknum', 'year', 'persistent_playcount', 'persistent_rating', 'timestamp', 'url', 'filesize', 'comments_value', 'lyrics'];
             var intOps = ['bitrate', 'samplerate', 'samplesize'];
+            var command = ["material-skin", "adv-search"];
 
             for (var i=0, len=ops.length; i<len; ++i) {
-                var val = undefined==this.params[ops[i]].val ? "" : this.params[ops[i]].val.trim();
+                var val = undefined==this.params[ops[i]].val ? "" : (""+this.params[ops[i]].val).trim();
                 if (val.length>0) {
                     command.push(ops[i]+":"+val);
                     command.push(ops[i]+".op:"+this.params[ops[i]].op);
                 }
             }
             for (var i=0, len=intOps.length; i<len; ++i) {
-                var val = undefined==this.params[intOps[i]].val ? 0 : parseInt(this.params[intOps[i]].val.trim());
+                var val = undefined==this.params[intOps[i]].val ? 0 : parseInt((""+this.params[intOps[i]].val).trim());
                 if (val!=0) {
                     command.push(intOps[i]+":"+val);
                     command.push(intOps[i]+".op:"+this.params[intOps[i]].op);
@@ -332,14 +335,14 @@ Vue.component('lms-advancedsearch-dialog', {
             if (this.params.content_type!=ADVS_ANY_CONTENT_TYPE) {
                 command.push("content_type:"+this.params.content_type);
             }
-            if (this.genre==ADVS_IN_GENRE || this.genre==ADVS_NOT_IN_GENRE) {
-                var val = undefined==this.genre_name ? "" : this.genre_name.trim();
+            if (this.params.genre==ADVS_IN_GENRE || this.params.genre==ADVS_NOT_IN_GENRE) {
+                var val = undefined==this.params.genre_name ? "" : this.params.genre_name.trim();
                 if (val.length>0) {
                     command.push("genre_name:"+val);
-                    command.push("genre:"+this.genre);
+                    command.push("genre:"+this.params.genre);
                 }
-            } else if (this.genre!=ADVS_ANY_GENRE) {
-                command.push("genre:"+this.genre);
+            } else if (this.params.genre!=ADVS_ANY_GENRE) {
+                command.push("genre:"+this.params.genre);
             }
 
             lmsCommand("", command).then(({data}) => {

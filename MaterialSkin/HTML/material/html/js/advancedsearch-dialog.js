@@ -6,6 +6,11 @@
  */
 'use strict';
 
+const ADVS_ANY_GENRE = -3;
+const ADVS_IN_GENRE = -1;
+const ADVS_NOT_IN_GENRE = -2;
+const ADVS_ANY_CONTENT_TYPE = "*";
+
 Vue.component('lms-advancedsearch-dialog', {
     template: `
 <v-dialog v-model="show" v-if="show" persistent scrollable width="700">
@@ -35,9 +40,12 @@ Vue.component('lms-advancedsearch-dialog', {
     <v-flex xs12 sm6><v-text-field clearable v-model="params.album_titlesearch.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
   
-   <!--
-   genre
-   -->
+   <v-layout class="avs-section" wrap>
+    <v-flex xs12 sm2><div class="avs-title">{{i18n('Genre')}}</div></v-flex>
+    <v-flex xs12 sm4><v-select :items="genres" v-model="params.genre" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.genre_name" class="lms-search" :disabled="params.genre!=ADVS_IN_GENRE && params.genre!=ADVS_NOT_IN_GENRE"></v-text-field></v-flex>
+   </v-layout>
+
    <v-layout class="avs-section" wrap>
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Duration')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.secs.op" item-text="label" item-value="key"></v-select></v-flex>
@@ -147,10 +155,13 @@ Vue.component('lms-advancedsearch-dialog', {
             bitrates: [],
             fileFormats: [],
             artistTypes: [],
+            genres: [],
             params: {
                 me_titlesearch: {val:undefined, op:"LIKE"},
                 contributor_namesearch: {val:undefined, op:"LIKE", types:[1, 5]},
                 album_titlesearch: {val:undefined, op:"LIKE"},
+                genre: ADVS_ANY_GENRE,
+                genre_name: undefined,
                 secs: {val:undefined, op:">"},
                 tracknum: {val:undefined, op:"="},
                 year: {val:undefined, op:">"},
@@ -160,7 +171,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 bitrate: {val:0, op:">"},
                 samplerate: {val:0, op:">"},
                 samplesize: {val:0, op:">"},
-                content_type: "-",
+                content_type: ADVS_ANY_CONTENT_TYPE,
                 url: {val:undefined, op:"LIKE"},
                 filesize: {val:undefined, op:">"},
                 comments_value: {val:undefined, op:"LIKE"},
@@ -188,15 +199,15 @@ Vue.component('lms-advancedsearch-dialog', {
                           {key:"<", label:i18n("before")},
                           {key:">", label:i18n("after")},
                           {key:"!=", label:i18n("is not")}];
-            this.sampleRates=[{key:0, label:i18n('Any')},
+            this.sampleRates=[{key:0, label:i18n('any')},
                               {key:44100, label:"44.1 kHz"},
                               {key:48000, label:"48 kHz"},
                               {key:96000, label:"96 kHz"},
                               {key:192000, label:"192 kHz"}];
-            this.sampleSizes=[{key:0, label:i18n('Any')},
+            this.sampleSizes=[{key:0, label:i18n('any')},
                               {key:16, label:'16'},
                               {key:24, label:'24'}];
-            this.bitrates=[{key:0, label:i18n('Any')},
+            this.bitrates=[{key:0, label:i18n('any')},
                            {key:32, label:'32 kbps'},
                            {key:48, label:'48 kbps'},
                            {key:64, label:'64 kbps'},
@@ -206,17 +217,21 @@ Vue.component('lms-advancedsearch-dialog', {
                            {key:192, label:'192 kbps'},
                            {key:224, label:'224 kbps'},
                            {key:320, label:'320 kbps'}];
-            this.fileFormats=[{key:"-", label:i18n('Any')},
+            this.fileFormats=[{key:ADVS_ANY_CONTENT_TYPE, label:i18n('any')},
                            {key:'acc', label:'AAC'},
                            {key:'flc', label:'FLC'},
                            {key:'mp3', label:'MP3'},
                            {key:'m4a', label:'M4A'}];
+            // TODO: All file format types!
             this.artistTypes=[{key:1, label:i18n('Artist')},
                              {key:5, label:i18n('Album artist')},
                              {key:6, label:i18n('Track artist')},
                              {key:2, label:i18n('Composer')},
                              {key:3, label:i18n('Conductor')},
                              {key:4, label:i18n('Band')}];
+            this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
+                         {key:ADVS_IN_GENRE, label:i18n('contains')},
+                         {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
 
             if (reset) {
                 this.params.me_titlesearch= {val:undefined, op:"LIKE"};
@@ -237,6 +252,17 @@ Vue.component('lms-advancedsearch-dialog', {
                 this.params.comments_value= {val:undefined, op:"LIKE"};
                 this.params.lyrics= {val:undefined, op:"LIKE"};
             }
+
+            lmsList(this.playerId, ["genres"], undefined, 0, 1000).then(({data}) => {
+                this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
+                             {key:ADVS_IN_GENRE, label:i18n('contains')},
+                             {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
+                if (data && data.result && data.result.genres_loop) {
+                    for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                        this.genres.push({key:loop[idx].id, label:loop[idx].genre});
+                    }
+                }
+            });
             this.show = true;
             focusEntry(this);
         }.bind(this));
@@ -256,20 +282,18 @@ Vue.component('lms-advancedsearch-dialog', {
         },
         search() {
             this.searching = true;
-            var command = ["material-skin", "adv-search"];
-            // TODO: Genre
             var ops = ['me_titlesearch', 'contributor_namesearch', 'album_titlesearch', 'secs', 'tracknum', 'year', 'persistent_playcount', 'persistent_rating', 'timestamp', 'url', 'filesize', 'comments_value', 'lyrics'];
             var intOps = ['bitrate', 'samplerate', 'samplesize'];
 
             for (var i=0, len=ops.length; i<len; ++i) {
-                var val = undefined==this.params[ops[i]].val ? "" : (""+this.params[ops[i]].val).trim();
+                var val = undefined==this.params[ops[i]].val ? "" : this.params[ops[i]].val.trim();
                 if (val.length>0) {
                     command.push(ops[i]+":"+val);
                     command.push(ops[i]+".op:"+this.params[ops[i]].op);
                 }
             }
             for (var i=0, len=intOps.length; i<len; ++i) {
-                var val = undefined==this.params[intOps[i]].val ? 0 : parseInt((""+this.params[intOps[i]].val).trim());
+                var val = undefined==this.params[intOps[i]].val ? 0 : parseInt(this.params[intOps[i]].val.trim());
                 if (val!=0) {
                     command.push(intOps[i]+":"+val);
                     command.push(intOps[i]+".op:"+this.params[intOps[i]].op);
@@ -278,8 +302,17 @@ Vue.component('lms-advancedsearch-dialog', {
             for (var i=0, loop=this.params.contributor_namesearch.types, len=loop.length; i<len; ++i) {
                 command.push("contributor_namesearch.active"+loop[i]+":1");
             }
-            if (this.params.content_type!="-") {
+            if (this.params.content_type!=ADVS_ANY_CONTENT_TYPE) {
                 command.push("content_type:"+this.params.content_type);
+            }
+            if (this.genre==ADVS_IN_GENRE || this.genre==ADVS_NOT_IN_GENRE) {
+                var val = undefined==this.genre_name ? "" : this.genre_name.trim();
+                if (val.length>0) {
+                    command.push("genre_name:"+val);
+                    command.push("genre:"+this.genre);
+                }
+            } else if (this.genre!=ADVS_ANY_GENRE) {
+                command.push("genre:"+this.genre);
             }
 
             lmsCommand("", command).then(({data}) => {

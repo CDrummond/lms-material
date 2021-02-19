@@ -64,54 +64,54 @@ Vue.component('lms-advancedsearch-dialog', {
     <v-flex xs12 sm6><v-text-field clearable v-model="params.year.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.stats.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Play count')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_playcount.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-text-field clearable v-model="params.persistent_playcount.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.stats.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Rating')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_rating.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-text-field clearable v-model="params.persistent_rating.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
-
-  <v-layout class="avs-section" wrap>
-    <v-flex xs12 sm2><div class="avs-title">{{i18n('Date modified')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="dateOps" v-model="params.timestamp.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm6><v-text-field clearable v-model="params.timestamp.val" class="lms-search" placeholder="mm/dd/yyyy"></v-text-field></v-flex>
-   </v-layout>
    
-   <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.tech.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Bitrate')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.bitrate.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-select :items="bitrates" v-model="params.bitrate.val" item-text="label" item-value="key"></v-select ></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.tech.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Sample rate')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.samplerate.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-select :items="sampleRates" v-model="params.samplerate.val" item-text="label" item-value="key"></v-select ></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.tech.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Sample size')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.samplesize.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-select :items="sampleSizes" v-model="params.samplesize.val" item-text="label" item-value="key"></v-select ></v-flex>
    </v-layout>
 
-  <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.file.visible">
+    <v-flex xs12 sm2><div class="avs-title">{{i18n('Date modified')}}</div></v-flex>
+    <v-flex xs12 sm4><v-select :items="dateOps" v-model="params.timestamp.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm6><v-text-field clearable v-model="params.timestamp.val" class="lms-search" placeholder="mm/dd/yyyy"></v-text-field></v-flex>
+   </v-layout>
+
+   <v-layout class="avs-section" wrap v-show="sections.file.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('File format')}}</div></v-flex>
     <v-flex xs12 sm10><v-select :items="fileFormats" v-model="params.content_type" item-text="label" item-value="key"></v-select></v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap>
+   <v-layout class="avs-section" wrap v-show="sections.file.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('Path')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.url.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-text-field clearable v-model="params.url.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
-  <v-layout class="avs-section" wrap>
+  <v-layout class="avs-section" wrap v-show="sections.file.visible">
     <v-flex xs12 sm2><div class="avs-title">{{i18n('File size')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.filesize.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm6><v-text-field clearable v-model="params.filesize.val" class="lms-search" :placeholder="i18n('bytes')"></v-text-field></v-flex>
@@ -133,6 +133,17 @@ Vue.component('lms-advancedsearch-dialog', {
 
   <v-card-actions>
    <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
+   <v-menu v-else top v-model="showMenu">
+   <v-btn icon slot="activator"><v-icon>settings</v-icon></v-btn>
+   <v-list>
+    <template v-for="(sect, index) in sections">
+     <v-list-tile @click="sect.visible=!sect.visible">
+      <v-list-tile-avatar><v-icon>{{sect.visible ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{sect.label}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
+   </v-list>
+   </v-menu>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat v-if="!searching" @click.native="search()">{{i18n('Search')}}</v-btn
@@ -144,6 +155,7 @@ Vue.component('lms-advancedsearch-dialog', {
     data() {
         return {
             show: false,
+            showMenu: false,
             searching: false,
             textOps: [],
             rangeOps: [],
@@ -176,6 +188,11 @@ Vue.component('lms-advancedsearch-dialog', {
                 filesize: {val:undefined, op:">"},
                 comments_value: {val:undefined, op:"LIKE"},
                 lyrics: {val:undefined, op:"LIKE"}
+            },
+            sections: {
+                tech:{visible: getLocalStorageBool('advs.tech', false), label:""},
+                file:{visible: getLocalStorageBool('advs.file', false), label:""},
+                stats:{visible: getLocalStorageBool('advs.stats', false), label:""}
             }
         }
     },
@@ -232,6 +249,9 @@ Vue.component('lms-advancedsearch-dialog', {
             this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
                          {key:ADVS_IN_GENRE, label:i18n('contains')},
                          {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
+            this.sections.tech.label=i18n('Technical');
+            this.sections.file.label=i18n('File');
+            this.sections.stats.label=i18n('Stats');
 
             if (reset) {
                 this.params.me_titlesearch= {val:undefined, op:"LIKE"};
@@ -268,7 +288,7 @@ Vue.component('lms-advancedsearch-dialog', {
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'advancedsearch') {
-                this.show=false;
+                this.close();
             }
         }.bind(this));
     },
@@ -277,8 +297,15 @@ Vue.component('lms-advancedsearch-dialog', {
             if (this.searching) {
                 this.searching=false;
             } else {
-                this.show=false;
+                this.close();
             }
+        },
+        close() {
+            this.show=false;
+            this.searching=false;
+            setLocalStorageVal('advs.tech', this.sections.tech.visible);
+            setLocalStorageVal('advs.file', this.sections.file.visible);
+            setLocalStorageVal('advs.stats', this.sections.stats.visible);
         },
         search() {
             this.searching = true;
@@ -316,6 +343,9 @@ Vue.component('lms-advancedsearch-dialog', {
             }
 
             lmsCommand("", command).then(({data}) => {
+                if (!this.searching) {
+                    return;
+                }
                 let results = [];
                 let total = 0;
 
@@ -339,7 +369,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 bus.$emit('advSearchResults', item, {command:command, params:[]},
                           { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
                 this.searching = false;
-                this.show = false;
+                this.close();
             }).catch(err => {
                 this.searching = false;
                 logError(err);

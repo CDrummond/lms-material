@@ -447,7 +447,7 @@ function browseClick(view, item, index, event) {
         if (useComposer(item.title)) {
             view.items.push({ title: i18n("Composers"),
                                 command: ["artists"],
-                                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
                                 cancache: true,
                                 svg: "composer",
                                 type: "group",
@@ -456,7 +456,7 @@ function browseClick(view, item, index, event) {
         if (useConductor(item.title)) {
             view.items.push({ title: i18n("Conductors"),
                                 command: ["artists"],
-                                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
                                 cancache: true,
                                 svg: "conductor",
                                 type: "group",
@@ -465,7 +465,7 @@ function browseClick(view, item, index, event) {
         if (useBand(item.title)) {
             view.items.push({ title: i18n("Bands"),
                                 command: ["artists"],
-                                params: ["role_id:BAND", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                params: ["role_id:BAND", item.id, ARTIST_TAGS],
                                 cancache: true,
                                 svg: "trumpet",
                                 type: "group",
@@ -1177,6 +1177,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             var hasTags = false;
             var hasArtistId = false;
             var hasLibraryId = false;
+            var hasNonArtistRole = false; // i.e. composer, conductor, etc.
 
             for (var i=0, params=cmd.params, len=params.length; i<len; ++i) {
                 if (params[i].startsWith("mode:")) {
@@ -1209,6 +1210,11 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                             hasArtistId = true;
                         } else if (params[i].startsWith("library_id:")) {
                             hasLibraryId = true;
+                        } else if (params[i].startsWith("role_id:")) {
+                            var role = params[i].split(':')[1].toLowerCase();
+                            if ('albumartist'!=role && '5'!=role) {
+                                hasNonArtistRole = true;
+                            }
                         }
                     }
                 }
@@ -1236,7 +1242,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                 } else if (!hasTags) {
                     if (mode=="artists" || mode=="vaalbums") {
                         p.push(ARTIST_TAGS_PLACEHOLDER);
-                        if (!hasLibraryId) {
+                        if (!hasLibraryId && !hasNonArtistRole) {
                             p.push('include_online_only_artists:1');
                         }
                     } else if (mode=="years" || mode=="genres") {

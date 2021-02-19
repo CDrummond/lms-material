@@ -129,7 +129,7 @@ Vue.component('lms-advancedsearch-dialog', {
     <v-flex xs12 sm6><v-text-field clearable v-model="params.lyrics.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
-  <v-card-text>
+  </v-card-text>
 
   <v-card-actions>
    <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>

@@ -21,7 +21,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 
- <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" @click.stop="togglePower(player)" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison, 'active-btn':playerStatus.ison}">power_settings_new</v-icon></v-btn>
+ <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress="togglePlayerPower" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison, 'active-btn':playerStatus.ison}">power_settings_new</v-icon></v-btn>
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
@@ -480,7 +480,14 @@ Vue.component('lms-toolbar', {
             }
             bus.$emit('expandNowPlaying', on);
         },
-        togglePower(player, state) {
+        togglePlayerPower(longPress) {
+            if (longPress) {
+                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+            } else {
+                this.togglePower(this.$store.state.player);
+            }
+        },
+        togglePower(player) {
             // If showing power button, dont react to presses for 0.5s after dialog closed. The button is very close to where
             // a dialogs back button is and user might accidentaly presss twice...
             if (this.$store.state.powerButton && this.$store.state.player.id == player.id && undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {

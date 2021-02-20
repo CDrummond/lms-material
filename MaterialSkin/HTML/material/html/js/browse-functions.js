@@ -97,7 +97,7 @@ function browseActions(view, item, args) {
 function browseHandleListResponse(view, item, command, resp, prevPage) {
     if (resp && resp.items) {
         // Only add history if view is not a search response replacing a search response...
-        if (SEARCH_ID!=item.id || undefined==view.current || SEARCH_ID!=view.current.id) {
+        if ((SEARCH_ID!=item.id && ADV_SEARCH_ID!=item.id) || undefined==view.current || (SEARCH_ID!=view.current.id && ADV_SEARCH_ID!=view.current.id)) {
             view.addHistory();
         }
         resp.canUseGrid = resp.canUseGrid && (view.$store.state.showArtwork || resp.forceGrid);
@@ -387,7 +387,7 @@ function browseClick(view, item, index, event) {
     }
     if (item.type=="extra") {
         if (view.$store.state.player) {
-            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, true);
+            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, 1);
         } else {
             bus.$emit('showError', undefined, i18n("No Player"));
         }
@@ -447,7 +447,7 @@ function browseClick(view, item, index, event) {
         if (useComposer(item.title)) {
             view.items.push({ title: i18n("Composers"),
                                 command: ["artists"],
-                                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
                                 cancache: true,
                                 svg: "composer",
                                 type: "group",
@@ -456,7 +456,7 @@ function browseClick(view, item, index, event) {
         if (useConductor(item.title)) {
             view.items.push({ title: i18n("Conductors"),
                                 command: ["artists"],
-                                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
                                 cancache: true,
                                 svg: "conductor",
                                 type: "group",
@@ -465,7 +465,7 @@ function browseClick(view, item, index, event) {
         if (useBand(item.title)) {
             view.items.push({ title: i18n("Bands"),
                                 command: ["artists"],
-                                params: ["role_id:BAND", item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                                params: ["role_id:BAND", item.id, ARTIST_TAGS],
                                 cancache: true,
                                 svg: "trumpet",
                                 type: "group",
@@ -482,7 +482,7 @@ function browseClick(view, item, index, event) {
         bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (item.weblink) {
         if (!IS_IOS) {
-            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, true);
+            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, 1);
         } else {
             window.open(item.weblink);
         }
@@ -741,6 +741,9 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (SELECT_ACTION===act) {
         if (!view.selection.has(index)) {
+            if (0==view.selection.size) {
+                bus.$emit('browseSelection', true);
+            }
             view.selection.add(index);
             item.selected = true;
             forceItemUpdate(view, item);
@@ -765,6 +768,9 @@ function browseItemAction(view, act, item, index, event) {
             view.selection.delete(index);
             item.selected = false;
             forceItemUpdate(view, item);
+            if (0==view.selection.size) {
+                bus.$emit('browseSelection', false);
+            }
         }
     } else if (MOVE_HERE_ACTION==act) {
         if (view.selection.size>0 && !view.selection.has(index)) {
@@ -884,6 +890,8 @@ function browseItemAction(view, act, item, index, event) {
                 }
             }
         });
+    } else if (BR_COPY_ACTION==act) {
+        bus.$emit('queueGetSelectedUrls', index, item.id);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {
@@ -972,6 +980,21 @@ function browseHeaderAction(view, act, event) {
         bus.$emit('dlg.open', 'addtoplaylist', view.items);
     } else if (RELOAD_ACTION==act) {
         view.refreshList(true);
+    } else if (ADV_SEARCH_ACTION==act) {
+        bus.$emit('dlg.open', 'advancedsearch', false);
+    } else if (SAVE_VLIB_ACTION==act) {
+        promptForText(ACTIONS[SAVE_VLIB_ACTION].title, undefined, undefined, i18n("Save")).then(resp => {
+            if (resp.ok && resp.value && resp.value.length>0) {
+                var command = JSON.parse(JSON.stringify(view.command.command));
+                command.push("savelib:"+resp.value);
+                lmsCommand("", command).then(({data}) => {
+                    bus.$emit('showMessage', i18n("Saved virtual library."));
+                }).catch(err => {
+                    bus.$emit('showError', undefined, i18n("Failed to save virtual library!"));
+                    logError(err);
+                });
+            }
+        });
     } else {
         view.itemAction(act, view.current);
     }
@@ -1154,6 +1177,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             var hasTags = false;
             var hasArtistId = false;
             var hasLibraryId = false;
+            var hasNonArtistRole = false; // i.e. composer, conductor, etc.
 
             for (var i=0, params=cmd.params, len=params.length; i<len; ++i) {
                 if (params[i].startsWith("mode:")) {
@@ -1186,6 +1210,11 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                             hasArtistId = true;
                         } else if (params[i].startsWith("library_id:")) {
                             hasLibraryId = true;
+                        } else if (params[i].startsWith("role_id:")) {
+                            var role = params[i].split(':')[1].toLowerCase();
+                            if ('albumartist'!=role && '5'!=role) {
+                                hasNonArtistRole = true;
+                            }
                         }
                     }
                 }
@@ -1213,7 +1242,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                 } else if (!hasTags) {
                     if (mode=="artists" || mode=="vaalbums") {
                         p.push(ARTIST_TAGS_PLACEHOLDER);
-                        if (!hasLibraryId) {
+                        if (!hasLibraryId && !hasNonArtistRole) {
                             p.push('include_online_only_artists:1');
                         }
                     } else if (mode=="years" || mode=="genres") {
@@ -1755,9 +1784,11 @@ function browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, tracks) {
 function browseInsertQueue(view, index, queueIndex, queueSize) {
     var commands = [];
     var indexes = [];
-    if (view.selection.size>1) {
+    if ((view.selection.size>1) || (-1==index && view.selection.size>0)) {
         var sel = Array.from(view.selection);
         indexes = sel.sort(function(a, b) { return a<b ? 1 : -1; });
+    } else if (-1==index) {
+        return;
     } else {
         indexes=[index];
     }

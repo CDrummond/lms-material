@@ -42,14 +42,25 @@ Vue.component('lms-addtoplaylist-dialog', {
             this.items = items;
             this.itemCommands = itemCommands;
             focusEntry(this);
+            var currentName = ""+this.name;
             lmsCommand("", ["playlists", 0, 10000]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;
+                    var nameValid = false;
                     this.existing = [];
                     for (var i=0, len=loop.length; i<len; ++i) {
                         this.existing.push(loop[i].playlist);
+                        if (!nameValid && loop[i].playlist==currentName) {
+                            nameValid = true;
+                        }
                     }
                     this.existing.sort();
+                    if (!nameValid && this.name==currentName) {
+                        this.name="";
+                    }
+                    if (this.name.length<1 && this.existing.length>0) {
+                        this.name = this.existing[0];
+                    }
                 }
             });
         }.bind(this));
@@ -64,20 +75,24 @@ Vue.component('lms-addtoplaylist-dialog', {
     },
     methods: {
         cancel() {
+            // For some reason 'this.name' is not updated if the combo has focus when the
+            // button is pressed. Work-around this by getting the element's value...
+            var elem = document.getElementById('addtoplaylist-name');
+            this.name = elem && elem.value ? elem.value.trim() : "";
             this.show=false;
         },
         save() {
             // For some reason 'this.name' is not updated if the combo has focus when the
             // button is pressed. Work-around this by getting the element's value...
             var elem = document.getElementById('addtoplaylist-name');
-            var name = elem && elem.value ? elem.value.trim() : "";
-            if (name.length<1) {
+            this.name = elem && elem.value ? elem.value.trim() : "";
+            if (this.name.length<1) {
                 return;
             }
             this.show=false;
 
             if (1==this.items.length && this.items[0].id.startsWith("album_id:")) {
-                this.saveAlbumToPlaylist(name, this.items[0].id);
+                this.saveAlbumToPlaylist(this.name, this.items[0].id);
             } else {
                 var tracks = [];
                 for (var i=0, len=this.items.length; i<len; ++i) {
@@ -89,9 +104,9 @@ Vue.component('lms-addtoplaylist-dialog', {
                 }
 
                 if (tracks.length==0 && this.items[0].params && this.items[0].params.track_id) {
-                    this.convertTrackIds(name);
+                    this.convertTrackIds(this.name);
                 } else {
-                    this.saveTracksToPlaylist(name, tracks);
+                    this.saveTracksToPlaylist(this.name, tracks);
                 }
             }
         },

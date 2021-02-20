@@ -19,9 +19,7 @@ Vue.component('lms-volume', {
      <v-btn flat icon @wheel="volWheel($event)" v-longpress:true="volumeUp" class="vol-btn vol-right"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
     </v-layout>
    </v-flex>
-   <v-flex xs12>
-    <div class="padding hide-for-mini"></div>
-   </v-flex>
+   <v-flex xs12 class="padding hide-for-mini"></v-flex>
   </v-layout>
  </v-container>
  <v-card-actions>

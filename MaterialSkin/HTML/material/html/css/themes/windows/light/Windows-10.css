@@ -43,6 +43,10 @@
  background-color:#000;
 }
 
+.lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+ background-color:rgba(128, 128, 128, 0.1);
+}
+
 @media (hover: hover) {
  .list-btns .add-btn, .list-btns .play-btn {
   background-color:var(--background-color)!important;

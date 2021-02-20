@@ -15,12 +15,20 @@ Vue.component('lms-player-settings', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon @click.native="close" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
-     <v-spacer v-if="unlockAll || (customActions && customActions.length>0)"></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="customActions || unlockAll">
+     <v-spacer></v-spacer>
+     <v-menu bottom left v-model="showMenu" v-if="(customActions && customActions.length>0) || unlockAll">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
+       <template v-for="(action, index) in customActions">
+        <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
+         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+         <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+        </v-list-tile>
+       </template>
+       <v-separator v-if="customActions && customActions.length>0 && unlockAll"></v-separator>
        <v-list-tile v-if="unlockAll" @click="showExtraSettings">
         <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
@@ -29,13 +37,6 @@ Vue.component('lms-player-settings', {
         <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
-       <v-divider v-if="unlockAll && (customActions && customActions.length>0)"></v-divider>
-       <template v-for="(action, index) in customActions">
-        <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
-         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-         <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-        </v-list-tile>
-       </template>
       </v-list>
      </v-menu>
     </v-toolbar>
@@ -75,9 +76,13 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
 
-    <v-list-tile>
-     <v-btn @click="setSleep()" flat style="margin-left:-8px"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn>
+    <v-list-tile class="other-setting">
+     <v-list-tile-content>
+      <v-list-tile-title><v-btn flat @click="setSleep"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn></v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
     </v-list-tile>
+     
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header" v-if="unlockAll" id="alarms">{{i18n('Alarms')}}</v-header>
      <v-list-tile v-if="unlockAll">
@@ -120,6 +125,21 @@ Vue.component('lms-player-settings', {
       <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>
 
+     <div class="dialog-padding" v-if="unlockAll"></div>
+     <v-header v-if="unlockAll">{{i18n('Other settings')}}</v-header>
+     <v-list-tile v-if="unlockAll" class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-title><v-btn flat @click="showExtraSettings"><img class="svg-img btn-icon" :src="'configure'| svgIcon(darkUi)"></img>{{i18n('Extra settings')}}</v-btn></v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Extra player settings, such as synchronization options, player specific plugin settings, etc.')}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+     </v-list-tile>
+     <v-list-tile v-if="unlockAll && playerLink" class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-title><v-btn flat @click="showConfig"><v-icon class="btn-icon">build</v-icon>{{i18n('Configuration')}}</v-btn></v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Player specific configuration UI, such as piCorePlayer or SqueezeAMP.')}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+     </v-list-tile>
+       
      <div class="dialog-padding"></div>
 
     </v-list>
@@ -233,7 +253,8 @@ Vue.component('lms-player-settings', {
             trans:{dstm:undefined},
             libraries:[],
             library:undefined,
-            customActions:undefined
+            customActions:undefined,
+            showHome:false
         }
     },
     computed: {
@@ -255,6 +276,9 @@ Vue.component('lms-player-settings', {
         },
         twentyFourHour() {
             return this.$store.state.twentyFourHour
+        },
+        homeButton() {
+            return this.$store.state.homeButton
         }
     },
     mounted() {
@@ -274,7 +298,7 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
 
-        bus.$on('playersettings.open', function(player, section) {
+        bus.$on('playersettings.open', function(player, section, showHome) {
             // Check if called via actions URL query. If so, need to map from mac/name to player instance
             if (typeof player === 'string' || player instanceof String) {
                 if ('-'==player) {
@@ -300,6 +324,7 @@ Vue.component('lms-player-settings', {
             } else if (!this.$store.state.player) {
                 bus.$emit('showError', undefined, i18n("No Player"));
             }
+            this.showHome=showHome;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=this.alarmDialog.show=false;
@@ -500,6 +525,21 @@ Vue.component('lms-player-settings', {
                 }
             });
         },
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                if (this.showHome) {
+                    this.goHome()
+                } else {
+                    this.close();
+                }
+            }
+        },
+        goHome() {
+            this.close();
+            this.$store.commit('closeAllDialogs', true);
+        },
         close() {
             this.show=false;
             this.showMenu = false;
@@ -653,10 +693,10 @@ Vue.component('lms-player-settings', {
             }
         },
         showExtraSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName);
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, 2);
         },
         showConfig() {
-            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName);
+            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, 2);
         },
         doCustomAction(action, player) {
             performCustomAction(this, action, player);

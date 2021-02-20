@@ -12,7 +12,7 @@ Vue.component('lms-information-dialog', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app class="dialog-toolbar">
-    <v-btn flat icon @click.native="close()" :title="i18n('Close')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')+serverName}}</div>
     </v-toolbar-title>
@@ -28,7 +28,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="openSettings" v-if="unlockAll" flat><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn>
+    <v-btn @click="openServerSettings" v-if="unlockAll" flat><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -70,10 +70,11 @@ Vue.component('lms-information-dialog', {
     <template v-for="(item, index) in players">
      <li>
       <v-icon v-if="item.icon.icon" style="margin-top:-4px">{{item.icon.icon}}</v-icon><img v-else class="svg-img" style="margin-top:-4px" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}
-      <ul style="margin-bottom:16px">
+      <ul>
        <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
       </ul>
      </li>
+     <v-btn @click="openPlayerSettings(item)" flat><v-icon class="btn-icon">{{TB_PLAYER_SETTINGS.icon}}</v-icon>{{TB_PLAYER_SETTINGS.title}}</v-btn>
     </template>
    </ul>
 
@@ -85,6 +86,7 @@ Vue.component('lms-information-dialog', {
      <li><a class="lms-link" href="https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html" target="_blank">{{i18n('User guide')}}</a></li>
      <li><a class="lms-link" href="https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('LMS support forums')}}</a></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
+     <li><p class="lms-link cursor" @click="openTechInfo">{{i18n('LMS technical information')}}</li>
     </ul>
    </p>
 
@@ -294,6 +296,13 @@ Vue.component('lms-information-dialog', {
                 }
             });
         },
+        goBackLP(longpress) {
+            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
+            // Work-around this by only using this callback to handle long press
+            if (longpress) {
+                this.close();
+            }
+        },
         close() {
             this.show = false;
             this.scanning = false;
@@ -333,18 +342,24 @@ Vue.component('lms-information-dialog', {
                 return str;
             }
         },
-        openSettings() {
+        openServerSettings() {
             bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName,
-                        // Keep in sync with toolbar.js!
+                        // Keep in sync with ui-setting.js *!
                         [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}]);
+                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], 2);
+        },
+        openPlayerSettings(player) {
+            bus.$emit('dlg.open', 'playersettings', player, undefined, true);
+        },
+        openTechInfo() {
+            bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, 2);
         },
         rescan(item) {
             bus.$emit('showMessage', item.name);
             lmsCommand('', item.cmd);
         },
         showUpdateInfo() {
-            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'));
+            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'), undefined, 2);
         }
     },
     beforeDestroy() {

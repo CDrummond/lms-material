@@ -283,7 +283,6 @@ Vue.component('lms-advancedsearch-dialog', {
                     }
                     if (data.result.samplerates_loop) {
                         this.sampleRates=[{key:0, label:i18n('any')}];
-                        console.log(JSON.stringify(data.result.samplerates_loop));
                         for (var idx=0, loop=data.result.samplerates_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                             this.sampleRates.push({key:loop[idx].rate, label:((loop[idx].rate/1000.0).toFixed(1)+" kHz")});
                         }

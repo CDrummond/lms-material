@@ -2,35 +2,35 @@
 -----
  1. Add 'Add to playlist' to queue items and subtoolbar (when have selection).
  2. If playlist name is empty in 'Add to playlist' dialog, then select first.
- 3. If previousplay list name is no longer valid when open 'Add to playlist'
+ 3. If previous playlist name is no longer valid when open 'Add to playlist'
     dialog, then select first.
  4. Set list item hover highlight for all themes.
  5. Add menu items to copy queue selection to playlist, and browse selection to
     queue.
  6. When showing volume-popup show all volumes if in sync group.
- 7. If player is in sync group, then add a button next to volume-slider to show
-    volume-popup with all volumes.
+ 7. If player is in sync group, then add a button next to volume-slider (in main
+    toolbar) to show volume-popup with all volumes.
  8. Add link to player settings from 'Information' dialog.
  9. Move 'Server settings', 'Player settings' and (for Android APK) 'Application
     settings' from main menu into 'Settings' dialog.
 10. Move 'Extra settings' out of 'Player settings' dialog's menu and place as
     button at bottom of dialog.
 11. Add long-press on back-button of full-screen dialogs to close all (e.g. if
-    had navigated Settings -> Player settings -> Extra settings then close
+    had navigated 'Settings' -> 'Player settings' -> 'Extra settings' then close
     all).
 12. Add 'home' button to full-screen dialogs if set to show and more than 1
-    deep.
+    level deep.
 13. Add link to LMS technical information in 'Information' dialog.
 14. When showing list of composers, conductors, or bands, check the numerical
     role_id as well as the text version so that the correct string is shown.
-15. Re-implement 'Advanced search'
+15. Re-implement 'Advanced search' as a Material dialog.
 16. Only add 'include_online_only_artists:1' if artist request has no role_id or
     role_id is 'AlbumArtist'
 17. Show sleep options on long-press of power button, if this is shown in
     toolbar.
 18. Add icon mapping for 'Radio France'.
 19. Support SVG images supplied with plugins. If plugin image ends with .svg.png
-    then look got .svg - e.g. plugins/Example/html/images/ExampleLogo.svg.png
+    then look for .svg - e.g. plugins/Example/html/images/ExampleLogo.svg.png
     maps to plugins/Example/html/images/ExampleLogo.svg
 
 2.2.4

@@ -95,7 +95,8 @@
     "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"},
     "MUSICSOURCE":{"svg":"music"},
     "/BBCSounds.png":{"svg":"bbc-sounds"},
-    "/TimesRadio.png":{"svg":"times-radio"}
+    "/TimesRadio.png":{"svg":"times-radio"},
+    "/radiofrance.png":{"svg":"france"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

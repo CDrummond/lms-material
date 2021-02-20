@@ -33,6 +33,7 @@ my $log = Slim::Utils::Log->addLogCategory({
 
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
+my $skinMgr;
 
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{desktop}i;
@@ -127,6 +128,8 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($USER_COLOR_URL_PARSER_RE, \&_userColorHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
+
+        $skinMgr = Slim::Web::HTTP::getSkinManager();
     }
 
     $class->initCLI();
@@ -1061,6 +1064,14 @@ sub _svgHandler {
 
     if (! -e $filePath) {
         $filePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . basename($request->uri->path) . ".svg";
+    }
+
+    # Check for plugin icon...
+    if (! -e $filePath) {
+        my $skin = $serverprefs->get('skin');
+        my $path = substr $request->uri->path, 14; # remove /material/svg/
+        main::DEBUGLOG && $log->debug("Looking for: " . $path);
+        $filePath = $skinMgr->fixHttpPath($skin, $path);
     }
 
     if (-e $filePath) {

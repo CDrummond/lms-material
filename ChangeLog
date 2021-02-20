@@ -29,6 +29,9 @@
 17. Show sleep options on long-press of power button, if this is shown in
     toolbar.
 18. Add icon mapping for 'Radio France'.
+19. Support SVG images supplied with plugins. If plugin image ends with .svg.png
+    then look got .svg - e.g. plugins/Example/html/images/ExampleLogo.svg.png
+    maps to plugins/Example/html/images/ExampleLogo.svg
 
 2.2.4
 -----

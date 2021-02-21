@@ -2133,3 +2133,8 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .avs-section .v-text-field {
  padding-top:7px;
 }
+
+.vlib-name {
+ opacity:0.5;
+ font-weight:var(--std-weight);
+}

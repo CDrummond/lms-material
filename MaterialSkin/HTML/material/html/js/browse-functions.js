@@ -541,6 +541,8 @@ function browseItemAction(view, act, item, index, event) {
                     var copy = JSON.parse(JSON.stringify(item));
                     copy.id=libId+"::"+item.id;
                     copy.title=item.title+SEPARATOR+view.libraryName;
+                    copy.title=item.title;
+                    copy.libname=view.libraryName;
                     copy.params.push("library_id:"+libId);
                     view.pin(copy, true);
                 } else if (2==res) {
@@ -1529,7 +1531,7 @@ function browsePin(view, item, add, mapped) {
         } else {
             var command = view.buildCommand(item, undefined, false);
             view.top.splice(lastPinnedIndex+1, 0,
-                            {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
+                            {id: item.id, title: item.title, libname: item.libname, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
                              command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
                              weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
         }

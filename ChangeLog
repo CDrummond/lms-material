@@ -33,6 +33,7 @@
     then look for .svg - e.g. plugins/Example/html/images/ExampleLogo.svg.png
     maps to plugins/Example/html/images/ExampleLogo.svg
 20. Add menu button to 'My Music' allowing virtual library to be selected.
+21. If have virtual libraries, then shown name of current next to 'My Music'
 
 2.2.4
 -----

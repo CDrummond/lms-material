@@ -92,7 +92,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <div class="lms-list bgnd-cover" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1}">
 
-  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
+  <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle || (isTop && libraryName) ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
     <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="itemMenu(citem, item.rs+col, $event)">
      <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
@@ -106,7 +106,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </div>
       <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
       <div v-else class="image-grid-text">{{citem.title}}</div>
-      <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{citem.subtitle}}</div>
+      <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.subtitle}}</div>
       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', citem.title)"></div>
       <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
        <img :src="citem.emblem | emblem()" loading="lazy"></img>
@@ -199,7 +199,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
 
     <v-list-tile-content v-else>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-title>{{item.title}}{{isTop && libraryName && item.id==TOP_MYMUSIC_ID ? SEPARATOR+libraryName : ""}}</v-list-tile-title>
      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
     </v-list-tile-content>
 

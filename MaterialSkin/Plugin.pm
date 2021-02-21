@@ -807,12 +807,7 @@ sub _cliCommand {
 
     if ($cmd eq 'adv-search') {
         my $params = {};
-        #my $searchType = $request->getParam('type');
         my $saveLib = $request->getParam('savelib');
-        #if (! $searchType) {
-        #    $searchType = 'Track';
-        #}
-        #$params->{'searchType'} = $searchType;
 
         foreach my $term (@ADV_SEARCH_OPS) {
             my $val = $request->getParam($term);

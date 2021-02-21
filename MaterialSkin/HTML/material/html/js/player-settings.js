@@ -28,7 +28,7 @@ Vue.component('lms-player-settings', {
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
-       <v-separator v-if="customActions && customActions.length>0 && unlockAll"></v-separator>
+       <v-divider v-if="customActions && customActions.length>0 && unlockAll"></v-divider>
        <v-list-tile v-if="unlockAll" @click="showExtraSettings">
         <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>

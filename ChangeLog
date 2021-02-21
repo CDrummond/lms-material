@@ -36,6 +36,8 @@
 21. If have virtual libraries, then shown name of current next to 'My Music'
 22. If showing virtual library name next to pinned item in list, show with
     reduced opacity.
+23. Extend note for libraries in 'Player settings' dialog to detail how to set
+    library for Material.
 
 2.2.4
 -----

@@ -120,7 +120,7 @@ Vue.component('lms-player-settings', {
 
      <div v-if="libraries.length>1" class="dialog-padding"></div>
      <v-header v-if="libraries.length>1" class="dialog-section-header">{{i18n('Library')}}</v-header>
-     <v-list-tile class="settings-note" v-if="libraries.length>1"><p>{{i18n("Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other LMS control points (such as the default web UI).")}}</p></v-list-tile>
+     <v-list-tile class="settings-note" v-if="libraries.length>1"><p>{{i18n("Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other LMS control points (such as the default web UI).")}}<br/><br/>{{i18n("Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'")}}</p></v-list-tile>
      <v-list-tile v-if="libraries.length>1">
       <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>

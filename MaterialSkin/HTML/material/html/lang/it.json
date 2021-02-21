@@ -432,6 +432,7 @@
 "Playing %1 by %2 from %3":"",
 "Playlist has no duplicates":"",
 "Playlist has no tracks":"",
+"Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"",
 "Plugins":"",
 "Previous track":"",
 "Previous/next long-press skip":"",

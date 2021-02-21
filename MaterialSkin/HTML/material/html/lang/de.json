@@ -512,6 +512,7 @@
 "Pause":"",
 "Player specifc settings, such as name, audio, alarms, etc.":"",
 "Player specific configuration UI, such as piCorePlayer or SqueezeAMP.":"",
+"Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"",
 "Plugins":"",
 "Radio":"",
 "Reload":"",

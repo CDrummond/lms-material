@@ -23,7 +23,10 @@ use Slim::Utils::Strings qw(string cstring);
 use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
 use File::Slurp qw(read_file);
-use Plugins::MaterialSkin::Search;
+
+if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
+    require Plugins::MaterialSkin::Search;
+}
 
 my $log = Slim::Utils::Log->addLogCategory({
     'category' => 'plugin.material-skin',
@@ -830,7 +833,7 @@ sub _cliCommand {
             $params->{'saveSearch'} = $saveLib;
         }
 
-        my ($tracks, $albums) = Plugins::MaterialSkin::Search::advancedSearch($params);
+        my ($tracks, $albums) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
 
         if (!$saveLib) {
             if ($tracks) {
@@ -904,7 +907,8 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'adv-search-params') {
-        my $params = Plugins::MaterialSkin::Search::options();
+        my $params = Plugins::MaterialSkin::Search::options($request->client());
+
         my $count = 0;
         while (my $genre = $params->{'genres'}->next) {
             $request->addResultLoop('genres_loop', $count, 'id', $genre->id);
@@ -1242,6 +1246,24 @@ sub _userColorHandler {
     }
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
+}
+
+1;
+
+# Small stub for Plugins::MaterialSkin::Search to use LMS methods if available
+package Plugins::MaterialSkin::Search;
+
+use Slim::Web::Pages::Search;
+
+sub advancedSearch {
+    my ($client, $params) = @_;
+
+    $params->{'searchType'} ||= 'Album';
+    return Slim::Web::Pages::Search::parseAdvancedSearchParams($client, $params);
+}
+
+sub options {
+    return Slim::Web::Pages::Search::parseAdvancedSearchParams($_[0], {});
 }
 
 1;

@@ -25,7 +25,7 @@ use Slim::Utils::Log;
 use Slim::Utils::Prefs;
 
 sub advancedSearch {
-	my $params  = shift;
+	my ($client, $params) = @_;
 
 	my %query   = ();
 	my @qstring = ();

@@ -111,9 +111,9 @@ function mapIconType(item, app, type) {
         item.svg=lmsIcon.split("MTL_svg_").pop().split(".")[0];
         return true;
     }
-    if (lmsIcon.endsWith(".svg.png")) {
+    if (lmsIcon.endsWith("_svg.png")) {
         item.image=item.icon=undefined;
-        item.svg=lmsIcon.replace(".svg.png", ".svg");
+        item.svg=lmsIcon.replace("_svg.png", ".svg");
         return true;
     }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {

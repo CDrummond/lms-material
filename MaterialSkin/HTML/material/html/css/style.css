@@ -1309,8 +1309,11 @@ progress {
  margin-top:8px;
  margin-bottom:8px;
  min-height:58px;
- max-height:232px;
  height:auto;
+}
+
+.v-dialog .v-list__tile__sub-title {
+ white-space:normal; /* Allow sub-titles in dialogs to span multiple lines */
 }
 
 .v-tabs__slider-wrapper .accent {

@@ -8,7 +8,7 @@
 
 Vue.component('lms-icon-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent scrollable width="450" class="lms-dialog">
  <v-card>
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">

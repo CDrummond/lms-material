@@ -185,13 +185,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     var rb = btns ? btns.repeat : undefined;
     if (sb && sb.command) {
         view.shuffAltBtn={show:true, command:sb.command, tooltip:sb.tooltip, image:sb.icon,
-                          icon:sb.jiveStyle == "thumbsDown" ? "thumb_down" : sb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined};
+                          icon:sb.jiveStyle == "thumbsDown" ? "thumb_down" : sb.jiveStyle == "thumbsUp" ? "thumb_up" : sb.jiveStyle == "love" ? "favorite" : undefined};
     } else if (view.shuffAltBtn.show) {
         view.shuffAltBtn.show=false;
     }
     if (rb && rb.command) {
         view.repAltBtn={show:true, command:rb.command, tooltip:rb.tooltip, image:rb.icon,
-                        icon:rb.jiveStyle == "thumbsDown" ? "thumb_down" : rb.jiveStyle == "thumbsUp" ? "thumb_up" : undefined};
+                        icon:rb.jiveStyle == "thumbsDown" ? "thumb_down" : rb.jiveStyle == "thumbsUp" ? "thumb_up" : rb.jiveStyle == "love" ? "favorite" : undefined};
     } else if (view.repAltBtn.show) {
         view.repAltBtn.show=false;
     }

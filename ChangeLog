@@ -38,6 +38,8 @@
     reduced opacity.
 23. Extend note for libraries in 'Player settings' dialog to detail how to set
     library for Material.
+24. Fix display of reamining time in mobile and expanded now playing views when
+    track has not started to play.
 
 2.2.4
 -----

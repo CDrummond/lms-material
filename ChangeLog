@@ -41,7 +41,7 @@
 24. Fix display of reamining time in mobile and expanded now playing views when
     track has not started to play.
 25. Only change item colour on hover for non-touch devices.
-26. Change 'Expand now playing' shortcut to 'Ctrl+Shift+N'
+26. Change 'Expand now playing' shortcut to 'Ctrl+Shift+E'
 
 2.2.4
 -----

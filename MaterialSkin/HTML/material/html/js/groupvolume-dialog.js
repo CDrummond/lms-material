@@ -185,9 +185,6 @@ Vue.component('lms-groupvolume', {
                 }
             }
         },
-        volumeChanged(player) {
-            this.setVolume(player, player.volume);
-        },
         cancelCloseTimer() {
             if (undefined!==this.closeTimer) {
                 clearTimeout(this.closeTimer);

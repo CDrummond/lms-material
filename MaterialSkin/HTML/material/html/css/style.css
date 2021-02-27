@@ -1135,9 +1135,9 @@ progress {
 }
 
 .ellipsis {
- text-overflow:ellipsis; 
- overflow:hidden;
- white-space:nowrap;
+ text-overflow:ellipsis!important;
+ overflow:hidden!important;
+ white-space:nowrap!important;
 }
 
 .shuffle-albums {

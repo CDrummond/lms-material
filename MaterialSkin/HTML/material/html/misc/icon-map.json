@@ -94,8 +94,6 @@
     "PLUGIN_DYNAMICPLAYLIST":{"svg":"dice-list"},
     "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"},
     "MUSICSOURCE":{"svg":"music"},
-    "/BBCSounds.png":{"svg":"bbc-sounds"},
-    "/TimesRadio.png":{"svg":"times-radio"},
     "/radiofrance.png":{"svg":"france"}
   },
   "indexOf":{

@@ -44,6 +44,8 @@
 26. Change 'Expand now playing' shortcut to 'Ctrl+Shift+E'
 27. Fix dragging of certain items (e.g. from 'Music folders', apps, etc.) onto
     queue.
+28. Remove mapping for BBCSounds and TimesRadio plugins, as these now supply the
+    svg icon themselves.
 
 2.2.4
 -----

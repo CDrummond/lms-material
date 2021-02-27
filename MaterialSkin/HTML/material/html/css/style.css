@@ -1023,15 +1023,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media screen and (max-width: 399px) {
- #advanced-search-btn {
-  display:none;
- }
- .lib-search {
-  margin-right:12px!important;
- }
-}
-
 .lib-search {
  margin-left:4px;
 }

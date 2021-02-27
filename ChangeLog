@@ -1,3 +1,8 @@
+2.3.1
+-----
+1. Remove min 400px width constraint for advanced search, no longer applies with
+   new dialog.
+
 2.3.0
 -----
  1. Add 'Add to playlist' to queue items and subtoolbar (when have selection).

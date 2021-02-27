@@ -42,6 +42,8 @@
     track has not started to play.
 25. Only change item colour on hover for non-touch devices.
 26. Change 'Expand now playing' shortcut to 'Ctrl+Shift+E'
+27. Fix dragging of certain items (e.g. from 'Music folders', apps, etc.) onto
+    queue.
 
 2.2.4
 -----

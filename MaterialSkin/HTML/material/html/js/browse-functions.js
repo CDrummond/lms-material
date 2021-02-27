@@ -1731,7 +1731,7 @@ function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount,
             return;
         }
         var cmd = commands.shift();
-        // browseInsertQueue calls thos function with pre-built commands, in wicch case cmd.act is undefined...
+        // browseInsertQueue calls thos function with pre-built commands, in which case cmd.act is undefined...
         if (undefined!=cmd.act) {
             var command = undefined==cmd.act ? cmd : browseBuildFullCommand(view, cmd.item, cmd.act);
             if (command.command.length===0) {
@@ -1799,10 +1799,19 @@ function browseInsertQueue(view, index, queueIndex, queueSize) {
 
     if (view.items[indexes[0]].id.startsWith("album_id:")) {
         browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, []);
-    } else {
+    } else if (view.items[indexes[0]].id.startsWith("track_id:")) {
         for (let i=0, len=indexes.length; i<len; ++i, ++queueSize) {
             commands.push(["playlistcontrol", "cmd:add", originalId(view.items[indexes[i]].id)]);
             commands.push(["playlist", "move", queueSize, queueIndex]);
+        }
+        browseDoCommands(view, commands, false, false, 0, 'refreshStatus');
+    } else {
+        for (let i=0, len=indexes.length; i<len; ++i, ++queueSize) {
+            var command = browseBuildFullCommand(view, view.items[indexes[i]], ADD_ACTION);
+            if (command.command.length>0) {
+                commands.push(command.command);
+                commands.push(["playlist", "move", queueSize, queueIndex]);
+            }
         }
         browseDoCommands(view, commands, false, false, 0, 'refreshStatus');
     }

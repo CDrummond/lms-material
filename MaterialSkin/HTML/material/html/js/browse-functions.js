@@ -6,6 +6,7 @@ function browseAddHistory(view) {
     prev.baseActions = view.baseActions;
     prev.current = view.current;
     prev.currentLibId = view.currentLibId;
+    prev.pinnedItemLibName = view.pinnedItemLibName;
     prev.currentBaseActions = view.currentBaseActions;
     prev.currentActions = view.currentActions;
     prev.headerTitle = view.headerTitle;
@@ -110,8 +111,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                                 ? item.title+SEPARATOR+view.enteredTerm
                                 : item.title
                             : "?";
+        var libname = view.current ? view.current.libname : undefined;
         view.current = item;
         view.currentLibId = command.libraryId;
+        view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
         view.items=resp.items;
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
@@ -1021,6 +1024,7 @@ function browseGoHome(view) {
     view.history=[];
     view.current = null;
     view.currentLibId = null;
+    view.pinnedItemLibName = undefined;
     view.headerTitle = null;
     view.headerSubTitle=null;
     view.baseActions=[];
@@ -1079,6 +1083,7 @@ function browseGoBack(view, refresh) {
     view.currentBaseActions = prev.currentBaseActions;
     view.currentActions = prev.currentActions;
     view.currentLibId = prev.currentLibId;
+    view.pinnedItemLibName = prev.pinnedItemLibName;
     view.headerTitle = prev.headerTitle;
     view.headerSubTitle = prev.headerSubTitle;
     view.tbarActions = prev.tbarActions;

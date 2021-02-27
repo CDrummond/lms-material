@@ -40,7 +40,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{pointer : history.length>1}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && libraryName && showLibraryName">{{SEPARATOR+libraryName}}</small></v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && (libraryName || pinnedItemLibName) && showLibraryName">{{SEPARATOR+(pinnedItemLibName ? pinnedItemLibName : libraryName)}}</small></v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer" @click="showHistory($event)" v-else-if="history.length>1">{{headerTitle}}</div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
@@ -328,7 +328,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                      select:undefined, unselect:undefined, sources: undefined },
             menu: { show:false, item: undefined, x:0, y:0},
             isTop: true,
-            libraryName: undefined,
+            libraryName: undefined, // Name of currently chosen library
+            pinnedItemLibName: undefined, // Name of library from pinned item - if saved with pinned item
             selection: new Set(),
             section: undefined,
             letter: undefined,
@@ -370,10 +371,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.unlockAll
         },
         showLibraryName() {
-            return this.$store.state.library && this.$store.state.library!=LMS_DEFAULT_LIBRARY &&
-                   ( (this.current && this.current.id.startsWith(MUSIC_ID_PREFIX)) ||
-                     (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
-                     (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) )
+            return this.pinnedItemLibName ||
+                   ( this.$store.state.library && this.$store.state.library!=LMS_DEFAULT_LIBRARY &&
+                    ( (this.current && this.current.id.startsWith(MUSIC_ID_PREFIX)) ||
+                      (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
+                      (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) ) )
         },
         ratingsPlugin() {
             return this.$store.state.ratingsPlugin

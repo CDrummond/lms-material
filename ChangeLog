@@ -7,6 +7,8 @@
    dialog.
 4. When checking for library_id in previously pinned items, check params length
    is greater than 0.
+5. If browsing into a pinned item with virtual library then show its library
+   name in subtoolbar.
 
 2.3.0
 -----

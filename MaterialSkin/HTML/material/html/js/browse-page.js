@@ -975,7 +975,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (var i=0, len=this.top.length; i<len; ++i) {
                 if (!this.top[i].id.startsWith(TOP_ID_PREFIX)) {
                     // Check for previously pinned item with library name, and try to separate
-                    if (!this.top[i].libname && this.top[i].params && this.top[i].params[this.top[i].params.length-1].startsWith('library_id:')) {
+                    if (!this.top[i].libname && this.top[i].params && this.top[i].params.length>0 && this.top[i].params[this.top[i].params.length-1].startsWith('library_id:')) {
                         var parts = this.top[i].title.split(SEPARATOR);
                         if (2==parts.length) {
                             this.top[i].title = parts[0];

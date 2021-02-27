@@ -3,6 +3,8 @@
 1. Remove min 400px width constraint for advanced search, no longer applies with
    new dialog.
 2. Fix long titles in 'Manage players' dialog.
+3. Disable entry fields, etc, when search is active in 'Advanced search'
+   dialog.
 
 2.3.0
 -----

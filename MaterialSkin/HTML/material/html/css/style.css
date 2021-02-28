@@ -1726,7 +1726,7 @@ div.v-subheader {
 }
 
 /* Long press on buttons sometimes causes select? */
-.v-btn--icon, .v-btn__content, .v-btn__content i, .noselect {
+.v-btn--icon, .v-btn__content, .v-btn__content i {
  -webkit-touch-callout:none;
  -webkit-user-select:none;
  -khtml-user-select:none;

@@ -34,7 +34,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-list>
  </v-menu>
  
- <div v-if="desktopLayout && !largeView" class="np-bar noselect" id="np-bar">
+ <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar">
   <v-layout row class="np-controls-desktop" v-if="stopButton">
    <v-flex xs3>
     <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:true="prevButton" :title="trans.prev"><v-icon large>skip_previous</v-icon></v-btn>
@@ -84,14 +84,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop noselect" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"  @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"  @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
   <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
     <template v-for="(tab, index) in info.tabs">
-     <v-tab :key="index">{{tab.title}}</v-tab>
+     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-      <v-card flat class="np-info-card-cover" @contextmenu.prevent="showContextMenu">
+      <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-tab-item>
@@ -101,8 +101,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-layout row>
      <template v-for="(tab, index) in info.tabs">
       <v-flex xs4>
-       <v-card flat class="np-info-card-cover" @contextmenu.prevent="showContextMenu">
-        <v-card-title><p>{{tab.title}}</p></v-card-title>
+       <v-card flat class="np-info-card-cover">
+        <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
        </v-card>
       </v-flex>
@@ -129,9 +129,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
    <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
     <template v-for="(tab, index) in info.tabs">
-     <v-tab :key="index">{{tab.title}}</v-tab>
+     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-      <v-card flat class="np-info-card-cover" @contextmenu.prevent="showContextMenu">
+      <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
       </v-card>
      </v-tab-item>
@@ -175,7 +175,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
         <v-layout class="np-time-layout">
          <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider noselect" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
          <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
          <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
         </v-layout>
@@ -242,7 +242,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
      <v-layout>
       <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider noselect" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
       <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
       <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
      </v-layout>

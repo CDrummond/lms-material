@@ -11,6 +11,7 @@
    name in subtoolbar.
 6. Make group volume dialog scrollable.
 7. Update translations.
+8. Remove window min height restriction for showing group volume dialog.
 
 2.3.0
 -----

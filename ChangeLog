@@ -12,6 +12,8 @@
 6. Make group volume dialog scrollable.
 7. Update translations.
 8. Remove window min height restriction for showing group volume dialog.
+9. When sholwing group volume dialog when no volume slider shown in toolbar,
+   then scroll to active player's volume.
 
 2.3.0
 -----

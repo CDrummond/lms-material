@@ -24,9 +24,9 @@ function grpVolSort(a, b) {
 Vue.component('lms-groupvolume', {
     template: `
 <v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol">
- <v-container grid-list-md text-xs-center>
+ <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
-   <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}">
+   <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
     <v-flex xs12 style="height:8px"></v-flex>
     <v-flex xs12 class="vol-label link-item" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
      {{player.name}}{{player.volume|displayVolume(player.dvc)}}
@@ -59,7 +59,7 @@ Vue.component('lms-groupvolume', {
     },
     mounted() {
         this.closeTimer = undefined;
-        bus.$on('groupvolume.open', function(playerStatus) {
+        bus.$on('groupvolume.open', function(playerStatus, scrollCurrent) {
             if (this.show) {
                 this.close();
                 return;
@@ -85,6 +85,22 @@ Vue.component('lms-groupvolume', {
             for (var p=0, len=this.players.length; p<len; ++p) {
                 this.playerMap[this.players[p].id]=p;
                 this.refreshPlayer(this.players[p]);
+            }
+
+            if (scrollCurrent) {
+                // Scroll current player's volume into view
+                var scrollChecks = 0;
+                var scrollInterval = setInterval(function() {
+                    var current = document.getElementById('gv-active');
+                    if (undefined!=current) {
+                        document.getElementById('gv-container').scrollTop = current.offsetTop;
+                        clearInterval(scrollInterval);
+                    } else if (scrollChecks<50) {
+                        scrollChecks++;
+                    } else {
+                        clearInterval(scrollInterval);
+                    }
+                }, 10);
             }
             this.show=true;
         }.bind(this));

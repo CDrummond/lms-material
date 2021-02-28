@@ -524,7 +524,7 @@ Vue.component('lms-toolbar', {
                 } else if (longPress && this.playerDvc) {
                     bus.$emit('playerCommand', ['mixer', 'muting', 1]);
                 } else {
-                    bus.$emit('dlg.open', this.playerStatus.synced ? 'groupvolume' : 'volume', this.playerStatus);
+                    bus.$emit('dlg.open', this.playerStatus.synced ? 'groupvolume' : 'volume', this.playerStatus, true);
                 }
             }
         },

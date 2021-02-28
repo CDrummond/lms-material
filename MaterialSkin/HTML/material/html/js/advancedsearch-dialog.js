@@ -272,7 +272,7 @@ Vue.component('lms-advancedsearch-dialog', {
                                      {key:ADVS_IN_GENRE, label:i18n('contains')},
                                      {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
                         for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                            this.genres.push({key:loop[idx].id, label:loop[idx].genre});
+                            this.genres.push({key:loop[idx].id, label:loop[idx].name});
                         }
                     }
                     if (data.result.filetypes_loop) {

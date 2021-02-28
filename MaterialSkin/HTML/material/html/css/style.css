@@ -649,6 +649,7 @@ div.v-subheader {
  right:0px;
  width:100vw;
  max-width:450px;
+ max-height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
  z-index:2;
  background-color:var(--background-color) !important;
 }
@@ -677,6 +678,11 @@ div.v-subheader {
 
 .vol-right {
  margin-left:16px!important;
+}
+
+.group-vol .container {
+ overflow-y:auto;
+ max-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 64px));
 }
 
 .v-menu__content {

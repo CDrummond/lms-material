@@ -9,6 +9,7 @@
    is greater than 0.
 5. If browsing into a pinned item with virtual library then show its library
    name in subtoolbar.
+6. Make group volume dialog scrollable.
 
 2.3.0
 -----

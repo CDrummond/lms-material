@@ -1,3 +1,7 @@
+2.3.2
+-----
+1. 'Now playing' should udate on year change.
+
 2.3.1
 -----
  1. Remove min 400px width constraint for advanced search, no longer applies

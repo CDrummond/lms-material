@@ -62,9 +62,11 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         trackChanged = true;
     }
     if (playerStatus.current.album!=view.playerStatus.current.albumName ||
+        playerStatus.current.year!=view.playerStatus.current.year ||
         playerStatus.current.album_id!=view.playerStatus.current.album_id) {
         view.playerStatus.current.albumName = playerStatus.current.album;
         view.playerStatus.current.album_id = playerStatus.current.album_id;
+        view.playerStatus.current.year = playerStatus.current.year;
         if (playerStatus.current.year && playerStatus.current.year>0) {
             view.playerStatus.current.album = view.playerStatus.current.albumName+" ("+ playerStatus.current.year+")";
         } else {

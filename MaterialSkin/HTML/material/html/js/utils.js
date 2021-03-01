@@ -928,24 +928,47 @@ function setElemSizes(larger) {
 }
 
 var lastShortcut={key:undefined, modifier:undefined, time:undefined};
-function bindKey(key, modifier, canRepeat) {
-    Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), function(e) {
-        if (store.state.keyboardControl) {
-            e.preventDefault();
-            let now = new Date().getTime();
-            if (canRepeat) {
-                if (key!=lastShortcut.key || modifier!=lastShortcut.modifier || undefined==lastShortcut.time || now-lastShortcut.time>=300) {
-                    bus.$emit('keyboard', key, modifier);
-                    lastShortcut={key:key, modifier:modifier, time:now};
-                }
-            } else {
-                if (key!=lastShortcut.key || modifier!=lastShortcut.modifier || undefined==lastShortcut.time || now-lastShortcut.time>100) {
-                    bus.$emit('keyboard', key, modifier);
-                }
-                lastShortcut={key:key, modifier:modifier, time:now};
-            }
+
+function decodeShortcutEvent(e) {
+    let s = {key:undefined, modifier:undefined, time:new Date().getTime()};
+    if (e.altKey) {
+        s.modifier = e.shiftKey ? 'alt+shift' : 'alt';
+    } else if (e.ctrlKey) {
+        s.modifier = e.shiftKey ? 'mod+shift' : 'mod';
+    }
+    if (e.key.length==1) {
+        s.key = e.key==' ' ? 'space' : e.key.toUpperCase();
+    } else {
+        let key = e.key.toLowerCase();
+        s.key = key.startsWith('arrow') ? key.substring(5) : key;
+    }
+    return s;
+}
+
+function handleShortcut(e) {
+    if (store.state.keyboardControl) {
+        e.preventDefault();
+        let s = decodeShortcutEvent(e);
+        if (s.key!=lastShortcut.key || s.modifier!=lastShortcut.modifier || undefined==lastShortcut.time || s.time-lastShortcut.time>100) {
+            bus.$emit('keyboard', s.key, s.modifier);
         }
-    } );
+        lastShortcut=s;
+    }
+}
+
+function handleRepeatingShortcut(e) {
+    if (store.state.keyboardControl) {
+        e.preventDefault();
+        let s = decodeShortcutEvent(e);
+        if (s.key!=lastShortcut.key || s.modifier!=lastShortcut.modifier || undefined==lastShortcut.time || s.time-lastShortcut.time>=300) {
+            bus.$emit('keyboard', s.key, s.modifier);
+            lastShortcut=s;
+        }
+    }
+}
+
+function bindKey(key, modifier, canRepeat) {
+    Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), canRepeat ? handleRepeatingShortcut : handleShortcut);
 }
 
 function shortcutStr(key, shift) {

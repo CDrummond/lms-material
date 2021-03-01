@@ -596,8 +596,8 @@ var lmsQueue = Vue.component("lms-queue", {
             bindKey(LMS_QUEUE_ADD_URL_KEYBOARD, 'mod');
             bindKey(LMS_SCROLL_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
-            bindKey('pageup', 'alt');
-            bindKey('pagedown', 'alt');
+            bindKey('pageup', 'alt', true);
+            bindKey('pagedown', 'alt', true);
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.$store.state.desktopLayout && this.$store.state.page!="queue")) {
                     return;

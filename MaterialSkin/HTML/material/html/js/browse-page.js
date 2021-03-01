@@ -430,9 +430,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             bindKey(LMS_APPEND_KEYBOARD, 'mod+shift');
             bindKey(LMS_ADD_ITEM_ACTION_KEYBOARD, 'mod+shift');
             bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
-            bindKey('pageup');
-            bindKey('pagedown');
-            bindKey('left', 'mod');
+            bindKey('pageup', undefined, true);
+            bindKey('pagedown', undefined, true);
+            bindKey('left', 'mod', true);
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.$store.state.desktopLayout && this.$store.state.page!="browse")) {
                     return;

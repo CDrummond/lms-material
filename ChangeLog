@@ -1,6 +1,8 @@
 2.3.2
 -----
 1. 'Now playing' should udate on year change.
+2. Allow certain shortcuts (e.g. inc/dec volume) to repeat every 300ms when
+   pressed.
 
 2.3.1
 -----

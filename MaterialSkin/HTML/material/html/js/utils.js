@@ -928,15 +928,22 @@ function setElemSizes(larger) {
 }
 
 var lastShortcut={key:undefined, modifier:undefined, time:undefined};
-function bindKey(key, modifier) {
+function bindKey(key, modifier, canRepeat) {
     Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), function(e) {
         if (store.state.keyboardControl) {
             e.preventDefault();
             let now = new Date().getTime();
-            if (key!=lastShortcut.key || modifier!=lastShortcut.modifier || undefined==lastShortcut.time || now-lastShortcut.time>100) {
-                bus.$emit('keyboard', key, modifier);
+            if (canRepeat) {
+                if (key!=lastShortcut.key || modifier!=lastShortcut.modifier || undefined==lastShortcut.time || now-lastShortcut.time>=300) {
+                    bus.$emit('keyboard', key, modifier);
+                    lastShortcut={key:key, modifier:modifier, time:now};
+                }
+            } else {
+                if (key!=lastShortcut.key || modifier!=lastShortcut.modifier || undefined==lastShortcut.time || now-lastShortcut.time>100) {
+                    bus.$emit('keyboard', key, modifier);
+                }
+                lastShortcut={key:key, modifier:modifier, time:now};
             }
-            lastShortcut={key:key, modifier:modifier, time:now};
         }
     } );
 }

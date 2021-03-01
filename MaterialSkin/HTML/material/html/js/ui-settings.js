@@ -16,6 +16,9 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
     <v-spacer></v-spacer>
+    <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><v-icon>settings_applications</v-icon></v-btn>
+    <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-btn>
+    <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><v-icon>{{TB_SERVER_SETTINGS.icon}}</v-icon></v-btn>
     <v-menu bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
@@ -27,16 +30,16 @@ Vue.component('lms-ui-settings', {
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-divider v-if="appSettings || player || unlockAll"></v-divider>
-      <v-list-tile v-if="appSettings" :href="appSettings">
+      <v-divider v-if="(appSettings && !appSettingsToolbar) || (player && !playerSettingsToolbar) || (unlockAll && !serverSettingsToolbar)"></v-divider>
+      <v-list-tile v-if="appSettings && !appSettingsToolbar" :href="appSettings">
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile v-if="player" @click="openPlayerSettings">
+      <v-list-tile v-if="player && !playerSettingsToolbar" @click="openPlayerSettings">
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{TB_PLAYER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile v-if="unlockAll" @click="openServerSettings">
+      <v-list-tile v-if="unlockAll && !serverSettingsToolbar" @click="openServerSettings">
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_SERVER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{TB_SERVER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
@@ -451,7 +454,8 @@ Vue.component('lms-ui-settings', {
             showRating: false,
             homeButton: false,
             powerButton: false,
-            appSettings: queryParams.appSettings
+            appSettings: queryParams.appSettings,
+            width: 500
         }
     },
     computed: {
@@ -472,9 +476,25 @@ Vue.component('lms-ui-settings', {
         },
         player() {
             return this.$store.state.player
+        },
+        appSettingsToolbar() {
+            return this.appSettings && this.width>=(this.unlockAll ? 510 : 480)
+        },
+        playerSettingsToolbar() {
+            return this.player && this.width>=(this.unlockAll ? 480 : 450)
+        },
+        serverSettingsToolbar() {
+            return this.unlockAll && this.width>=450
         }
     },
     mounted() {
+        this.width = Math.floor(window.innerWidth/50)*50;
+        setTimeout(function () {
+            this.width = Math.floor(window.innerWidth/50)*50;
+        }.bind(this), 1000);
+        bus.$on('windowWidthChanged', function() {
+            this.width = Math.floor(window.innerWidth/50)*50;
+        }.bind(this));
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
             this.readStore();

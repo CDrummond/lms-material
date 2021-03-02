@@ -14,7 +14,7 @@ Vue.component('lms-ui-settings', {
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar">
     <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{TB_UI_SETTINGS.title+serverName}}</v-toolbar-title>
+    <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><v-icon>settings_applications</v-icon></v-btn>
     <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-btn>
@@ -478,22 +478,22 @@ Vue.component('lms-ui-settings', {
             return this.$store.state.player
         },
         appSettingsToolbar() {
-            return this.appSettings && this.width>=(this.unlockAll ? 510 : 480)
+            return this.appSettings && this.width>=(this.unlockAll ? 425 : 350)
         },
         playerSettingsToolbar() {
-            return this.player && this.width>=(this.unlockAll ? 480 : 450)
+            return this.player && this.width>=(this.unlockAll ? 350 : 300)
         },
         serverSettingsToolbar() {
-            return this.unlockAll && this.width>=450
+            return this.unlockAll && this.width>=300
         }
     },
     mounted() {
-        this.width = Math.floor(window.innerWidth/50)*50;
+        this.width = Math.floor(window.innerWidth/25)*25;
         setTimeout(function () {
-            this.width = Math.floor(window.innerWidth/50)*50;
+            this.width = Math.floor(window.innerWidth/25)*25;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.width = Math.floor(window.innerWidth/50)*50;
+            this.width = Math.floor(window.innerWidth/25)*25;
         }.bind(this));
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;

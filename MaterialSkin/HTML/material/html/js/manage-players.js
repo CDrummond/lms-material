@@ -9,7 +9,7 @@
 var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
 var PMGR_DELETE_GROUP_ACTION     = {cmd:"delete",   icon:"delete"};
 var PMGR_SYNC_ACTION             = {cmd:"sync",     icon:"link"};
-var PMGR_SETTINGS_ACTION         = {cmd:"settings", icon:"music_note"};
+var PMGR_SETTINGS_ACTION         = {cmd:"settings", svg:"player-settings"};
 var PMGR_POWER_ON_ACTION         = {cmd:"on",       icon:"power_settings_new", dimmed:true};
 var PMGR_POWER_OFF_ACTION        = {cmd:"off",      icon:"power_settings_new", active:true};
 var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
@@ -180,7 +180,7 @@ Vue.component('lms-manage-players', {
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
     <v-list-tile v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon" v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
    </template>

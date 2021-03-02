@@ -17,8 +17,8 @@ Vue.component('lms-ui-settings', {
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><v-icon>settings_applications</v-icon></v-btn>
-    <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-btn>
-    <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><v-icon>{{TB_SERVER_SETTINGS.icon}}</v-icon></v-btn>
+    <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img></v-btn>
+    <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img></v-btn>
     <v-menu bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
@@ -36,11 +36,11 @@ Vue.component('lms-ui-settings', {
        <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile v-if="player && !playerSettingsToolbar" @click="openPlayerSettings">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_PLAYER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar v-if="displayMenuIcons"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{TB_PLAYER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile v-if="unlockAll && !serverSettingsToolbar" @click="openServerSettings">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>{{TB_SERVER_SETTINGS.icon}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar v-if="displayMenuIcons"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{TB_SERVER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
      </v-list>
@@ -353,14 +353,14 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile v-if="player" class="other-setting">
      <v-list-tile-content>
-      <v-list-tile-title><v-btn @click="openPlayerSettings" flat><v-icon class="btn-icon">{{TB_PLAYER_SETTINGS.icon}}</v-icon>{{TB_PLAYER_SETTINGS.title}}</v-btn></v-list-tile-title>
+      <v-list-tile-title><v-btn @click="openPlayerSettings" flat><img class="btn-icon svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)">{{TB_PLAYER_SETTINGS.title}}</v-btn></v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Player specifc settings, such as name, audio, alarms, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
 
     <v-list-tile v-if="unlockAll" class="other-setting">
      <v-list-tile-content>
-      <v-list-tile-title><v-btn flat @click="openServerSettings"><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn></v-list-tile-title>
+      <v-list-tile-title><v-btn flat @click="openServerSettings"><img class="btn-icon svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)">{{TB_SERVER_SETTINGS.title}}</v-btn></v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('LMS server settings, such as plugins, logging, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
@@ -873,6 +873,11 @@ Vue.component('lms-ui-settings', {
         },
         'showMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'uisettings', shown:newVal});
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

@@ -28,7 +28,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="openServerSettings" v-if="unlockAll" flat><v-icon class="btn-icon">{{TB_SERVER_SETTINGS.icon}}</v-icon>{{TB_SERVER_SETTINGS.title}}</v-btn>
+    <v-btn @click="openServerSettings" v-if="unlockAll" flat><img class="btn-icon svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_SERVER_SETTINGS.title}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -74,7 +74,7 @@ Vue.component('lms-information-dialog', {
        <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
       </ul>
      </li>
-     <v-btn @click="openPlayerSettings(item)" flat><v-icon class="btn-icon">{{TB_PLAYER_SETTINGS.icon}}</v-icon>{{TB_PLAYER_SETTINGS.title}}</v-btn>
+     <v-btn @click="openPlayerSettings(item)" flat><img class="btn-icon svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_PLAYER_SETTINGS.title}}</v-btn>
     </template>
    </ul>
 

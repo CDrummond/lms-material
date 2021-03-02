@@ -7,8 +7,8 @@
 'use strict';
 
 var TB_UI_SETTINGS     = {id:"tb:settings",       icon: "settings" };
-var TB_PLAYER_SETTINGS = {id:"tb:playersettings", icon: "music_note" };
-var TB_SERVER_SETTINGS = {id:"tb:serversettings", icon: "dns" };
+var TB_PLAYER_SETTINGS = {id:"tb:playersettings", svg: "player-settings" };
+var TB_SERVER_SETTINGS = {id:"tb:serversettings", svg: "server-settings" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_MANAGE_PLAYERS  = {id:"tb-manageplayers",  svg: "player-manager" };
 

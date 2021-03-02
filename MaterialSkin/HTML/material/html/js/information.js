@@ -16,8 +16,10 @@ Vue.component('lms-information-dialog', {
     <v-toolbar-title>
      <div>{{i18n('Information')+serverName}}</div>
     </v-toolbar-title>
+    <!--
     <v-spacer></v-spacer>
     <v-btn flat icon @click.native="openWindow('https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html')" :title="i18n('User guide')"><v-icon>help_outline</b-icon></v-btn>
+    -->
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">
@@ -85,8 +87,8 @@ Vue.component('lms-information-dialog', {
     <ul>
      <li><a class="lms-link" href="https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html" target="_blank">{{i18n('User guide')}}</a></li>
      <li><a class="lms-link" href="https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('LMS support forums')}}</a></li>
+     <li><div class="lms-link cursor" @click="openTechInfo">{{i18n('LMS technical information')}}</div></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
-     <li><p class="lms-link cursor" @click="openTechInfo">{{i18n('LMS technical information')}}</li>
     </ul>
    </p>
 

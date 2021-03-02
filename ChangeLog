@@ -8,6 +8,8 @@
 4. Better player settings, server settings, and advanced search icons.
 5. Remove (?) button from 'Information' dialog toolbar. Links to user guide, but
    this is too out of date for such a prominant link.
+6. Add mouse-wheel support to volume slders in 'Manage players' dialog and
+   volume popup for synced players.
 
 2.3.1
 -----

@@ -478,13 +478,13 @@ Vue.component('lms-ui-settings', {
             return this.$store.state.player
         },
         appSettingsToolbar() {
-            return this.appSettings && this.width>=(this.unlockAll ? 425 : 350)
+            return this.appSettings && this.width>=(this.unlockAll ? 375 : 325)
         },
         playerSettingsToolbar() {
-            return this.player && this.width>=(this.unlockAll ? 350 : 300)
+            return this.player && this.width>=(this.unlockAll ? 325 : 275)
         },
         serverSettingsToolbar() {
-            return this.unlockAll && this.width>=300
+            return this.unlockAll && this.width>=275
         }
     },
     mounted() {

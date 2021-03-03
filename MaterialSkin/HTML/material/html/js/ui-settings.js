@@ -16,7 +16,7 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><v-icon>settings_applications</v-icon></v-btn>
+    <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi)"></img></v-btn>
     <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img></v-btn>
     <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img></v-btn>
     <v-menu bottom left v-model="showMenu">
@@ -32,7 +32,7 @@ Vue.component('lms-ui-settings', {
       </v-list-tile>
       <v-divider v-if="(appSettings && !appSettingsToolbar) || (player && !playerSettingsToolbar) || (unlockAll && !serverSettingsToolbar)"></v-divider>
       <v-list-tile v-if="appSettings && !appSettingsToolbar" :href="appSettings">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar v-if="displayMenuIcons"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi)"></img></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile v-if="player && !playerSettingsToolbar" @click="openPlayerSettings">
@@ -346,7 +346,7 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile v-if="appSettings" class="other-setting">
      <v-list-tile-content>
-      <v-list-tile-title><v-btn :href="appSettings" flat><v-icon class="btn-icon">settings_applications</v-icon>{{i18n('Application settings')}}</v-btn></v-list-tile-title>
+      <v-list-tile-title><v-btn :href="appSettings" flat><img class="btn-icon svg-img" :src="'app-settings' | svgIcon(darkUi)"></img>{{i18n('Application settings')}}</v-btn></v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Application specific settings, such as zoom scale, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>

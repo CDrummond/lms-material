@@ -252,7 +252,7 @@ Vue.component('lms-iframe-dialog', {
                             ? "player"
                             : page.indexOf("server/basic.html")>0
                                 ? "server"
-                                : page.startsWith("plugins/") && page.indexOf("?player=")>0
+                                : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
                                     ? "extra"
                                     : "other";
             this.show = true;

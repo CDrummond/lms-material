@@ -12,6 +12,7 @@
 6. Add mouse-wheel support to volume sliders in 'Manage players' dialog and
    volume popup for synced players.
 7. Prevent flash of light background when using 'Extra' item with dark themes.
+8. Fix clipping of some icons in menus.
 
 2.3.1
 -----

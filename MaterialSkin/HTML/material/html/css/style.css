@@ -1464,6 +1464,7 @@ progress {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  vertical-align:middle;
+ border-radius:unset !important;
 }
 
 .link-item {

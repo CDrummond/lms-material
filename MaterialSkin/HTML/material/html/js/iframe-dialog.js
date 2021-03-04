@@ -165,7 +165,7 @@ function hideClassicSkinElems(page, textCol) {
                 selector.addEventListener("change", selectChanged);
                 selectChanged();
             }
-        } else if ('other'==page) {
+        } else if ('other'==page || 'extra'==page) {
             if (content) {
                 if (content.addEventListener) {
                     content.addEventListener('click', otherClickHandler);
@@ -252,7 +252,9 @@ Vue.component('lms-iframe-dialog', {
                             ? "player"
                             : page.indexOf("server/basic.html")>0
                                 ? "server"
-                                : "other";
+                                : page.startsWith("plugins/") && page.indexOf("?player=")>0
+                                    ? "extra"
+                                    : "other";
             this.show = true;
             this.showMenu = false;
             this.loaded = false;

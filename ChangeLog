@@ -11,6 +11,7 @@
    this is too out of date for such a prominant link.
 6. Add mouse-wheel support to volume slders in 'Manage players' dialog and
    volume popup for synced players.
+7. Prevent flash of light background when using 'Extra' item with dark themes.
 
 2.3.1
 -----

@@ -351,7 +351,7 @@ Vue.component('lms-information-dialog', {
                          {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], 2);
         },
         openPlayerSettings(player) {
-            bus.$emit('dlg.open', 'playersettings', player, undefined, true);
+            bus.$emit('dlg.open', 'playersettings', player, undefined, 2);
         },
         openTechInfo() {
             bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, 2);

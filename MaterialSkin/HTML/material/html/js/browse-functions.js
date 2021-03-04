@@ -750,6 +750,9 @@ function browseItemAction(view, act, item, index, event) {
                 bus.$emit('browseSelection', true);
             }
             view.selection.add(index);
+            if (view.items[index].duration!=undefined && view.items[index].duration>0) {
+                view.selectionDuration += view.items[index].duration;
+            }
             item.selected = true;
             forceItemUpdate(view, item);
             if (event && event.shiftKey) {
@@ -771,6 +774,9 @@ function browseItemAction(view, act, item, index, event) {
         view.selectStart = undefined;
         if (view.selection.has(index)) {
             view.selection.delete(index);
+            if (view.items[index].duration!=undefined && view.items[index].duration>0) {
+                view.selectionDuration -= view.items[index].duration;
+            }
             item.selected = false;
             forceItemUpdate(view, item);
             if (0==view.selection.size) {

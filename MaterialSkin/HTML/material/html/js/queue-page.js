@@ -242,7 +242,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime(true)}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.removeall" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
@@ -375,6 +375,7 @@ var lmsQueue = Vue.component("lms-queue", {
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
+            selectionDuration: 0,
             settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0,
             dstm: false,
@@ -810,6 +811,9 @@ var lmsQueue = Vue.component("lms-queue", {
                         bus.$emit('queueSelection', true);
                     }
                     this.selection.add(index);
+                    if (this.items[index].duration!=undefined && this.items[index].duration>0) {
+                        this.selectionDuration += this.items[index].duration;
+                    }
                     item.selected = true;
                     forceItemUpdate(this, item);
                     if (event && event.shiftKey) {
@@ -831,6 +835,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.selectStart = undefined;
                 if (this.selection.has(index)) {
                     this.selection.delete(index);
+                    if (this.items[index].duration!=undefined && this.items[index].duration>0) {
+                        this.selectionDuration -= this.items[index].duration;
+                    }
                     item.selected = false;
                     forceItemUpdate(this, item);
                     if (0==this.selection.size) {
@@ -900,12 +907,16 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             this.selection = new Set();
+            this.selectionDuration = 0;
             for (var i=0, len=this.items.length; i<len; ++i) {
                 if (this.items[i].selected) {
                     this.items[i].selected = false;
                 } else {
                     this.selection.add(i);
                     this.items[i].selected = true;
+                    if (this.items[i].duration!=undefined && this.items[i].duration>0) {
+                        this.selectionDuration += this.items[i].duration;
+                    }
                 }
             }
         },
@@ -923,6 +934,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }
             this.selection = new Set();
+            this.selectionDuration = 0;
             bus.$emit('queueSelection', false);
         },
         select(item, index, event) {

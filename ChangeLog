@@ -13,6 +13,7 @@
    volume popup for synced players.
 7. Prevent flash of light background when using 'Extra' item with dark themes.
 8. Fix clipping of some icons in menus.
+9. Show total duration of selected items, if items have duration.
 
 2.3.1
 -----

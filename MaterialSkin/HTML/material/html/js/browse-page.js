@@ -17,7 +17,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime(true)}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
@@ -331,6 +331,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             libraryName: undefined, // Name of currently chosen library
             pinnedItemLibName: undefined, // Name of library from pinned item - if saved with pinned item
             selection: new Set(),
+            selectionDuration: 0,
             section: undefined,
             letter: undefined,
             filteredJumplist: [],
@@ -1034,6 +1035,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             this.selection = new Set();
+            this.selectionDuration = 0;
             for (var i=0, len=this.items.length; i<len; ++i) {
                 if (!this.items[i].header) {
                     if (this.items[i].selected) {
@@ -1041,6 +1043,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else {
                         this.selection.add(i);
                         this.items[i].selected = true;
+                        if (this.items[i].duration!=undefined && this.items[i].duration>0) {
+                            this.selectionDuration += this.items[i].duration;
+                        }
                     }
                 }
             }
@@ -1060,6 +1065,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             this.selection = new Set();
+            this.selectionDuration = 0;
             this.selectStart = undefined;
             bus.$emit('browseSelection', false);
         },
@@ -1657,6 +1663,19 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return item.title+"\n"+item.subtitle;
             }
             return item.title;
+        },
+        displayTime: function (value, bracket) {
+            if (!value || value<0.000000000001) {
+                return '';
+            }
+            let str = formatSeconds(Math.floor(value));
+            if (undefined==str || str.length<1) {
+                return '';
+            }
+            if (bracket) {
+                return " (" + str + ")";
+            }
+            return str;
         },
         displaySelectionCount: function (value) {
             if (!value) {

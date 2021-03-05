@@ -413,76 +413,11 @@ function browseClick(view, item, index, event) {
         bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix');
-    } else if (!item.genreArtists && STD_ITEM_GENRE==item.stdItem && view.current && view.current.id==GENRES_ID) {
-        view.addHistory();
-        view.items=[];
-        view.items.push({ title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
-                      command: ["artists"],
-                      params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
-                      svg: "artist",
-                      type: "group",
-                      id: uniqueId(item.id, view.items.length),
-                      genreArtists:true });
-        if (lmsOptions.separateArtists) {
-              view.items.push({ title: i18n("Album Artists"),
-                  command: ["artists"],
-                  params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
-                  svg: "albumartist",
-                  type: "group",
-                  id: uniqueId(item.id, view.items.length),
-                  genreArtists:true });
-        }
-        view.items.push({ title: i18n("Albums"),
-                      command: ["albums"],
-                      params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-                      menu: [],
-                      icon: "album",
-                      type: "group",
-                      id: uniqueId(item.id, view.items.length)});
-        view.items.push({ title: i18n("Random Albums"),
-                      command: ["albums"],
-                      params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
-                      menu: [],
-                      svg: "dice-album",
-                      type: "group",
-                      id: uniqueId(item.id, view.items.length)});
-        view.inGenre = item.title;
-        if (useComposer(item.title)) {
-            view.items.push({ title: i18n("Composers"),
-                                command: ["artists"],
-                                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
-                                cancache: true,
-                                svg: "composer",
-                                type: "group",
-                                id: uniqueId(item.id, view.items.length)});
-        }
-        if (useConductor(item.title)) {
-            view.items.push({ title: i18n("Conductors"),
-                                command: ["artists"],
-                                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
-                                cancache: true,
-                                svg: "conductor",
-                                type: "group",
-                                id: uniqueId(item.id, view.items.length)});
-        }
-        if (useBand(item.title)) {
-            view.items.push({ title: i18n("Bands"),
-                                command: ["artists"],
-                                params: ["role_id:BAND", item.id, ARTIST_TAGS],
-                                cancache: true,
-                                svg: "trumpet",
-                                type: "group",
-                                id: uniqueId(item.id, view.items.length)});
-        }
-        view.headerTitle = item.title;
-        view.headerSubTitle = i18n("Select category");
-        setScrollTop(view, 0);
-        view.isTop = false;
-        view.jumplist = view.filteredJumplist = [];
-        view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-        view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
-        view.layoutGrid(true);
-        bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
+    } else if (STD_ITEM_GENRE==item.stdItem && view.current && view.current.id==GENRES_ID) {
+        browseGenre(view, item);
+    } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.genre_id && item.actions.go.params.mode=='artists' && item.title.indexOf(': ')>0) {
+        // Genre from 'More' menu?
+        browseGenre(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1]});
     } else if (item.weblink) {
         if (!IS_IOS) {
             bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, 1);
@@ -516,6 +451,76 @@ function browseClick(view, item, index, event) {
         }
         view.fetchItems(command, item);
     }
+}
+
+function browseGenre(view, item) {
+    view.addHistory();
+    view.items=[];
+    view.items.push({ title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
+                  command: ["artists"],
+                  params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                  svg: "artist",
+                  type: "group",
+                  id: uniqueId(item.id, view.items.length)});
+    if (lmsOptions.separateArtists) {
+          view.items.push({ title: i18n("Album Artists"),
+              command: ["artists"],
+              params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
+              svg: "albumartist",
+              type: "group",
+              id: uniqueId(item.id, view.items.length)});
+    }
+    view.items.push({ title: i18n("Albums"),
+                  command: ["albums"],
+                  params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+                  menu: [],
+                  icon: "album",
+                  type: "group",
+                  id: uniqueId(item.id, view.items.length)});
+    view.items.push({ title: i18n("Random Albums"),
+                  command: ["albums"],
+                  params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
+                  menu: [],
+                  svg: "dice-album",
+                  type: "group",
+                  id: uniqueId(item.id, view.items.length)});
+    view.inGenre = item.title;
+    if (useComposer(item.title)) {
+        view.items.push({ title: i18n("Composers"),
+                            command: ["artists"],
+                            params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
+                            cancache: true,
+                            svg: "composer",
+                            type: "group",
+                            id: uniqueId(item.id, view.items.length)});
+    }
+    if (useConductor(item.title)) {
+        view.items.push({ title: i18n("Conductors"),
+                            command: ["artists"],
+                            params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
+                            cancache: true,
+                            svg: "conductor",
+                            type: "group",
+                            id: uniqueId(item.id, view.items.length)});
+    }
+    if (useBand(item.title)) {
+        view.items.push({ title: i18n("Bands"),
+                            command: ["artists"],
+                            params: ["role_id:BAND", item.id, ARTIST_TAGS],
+                            cancache: true,
+                            svg: "trumpet",
+                            type: "group",
+                            id: uniqueId(item.id, view.items.length)});
+    }
+    view.headerTitle = item.title;
+    view.headerSubTitle = i18n("Select category");
+    setScrollTop(view, 0);
+    view.isTop = false;
+    view.jumplist = view.filteredJumplist = [];
+    view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+    view.layoutGrid(true);
+    bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
 }
 
 function browseItemAction(view, act, item, index, event) {

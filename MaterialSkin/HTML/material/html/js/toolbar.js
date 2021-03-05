@@ -21,7 +21,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 
- <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress="togglePlayerPower" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison, 'active-btn':playerStatus.ison}">power_settings_new</v-icon></v-btn>
+ <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress="toggleCurrentPlayerPower" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison, 'active-btn':playerStatus.ison}">power_settings_new</v-icon></v-btn>
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator">
@@ -50,10 +50,10 @@ Vue.component('lms-toolbar', {
          <v-btn icon class="hide-for-mini open-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small>open_in_new</v-icon></v-btn>
         </v-flex>
         <v-flex xs6 style="margin-left:2px">
-         <v-btn icon v-if="item.canpoweroff" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
+         <v-btn icon v-if="item.canpoweroff" v-longpress="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
         </v-flex>
        </v-layout>
-       <v-btn v-else-if="item.canpoweroff" icon style="float:right" @click.stop="togglePower(item)" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
+       <v-btn v-else-if="item.canpoweroff" icon style="float:right" v-longpress="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
     </v-list-tile>
    </template>
@@ -480,23 +480,30 @@ Vue.component('lms-toolbar', {
             }
             bus.$emit('expandNowPlaying', on);
         },
-        togglePlayerPower(longPress) {
-            if (longPress) {
-                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
-            } else {
-                this.togglePower(this.$store.state.player);
-            }
-        },
-        togglePower(player) {
+        toggleCurrentPlayerPower(longPress) {
             // If showing power button, dont react to presses for 0.5s after dialog closed. The button is very close to where
             // a dialogs back button is and user might accidentaly presss twice...
-            if (this.$store.state.powerButton && this.$store.state.player.id == player.id && undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
+            if (this.$store.state.powerButton && undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
                 return;
             }
-            var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
-            lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
-                bus.$emit('refreshStatus', player.id);
-            });
+            this.togglePlayerPower(this.$store.state.player, longPress);
+        },
+        togglePlayerPower(player, longPress) {
+            if (longPress) {
+                this.showPlayerMenu = false;
+                bus.$emit('dlg.open', 'sleep', player);
+            } else {
+                var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
+                lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
+                    bus.$emit('refreshStatus', player.id);
+                });
+            }
+        },
+        togglePower(longPress, el) {
+            let idx = parseInt(el.id.split("-")[0]);
+            if (idx>=0 && idx<=this.$store.state.players.length) {
+                this.togglePlayerPower(this.$store.state.players[idx], longPress);
+            }
         },
         openMiniPlayer(player) {
             this.showPlayerMenu=false;

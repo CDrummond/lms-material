@@ -17,6 +17,8 @@
 10. Add GENRE, GENREID, and YEAR custom action placeholders.
 11. Intercept genre list from 'More', and replace with Material's category
     selection.
+12. Long-press on power buttons in players menu to show sleep settings for
+    player.
 
 2.3.1
 -----

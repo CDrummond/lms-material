@@ -20,6 +20,7 @@
 12. Long-press on power buttons in players menu to show sleep settings for
     player.
 13. Fix closing zoomed now-playing image causing browse to navigate back.
+14. Add hover effect to queue duration, indicating that it is clickable.
 
 2.3.1
 -----

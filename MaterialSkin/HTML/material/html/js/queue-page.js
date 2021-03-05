@@ -258,10 +258,10 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{trans.remaining}}</v-flex>
    </v-layout>
    <v-layout row wrap v-else-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" @click="showRemaining">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single}">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single link-item">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext link-item">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
    </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" @click="showRemaining" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single link-item" @click="showRemaining" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat</v-icon></v-btn>

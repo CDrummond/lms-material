@@ -68,14 +68,24 @@ function doReplacements(string, player, item) {
         if (undefined!=item.album_id) {
             val=val.replace("$ALBUMID", item.album_id);
         }
+        if (undefined!=item.genre_id) {
+            val=val.replace("$GENREID", item.genre_id);
+        }
+        if (undefined!=item.year) {
+            val=val.replace("$YEAR", item.year);
+        }
         if (undefined!=item.id) {
             let id = ''+item.id;
             if (id.startsWith("artist_id:")) {
-                val=val.replace("$ARTISTID", id);
+                val=val.replace("$ARTISTID", id.split(':')[1]);
             } else if (id.startsWith("album_id:")) {
-                val=val.replace("$ALBUMID", id);
-            } else {
-                val=val.replace("$TRACKID", id);
+                val=val.replace("$ALBUMID", id.split(':')[1]);
+            } else if (id.startsWith("genre_id:")) {
+                val=val.replace("$GENREID", id.split(':')[1]);
+            } else if (id.startsWith("year:")) {
+                val=val.replace("$YEAR", id.split(':')[1]);
+            } else if (id.indexOf(':')>0) {
+                val=val.replace("$TRACKID", id.split(':')[1]);
             }
         }
         if (undefined!=item.artist) {
@@ -91,7 +101,9 @@ function doReplacements(string, player, item) {
                     val=val.replace("$ARTISTNAME", item.title);
                 } else if (id.startsWith("album_id:")) {
                     val=val.replace("$ALBUMNAME", item.title);
-                } else {
+                } else if (id.startsWith("genre_id:")) {
+                    val=val.replace("$GENRE", item.title);
+                } else if (!id.startsWith("year:")) {
                     val=val.replace("$TRACKNAME", item.title);
                 }
             } else {

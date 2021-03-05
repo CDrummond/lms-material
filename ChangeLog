@@ -1,19 +1,20 @@
 2.3.2
 -----
-1. 'Now playing' should update on year change.
-2. Allow certain shortcuts (e.g. inc/dec volume) to repeat every 300ms when
-   pressed.
-3. Show buttons for application, player, and server settings in 'Settings'
-   dialog toolbar if there is space.
-4. Better player settings, server settings, application settings, and advanced
-   search icons.
-5. Remove (?) button from 'Information' dialog toolbar. Links to user guide, but
-   this is too out of date for such a prominant link.
-6. Add mouse-wheel support to volume sliders in 'Manage players' dialog and
-   volume popup for synced players.
-7. Prevent flash of light background when using 'Extra' item with dark themes.
-8. Fix clipping of some icons in menus.
-9. Show total duration of selected items, if items have duration.
+ 1. 'Now playing' should update on year change.
+ 2. Allow certain shortcuts (e.g. inc/dec volume) to repeat every 300ms when
+    pressed.
+ 3. Show buttons for application, player, and server settings in 'Settings'
+    dialog toolbar if there is space.
+ 4. Better player settings, server settings, application settings, and advanced
+    search icons.
+ 5. Remove (?) button from 'Information' dialog toolbar. Links to user guide,
+    but this is too out of date for such a prominant link.
+ 6. Add mouse-wheel support to volume sliders in 'Manage players' dialog and
+    volume popup for synced players.
+ 7. Prevent flash of light background when using 'Extra' item with dark themes.
+ 8. Fix clipping of some icons in menus.
+ 9. Show total duration of selected items, if items have duration.
+10. Add GENRE, GENREID, and YEAR custom action placeholders.
 
 2.3.1
 -----

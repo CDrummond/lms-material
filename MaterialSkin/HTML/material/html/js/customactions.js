@@ -102,7 +102,7 @@ function doReplacements(string, player, item) {
                 } else if (id.startsWith("album_id:")) {
                     val=val.replace("$ALBUMNAME", item.title);
                 } else if (id.startsWith("genre_id:")) {
-                    val=val.replace("$GENRE", item.title);
+                    val=val.replace("$GENRENAME", item.title);
                 } else if (!id.startsWith("year:")) {
                     val=val.replace("$TRACKNAME", item.title);
                 }

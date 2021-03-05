@@ -14,7 +14,7 @@
  7. Prevent flash of light background when using 'Extra' item with dark themes.
  8. Fix clipping of some icons in menus.
  9. Show total duration of selected items, if items have duration.
-10. Add GENRE, GENREID, and YEAR custom action placeholders.
+10. Add GENRENAME, GENREID, and YEAR custom action placeholders.
 11. Intercept genre list from 'More', and replace with Material's category
     selection.
 12. Long-press on power buttons in players menu to show sleep settings for

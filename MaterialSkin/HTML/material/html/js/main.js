@@ -218,10 +218,6 @@ var app = new Vue({
             }
         }.bind(this));
 
-        bus.$on('dialogOpen', function(name, val) {
-            this.$store.commit('dialogOpen', {name:name, shown:val});
-        }.bind(this));
-
         bus.$on('dlg.open', function(name, a, b, c, d, e, f, g, h) {
             if (typeof DEFERRED_LOADED != 'undefined') {
                 this.dialogs[name] = true; // Mount

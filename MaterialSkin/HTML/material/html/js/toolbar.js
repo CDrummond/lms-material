@@ -327,10 +327,8 @@ Vue.component('lms-toolbar', {
             }
         }.bind(this));
 
-        bus.$on('dialogOpen', function(name, val) {
-            if (name=='info-dialog') {
-                this.infoOpen = val;
-            }
+        bus.$on('infoDialog', function(val) {
+            this.infoOpen = val;
             this.initItems();
         }.bind(this));
         bus.$on('nowPlayingExpanded', function(val) {

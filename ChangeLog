@@ -19,6 +19,7 @@
     selection.
 12. Long-press on power buttons in players menu to show sleep settings for
     player.
+13. Fix closing zoomed now-playing image causing browse to navigate back.
 
 2.3.1
 -----

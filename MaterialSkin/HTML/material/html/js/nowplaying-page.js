@@ -534,7 +534,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             });
             this.gallery.init();
             this.$store.commit('dialogOpen', {name:'np-viewer', shown:true});
-            this.gallery.listen('close', function() { bus.$emit('dialogOpen', 'np-viewer', false); });
+            // PhotoSwipe seems to emit an 'esc' when closed, which causes us to navigate back. If we delay emitting
+            // dialogOpen.browse-viewer.false by 1/2 second the code looking for 'esc' still thinks this dialog is open, and
+            // so ignores the event. Hacky, but works.
+            this.gallery.listen('close', function() { setTimeout(function () { bus.$emit('dialogOpen', 'np-viewer', false); }, 500); });
         },
         doAction(command) {
             if (this.$store.state.visibleMenus.size>0) {

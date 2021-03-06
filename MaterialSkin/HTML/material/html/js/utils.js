@@ -1125,9 +1125,9 @@ function splitMultiples(item) {
         let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",") : undefined;
 
         if (undefined!=ids) {
-            let strings = undefined!=item[ARTIST_TYPES[i]] ? item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX) : undefined;
             item[idsKey] = ids;
 
+            let strings = undefined!=item[ARTIST_TYPES[i]] ? item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX) : undefined;
             if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
                 item[ARTIST_TYPES[i]+"_id"]=ids[0];
                 item[ARTIST_TYPES[i]] = strings[0];

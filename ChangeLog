@@ -24,8 +24,8 @@
 15. Only look for local files if track URLs starts with file://
 16. Only set new source in iframe page if link is not an anchor.
 17. Long-press on search button to go straight to advanced search.
-18. Fix incorrect splitting of (e.g.) artist_ids when this is a string of 1
-    single id.
+18. Need to split (e.g.) trackartist_ids if present, even if trackartist is not
+    present.
 
 2.3.1
 -----

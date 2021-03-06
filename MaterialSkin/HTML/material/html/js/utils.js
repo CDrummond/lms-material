@@ -1121,22 +1121,19 @@ function useBand(genre) {
 
 function splitMultiples(item) {
     for (var i=0, len=ARTIST_TYPES.length; i<len; ++i) {
-        if (undefined!=item[ARTIST_TYPES[i]]) {
-            let idsKey = ARTIST_TYPES[i]+"_ids";
-            if (undefined!=item[idsKey]) {
-                // Split (e.g.) artist_ids so we have artist_id=first and artist_ids=all, likewise for artist
-                // ...check that xxx_ids has ',' - if not its a single id, so turn into an array...
-                let ids = (""+item[idsKey]).indexOf(",")>0 ? item[idsKey].split(",") : [parseInt(item[idsKey])];
-                let values = item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX);
-                item[idsKey] = ids;
+        let idsKey = ARTIST_TYPES[i]+"_ids";
+        let strings = undefined!=item[ARTIST_TYPES[i]] ? item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX) : undefined;
+        let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",") : undefined;
 
-                if (ids.length>0 && ids.length==values.length) {
-                    item[ARTIST_TYPES[i]+"_id"]=ids[0];
-                    item[ARTIST_TYPES[i]] = values[0];
-                    if (lmsOptions.showAllArtists) {
-                        item[ARTIST_TYPES[i]+"s"] = values;
-                    }
-                }
+        if (undefined!=ids) {
+            item[idsKey] = ids;
+        }
+
+        if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
+            item[ARTIST_TYPES[i]+"_id"]=ids[0];
+            item[ARTIST_TYPES[i]] = strings[0];
+            if (lmsOptions.showAllArtists) {
+                item[ARTIST_TYPES[i]+"s"] = strings;
             }
         }
     }

@@ -1122,18 +1122,18 @@ function useBand(genre) {
 function splitMultiples(item) {
     for (var i=0, len=ARTIST_TYPES.length; i<len; ++i) {
         let idsKey = ARTIST_TYPES[i]+"_ids";
-        let strings = undefined!=item[ARTIST_TYPES[i]] ? item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX) : undefined;
         let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",") : undefined;
 
         if (undefined!=ids) {
+            let strings = undefined!=item[ARTIST_TYPES[i]] ? item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX) : undefined;
             item[idsKey] = ids;
-        }
 
-        if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
-            item[ARTIST_TYPES[i]+"_id"]=ids[0];
-            item[ARTIST_TYPES[i]] = strings[0];
-            if (lmsOptions.showAllArtists) {
-                item[ARTIST_TYPES[i]+"s"] = strings;
+            if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
+                item[ARTIST_TYPES[i]+"_id"]=ids[0];
+                item[ARTIST_TYPES[i]] = strings[0];
+                if (lmsOptions.showAllArtists) {
+                    item[ARTIST_TYPES[i]+"s"] = strings;
+                }
             }
         }
     }

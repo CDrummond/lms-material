@@ -155,7 +155,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 actParams['album']=view.current.title;
                 if (view.items.length>0) {
                     let url = view.items[0].header ? (view.items.length>1 ? view.items[1].url : undefined) : view.items[0].url;
-                    if (undefined!=url) {
+                    if (undefined!=url && /^file:\/\//.test(url)) {
                         try {
                             actParams['path']=decodeURIComponent(url.substring(0, url.lastIndexOf('/'))+'/').substring(7);
                             // if we have (e.g.) /c:/path change to c:/path

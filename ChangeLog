@@ -21,6 +21,7 @@
     player.
 13. Fix closing zoomed now-playing image causing browse to navigate back.
 14. Add hover effect to queue duration, indicating that it is clickable.
+15. Only look for local files if track URLs starts with file://
 
 2.3.1
 -----

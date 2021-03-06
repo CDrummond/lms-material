@@ -79,7 +79,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
    <v-divider vertical v-if="desktopLayout && settingsMenuActions.length>0"></v-divider>
-   <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" v-longpress="searchLib" id="search-btn"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
+   <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItems" color="primary">refresh</v-icon>
@@ -736,13 +736,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 browseItemAction(this, SEARCH_LIB_ACTION);
             }
         },
-        searchLib(longpress) {
-            if (longpress) {
-                bus.$emit('dlg.open', 'advancedsearch', true);
-            } else {
-                this.itemAction(SEARCH_LIB_ACTION);
-            }
-        },
         itemAction(act, item, index, event) {
             browseItemAction(this, act, item, index, event);
         },
@@ -784,7 +777,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (!IS_MOBILE && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 if (undefined!=item.artist_ids && item.artist_ids.length>1) {
                     var entries = [];
-                    console.log(item.artist_ids, item.artist_ids.length);
                     for (var i=0, len=item.artist_ids.length; i<len; ++i) {
                         entries.push({id:"artist_id:"+item.artist_ids[i], title:item.artists[i], stdItem:STD_ITEM_ARTIST});
                     }

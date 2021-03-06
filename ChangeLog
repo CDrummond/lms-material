@@ -1,6 +1,7 @@
 2.3.3
 -----
 1. Fix blank queue, etc.
+2. Remove longpress to open advanced search, breaks back button?
 
 2.3.2
 -----

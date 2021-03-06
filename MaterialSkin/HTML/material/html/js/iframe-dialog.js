@@ -57,7 +57,7 @@ function otherClickHandler(e) {
     } else if (target.tagName === 'SPAN' || target.tagName === 'IMG') {
         href = target.parentElement.getAttribute('href');
     }
-    if (href) {
+    if (href && !href.startsWith('#')) {
         bus.$emit('iframe-href', href);
     }
 }

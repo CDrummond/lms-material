@@ -22,6 +22,7 @@
 13. Fix closing zoomed now-playing image causing browse to navigate back.
 14. Add hover effect to queue duration, indicating that it is clickable.
 15. Only look for local files if track URLs starts with file://
+16. Only set new source in iframe page if link is not an anchor.
 
 2.3.1
 -----

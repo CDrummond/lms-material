@@ -13,7 +13,7 @@ Vue.component('lms-ui-settings', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar">
-    <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat icon v-longpress="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi)"></img></v-btn>
@@ -651,13 +651,6 @@ Vue.component('lms-ui-settings', {
                                { value: 15, label: i18n("%1 seconds", 15)},
                                { value: 30, label: i18n("%1 seconds", 30)}
                              ];
-        },
-        goBackLP(longpress) {
-            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
-            // Work-around this by only using this callback to handle long press
-            if (longpress) {
-                this.close();
-            }
         },
         close() {
             this.show=false;

@@ -195,7 +195,7 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon v-longpress="goBackLP" @click.stop="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
@@ -288,19 +288,12 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
     },
     methods: {
-        goBackLP(longpress) {
-            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
-            // Work-around this by only using this callback to handle long press
-            if (longpress) {
-                if (this.showHome) {
-                    this.goHome()
-                } else {
-                    this.close();
-                }
-            }
-        },
-        goBack() {
+        goBack(longpress) {
             if (!this.show) {
+                return;
+            }
+            if (longpress && this.showHome) {
+                this.goHome();
                 return;
             }
             if (this.history.length<1) {

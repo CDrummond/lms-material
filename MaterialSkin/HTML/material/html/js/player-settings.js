@@ -15,7 +15,7 @@ Vue.component('lms-player-settings', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon v-longpress="goBackLP" @click.stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer></v-spacer>
@@ -525,22 +525,15 @@ Vue.component('lms-player-settings', {
                 }
             });
         },
-        goBackLP(longpress) {
-            // Single-press on back-btn and using long-press handler seems to cause click (not longpress) to fall through
-            // Work-around this by only using this callback to handle long press
-            if (longpress) {
-                if (this.showHome) {
-                    this.goHome()
-                } else {
-                    this.close();
-                }
-            }
-        },
         goHome() {
             this.close();
             this.$store.commit('closeAllDialogs', true);
         },
-        close() {
+        close(longpress) {
+            if (longpress && this.showHome) {
+                this.goHome();
+                return;
+            }
             this.show=false;
             this.showMenu = false;
             if (this.dstmItems.length>1 && this.dstm!=this.orig.dstm) {

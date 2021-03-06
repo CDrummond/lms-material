@@ -1124,8 +1124,9 @@ function splitMultiples(item) {
         if (undefined!=item[ARTIST_TYPES[i]]) {
             let idsKey = ARTIST_TYPES[i]+"_ids";
             if (undefined!=item[idsKey]) {
-                // Split (e.g.) artist_ids so we have artist_id=first and artist_ids=all, lkewise for artist
-                let ids = item[idsKey].split(",");
+                // Split (e.g.) artist_ids so we have artist_id=first and artist_ids=all, likewise for artist
+                // ...check that xxx_ids has ',' - if not its a single id, so turn into an array...
+                let ids = (""+item[idsKey]).indexOf(",")>0 ? item[idsKey].split(",") : [parseInt(item[idsKey])];
                 let values = item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX);
                 item[idsKey] = ids;
 

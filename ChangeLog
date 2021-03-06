@@ -23,6 +23,7 @@
 14. Add hover effect to queue duration, indicating that it is clickable.
 15. Only look for local files if track URLs starts with file://
 16. Only set new source in iframe page if link is not an anchor.
+17. Long-press on search button to go straight to advanced search.
 
 2.3.1
 -----

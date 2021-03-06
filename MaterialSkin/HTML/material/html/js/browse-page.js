@@ -79,7 +79,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
    <v-divider vertical v-if="desktopLayout && settingsMenuActions.length>0"></v-divider>
-   <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
+   <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" v-longpress="searchLib" id="search-btn"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItems" color="primary">refresh</v-icon>
@@ -734,6 +734,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             // the search widget re-shown! Therefore, ingore click events on 'Music sources' for the first 750ms it is shown.
             if (undefined==this.backBtnPressTime || (new Date().getTime()-this.backBtnPressTime)>750) {
                 browseItemAction(this, SEARCH_LIB_ACTION);
+            }
+        },
+        searchLib(longpress) {
+            if (longpress) {
+                bus.$emit('dlg.open', 'advancedsearch', true);
+            } else {
+                this.itemAction(SEARCH_LIB_ACTION);
             }
         },
         itemAction(act, item, index, event) {

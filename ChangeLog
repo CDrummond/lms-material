@@ -1,3 +1,8 @@
+2.3.4
+-----
+1. Always check if an items duration is valid before using to calculate
+   selection duration.
+
 2.3.3
 -----
 1. Fix blank queue, etc.

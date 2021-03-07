@@ -1042,9 +1042,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else {
                         this.selection.add(i);
                         this.items[i].selected = true;
-                        if (this.items[i].duration!=undefined && this.items[i].duration>0) {
-                            this.selectionDuration += this.items[i].duration;
-                        }
+                        this.selectionDuration += itemDuration(this.items[i]);
                     }
                 }
             }

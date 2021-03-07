@@ -811,9 +811,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         bus.$emit('queueSelection', true);
                     }
                     this.selection.add(index);
-                    if (this.items[index].duration!=undefined && this.items[index].duration>0) {
-                        this.selectionDuration += this.items[index].duration;
-                    }
+                    this.selectionDuration += itemDuration(this.items[index]);
                     item.selected = true;
                     forceItemUpdate(this, item);
                     if (event && event.shiftKey) {
@@ -835,9 +833,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.selectStart = undefined;
                 if (this.selection.has(index)) {
                     this.selection.delete(index);
-                    if (this.items[index].duration!=undefined && this.items[index].duration>0) {
-                        this.selectionDuration -= this.items[index].duration;
-                    }
+                    this.selectionDuration -= itemDuration(this.items[index]);
                     item.selected = false;
                     forceItemUpdate(this, item);
                     if (0==this.selection.size) {
@@ -914,9 +910,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 } else {
                     this.selection.add(i);
                     this.items[i].selected = true;
-                    if (this.items[i].duration!=undefined && this.items[i].duration>0) {
-                        this.selectionDuration += this.items[i].duration;
-                    }
+                    this.selectionDuration += itemDuration(this.items[i]);
                 }
             }
         },

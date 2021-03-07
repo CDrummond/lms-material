@@ -1139,3 +1139,11 @@ function splitMultiples(item) {
     }
 }
 
+function itemDuration(item) {
+    if (undefined==item.duration) {
+        return 0;
+    }
+    let val = parseFloat(item.duration);
+    return val>0 ? val : 0;
+}
+

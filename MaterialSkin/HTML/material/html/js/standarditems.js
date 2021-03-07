@@ -87,32 +87,32 @@ function buildStdItemCommand(item, parentCommand) {
                 command.params.push(list[i]);
             }
         }
-        return command;
-    }
-    if (undefined==STD_ITEMS[item.stdItem].command) {
-        return command;
-    }
-    for (var i=0, list=STD_ITEMS[item.stdItem].command, len=list.length; i<len; ++i) {
-        command.command.push(list[i]);
-    }
-    for (var i=0, list=STD_ITEMS[item.stdItem].params, len=list.length; i<len; ++i) {
-        command.params.push(list[i]);
-    }
-    if (lmsOptions.techInfo && (STD_ITEM_ALBUM==item.stdItem || STD_ITEM_PLAYLIST==item.stdItem || STD_ITEM_REMOTE_PLAYLIST==item.stdItem)) {
-        for (var i=0, list=command.params, len=list.length; i<len; ++i) {
-            if (command.params[i].startsWith("tags:")) {
-                command.params[i]+="lorT";
-                break;
+    } else {
+        if (undefined==STD_ITEMS[item.stdItem].command) {
+            return command;
+        }
+        for (var i=0, list=STD_ITEMS[item.stdItem].command, len=list.length; i<len; ++i) {
+            command.command.push(list[i]);
+        }
+        for (var i=0, list=STD_ITEMS[item.stdItem].params, len=list.length; i<len; ++i) {
+            command.params.push(list[i]);
+        }
+        if (lmsOptions.techInfo && (STD_ITEM_ALBUM==item.stdItem || STD_ITEM_PLAYLIST==item.stdItem || STD_ITEM_REMOTE_PLAYLIST==item.stdItem)) {
+            for (var i=0, list=command.params, len=list.length; i<len; ++i) {
+                if (command.params[i].startsWith("tags:")) {
+                    command.params[i]+="lorT";
+                    break;
+                }
             }
         }
+        command.params.push(item.id);
     }
-    command.params.push(item.id);
     if (undefined!=parentCommand) {
         if (item.id.startsWith("artist_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if (lower.startsWith("role_id:") || (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:"))) {
+                    if (lower.startsWith("role_id:") || (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
@@ -124,6 +124,15 @@ function buildStdItemCommand(item, parentCommand) {
                     if ( (!lmsOptions.noRoleFilter && (lower.startsWith("role_id:"))) ||
                          (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) ||
                          lower.startsWith("artist_id:")) {
+                        command.params.push(parentCommand.params[i]);
+                    }
+                }
+            }
+        } else if (item.id.startsWith("genre_id:")) {
+            for (var i=0, len=parentCommand.params.length; i<len; ++i) {
+                if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
+                    var lower = parentCommand.params[i].toLowerCase();
+                    if (lower.startsWith("role_id:") || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }

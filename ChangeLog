@@ -1,3 +1,8 @@
+2.4.0
+-----
+1. Add categories when browsing into years. e.g. My Music / Years / 2021 /
+   Genres / Hard Rock / Albums
+
 2.3.4
 -----
 1. Always check if an items duration is valid before using to calculate

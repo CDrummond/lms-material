@@ -396,7 +396,6 @@ function browseClick(view, item, index, event) {
         }
         return;
     }
-
     if (TOP_MYMUSIC_ID==item.id) {
         view.addHistory();
         view.items = view.myMusic;
@@ -413,11 +412,16 @@ function browseClick(view, item, index, event) {
         bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix');
-    } else if (STD_ITEM_GENRE==item.stdItem && view.current && view.current.id==GENRES_ID) {
-        browseGenre(view, item);
+    } else if (STD_ITEM_GENRE==item.stdItem && view.current && (view.current.id==GENRES_ID || getField(item, "year"))) {
+        browseAddCategories(view, item, true, getField(item, "year"));
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.genre_id && item.actions.go.params.mode=='artists' && item.title.indexOf(': ')>0) {
         // Genre from 'More' menu?
-        browseGenre(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1]});
+        browseAddCategories(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1]}, true);
+    } else if (STD_ITEM_YEAR==item.stdItem && view.current && view.current.id==YEARS_ID) {
+        browseAddCategories(view, item, false);
+    } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.year && item.actions.go.params.mode=='albums' && item.title.indexOf(': ')>0) {
+        // Year from 'More' menu?
+        browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
     } else if (item.weblink) {
         if (!IS_IOS) {
             bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, 1);
@@ -453,9 +457,10 @@ function browseClick(view, item, index, event) {
     }
 }
 
-function browseGenre(view, item) {
+function browseAddCategories(view, item, isGenre) {
     view.addHistory();
     view.items=[];
+
     view.items.push({ title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
                   command: ["artists"],
                   params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
@@ -484,8 +489,17 @@ function browseGenre(view, item) {
                   svg: "dice-album",
                   type: "group",
                   id: uniqueId(item.id, view.items.length)});
-    view.inGenre = item.title;
-    if (useComposer(item.title)) {
+    if (!isGenre) {
+        view.items.push({ title: i18n("Genres"),
+                            command: ["genres"],
+                            params: [item.id],
+                            cancache: true,
+                            svg: "guitar-acoustic",
+                            type: "group",
+                            id: uniqueId(item.id, view.items.length)});
+    }
+    view.inGenre = isGenre ? item.title : 'years';
+    if (isGenre ? useComposer(item.title) : lmsOptions.showComposer) {
         view.items.push({ title: i18n("Composers"),
                             command: ["artists"],
                             params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
@@ -494,7 +508,7 @@ function browseGenre(view, item) {
                             type: "group",
                             id: uniqueId(item.id, view.items.length)});
     }
-    if (useConductor(item.title)) {
+    if (isGenre ? useConductor(item.title) : lmsOptions.showConductor) {
         view.items.push({ title: i18n("Conductors"),
                             command: ["artists"],
                             params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
@@ -503,7 +517,7 @@ function browseGenre(view, item) {
                             type: "group",
                             id: uniqueId(item.id, view.items.length)});
     }
-    if (useBand(item.title)) {
+    if (isGenre ? useBand(item.title) : lmsOptions.showBand) {
         view.items.push({ title: i18n("Bands"),
                             command: ["artists"],
                             params: ["role_id:BAND", item.id, ARTIST_TAGS],
@@ -1353,6 +1367,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicYears")) {
                         item.icon = "date_range";
                         item.cancache = true;
+                        item.id = YEARS_ID;
                     } else if (c.id == "myMusicNewMusic") {
                         item.icon = "new_releases";
                         item.section = SECTION_NEWMUSIC;

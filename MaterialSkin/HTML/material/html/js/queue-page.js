@@ -60,8 +60,9 @@ function animate(elem, from, to) {
 
 // Record time artist/album was clicked - to prevent context menu also showing.
 var lastQueueItemClick = undefined;
+var lmsQueueSelectionActive = false;
 function showArtist(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
@@ -69,15 +70,15 @@ function showArtist(id, title) {
 }
 
 function showAlbumArtist(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), 'queue');
 }
 
-function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
-    if (lmsNumVisibleMenus>0) {
+function showAlbum(album, title) {
+    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
@@ -85,7 +86,7 @@ function showAlbum(album, title) { // lmsNumVisibleMenus defined in store.js
 }
 
 function showComposer(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
@@ -93,7 +94,7 @@ function showComposer(id, title) {
 }
 
 function showConductor(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
@@ -101,7 +102,7 @@ function showConductor(id, title) {
 }
 
 function showBand(id, title) {
-    if (lmsNumVisibleMenus>0) { // lmsNumVisibleMenus defined in store.js
+    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     lastQueueItemClick = new Date();
@@ -809,6 +810,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (!this.selection.has(index)) {
                     if (0==this.selection.size) {
                         bus.$emit('queueSelection', true);
+                        lmsQueueSelectionActive = true;
                     }
                     this.selection.add(index);
                     this.selectionDuration += itemDuration(this.items[index]);
@@ -838,6 +840,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     forceItemUpdate(this, item);
                     if (0==this.selection.size) {
                         bus.$emit('queueSelection', false);
+                        lmsQueueSelectionActive = false;
                     }
                 }
             } else if (MOVE_HERE_ACTION==act) {
@@ -929,6 +932,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.selection = new Set();
             this.selectionDuration = 0;
+            lmsQueueSelectionActive = false;
             bus.$emit('queueSelection', false);
         },
         select(item, index, event) {
@@ -1043,6 +1047,8 @@ var lmsQueue = Vue.component("lms-queue", {
                             }
                         }
                         this.selection = sel;
+                        lmsQueueSelectionActive = this.selection.length>0;
+                        bus.$emit('queueSelection', lmsQueueSelectionActive);
                     }
                     this.$nextTick(function () {
                         setScrollTop(this, currentPos>0 ? currentPos : 0);

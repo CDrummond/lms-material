@@ -2,6 +2,8 @@
 -----
 1. Always check if an items duration is valid before using to calculate
    selection duration.
+2. Ignore clicks on artist, album, etc. subtitles in queue when selection
+   active.
 
 2.3.3
 -----

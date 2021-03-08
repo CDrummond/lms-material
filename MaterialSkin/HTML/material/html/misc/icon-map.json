@@ -82,7 +82,6 @@
     "/napster.png":{"svg":"napster"},
     "/shoutcast.png":{"svg":"shoutcast"},
     "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"},
-    "/TVH/icon.png":{"svg":"tvheadend"},
     "plugins/InfoBrowser/html/images/icon.png":{"icon":"info"},
     "html/images/cover.png":{"icon":"album"},
     "plugins/InguzEQ/inguz.png":{"icon":"equalizer"},

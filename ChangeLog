@@ -4,6 +4,7 @@
    selection duration.
 2. Ignore clicks on artist, album, etc. subtitles in queue when selection
    active.
+3. Remove mapping for TVHeadend icon, as plugin now provides its own.
 
 2.3.3
 -----

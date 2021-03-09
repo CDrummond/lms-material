@@ -9,6 +9,7 @@
 5. Fix colour of player status icons for light themes with coloured toolbars.
 6. Fix colour of SVG icons in toolbars of fullscreen dialogs when using light
    themes with coloured toolbars.
+7. Fix opening menu of pinned item in browse when another browse menu is open.
 
 2.3.3
 -----

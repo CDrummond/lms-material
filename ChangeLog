@@ -6,6 +6,7 @@
    active.
 3. Remove mapping for TVHeadend icon, as plugin now provides its own.
 4. Fix check for all items having same icon/image.
+5. Fix colour of player status icons for light themes with coloured toolbars.
 
 2.3.3
 -----

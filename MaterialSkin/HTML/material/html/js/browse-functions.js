@@ -175,7 +175,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                     view.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
                                                     weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true});
                 }
-            } else { // if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
+            } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
                 view.currentActions.items.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});
             }
             view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });

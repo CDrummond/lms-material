@@ -22,6 +22,7 @@ Vue.component('lms-rating-dialog', {
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat @click.native="remove()">{{i18n('Remove')}}</v-btn>
    <v-btn flat @click.native="apply()">{{i18n('Apply')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -77,6 +78,10 @@ Vue.component('lms-rating-dialog', {
                 this.toSet.push(i.split(":")[1]);
             });
             this.setRating();
+        },
+        remove() {
+            this.value = 0;
+            this.apply();
         },
         setRating() {
             if (this.toSet.length==0) {

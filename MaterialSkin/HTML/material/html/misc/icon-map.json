@@ -92,8 +92,7 @@
     "PLUGIN_TRACKSTAT":{"icon":"bar_chart"},
     "PLUGIN_DYNAMICPLAYLIST":{"svg":"dice-list"},
     "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"},
-    "MUSICSOURCE":{"svg":"music"},
-    "/radiofrance.png":{"svg":"france"}
+    "MUSICSOURCE":{"svg":"music"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

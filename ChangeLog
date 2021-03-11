@@ -4,7 +4,8 @@
    selection duration.
 2. Ignore clicks on artist, album, etc. subtitles in queue when selection
    active.
-3. Remove mapping for TVHeadend icon, as plugin now provides its own.
+3. Remove icon mapping for RadioFrance and TVHeadend icon, as plugins now
+   provide their own.
 4. Fix check for all items having same icon/image.
 5. Fix colour of player status icons for light themes with coloured toolbars.
 6. Fix colour of SVG icons in toolbars of fullscreen dialogs when using light

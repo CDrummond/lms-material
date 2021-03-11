@@ -857,6 +857,7 @@ function showMenu(obj, newMenu) {
         }.bind(this), 100);
     } else {
         obj.menu = newMenu;
+        obj.menu.show = true;
     }
 }
 

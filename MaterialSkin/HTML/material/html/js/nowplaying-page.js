@@ -458,11 +458,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         bus.$on('showLinkMenu.now-playing', function(x, y, menu) {
-            this.menu.icons = true;
-            this.menu.items = menu
-            this.menu.x = x;
-            this.menu.y = y;
-            this.menu.show = true;
+            showMenu(this, {items: menu, x:x, y:y, show:true, icons:true});
         }.bind(this));
 
         this.showTotal = getLocalStorageBool('showTotal', true);

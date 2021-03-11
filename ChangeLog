@@ -1,18 +1,19 @@
 2.3.4
 -----
-1. Always check if an items duration is valid before using to calculate
-   selection duration.
-2. Ignore clicks on artist, album, etc. subtitles in queue when selection
-   active.
-3. Remove icon mapping for RadioFrance and TVHeadend icon, as plugins now
-   provide their own.
-4. Fix check for all items having same icon/image.
-5. Fix colour of player status icons for light themes with coloured toolbars.
-6. Fix colour of SVG icons in toolbars of fullscreen dialogs when using light
-   themes with coloured toolbars.
-7. Fix opening menu of pinned item in browse when another browse menu is open.
-8. If rating is 1 or 0.5 and click to set same value then reset rating to 0.
-9. Add 'Remove' to rartings dialog, setting rating to 0.
+ 1. Always check if an items duration is valid before using to calculate
+    selection duration.
+ 2. Ignore clicks on artist, album, etc. subtitles in queue when selection
+    active.
+ 3. Remove icon mapping for RadioFrance and TVHeadend icon, as plugins now
+    provide their own.
+ 4. Fix check for all items having same icon/image.
+ 5. Fix colour of player status icons for light themes with coloured toolbars.
+ 6. Fix colour of SVG icons in toolbars of fullscreen dialogs when using light
+    themes with coloured toolbars.
+ 7. Fix opening menu of pinned item in browse when another browse menu is open.
+ 8. If rating is 1 or 0.5 and click to set same value then reset rating to 0.
+ 9. Add 'Remove' to rartings dialog, setting rating to 0.
+10. Fix showing link menu in now-playing whilst existing already open.
 
 2.3.3
 -----

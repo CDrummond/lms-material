@@ -12,7 +12,7 @@
     themes with coloured toolbars.
  7. Fix opening menu of pinned item in browse when another browse menu is open.
  8. If rating is 1 or 0.5 and click to set same value then reset rating to 0.
- 9. Add 'Remove' to rartings dialog, setting rating to 0.
+ 9. Add 'Remove' to ratings dialog, setting rating to 0.
 10. Fix showing link menu in now-playing whilst existing already open.
 11. Add semi-transparent background when showing rating in portrait now-playing.
 

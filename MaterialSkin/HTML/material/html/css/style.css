@@ -946,6 +946,17 @@ div.v-subheader {
  text-shadow: 2px 2px 5px var(--text-shadow-color);
 }
 
+.np-portrait-rating .v-rating {
+ background-color:rgba(255, 255, 255, 0.5);
+ display:inline-block;
+ border-radius:8px;
+ padding:0px 4px 2px 4px;
+}
+
+.theme--dark .np-portrait-rating .v-rating {
+ background-color:rgba(32, 32, 32, 0.5);
+}
+
 div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }

@@ -11,6 +11,7 @@ package Plugins::MaterialSkin::Plugin;
 use strict;
 
 use Config;
+use Scalar::Util qw(blessed);
 use Slim::Menu::BrowseLibrary;
 use Slim::Music::VirtualLibraries;
 use Slim::Utils::Favorites;
@@ -233,8 +234,8 @@ sub _cliCommand {
     if ($cmd eq 'transferqueue') {
         my $fromId = $request->getParam('from');
         my $toId = $request->getParam('to');
-        my $move = $request->getParam('move');
-        if (!$fromId || !$toId) {
+        my $mode = $request->getParam('mode');
+        if (!$fromId || !$toId || !$mode) {
             $request->setStatusBadParams();
             return;
         }
@@ -246,7 +247,10 @@ sub _cliCommand {
         }
 
         # Remeber if source was playing, and start dest playing if so
-        my $wasPlaying = $from->isPlaying();
+        my $fromWasPlaying = $from->isPlaying();
+        my $toWasPlaying = $to->isPlaying();
+        my $fromCurrentIndex = Slim::Player::Source::playingSongIndex($from);
+        my $toCurrentIndex = Slim::Player::Source::playingSongIndex($to);
 
         # Get list of playes source is currently synced with
         my @sourceBuddies;
@@ -270,17 +274,49 @@ sub _cliCommand {
 
         $to->execute(['power', 1]) unless $to->power;
 
-        # Sync with destination player - queue will be copied
-        $from->execute(['sync', $toId]);
-        if ( exists $INC{'Slim/Plugin/RandomPlay/Plugin.pm'} && (my $mix = Slim::Plugin::RandomPlay::Plugin::active($from)) ) {
-            $to->execute(['playlist', 'addtracks', 'listRef', ['randomplay://' . $mix] ]);
+        if ($mode eq 'swap') {
+            my $fromPl = 'material-skin-swap-' . $fromId;
+            my $toPl = 'material-skin-swap-' . $toId;
+            $fromPl =~ s/:/_/g;
+            $toPl =~ s/:/_/g;
+
+            # Save to temporary playlists
+            $from->execute(['playlist', 'save', $fromPl]);
+            my $fromPlObj = Slim::Schema->single('Playlist', { 'title' => $fromPl });
+            if (!blessed($fromPlObj)) {
+                $request->setStatusBadParams();
+                return;
+            }
+            $to->execute(['playlist', 'save', $toPl]);
+            my $toPlObj = Slim::Schema->single('Playlist', { 'title' => $toPl });
+            if (!blessed($toPlObj)) {
+                Slim::Control::Request::executeRequest(undef, ['playlists', 'delete', 'playlist_id:' . $fromPlObj->id]);
+                $request->setStatusBadParams();
+                return;
+            }
+
+            # Clear players, and load temp playlists
+            $from->execute(['playlist', 'clear']);
+            $from->execute(['playlistcontrol', 'cmd:add', 'playlist_id:' . $toPlObj->id]);
+            $to->execute(['playlist', 'clear']);
+            $to->execute(['playlistcontrol', 'cmd:add', 'playlist_id:' . $fromPlObj->id]);
+
+            # Tidy up - remove temp playlists
+            Slim::Control::Request::executeRequest(undef, ['playlists', 'delete', 'playlist_id:' . $fromPlObj->id]);
+            Slim::Control::Request::executeRequest(undef, ['playlists', 'delete', 'playlist_id:' . $toPlObj->id]);
+        } else {
+            # Sync with destination player - queue will be copied
+            $from->execute(['sync', $toId]);
+            if ( exists $INC{'Slim/Plugin/RandomPlay/Plugin.pm'} && (my $mix = Slim::Plugin::RandomPlay::Plugin::active($from)) ) {
+                $to->execute(['playlist', 'addtracks', 'listRef', ['randomplay://' . $mix] ]);
+            }
+
+            # Switch to now playing view?
+            $to->execute(['now-playing']);
+
+            # Now unsync source from dest
+            $from->execute(['sync', '-']);
         }
-
-        # Switch to now playing view?
-        $to->execute(['now-playing']);
-
-        # Now unsync source from dest
-        $from->execute(['sync', '-']);
 
         # If dest was in a sync group, re-add the buddies...
         for my $buddy (@destBuddies) {
@@ -293,38 +329,46 @@ sub _cliCommand {
         }
 
         # If queue is moved then clear source
-        if ($move) {
+        if ($mode eq 'move') {
             $from->execute(['playlist', 'clear']);
+            $from->execute(['power', 0]);
         }
 
-        $from->execute(['power', 0]);
+        if ($mode eq 'swap') {
+            if ($fromWasPlaying) {
+                $to->execute(['playlist', 'index', $fromCurrentIndex]);
+            }
+            if ($toWasPlaying) {
+                $from->execute(['playlist', 'index', $toCurrentIndex]);
+            }
+        } else {
+            # Sometimes sync goes bit off even when all sync settings are correct so
+            # if dest is synced power off and on again
+            if ($to->isSynced() || $to->model eq 'group') {
+                $to->execute(['power', 0]);
+                # ...power back on after 1 second...
+                Slim::Utils::Timers::setTimer($to, Time::HiRes::time() + 1.00, sub {
+                    my ( $to, $fromWasPlaying ) = @_;
+                    $to->execute(['power', 1]);
 
-        # Sometimes sync goes bit off even when all sync settings are correct so
-        # if dest is synced power off and on again
-        if ($to->isSynced() || $to->model eq "group") {
-            $to->execute(['power', 0]);
-            # ...power back on after 1 second...
-            Slim::Utils::Timers::setTimer($to, Time::HiRes::time() + 1.00, sub {
-                my ( $to, $wasPlaying ) = @_;
-                $to->execute(['power', 1]);
-
-                # If destination was a group, then power off/on yet again!
-                if ($to->model eq "group") {
-                    $to->execute(['power', 0]);
-                    # ...and wait 1 second again...
-                    Slim::Utils::Timers::setTimer($to, Time::HiRes::time() + 1.00, sub {
-                        my ( $to, $wasPlaying ) = @_;
-                        $to->execute(['power', 1]);
-                        if ($wasPlaying) {
-                            $to->execute(['play']);
-                        }
-                    }, $wasPlaying);
-                } elsif ($wasPlaying) {
-                    $to->execute(['play']);
-                }
-            }, $wasPlaying);
-        } elsif ($wasPlaying) {
-            $to->execute(['play']);
+                    # If destination was a group, then power off/on yet again!
+                    if ($to->model eq 'group') {
+                        $to->execute(['power', 0]);
+                        # ...and wait 1 second again...
+                        Slim::Utils::Timers::setTimer($to, Time::HiRes::time() + 1.00, sub {
+                            my ( $to, $fromWasPlaying ) = @_;
+                            $to->execute(['power', 1]);
+                            if ($fromWasPlaying) {
+                                $to->execute(['play']);
+                            }
+                        }, $fromWasPlaying);
+                    } elsif ($fromWasPlaying) {
+                        $to->execute(['play']);
+                    }
+                }, $fromWasPlaying);
+            } elsif ($fromWasPlaying) {
+                $to->execute(['play']);
+            }
         }
 
         $request->setStatusDone();
@@ -489,7 +533,6 @@ sub _cliCommand {
             my $updating = 0;
             my $plugins = eval { from_json( $json ) };
             for my $plugin (@{$plugins}) {
-            print("\n\nNAME:" . $plugin->{'name'} . " URL:" . $plugin->{'url'} . "\n\n");
                 Slim::Utils::PluginDownloader->install({ name => $plugin->{'name'}, url => $plugin->{'url'}, sha => $plugin->{'sha'} });
                 $updating++;
             }

@@ -70,7 +70,7 @@ Vue.component('lms-movequeue-dialog', {
             this.show=false;
         },
         moveTo(dest) {
-            lmsCommand("", ["material-skin", "transferqueue", "from:"+this.src, "to:"+dest.id, "move:"+this.option]).then(({data}) => {
+            lmsCommand("", ["material-skin", "transferqueue", "from:"+this.src, "to:"+dest.id, "mode:"+(0==this.option ? 'copy' : 1==this.option ? 'move' : 'swap')]).then(({data}) => {
                 this.$store.commit('setPlayer', dest.id);
                 if (0==this.option) {
                     bus.$emit('showMessage', i18n("Queue copied to '%1'", dest.name));
@@ -89,7 +89,8 @@ Vue.component('lms-movequeue-dialog', {
         initItems() {
             this.options=[
                 { key:0, label:i18n("Copy the queue to:")},
-                { key:1, label:i18n("Move the queue to:")} ]
+                { key:1, label:i18n("Move the queue to:")},
+                { key:2, label:i18n("Swap the queue with:")} ]
         },
     },
     filters: {

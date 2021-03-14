@@ -88,7 +88,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile v-if="unlockAll">
       <v-list-tile-content @click="toggleAllAlarms()" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
-       <v-list-tile-sub-title>{{i18n('Enable alarm fuctionality.')}}</v-list-tile-sub-title>
+       <v-list-tile-sub-title>{{i18n('Enable alarm functionality.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
       <v-list-tile-action><v-switch v-model="alarms.on" @click.stop="toggleAllAlarms()"></v-switch></v-list-tile-action>
      </v-list-tile>

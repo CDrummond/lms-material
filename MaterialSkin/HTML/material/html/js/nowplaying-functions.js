@@ -330,7 +330,7 @@ function nowplayingFetchLyrics(view) {
                     view.info.tabs[LYRICS_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
                 }
             }).catch(error => {
-                view.info.tabs[LYRICS_TAB].text=i18n("Failed to retreive information.");
+                view.info.tabs[LYRICS_TAB].text=i18n("Failed to retrieve information.");
             });
         }
     } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.title && undefined==view.infoTrack.track_id && undefined==view.infoTrack.artist_id) {
@@ -415,7 +415,7 @@ function nowplayingFetchBio(view) {
                                         view.info.tabs[BIO_TAB].isMsg=undefined==data.result.biography;
                                     }
                                 }).catch(error => {
-                                    view.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
+                                    view.info.tabs[BIO_TAB].text=i18n("Failed to retrieve information.");
                                 });
                             }
                         } else {
@@ -424,7 +424,7 @@ function nowplayingFetchBio(view) {
                         }
                     }
                 }).catch(error => {
-                    view.info.tabs[BIO_TAB].text=i18n("Failed to retreive information.");
+                    view.info.tabs[BIO_TAB].text=i18n("Failed to retrieve information.");
                 });
             }
         }
@@ -474,7 +474,7 @@ function nowplayingFetchReview(view) {
                     view.info.tabs[REVIEW_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {
-                view.info.tabs[REVIEW_TAB].text=i18n("Failed to retreive information.");
+                view.info.tabs[REVIEW_TAB].text=i18n("Failed to retrieve information.");
             });
         }
     } else if (undefined==view.infoTrack.albumartist && undefined==view.infoTrack.artist_id &&

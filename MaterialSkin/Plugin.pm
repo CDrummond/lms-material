@@ -39,10 +39,10 @@ my $serverprefs = preferences('server');
 my $skinMgr;
 
 my $MAX_ADV_SEARCH_RESULTS = 1000;
-my $DESKTOP_URL_PARSER_RE = qr{desktop}i;
-my $MINI_URL_PARSER_RE = qr{mini}i;
-my $NOW_PLAYING_URL_PARSER_RE = qr{now-playing}i;
-my $MOBILE_URL_PARSER_RE = qr{mobile}i;
+my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
+my $MINI_URL_PARSER_RE = qr{^mini$}i;
+my $NOW_PLAYING_URL_PARSER_RE = qr{^now-playing$}i;
+my $MOBILE_URL_PARSER_RE = qr{^mobile$}i;
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $JS_URL_PARSER_RE = qr{material/custom.js}i;

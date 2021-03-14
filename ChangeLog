@@ -1,3 +1,7 @@
+2.3.5
+-----
+1. Less generic pagehandler regexes.
+
 2.3.4
 -----
  1. Always check if an items duration is valid before using to calculate

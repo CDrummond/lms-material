@@ -384,9 +384,6 @@ var app = new Vue({
             this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
         },
         clickListener(event) {
-            if (this.$store.state.visibleMenus.size>0) {
-                return;
-            }
             if (this.$store.state.openDialogs.length>1) {
                 return;
             }

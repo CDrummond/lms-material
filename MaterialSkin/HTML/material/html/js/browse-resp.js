@@ -452,15 +452,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (isRadios && !isRadiosTop && resp.items.length>1 && resp.items.length<15) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 var image = undefined;
-                var diff = false;
-                for (var i=0, len=resp.items.length; i<len && !diff; ++i) {
+                var images = 0;
+                for (var i=0, len=resp.items.length; i<len; ++i) {
                     if (undefined==image) {
                         image=resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg;
-                    } else if ((resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg)!=image) {
-                        diff=true;
+                        images++;
+                    } else if ((resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg)==image) {
+                        images++;
                     }
                 }
-                if (!diff) {
+                if (images==resp.items.length && undefined!=image) {
                     for (var i=0, len=resp.items.length; i<len; ++i) {
                         resp.items[i].image = resp.items[i].icon = resp.items[i].svg = undefined;
                     }

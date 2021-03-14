@@ -26,7 +26,7 @@
  background:rgba(255, 255, 255, 0.3333)!important;
 }
 
-.lms-toolbar .v-btn__content i.active-btn, .maintoolbar-player-icon {
+.lms-toolbar .v-btn__content i.active-btn, .maintoolbar-player-icon, .player-status-icon {
  color:var(--light-text-color) !important;
 }
 

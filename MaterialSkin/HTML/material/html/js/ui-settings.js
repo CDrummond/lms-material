@@ -16,9 +16,9 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon v-longpress="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi)"></img></v-btn>
-    <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img></v-btn>
-    <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img></v-btn>
+    <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi, usingColoredToolbars)"></img></v-btn>
+    <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi, usingColoredToolbars)"></img></v-btn>
+    <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi, usingColoredToolbars)"></img></v-btn>
     <v-menu bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
@@ -485,6 +485,9 @@ Vue.component('lms-ui-settings', {
         },
         serverSettingsToolbar() {
             return this.unlockAll && this.width>=275
+        },
+        usingColoredToolbars() {
+            return this.$store.state.theme.endsWith("-colored");
         }
     },
     mounted() {
@@ -869,8 +872,8 @@ Vue.component('lms-ui-settings', {
         }
     },
     filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, coloredToolbars) {
+            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

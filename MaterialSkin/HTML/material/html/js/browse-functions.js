@@ -944,7 +944,7 @@ function browseItemAction(view, act, item, index, event) {
 }
 
 function browseItemMenu(view, item, index, event) {
-    if (view.menu.show && item.id==view.menu.item.id) {
+    if (view.menu.show && view.menu.item && item.id==view.menu.item.id) {
         view.menu.show=false;
         return;
     }

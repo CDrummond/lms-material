@@ -2,6 +2,7 @@
 -----
 1. Less generic pagehandler regexes.
 2. Translation updates.
+3. Fix certain shortcuts with macOS.
 
 2.3.4
 -----

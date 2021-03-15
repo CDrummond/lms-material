@@ -934,7 +934,7 @@ function decodeShortcutEvent(e) {
     let s = {key:undefined, modifier:undefined, time:new Date().getTime()};
     if (e.altKey) {
         s.modifier = e.shiftKey ? 'alt+shift' : 'alt';
-    } else if (e.ctrlKey) {
+    } else if (e.ctrlKey || e.metaKey) {
         s.modifier = e.shiftKey ? 'mod+shift' : 'mod';
     }
     if (e.key.length==1) {

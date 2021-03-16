@@ -162,7 +162,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       </div>
      </div>
 
-     <v-layout text-xs-center v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value">
+     <v-layout text-xs-center v-if="showRatings">
       <v-flex xs12>
       <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
       <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
@@ -231,7 +231,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
-    <v-flex xs12 v-if="showRatings && playerStatus.current.duration>0 && undefined!=rating.value && !landscape" class="np-text np-portrait-rating">
+    <v-flex xs12 v-if="showRatings && !landscape" class="np-text np-portrait-rating">
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-flex>

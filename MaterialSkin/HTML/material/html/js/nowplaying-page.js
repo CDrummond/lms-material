@@ -774,6 +774,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.clearClickTimeout(this.clickTimer);
                     if (IS_IOS) {
                         this.showMenu(event);
+                    } else {
+                        bus.$emit('expandNowPlaying', true);
                     }
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {

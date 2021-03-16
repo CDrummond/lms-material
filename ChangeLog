@@ -3,6 +3,8 @@
 1. Less generic pagehandler regexes.
 2. Translation updates.
 3. Fix certain shortcuts with macOS.
+4. Expand now-laying in desktop layout with single click on cover image in
+   bottom toolbar. Not for iOS though, as this shows menu on single click.
 
 2.3.4
 -----

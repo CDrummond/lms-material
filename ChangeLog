@@ -3,6 +3,7 @@
 1. Less generic pagehandler regexes.
 2. Translation updates.
 3. Fix certain shortcuts with macOS.
+4. For mobile devices, hide bottom bar when keyboard is shown.
 
 2.3.4
 -----

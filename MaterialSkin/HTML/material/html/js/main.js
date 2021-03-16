@@ -134,51 +134,74 @@ var app = new Vue({
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
         let vh = window.innerHeight * 0.01;
         let lastWinHeight = window.innerHeight;
-        let LastReportedHeight = lastWinHeight;
+        let lastReportedHeight = lastWinHeight;
         let lastWinWidth = window.innerWidth;
         let timeout = undefined;
         let lmsApp = this;
+        this.bottomBar = {height: undefined, shown:true, desktop:this.$store.state.desktopLayout};
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         window.addEventListener('resize', () => {
             if (timeout) {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(function () {
+                let heightChange = 0;
+                let widthChange = 0;
                 // Only update if changed
                 if (Math.abs(lastWinHeight-window.innerHeight)!=0) {
                     let vh = window.innerHeight * 0.01;
                     document.documentElement.style.setProperty('--vh', `${vh}px`);
+                    heightChange = lastWinHeight - window.innerHeight;
                     lastWinHeight = window.innerHeight;
                 }
                 timeout = undefined;
                 if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
+                    widthChange = lastWinWidth - window.innerWidth;
                     lastWinWidth = window.innerWidth;
                     lmsApp.checkLayout();
                     bus.$emit('windowWidthChanged');
                 }
-                if (Math.abs(LastReportedHeight-window.innerHeight)>=3) {
-                    LastReportedHeight = window.innerHeight;
+                if (Math.abs(lastReportedHeight-window.innerHeight)>=3) {
+                    lastReportedHeight = window.innerHeight;
                     bus.$emit('windowHeightChanged');
                 }
 
                 // Check entries are visible
-                if (IS_MOBILE && (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA")) {
-                    let elem = document.activeElement;
-                    let found = false;
-                    let makeVisible = true;
-                    for (let i=0; i<10 && !found && elem; ++i) {
-                        if (elem.classList.contains("lms-list-item")) {
-                            found = true;
-                        } else if (elem.classList.contains("subtoolbar")) {
-                            // No need to scroll an input field in subtoolbar into view - see #342
-                            found = true;
-                            makeVisible = false;
-                        } else {
-                            elem = elem.parentElement;
+                if (IS_MOBILE) {
+                    if (undefined==lmsApp.bottomBar.height || lmsApp.desktop!=lmsApp.$store.state.desktopLayout) {
+                        lmsApp.bottomBar.height = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-height');
+                        lmsApp.desktop=lmsApp.$store.state.desktopLayout;
+                    }
+                    var keyboardShown = 0==widthChange && heightChange>100;
+                    if (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+                        let elem = document.activeElement;
+                        let found = false;
+                        let makeVisible = true;
+                        for (let i=0; i<10 && !found && elem; ++i) {
+                            if (elem.classList.contains("lms-list-item")) {
+                                found = true;
+                            } else if (elem.classList.contains("subtoolbar")) {
+                                // No need to scroll an input field in subtoolbar into view - see #342
+                                found = true;
+                                makeVisible = false;
+                            } else {
+                                elem = elem.parentElement;
+                            }
+                        }
+                        if (makeVisible) {
+                            ensureVisible(found ? elem : document.activeElement);
                         }
                     }
-                    if (makeVisible) {
-                        ensureVisible(found ? elem : document.activeElement);
+                    if (keyboardShown == lmsApp.bottomBar.shown) {
+                        var elem = document.getElementById('np-bar');
+                        if (!elem) {
+                            elem = document.getElementById('nav-bar');
+                        }
+                        if (elem) {
+                            elem.style.display = keyboardShown ? 'none' : 'block';
+                            document.documentElement.style.setProperty('--bottom-toolbar-height', keyboardShown ? '0px' : lmsApp.bottomBar.height);
+                            lmsApp.bottomBar.shown = !keyboardShown;
+                        }
                     }
                 }
             }, 50);

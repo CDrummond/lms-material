@@ -3,7 +3,9 @@
 1. Less generic pagehandler regexes.
 2. Translation updates.
 3. Fix certain shortcuts with macOS.
-4. For mobile devices, hide bottom bar when keyboard is shown.
+4. Expand now-laying in desktop layout with single click on cover image in
+   bottom toolbar. Not for iOS though, as this shows menu on single click.
+5. For mobile devices, hide bottom bar when keyboard is shown.
 
 2.3.4
 -----

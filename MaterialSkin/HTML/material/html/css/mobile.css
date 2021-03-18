@@ -126,6 +126,10 @@
  margin:0px;
 }
 
+.bgnd-cover {
+ background:fixed; /* Causes queue, and browse, backgrounds to have same size/position as for now playing??? */
+}
+
 .browse-progress {
  position:absolute;
  top:0;

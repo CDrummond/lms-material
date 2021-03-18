@@ -10,7 +10,7 @@ const LIBRARY_SVG = "data:image/svg+xml,%3Csvg width='24' height='24' version='1
 
 Vue.component('lms-bottomnav', {
     template: `
-<v-footer class="lms-footer">
+<v-footer class="lms-footer" id="nav-bar">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress="browsePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">

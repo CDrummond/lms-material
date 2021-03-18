@@ -273,7 +273,7 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-@media screen and (max-height: 180px) {
+@media screen and (max-height: 180px) and (hover: hover) {
  .hide-for-mini {
   display:none!important;
  }

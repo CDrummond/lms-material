@@ -354,7 +354,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="player" class="other-setting">
      <v-list-tile-content>
       <v-list-tile-title><v-btn @click="openPlayerSettings" flat><img class="btn-icon svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)">{{TB_PLAYER_SETTINGS.title}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Player specifc settings, such as name, audio, alarms, etc.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Player specific settings, such as name, audio, alarms, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
 

@@ -22,6 +22,12 @@ var currentPlayingTrackPosition = 0;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
+ <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd">
+  <div v-show="info.show ? drawInfoBgndImage : drawBgndImage" class="np-bgnd bgnd-cover" id="np-bgnd">
+   <div v-bind:class="{'np-bgnd bgnd-blur':(info.show ? drawInfoBgndImage : drawBgndImage)}"></div>
+  </div>
+ </div>
+
  <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
@@ -86,7 +92,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-list>
   <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"  @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
-  <div v-if="info.show" class="np-info np-info-desktop bgnd-cover np-info-cover" id="np-info">
+  <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
@@ -125,8 +131,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
  </div>
  
- <div class="np-page bgnd-cover" v-else id="np-page">
-  <div v-if="info.show" class="np-info bgnd-cover" id="np-info">
+ <div class="np-page" v-else id="np-page">
+  <div v-if="info.show" class="np-info" id="np-info">
    <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
@@ -411,12 +417,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
+        this.bgndElement = document.getElementById("np-bgnd");
         this.page = document.getElementById("np-page");
         bus.$on('themeChanged', function() {
             this.setBgndCover();
-        }.bind(this));
-        bus.$on('layoutChanged', function() {
-            this.setBgndCover(true);
         }.bind(this));
 
         this.checkLandscape();
@@ -631,12 +635,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.info.show || !this.infoTrack) {
                 return;
             }
-            this.$nextTick(function () {
-                var elem = document.getElementById("np-info");
-                if (elem) {
-                    elem.style.backgroundImage = "url('"+(this.$store.state.infoBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : "") +"')";
-                }
-            });
             if (this.$store.state.desktopLayout && !this.showTabs) {
                 this.fetchLyrics();
                 this.fetchBio();
@@ -678,14 +676,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.showTotal = !this.showTotal;
             setLocalStorageVal("showTotal", this.showTotal);
         },
-        setBgndCover(force) {
-            if (this.page && (!this.$store.state.desktopLayout || this.largeView)) {
-                setBgndCover(this.page, this.$store.state.nowPlayingBackdrop && this.coverUrl!=LMS_BLANK_COVER ? this.coverUrl : undefined);
-            } else if (this.page && force && this.$store.state.desktopLayout && !this.largeView) {
-                // Switched from mobile to desktop, and bottom bar should not have cover
-                this.page.style.backgroundImage = 'none';
-                this.page.style.boxShadow = 'none';
-            }
+        setBgndCover() {
+            setBgndCover(this.bgndElement, this.coverUrl);
         },
         playPauseButton(showSleepMenu) {
             if (this.$store.state.visibleMenus.size>0) {
@@ -922,7 +914,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 this.$nextTick(function () {
                     this.page = document.getElementById("np-page");
-                    this.setBgndCover();
                 });
             } else {
                 if (this.before) {
@@ -992,6 +983,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         noPlayer() {
             return !this.$store.state.player
+        },
+        drawBgndImage() {
+            return this.$store.state.nowPlayingBackdrop
+        },
+        drawInfoBgndImage() {
+            return this.$store.state.infoBackdrop
         }
     },
     beforeDestroy() {

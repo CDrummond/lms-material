@@ -796,6 +796,14 @@ div.v-subheader {
  padding:8px!important;
 }
 
+.np-bgnd {
+ position:fixed;
+ top:var(--main-toolbar-height);
+ width:100vw;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ background-color:var(--background-color);
+}
+
 .np-image {
  object-fit:contain;
  object-position:50% 50%;
@@ -911,7 +919,7 @@ div.v-subheader {
 }
 
 .np-info-card-cover, .np-info .theme--light.v-tabs__bar, .np-info .theme--dark.v-tabs__bar {
- background:var(--background-shadow-color) !important;
+ background:transparent!important;
 }
 
 .np-info-card-cover div.v-btn__content i {
@@ -1152,6 +1160,11 @@ progress {
  background-size:cover !important;
  background-repeat:no-repeat !important;
  background-position:center top !important;
+}
+
+.bgnd-blur {
+ backdrop-filter:blur(5px);
+ background:none!important;
 }
 
 .ellipsis {

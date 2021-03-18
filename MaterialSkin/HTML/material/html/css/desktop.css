@@ -101,6 +101,10 @@
  width:100%;
 }
 
+.np-bgnd {
+ height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
+}
+
 .np-controls-desktop {
  margin-left:-16px;
  margin-top:16px;

@@ -147,6 +147,13 @@ Vue.component('lms-groupvolume', {
         refreshPlayer(player) {
             bus.$emit('refreshStatus', player.id);
         },
+        updateOthers(id) {
+            for (var i=0, len=this.players.length; i<len; ++i) {
+                if (this.players[i].id!=id) {
+                    this.refreshPlayer(this.players[i]);
+                }
+            }
+        },
         updatePlayer(player) {
             if (!this.show) {
                 return;
@@ -163,11 +170,13 @@ Vue.component('lms-groupvolume', {
             if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
+            this.resetCloseTimer();
             if (player.muted) {
                 this.toggleMute(player);
             } else {
                 lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
                     this.refreshPlayer(player);
+                    this.updateOthers(player.id);
                 });
             }
         },
@@ -178,9 +187,11 @@ Vue.component('lms-groupvolume', {
             if (!this.show) {
                 return;
             }
+            this.resetCloseTimer();
             lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
                 player.volume = vol;
                 player.muted = vol<0;
+                this.updateOthers(player.id);
             });
         },
         volWheel(player, event) {
@@ -191,9 +202,10 @@ Vue.component('lms-groupvolume', {
             }
         },
         toggleMute(player) {
+            this.resetCloseTimer();
             lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
                 this.refreshPlayer(player);
-                // Status seems to take while to update, so chaeck again 1/2 second later...
+                // Status seems to take while to update, so check again 1/2 second later...
                 setTimeout(function () {
                     this.refreshPlayer(player);
                 }.bind(this), 500);

@@ -147,11 +147,9 @@ Vue.component('lms-groupvolume', {
         refreshPlayer(player) {
             bus.$emit('refreshStatus', player.id);
         },
-        updateOthers(id) {
+        updateAll(id) {
             for (var i=0, len=this.players.length; i<len; ++i) {
-                if (this.players[i].id!=id) {
-                    this.refreshPlayer(this.players[i]);
-                }
+                this.refreshPlayer(this.players[i]);
             }
         },
         updatePlayer(player) {
@@ -175,8 +173,7 @@ Vue.component('lms-groupvolume', {
                 this.toggleMute(player);
             } else {
                 lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
-                    this.refreshPlayer(player);
-                    this.updateOthers(player.id);
+                    this.updateAll();
                 });
             }
         },
@@ -191,7 +188,7 @@ Vue.component('lms-groupvolume', {
             lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
                 player.volume = vol;
                 player.muted = vol<0;
-                this.updateOthers(player.id);
+                this.updateAll();
             });
         },
         volWheel(player, event) {

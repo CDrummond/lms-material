@@ -8,6 +8,8 @@
 5. For mobile devices, hide bottom bar when keyboard is shown.
 6. When changing volume in group player's dialog freshes all players.
 7. Reset close timer on group player dialog when adjust a volume.
+8. Refresh all synced players' volumes when adjust player volume in 'Manage
+   players' dialog.
 
 2.3.4
 -----

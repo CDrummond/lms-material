@@ -421,10 +421,10 @@ Vue.component('lms-manage-players', {
         },
         toggleMute(player) {
             lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
-                this.refreshPlayer(player);
+                this.refreshAllMembers(player);
                 // Status seems to take while to update, so chaeck again 1/2 second later...
                 setTimeout(function () {
-                    this.refreshPlayer(player);
+                    this.refreshAllMembers(player);
                 }.bind(this), 500);
             });
         },

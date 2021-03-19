@@ -147,7 +147,7 @@ Vue.component('lms-groupvolume', {
         refreshPlayer(player) {
             bus.$emit('refreshStatus', player.id);
         },
-        updateAll(id) {
+        refreshAll() {
             for (var i=0, len=this.players.length; i<len; ++i) {
                 this.refreshPlayer(this.players[i]);
             }
@@ -173,7 +173,7 @@ Vue.component('lms-groupvolume', {
                 this.toggleMute(player);
             } else {
                 lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
-                    this.updateAll();
+                    this.refreshAll();
                 });
             }
         },
@@ -188,7 +188,7 @@ Vue.component('lms-groupvolume', {
             lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
                 player.volume = vol;
                 player.muted = vol<0;
-                this.updateAll();
+                this.refreshAll();
             });
         },
         volWheel(player, event) {
@@ -201,10 +201,10 @@ Vue.component('lms-groupvolume', {
         toggleMute(player) {
             this.resetCloseTimer();
             lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
-                this.refreshPlayer(player);
+                this.refreshAll();
                 // Status seems to take while to update, so check again 1/2 second later...
                 setTimeout(function () {
-                    this.refreshPlayer(player);
+                    this.refreshAll();
                 }.bind(this), 500);
             });
         },

@@ -10,6 +10,7 @@
 7. Reset close timer on group player dialog when adjust a volume.
 8. Refresh all synced players' volumes when adjust player volume in 'Manage
    players' dialog.
+9. When toggle power, check status 1/2 second later as well.
 
 2.3.4
 -----

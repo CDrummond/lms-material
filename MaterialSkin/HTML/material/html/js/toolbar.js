@@ -494,6 +494,10 @@ Vue.component('lms-toolbar', {
                 var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
                 lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
                     bus.$emit('refreshStatus', player.id);
+                    // Status seems to take while to update, so chaeck again 1/2 second later...
+                    setTimeout(function () {
+                        bus.$emit('refreshStatus', player.id);
+                    }.bind(this), 500);
                 });
             }
         },

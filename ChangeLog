@@ -1,3 +1,7 @@
+2.3.6
+-----
+1. Allow hover buttons on home sreen - e.g. for pinned radio stations.
+
 2.3.5
 -----
 1. Less generic pagehandler regexes.

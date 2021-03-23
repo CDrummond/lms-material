@@ -1041,7 +1041,7 @@ function browseGoHome(view) {
     view.isTop = true;
     view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
     view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
-    view.hoverBtns = false;
+    view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.showRatingButton = false;
     view.subtitleClickable = false;

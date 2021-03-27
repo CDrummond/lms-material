@@ -8,6 +8,7 @@
 6. Fix volume label highlight if using coloured toolbars.
 7. Highlight player name in toolbar on mouse-over.
 8. Highlight mobile layout bottom nav icons on mouse-over.
+9. Fix colours of buttom nav when using coloured toolbars.
 
 2.3.5
 -----

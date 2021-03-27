@@ -1353,7 +1353,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             bus.$emit('dragActive', false);
         },
         dragOver(index, ev) {
-            if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) && (!this.current || !this.current.isFavFolder || !this.options.sortFavorites)) {
+            if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
+               (!this.current || !this.current.isFavFolder || !this.options.sortFavorites || this.items[index].isFavFolder)) {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;

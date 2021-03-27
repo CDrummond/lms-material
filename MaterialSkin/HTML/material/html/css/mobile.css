@@ -198,6 +198,15 @@
  margin-bottom:0px;
 }
 
+/*@media (hover:hover) {*/
+.active-nav:hover {
+  opacity:0.6!important;
+ }
+ .inactive-nav:hover {
+  opacity:0.75!important;
+ }
+/*}*/
+
 @media only screen and (max-width:370px) {
  .lms-toolbar > .v-toolbar__content {
   margin-left:-16px !important;

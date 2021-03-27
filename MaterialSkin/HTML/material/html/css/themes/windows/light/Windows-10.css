@@ -37,7 +37,7 @@
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
  --browse-header-color:rgba(248, 248, 248, 0.35);
- --btn-hover-color:rgba(184, 184, 184, 0.5)!important;
+ --btn-hover-color:rgba(184, 184, 184, 0.3)!important;
  --list-hover-color:rgba(128, 128, 128, 0.1)!important;
 }
 

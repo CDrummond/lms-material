@@ -25,7 +25,7 @@
  --inactive-nav-opacity:0.5;
  --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
  --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
- --btn-hover-color:rgba(128, 128, 128, 0.5);
+ --btn-hover-color:rgba(128, 128, 128, 0.3);
  --list-hover-color:rgba(128, 128, 128, 0.125);
 }
 

@@ -199,11 +199,8 @@
 }
 
 /*@media (hover:hover) {*/
-.active-nav:hover {
-  opacity:0.6!important;
- }
- .inactive-nav:hover {
-  opacity:0.75!important;
+.active-nav:hover, .inactive-nav:hover {
+  opacity:0.8!important;
  }
 /*}*/
 

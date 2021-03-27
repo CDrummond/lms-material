@@ -34,4 +34,8 @@
  .menu-btn:hover {
   background-color:rgba(184, 184, 184, 0.5);
  }
+ .lms-toolbar .link-item:hover {
+  color:var(--light-text-color) !important;
+  opacity:0.75;
+ }
 /*}*/

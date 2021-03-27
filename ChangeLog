@@ -3,6 +3,7 @@
 1. Allow hover buttons on home sreen - e.g. for pinned radio stations.
 2. Fix accessing undefined item.menu
 3. Allow dragging favourites into folders even if set to sort favourite list.
+4. Pulse volume button, or label, if volume is 0% and currently playing.
 
 2.3.5
 -----

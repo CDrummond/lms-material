@@ -47,14 +47,14 @@
  background-color:rgba(128, 128, 128, 0.1);
 }
 
-@media (hover: hover) {
+/*@media (hover: hover) {*/
  .list-btns .add-btn, .list-btns .play-btn {
   background-color:var(--background-color)!important;
  }
- .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover {
+ .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover, .v-btn:hover  {
   background-color:rgba(184, 184, 184, 0.5)!important;
  }
-}
+/*}*/
 
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;

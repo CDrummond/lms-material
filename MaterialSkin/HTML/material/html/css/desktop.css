@@ -71,12 +71,12 @@
  width:var(--splitter-width)!important;
 }
 
-@media (hover: hover) {
+/*@media (hover: hover) {*/
  .vue-splitter .splitter:hover {
   border:none;
   background-color:var(--primary-color)!important;
  }
-}
+/*}*/
 
 .np-bar {
  padding:0px 16px 0px 16px; /* t, r, b, l */
@@ -269,7 +269,7 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-@media screen and (max-height: 180px) and (hover: hover) {
+@media screen and (max-height: 180px) { /* and (hover: hover) { */
  .hide-for-mini {
   display:none!important;
  }

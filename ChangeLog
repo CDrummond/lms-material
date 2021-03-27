@@ -4,6 +4,7 @@
 2. Fix accessing undefined item.menu
 3. Allow dragging favourites into folders even if set to sort favourite list.
 4. Pulse volume button, or label, if volume is 0% and currently playing.
+5. Fix button highlight on chrome, "@media (hover:hover)" not working?
 
 2.3.5
 -----

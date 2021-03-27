@@ -426,11 +426,11 @@ div.v-subheader {
  padding:3px;
 }
 
-@media (hover:hover) {
+/*@media (hover:hover) {*/
  .image-grid-item:hover .emblem {
   opacity:0.75;
  }
-}
+/*}*/
 
 .lms-list .image-grid-item .emblem img {
  width:26px !important;
@@ -1482,11 +1482,11 @@ progress {
  cursor:pointer;
 }
 
-@media (hover:hover) {
+/*@media (hover:hover) {*/
  .link-item:hover, .np-bar .link-item:hover {
   color:var(--active-color)!important;
  }
-}
+/*}*/
 
 .svg-update-img {
  position:absolute;
@@ -1518,12 +1518,6 @@ div.v-subheader {
  line-height:22px;
  vertical-align:middle;
  padding-left:4px;
-}
-
-@media (hover:none) {
- :hover:before {
-  background-color:transparent !important;
- }
 }
 
 .lms-avatar .v-avatar {
@@ -1961,11 +1955,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:8px;
 }
 
-@media (hover:hover) {
+/*@media (hover:hover) {*/
  .add-btn:hover, .play-btn:hover {
   background-color:rgba(110, 110, 110, 0.95);
  }
-}
+/*}*/
 
 .add-btn:after {
  content:"add_circle_outline";

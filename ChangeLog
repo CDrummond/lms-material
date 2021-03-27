@@ -1,6 +1,7 @@
 2.3.6
 -----
 1. Allow hover buttons on home sreen - e.g. for pinned radio stations.
+2. Fix accessing undefined item.menu
 
 2.3.5
 -----

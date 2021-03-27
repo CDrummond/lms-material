@@ -38,4 +38,10 @@
   color:var(--light-text-color) !important;
   opacity:0.75;
  }
+/*@media (hover:hover) {*/
+ .active-nav:hover, .inactive-nav:hover {
+  opacity:0.8!important;
+  background-color:transparent;
+ }
+/*}*/
 /*}*/

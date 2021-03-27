@@ -11,6 +11,7 @@
  --bottom-nav-pad:0px;
  --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px)), 100vw);
+ --nav-hover-color:var(--btn-hover-color);
 }
 
 /* For old browser's that dont support min() */
@@ -178,11 +179,8 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-.inactive-nav {
+.inactive-nav div span, .inactive-nav div i, .inactive-nav div img {
  opacity:var(--inactive-nav-opacity);
-}
-
-.inactive-nav div span, .inactive-nav div i {
  color:var(--bottom-toolbar-text-color) !important;
 }
 
@@ -198,9 +196,9 @@
  margin-bottom:0px;
 }
 
-/*@media (hover:hover) {*/
-.active-nav:hover, .inactive-nav:hover {
-  opacity:0.8!important;
+/*@media (hover: hover) {*/
+.lms-footer .active-nav:hover, .lms-footer .inactive-nav:hover {
+  background-color:var(--nav-hover-color)!important;
  }
 /*}*/
 

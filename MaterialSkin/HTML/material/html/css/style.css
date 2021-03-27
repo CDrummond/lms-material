@@ -25,6 +25,8 @@
  --inactive-nav-opacity:0.5;
  --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
  --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
+ --btn-hover-color:rgba(128, 128, 128, 0.5);
+ --list-hover-color:rgba(128, 128, 128, 0.125);
 }
 
 .note {
@@ -2153,3 +2155,12 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  opacity:0.5;
  font-weight:var(--std-weight);
 }
+
+/*@media (hover: hover) {*/
+ .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover, .v-btn:hover {
+  background-color:var(--btn-hover-color);
+ }
+ .lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+  background-color:var(--list-hover-color);
+ }
+/*}*/

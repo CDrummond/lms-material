@@ -35,21 +35,12 @@
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
  --browse-header-color:rgba(248, 248, 248, 0.35);
+ --list-hover-color:rgba(128, 128, 128, 0.1)!important;
 }
 
 .np-info-cover {
  background-color:#000;
 }
-
-.lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
- background-color:rgba(128, 128, 128, 0.1);
-}
-
-/*@media (hover: hover) {*/
- .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover, .v-btn:hover  {
-  background-color:rgba(128, 128, 128, 0.5);
- }
-/*}*/
 
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;

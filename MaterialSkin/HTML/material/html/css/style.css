@@ -25,6 +25,8 @@
  --inactive-nav-opacity:0.5;
  --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
  --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
+ --btn-hover-color:rgba(128, 128, 128, 0.3);
+ --list-hover-color:rgba(128, 128, 128, 0.125);
 }
 
 .note {
@@ -426,7 +428,7 @@ div.v-subheader {
  padding:3px;
 }
 
-@media (hover:hover) {
+@media (hover: hover) and (pointer: fine) {
  .image-grid-item:hover .emblem {
   opacity:0.75;
  }
@@ -1495,7 +1497,7 @@ progress {
  cursor:pointer;
 }
 
-@media (hover:hover) {
+@media (hover: hover) and (pointer: fine) {
  .link-item:hover, .np-bar .link-item:hover {
   color:var(--active-color)!important;
  }
@@ -1531,12 +1533,6 @@ div.v-subheader {
  line-height:22px;
  vertical-align:middle;
  padding-left:4px;
-}
-
-@media (hover:none) {
- :hover:before {
-  background-color:transparent !important;
- }
 }
 
 .lms-avatar .v-avatar {
@@ -1974,7 +1970,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:8px;
 }
 
-@media (hover:hover) {
+@media (hover: hover) and (pointer: fine) {
  .add-btn:hover, .play-btn:hover {
   background-color:rgba(110, 110, 110, 0.95);
  }
@@ -2171,4 +2167,18 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .vlib-name {
  opacity:0.5;
  font-weight:var(--std-weight);
+}
+
+@media (hover: hover) and (pointer: fine) {
+ .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover, .v-btn:hover {
+  background-color:var(--btn-hover-color);
+ }
+ .lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+  background-color:var(--list-hover-color);
+ }
+}
+
+/* Disable ripple fade-out animation, as on mobiel if clicking a button causes it to disappear the animation goes to another button! */
+.v-ripple__animation--out {
+ display:none !important;
 }

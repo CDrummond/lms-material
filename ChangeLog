@@ -5,6 +5,17 @@
 2. Add basic 'swap' queue command.
 3. Blur background images - requires browser supprt backdrop-filter CSS.
 
+2.3.6
+-----
+1. Allow hover buttons on home sreen - e.g. for pinned radio stations.
+2. Fix accessing undefined item.menu
+3. Allow dragging favourites into folders even if set to sort favourite list.
+4. Pulse volume button, or label, if volume is 0% and currently playing.
+5. Fix volume label highlight if using coloured toolbars.
+6. Highlight player name in toolbar on mouse-over.
+7. Highlight mobile bottom nav buttons on mouse-over.
+8. Fix colours of buttom nav when using coloured toolbars.
+
 2.3.5
 -----
 1. Less generic pagehandler regexes.
@@ -13,6 +24,11 @@
 4. Expand now-laying in desktop layout with single click on cover image in
    bottom toolbar. Not for iOS though, as this shows menu on single click.
 5. For mobile devices, hide bottom bar when keyboard is shown.
+6. When changing volume in group player's dialog freshes all players.
+7. Reset close timer on group player dialog when adjust a volume.
+8. Refresh all synced players' volumes when adjust player volume in 'Manage
+   players' dialog.
+9. When toggle power, check status 1/2 second later as well.
 
 2.3.4
 -----

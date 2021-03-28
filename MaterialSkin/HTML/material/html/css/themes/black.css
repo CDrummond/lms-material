@@ -36,6 +36,8 @@
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
  --browse-header-color:rgba(64, 64, 64, 0.3);
+ --nav-hover-color:rgba(96, 96, 96, 0.35)!important;
+ --list-hover-color:rgba(128, 128, 128, 0.2)!important;
 }
 
 .np-info-cover {
@@ -56,18 +58,8 @@
  border-bottom:1px solid var(--dialog-border-color);
 }
 
-.lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover {
- background-color:rgba(128, 128, 128, 0.2);
-}
-
 .v-menu__content .v-list__tile:hover {
  background-color:var(--list-item-border-color) !important;
-}
-
-@media (hover: hover) {
- .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover {
-  background-color:rgba(128, 128, 128, 0.5);
- }
 }
 
 .lms-toolbar .v-btn__content i.active-btn {

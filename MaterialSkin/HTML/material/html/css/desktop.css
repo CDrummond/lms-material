@@ -71,7 +71,7 @@
  width:var(--splitter-width)!important;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
  .vue-splitter .splitter:hover {
   border:none;
   background-color:var(--primary-color)!important;
@@ -273,7 +273,7 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-@media screen and (max-height: 180px) and (hover: hover) {
+@media screen and (max-height: 180px) and (hover: hover) and (pointer: fine) {
  .hide-for-mini {
   display:none!important;
  }

@@ -82,6 +82,11 @@ Vue.component('lms-bottomnav', {
             }
             let activeColor = getComputedStyle(document.documentElement).getPropertyValue('--active-nav-btn-color');
             let inactiveColor = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-text-color');
+
+            if (getLocalStorageVal('theme', 'x').endsWith('-colored')) {
+                activeColor = inactiveColor = getComputedStyle(document.documentElement).getPropertyValue('--light-text-color');
+            }
+
             // Check if properties have been set yet, if not try again a bit later...
             if (""==activeColor || ""==inactiveColor) {
                 if (undefined!=this.colorTimer) {

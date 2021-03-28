@@ -30,8 +30,16 @@
  color:var(--light-text-color) !important;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
  .menu-btn:hover {
   background-color:rgba(184, 184, 184, 0.5);
+ }
+ .lms-toolbar .link-item:hover {
+  color:var(--light-text-color) !important;
+  opacity:0.75;
+ }
+ .active-nav:hover, .inactive-nav:hover {
+  opacity:0.8!important;
+  background-color:transparent;
  }
 }

@@ -4,6 +4,9 @@
    Genres / Hard Rock / Albums
 2. Add basic 'swap' queue command.
 3. Blur background images - requires browser supprt backdrop-filter CSS.
+4. Add support for 'single' URL query. When this is set, and a player name or
+   id, is passed, then Material will only control this player and will ignore
+   others.
 
 2.3.6
 -----

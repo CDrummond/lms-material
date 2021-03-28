@@ -51,7 +51,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined, single:false };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -100,6 +100,8 @@ function parseQueryParams() {
             if (parts.length>1) {
                 setLocalStorageVal('color', parts[1]);
             }
+        } else if ("single"==kv[0]) {
+            resp.single=true;
         }
     }
     return resp;

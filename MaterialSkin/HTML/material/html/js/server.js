@@ -329,9 +329,12 @@ var lmsServer = Vue.component('lms-server', {
             }
 
             if (data.players_loop) {
+                // if ?player=x&single is passed as a query param, then we only care about that single player
+                var checkPlayer = queryParams.single && undefined!=queryParams.player ? queryParams.player : undefined;
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
-                    if (1==parseInt(i.connected)) { // Only list/use connected players...
+                    if (1==parseInt(i.connected) && // Only list/use connected players...
+                        (undefined==checkPlayer || (checkPlayer==i.playerid || checkPlayer==i.name))) {
                         players.push({ id: i.playerid,
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),

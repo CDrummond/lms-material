@@ -7,6 +7,7 @@
 4. Add support for 'single' URL query. When this is set, and a player name or
    id, is passed, then Material will only control this player and will ignore
    others.
+5. Only show 'Append random album' in artist's album list if more than 1 album.
 
 2.3.6
 -----

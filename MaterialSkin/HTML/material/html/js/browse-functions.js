@@ -28,7 +28,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args) {
+function browseActions(view, item, args, count) {
     var actions=[];
     if (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists')) {
         if (lmsOptions.infoPlugin) {
@@ -89,7 +89,9 @@ function browseActions(view, item, args) {
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
-            actions.push({action:loop[i], weight:300+1});
+            if (ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) {
+                actions.push({action:loop[i], weight:300+1});
+            }
         }
     }
     return actions;
@@ -168,7 +170,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                     }
                 }
             }
-            view.currentActions.items = browseActions(view, resp.items.length>0 ? item : undefined, actParams);
+            view.currentActions.items = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');

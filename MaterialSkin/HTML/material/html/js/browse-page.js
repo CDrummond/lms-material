@@ -323,7 +323,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItems: false,
-            hoverBtns: false,
+            hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, sources: undefined },

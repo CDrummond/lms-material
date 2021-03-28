@@ -196,11 +196,11 @@
  margin-bottom:0px;
 }
 
-/*@media (hover: hover) {*/
+@media (hover: hover) and (pointer: fine) {
 .lms-footer .active-nav:hover, .lms-footer .inactive-nav:hover {
   background-color:var(--nav-hover-color)!important;
  }
-/*}*/
+}
 
 @media only screen and (max-width:370px) {
  .lms-toolbar > .v-toolbar__content {

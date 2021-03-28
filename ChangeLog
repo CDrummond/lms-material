@@ -4,11 +4,10 @@
 2. Fix accessing undefined item.menu
 3. Allow dragging favourites into folders even if set to sort favourite list.
 4. Pulse volume button, or label, if volume is 0% and currently playing.
-5. Fix button highlight on chrome, "@media (hover:hover)" not working?
-6. Fix volume label highlight if using coloured toolbars.
-7. Highlight player name in toolbar on mouse-over.
-8. Highlight mobile bottom nav buttons on mouse-over.
-9. Fix colours of buttom nav when using coloured toolbars.
+5. Fix volume label highlight if using coloured toolbars.
+6. Highlight player name in toolbar on mouse-over.
+7. Highlight mobile bottom nav buttons on mouse-over.
+8. Fix colours of buttom nav when using coloured toolbars.
 
 2.3.5
 -----

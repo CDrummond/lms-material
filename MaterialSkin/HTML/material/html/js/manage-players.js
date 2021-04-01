@@ -140,7 +140,7 @@ Vue.component('lms-manage-players', {
         <v-btn flat icon @click="adjustVolume(player, false)" @click.middle="toggleMute(player)" class="pmgr-btn pmgr-vol-dec-btn" :title="player.name + ' - ' + trans.decVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
         <v-slider :disabled="!player.dvc" @change="volumeChanged(player)" @wheel.native="volWheel(player, $event)" step="1" v-model="player.volume" class="pmgr-vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
         <v-btn flat icon @click="adjustVolume(player, true)" @click.middle="toggleMute(player)" class="pmgr-btn" :title="player.name + ' - ' + trans.incVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
-        <p v-if="player.dvc" class="pmgr-vol link-item" v-bind:class="{'pmgr-vol-small':!showAllButtons, 'dimmed': !player.ison || player.muted}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-pmgr-label'">{{player.volume}}%</p>
+        <p v-if="player.dvc" class="pmgr-vol link-item" v-bind:class="{'pmgr-vol-small':!showAllButtons, 'dimmed': !player.ison || player.muted, 'pulse':player.ison && player.isplaying && 0==player.volume}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-pmgr-label'">{{player.volume}}%</p>
         <p v-else class="pmgr-vol" v-bind:class="{'pmgr-vol-small':!showAllButtons}"></p>
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>

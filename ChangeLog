@@ -8,6 +8,7 @@
    id, is passed, then Material will only control this player and will ignore
    others.
 5. Only show 'Append random album' in artist's album list if more than 1 album.
+6. Reduce size of 'Scroll queue to current track' icon.
 
 2.3.6
 -----

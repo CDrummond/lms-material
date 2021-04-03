@@ -58,6 +58,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isMusicMix = (command == "musicip" || command == "musicsimilarity") && data.params[1].length>0 && data.params[1][1]=="mix";
+            var isDynamicPlaylist = command == "dynamicplaylist";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -255,6 +256,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
+                    i.menu.push(ADD_TO_FAV_ACTION);
+                } else if (isDynamicPlaylist && i.params && i.params.playlistid && i.params.playlistid.startsWith("dynamicplaylist")) {
+                    i.presetParams = {favorites_url: "dynamicplaylist://"+i.params.playlistid};
                     i.menu.push(ADD_TO_FAV_ACTION);
                 }
 

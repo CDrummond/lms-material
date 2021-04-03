@@ -5,6 +5,7 @@
 2. Highlight subtoolbar on hover, if it will produce a menu.
 3. Work-around for deleting favourite via URL also deleting others. (LMS issue
    559)
+4. Allow adding dynamic playlists to favourites.
 
 2.3.6
 -----

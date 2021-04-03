@@ -3,6 +3,8 @@
 1. Pulse player volume labels if playing and volume is 0 in 'Manage players'
    dialog and group/synced volume dialog.
 2. Highlight subtoolbar on hover, if it will produce a menu.
+3. Work-around for deleting favourite via URL also deleting others. (LMS issue
+   559)
 
 2.3.6
 -----

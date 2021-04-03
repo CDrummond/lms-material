@@ -187,7 +187,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
                                                   'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params']) ) {
         $request->setStatusBadParams();
@@ -339,6 +339,18 @@ sub _cliCommand {
                 $cnt++;
             }
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'delete-favourite') {
+        my $url = $request->getParam('url');
+        if (!$url) {
+            $request->setStatusBadParams();
+            return;
+        }
+        my $favs = Slim::Plugin::Favorites::OpmlFavorites->new('xx');
+        $favs->deleteUrl($url);
         $request->setStatusDone();
         return;
     }

@@ -10,6 +10,15 @@
 5. Only show 'Append random album' in artist's album list if more than 1 album.
 6. Reduce size of 'Scroll queue to current track' icon.
 
+2.3.7
+-----
+1. Pulse player volume labels if playing and volume is 0 in 'Manage players'
+   dialog and group/synced volume dialog.
+2. Highlight subtoolbar on hover, if it will produce a menu.
+3. Work-around for deleting favourite via URL also deleting others. (LMS issue
+   559)
+4. Allow adding dynamic playlists to favourites.
+
 2.3.6
 -----
 1. Allow hover buttons on home sreen - e.g. for pinned radio stations.

@@ -28,7 +28,7 @@ Vue.component('lms-groupvolume', {
   <v-layout row wrap>
    <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
     <v-flex xs12 style="height:8px"></v-flex>
-    <v-flex xs12 class="vol-label link-item" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
+    <v-flex xs12 class="vol-label link-item" v-bind:class="{'pulse':0==player.volume && player.isplaying}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
      {{player.name}}{{player.volume|displayVolume(player.dvc)}}
     </v-flex>
     <v-flex xs12 style="height:16px"></v-flex>
@@ -54,6 +54,7 @@ Vue.component('lms-groupvolume', {
     data() {
         return { 
                  show: false,
+                 playing: false,
                  players: []
                }
     },
@@ -75,7 +76,7 @@ Vue.component('lms-groupvolume', {
             }
             for (var p=0, len=playerStatus.syncslaves.length; p<len; ++p) {
                 this.players.push({id: playerStatus.syncslaves[p], master:false, name:pMap[playerStatus.syncslaves[p]].name, isgroup:pMap[playerStatus.syncslaves[p]].isgroup,
-                                   volume:undefined, dvc:true, muted:false});
+                                   volume:undefined, dvc:true, muted:false, isplaying:false});
                 if (this.$store.state.player.id==playerStatus.syncslaves[p]) {
                     this.players[this.players.length-1].volume = playerStatus.volume;
                 }
@@ -163,6 +164,7 @@ Vue.component('lms-groupvolume', {
             this.players[idx].dvc = player.dvc;
             this.players[idx].muted = player.muted;
             this.players[idx].volume = player.volume;
+            this.players[idx].isplaying = player.isplaying;
         },
         adjustVolume(player, inc) {
             if (!this.show || this.$store.state.visibleMenus.size>0) {

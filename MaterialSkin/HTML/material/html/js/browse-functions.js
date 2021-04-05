@@ -709,7 +709,7 @@ function browseItemAction(view, act, item, index, event) {
                 act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete")).then(res => {
             if (res) {
                 view.clearSelection();
-                var command = ["favorites", "delete", id];
+                var command = id.startsWith("url:") ? ["material-skin", "delete-favourite", id] : ["favorites", "delete", id];
                 lmsCommand(view.playerId(), command).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (SECTION_FAVORITES==view.current.section) {

@@ -9,6 +9,7 @@
    others.
 5. Only show 'Append random album' in artist's album list if more than 1 album.
 6. Reduce size of 'Scroll queue to current track' icon.
+7. Make 'Settings' menu entry open a sub-menu with specific settings.
 
 2.3.7
 -----

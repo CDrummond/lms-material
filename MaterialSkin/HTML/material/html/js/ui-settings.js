@@ -16,9 +16,6 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon v-longpress="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn flat icon v-if="appSettingsToolbar" :href="appSettings" :title="i18n('Application settings')"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi, usingColoredToolbars)"></img></v-btn>
-    <v-btn flat icon v-if="playerSettingsToolbar" @click="openPlayerSettings" :title="TB_PLAYER_SETTINGS.title"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi, usingColoredToolbars)"></img></v-btn>
-    <v-btn flat icon v-if="serverSettingsToolbar" @click="openServerSettings" :title="TB_SERVER_SETTINGS.title"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi, usingColoredToolbars)"></img></v-btn>
     <v-menu bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
@@ -29,19 +26,6 @@ Vue.component('lms-ui-settings', {
       <v-list-tile @click="revertToDefault">
        <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-divider v-if="(appSettings && !appSettingsToolbar) || (player && !playerSettingsToolbar) || (unlockAll && !serverSettingsToolbar)"></v-divider>
-      <v-list-tile v-if="appSettings && !appSettingsToolbar" :href="appSettings">
-       <v-list-tile-avatar v-if="displayMenuIcons"><img class="svg-img" :src="'app-settings' | svgIcon(darkUi)"></img></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Application settings')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile v-if="player && !playerSettingsToolbar" @click="openPlayerSettings">
-       <v-list-tile-avatar v-if="displayMenuIcons"><img class="svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{TB_PLAYER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile v-if="unlockAll && !serverSettingsToolbar" @click="openServerSettings">
-       <v-list-tile-avatar v-if="displayMenuIcons"><img class="svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{TB_SERVER_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
      </v-list>
     </v-menu>
@@ -341,30 +325,6 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="infoBackdrop"></v-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding" v-if="appSettings || player || unlockAll"></div>
-    <v-header v-if="appSettings || player || unlockAll">{{i18n('Other settings')}}</v-header>
-
-    <v-list-tile v-if="appSettings" class="other-setting">
-     <v-list-tile-content>
-      <v-list-tile-title><v-btn :href="appSettings" flat><img class="btn-icon svg-img" :src="'app-settings' | svgIcon(darkUi)"></img>{{i18n('Application settings')}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Application specific settings, such as zoom scale, etc.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-    </v-list-tile>
-
-    <v-list-tile v-if="player" class="other-setting">
-     <v-list-tile-content>
-      <v-list-tile-title><v-btn @click="openPlayerSettings" flat><img class="btn-icon svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)">{{TB_PLAYER_SETTINGS.title}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Player specific settings, such as name, audio, alarms, etc.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-    </v-list-tile>
-
-    <v-list-tile v-if="unlockAll" class="other-setting">
-     <v-list-tile-content>
-      <v-list-tile-title><v-btn flat @click="openServerSettings"><img class="btn-icon svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)">{{TB_SERVER_SETTINGS.title}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('LMS server settings, such as plugins, logging, etc.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-    </v-list-tile>
-
     <div class="dialog-padding"></div>
    </v-list>
   </v-card-text>
@@ -454,7 +414,6 @@ Vue.component('lms-ui-settings', {
             showRating: false,
             homeButton: false,
             powerButton: false,
-            appSettings: queryParams.appSettings,
             width: 500
         }
     },
@@ -476,15 +435,6 @@ Vue.component('lms-ui-settings', {
         },
         player() {
             return this.$store.state.player
-        },
-        appSettingsToolbar() {
-            return this.appSettings && this.width>=(this.unlockAll ? 375 : 325)
-        },
-        playerSettingsToolbar() {
-            return this.player && this.width>=(this.unlockAll ? 325 : 275)
-        },
-        serverSettingsToolbar() {
-            return this.unlockAll && this.width>=275
         },
         usingColoredToolbars() {
             return this.$store.state.theme.endsWith("-colored");
@@ -825,7 +775,11 @@ Vue.component('lms-ui-settings', {
             if (this.$store.state.desktopLayout) {
                 list.push(shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)+SEPARATOR+i18n("Toggle queue"));
             }
-            list.push(shortcutStr(LMS_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title);
+            list.push(shortcutStr(LMS_UI_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title);
+            list.push(shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title);
+            if (this.$store.state.unlockAll) {
+                list.push(shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD)+SEPARATOR+TB_SERVER_SETTINGS.title);
+            }
             list.push(shortcutStr(LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
             list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
             list.push(i18n("Alt+(N)")+SEPARATOR+i18n("Switch to Nth player"));
@@ -849,15 +803,6 @@ Vue.component('lms-ui-settings', {
         showBrowseModesDialog() {
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
-        },
-        openServerSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName,
-                        // Keep in sync with information.js *!
-                        [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], 2);
-        },
-        openPlayerSettings() {
-            bus.$emit('dlg.open', 'playersettings', undefined, undefined, 2);
         }
     },
     watch: {

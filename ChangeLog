@@ -10,12 +10,9 @@
 5. Only show 'Append random album' in artist's album list if more than 1 album.
 6. Reduce size of 'Scroll queue to current track' icon.
 7. Make 'Settings' menu entry open a sub-menu with specific settings.
-
-2.3.8
------
-1. Add 'Add to favorites' action to all dynamic playlists with a playlistid and
+8. Add 'Add to favorites' action to all dynamic playlists with a playlistid and
    that have a 'Play now' action.
-2. Highlight player names on hover in 'Manage players' dialog.
+9. Highlight player names on hover in 'Manage players' dialog.
 
 2.3.7
 -----

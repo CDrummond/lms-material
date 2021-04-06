@@ -50,7 +50,6 @@
 "Appended '%1' to the play queue":"Tilføjede '%1' til afspilningskøen",
 "Application layout":"Sidens udseende",
 "Application settings":"Programindstillinger",
-"Application specific settings, such as zoom scale, etc.":"Applikationsspecifikke indstillinger som fx zoom skala, m.v.",
 "Apply":"Anvend",
 "Apps":"Apps",
 "Artist":"Kunstner",
@@ -209,7 +208,6 @@
 "Invalid URL":"Ulovlig URL",
 "Invert selection":"Inverter valgte",
 "Keyboard shortcuts":"Tastaturgenveje",
-"LMS server settings, such as plugins, logging, etc.":"LMS serverindstillinger som fx plugins, logning, m.v.",
 "LMS support forums":"LMS supportforum",
 "LMS technical information":"LMS teknisk information",
 "Large font size":"Stor fontstørrelse",
@@ -279,7 +277,6 @@
 "Play/pause":"Afspil/pause",
 "Player not found":"Afspiller ikke fundet",
 "Player settings":"Afspillerindstillinger",
-"Player specific settings, such as name, audio, alarms, etc.":"Afspillerspecifikke indstillinger som navn, lyd, vækkeure, m.v.",
 "Player specific configuration UI, such as piCorePlayer or SqueezeAMP.":"Afspillerspecifik UI konfiguration, som fx piCorePlayer eller SqueezeAMP.",
 "Players":"Afspillere",
 "Playing":"Afspiller",
@@ -553,5 +550,8 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Genres":"",
+"Interface settings":"",
+"Swap the queue with:":""
 }

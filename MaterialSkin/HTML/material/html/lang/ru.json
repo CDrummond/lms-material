@@ -50,7 +50,6 @@
 "Appended '%1' to the play queue":"Добавить '%1' альбом в очередь",
 "Application layout":"Макет приложения",
 "Application settings":"Настройки приложения",
-"Application specific settings, such as zoom scale, etc.":"Настройки для конкретного приложения, такие как масштаб и т.д.",
 "Apply":"Применить",
 "Apps":"Приложения",
 "Artist":"Исполнитель",
@@ -209,7 +208,6 @@
 "Invalid URL":"Не верный URL",
 "Invert selection":"Наоборот",
 "Keyboard shortcuts":"Сочетания клавиш",
-"LMS server settings, such as plugins, logging, etc.":"Настройки сервера LMS, такие как плагины, ведение журнала и т.д.",
 "LMS support forums":"Форум поддержки",
 "LMS technical information":"Техническая информация LMS",
 "Large font size":"Больбшой шрифт",
@@ -279,7 +277,6 @@
 "Play/pause":"Играть/Пауза",
 "Player not found":"Плеер не найден",
 "Player settings":"Настройки проигрывателя",
-"Player specific settings, such as name, audio, alarms, etc.":"Специфические настройки проигрывателя, такие как имя, звук, сигналы тревоги и т.д.",
 "Player specific configuration UI, such as piCorePlayer or SqueezeAMP.":"Пользовательский интерфейс конфигурации для конкретного проигрывателя, например piCorePlayer или SqueezeAMP.",
 "Players":"Проигрыватели",
 "Playing":"Играет",
@@ -553,5 +550,8 @@
 "1 Year":"1 Год",
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
-"%1 days":"%1 дней"
+"%1 days":"%1 дней",
+"Genres":"",
+"Interface settings":"",
+"Swap the queue with:":""
 }

@@ -257,7 +257,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         addedDivider = true;
                     }
                     i.menu.push(ADD_TO_FAV_ACTION);
-                } else if (isDynamicPlaylist && i.params && i.params.playlistid && i.params.playlistid.startsWith("dynamicplaylist")) {
+                } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction) {
                     i.presetParams = {favorites_url: "dynamicplaylist://"+i.params.playlistid};
                     i.menu.push(ADD_TO_FAV_ACTION);
                 }

@@ -2,6 +2,7 @@
 -----
 1. Add 'Add to favorites' action to all dynamic playlists with a playlistid and
    that have a 'Play now' action.
+2. Highlight player names on hover in 'Manage players' dialog.
 
 2.3.7
 -----

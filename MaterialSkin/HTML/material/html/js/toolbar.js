@@ -500,7 +500,7 @@ Vue.component('lms-toolbar', {
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_APP_SETTINGS.stitle=i18n('Application');
             this.menuItems = [ TB_SETTINGS, TB_INFO ];
-            this.settingsMenuItems = [ TB_UI_SETTINGS, TB_APP_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS];
+            this.settingsMenuItems = [ TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS];
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),

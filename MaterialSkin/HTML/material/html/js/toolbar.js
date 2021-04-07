@@ -177,18 +177,23 @@ Vue.component('lms-toolbar', {
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 <v-menu v-model="showSettingsMenu" :position-x="window.innerWidth" :position-y="0">
  <v-list>
+  <v-list-tile @click="showMainMenu = true">
+   <v-list-tile-avatar><v-icon small>arrow_back</v-icon></v-list-tile-avatar>
+   <v-list-tile-content><v-list-tile-title class="menutitle">{{TB_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
+  </v-list-tile>
+  <v-divider></v-divider>
   <template v-for="(item, index) in settingsMenuItems">
    <v-list-tile :href="queryParams.appSettings" v-if="TB_APP_SETTINGS.id==item.id && queryParams.appSettings">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-title>{{item.stitle}}</v-list-tile-title>
     </v-list-tile-content>
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
    <v-list-tile v-else-if="TB_APP_SETTINGS.id!=item.id" @click="menuAction(item.id)" v-if="TB_UI_SETTINGS.id==item.id || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll)">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content>
-     <v-list-tile-title>{{item.title}}</v-list-tile-title>
+     <v-list-tile-title>{{item.stitle}}</v-list-tile-title>
     </v-list-tile-content>
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
@@ -353,6 +358,9 @@ Vue.component('lms-toolbar', {
                 this.showSettingsMenu = false;
             }
         }.bind(this));
+        bus.$on('showMainMenu', function() {
+            this.showMainMenu = true;
+        }.bind(this));
 
         bus.$on('infoDialog', function(val) {
             this.infoOpen = val;
@@ -464,16 +472,19 @@ Vue.component('lms-toolbar', {
         initItems() {
             TB_SETTINGS.title=i18n('Settings');
             TB_UI_SETTINGS.title=i18n('Interface settings');
+            TB_UI_SETTINGS.stitle=i18n('Interface');
             TB_UI_SETTINGS.shortcut=shortcutStr(LMS_UI_SETTINGS_KEYBOARD);
             TB_PLAYER_SETTINGS.title=i18n('Player settings');
+            TB_PLAYER_SETTINGS.stitle=i18n('Player');
             TB_PLAYER_SETTINGS.shortcut=shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD);
             TB_SERVER_SETTINGS.title=i18n('Server settings');
+            TB_SERVER_SETTINGS.stitle=i18n('Server');
             TB_SERVER_SETTINGS.shortcut=shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD);
             TB_INFO.title=i18n('Information');
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
-            TB_APP_SETTINGS.title=i18n('Application settings');
+            TB_APP_SETTINGS.stitle=i18n('Application');
             this.menuItems = [ TB_SETTINGS, TB_INFO ];
             this.settingsMenuItems = [ TB_UI_SETTINGS, TB_APP_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS];
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),

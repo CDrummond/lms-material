@@ -269,6 +269,11 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-list>
   <v-list v-else-if="menu.albumSorts">
+   <v-list-tile @click="bus.$emit('showMainMenu')">
+    <v-list-tile-avatar><v-icon small>arrow_back</v-icon></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title class="menutitle">{{ACTIONS[ALBUM_SORTS_ACTION].title}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-divider></v-divider>
    <template v-for="(item, index) in menu.albumSorts">
     <v-list-tile @click="sortAlbums(item)">
      <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>

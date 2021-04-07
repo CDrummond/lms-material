@@ -1,18 +1,19 @@
 2.4.0
 -----
-1. Add categories when browsing into years. e.g. My Music / Years / 2021 /
-   Genres / Hard Rock / Albums
-2. Add basic 'swap' queue command.
-3. Blur background images - requires browser supports backdrop-filter CSS.
-4. Add support for 'single' URL query. When this is set, and a player name or
-   id, is passed, then Material will only control this player and will ignore
-   others.
-5. Only show 'Append random album' in artist's album list if more than 1 album.
-6. Reduce size of 'Scroll queue to current track' icon.
-7. Make 'Settings' menu entry open a sub-menu with specific settings.
-8. Add 'Add to favorites' action to all dynamic playlists with a playlistid and
-   that have a 'Play now' action.
-9. Highlight player names on hover in 'Manage players' dialog.
+ 1. Add categories when browsing into years. e.g. My Music / Years / 2021 /
+    Genres / Hard Rock / Albums
+ 2. Add basic 'swap' queue command.
+ 3. Blur background images - requires browser supports backdrop-filter CSS.
+ 4. Add support for 'single' URL query. When this is set, and a player name or
+    id, is passed, then Material will only control this player and will ignore
+    others.
+ 5. Only show 'Append random album' in artist's album list if more than 1 album.
+ 6. Reduce size of 'Scroll queue to current track' icon.
+ 7. Make 'Settings' menu entry open a sub-menu with specific settings.
+ 8. Add 'Add to favorites' action to all dynamic playlists with a playlistid and
+    that have a 'Play now' action.
+ 9. Highlight player names on hover in 'Manage players' dialog.
+10. Add back/title entry to sub-menus.
 
 2.3.7
 -----

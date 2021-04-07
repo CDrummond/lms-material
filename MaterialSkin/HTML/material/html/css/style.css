@@ -472,6 +472,11 @@ div.v-subheader {
  left:24px;
 }
 
+.menutitle {
+ font-size:var(--std-font-size) !important;
+ font-weight:var(--bold-weight);
+}
+
 .maintoolbar-title {
  padding-left:58px;
  font-size:var(--std-font-size) !important;

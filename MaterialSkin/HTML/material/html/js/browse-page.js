@@ -270,7 +270,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.albumSorts">
    <v-list-tile @click="bus.$emit('showMainMenu')" v-if="menu.inMainMenu">
-    <v-list-tile-avatar><v-icon small>arrow_back</v-icon></v-list-tile-avatar>
+    <v-list-tile-avatar><v-icon>arrow_back</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title class="menutitle">{{ACTIONS[ALBUM_SORTS_ACTION].title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
    <v-divider></v-divider>

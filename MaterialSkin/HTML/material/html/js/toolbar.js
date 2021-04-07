@@ -198,6 +198,13 @@ Vue.component('lms-toolbar', {
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
   </template>
+  <v-divider v-if="customSettingsActions && customSettingsActions.length>0"></v-divider>
+  <template v-if="customSettingsActions && customSettingsActions.length>0" v-for="(action, index) in customSettingsActions">
+   <v-list-tile @click="doCustomAction(action)">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+  </template>
  </v-list>
 </v-menu>
 </div>
@@ -210,6 +217,7 @@ Vue.component('lms-toolbar', {
                  menuItems: [],
                  settingsMenuItems: [],
                  customActions:undefined,
+                 customSettingsActions:undefined,
                  showPlayerMenu: false,
                  showMainMenu: false,
                  showErrorMenu: false,
@@ -408,12 +416,15 @@ Vue.component('lms-toolbar', {
         bus.$on('customActions', function() {
             if (undefined==this.customActions) {
                 this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+                this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
             }
         }.bind(this));
         bus.$on('lockChanged', function() {
             this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+            this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
         }.bind(this));
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+        this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
         this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         bus.$on('themeChanged', function() {
             this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
@@ -507,7 +518,7 @@ Vue.component('lms-toolbar', {
         },
         menuAction(id) {
             if (TB_SETTINGS.id==id) {
-                if (this.$store.state.player || this.$store.state.unlockAll || queryParams.appSettings) {
+                if (this.$store.state.player || this.$store.state.unlockAll || queryParams.appSettings || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0)) {
                     this.showSettingsMenu = true;
                 } else {
                     bus.$emit('dlg.open', 'uisettings');

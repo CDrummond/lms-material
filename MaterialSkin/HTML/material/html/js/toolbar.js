@@ -345,7 +345,10 @@ Vue.component('lms-toolbar', {
             this.showPlayerMenu = false;
             this.showMainMenu = false;
             this.showErrorMenu = false;
-            this.showSettingsMenu = false;
+            if (this.showSettingsMenu) {
+                this.showSettingsMenu = false;
+                this.showMainMenu = true;
+            }
         }.bind(this));
         bus.$on('hideMenu', function(name) {
             if (name=='main') {

@@ -269,7 +269,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-list>
   <v-list v-else-if="menu.albumSorts">
-   <v-list-tile @click="bus.$emit('showMainMenu')">
+   <v-list-tile @click="bus.$emit('showMainMenu')" v-if="menu.inMainMenu">
     <v-list-tile-avatar><v-icon small>arrow_back</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title class="menutitle">{{ACTIONS[ALBUM_SORTS_ACTION].title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
@@ -1494,6 +1494,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('esc', function() {
             if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
                 this.menu.show = false;
+                if (this.menu.inMainMenu) {
+                    bus.$emit('showMainMenu');
+                }
             } else if ( (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') &&
                         // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
                         (undefined==this.$store.state.lastDialogClose || (new Date().getTime()-this.$store.state.lastDialogClose)>250) ) {

@@ -165,10 +165,13 @@ function updateActionStrings() {
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");
     ACTIONS[PQ_PLAY_NEXT_ACTION].title=i18n("Move to next in queue");
     ACTIONS[PQ_SCROLL_ACTION].title=i18n("Scroll queue to current track");
+    ACTIONS[PQ_SCROLL_ACTION].stitle=i18n("Scroll to current");
     ACTIONS[PQ_SCROLL_ACTION].key=LMS_SCROLL_QUEUE_KEYBOARD;
     ACTIONS[PQ_ADD_URL_ACTION].title=i18n("Add URL to queue");
+    ACTIONS[PQ_ADD_URL_ACTION].stitle=i18n("Add URL");
     ACTIONS[PQ_ADD_URL_ACTION].key=LMS_QUEUE_ADD_URL_KEYBOARD;
     ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Transfer queue to another player");
+    ACTIONS[PQ_MOVE_QUEUE_ACTION].stitle=i18n("Transfer queue");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
     ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=i18n("Remove album");
     ACTIONS[PQ_ZAP_ACTION].title=i18n("Zap");

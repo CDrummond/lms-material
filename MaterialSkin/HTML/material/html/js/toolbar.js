@@ -134,7 +134,7 @@ Vue.component('lms-toolbar', {
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
+     <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].stitle ? ACTIONS[action].stitle : ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
      <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
     </v-list-tile>
    </template>

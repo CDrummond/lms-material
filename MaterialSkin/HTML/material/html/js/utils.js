@@ -1150,3 +1150,8 @@ function itemDuration(item) {
     return val>0 ? val : 0;
 }
 
+function openServerSettings(serverName, showHome) {
+    bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+serverName,
+            [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
+             {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
+}

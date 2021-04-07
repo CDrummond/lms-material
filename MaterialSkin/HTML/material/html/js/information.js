@@ -30,7 +30,7 @@ Vue.component('lms-information-dialog', {
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
-    <v-btn @click="openServerSettings" v-if="unlockAll" flat><img class="btn-icon svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_SERVER_SETTINGS.title}}</v-btn>
+    <v-btn @click="openServerSettings(serverName, 2)" v-if="unlockAll" flat><img class="btn-icon svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_SERVER_SETTINGS.title}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 
@@ -336,12 +336,6 @@ Vue.component('lms-information-dialog', {
             } else {
                 return str;
             }
-        },
-        openServerSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+this.serverName,
-                        // Keep in sync with toolbar.js *!
-                        [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-                         {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], 2);
         },
         openPlayerSettings(player) {
             bus.$emit('dlg.open', 'playersettings', player, undefined, 2);

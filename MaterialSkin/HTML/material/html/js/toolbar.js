@@ -152,16 +152,16 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
   </v-list>
  </v-menu>
- <v-menu v-else-if="!connected && (undefined!=appSettings || undefined!=appQuit)" bottom left v-model="showErrorMenu">
+ <v-menu v-else-if="!connected && (undefined!=queryParams.appSettings || undefined!=appQuit)" bottom left v-model="showErrorMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><v-icon class="red">error</v-icon></v-btn>
   <v-list>
    <v-list-tile @click="bus.$emit('showError', undefined, trans.connectionLost)">
     <v-list-tile-avatar v-if="menuIcons"><v-icon>error</v-icon></v-btn></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <v-list-tile :href="appSettings" v-if="undefined!=appSettings">
-    <v-list-tile-avatar v-if="menuIcons"><v-icon>settings_applications</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.appSettings}}</v-list-tile-title></v-list-tile-content>
+   <v-list-tile :href="queryParams.appSettings" v-if="undefined!=queryParams.appSettings">
+    <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
    <v-divider v-if="undefined!=appQuit"></v-divider>
    <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
@@ -226,7 +226,7 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appSettings:undefined, appQuit:undefined, toggleQueue:undefined,
+                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appQuit:undefined, toggleQueue:undefined,
                         toggleQueueShortcut:undefined, groupVol:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
@@ -241,7 +241,6 @@ Vue.component('lms-toolbar', {
                  showMiniLauncherButton: !queryParams.hide.has('mini'),
                  date: undefined,
                  time: undefined,
-                 appSettings: queryParams.appSettings,
                  appQuit: queryParams.appQuit,
                  coloredToolbars: false
                }
@@ -498,6 +497,7 @@ Vue.component('lms-toolbar', {
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
+            TB_APP_SETTINGS.title=i18n('Application settings');
             TB_APP_SETTINGS.stitle=i18n('Application');
             this.menuItems = [ TB_SETTINGS, TB_INFO ];
             this.settingsMenuItems = [ TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS];
@@ -508,7 +508,7 @@ Vue.component('lms-toolbar', {
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
-                          appSettings:i18n('Application settings'), appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'),
+                          appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'),
                           toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
         },
         setPlayer(id) {

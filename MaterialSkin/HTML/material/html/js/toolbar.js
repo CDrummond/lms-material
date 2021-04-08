@@ -180,7 +180,7 @@ Vue.component('lms-toolbar', {
 <v-menu v-model="showSettingsMenu" :position-x="window.innerWidth" :position-y="0">
  <v-list>
   <v-list-tile @click="showMainMenu = true">
-   <v-list-tile-avatar><v-icon>arrow_back</v-icon></v-list-tile-avatar>
+   <v-list-tile-avatar><v-icon>chevron_left</v-icon></v-list-tile-avatar>
    <v-list-tile-content><v-list-tile-title class="menutitle">{{TB_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
   </v-list-tile>
   <v-divider></v-divider>

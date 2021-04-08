@@ -121,6 +121,7 @@ Vue.component('lms-toolbar', {
       <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
+     <v-list-tile-action v-else-if="TB_SETTINGS.id==item.id && useSettingsMenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
     </v-list-tile>
    </template>
    <v-list-tile v-if="showPlayerMenuEntry" href="intent://sbplayer/#Intent;scheme=angrygoat;package=com.angrygoat.android.sbplayer;end">
@@ -136,6 +137,7 @@ Vue.component('lms-toolbar', {
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].stitle ? ACTIONS[action].stitle : ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
      <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
+     <v-list-tile-action v-else-if="ACTIONS[action].submenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
     </v-list-tile>
    </template>
    <v-divider v-if="customActions && customActions.length>0"></v-divider>
@@ -518,7 +520,7 @@ Vue.component('lms-toolbar', {
         },
         menuAction(id) {
             if (TB_SETTINGS.id==id) {
-                if (this.$store.state.player || this.$store.state.unlockAll || queryParams.appSettings || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0)) {
+                if (this.useSettingsMenu) {
                     this.showSettingsMenu = true;
                 } else {
                     bus.$emit('dlg.open', 'uisettings');
@@ -821,6 +823,9 @@ Vue.component('lms-toolbar', {
         },
         powerButton() {
             return this.$store.state.powerButton
+        },
+        useSettingsMenu() {
+            return this.$store.state.player || this.$store.state.unlockAll || queryParams.appSettings || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0)
         }
     },
     filters: {

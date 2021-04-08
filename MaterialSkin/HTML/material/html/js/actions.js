@@ -88,7 +88,7 @@ var ACTIONS=[
     {cmd:"search-lib",   icon:"search"},
     {cmd:"use-grid",     icon:"grid_on"},
     {cmd:"use-list",     icon:"grid_off"},
-    {cmd:"albsort",      icon:"sort_by_alpha"},
+    {cmd:"albsort",      icon:"sort_by_alpha", submenu:true},
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete_outline"},
     {cmd:"move-fav-parent", svg:"folder-up"},

@@ -1623,6 +1623,10 @@ div.v-subheader {
  opacity:var(--sub-opacity);
 }
 
+.v-menu__content .v-list__tile .menu-subind {
+ opacity:var(--sub-opacity);
+}
+
 .v-menu__content .v-list__tile .menu-shortcut {
  min-width:40px!important;
  margin-left:16px;

@@ -116,11 +116,18 @@ var app = new Vue({
                         }
                     }
                 }
-                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'respectFixedVol', 'showAllArtists', 'artistFirst'];
+                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst'];
                 for (var i=0, len=BOOL_OPTS.length; i<len; ++i) {
                     if (undefined!=data.result[BOOL_OPTS[i]]) {
                         lmsOptions[BOOL_OPTS[i]] = 1 == parseInt(data.result[BOOL_OPTS[i]]);
                         setLocalStorageVal(BOOL_OPTS[i], lmsOptions[BOOL_OPTS[i]]);
+                    }
+                }
+                const INT_OPTS = ['respectFixedVol'];
+                for (var i=0, len=INT_OPTS.length; i<len; ++i) {
+                    if (undefined!=data.result[INT_OPTS[i]]) {
+                        lmsOptions[INT_OPTS[i]] = parseInt(data.result[INT_OPTS[i]]);
+                        setLocalStorageVal(INT_OPTS[i], lmsOptions[INT_OPTS[i]]);
                     }
                 }
             }

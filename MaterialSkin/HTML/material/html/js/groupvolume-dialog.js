@@ -27,19 +27,19 @@ Vue.component('lms-groupvolume', {
  <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
    <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
-    <v-flex xs12 style="height:8px"></v-flex>
-    <v-flex xs12 class="vol-label link-item" v-bind:class="{'pulse':0==player.volume && player.isplaying}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
+    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 style="height:8px"></v-flex>
+    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 class="vol-label link-item" v-bind:class="{'pulse':0==player.volume && player.isplaying}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
      {{player.name}}{{player.volume|displayVolume(player.dvc)}}
     </v-flex>
-    <v-flex xs12 style="height:16px"></v-flex>
-    <v-flex xs12>
+    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 style="height:16px"></v-flex>
+    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12>
      <v-layout>
       <v-btn flat icon class="vol-btn vol-left" @click="adjustVolume(player, false)"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-      <v-slider :disabled="!player.dvc" @change="volumeChanged(player)" @wheel.native="volWheel(player, $event)"  step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
+      <v-slider :disabled="VOL_FIXED==player.dvc" @change="volumeChanged(player)" @wheel.native="volWheel(player, $event)"  step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
       <v-btn flat icon @click="adjustVolume(player, true)" class="vol-btn vol-right"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
      </v-layout>
     </v-flex>
-    <v-flex xs12 style="height:16px"></v-flex>
+    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 style="height:16px"></v-flex>
    </div>
   </v-layout>
  </v-container>
@@ -70,13 +70,13 @@ Vue.component('lms-groupvolume', {
                 pMap[this.$store.state.players[p].id]={name: this.$store.state.players[p].name, isgroup: this.$store.state.players[p].isgroup};
             }
             this.players = [{id: playerStatus.syncmaster, master:true, name:pMap[playerStatus.syncmaster].name, isgroup:pMap[playerStatus.syncmaster].isgroup, 
-                             volume:undefined, dvc:true, muted:false}];
+                             volume:undefined, dvc:VOL_STD, muted:false}];
             if (this.$store.state.player.id==playerStatus.syncmaster) {
                 this.players[0].volume = playerStatus.volume;
             }
             for (var p=0, len=playerStatus.syncslaves.length; p<len; ++p) {
                 this.players.push({id: playerStatus.syncslaves[p], master:false, name:pMap[playerStatus.syncslaves[p]].name, isgroup:pMap[playerStatus.syncslaves[p]].isgroup,
-                                   volume:undefined, dvc:true, muted:false, isplaying:false});
+                                   volume:undefined, dvc:VOL_STD, muted:false, isplaying:false});
                 if (this.$store.state.player.id==playerStatus.syncslaves[p]) {
                     this.players[this.players.length-1].volume = playerStatus.volume;
                 }
@@ -246,7 +246,7 @@ Vue.component('lms-groupvolume', {
     },
     filters: {
         displayVolume: function (value, dvc) {
-            return dvc ? ': ' +value+'%' : '';
+            return VOL_FIXED==dvc ? ': ' +value+'%' : '';
         },
     }
 })

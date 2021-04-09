@@ -393,11 +393,12 @@ var lmsServer = Vue.component('lms-server', {
                 return;
             }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
+            var dvc = 1==parseInt(data.digital_volume_control);
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play" && !data.waitingToPlay,
                            volume: -1,
-                           // If 'respectFixedVol' is false, then we treat fixed-volume players as normal - and enable all volume controls.
-                           dvc: !lmsOptions.respectFixedVol || 1==parseInt(data.digital_volume_control),
+                           // If 'respectFixedVol' is 0, then we treat fixed-volume players as normal - and enable all volume controls.
+                           dvc: VOL_STD==lmsOptions.respectFixedVol || dvc ? VOL_STD : VOL_HIDDEN==lmsOptions.respectFixedVol && !dvc ? VOL_HIDDEN : VOL_FIXED,
                            playlist: { shuffle:0, repeat: 0, duration:0, name:'', current: -1, count:0, timestamp:0},
                            current: { canseek: 0, time: undefined, duration: undefined },
                            will_sleep_in: data.will_sleep_in,
@@ -422,8 +423,8 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
 
-            player.volume = !player.dvc ? 100 : undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
-            player.muted = player.dvc && player.volume<0;
+            player.volume = VOL_STD!=player.dvc ? 100 : undefined==data["mixer volume"] ? 0.0 : Math.round(parseFloat(data["mixer volume"]));
+            player.muted = VOL_STD==player.dvc && player.volume<0;
             player.volume = Math.abs(player.volume);
 
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),

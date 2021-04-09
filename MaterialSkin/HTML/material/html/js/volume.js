@@ -48,7 +48,7 @@ Vue.component('lms-volume', {
                 if (vol!=this.playerVolume) {
                     this.playerVolume = vol;
                 }
-                this.dvc = playerStatus.dvc;
+                this.dvc = VOL_STD==playerStatus.dvc;
                 if (this.showing) {
                     this.showing = false;
                     this.movingVolumeSlider = false;

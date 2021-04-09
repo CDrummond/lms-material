@@ -113,3 +113,7 @@ var MULTI_SPLIT_REGEX = ";"
 // changed. On other engines the eval succeeds and MULTI_SPLIT_REGEX is set correctly.
 try { eval('MULTI_SPLIT_REGEX = new RegExp(/(?<!\\s),(?!\\s)/);'); } catch(e) { }
 
+const VOL_STD    = 0;
+const VOL_FIXED  = 1;
+const VOL_HIDDEN = 2;
+

@@ -206,7 +206,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-card>
   </div>
   <div v-else>
-   <div v-show="overlayVolume>-1 && playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
+   <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
@@ -352,7 +352,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  playerStatus: {
                     isplaying: false,
                     sleepTimer: false,
-                    dvc: true,
+                    dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined, disc:0, year:0 },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
@@ -840,13 +840,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (event.srcElement.classList.contains("np-title") || event.srcElement.classList.contains("np-text") || event.srcElement.classList.contains("np-text-landscape")) {
                 return;
             }
-            if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0 && this.playerStatus.dvc) {
+            if (this.$store.state.swipeVolume && !this.menu.show && event.touches && event.touches.length>0 && VOL_STD==this.playerStatus.dvc) {
                 this.touch={x:event.touches[0].clientX, y:event.touches[0].clientY, moving:false};
                 this.lastSentVolume=-1;
             }
         },
         touchEnd() {
-            if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume && this.playerStatus.dvc) {
+            if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume && VOL_STD==this.playerStatus.dvc) {
                 bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
             }
             this.touch=undefined;
@@ -855,7 +855,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.cancelSendVolumeTimer();
         },
         touchMoving(event) {
-            if (undefined!=this.touch && this.playerStatus.dvc) {
+            if (undefined!=this.touch && VOL_STD==this.playerStatus.dvc) {
                 if (Math.abs(event.touches[0].clientX-this.touch.x)<48) {
                     if (!this.touch.moving && Math.abs(event.touches[0].clientY-this.touch.y)>10) {
                         this.touch.moving=true;

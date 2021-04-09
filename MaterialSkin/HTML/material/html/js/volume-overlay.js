@@ -40,7 +40,7 @@ Vue.component('lms-volumeoverlay', {
             this.startTimeout();
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
-            this.dvc = playerStatus.dvc;
+            this.dvc = VOL_STD==playerStatus.dvc;
             var vol = playerStatus.volume;
             if (vol!=this.volume) {
                 this.volume = vol;

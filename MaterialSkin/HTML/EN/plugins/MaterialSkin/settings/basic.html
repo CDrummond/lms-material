@@ -4,11 +4,10 @@
         <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
     [% END %]
 
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_RESPECT_FIXED_VOL_DESC" %]
-        <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
-            <option [% IF NOT prefs.respectFixedVol %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.respectFixedVol %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    [% WRAPPER settingGroup  title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
+        <input type="radio" name="pref_respectFixedVol" value="0" [% IF prefs.pref_respectFixedVol == 0 %]checked[% END %]>[% 'PLUGIN_MATERIAL_SKIN_FIXED_VOL_NORMAL'  | getstring %]<br/>
+        <input type="radio" name="pref_respectFixedVol" value="1" [% IF prefs.pref_respectFixedVol == 1 %]checked[% END %]>[% 'PLUGIN_MATERIAL_SKIN_FIXED_VOL_SPECIAL' | getstring %]<br/>
+        <input type="radio" name="pref_respectFixedVol" value="2" [% IF prefs.pref_respectFixedVol == 2 %]checked[% END %]>[% 'PLUGIN_MATERIAL_SKIN_FIXED_VOL_HIDE'    | getstring %]<br/>
     [% END %]
 
     <br/><hr class="main-sep"/><br/>

@@ -100,8 +100,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
-        <div v-if="undefined!=tab.items && tab.items.length>0" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
-        <v-list v-if="undefined!=tab.items && tab.items.length>0">
+        <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
+        <v-list v-if="undefined!=tab.items && tab.items.length>1">
          <template v-for="(item, iindex) in tab.items">
           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -128,8 +128,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
-         <div v-if="undefined!=tab.items && tab.items.length>0" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
-         <v-list v-if="undefined!=tab.items && tab.items.length>0">
+         <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
+         <v-list v-if="undefined!=tab.items && tab.items.length>1">
           <template v-for="(item, iindex) in tab.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -174,8 +174,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
-        <div v-if="undefined!=tab.items && tab.items.length>0" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
-        <v-list v-if="undefined!=tab.items && tab.items.length>0">
+        <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
+        <v-list v-if="undefined!=tab.items && tab.items.length>1">
          <template v-for="(item, iindex) in tab.items">
           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">

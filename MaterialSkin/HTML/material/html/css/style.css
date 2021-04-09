@@ -2198,6 +2198,12 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  background:transparent!important;
 }
 
+.np-info-text .v-list .v-avatar img,
+.np-info-text-desktop .v-list .v-avatar img,
+.np-info-text-full-desktop .v-list .v-avatar img {
+ margin:0px!important;
+}
+
 .np-info-text .v-list__tile__action,
 .np-info-text-desktop .v-list__tile__action,
 .np-info-text-full-desktop .v-list__tile__action {

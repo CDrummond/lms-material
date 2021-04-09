@@ -2191,3 +2191,19 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .v-ripple__animation--out {
  display:none !important;
 }
+
+.np-info-text .v-list,
+.np-info-text-desktop .v-list,
+.np-info-text-full-desktop .v-list {
+ background:transparent!important;
+}
+
+.np-info-text .v-list__tile__action,
+.np-info-text-desktop .v-list__tile__action,
+.np-info-text-full-desktop .v-list__tile__action {
+ min-width:32px;
+}
+
+.np-sect-title {
+ font-weight:var(--bold-weight);
+}

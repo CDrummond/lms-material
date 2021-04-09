@@ -6,9 +6,9 @@
  */
 'use strict';
 
-const BIO_TAB = 0;
-const REVIEW_TAB = 1;
-const LYRICS_TAB = 2;
+const ARTIST_TAB = 0;
+const ALBUM_TAB = 1;
+const TRACK_TAB = 2;
 
 const NP_FONT_ACT = 0;
 const NP_PIC_ACT = 1;
@@ -98,7 +98,24 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
       <v-card flat class="np-info-card-cover">
-       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
+       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+        <div v-html="tab.text"></div>
+        <div v-if="undefined!=tab.items && tab.items.length>0" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
+        <v-list v-if="undefined!=tab.items && tab.items.length>0">
+         <template v-for="(item, iindex) in tab.items">
+          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
+           <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+            <img :key="item.image" v-lazy="item.image"></img>
+           </v-list-tile-avatar>
+           <v-list-tile-content>
+            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           </v-list-tile-content>
+           <v-list-tile-action v-for="(act, idx) in tabActions"><v-btn flat icon @click="itemAction(act, tab, iindex)"><v-icon>{{ACTIONS[act].icon}}</v-icon></v-btn></v-list-tile-action>
+          </v-list-tile>
+         </template>
+        <v-list>
+       </v-card-text>
       </v-card>
      </v-tab-item>
     </template>
@@ -109,7 +126,24 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-flex xs4>
        <v-card flat class="np-info-card-cover">
         <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
-        <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
+        <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+         <div v-html="tab.text"></div>
+         <div v-if="undefined!=tab.items && tab.items.length>0" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
+         <v-list v-if="undefined!=tab.items && tab.items.length>0">
+          <template v-for="(item, iindex) in tab.items">
+           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
+            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+             <img :key="item.image" v-lazy="item.image"></img>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+             <v-list-tile-title>{{item.title}}</v-list-tile-title>
+             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action v-for="(act, idx) in tabActions"><v-btn flat icon @click="itemAction(act, tab, iindex)"><v-icon>{{ACTIONS[act].icon}}</v-icon></v-btn></v-list-tile-action>
+           </v-list-tile>
+          </template>
+         <v-list>
+        </v-card-text>
        </v-card>
       </v-flex>
      </template>
@@ -138,7 +172,24 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
       <v-card flat class="np-info-card-cover">
-       <v-card-text :class="['np-info-text', zoomInfoClass, LYRICS_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', REVIEW_TAB==index ? 'np-info-review' : '', REVIEW_TAB==index ? 'np-info-review' : '']" v-html="tab.text"></v-card-text>
+       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+        <div v-html="tab.text"></div>
+        <div v-if="undefined!=tab.items && tab.items.length>0" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
+        <v-list v-if="undefined!=tab.items && tab.items.length>0">
+         <template v-for="(item, iindex) in tab.items">
+          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
+           <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+            <img :key="item.image" v-lazy="item.image"></img>
+           </v-list-tile-avatar>
+           <v-list-tile-content>
+            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           </v-list-tile-content>
+           <v-list-tile-action v-for="(act, idx) in tabActions"><v-btn flat icon @click="itemAction(act, tab, iindex)"><v-icon>{{ACTIONS[act].icon}}</v-icon></v-btn></v-list-tile-action>
+          </v-list-tile>
+         </template>
+        <v-list>
+       </v-card-text>
       </v-card>
      </v-tab-item>
     </template>
@@ -306,11 +357,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined, disc:0, year:0 },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
-                 info: { show: false, tab:LYRICS_TAB, showTabs:false, sync: true,
-                         tabs: [ { title:undefined, text:undefined, reqId:0 }, { title:undefined, text:undefined, reqId:0 }, { title:undefined, text:undefined, reqId:0 } ] },
+                 info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
+                         tabs: [ { title:undefined, text:undefined, reqId:0, items:[] },
+                                 { title:undefined, text:undefined, reqId:0, items:[] },
+                                 { title:undefined, text:undefined, reqId:0, items:[] } ] },
+                 infoTrack: {album_id:undefined, track_id:undefined},
+                 tabActions: [], // PLAY_ACTION, ADD_ACTION], // TODO: Actions?
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
+                          play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, albums:undefined, tracks:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
@@ -500,10 +555,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
-                           next:i18n("Next track") };
-            this.info.tabs[LYRICS_TAB].title=i18n("Lyrics");
-            this.info.tabs[BIO_TAB].title=i18n("Artist biography");
-            this.info.tabs[REVIEW_TAB].title=i18n("Album review");
+                           next:i18n("Next track"), albums:i18n("Albums"), tracks:i18n("Tracks") };
+            this.info.tabs[TRACK_TAB].title=i18n("Track");
+            this.info.tabs[ARTIST_TAB].title=i18n("Artist");
+            this.info.tabs[ALBUM_TAB].title=i18n("Album");
         },
         showContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {
@@ -619,14 +674,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
                       this.playerStatus.playlist.current, 'now-playing');
         },
-        fetchLyrics() {
+        fetchTrackInfo() {
             nowplayingFetchLyrics(this);
         },
-        fetchBio() {
-            nowplayingFetchBio(this);
+        fetchArtistInfo() {
+            nowplayingFetchArtistInfo(this);
         },
-        fetchReview() {
-            nowplayingFetchReview(this);
+        fetchAlbumInfo() {
+            nowplayingFetchAlbumInfo(this);
         },
         isCurrent(data, tab) {
             return data.id==this.info.tabs[tab].reqId;
@@ -636,15 +691,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return;
             }
             if (this.$store.state.desktopLayout && !this.showTabs) {
-                this.fetchLyrics();
-                this.fetchBio();
-                this.fetchReview();
-            } else if (LYRICS_TAB==this.info.tab) {
-                this.fetchLyrics();
-            } else if (BIO_TAB==this.info.tab) {
-                this.fetchBio();
+                this.fetchTrackInfo();
+                this.fetchArtistInfo();
+                this.fetchAlbumInfo();
+            } else if (TRACK_TAB==this.info.tab) {
+                this.fetchTrackInfo();
+            } else if (ARTIST_TAB==this.info.tab) {
+                this.fetchArtistInfo();
             } else {
-                this.fetchReview();
+                this.fetchAlbumInfo();
             }
         },
         startPositionInterval() {
@@ -859,6 +914,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         checkLandscape() {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+        },
+        itemAction(act, tab, index) {
         }
     },
     filters: {

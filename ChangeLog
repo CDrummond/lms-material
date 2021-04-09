@@ -15,6 +15,9 @@
  9. Highlight player names on hover in 'Manage players' dialog.
 10. Add back/title entry to sub-menus.
 11. Allow to add custom entries to settings sub-menu.
+12. Re-title MAI views to 'Artist', 'Album', and 'Track'
+13. Add album list to MAI 'Artist' view.
+14. Add track list to MAI 'Album' view.
 
 2.3.7
 -----

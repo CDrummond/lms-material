@@ -396,7 +396,7 @@ function nowplayingFetchArtistInfo(view) {
                 lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && data.result && view.isCurrent(data, ARTIST_TAB) && (data.result.biography || data.result.error)) {
-                        // If failt with artist, try albumartist (if view is within artist)
+                        // If failed with artist, try albumartist (if view is within artist)
                         if (undefined==data.result.biography && view.info.tabs[ARTIST_TAB].albumartist &&
                             view.info.tabs[ARTIST_TAB].artist.indexOf(view.info.tabs[ARTIST_TAB].albumartist)>=0) {
                             var command = ["musicartistinfo", "biography", "html:1"];
@@ -431,6 +431,14 @@ function nowplayingFetchArtistInfo(view) {
                     lmsList("", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, "sort:yearalbum"], 0, 250, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
+                            view.info.tabs[ARTIST_TAB].items = parseBrowseResp(data).items;
+                        }
+                    });
+                } else if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
+                    lmsList("", ["search"], ["tags:jlyAdt", "extended:1", "term:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], 0, 250, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                        logJsonMessage("RESP", data);
+                        if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
+                            data.result.tracks_loop = data.result.contributors_loop = undefined;
                             view.info.tabs[ARTIST_TAB].items = parseBrowseResp(data).items;
                         }
                     });

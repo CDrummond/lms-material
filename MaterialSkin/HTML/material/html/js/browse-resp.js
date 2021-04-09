@@ -630,7 +630,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               subtitle: artist,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : ("/music/" + i.artwork_track_id + "/cover" + LMS_IMAGE_SIZE),
+                                        : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_IMAGE_SIZE),
                               stdItem: STD_ITEM_ALBUM,
                               type: "group",
                               origTitle: i.album,

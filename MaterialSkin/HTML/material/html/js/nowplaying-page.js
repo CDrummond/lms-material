@@ -101,20 +101,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
-        <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
-        <v-list v-if="undefined!=tab.items && tab.items.length>1">
-         <template v-for="(item, iindex) in tab.items">
-          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && iindex==menu.index}" @click.stop="itemClicked(index, iindex, $event)">
-           <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-            <img :key="item.image" v-lazy="item.image"></img>
-           </v-list-tile-avatar>
-           <v-list-tile-content>
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-           </v-list-tile-content>
-          </v-list-tile>
-         </template>
-        <v-list>
+        <template v-for="(sect, sindex) in tab.sections">
+         <div class="np-sect-title">{{sect.title}}</div>
+         <v-list v-if="undefined!=sect.items && sect.items.length>1">
+          <template v-for="(item, iindex) in sect.items">
+           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+             <img :key="item.image" v-lazy="item.image"></img>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+             <v-list-tile-title>{{item.title}}</v-list-tile-title>
+             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            </v-list-tile-content>
+           </v-list-tile>
+          </template>
+          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+         <v-list>
+        </template>
        </v-card-text>
       </v-card>
      </v-tab-item>
@@ -128,20 +131,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
-         <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
-         <v-list v-if="undefined!=tab.items && tab.items.length>1">
-          <template v-for="(item, iindex) in tab.items">
-           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && iindex==menu.index}" @click.stop="itemClicked(index, iindex, $event)">
-            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-             <img :key="item.image" v-lazy="item.image"></img>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-             <v-list-tile-title>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            </v-list-tile-content>
-           </v-list-tile>
-          </template>
-         <v-list>
+         <template v-for="(sect, sindex) in tab.sections">
+          <div class="np-sect-title">{{sect.title}}</div>
+          <v-list v-if="undefined!=sect.items && sect.items.length>1">
+           <template v-for="(item, iindex) in sect.items">
+            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+              <img :key="item.image" v-lazy="item.image"></img>
+             </v-list-tile-avatar>
+             <v-list-tile-content>
+              <v-list-tile-title>{{item.title}}</v-list-tile-title>
+              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+             </v-list-tile-content>
+            </v-list-tile>
+           </template>
+           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+          <v-list>
+         </template>
         </v-card-text>
        </v-card>
       </v-flex>
@@ -173,20 +179,23 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
-        <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
-        <v-list v-if="undefined!=tab.items && tab.items.length>1">
-         <template v-for="(item, iindex) in tab.items">
-          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && iindex==menu.index}" @click.stop="itemClicked(index, iindex, $event)">
-           <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-            <img :key="item.image" v-lazy="item.image"></img>
-           </v-list-tile-avatar>
-           <v-list-tile-content>
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-           </v-list-tile-content>
-          </v-list-tile>
-         </template>
-        <v-list>
+        <template v-for="(sect, sindex) in tab.sections">
+         <div class="np-sect-title">{{sect.title}}</div>
+         <v-list v-if="undefined!=sect.items && sect.items.length>1">
+          <template v-for="(item, iindex) in sect.items">
+           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+             <img :key="item.image" v-lazy="item.image"></img>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+             <v-list-tile-title>{{item.title}}</v-list-tile-title>
+             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            </v-list-tile-content>
+           </v-list-tile>
+          </template>
+          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+         <v-list>
+        </template>
        </v-card-text>
       </v-card>
      </v-tab-item>
@@ -356,18 +365,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
-                         tabs: [ { title:undefined, text:undefined, reqId:0, items:[] },
-                                 { title:undefined, text:undefined, reqId:0, items:[] },
-                                 { title:undefined, text:undefined, reqId:0, items:[] } ] },
+                         tabs: [ { title:undefined, text:undefined, reqId:0,
+                                    sections:[ { title:undefined, items:[], more:undefined } ] },
+                                 { title:undefined, text:undefined, reqId:0,
+                                    sections:[ { title:undefined, items:[] } ] },
+                                 { title:undefined, text:undefined, reqId:0, sections:[] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, albums:undefined, tracks:undefined },
+                          play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
                  largeView: false,
-                 menu: { show: false, x:0, y:0, items: [], icons:false, tab:undefined, index:undefined },
+                 menu: { show: false, x:0, y:0, items: [], icons:false, tab:undefined, section:undefined, index:undefined },
                  rating: {value:0, setting:0},
                  timeTooltip: {show: false, x:0, y:0, text:undefined},
                  overlayVolume: -1,
@@ -552,10 +563,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
-                           next:i18n("Next track"), albums:i18n("Albums"), tracks:i18n("Tracks") };
+                           next:i18n("Next track") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ALBUM_TAB].title=i18n("Album");
+            this.info.tabs[ARTIST_TAB].sections[0].title=i18n("Albums");
+            this.info.tabs[ALBUM_TAB].sections[0].title=i18n("Tracks");
         },
         showContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {
@@ -912,8 +925,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
         },
-        itemClicked(tab, index, event) {
-            nowPlayingItemClicked(this, tab, index, event);
+        itemClicked(tab, section, index, event) {
+            nowPlayingItemClicked(this, tab, section, index, event);
+        },
+        moreClicked(tab, section) {
+            nowPlayingMoreClicked(this, tab, section);
         }
     },
     filters: {

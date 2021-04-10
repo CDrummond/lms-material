@@ -26,7 +26,13 @@
  --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
  --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
  --btn-hover-color:rgba(128, 128, 128, 0.3);
- --list-hover-color:rgba(128, 128, 128, 0.125);
+ --list-hover-color:rgba(0, 0, 0, 0.04)!important;
+ --list-active-color:rgba(0, 0, 0, 0.08)!important;
+}
+
+.theme--dark {
+ --list-hover-color:rgba(255, 255, 255, 0.04)!important;
+ --list-active-color:rgba(255, 255, 255, 0.08)!important;
 }
 
 .note {
@@ -1187,11 +1193,15 @@ progress {
 }
 
 .list-active {
- background-color:var(--list-hover-color)!important;
+ background-color:var(--list-active-color)!important;
 }
 
-.pq-current {
- background-color:var(--pq-current-color);
+.list-active a:hover {
+ background-color:transparent!important; /* Prevent double highlight */
+}
+
+.pq-current, .list-active {
+ background-color:var(--pq-current-color)
 }
 
 .pq-current div.v-list__tile__title {
@@ -2187,7 +2197,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
   background-color:var(--btn-hover-color);
  }
  .lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
-  background-color:var(--list-hover-color);
+  background-color:var(--list-hover-color)!important;
  }
 }
 

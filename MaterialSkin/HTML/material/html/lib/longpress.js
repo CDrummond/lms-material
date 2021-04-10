@@ -12,13 +12,16 @@ Vue.directive('longpress', {
             console.warn(warn)
         }
 
-        el.longpress={time:undefined, stated:false, timedout:false, touchOnly:false, start:undefined, cancel:undefined, binding:binding, repeat:binding.arg};
+        el.longpress={time:undefined, stated:false, timedout:false, touchOnly:false, start:undefined, cancel:undefined,
+                      binding:binding, repeat:'repeat'==binding.arg, stopProp:'stop'==binding.arg};
 
         // Define funtion handlers
         // Create timeout ( run function after 1s )
         el.longpress.start = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+            if (el.longpress.stopProp) {
+                try { e.preventDefault(); } catch(e) { }
+                try { e.stopPropagation();} catch(e) { }
+            }
             if (e.type=="touchstart") {
                 el.longpress.touchOnly = true;
             } else if (el.longpress.touchOnly && !e.type.startsWith("touch")) {
@@ -59,8 +62,10 @@ Vue.directive('longpress', {
 
         // Cancel Timeout
         el.longpress.cancel = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+            if (el.longpress.stopProp) {
+                try { e.preventDefault(); } catch(e) { }
+                try { e.stopPropagation();} catch(e) { }
+            }
             if (el.longpress.started && !el.longpress.timedout) {
                 if (undefined==el.longpress.binding.value.method) {
                     el.longpress.binding.value(false, el);

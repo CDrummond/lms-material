@@ -468,17 +468,18 @@ function nowplayingFetchArtistInfo(view) {
                 }).catch(error => {
                     view.info.tabs[ARTIST_TAB].text=i18n("Failed to retrieve information.");
                 });
-                if (view.infoTrack.artist_id!=undefined && view.infoTrack.artist_id>=0) {
-                    nowPlayingGetArtistAlbums(view, view.infoTrack.artist_id);
-                } else if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
-                    lmsCommand("", ["material-skin", "map", "artist:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
-                        if (data && data.result && data.result.artist_id && view.isCurrent(data, ARTIST_TAB)) {
-                            logJsonMessage("RESP", data);
-                            nowPlayingGetArtistAlbums(view, data.result.artist_id);
-                        }
-                    });
-                }
             }
+        }
+
+        if (view.infoTrack.artist_id!=undefined && view.infoTrack.artist_id>=0) {
+            nowPlayingGetArtistAlbums(view, view.infoTrack.artist_id);
+        } else if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
+            lmsCommand("", ["material-skin", "map", "artist:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                if (data && data.result && data.result.artist_id && view.isCurrent(data, ARTIST_TAB)) {
+                    logJsonMessage("RESP", data);
+                    nowPlayingGetArtistAlbums(view, data.result.artist_id);
+                }
+            });
         }
     } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.artist_id && undefined==view.infoTrack.artist_ids) {
         view.info.tabs[ARTIST_TAB].isMsg=true;

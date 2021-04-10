@@ -318,7 +318,7 @@ function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
 }
 
 function browseClick(view, item, index, event) {
-    if (view.fetchingItems || "html"==item.type) {
+    if (view.fetchingItem!=undefined || "html"==item.type) {
          return;
     }
     if (view.menu.show) {
@@ -1035,9 +1035,9 @@ function browseGoHome(view) {
     if (view.history.length==0) {
         return;
     }
-    if (view.fetchingItems) {
+    if (view.fetchingItem!=undefined) {
         view.nextReqId();
-        view.fetchingItems = false;
+        view.fetchingItem = undefined;
     }
     view.selection = new Set();
     var prev = view.history.length>0 ? view.history[0].pos : 0;
@@ -1073,9 +1073,9 @@ function browseGoHome(view) {
 }
 
 function browseGoBack(view, refresh) {
-    if (view.fetchingItems) {
+    if (view.fetchingItem!=undefined) {
         view.nextReqId();
-        view.fetchingItems = false;
+        view.fetchingItem = undefined;
         return;
     }
     let searchWasActive = view.searchActive;
@@ -1319,7 +1319,7 @@ function browseMyMusicMenu(view) {
     if (view.myMusic.length>0 && !view.myMusic[0].needsUpdating) {
         return;
     }
-    view.fetchingItems=true;
+    view.fetchingItem = {id:TOP_ID_PREFIX};
     lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
         if (data && data.result) {
             logJsonMessage("RESP", data);
@@ -1408,7 +1408,7 @@ function browseMyMusicMenu(view) {
             if (!view.playerId()) { // No player, then can't get playre specific items just yet
                 view.processMyMusicMenu();
                 view.myMusic[0].needsUpdating=true; // Still needs updating to get the rest of view...
-                view.fetchingItems = false;
+                view.fetchingItem = undefined;
             } else {
                 lmsList(view.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                     if (data && data.result && data.result.item_loop) {
@@ -1486,15 +1486,15 @@ function browseMyMusicMenu(view) {
                         }
                         view.processMyMusicMenu();
                     }
-                    view.fetchingItems = false;
+                    view.fetchingItem = undefined;
                 }).catch(err => {
-                    view.fetchingItems = false;
+                    view.fetchingItem = undefined;
                     logAndShowError(err);
                 });
             }
         }
     }).catch(err => {
-        view.fetchingItems = false;
+        view.fetchingItem = undefined;
         logAndShowError(err);
     });
 }

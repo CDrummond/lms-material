@@ -19,7 +19,8 @@
 13. Add album list to MAI 'Artist' view.
 14. Add track list to MAI 'Album' view.
 15. Add, server-side, option to hide volume controls for fixed volume players.
-16. Highlight current list, or grid, item that is showing menu.
+16. Highlight current list, or grid, item that is showing menu or which was
+    clicked and has caused Material to fetch a new list of items.
 
 2.3.7
 -----

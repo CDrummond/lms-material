@@ -82,7 +82,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>
- <v-icon class="browse-progress" v-if="fetchingItems" color="primary">refresh</v-icon>
+ <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
  <div class="lms-list bgnd-cover" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage}" v-if="filteredJumplist.length>1">
@@ -96,7 +96,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
      <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="itemMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
-      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': menu.show && (item.rs+col)==menu.index}">
+      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
        <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src='html/images/radio.png'" v-bind:class="{'radio-img': SECTION_RADIO==citem.section}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
@@ -121,7 +121,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </RecycleScroller>
 
    <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'list-active': menu.show && index==menu.index, 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -173,7 +173,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
     </v-list-tile>
-    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': menu.show && index==menu.index}">
+    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -327,7 +327,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             currentActions: {show:false, items:[]},
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
-            fetchingItems: false,
+            fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
@@ -420,7 +420,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.reqId = 0;
         this.myMusic=[];
         this.history=[];
-        this.fetchingItems = false;
+        this.fetchingItem = undefined;
         this.current = null;
         this.currentLibId = null;
         this.headerTitle = null;
@@ -598,36 +598,36 @@ var lmsBrowse = Vue.component("lms-browse", {
         isCurrentReq(data) {
             return data.id==this.reqId;
         },
-        fetchItems(command, item, prevPage) {
-            if (this.fetchingItems) {
+        fetchItems(command, item, prevPage, index) {
+            if (this.fetchingItem!=undefined) {
                 return;
             }
 
-            this.fetchingItems = true;
+            this.fetchingItem = item.id;
             var count = item.limit ? item.limit : LMS_BATCH_SIZE;
             lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
                     this.handleListResponse(item, command, resp, prevPage);
-                    this.fetchingItems = false;
+                    this.fetchingItem = undefined;
                 }
             }).catch(err => {
-                this.fetchingItems = false;
+                this.fetchingItem = undefined;
                 this.handleListResponse(item, command, {items: []});
                 logError(err, command.command, command.params, 0, count);
             });
         },
         fetchUrlItems(url, provider, item) {
-            if (this.fetchingItems) {
+            if (this.fetchingItem!=undefined) {
                 return;
             }
 
-            this.fetchingItems = true;
+            this.fetchingItem = item.id;
             lmsCommand("", ["material-skin", "geturl", "url:"+url]).then(({data}) => {
-                this.fetchingItems = false;
+                this.fetchingItem = undefined;
                 this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
             }).catch(err => {
-                this.fetchingItems = false;
+                this.fetchingItem = undefined;
                 this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
                 logError(err);
             });
@@ -647,14 +647,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             var command = this.buildCommand(item);
             if ((command.command.length==2 && ("items"==command.command[1] || "browsejive"==command.command[1] || "jiveplaylistparameters"==command.command[1])) ||
                 (command.command.length==1 && "albums"==command.command[0])) {
-                this.fetchingItems = true;
+                this.fetchingItem = item.id;
                 lmsList(this.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, undefined, this.nextReqId()).then(({data}) => {
                     if (this.isCurrentReq(data)) {
-                        this.fetchingItems = false;
+                        this.fetchingItem = undefined;
                         this.handleTextClickResponse(item, command, data, isMoreMenu);
                     }
                 }).catch(err => {
-                    this.fetchingItems = false;
+                    this.fetchingItem = undefined;
                     logError(err, command.command, command.params);
                 });
             } else if (command.command.length>0) {
@@ -701,7 +701,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.gallery.listen('close', function() { setTimeout(function () { browsePage.$store.commit('dialogOpen', {name:'browse-viewer', shown:false}); }, 500); });
         },
         search(event, item, text) {
-            if (this.fetchingItems) {
+            if (this.fetchingItem!=undefined) {
                 return;
             }
             this.enteredTerm = undefined==event ? text : event.target._value;
@@ -715,7 +715,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.fetchItems(this.buildCommand(item), item);
         },
         entry(event, item, text) {
-            if (this.fetchingItems) {
+            if (this.fetchingItem!=undefined) {
                 return;
             }
             this.enteredTerm = undefined==event ? text : event.target._value;
@@ -876,7 +876,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         refreshList(restorePosition) {
             this.clearSelection();
             var pos=undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
-            this.fetchingItems = true;
+            this.fetchingItem = this.current.id;
             lmsList(this.playerId(), this.command.command, this.command.params, 0, LMS_BATCH_SIZE, this.current.cancache).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined, this.command, this.inGenre);
                 this.items=resp.items;
@@ -892,10 +892,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     setScrollTop(this, pos>0 ? pos : 0);
                     this.filterJumplist();
                 });
-                this.fetchingItems = false;
+                this.fetchingItem = undefined;
             }).catch(err => {
                 logAndShowError(err, undefined, this.command.command, this.command.params);
-                this.fetchingItems = false;
+                this.fetchingItem = undefined;
             });
         },
         homeBtnPressed() {

@@ -551,13 +551,13 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
-"Add URL":"",
+"Add URL":"URL hinzufügen",
 "Alt+%1":"",
 "Alt+(N)":"",
-"Application":"",
-"Interface settings":"",
+"Application":"Anwendung",
+"Interface settings":"Benutzeroberfläche einrichten",
 "Player":"",
-"Scroll to current":"",
-"Swap the queue with:":"",
-"Transfer queue":""
+"Scroll to current":"Springe zum aktuellem Titel",
+"Swap the queue with:":"Tausche Warteschlange mit:",
+"Transfer queue":"Verschiebe Warteschlange"
 }

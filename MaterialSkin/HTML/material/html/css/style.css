@@ -2231,5 +2231,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 .np-sect-title {
+ padding-top:16px;
  font-weight:var(--bold-weight);
+ text-align:left!important;
 }

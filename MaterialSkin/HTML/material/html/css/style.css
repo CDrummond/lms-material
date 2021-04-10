@@ -1186,6 +1186,10 @@ progress {
  padding:-2px;
 }
 
+.list-active {
+ background-color:var(--list-hover-color)!important;
+}
+
 .pq-current {
  background-color:var(--pq-current-color);
 }

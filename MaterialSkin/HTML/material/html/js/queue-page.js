@@ -286,7 +286,7 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="lms-list bgnd-cover" id="queue-bgnd">
  <v-list class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'bgnd-blur':drawBgndImage}">
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS && threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" loading="lazy"></img>
@@ -304,7 +304,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile>
    </RecycleScroller>
    <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" loading="lazy"></img>
@@ -321,7 +321,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile>
    </RecycleScroller>
    <template v-else v-for="(item, index) in items">
-    <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex, 'drop-target': dragActive && index==dropIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile :key="item.key" avatar v-bind:class="{'pq-current': index==currentIndex, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" :id="'track'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click="click(item, index, $event)" class="lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>

@@ -96,7 +96,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
      <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="itemMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
-      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()">
+      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': menu.show && (item.rs+col)==menu.index}">
        <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src='html/images/radio.png'" v-bind:class="{'radio-img': SECTION_RADIO==citem.section}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
@@ -121,7 +121,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </RecycleScroller>
 
    <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'list-active': menu.show && index==menu.index, 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -173,7 +173,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
     </v-list-tile>
-    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex}">
+    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': menu.show && index==menu.index}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -332,7 +332,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, sources: undefined },
-            menu: { show:false, item: undefined, x:0, y:0},
+            menu: { show:false, item: undefined, x:0, y:0, index:-1},
             isTop: true,
             libraryName: undefined, // Name of currently chosen library
             pinnedItemLibName: undefined, // Name of library from pinned item - if saved with pinned item
@@ -807,7 +807,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 showMenu(this, {show:true, x:event.clientX, y:event.clientY, history:history});
             }
         },
-        showLibMenu(event) {
+        showLibMenu(event, index) {
             lmsList("", ["libraries"]).then(({data}) => {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     var libraries = [];
@@ -817,7 +817,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     libraries.sort(nameSort);
                     libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
-                    showMenu(this, {show:true, x:event.clientX, y:event.clientY, libraries:libraries});
+                    showMenu(this, {show:true, x:event.clientX, y:event.clientY, libraries:libraries, index:index});
                 }
             });
         },

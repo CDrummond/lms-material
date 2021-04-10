@@ -290,6 +290,31 @@ function nowplayingMenuAction(view, item) {
         bus.$emit('browse-search', item.text, 'now-playing');
         view.info.show=false;
         view.largeView=false;
+    } else if (item.act>=NP_ITEM_ACT) {
+        if (undefined!=view.menu.tab && undefined!=view.menu.index && view.info.tabs[view.menu.tab].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].items.length) {
+            let act = item.act - NP_ITEM_ACT;
+            let litem = view.info.tabs[view.menu.tab].items[view.menu.index];
+            if (MORE_LIB_ACTION==act) {
+                bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), 'now-playing');
+                view.info.show=false;
+            } else if (MORE_ACTION==act) {
+                bus.$emit('trackInfo', litem, undefined, 'now-playing');
+                view.info.show=false;
+            } else {
+                let command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd), litem.id];
+                lmsCommand(view.$store.state.player.id, command).then(({data}) => {
+                    logJsonMessage("RESP", data);
+                    bus.$emit('refreshStatus');
+                    if (act===ADD_ACTION) {
+                        bus.$emit('showMessage', i18n("Appended '%1' to the play queue", litem.title));
+                    } else if (act===INSERT_ACTION) {
+                        bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", litem.title));
+                    }
+                }).catch(err => {
+                    logAndShowError(err, undefined, command);
+                });
+            }
+        }
     } else if (view.customActions && item.act>=NP_CUSTOM) {
         let ca = item.act-NP_CUSTOM;
         if (ca>=0 && ca<view.customActions.length) {
@@ -512,3 +537,20 @@ function nowplayingFetchAlbumInfo(view) {
     }
 }
 
+function nowPlayingItemClicked(view, tab, index, event) {
+    view.menu.items=[{title:ACTIONS[PLAY_ACTION].title, icon:ACTIONS[PLAY_ACTION].icon, act:NP_ITEM_ACT+PLAY_ACTION},
+                     {title:ACTIONS[INSERT_ACTION].title, svg:ACTIONS[INSERT_ACTION].svg, act:NP_ITEM_ACT+INSERT_ACTION},
+                     {title:ACTIONS[ADD_ACTION].title, icon:ACTIONS[ADD_ACTION].icon, act:NP_ITEM_ACT+ADD_ACTION}];
+    if (ARTIST_TAB==tab) {
+        view.menu.items.push({title:i18n("Browse"), svg:'library-music-outline', act:NP_ITEM_ACT+MORE_LIB_ACTION});
+    }
+    view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_ITEM_ACT+MORE_ACTION});
+    view.menu.icons=true;
+    view.menu.tab = tab;
+    view.menu.index = index;
+    view.menu.x = event.clientX;
+    view.menu.y = event.clientY;
+    view.$nextTick(() => {
+        view.menu.show = true;
+    });
+}

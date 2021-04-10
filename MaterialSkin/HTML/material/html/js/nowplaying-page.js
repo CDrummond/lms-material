@@ -16,6 +16,7 @@ const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
 const NP_CUSTOM = 100;
+const NP_ITEM_ACT = 200;
 
 var currentPlayingTrackPosition = 0;
 
@@ -103,7 +104,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
         <v-list v-if="undefined!=tab.items && tab.items.length>1">
          <template v-for="(item, iindex) in tab.items">
-          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
+          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && iindex==menu.index}" @click.stop="itemClicked(index, iindex, $event)">
            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
             <img :key="item.image" v-lazy="item.image"></img>
            </v-list-tile-avatar>
@@ -111,7 +112,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             <v-list-tile-title>{{item.title}}</v-list-tile-title>
             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
            </v-list-tile-content>
-           <v-list-tile-action v-for="(act, idx) in tabActions"><v-btn flat icon @click="itemAction(act, tab, iindex)"><v-icon>{{ACTIONS[act].icon}}</v-icon></v-btn></v-list-tile-action>
           </v-list-tile>
          </template>
         <v-list>
@@ -131,7 +131,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
          <v-list v-if="undefined!=tab.items && tab.items.length>1">
           <template v-for="(item, iindex) in tab.items">
-           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
+           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && iindex==menu.index}" @click.stop="itemClicked(index, iindex, $event)">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
              <img :key="item.image" v-lazy="item.image"></img>
             </v-list-tile-avatar>
@@ -139,7 +139,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
              <v-list-tile-title>{{item.title}}</v-list-tile-title>
              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-list-tile-action v-for="(act, idx) in tabActions"><v-btn flat icon @click="itemAction(act, tab, iindex)"><v-icon>{{ACTIONS[act].icon}}</v-icon></v-btn></v-list-tile-action>
            </v-list-tile>
           </template>
          <v-list>
@@ -177,7 +176,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <div v-if="undefined!=tab.items && tab.items.length>1" class="np-sect-title">{{ALBUM_TAB==index ? trans.tracks : trans.albums}}</div>
         <v-list v-if="undefined!=tab.items && tab.items.length>1">
          <template v-for="(item, iindex) in tab.items">
-          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id))}">
+          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && iindex==menu.index}" @click.stop="itemClicked(index, iindex, $event)">
            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
             <img :key="item.image" v-lazy="item.image"></img>
            </v-list-tile-avatar>
@@ -185,7 +184,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             <v-list-tile-title>{{item.title}}</v-list-tile-title>
             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
            </v-list-tile-content>
-           <v-list-tile-action v-for="(act, idx) in tabActions"><v-btn flat icon @click="itemAction(act, tab, iindex)"><v-icon>{{ACTIONS[act].icon}}</v-icon></v-btn></v-list-tile-action>
           </v-list-tile>
          </template>
         <v-list>
@@ -362,7 +360,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  { title:undefined, text:undefined, reqId:0, items:[] },
                                  { title:undefined, text:undefined, reqId:0, items:[] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
-                 tabActions: [], // PLAY_ACTION, ADD_ACTION], // TODO: Actions?
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                           play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, albums:undefined, tracks:undefined },
@@ -370,7 +367,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  landscape: false,
                  wide: 0,
                  largeView: false,
-                 menu: { show: false, x:0, y:0, items: [], icons:false },
+                 menu: { show: false, x:0, y:0, items: [], icons:false, tab:undefined, index:undefined },
                  rating: {value:0, setting:0},
                  timeTooltip: {show: false, x:0, y:0, text:undefined},
                  overlayVolume: -1,
@@ -915,7 +912,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.landscape = isLandscape();
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
         },
-        itemAction(act, tab, index) {
+        itemClicked(tab, index, event) {
+            nowPlayingItemClicked(this, tab, index, event);
         }
     },
     filters: {

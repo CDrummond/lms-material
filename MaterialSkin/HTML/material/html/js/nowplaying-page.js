@@ -102,7 +102,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title">{{sect.title}}</div>
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>1) || undefined!=sect.html">{{sect.title}}</div>
          <v-list v-if="undefined!=sect.items && sect.items.length>1">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
@@ -116,7 +116,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            </v-list-tile>
           </template>
           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-         <v-list>
+         </v-list>
+         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
        </v-card-text>
       </v-card>
@@ -132,7 +133,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
          <template v-for="(sect, sindex) in tab.sections">
-          <div class="np-sect-title">{{sect.title}}</div>
+          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>1) || undefined!=sect.html">{{sect.title}}</div>
           <v-list v-if="undefined!=sect.items && sect.items.length>1">
            <template v-for="(item, iindex) in sect.items">
             <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
@@ -146,7 +147,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             </v-list-tile>
            </template>
            <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-          <v-list>
+          </v-list>
+          <div v-if="undefined!=sect.html" v-html="sect.html"></div>
          </template>
         </v-card-text>
        </v-card>
@@ -180,7 +182,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title">{{sect.title}}</div>
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>1) || undefined!=sect.html">{{sect.title}}</div>
          <v-list v-if="undefined!=sect.items && sect.items.length>1">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
@@ -194,7 +196,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            </v-list-tile>
           </template>
           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-         <v-list>
+         </v-list>
+         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
        </v-card-text>
       </v-card>
@@ -366,7 +369,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  },
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined, reqId:0,
-                                    sections:[ { title:undefined, items:[], more:undefined } ] },
+                                    sections:[ { title:undefined, items:[], more:undefined }, { title:undefined, html:undefined } ] },
                                  { title:undefined, text:undefined, reqId:0,
                                     sections:[ { title:undefined, items:[] } ] },
                                  { title:undefined, text:undefined, reqId:0, sections:[] } ] },
@@ -517,6 +520,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.info.show = !this.info.show;
             }
         }.bind(this));
+        bus.$on('npclose', function() {
+            this.info.show=false;
+            this.largeView=false;
+        }.bind(this));
 
         bus.$on('prefset', function(pref, value, player) {
             if ("plugin.dontstopthemusic:provider"==pref && player==this.$store.state.player.id) {
@@ -568,6 +575,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ALBUM_TAB].title=i18n("Album");
             this.info.tabs[ARTIST_TAB].sections[0].title=i18n("Albums");
+            this.info.tabs[ARTIST_TAB].sections[1].title=i18n("Similar artists");
             this.info.tabs[ALBUM_TAB].sections[0].title=i18n("Tracks");
         },
         showContextMenu(event) {

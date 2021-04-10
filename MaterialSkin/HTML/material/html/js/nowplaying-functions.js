@@ -1,5 +1,6 @@
 const NP_MAX_ALBUMS = 50;
 const NP_MAX_TRACKS = 100;
+const NP_SIMILAR_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=5a854b839b10f8d46e630e8287c2299b&method=artist.getSimilar&autocorrect=1&format=json&artist=';
 
 function nowplayingOnPlayerStatus(view, playerStatus) {
     var playStateChanged = false;
@@ -383,6 +384,7 @@ function nowplayingFetchArtistInfo(view) {
         (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=view.infoTrack.artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=view.infoTrack.artist_ids.length)) {
         view.info.tabs[ARTIST_TAB].sections[0].items=[];
         view.info.tabs[ARTIST_TAB].sections[0].more=undefined;
+        view.info.tabs[ARTIST_TAB].sections[1].html=undefined;
         view.info.tabs[ARTIST_TAB].text=i18n("Fetching...");
         view.info.tabs[ARTIST_TAB].isMsg=true;
         view.info.tabs[ARTIST_TAB].artist=view.infoTrack.artist;
@@ -478,6 +480,26 @@ function nowplayingFetchArtistInfo(view) {
                 if (data && data.result && data.result.artist_id && view.isCurrent(data, ARTIST_TAB)) {
                     logJsonMessage("RESP", data);
                     nowPlayingGetArtistAlbums(view, data.result.artist_id);
+                }
+            });
+        }
+
+        if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
+            lmsCommand("", ["material-skin", "geturl", "url:"+NP_SIMILAR_URL+encodeURIComponent(view.info.tabs[ARTIST_TAB].artist ? view.info.tabs[ARTIST_TAB].artist : view.info.tabs[ARTIST_TAB].albumartist), "format:json"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                if (data && data.result && data.result.content) {
+                    logJsonMessage("RESP", data);
+                    let body = data.result.content;
+                    if (body.similarartists && body.similarartists.artist) {
+                        for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
+                            if (undefined==view.info.tabs[ARTIST_TAB].sections[1].html) {
+                                view.info.tabs[ARTIST_TAB].sections[1].html="<p style=\"text-align:left; margin-top:8px\">";
+                            } else {
+                                view.info.tabs[ARTIST_TAB].sections[1].html+=", ";
+                            }
+                            view.info.tabs[ARTIST_TAB].sections[1].html+="<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>";
+                        }
+                        view.info.tabs[ARTIST_TAB].sections[1].html+="</p>";
+                    }
                 }
             });
         }
@@ -579,4 +601,9 @@ function nowPlayingMoreClicked(view, tab, section) {
         bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], unescape(view.infoTrack.album), 'now-playing');
         view.info.show=false;
     }
+}
+
+function nowplayingSearch(str) {
+    bus.$emit('browse-search', unescape(str), 'now-playing');
+    bus.$emit('npclose');
 }

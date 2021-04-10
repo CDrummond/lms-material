@@ -668,6 +668,7 @@ sub _cliCommand {
 
     if ($cmd eq 'geturl') {
         my $url = $request->getParam('url');
+        my $format = $request->getParam('format');
         if ($url) {
             main::DEBUGLOG && $log->debug("Get URL: $url");
             $request->setStatusProcessing();
@@ -680,7 +681,19 @@ sub _cliCommand {
                 sub {
                     main::DEBUGLOG && $log->debug("Fetched URL");
                     my $response = shift;
-                    $request->addResult("content", $response->content);
+                    my $content = $response->can('decoded_content')
+                                ? $response->decoded_content
+                                : $response->content;
+
+                    if ( ($response->headers->content_type =~ /xml/) || ($format && $format eq 'xml')) {
+                        require XML::Simple;
+                        $request->addResult("content", XML::Simple::XMLin($content));
+                    } elsif ( ($response->headers->content_type =~ /json/) || ($format && $format eq 'json') ) {
+                        $request->addResult("content", from_json($content));
+                    } else {
+                        $request->addResult("content", $content);
+                    }
+
                     $request->setStatusDone();
                 },
                 sub {

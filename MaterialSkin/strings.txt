@@ -96,18 +96,23 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	EN	Fixed volume players
+	FR	Platines à volume fixe
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	EN	How should player's with a fixed volume be controlled?
+	FR	Comment contrôler les platines à volume fixe ?
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_HIDE
 	EN	Hide volume control
+	FR	Masquer le contrôle du volume
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_SPECIAL
 	EN	Disable volume slider, and hide volume level
+	FR	Désactiver le curseur du volume et masquer le niveau du volume
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_NORMAL
 	EN	Display standard volume control
+	FR	Afficher et permettre le contrôle du volume
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	EN	Show artist first in now-playing and queue

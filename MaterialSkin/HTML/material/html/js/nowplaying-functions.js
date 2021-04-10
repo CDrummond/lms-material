@@ -366,6 +366,18 @@ function nowplayingFetchLyrics(view) {
     }
 }
 
+function nowPlayingGetArtistAlbums(view, artist_id) {
+    lmsList("", ["albums"], ["artist_id:"+artist_id, ALBUM_TAGS, "sort:yearalbum"], 0, NP_MAX_ALBUMS, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+        logJsonMessage("RESP", data);
+        if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
+            view.info.tabs[ARTIST_TAB].sections[0].items = parseBrowseResp(data).items;
+            if (data.result.count>NP_MAX_ALBUMS) {
+                view.info.tabs[ARTIST_TAB].sections[0].more=i18n("+ %1 more", data.result.count-NP_MAX_ALBUMS);
+            }
+        }
+    });
+}
+
 function nowplayingFetchArtistInfo(view) {
     if (view.info.tabs[ARTIST_TAB].artist!=view.infoTrack.artist || view.info.tabs[ARTIST_TAB].artist_id!=view.infoTrack.artist_id ||
         (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=view.infoTrack.artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=view.infoTrack.artist_ids.length)) {
@@ -457,25 +469,12 @@ function nowplayingFetchArtistInfo(view) {
                     view.info.tabs[ARTIST_TAB].text=i18n("Failed to retrieve information.");
                 });
                 if (view.infoTrack.artist_id!=undefined && view.infoTrack.artist_id>=0) {
-                    lmsList("", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, "sort:yearalbum"], 0, NP_MAX_ALBUMS, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
-                        logJsonMessage("RESP", data);
-                        if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
-                            view.info.tabs[ARTIST_TAB].sections[0].items = parseBrowseResp(data).items;
-                            console.log(data.result.count, NP_MAX_ALBUMS);
-                            if (data.result.count>NP_MAX_ALBUMS) {
-                                view.info.tabs[ARTIST_TAB].sections[0].more=i18n("+ %1 more", data.result.count-NP_MAX_ALBUMS);
-                            }
-                        }
-                    });
+                    nowPlayingGetArtistAlbums(view, view.infoTrack.artist_id);
                 } else if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
-                    lmsList("", ["search"], ["tags:jlyAdt", "extended:1", "term:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], 0, NP_MAX_ALBUMS, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
-                        logJsonMessage("RESP", data);
-                        if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
-                            data.result.tracks_loop = data.result.contributors_loop = undefined;
-                            view.info.tabs[ARTIST_TAB].sections[0].items = parseBrowseResp(data).items;
-                            if (undefined!=data.result.albums_count && data.result.albums_count>NP_MAX_ALBUMS) {
-                                view.info.tabs[ARTIST_TAB].sections[0].more=i18n("+ %1 more", data.result.albums_count-NP_MAX_ALBUMS);
-                            }
+                    lmsCommand("", ["material-skin", "map", "artist:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                        if (data && data.result && data.result.artist_id && view.isCurrent(data, ARTIST_TAB)) {
+                            logJsonMessage("RESP", data);
+                            nowPlayingGetArtistAlbums(view, data.result.artist_id);
                         }
                     });
                 }

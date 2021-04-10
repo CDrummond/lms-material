@@ -622,7 +622,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
-            this.fetchingItem = item.id;
+            this.fetchingItem = item ? item.id : url;
             lmsCommand("", ["material-skin", "geturl", "url:"+url]).then(({data}) => {
                 this.fetchingItem = undefined;
                 this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));

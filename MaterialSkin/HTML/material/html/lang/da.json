@@ -74,7 +74,6 @@
 "Browse modes":"Måder at gennemgå musikbiblioteket på",
 "Browse music library":"Gå på opdagelse i dit musikbibliotek",
 "CD Player":"CD-afspiller",
-"CLICK: ":"KLIK",
 "Cancel":"Afbryd",
 "Change library":"Skift bibliotek",
 "Changes":"Ændringer",
@@ -188,7 +187,6 @@
 "Friday":"Fredag",
 "General":"Generelt",
 "Genre":"Genre",
-"Genre is not known to LMS":"Ukendt genre",
 "Genres":"Genrer",
 "GitHub development page":"GitHub udviklingsside",
 "Go back":"Gå tilbage",
@@ -565,5 +563,6 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Unkown genre":""
 }

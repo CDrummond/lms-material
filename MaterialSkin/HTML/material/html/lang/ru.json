@@ -553,11 +553,11 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней",
-"Add URL":"",
-"Application":"",
-"Interface settings":"",
-"Player":"",
-"Scroll to current":"",
-"Swap the queue with:":"",
-"Transfer queue":""
+"Add URL":"Добавить адрес",
+"Application":"Приложение",
+"Interface settings":"Настройка вида",
+"Player":"Плеер",
+"Scroll to current":"Прокрутить до текущего",
+"Swap the queue with:":"Поменять очередь на:",
+"Transfer queue":"Передать очередь"
 }

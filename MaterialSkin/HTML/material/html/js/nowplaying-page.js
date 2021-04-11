@@ -102,8 +102,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>1) || undefined!=sect.html">{{sect.title}}</div>
-         <v-list v-if="undefined!=sect.items && sect.items.length>1">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}</div>
+         <v-list v-if="undefined!=sect.items && sect.items.length>=sect.min">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -133,8 +133,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
          <template v-for="(sect, sindex) in tab.sections">
-          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>1) || undefined!=sect.html">{{sect.title}}</div>
-          <v-list v-if="undefined!=sect.items && sect.items.length>1">
+          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}</div>
+          <v-list v-if="undefined!=sect.items && sect.items.length>=sect.min">
            <template v-for="(item, iindex) in sect.items">
             <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
              <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -182,8 +182,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>1) || undefined!=sect.html">{{sect.title}}</div>
-         <v-list v-if="undefined!=sect.items && sect.items.length>1">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}</div>
+         <v-list v-if="undefined!=sect.items && sect.items.length>=sect.min">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -369,9 +369,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  },
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined, reqId:0,
-                                    sections:[ { title:undefined, items:[], more:undefined }, { title:undefined, html:undefined } ] },
+                                    sections:[ { title:undefined, items:[], min:1, more:undefined }, { title:undefined, html:undefined } ] },
                                  { title:undefined, text:undefined, reqId:0,
-                                    sections:[ { title:undefined, items:[] } ] },
+                                    sections:[ { title:undefined, items:[], min:2 } ] },
                                  { title:undefined, text:undefined, reqId:0,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},

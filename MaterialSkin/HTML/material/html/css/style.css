@@ -2254,7 +2254,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-top:8px;
  justify-content: center;
  display: grid;
- grid-template-columns:175px repeat(auto-fill, 175px);
+ grid-template-columns:repeat(auto-fill, 175px);
 }
 
 .np-grid-item {

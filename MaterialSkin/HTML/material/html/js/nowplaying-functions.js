@@ -327,7 +327,7 @@ function nowplayingMenuAction(view, item) {
     }
 }
 
-function nowplayingFetchLyrics(view) {
+function nowplayingFetchTrackInfo(view) {
     if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].songtitle!=view.infoTrack.title ||
         view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id) {
         view.info.tabs[TRACK_TAB].text=i18n("Fetching...");
@@ -364,6 +364,47 @@ function nowplayingFetchLyrics(view) {
         }
     } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.title && undefined==view.infoTrack.track_id && undefined==view.infoTrack.artist_id) {
         view.info.tabs[TRACK_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+    }
+
+    let html="";
+    let trk = view.playerStatus.current;
+    let useComposerTag = trk.composer && lmsOptions.showComposer && useComposer(trk.genre);
+    let useConductorTag = trk.conductor && lmsOptions.showConductor && useConductor(trk.genre);
+    let useBandTag = trk.band && lmsOptions.showBand && useBand(trk.genre);
+
+    if (undefined!=trk.artist) {
+        let style=undefined!=trk.artist_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('ARTIST', "+trk.artist_id+", \'"+escape(trk.artist)+"\')\"") : "";
+        html+="<tr><td>"+i18n("Artist")+"&nbsp;</td><td"+style+">"+trk.artist+"</td></tr>";
+    }
+    if (undefined!=trk.albumartist && trk.albumartist!=trk.artist) {
+        let style=undefined!=trk.albumartist_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('ALBUMARTIST', "+trk.albumartist_id+", \'"+escape(trk.albumartist)+"\')\"") : "";
+        html+="<tr><td>"+i18n("Album artist")+"&nbsp;</td><td"+style+">"+trk.albumartist+"</td></tr>";
+    }
+    if (useComposerTag && trk.composer!=trk.artist && trk.composer!=trk.albumartist) {
+        let style=undefined!=trk.composer_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('COMPOSER', "+trk.composer_id+", \'"+escape(trk.composer)+"\')\"") : "";
+        html+="<tr><td>"+i18n("Composer")+"&nbsp;</td><td"+style+">"+trk.composer+"</td></tr>";
+    }
+    if (useConductorTag && trk.conductor!=trk.artist && trk.conductor!=trk.albumartist) {
+        let style=undefined!=trk.conductor_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('CONDUCTOR', "+trk.conductor_id+", \'"+escape(trk.conductor)+"\')\"") : "";
+        html+="<tr><td>"+i18n("Conductor")+"&nbsp;</td><td"+style+">"+trk.conductor+"</td></tr>";
+    }
+    if (useBandTag && trk.band!=trk.artist && trk.band!=trk.albumartist) {
+        let style=undefined!=trk.band_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('BAND', "+trk.band_id+", \'"+escape(trk.band)+"\')\"") : "";
+        html+="<tr><td>"+i18n("Band")+"&nbsp;</td><td"+style+">"+trk.band+"</td></tr>";
+    }
+    if (undefined!=trk.year && trk.year>0) {
+        html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</td></tr>";
+    }
+    if (undefined!=trk.genre) {
+        html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</td></tr>";
+    }
+    if (undefined!=trk.technicalInfo) {
+        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
+    }
+    if (html.length>0) {
+        view.info.tabs[TRACK_TAB].sections[0].html = "<table class=\"np-html-sect\">" + html + "</table>";
+    } else {
+        view.info.tabs[TRACK_TAB].sections[0].html = undefined;
     }
 }
 
@@ -492,7 +533,7 @@ function nowplayingFetchArtistInfo(view) {
                     if (body.similarartists && body.similarartists.artist) {
                         for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
                             if (undefined==view.info.tabs[ARTIST_TAB].sections[1].html) {
-                                view.info.tabs[ARTIST_TAB].sections[1].html="<p style=\"text-align:left; margin-top:8px\">";
+                                view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">";
                             } else {
                                 view.info.tabs[ARTIST_TAB].sections[1].html+=", ";
                             }
@@ -606,4 +647,39 @@ function nowPlayingMoreClicked(view, tab, section) {
 function nowplayingSearch(str) {
     bus.$emit('browse-search', unescape(str), 'now-playing');
     bus.$emit('npclose');
+}
+
+function nowplayingBrowse(cat, param, title) {
+    let cmd=undefined;
+    let params=undefined;
+    if ('year'==cat) {
+        bus.$emit("browse", cat, param, ""+param, 'now-playing');
+        bus.$emit('npclose');
+    } else if ('genre'==cat) {
+        let name = unescape(title);
+        if (isNaN(param)) {
+            lmsCommand("", ["material-skin", "map", "genre:"+name]).then(({data}) => {
+                if (data && data.result && data.result.genre_id) {
+                    logJsonMessage("RESP", data);
+                    bus.$emit("browse", cat, data.result.genre_id, name, 'now-playing');
+                    bus.$emit('npclose');
+                } else {
+                    bus.$emit('showError', undefined, i18n("Genre is not known to LMS"));
+                }
+            }).catch(error => {
+                bus.$emit('showError', undefined, i18n("Genre is not known to LMS"));
+            });
+        } else {
+            bus.$emit("browse", cat, param, name, 'now-playing');
+            bus.$emit('npclose');
+        }
+    } else {
+        cmd=["albums"];
+        params=["artist_id:"+param, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER];
+        if (cat!='ARTIST') {
+            params.push("role_id:"+cat);
+        }
+        bus.$emit("browse", cmd, params, unescape(title), 'now-playing');
+        bus.$emit('npclose');
+    }
 }

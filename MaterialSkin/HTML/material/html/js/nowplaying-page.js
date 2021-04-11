@@ -372,7 +372,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                     sections:[ { title:undefined, items:[], more:undefined }, { title:undefined, html:undefined } ] },
                                  { title:undefined, text:undefined, reqId:0,
                                     sections:[ { title:undefined, items:[] } ] },
-                                 { title:undefined, text:undefined, reqId:0, sections:[] } ] },
+                                 { title:undefined, text:undefined, reqId:0,
+                                   sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
@@ -577,6 +578,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[ARTIST_TAB].sections[0].title=i18n("Albums");
             this.info.tabs[ARTIST_TAB].sections[1].title=i18n("Similar artists");
             this.info.tabs[ALBUM_TAB].sections[0].title=i18n("Tracks");
+            this.info.tabs[TRACK_TAB].sections[0].title=i18n("Details");
         },
         showContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {
@@ -693,7 +695,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                       this.playerStatus.playlist.current, 'now-playing');
         },
         fetchTrackInfo() {
-            nowplayingFetchLyrics(this);
+            nowplayingFetchTrackInfo(this);
         },
         fetchArtistInfo() {
             nowplayingFetchArtistInfo(this);

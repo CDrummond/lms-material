@@ -2235,3 +2235,17 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  font-weight:var(--bold-weight);
  text-align:left!important;
 }
+
+.np-html-sect {
+ text-align:left;
+ margin-top:8px;
+ width:100%;
+}
+
+.np-html-sect table {
+ border-collapse: collapse;
+}
+
+.np-html-sect td {
+ border-bottom: 1px solid var(--list-item-border-color);
+}

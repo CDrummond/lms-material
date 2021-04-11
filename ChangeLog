@@ -23,6 +23,8 @@
     clicked and has caused Material to fetch a new list of items.
 17. Fix UTF-8 strings in podcast searches, by having LMS side decode XML/JSON.
 18. Show Last.fm similar artists list in MAI 'Artist' view.
+19. List artist, albumartist, composer, conductor, band, year, genre, and tech
+    info in MAI 'Track' view.
 
 2.3.7
 -----

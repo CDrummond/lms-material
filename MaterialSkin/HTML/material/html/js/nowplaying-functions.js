@@ -648,7 +648,7 @@ function nowplayingFetchAlbumInfo(view) {
     }
 }
 
-function nowPlayingItemClicked(view, tab, section, index, event) {
+function nowplayingItemClicked(view, tab, section, index, event) {
     view.menu.items=[{title:ACTIONS[PLAY_ACTION].title, icon:ACTIONS[PLAY_ACTION].icon, act:NP_ITEM_ACT+PLAY_ACTION},
                      {title:ACTIONS[INSERT_ACTION].title, svg:ACTIONS[INSERT_ACTION].svg, act:NP_ITEM_ACT+INSERT_ACTION},
                      {title:ACTIONS[ADD_ACTION].title, icon:ACTIONS[ADD_ACTION].icon, act:NP_ITEM_ACT+ADD_ACTION}];
@@ -667,7 +667,7 @@ function nowPlayingItemClicked(view, tab, section, index, event) {
     });
 }
 
-function nowPlayingMoreClicked(view, tab, section) {
+function nowplayingMoreClicked(view, tab, section) {
     if (ARTIST_TAB==tab && 0==section) {
         bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, "sort:yearalbum"], unescape(view.infoTrack.artist), 'now-playing');
         view.info.show=false;
@@ -675,6 +675,11 @@ function nowPlayingMoreClicked(view, tab, section) {
         bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], unescape(view.infoTrack.album), 'now-playing');
         view.info.show=false;
     }
+}
+
+function nowplayingToggleGrid(view, tab, section) {
+    view.info.tabs[tab].sections[section].grid=!view.info.tabs[tab].sections[section].grid;
+    setLocalStorageVal("np-tabs-"+tab+"-"+section+"-grid", view.info.tabs[tab].sections[section].grid);
 }
 
 function nowplayingSearch(str) {

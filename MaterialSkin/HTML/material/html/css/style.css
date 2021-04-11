@@ -2249,3 +2249,37 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .np-html-sect td {
  border-bottom: 1px solid var(--list-item-border-color);
 }
+
+.np-grid-sect {
+ margin-top:8px;
+ justify-content: center;
+ display: grid;
+ grid-template-columns:175px repeat(auto-fill, 175px);
+}
+
+.np-grid-item {
+ width:150px;
+ height:200px;
+}
+
+.np-grid-more {
+ width:150px;
+ height:150px;
+ padding-top:60px;
+ text-align:center;
+ border: 1px solid var(--text-color);
+}
+
+.np-grid-item .v-list__tile__title {
+ margin-top:-8px;
+ text-align:center;
+}
+
+.np-grid-item .v-list__tile__sub-title {
+ margin-top:-4px;
+ text-align:center;
+}
+
+.np-sect-toggle {
+ margin-left:16px;
+}

@@ -102,8 +102,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}</div>
-         <v-list v-if="undefined!=sect.items && sect.items.length>=sect.min">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -117,6 +117,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
           </template>
           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
          </v-list>
+         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+          <template v-for="(item, iindex) in sect.items">
+           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <img :key="item.image" v-lazy="item.image"></img>
+            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           </div>
+          </template>
+          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+         </div>
          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
        </v-card-text>
@@ -133,8 +143,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
          <template v-for="(sect, sindex) in tab.sections">
-          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}</div>
-          <v-list v-if="undefined!=sect.items && sect.items.length>=sect.min">
+          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min">
            <template v-for="(item, iindex) in sect.items">
             <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
              <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -148,7 +158,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            </template>
            <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
           </v-list>
-          <div v-if="undefined!=sect.html" v-html="sect.html"></div>
+          <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+           <template v-for="(item, iindex) in sect.items">
+            <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+             <img :key="item.image" v-lazy="item.image"></img>
+             <v-list-tile-title>{{item.title}}</v-list-tile-title>
+             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            </div>
+           </template>
+           <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+          </div>
+          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
          </template>
         </v-card-text>
        </v-card>
@@ -182,8 +202,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}</div>
-         <v-list v-if="undefined!=sect.items && sect.items.length>=sect.min">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
@@ -197,6 +217,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
           </template>
           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
          </v-list>
+         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+          <template v-for="(item, iindex) in sect.items">
+           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <img :key="item.image" v-lazy="item.image"></img>
+            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           </div>
+          </template>
+          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+         </div>
          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
        </v-card-text>
@@ -369,9 +399,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  },
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined, reqId:0,
-                                    sections:[ { title:undefined, items:[], min:1, more:undefined }, { title:undefined, html:undefined } ] },
+                                    sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
+                                               { title:undefined, html:undefined } ] },
                                  { title:undefined, text:undefined, reqId:0,
-                                    sections:[ { title:undefined, items:[], min:2 } ] },
+                                    sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
                                  { title:undefined, text:undefined, reqId:0,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
@@ -936,10 +967,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
         },
         itemClicked(tab, section, index, event) {
-            nowPlayingItemClicked(this, tab, section, index, event);
+            nowplayingItemClicked(this, tab, section, index, event);
         },
         moreClicked(tab, section) {
-            nowPlayingMoreClicked(this, tab, section);
+            nowplayingMoreClicked(this, tab, section);
+        },
+        toggleGrid(tab, section) {
+            nowplayingToggleGrid(this, tab, section);
         }
     },
     filters: {

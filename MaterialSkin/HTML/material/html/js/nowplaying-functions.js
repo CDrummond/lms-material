@@ -327,6 +327,28 @@ function nowplayingMenuAction(view, item) {
     }
 }
 
+function nowplayingArtistEntry(trk, key, role, used) {
+    if (undefined!=trk[key+'s'] && undefined!=trk[key+'_ids'] && trk[key+'s'].length==trk[key+'_ids'].length) {
+        let html="";
+        for (let i=0, len=trk[key+'s'].length; i<len; ++i) {
+            if (!used.has(trk[key+'s'][i])) {
+                used.add(trk[key+'s'][i]);
+                if (html.length>1) {
+                    html+=", ";
+                }
+                html+="<obj class=\"link-item\" onclick=\"nowplayingBrowse('"+role+"', "+trk[key+'_ids'][i]+", \'"+escape(trk[key+'s'][i])+"\')\">"+trk[key+'s'][i]+"</obj>";
+            }
+        }
+    } else if (undefined!=trk[key] && !used.has(trk[key])) {
+        used.add(trk[key]);
+        if (undefined!=trk[key+'_id']) {
+            return "<obj class=\"link-item\" onclick=\"nowplayingBrowse('"+role+"', "+trk[key+'_id']+", \'"+escape(trk[key])+"\')\">"+trk[key]+"</obj>";
+        }
+        return trk[key];
+    }
+    return "";
+}
+
 function nowplayingFetchTrackInfo(view) {
     if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].songtitle!=view.infoTrack.title ||
         view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id) {
@@ -371,32 +393,43 @@ function nowplayingFetchTrackInfo(view) {
     let useComposerTag = trk.composer && lmsOptions.showComposer && useComposer(trk.genre);
     let useConductorTag = trk.conductor && lmsOptions.showConductor && useConductor(trk.genre);
     let useBandTag = trk.band && lmsOptions.showBand && useBand(trk.genre);
+    let used = new Set();
 
     if (undefined!=trk.artist) {
-        let style=undefined!=trk.artist_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('ARTIST', "+trk.artist_id+", \'"+escape(trk.artist)+"\')\"") : "";
-        html+="<tr><td>"+i18n("Artist")+"&nbsp;</td><td"+style+">"+trk.artist+"</td></tr>";
+        let entry = nowplayingArtistEntry(trk, 'artist', 'ARTIST', used);
+        if (entry.length>1) {
+            html+="<tr><td>"+i18n("Artist")+"&nbsp;</td><td>"+entry+"</td></tr>";
+        }
     }
-    if (undefined!=trk.albumartist && trk.albumartist!=trk.artist) {
-        let style=undefined!=trk.albumartist_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('ALBUMARTIST', "+trk.albumartist_id+", \'"+escape(trk.albumartist)+"\')\"") : "";
-        html+="<tr><td>"+i18n("Album artist")+"&nbsp;</td><td"+style+">"+trk.albumartist+"</td></tr>";
+    if (undefined!=trk.albumartist) {
+        let entry = nowplayingArtistEntry(trk, 'albumartist', 'ALBUMARTIST', used);
+        if (entry.length>1) {
+            html+="<tr><td>"+i18n("Album artist")+"&nbsp;</td><td>"+entry+"</td></tr>";
+        }
     }
-    if (useComposerTag && trk.composer!=trk.artist && trk.composer!=trk.albumartist) {
-        let style=undefined!=trk.composer_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('COMPOSER', "+trk.composer_id+", \'"+escape(trk.composer)+"\')\"") : "";
-        html+="<tr><td>"+i18n("Composer")+"&nbsp;</td><td"+style+">"+trk.composer+"</td></tr>";
+    if (useComposerTag) {
+        let entry = nowplayingArtistEntry(trk, 'composer', 'COMPOSER', used);
+        if (entry.length>1) {
+            html+="<tr><td>"+i18n("Composer")+"&nbsp;</td><td>"+entry+"</td></tr>";
+        }
     }
-    if (useConductorTag && trk.conductor!=trk.artist && trk.conductor!=trk.albumartist) {
-        let style=undefined!=trk.conductor_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('CONDUCTOR', "+trk.conductor_id+", \'"+escape(trk.conductor)+"\')\"") : "";
-        html+="<tr><td>"+i18n("Conductor")+"&nbsp;</td><td"+style+">"+trk.conductor+"</td></tr>";
+    if (useConductorTag) {
+        let entry = nowplayingArtistEntry(trk, 'conductor', 'CONDUCTOR', used);
+        if (entry.length>1) {
+            html+="<tr><td>"+i18n("Conductor")+"&nbsp;</td><td>"+entry+"</td></tr>";
+        }
     }
-    if (useBandTag && trk.band!=trk.artist && trk.band!=trk.albumartist) {
-        let style=undefined!=trk.band_id ? (" class=\"link-item\" onclick=\"nowplayingBrowse('BAND', "+trk.band_id+", \'"+escape(trk.band)+"\')\"") : "";
-        html+="<tr><td>"+i18n("Band")+"&nbsp;</td><td"+style+">"+trk.band+"</td></tr>";
+    if (useBandTag) {
+        let entry = nowplayingArtistEntry(trk, 'band', 'BAND', used);
+        if (entry.length>1) {
+            html+="<tr><td>"+i18n("Band")+"&nbsp;</td><td>"+entry+"</td></tr>";
+        }
     }
     if (undefined!=trk.year && trk.year>0) {
-        html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</td></tr>";
+        html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</obj></td></tr>";
     }
     if (undefined!=trk.genre) {
-        html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</td></tr>";
+        html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</obj></td></tr>";
     }
     if (undefined!=trk.technicalInfo) {
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";

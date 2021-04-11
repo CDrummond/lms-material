@@ -702,10 +702,10 @@ function nowplayingBrowse(cat, param, title) {
                     bus.$emit("browse", cat, data.result.genre_id, name, 'now-playing');
                     bus.$emit('npclose');
                 } else {
-                    bus.$emit('showError', undefined, i18n("Genre is not known to LMS"));
+                    bus.$emit('showError', undefined, i18n("Unkown genre"));
                 }
             }).catch(error => {
-                bus.$emit('showError', undefined, i18n("Genre is not known to LMS"));
+                bus.$emit('showError', undefined, i18n("Unkown genre"));
             });
         } else {
             bus.$emit("browse", cat, param, name, 'now-playing');

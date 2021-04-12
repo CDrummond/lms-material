@@ -1546,7 +1546,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.goHome();
             if ('genre'==cmd || 'year'==cmd) {
-                let item = {id:'click.'+cmd+'.'+params, actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}}, title:/**/CLICK: '+title, type:'click'};
+                let item = {id:'click.'+cmd+'.'+params, actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}}, title:/**/'CLICK: '+title, type:'click'};
                 if ('genre'==cmd) {
                     item.actions.go.params['genre_id']=params;
                 } else {

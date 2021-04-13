@@ -172,7 +172,7 @@
 }
 
 .np-tech-desktop {
- margin-top:calc(21px - var(--std-font-size));
+ margin-top:calc(19px - var(--std-font-size));
  display:inline-block;
  vertical-align:top;
  height:27px;
@@ -180,7 +180,7 @@
 }
 
 .np-rating-desktop {
- margin-top:calc(16px - var(--std-font-size));
+ margin-top:calc(21px - var(--std-font-size));
  display:inline-block;
  height:27px;
  margin-right:-8px

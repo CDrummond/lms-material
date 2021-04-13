@@ -103,8 +103,8 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="menuIcons"></v-switch></v-list-tile-action>
     </v-list-tile>
-
     <v-divider></v-divider>
+
     <v-list-tile>
      <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
       <v-list-tile-title>{{i18n('Screensaver')}}</v-list-tile-title>
@@ -112,8 +112,8 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="screensaver"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
-    <v-divider v-if="showLaunchPlayer"></v-divider>
     <v-list-tile v-if="showLaunchPlayer">
      <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
       <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
@@ -121,6 +121,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider v-if="showLaunchPlayer"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
@@ -156,13 +157,13 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
-    <v-divider v-if="hasPassword"></v-divider>
     <v-list-tile v-if="hasPassword">
      <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
     </v-list-tile>
+    <v-divider v-if="hasPassword"></v-divider>
 
-    <v-divider></v-divider>
     <v-list-tile>
      <v-list-tile-content @click="powerButton = !powerButton" class="switch-label">
       <v-list-tile-title>{{i18n('Show power button')}}</v-list-tile-title>

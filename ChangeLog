@@ -21,6 +21,11 @@
 15. Add, server-side, option to hide volume controls for fixed volume players.
 16. Highlight current list, or grid, item that is showing menu or which was
     clicked and has caused Material to fetch a new list of items.
+17. Fix UTF-8 strings in podcast searches, by having LMS side decode XML/JSON.
+18. Show Last.fm similar artists list in MAI 'Artist' view.
+19. List artist, albumartist, composer, conductor, band, year, genre, and tech
+    info in MAI 'Track' view.
+20. Fix position of tech info and rating stars in desktop bottom bar.
 
 2.3.7
 -----

@@ -980,96 +980,98 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
 function parseBrowseUrlResp(data, provider) {
     var resp = {items: [], baseActions:[], canUseGrid: false, jumplist:[] };
+    logJsonMessage("RESP", data);
 
     if (!data || !data.result || !data.result.content || data.result.content.length<3) {
         return resp;
     }
 
-    if (typeof provider === 'string' || provider instanceof String) {
-        if ('rss'==provider) {
+    if ('rss'==provider) {
+        if (data.result.content["xmlns:atom"] && data.result.content.channel && data.result.content.channel.item) {
+            let items = data.result.content.channel.item;
+            let audioFormats = new Set(["mp3", "m4a", "ogg", "wma"]);
             let totalDuration = 0;
-            try {
-                let domParser = new DOMParser();
-                let doc = domParser.parseFromString(data.result.content, 'text/xml');
-                let items = doc.querySelectorAll('item');
-                let audioFormats = new Set(["mp3", "m4a", "ogg", "wma"]);
-                for (var i=0, len=items.length; i<len; ++i) {
-                    try {
-                        let enclosure = items[i].querySelector('enclosure');
-                        if (undefined==enclosure) {
+            for (var i=0, len=items.length; i<len; ++i) {
+                let url = undefined;
+                if (undefined==items[i].enclosure) {
+                    url = items[i].link;
+                } else {
+                    let type = items[i].enclosure.type;
+                    if (undefined!=type) {
+                        type = type.toLowerCase();
+                        if (!type.startsWith("audio/") && !audioFormats.contains(type)) {
                             continue;
                         }
-                        let type = enclosure.getAttribute('type');
-                        if (undefined!=type) {
-                            type = type.toLowerCase();
-                            if (!type.startsWith("audio/") && !audioFormats.contains(type)) {
-                                continue;
-                            }
+                    }
+                    url = items[i].enclosure.url;
+                }
+                if (undefined==url) {
+                    continue;
+                }
+                let title = items[i].title;
+                let pubDate = items[i].pubDate;
+                let itunesImage = items[i]["itunes:image"];
+                let itunesDuration = items[i]["itunes:duration"];
+                let imageUrl = undefined;
+                let duration = 0;
+                let subtitle = undefined;
+                if (undefined!=itunesImage) {
+                    imageUrl = itunesImage.href;
+                }
+                if (undefined!=itunesDuration) {
+                    if (itunesDuration.indexOf(':')>0) {
+                        let parts = itunesDuration.split(':');
+                        if (2==parts.length) {
+                            duration=(parseInt(parts[0]) * 60) + parseInt(parts[1]);
+                        } else if (3==parts.length) {
+                            duration=(parseInt(parts[0]) * 60*60) + (parseInt(parts[1]) * 60) + parseInt(parts[2]);
                         }
-                        let title = items[i].querySelector('title').textContent;
-                        let url = enclosure.getAttribute('url');
-                        /*let url = items[i].querySelector('link').textContent;*/
-                        let pubDate = items[i].querySelector('pubDate');
-                        let itunesImage = items[i].querySelector('image');
-                        let itunesDuration = items[i].querySelector('duration');
-                        let imageUrl = undefined;
-                        let duration = 0;
-                        let subtitle = undefined;
-                        if (undefined!=itunesImage) {
-                            imageUrl = itunesImage.getAttribute('href');
+                    } else {
+                        duration = parseInt(itunesDuration);
+                    }
+                    totalDuration+=duration;
+                }
+                if (0==duration) {
+                    let content = items[i].content;
+                    if (undefined!=content) {
+                        let dur = content.duration;
+                        if (undefined!=dur) {
+                            duration = parseInt(dur);
                         }
-                        if (undefined!=itunesDuration) {
-                            if (itunesDuration.textContent.indexOf(':')>0) {
-                                let parts = itunesDuration.textContent.split(':');
-                                if (2==parts.length) {
-                                    duration=(parseInt(parts[0]) * 60) + parseInt(parts[1]);
-                                } else if (3==parts.length) {
-                                    duration=(parseInt(parts[0]) * 60*60) + (parseInt(parts[1]) * 60) + parseInt(parts[2]);
-                                }
-                            } else {
-                                duration = parseInt(itunesDuration.textContent);
-                            }
-                            totalDuration+=duration;
-                        }
-                        if (0==duration) {
-                            let content = items[i].querySelector('content');
-                            if (undefined!=content) {
-                                let dur = content.getAttribute('duration');
-                                if (undefined!=dur) {
-                                    duration = parseInt(dur);
-                                }
-                            }
-                        }
-                        if (undefined!=pubDate) {
-                            subtitle = pubDate.textContent;
-                            if (duration>0) {
-                                subtitle+=" ("+formatSeconds(duration)+")";
-                            }
-                        } else if (duration>0) {
-                            subtitle=formatSeconds(duration);
-                        }
-                        resp.items.push({title:title,
-                                         subtitle:subtitle,
-                                         id:url,
-                                         menu:[PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
-                                         image:imageUrl ? resolveImageUrl(imageUrl, LMS_IMAGE_SIZE) : undefined,
-                                         isUrl:true,
-                                         duration:i.duration,
-                                         type: "track"});
-                    } catch (e) {
-                        console.error(e);
                     }
                 }
-            } catch (e) {
-                console.error('Error in parsing the feed', e)
+                if (undefined!=pubDate) {
+                    subtitle = pubDate;
+                    if (duration>0) {
+                        subtitle+=" ("+formatSeconds(duration)+")";
+                    }
+                } else if (duration>0) {
+                    subtitle=formatSeconds(duration);
+                }
+                resp.items.push({title:title,
+                                 subtitle:subtitle,
+                                 id:url,
+                                 menu:[PLAY_ACTION, INSERT_ACTION, ADD_ACTION],
+                                 image:imageUrl ? resolveImageUrl(imageUrl, LMS_IMAGE_SIZE) : undefined,
+                                 isUrl:true,
+                                 duration:i.duration,
+                                 type: "track"});
             }
+
             resp.subtitle = i18np("1 Episode", "%1 Episodes", resp.items.length);
             if (totalDuration>0) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
             }
         }
     } else {
-        let body = JSON.parse(data.result.content);
+        let body = undefined;
+
+        try {
+            body = JSON.parse(data.result.content);
+        } catch (e) {
+            body = data.result.content;
+        }
+
         let loop = undefined == provider.resp.key ? body : body[provider.resp.key];
 
         for (var i=0, loopLen=loop.length; i<loopLen; ++i) {

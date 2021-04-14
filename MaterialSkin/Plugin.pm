@@ -401,6 +401,7 @@ sub _cliCommand {
 
     if ($cmd eq 'map') {
         my $genre = $request->getParam('genre');
+        my $artist = $request->getParam('artist');
         my $genre_id = $request->getParam('genre_id');
         my @list;
         my $sql;
@@ -419,6 +420,11 @@ sub _cliCommand {
             $sql = $dbh->prepare_cached( qq{SELECT genres.name FROM genres WHERE id = ? LIMIT 1} );
             $resp_name = "genre";
             $col = 'name';
+        } elsif ($artist) {
+            @list = split(/,/, $artist);
+            $sql = $dbh->prepare_cached( qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1} );
+            $resp_name = "artist_id";
+            $col = 'id';
         } else {
             $request->setStatusBadParams();
             return;
@@ -662,6 +668,7 @@ sub _cliCommand {
 
     if ($cmd eq 'geturl') {
         my $url = $request->getParam('url');
+        my $format = $request->getParam('format');
         if ($url) {
             main::DEBUGLOG && $log->debug("Get URL: $url");
             $request->setStatusProcessing();
@@ -674,7 +681,19 @@ sub _cliCommand {
                 sub {
                     main::DEBUGLOG && $log->debug("Fetched URL");
                     my $response = shift;
-                    $request->addResult("content", $response->content);
+                    my $content = $response->can('decoded_content')
+                                ? $response->decoded_content
+                                : $response->content;
+
+                    if ( ($response->headers->content_type =~ /xml/) || ($format && $format eq 'xml')) {
+                        require XML::Simple;
+                        $request->addResult("content", XML::Simple::XMLin($content));
+                    } elsif ( ($response->headers->content_type =~ /json/) || ($format && $format eq 'json') ) {
+                        $request->addResult("content", from_json($content));
+                    } else {
+                        $request->addResult("content", $content);
+                    }
+
                     $request->setStatusDone();
                 },
                 sub {

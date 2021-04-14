@@ -622,8 +622,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
-            this.fetchingItem = item.id;
-            lmsCommand("", ["material-skin", "geturl", "url:"+url]).then(({data}) => {
+            this.fetchingItem = item ? item.id : url;
+            let cmd = ["material-skin", "geturl", "url:"+url];
+            if (undefined==item) {
+                cmd.push("format:json");
+            }
+            lmsCommand("", cmd).then(({data}) => {
                 this.fetchingItem = undefined;
                 this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
             }).catch(err => {
@@ -1536,11 +1540,22 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('browse', function(cmd, params, title, page) {
+            this.clearSelection();
             if (!this.$store.state.desktopLayout) {
                 this.$store.commit('setPage', 'browse');
             }
             this.goHome();
-            this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            if ('genre'==cmd || 'year'==cmd) {
+                let item = {id:'click.'+cmd+'.'+params, actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}}, title:/**/'CLICK: '+title, type:'click'};
+                if ('genre'==cmd) {
+                    item.actions.go.params['genre_id']=params;
+                } else {
+                    item.actions.go.params['year']=params;
+                }
+                this.click(item);
+            } else {
+                this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            }
         }.bind(this));
 
         bus.$on('refreshList', function(section) {

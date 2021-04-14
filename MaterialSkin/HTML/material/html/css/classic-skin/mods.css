@@ -147,7 +147,7 @@ table td {
   padding-bottom:8px;
 }
 
-.homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead {
+.homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead, .prefHead {
  background-color: transparent;
  min-height: 15px;
  height: auto !important;
@@ -164,6 +164,11 @@ select, input {
 input[type="text"], input[type="button"], input[type="submit"], input[type=checkbox], input[type=radio], select {
  -webkit-appearance: none;
  appearance: none;
+}
+
+input[type=radio] {
+ margin-top:-4px;
+ margin-right:4px;
 }
 
 select::-ms-expand {

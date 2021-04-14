@@ -245,3 +245,37 @@
 .vue-splitter .splitter {
  max-width:0px!important;
 }
+
+@media only screen and (max-width:375px) {
+.np-grid-sect {
+  grid-template-columns:repeat(auto-fill, 150px);
+ }
+
+ .np-grid-item {
+  width:135px;
+  height:185px;
+ }
+
+ .np-grid-more {
+  width:135px;
+  height:135px;
+  padding-top:50px;
+ }
+}
+
+@media only screen and (max-width:340px) {
+.np-grid-sect {
+  grid-template-columns:repeat(auto-fill, 135px);
+ }
+
+ .np-grid-item {
+  width:120px;
+  height:170px;
+ }
+
+ .np-grid-more {
+  width:120px;
+  height:120px;
+  padding-top:45px;
+ }
+}

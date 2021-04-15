@@ -476,6 +476,7 @@
 "Un-pin from home screen":"Fjern fra forsiden",
 "Un-select":"Vælg fra",
 "Unknown":"Ukendt",
+"Unknown genre":"Ukendt genre",
 "Unmute":"Slå lyden til",
 "Upcoming track count":"Numre tilbage",
 "Update":"Opdater",
@@ -563,6 +564,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Unkown genre":""
+"%1 days":"%1 dage"
 }

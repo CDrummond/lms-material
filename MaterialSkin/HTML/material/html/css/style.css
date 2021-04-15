@@ -423,7 +423,7 @@ div.v-subheader {
  left:4px !important;
 }
 
-.lms-list .image-grid-item .emblem {
+.lms-list .image-grid-item .emblem, .np-grid-item .emblem {
  position:absolute;
  top:2px !important;
  right:4px !important;
@@ -434,13 +434,17 @@ div.v-subheader {
  padding:3px;
 }
 
+.np-grid-item .emblem {
+ top:4px !important;
+}
+
 @media (hover: hover) and (pointer: fine) {
  .image-grid-item:hover .emblem {
   opacity:0.75;
  }
 }
 
-.lms-list .image-grid-item .emblem img {
+.lms-list .image-grid-item .emblem img, .np-grid-item .emblem img {
  width:26px !important;
  height:26px !important;
 }
@@ -2258,6 +2262,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 .np-grid-item {
+ position:relative;
  width:150px;
  height:200px;
 }

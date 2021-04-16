@@ -13,7 +13,6 @@ function initEmblems() {
 }
 
 function getEmblem(extid) {
-return emblems['spotify'];
     if (undefined!=extid) {
         return emblems[ extid.split(':')[0] ];
     }

@@ -1085,9 +1085,13 @@ function browseGoBack(view, refresh) {
             return; // Search results not being shown, so '<-' button just closes search field
         }
     }
-    if (view.prevPage && !view.$store.state.desktopLayout) {
+    if (view.prevPage) {
         var nextPage = ""+view.prevPage;
-        view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', nextPage); }); });
+        if (NP_INFO==nextPage) {
+            view.$nextTick(function () { view.$nextTick(function () { if (!view.$store.state.desktopLayout) { view.$store.commit('setPage', 'now-playing'); } bus.$emit('info');}); });
+        } else if (!view.$store.state.desktopLayout) {
+            view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', nextPage); }); });
+        }
     }
     if (view.history.length<2) {
         view.goHome();

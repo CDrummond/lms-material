@@ -291,7 +291,7 @@ function nowplayingMenuAction(view, item) {
     } else if (FOLLOW_LINK_ACTION==item.act) {
         openWindow(item.link);
     } else if (SEARCH_TEXT_ACTION==item.act) {
-        bus.$emit('browse-search', item.text, 'now-playing');
+        bus.$emit('browse-search', item.text, NP_INFO);
         view.info.show=false;
         view.largeView=false;
     } else if (item.act>=NP_ITEM_ACT) {
@@ -300,10 +300,10 @@ function nowplayingMenuAction(view, item) {
             let act = item.act - NP_ITEM_ACT;
             let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
-                bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), 'now-playing');
+                bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);
                 view.info.show=false;
             } else if (MORE_ACTION==act) {
-                bus.$emit('trackInfo', litem, undefined, 'now-playing');
+                bus.$emit('trackInfo', litem, undefined, NP_INFO);
                 view.info.show=false;
             } else {
                 let command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd), litem.id];
@@ -670,10 +670,10 @@ function nowplayingItemClicked(view, tab, section, index, event) {
 
 function nowplayingMoreClicked(view, tab, section) {
     if (ARTIST_TAB==tab && 0==section) {
-        bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, "sort:yearalbum"], unescape(view.infoTrack.artist), 'now-playing');
+        bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, "sort:yearalbum"], unescape(view.infoTrack.artist), NP_INFO);
         view.info.show=false;
     } else if (ALBUM_TAB==tab && 0==section) {
-        bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], unescape(view.infoTrack.album), 'now-playing');
+        bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], unescape(view.infoTrack.album), NP_INFO);
         view.info.show=false;
     }
 }
@@ -684,7 +684,7 @@ function nowplayingToggleGrid(view, tab, section) {
 }
 
 function nowplayingSearch(str) {
-    bus.$emit('browse-search', unescape(str), 'now-playing');
+    bus.$emit('browse-search', unescape(str), NP_INFO);
     bus.$emit('npclose');
 }
 
@@ -692,7 +692,7 @@ function nowplayingBrowse(cat, param, title) {
     let cmd=undefined;
     let params=undefined;
     if ('year'==cat) {
-        bus.$emit("browse", cat, param, ""+param, 'now-playing');
+        bus.$emit("browse", cat, param, ""+param, NP_INFO);
         bus.$emit('npclose');
     } else if ('genre'==cat) {
         let name = unescape(title);
@@ -700,7 +700,7 @@ function nowplayingBrowse(cat, param, title) {
             lmsCommand("", ["material-skin", "map", "genre:"+name]).then(({data}) => {
                 if (data && data.result && data.result.genre_id) {
                     logJsonMessage("RESP", data);
-                    bus.$emit("browse", cat, data.result.genre_id, name, 'now-playing');
+                    bus.$emit("browse", cat, data.result.genre_id, name, NP_INFO);
                     bus.$emit('npclose');
                 } else {
                     bus.$emit('showError', undefined, i18n("Unknown genre"));
@@ -709,7 +709,7 @@ function nowplayingBrowse(cat, param, title) {
                 bus.$emit('showError', undefined, i18n("Unknown genre"));
             });
         } else {
-            bus.$emit("browse", cat, param, name, 'now-playing');
+            bus.$emit("browse", cat, param, name, NP_INFO);
             bus.$emit('npclose');
         }
     } else {
@@ -718,7 +718,7 @@ function nowplayingBrowse(cat, param, title) {
         if (cat!='ARTIST') {
             params.push("role_id:"+cat);
         }
-        bus.$emit("browse", cmd, params, unescape(title), 'now-playing');
+        bus.$emit("browse", cmd, params, unescape(title), NP_INFO);
         bus.$emit('npclose');
     }
 }

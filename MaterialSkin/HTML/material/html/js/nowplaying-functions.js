@@ -295,9 +295,10 @@ function nowplayingMenuAction(view, item) {
         view.info.show=false;
         view.largeView=false;
     } else if (item.act>=NP_ITEM_ACT) {
-        if (undefined!=view.menu.tab && undefined!=view.menu.index && view.info.tabs[view.menu.tab].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].items.length) {
+        if (undefined!=view.menu.tab && undefined!=view.menu.index && undefined!=view.info.tabs[view.menu.tab].sections[0].items &&
+            view.info.tabs[view.menu.tab].sections[0].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].sections[0].items.length) {
             let act = item.act - NP_ITEM_ACT;
-            let litem = view.info.tabs[view.menu.tab].items[view.menu.index];
+            let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
                 bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), 'now-playing');
                 view.info.show=false;

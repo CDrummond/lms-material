@@ -476,6 +476,10 @@ div.v-subheader {
  height:24px;
 }
 
+.np-info .lms-list {
+ height:unset!important;
+}
+
 .maintoolbar-player-icon {
  position:fixed;
  top:12px;

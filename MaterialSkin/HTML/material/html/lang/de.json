@@ -398,6 +398,7 @@
 "Shuffle tracks":"Zufällige Titelreihenfolge",
 "Shutdown":"Herunterfahren",
 "Signal Strength: %1%":"Signalstärke: %1%",
+"Similar artists":"Ähnliche Interpreten",
 "Sleep":"Schlummern",
 "Smart crossfade":"Intelligentes Überblenden",
 "Smart gain":"'Intelligente' Normalisierung",
@@ -458,6 +459,7 @@
 "Track artist":"Titelinterpret",
 "Track gain":"Titel-Normalisierung",
 "Track#":"Track Nr.",
+"Tracks":"Titel",
 "Transfer queue":"Verschiebe Warteschlange",
 "Transfer queue to another player":"Verschiebe Warteschlange auf einen anderen Player",
 "Tues":"Die",
@@ -469,6 +471,7 @@
 "Un-pin from home screen":"Aus Hauptmenü entfernen",
 "Un-select":"Auswahl aufheben",
 "Unknown":"Unbekannt",
+"Unknown genre":"Unbekannte Stilrichtung",
 "Unmute":"Stummschaltung aufheben",
 "Upcoming track count":"Anzahl der nächsten Titel",
 "Update":"Aktualisieren",
@@ -561,8 +564,5 @@
 "Alt+%1":"",
 "Alt+(N)":"",
 "Details":"",
-"Player":"",
-"Similar artists":"Ähnliche Interpreten",
-"Tracks":"Titel",
-"Unknown genre":"Unbekannte Stilrichtung"
+"Player":""
 }

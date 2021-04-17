@@ -560,9 +560,9 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"+ %1 more":"",
-"Details":"",
-"Similar artists":"",
-"Tracks":"",
-"Unknown genre":""
+"+ %1 more":"+ %1 de plus",
+"Details":"Détails",
+"Similar artists":"Artistes similaires",
+"Tracks":"Morceaux",
+"Unknown genre":"Genre inconnu"
 }

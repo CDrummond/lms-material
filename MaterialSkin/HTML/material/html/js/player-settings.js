@@ -15,7 +15,7 @@ Vue.component('lms-player-settings', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon v-longpress="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon v-longpress:stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer></v-spacer>

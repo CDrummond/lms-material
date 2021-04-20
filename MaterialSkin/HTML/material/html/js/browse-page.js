@@ -1552,7 +1552,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     item.actions.go.params['year']=params;
                 }
+                var len = this.history.length;
                 this.click(item);
+                if (this.history.length>len) {
+                    this.prevPage = NP_INFO;
+                }
             } else {
                 this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
             }

@@ -432,7 +432,7 @@ function nowplayingFetchTrackInfo(view) {
     if (undefined!=trk.genre) {
         html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</obj></td></tr>";
     }
-    if (undefined!=trk.technicalInfo) {
+    if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
     }
     if (html.length>0) {

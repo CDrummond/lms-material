@@ -6,6 +6,7 @@
 "%1 until sleep":"%1 bis zum Schlafmodus",
 "(+%1 others)":"(+%1 andere)",
 "(Currently only 'SB Player' is supported.)":"(Im Moment wird nur 'SB Player' unterstützt.)",
+"+ %1 more":"+ %1 weitere",
 "About":"Über",
 "Add":"Hinzufügen",
 "Add URL":"URL hinzufügen",
@@ -560,9 +561,9 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
-"+ %1 more":"+ %1 weitere",
 "Alt+%1":"",
 "Alt+(N)":"",
 "Details":"",
+"Fade in alarms when starting.":"",
 "Player":""
 }

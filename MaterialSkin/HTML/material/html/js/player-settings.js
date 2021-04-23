@@ -117,6 +117,14 @@ Vue.component('lms-player-settings', {
      <v-list-tile v-if="unlockAll">
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
+     <v-divider v-if="unlockAll"></v-divider>
+     <v-list-tile v-if="unlockAll">
+      <v-list-tile-content @click="alarms.fade=!alarms.fade" class="switch-label">
+       <v-list-tile-title>{{i18n('Fade in')}}</v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n('Fade in alarms when starting.')}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+      <v-list-tile-action><v-switch v-model="alarms.fade" @click.stop="alarms.fade=!alarms.fade"></v-switch></v-list-tile-action>
+     </v-list-tile>
 
      <div v-if="libraries.length>1" class="dialog-padding"></div>
      <v-header v-if="libraries.length>1" class="dialog-section-header">{{i18n('Library')}}</v-header>

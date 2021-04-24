@@ -72,11 +72,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
-     <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.album">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.album}}</v-list-tile-sub-title>
-     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.artistAndComposer}}{{SEPARATOR}}{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
-     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</v-list-tile-sub-title>
-     <v-list-tile-sub-title v-else-if="playerStatus.current.album">{{playerStatus.current.album}}</v-list-tile-sub-title>
-     <v-list-tile-sub-title v-else-if="playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title">{{playerStatus.current.remote_title}}</v-list-tile-sub-title>
+     <v-list-tile-sub-title v-if="playerStatus.current.artistAndComposer && playerStatus.current.albumLine"><object v-html="playerStatus.current.artistAndComposer"/>{{SEPARATOR}}<object v-html="playerStatus.current.albumLine"/></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-else-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
@@ -272,8 +270,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-landscape-song-info hide-scrollbar fade-bottom">
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
-       <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
-       <p class="np-text-landscape subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
+       <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></p>
+       <p class="np-text-landscape subtext" v-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></p>
       </div>
      </div>
 
@@ -340,8 +338,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-portrait-song-info hide-scrollbar fade-bottom">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
-      <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer">{{playerStatus.current.artistAndComposer}}</p>
-      <p class="np-text subtext" v-if="playerStatus.current.album || (playerStatus.current.remote_title && playerStatus.current.remote_title!=playerStatus.current.title)">{{playerStatus.current.album ? playerStatus.current.album : playerStatus.current.remote_title}}</p>
+      <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></p>
+      <p class="np-text subtext" v-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></p>
      </div>
     </div>
    </div>
@@ -412,7 +410,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     sleepTimer: false,
                     dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
-                               album:undefined, albumName:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined, disc:0, year:0 },
+                               album:undefined, albumName:undefined, albumLine:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined, disc:0, year:0 },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,

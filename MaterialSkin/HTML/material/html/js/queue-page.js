@@ -58,137 +58,15 @@ function animate(elem, from, to) {
     }
 }
 
-// Record time artist/album was clicked - to prevent context menu also showing.
-var lastQueueItemClick = undefined;
 var lmsQueueSelectionActive = false;
-function showArtist(id, title) {
-    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), 'queue');
-}
-
-function showAlbumArtist(id, title) {
-    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), 'queue');
-}
-
-function showAlbum(album, title) {
-    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title), 'queue');
-}
-
-function showComposer(id, title) {
-    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), 'queue');
-}
-
-function showConductor(id, title) {
-    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), 'queue');
-}
-
-function showBand(id, title) {
-    if (lmsNumVisibleMenus>0 || lmsQueueSelectionActive) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    lastQueueItemClick = new Date();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), 'queue');
-}
-
-function addArtistLink(item, subtitle, type, func) {
-    if (lmsOptions.showAllArtists && undefined!=item[type+"s"] && item[type+"s"].length>1) {
-        if (!IS_MOBILE && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
-            let vals = [];
-            for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
-                vals.push("<obj class=\"link-item\" onclick=\""+func+" ("+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\')\">" + loop[i] + "</obj>");
-            }
-            subtitle=addPart(subtitle, vals.join(", "));
-        } else {
-            subtitle=addPart(subtitle, item[type+"s"].join(", "));
-        }
-    } else {
-        let val = item[type];
-        if (undefined!=val) {
-            let id = IS_MOBILE ? undefined : item[type+"_id"];
-            if (undefined==id && !IS_MOBILE && undefined!=item[type+"_ids"]) {
-                id = item[type+"_ids"][0];
-            }
-            if (undefined!=id) {
-                subtitle=addPart(subtitle, "<obj class=\"link-item\" onclick=\""+func+" ("+id+",\'"+escape(val)+"\')\">" + val + "</obj>");
-            } else {
-                subtitle=addPart(subtitle, val);
-            }
-        }
-    }
-    return subtitle;
-}
-
 function buildSubtitle(i, threeLines) {
-    var subtitle = undefined;
-    var artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
-
-    if (lmsOptions.artistFirst) {
-        if (i.artist) {
-            subtitle=addArtistLink(i, subtitle, "artist", "showArtist");
-        } else if (i.trackartist) {
-            subtitle=addArtistLink(i, subtitle, "trackartist", "showArtist");
-        } else if (i.albumartist) {
-            subtitle=addArtistLink(i, subtitle, "albumartist", "showAlbumArtist");
-        }
-    }
-
-    if (i.band && i.band!=artist && lmsOptions.showBand && useBand(i.genre)) {
-        subtitle=addArtistLink(i, subtitle, "band", "showBand");
-    }
-    if (i.composer && i.composer!=artist && lmsOptions.showComposer && useComposer(i.genre)) {
-        subtitle=addArtistLink(i, subtitle, "composer", "showComposer");
-    }
-    if (i.conductor && i.conductor!=artist && lmsOptions.showConductor && useConductor(i.genre)) {
-        subtitle=addArtistLink(i, subtitle, "conductor", "showConductor");
-    }
-
-    if (!lmsOptions.artistFirst) {
-        if (i.artist) {
-            subtitle=addArtistLink(i, subtitle, "artist", "showArtist");
-        } else if (i.trackartist) {
-            subtitle=addArtistLink(i, subtitle, "trackartist", "showArtist");
-        } else if (i.albumartist) {
-            subtitle=addArtistLink(i, subtitle, "albumartist", "showAlbumArtist");
-        }
-    }
-
+    var subtitle = buildArtistLine(i, 'queue');
     var lines = [];
     if (threeLines) {
         lines.push(subtitle);
         subtitle = undefined;
     }
-    var remoteTitle = checkRemoteTitle(i);
-    if (i.album) {
-        var album = i.album;
-        if (i.year && i.year>0) {
-            album+=" (" + i.year + ")";
-        }
-        if (i.album_id && !IS_MOBILE) {
-            album="<obj class=\"link-item\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\')\">" + album + "</obj>";
-        }
-        subtitle=addPart(subtitle, album);
-    } else if (remoteTitle && remoteTitle!=i.title) {
-        subtitle=addPart(subtitle, remoteTitle);
-    }
+    subtitle = buildAlbumLine(i, 'queue');
     if (threeLines) {
         lines.push(subtitle);
         return lines;
@@ -781,8 +659,8 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         singleClick(item, index, event) {
-            if (this.$store.state.showMenuAudio && (!lastQueueItemClick || ((new Date())-lastQueueItemClick)>500)) {
-                lastQueueItemClick = undefined;
+            if (this.$store.state.showMenuAudio && (!lastItemLinkClick || ((new Date())-lastItemLinkClick)>500)) {
+                lastItemLinkClick = undefined;
                 this.itemMenu(item, index, event);
             }
         },

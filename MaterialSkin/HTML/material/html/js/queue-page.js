@@ -659,8 +659,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         singleClick(item, index, event) {
-            if (this.$store.state.showMenuAudio && (!lastItemLinkClick || ((new Date())-lastItemLinkClick)>500)) {
-                lastItemLinkClick = undefined;
+            if (this.$store.state.showMenuAudio) {
                 this.itemMenu(item, index, event);
             }
         },

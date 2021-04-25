@@ -6,58 +6,56 @@
  */
 'use strict';
 
-// Record time artist/album was clicked - to prevent context menu also showing.
-var lastItemLinkClick = undefined;
-function showArtist(id, title, page) {
+function showArtist(event, id, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
-    lastItemLinkClick = new Date();
+    event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page);
     bus.$emit('npclose');
 }
 
-function showAlbumArtist(id, title, page) {
+function showAlbumArtist(event, id, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
-    lastItemLinkClick = new Date();
+    event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), page);
     bus.$emit('npclose');
 }
 
-function showAlbum(album, title, page) {
+function showAlbum(event, album, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
-    lastItemLinkClick = new Date();
+    event.stopPropagation();
     bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title), page);
     bus.$emit('npclose');
 }
 
-function showComposer(id, title, page) {
+function showComposer(event, id, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
-    lastItemLinkClick = new Date();
+    event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), page);
     bus.$emit('npclose');
 }
 
-function showConductor(id, title, page) {
+function showConductor(event, id, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
-    lastItemLinkClick = new Date();
+    event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), page);
     bus.$emit('npclose');
 }
 
-function showBand(id, title, page) {
+function showBand(event, id, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
-    lastItemLinkClick = new Date();
+    event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), page);
     bus.$emit('npclose');
 }
@@ -67,7 +65,7 @@ function addArtistLink(item, line, type, func, page) {
         if (!IS_MOBILE && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
             let vals = [];
             for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
-                vals.push("<obj class=\"link-item\" onclick=\""+func+" ("+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
+                vals.push("<obj class=\"link-item\" onclick=\""+func+" (event, "+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
             }
             line=addPart(line, vals.join(", "));
         } else {
@@ -81,7 +79,7 @@ function addArtistLink(item, line, type, func, page) {
                 id = item[type+"_ids"][0];
             }
             if (undefined!=id) {
-                line=addPart(line, "<obj class=\"link-item\" onclick=\""+func+" ("+id+",\'"+escape(val)+"\', \'"+page+"\')\">" + val + "</obj>");
+                line=addPart(line, "<obj class=\"link-item\" onclick=\""+func+" (event, "+id+",\'"+escape(val)+"\', \'"+page+"\')\">" + val + "</obj>");
             } else {
                 line=addPart(line, val);
             }
@@ -136,7 +134,7 @@ function buildAlbumLine(i, page) {
             album+=" (" + i.year + ")";
         }
         if (i.album_id && !IS_MOBILE) {
-            album="<obj class=\"link-item\" onclick=\"showAlbum("+i.album_id+",\'"+escape(album)+"\', \'"+page+"\')\">" + album + "</obj>";
+            album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\', \'"+page+"\')\">" + album + "</obj>";
         }
         line=addPart(line, album);
     } else if (remoteTitle && remoteTitle!=i.title) {

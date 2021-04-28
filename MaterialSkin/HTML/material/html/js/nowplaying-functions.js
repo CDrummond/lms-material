@@ -550,7 +550,7 @@ function nowplayingFetchArtistInfo(view) {
                 if (data && data.result && data.result.content) {
                     logJsonMessage("RESP", data);
                     let body = data.result.content;
-                    if (body.similarartists && body.similarartists.artist) {
+                    if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
                         for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
                             if (undefined==view.info.tabs[ARTIST_TAB].sections[1].html) {
                                 view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">";

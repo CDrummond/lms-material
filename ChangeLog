@@ -10,7 +10,7 @@
  5. Only show 'Append random album' in artist's album list if more than 1 album.
  6. Reduce size of 'Scroll queue to current track' icon.
  7. Make 'Settings' menu entry open a sub-menu with specific settings.
- 8. Add 'Add to favorites' action to all dynamic playlists with a playlistid and
+ 8. Add 'Add to favourites' action to all dynamic playlists with a playlistid and
     that have a 'Play now' action.
  9. Highlight player names on hover in 'Manage players' dialog.
 10. Add back/title entry to sub-menus.
@@ -27,7 +27,7 @@
     info in MAI 'Track' view.
 20. Fix position of tech info and rating stars in desktop bottom bar.
 21. Add setting to toggle alarm fade in.
-22. Make artist, and album, details clickable links in now-playing.
+22. Make artist, and album, details click-able links in now-playing.
 
 2.3.7
 -----

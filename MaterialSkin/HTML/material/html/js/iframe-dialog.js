@@ -88,7 +88,6 @@ function addFsSelectButton(doc, elem, isDir) {
         // Append our icon after path field
         elem.parentNode.insertBefore(btn, elem.nextSibling);
     }
-    return elem;
 }
 
 function addFsSelectButtons(doc) {
@@ -103,13 +102,65 @@ function addFsSelectButtons(doc) {
     }
 }
 
+function getElementsByClassName(elem, tagName, clazz){
+	var elems = (tagName == "*" && elem.all) ? elem.all : elem.getElementsByTagName(tagName);
+	var found = new Array();
+	var re = new RegExp("(^|\\s)" + clazz.replace(/\-/g, "\\-") + "(\\s|$)");
+	for (var i=0, len=elems.length; i<len; i++) {
+		if (re.test(elems[i].className)) {
+			found.push(elems[i]);
+		}
+	}
+	return found;
+}
+
+function addSliders(doc) {
+    var inputs = getElementsByClassName(doc, "input", "sliderInput_.+");
+    if (inputs!=null) {
+        for (var i=0, len=inputs.length; i<len; i++) {
+            var classes = inputs[i].className.split(' ');
+            for (var c=0, clen=classes.length; c<clen; ++c) {
+                if (classes[c].startsWith('sliderInput_')) {
+                    var parts = classes[c].substring('sliderInput_'.length).split('_');
+                    if (parts.length>1) {
+                        var min = parseInt(parts[0]);
+                        var max = parseInt(parts[1]);
+                        var inc = parts.length>2 ? parseInt(parts[2]) : 1;
+                        var slider = doc.createElement("input");
+                        slider.type="range";
+                        slider.min=min;
+                        slider.max=max;
+                        slider.step=inc;
+                        slider.value = inputs[i].value; // TODO!
+                        slider.classList.add("msk-slider");
+                        slider.id="mskslider."+inputs[i].id;
+                        inputs[i].parentNode.insertBefore(slider, inputs[i]);
+                        if (max<=9999) {
+                            inputs[i].classList.add("msk-slider-input");
+                        }
+
+                        slider.oninput = function() {
+                            var input = this.id.substring("mskslider.".length);
+                            doc.getElementById(input).value = this.value;
+                        }
+                        inputs[i].onchange = function() {
+                            doc.getElementById("mskslider."+this.id).value = this.value;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
 var iframeInfo = {
   action:undefined,
   actionCheckInterval: undefined,
   actionChecks: 0
 };
 
-/* Check for file-entry fields each time form's action is changed */
+/* Check for file-entry fields, and sliders, each time form's action is changed */
 function iframeActionCheck() {
     iframeInfo.actionChecks++;
     var iframe = document.getElementById("embeddedIframe");
@@ -121,6 +172,7 @@ function iframeActionCheck() {
                 if (settingsForm.action!=iframeInfo.action) {
                     iframeInfo.action = settingsForm.action;
                     addFsSelectButtons(content);
+                    addSliders(content);
                 } else if (iframeInfo.actionChecks<200) {
                     return;
                 }

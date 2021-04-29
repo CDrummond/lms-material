@@ -261,6 +261,53 @@ input[type=checkbox], input[type=radio] {
  text-align:center;
 }
 
+.msk-slider {
+ margin-bottom:-8px;
+ margin-right:8px;
+ -webkit-appearance: none;
+ width:170px;
+ height: 2px !important;
+ min-height: 2px !important;
+ line-height: 1!important;
+ border-radius: 5px;
+ background: var(--range-trough-color);
+ outline: none;
+ -webkit-transition: .2s;
+ transition: opacity .2s;
+}
+
+.msk-slider::-moz-range-thumb,
+.msk-slider::-webkit-slider-thumb {
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ background: var(--primary-color);
+ border: 1px solid var(--primary-color);
+ cursor: pointer;
+}
+
+.msk-slider::-moz-range-progress {
+ background-color: var(--primary-color);
+ height:2px!important;
+}
+.msk-slider::-moz-range-track {
+ background: var(--range-trough-color);
+ height:2px!important;
+}
+.msk-slider::-ms-fill-lower {
+ background-color: var(--primary-color);
+ height:2px!important;
+}
+.msk-slider::-ms-fill-upper {
+ background: var(--range-trough-color);
+ height:2px!important;
+}
+.msk-slider-input {
+ width:48px!important;
+ max-width:48px!important;
+ min-width:48px!important;
+}
+
 input[type=checkbox]:before {
  content:"check_box_outline_blank";
 }

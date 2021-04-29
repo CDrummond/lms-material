@@ -15,3 +15,6 @@ input[type="submit"]:active, input[type="button"]:active {
  background-color: #6F6F6F;
 }
 
+:root {
+ --range-trough-color:#5a5a5a;
+}

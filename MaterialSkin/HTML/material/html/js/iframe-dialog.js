@@ -131,7 +131,7 @@ function addSliders(doc) {
                         slider.min=min;
                         slider.max=max;
                         slider.step=inc;
-                        slider.value = inputs[i].value; // TODO!
+                        slider.value = inputs[i].value;
                         slider.classList.add("msk-slider");
                         slider.id="mskslider."+inputs[i].id;
                         inputs[i].parentNode.insertBefore(slider, inputs[i]);

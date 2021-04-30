@@ -143,7 +143,14 @@ function addSliders(doc) {
                             var input = this.id.substring("mskslider.".length);
                             doc.getElementById(input).value = this.value;
                         }
+                        inputs[i].min=min;
+                        inputs[i].max=max;
                         inputs[i].onchange = function() {
+                            if (this.value>this.max) {
+                                this.value = this.max;
+                            } else if (this.value<this.min) {
+                                this.value = this.min;
+                            }
                             doc.getElementById("mskslider."+this.id).value = this.value;
                         }
                     }

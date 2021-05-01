@@ -1121,10 +1121,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return !this.$store.state.player
         },
         drawBgndImage() {
-            return this.$store.state.nowPlayingBackdrop
+            return this.$store.state.nowPlayingBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl
         },
         drawInfoBgndImage() {
-            return this.$store.state.infoBackdrop
+            return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl
         }
     },
     beforeDestroy() {

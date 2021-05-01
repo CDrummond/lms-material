@@ -323,7 +323,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       `,
     data() {
         return {
-            current: undefined,
+            current: {image: undefined},
             currentActions: {show:false, items:[]},
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
@@ -394,7 +394,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
         },
         drawBgndImage() {
-            return this.$store.state.browseBackdrop
+            return this.$store.state.browseBackdrop && undefined!=this.current && undefined!=this.current.image
         }
     },
     created() {

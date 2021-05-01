@@ -261,7 +261,8 @@ var lmsQueue = Vue.component("lms-queue", {
             wide: 0,
             dstm: false,
             dragActive: false,
-            dropIndex: -1
+            dropIndex: -1,
+            coverUrl: undefined
         }
     },
     computed: {
@@ -290,7 +291,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.customSkipPlugin
         },
         drawBgndImage() {
-            return this.$store.state.queueBackdrop
+            return this.$store.state.queueBackdrop && undefined!=this.coverUrl
         }
     },
     created() {

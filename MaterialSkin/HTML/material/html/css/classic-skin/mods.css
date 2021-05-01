@@ -276,8 +276,24 @@ input[type=checkbox], input[type=radio] {
  transition: opacity .2s;
 }
 
-.msk-slider::-moz-range-thumb,
+.msk-slider::-moz-range-thumb {
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ background: var(--primary-color);
+ border: 1px solid var(--primary-color);
+ cursor: pointer;
+}
 .msk-slider::-webkit-slider-thumb {
+ -webkit-appearance: none;
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ background: var(--primary-color);
+ border: 1px solid var(--primary-color);
+ cursor: pointer;
+}
+.msk-slider::-ms-thumb {
  width: 16px;
  height: 16px;
  border-radius: 50%;

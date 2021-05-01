@@ -561,9 +561,12 @@
 "Interface settings":"",
 "Player":"",
 "Scroll to current":"",
+"Shuffle method":"",
 "Similar artists":"",
 "Swap the queue with:":"",
 "Tracks":"",
 "Transfer queue":"",
-"Unknown genre":""
+"Unknown genre":"",
+"Use faster, but less balanced shuffle":"",
+"Use more balanced, but slower shuffle":""
 }

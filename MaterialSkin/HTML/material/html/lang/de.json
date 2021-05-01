@@ -152,6 +152,7 @@
 "Extra settings":"Zusätzliche Einstellungen",
 "Extras":"Extras",
 "Fade in":"Einblenden",
+"Fade in alarms when starting.":"Weckton einblenden",
 "Fade in and out":"Ein- und ausblenden",
 "Fade out":"Ausblenden",
 "Failed":"Fehlgeschlagen",
@@ -564,6 +565,8 @@
 "Alt+%1":"",
 "Alt+(N)":"",
 "Details":"",
-"Fade in alarms when starting.":"Weckton einblenden",
-"Player":""
+"Player":"",
+"Shuffle method":"Mischmethode",
+"Use faster, but less balanced shuffle":"Schneller, aber weniger ausbalanciert mischen",
+"Use more balanced, but slower shuffle":"Ausbalancierter, aber langsamer mischen"
 }

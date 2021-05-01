@@ -28,6 +28,7 @@ Vue.component('lms-randommix', {
    </v-select>
    <v-select v-if="libraries.length>1 && showAll" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
    <v-checkbox v-if="showAll" v-model="continuous" :label="i18n('Continuous')" @click.stop="continuous=!continuous"></v-checkbox>
+   <v-select v-if="showAll && lmsVersion>=80200" :items="shuffles" :label="i18n('Shuffle method')" v-model="useBalancedShuffle" item-text="label" item-value="key"></v-select>
    <v-text-field v-if="showAll" :label="i18n('Historic track count')" v-model="oldTracks" type="number"></v-text-field>
    <v-text-field v-if="showAll" :label="i18n('Upcoming track count')" v-model="newTracks" type="number"></v-text-field>
    </div>
@@ -56,6 +57,8 @@ Vue.component('lms-randommix', {
             libraries: [],
             library: undefined,
             continuous: true,
+            useBalancedShuffle: 1,
+            shuffles: [],
             oldTracks: 10,
             newTracks: 10,
             isWide: true
@@ -81,6 +84,8 @@ Vue.component('lms-randommix', {
                             {key:"albums", label:i18n("Album Mix")},
                             {key:"contributors", label:i18n("Artist Mix")},
                             {key:"year", label:i18n("Year Mix")}];
+                this.shuffles=[{key:0, label:i18n("Use faster, but less balanced shuffle")},
+                               {key:1, label:i18n("Use more balanced, but slower shuffle")}]
                 if (data && data.result && data.result._randomplayisactive) {
                     this.chosenMix = data.result._randomplayisactive;
                     this.active = true;
@@ -146,6 +151,13 @@ Vue.component('lms-randommix', {
                         this.oldTracks = parseInt(data.result._p2);
                     }
                 });
+                if (lmsVersion>=80200) {
+                    lmsCommand("", ["pref", "plugin.randomplay:useBalancedShuffle", "?"]).then(({data}) => {
+                       if (data && data.result && data.result._p2 != null) {
+                            this.useBalancedShuffle = parseInt(data.result._p2);
+                        }
+                    });
+                }
             });
         }.bind(this));
         bus.$on('noPlayers', function() {
@@ -170,6 +182,9 @@ Vue.component('lms-randommix', {
             this.close();
             setLocalStorageVal("rndmix.showAll", this.showAll);
             lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
+            if (lmsVersion>=80200) {
+                lmsCommand("", ["pref", "plugin.randomplay:useBalancedShuffle", this.useBalancedShuffle]);
+            }
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
             lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
             lmsCommand(this.playerId, ["randomplaychooselibrary", this.library]).then(({data}) => {

@@ -162,7 +162,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <div class="lms-list bgnd-cover" id="queue-bgnd">
- <v-list class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'bgnd-blur':drawBgndImage}">
+ <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'bgnd-blur':drawBgndImage}">
   <RecycleScroller v-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS && threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-avatar v-if="artwork || item.selected" :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
@@ -217,7 +217,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
     </v-list-tile>
    </template>
-  </v-list>
+  </div>
  </div>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

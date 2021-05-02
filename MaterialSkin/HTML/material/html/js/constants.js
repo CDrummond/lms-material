@@ -105,6 +105,7 @@ const SECTION_NEWMUSIC = 6; // Not a real 'section' but used to indicate when to
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 const NP_INFO = 'now-playing-info';
+const NP_EXPANDED = 'now-playing-expanded';
 
 const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
 var MULTI_SPLIT_REGEX = ";"

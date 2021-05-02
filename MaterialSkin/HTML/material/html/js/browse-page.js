@@ -1541,7 +1541,11 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browse', function(cmd, params, title, page) {
             this.clearSelection();
-            if (!this.$store.state.desktopLayout) {
+            if (this.$store.state.desktopLayout) {
+                if ('now-playing'==page && this.nowPlayingExpanded) {
+                    page = NP_EXPANDED;
+                }
+            } else {
                 this.$store.commit('setPage', 'browse');
             }
             this.goHome();

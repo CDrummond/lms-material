@@ -1087,8 +1087,19 @@ function browseGoBack(view, refresh) {
     }
     if (view.prevPage) {
         var nextPage = ""+view.prevPage;
-        if (NP_INFO==nextPage) {
-            view.$nextTick(function () { view.$nextTick(function () { if (!view.$store.state.desktopLayout) { view.$store.commit('setPage', 'now-playing'); } bus.$emit('info');}); });
+        if (NP_INFO==nextPage || NP_EXPANDED==nextPage) {
+            view.$nextTick(function () {
+                view.$nextTick(function () {
+                    if (!view.$store.state.desktopLayout) {
+                        view.$store.commit('setPage', 'now-playing');
+                    }
+                    if (NP_INFO==nextPage) {
+                        bus.$emit('info');
+                    } else {
+                        bus.$emit('expandNowPlaying', true);
+                    }
+                });
+            });
         } else if (!view.$store.state.desktopLayout) {
             view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', nextPage); }); });
         }

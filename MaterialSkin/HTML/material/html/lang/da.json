@@ -565,8 +565,5 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Fade in alarms when starting.":"",
-"Shuffle method":"",
-"Use faster, but less balanced shuffle":"",
-"Use more balanced, but slower shuffle":""
+"Fade in alarms when starting.":""
 }

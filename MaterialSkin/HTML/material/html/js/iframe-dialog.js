@@ -116,9 +116,13 @@ function getElementsByClassName(elem, tagName, clazz){
 
 function addSliders(doc) {
     var inputs = getElementsByClassName(doc, "input", "sliderInput_.+");
+    var added = false;
     if (inputs!=null) {
         for (var i=0, len=inputs.length; i<len; i++) {
             var classes = inputs[i].className.split(' ');
+            if (classes.includes('msk-modified')) {
+                continue;
+            }
             for (var c=0, clen=classes.length; c<clen; ++c) {
                 if (classes[c].startsWith('sliderInput_')) {
                     var parts = classes[c].substring('sliderInput_'.length).split('_');
@@ -143,6 +147,7 @@ function addSliders(doc) {
                             var input = this.id.substring("mskslider.".length);
                             doc.getElementById(input).value = this.value;
                         }
+                        inputs[i].classList.add('msk-modified');
                         inputs[i].min=min;
                         inputs[i].max=max;
                         inputs[i].onchange = function() {
@@ -154,11 +159,13 @@ function addSliders(doc) {
                             doc.getElementById("mskslider."+this.id).value = this.value;
                         }
                     }
+                    added = true;
                     break;
                 }
             }
         }
     }
+    return added;
 }
 
 var iframeInfo = {
@@ -179,8 +186,11 @@ function iframeActionCheck() {
                 if (settingsForm.action!=iframeInfo.action) {
                     iframeInfo.action = settingsForm.action;
                     addFsSelectButtons(content);
-                    addSliders(content);
-                } else if (iframeInfo.actionChecks<200) {
+                    iframeInfo.addedSliders = addSliders(content);
+                } else if (iframeInfo.actionChecks<50) {
+                    if (!iframeInfo.addedSliders) {
+                        iframeInfo.addedSliders = addSliders(content);
+                    }
                     return;
                 }
             }
@@ -195,6 +205,7 @@ function selectChanged() {
     if (undefined!=iframeInfo.actionCheckInterval) {
         clearInterval(iframeInfo.actionCheckInterval);
     }
+    iframeInfo.addedSliders = false;
     iframeInfo.actionChecks = 0;
     iframeInfo.actionCheckInterval = setInterval(function () {
         iframeActionCheck();

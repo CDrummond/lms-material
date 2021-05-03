@@ -151,10 +151,13 @@ function addSliders(doc) {
                         inputs[i].min=min;
                         inputs[i].max=max;
                         inputs[i].onchange = function() {
-                            if (this.value>this.max) {
-                                this.value = this.max;
-                            } else if (this.value<this.min) {
-                                this.value = this.min;
+                            var val = parseInt(this.value);
+                            var minVal = parseInt(this.min);
+                            var maxVal = parseInt(this.max);
+                            if (val>maxVal) {
+                                this.value = maxVal;
+                            } else if (val<minVal) {
+                                this.value = minVal;
                             }
                             doc.getElementById("mskslider."+this.id).value = this.value;
                         }

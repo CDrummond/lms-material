@@ -1,6 +1,7 @@
 2.4.1
 -----
 1. Ensure sliders are re-added when settings saved.
+2. Fix usage of player parameter when player name has spaces.
 
 2.4.0
 -----

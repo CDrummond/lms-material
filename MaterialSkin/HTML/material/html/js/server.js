@@ -359,24 +359,28 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
             }
-            if (data.other_players_loop) {
-                for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
-                    var i = data.other_players_loop[idx];
-                    if (!ids.has(i.playerid) && 'group'!==i.model) {
-                        otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl, icon: mapPlayerIcon(i)});
+            if (!queryParams.single) {
+                if (data.other_players_loop) {
+                    for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
+                        var i = data.other_players_loop[idx];
+                        if (!ids.has(i.playerid) && 'group'!==i.model) {
+                            otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl, icon: mapPlayerIcon(i)});
+                        }
                     }
                 }
-            }
-            if (data.sn_players_loop) {
-                for (var idx=0, len=data.sn_players_loop.length; idx<len; ++idx) {
-                    var i = data.sn_players_loop[idx];
-                    if (!ids.has(i.playerid) && 'group'!==i.model) {
-                        otherPlayers.push({id: i.playerid, name: i.name, server:'mysqueezebox.com', serverurl:'http://www.mysqueezebox.com', icon: mapPlayerIcon(i)});
+                if (data.sn_players_loop) {
+                    for (var idx=0, len=data.sn_players_loop.length; idx<len; ++idx) {
+                        var i = data.sn_players_loop[idx];
+                        if (!ids.has(i.playerid) && 'group'!==i.model) {
+                            otherPlayers.push({id: i.playerid, name: i.name, server:'mysqueezebox.com', serverurl:'http://www.mysqueezebox.com', icon: mapPlayerIcon(i)});
+                        }
                     }
                 }
             }
             this.$store.commit('setPlayers', players.sort(playerSort));
-            this.$store.commit('setOtherPlayers', otherPlayers.sort(otherPlayerSort));
+            if (!queryParams.single) {
+                this.$store.commit('setOtherPlayers', otherPlayers.sort(otherPlayerSort));
+            }
 
             if (0==this.subscribedPlayers.size) {
                 // Upon reconnect, will will need to re-sub to current player...

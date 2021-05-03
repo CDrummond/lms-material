@@ -3,6 +3,7 @@
 1. Ensure sliders are re-added when settings saved.
 2. Fix usage of player parameter when player name has spaces.
 3. Fix restricting slider input value to min/max range.
+4. If 'single' passed as query param then ignore players on other LMS servers.
 
 2.4.0
 -----

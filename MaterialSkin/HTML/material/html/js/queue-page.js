@@ -66,7 +66,7 @@ function buildSubtitle(i, threeLines) {
         lines.push(subtitle);
         subtitle = undefined;
     }
-    subtitle = buildAlbumLine(i, 'queue');
+    subtitle = addPart(subtitle, buildAlbumLine(i, 'queue'));
     if (threeLines) {
         lines.push(subtitle);
         return lines;

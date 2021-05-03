@@ -8,8 +8,6 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstyAABKNST";
 
-var lmsVersion = 0;
-
 function updateNative(status) {
     if (queryParams.nativeStatus) {
         try {
@@ -313,12 +311,6 @@ var lmsServer = Vue.component('lms-server', {
                 clearListCache();
             }
 
-            if (0==lmsVersion && undefined!=data.version) {
-                var parts = data.version.split('.');
-                for (var i=0, len=parts.length; i<len && i<3; ++i) {
-                    lmsVersion += parseInt(parts[i]) * Math.pow(100, 2-i);
-                }
-            }
             if (undefined!=data.rescan && 1==parseInt(data.rescan)) {
                 let total = undefined!=data.progresstotal ? parseInt(data.progresstotal) : undefined;
                 let done = undefined!=data.progressdone ? parseInt(data.progressdone) : undefined;

@@ -92,10 +92,10 @@ Vue.component('lms-player-settings', {
       </v-list-tile-content>
       <v-list-tile-action><v-switch v-model="alarms.on" @click.stop="toggleAllAlarms()"></v-switch></v-list-tile-action>
      </v-list-tile>
-     <v-divider v-if="unlockAll"></v-divider>
-     <div class="settings-sub-pad" v-if="unlockAll"></div>
-     <v-subheader class="alarm-sched-header" v-if="unlockAll">{{i18n('Scheduled alarms')}}</v-subheader>
-     <template v-for="(item, index) in alarms.scheduled" v-if="unlockAll">
+     <v-divider v-if="showAlarms"></v-divider>
+     <div class="settings-sub-pad" v-if="showAlarms"></div>
+     <v-subheader class="alarm-sched-header" v-if="showAlarms">{{i18n('Scheduled alarms')}}</v-subheader>
+     <template v-for="(item, index) in alarms.scheduled" v-if="showAlarms">
       <v-list-tile class="alarm-entry">
        <v-checkbox v-model="item.enabled" :label="item | formatAlarm(twentyFourHour)" @click.stop="toggleAlarm(item)"></v-checkbox>
        <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
@@ -103,22 +103,22 @@ Vue.component('lms-player-settings', {
       </v-list-tile>
       <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
      </template>
-     <v-btn flat @click.stop="addAlarm()" class="alarm-add" v-if="unlockAll"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
-     <div class="settings-sub-pad" v-if="unlockAll"></div>
-     <v-subheader v-if="unlockAll">{{i18n('Alarm settings')}}</v-subheader>
-     <v-list-tile v-if="unlockAll">
+     <v-btn flat @click.stop="addAlarm()" class="alarm-add" v-if="showAlarms"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
+     <div class="settings-sub-pad" v-if="showAlarms"></div>
+     <v-subheader v-if="showAlarms">{{i18n('Alarm settings')}}</v-subheader>
+     <v-list-tile v-if="showAlarms">
       <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
      </v-list-tile>
-     <v-divider v-if="unlockAll"></v-divider>
-     <v-list-tile v-if="unlockAll">
+     <v-divider v-if="showAlarms"></v-divider>
+     <v-list-tile v-if="showAlarms">
       <v-text-field :label="i18n('Snooze (minutes)')" v-model="alarms.snooze" type="number"></v-text-field>
      </v-list-tile>
-     <v-divider v-if="unlockAll"></v-divider>
-     <v-list-tile v-if="unlockAll">
+     <v-divider v-if="showAlarms"></v-divider>
+     <v-list-tile v-if="showAlarms">
       <v-text-field :label="i18n('Timeout (minutes)')" v-model="alarms.timeout" type="number"></v-text-field>
      </v-list-tile>
-     <v-divider v-if="unlockAll"></v-divider>
-     <v-list-tile v-if="unlockAll">
+     <v-divider v-if="showAlarms"></v-divider>
+     <v-list-tile v-if="showAlarms">
       <v-list-tile-content @click="alarms.fade=!alarms.fade" class="switch-label">
        <v-list-tile-title>{{i18n('Fade in')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Fade in alarms when starting.')}}</v-list-tile-sub-title>
@@ -275,6 +275,9 @@ Vue.component('lms-player-settings', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        showAlarms() {
+            return this.$store.state.unlockAll && this.alarms.on
         },
         darkUi () {
             return this.$store.state.darkUi

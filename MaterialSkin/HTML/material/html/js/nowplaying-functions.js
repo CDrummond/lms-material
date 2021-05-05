@@ -464,7 +464,7 @@ function nowplayingFetchArtistInfo(view) {
                 lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
-                        if (data.result && data.result.biograph)) {
+                        if (data.result && data.result.biograph) {
                             if (data.result.artist) {
                                 view.info.tabs[ARTIST_TAB].found = true;
                                 if (view.info.tabs[ARTIST_TAB].first) {

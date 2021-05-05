@@ -13,6 +13,7 @@
  9. Adjust power button in toolbar position.
 10. If MAI can't find details, then show artist, album or track title in
     relevant section instead of error message.
+11. Show 'Source' in track details.
 
 2.4.0
 -----

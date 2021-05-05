@@ -419,6 +419,11 @@ function nowplayingFetchTrackInfo(view) {
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
     }
+    var source = undefined==trk.emblem
+                    ? parseInt(trk.id)<0
+                        ? i18n("Internet/Other") : i18n("Local")
+                    : trk.emblem.name[0].toUpperCase()+trk.emblem.name.substring(1);
+    html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+source+"</td></tr>";
     if (html.length>0) {
         view.info.tabs[TRACK_TAB].sections[0].html = "<table class=\"np-html-sect\">" + html + "</table>";
     } else {

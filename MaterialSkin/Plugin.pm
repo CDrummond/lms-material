@@ -873,6 +873,7 @@ sub _cliCommand {
                     my $url = $result->[0]->{'url'} if ref $result && scalar @$result;
                     if ($url) {
                         $request->addResultLoop("urls_loop", $cnt, "url", $url);
+                        $request->addResultLoop("urls_loop", $cnt, "id", $t);
                         $cnt++;
                     }
                 }

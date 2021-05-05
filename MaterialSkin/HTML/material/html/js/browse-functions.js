@@ -89,11 +89,15 @@ function browseActions(view, item, args, count) {
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
+            if (DOWNLOAD_ACTION==loop[i] && undefined==queryParams.appDownload) {
+                continue;
+            }
             if (ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) {
-                actions.push({action:loop[i], weight:300+1});
+                actions.push({action:loop[i], weight:300+i});
             }
         }
     }
+
     return actions;
 }
 
@@ -920,6 +924,8 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, item.id);
+    } else if (DOWNLOAD_ACTION==act) {
+        download(item);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {
@@ -1087,22 +1093,22 @@ function browseGoBack(view, refresh) {
     }
     if (view.prevPage && !view.$store.state.desktopLayout) {
         var nextPage = ""+view.prevPage;
-        if (NP_INFO==nextPage || NP_EXPANDED==nextPage) {
-            view.$nextTick(function () {
-                view.$nextTick(function () {
-                    //if (!view.$store.state.desktopLayout) {
-                        view.$store.commit('setPage', 'now-playing');
-                    //}
-                    if (NP_INFO==nextPage) {
-                        bus.$emit('info');
-                    } else {
-                        bus.$emit('expandNowPlaying', true);
-                    }
-                });
-            });
-        } else { // if (!view.$store.state.desktopLayout) {
-            view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', nextPage); }); });
-        }
+        //if (NP_INFO==nextPage || NP_EXPANDED==nextPage) {
+        //    view.$nextTick(function () {
+        //        view.$nextTick(function () {
+        //            //if (!view.$store.state.desktopLayout) {
+        //                view.$store.commit('setPage', 'now-playing');
+        //            //}
+        //            if (NP_INFO==nextPage) {
+        //                bus.$emit('info');
+        //            } else {
+        //                bus.$emit('expandNowPlaying', true);
+        //            }
+        //        });
+        //    });
+        //} else { // if (!view.$store.state.desktopLayout) {
+            view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', NP_INFO==nextPage || NP_EXPANDED==nextPage ? 'now-playing' : nextPage); }); });
+        //}
     }
     if (view.history.length<2) {
         view.goHome();

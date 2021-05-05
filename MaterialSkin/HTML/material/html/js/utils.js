@@ -51,7 +51,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined, single:false };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined, single:false, appDownload:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -93,6 +93,8 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("appQuit"==kv[0]) {
             resp.appQuit=kv[1];
+        } else if ("appDownload"==kv[0]) {
+            resp.appDownload=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {
@@ -1155,4 +1157,54 @@ function openServerSettings(serverName, showHome) {
     bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+serverName,
             [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
              {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
+}
+
+function downloadJson(obj, name){
+    var node = document.createElement('a');
+    node.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)));
+    node.setAttribute("download", name);
+    document.body.appendChild(node);
+    node.click();
+    node.remove();
+}
+
+function download(item) {
+    confirm(item.title, ACTIONS[DOWNLOAD_ACTION].title).then(res => {
+        if (res) {
+            if (item.id.startsWith("album_id:") || item.id.startsWith("playlist_id:")) {
+                lmsCommand("", ["tracks", 0, 1000, "tags:u", item.id]).then(({data})=>{
+                    var tracks = [];
+                    if (data && data.result && data.result.titles_loop) {
+                        for (var i=0, loop=data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
+                            if (loop[i].url) {
+                                tracks.push({url:loop[i].url, id:loop[i].id});
+                            }
+                        }
+                    }
+                    if (tracks.length>0) {
+                        downloadJson({tracks:tracks}, "download.json");
+                    }
+                }).catch(err => {
+                    logError(err);
+                });
+            }
+            else if (item.id.startsWith("track_id:")) {
+                lmsCommand("", ["material-skin", "urls", "tracks:"+item.id.split(':')[1]]).then(({data})=>{
+                    var tracks = [];
+                    if (data && data.result && data.result.urls_loop) {
+                        for (var i=0, loop=data.result.urls_loop, loopLen=loop.length; i<loopLen; ++i) {
+                            if (loop[i].url) {
+                                tracks.push({url:loop[i].url, id:loop[i].id});
+                            }
+                        }
+                    }
+                    if (tracks.length>0) {
+                        downloadJson({tracks:tracks}, "download.json");
+                    }
+                }).catch(err => {
+                    logError(err);
+                });
+            }
+        }
+    });
 }

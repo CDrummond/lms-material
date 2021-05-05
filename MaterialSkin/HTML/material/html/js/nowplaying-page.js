@@ -569,8 +569,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
         bus.$on('npclose', function() {
-            this.info.show=false;
-            this.largeView=false;
+            this.close();
         }.bind(this));
 
         bus.$on('prefset', function(pref, value, player) {
@@ -736,8 +735,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 bus.$emit('showMessage', i18n('Nothing playing'));
                 return;
             }
-            this.info.show=false;
-            this.largeView=false;
+            this.close();
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
                       this.playerStatus.playlist.current, NP_INFO);
         },
@@ -767,6 +765,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.fetchArtistInfo();
             } else {
                 this.fetchAlbumInfo();
+            }
+        },
+        close() {
+            if (this.$store.state.desktopLayout) {
+                this.info.show=false;
+                this.largeView=false;
             }
         },
         startPositionInterval() {

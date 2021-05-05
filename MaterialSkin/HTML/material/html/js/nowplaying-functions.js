@@ -263,9 +263,8 @@ function nowplayingMenuAction(view, item) {
     } else if (NP_INFO_ACT==item.act) {
         view.trackInfo();
     } else if (NP_BROWSE_CMD==item.act) {
-        view.info.show=false;
-        view.largeView=false;
         bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title, 'now-playing');
+        view.close();
     } else if (NP_COPY_DETAILS_CMD==item.act) {
         if (undefined!=view.playerStatus.current.title && undefined!=view.playerStatus.current.artist && undefined!=view.playerStatus.current.album) {
             copyTextToClipboard(i18n("Playing %1 by %2 from %3", view.playerStatus.current.title, view.playerStatus.current.artist, view.playerStatus.current.album));
@@ -278,8 +277,7 @@ function nowplayingMenuAction(view, item) {
         openWindow(item.link);
     } else if (SEARCH_TEXT_ACTION==item.act) {
         bus.$emit('browse-search', item.text, NP_INFO);
-        view.info.show=false;
-        view.largeView=false;
+        view.close();
     } else if (item.act>=NP_ITEM_ACT) {
         if (undefined!=view.menu.tab && undefined!=view.menu.index && undefined!=view.info.tabs[view.menu.tab].sections[0].items &&
             view.info.tabs[view.menu.tab].sections[0].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].sections[0].items.length) {
@@ -287,10 +285,10 @@ function nowplayingMenuAction(view, item) {
             let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
                 bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);
-                view.info.show=false;
+                view.close();
             } else if (MORE_ACTION==act) {
                 bus.$emit('trackInfo', litem, undefined, NP_INFO);
-                view.info.show=false;
+                view.close();
             } else {
                 let command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd), litem.id];
                 lmsCommand(view.$store.state.player.id, command).then(({data}) => {

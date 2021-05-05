@@ -926,7 +926,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
                 this.backBtnPressTime = new Date().getTime(); // See sourcesClicked
-                if (longPress && !this.$store.state.homeButton) {
+                if (longPress) {
                     this.goHome();
                 } else {
                     this.goBack();

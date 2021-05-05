@@ -14,6 +14,7 @@
 10. If MAI can't find details, then show artist, album or track title in
     relevant section instead of error message.
 11. Show 'Source' in track details.
+12. Long-press on back button goes home, even if home button shown.
 
 2.4.0
 -----

@@ -1085,14 +1085,14 @@ function browseGoBack(view, refresh) {
             return; // Search results not being shown, so '<-' button just closes search field
         }
     }
-    if (view.prevPage) {
+    if (view.prevPage && !view.$store.state.desktopLayout) {
         var nextPage = ""+view.prevPage;
         if (NP_INFO==nextPage || NP_EXPANDED==nextPage) {
             view.$nextTick(function () {
                 view.$nextTick(function () {
-                    if (!view.$store.state.desktopLayout) {
+                    //if (!view.$store.state.desktopLayout) {
                         view.$store.commit('setPage', 'now-playing');
-                    }
+                    //}
                     if (NP_INFO==nextPage) {
                         bus.$emit('info');
                     } else {
@@ -1100,7 +1100,7 @@ function browseGoBack(view, refresh) {
                     }
                 });
             });
-        } else if (!view.$store.state.desktopLayout) {
+        } else { // if (!view.$store.state.desktopLayout) {
             view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', nextPage); }); });
         }
     }

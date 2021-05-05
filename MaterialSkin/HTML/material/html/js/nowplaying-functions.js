@@ -362,8 +362,8 @@ function nowplayingFetchTrackInfo(view) {
         } else {
             lmsCommand("", command, view.info.tabs[TRACK_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
-                if (data && data.result && view.isCurrent(data, TRACK_TAB) && (data.result.lyrics || data.result.error)) {
-                    view.info.tabs[TRACK_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : data.result.error;
+                if (data && data.result && view.isCurrent(data, TRACK_TAB)) {
+                    view.info.tabs[TRACK_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : view.infoTrack.title;
                 }
             }).catch(error => {
                 view.info.tabs[TRACK_TAB].text=i18n("Failed to retrieve information.");
@@ -464,7 +464,7 @@ function nowplayingFetchArtistInfo(view) {
                 lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
-                        if (data.result && (data.result.biography || data.result.error)) {
+                        if (data.result && data.result.biograph)) {
                             if (data.result.artist) {
                                 view.info.tabs[ARTIST_TAB].found = true;
                                 if (view.info.tabs[ARTIST_TAB].first) {
@@ -473,12 +473,12 @@ function nowplayingFetchArtistInfo(view) {
                                 } else {
                                     view.info.tabs[ARTIST_TAB].text+="<br/><br/>";
                                 }
-                                view.info.tabs[ARTIST_TAB].text+="<b>"+data.result.artist+"</b><br/>"+(data.result.biography ? replaceNewLines(data.result.biography) : data.result.error);
+                                view.info.tabs[ARTIST_TAB].text+="<b>"+data.result.artist+"</b><br/>"+replaceNewLines(data.result.biography);
                             }
                         }
                         view.info.tabs[ARTIST_TAB].count--;
                         if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
-                            view.info.tabs[ARTIST_TAB].text = i18n("No artist found");
+                            view.info.tabs[ARTIST_TAB].text = view.infoTrack.artists.join();
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
                         }
@@ -508,13 +508,13 @@ function nowplayingFetchArtistInfo(view) {
                                 command.push("artist:"+view.infoTrack.albumartist);
                             }
                             if (3==command.length) {
-                                view.info.tabs[ARTIST_TAB].text=data.result.error;
+                                view.info.tabs[ARTIST_TAB].text=view.infoTrack.artist;
                                 view.info.tabs[ARTIST_TAB].isMsg=true;
                             } else {
                                 lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                                     logJsonMessage("RESP", data);
-                                    if (data && data.result && view.isCurrent(data, ARTIST_TAB) && (data.result.biography || data.result.error)) {
-                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                                    if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
+                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : view.infoTrack.artist;
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
                                 }).catch(error => {
@@ -522,7 +522,7 @@ function nowplayingFetchArtistInfo(view) {
                                 });
                             }
                         } else {
-                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : data.result.error;
+                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : view.infoTrack.artist;
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
                     }
@@ -606,8 +606,8 @@ function nowplayingFetchAlbumInfo(view) {
         } else {
             lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
-                if (data && data.result && view.isCurrent(data, ALBUM_TAB) && (data.result.albumreview || data.result.error)) {
-                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : data.result.error;
+                if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
+                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : view.infoTrack.album;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {

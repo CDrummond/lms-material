@@ -739,7 +739,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.show=false;
             this.largeView=false;
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
-                      this.playerStatus.playlist.current, 'now-playing');
+                      this.playerStatus.playlist.current, NP_INFO);
         },
         fetchTrackInfo() {
             nowplayingFetchTrackInfo(this);

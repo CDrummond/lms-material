@@ -7,6 +7,8 @@
 5. Remove LMS8.2 shuffle mode setting from 'Random mix' dialog, as this
    setting will now be generic and not random mix specific.
 6. Hide alarm settings if alarm functionality is disabled.
+7. When click browse's back button after clicking (...) in now-playing re-show
+   now-playing MAI view.
 
 2.4.0
 -----

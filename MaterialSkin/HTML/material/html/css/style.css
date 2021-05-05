@@ -509,8 +509,8 @@ div.v-subheader {
 
 .maintoolbar-player-power-button, .maintoolbar-player-power-button:hover {
  position:fixed;
- left:24px!important;
- top:0px!important;
+ left:12px!important;
+ top:2px!important;
  z-index:5;
 }
 

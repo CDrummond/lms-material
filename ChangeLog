@@ -10,6 +10,7 @@
 7. When click browse's back button after clicking (...) in now-playing re-show
    now-playing MAI view.
 8. Only navigate back into now-playing from browse if using mobile layout.
+9. Adjust power button in toolbar position.
 
 2.4.0
 -----

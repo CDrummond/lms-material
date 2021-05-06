@@ -257,7 +257,6 @@
 "Next track":"Morceau suivant",
 "No Player":"Pas de platine",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"Aucun album n'a été mis en favoris pour cet artiste. Veuillez utiliser les entrées ci-dessous pour rechercher des albums sur vos services en ligne.",
-"No artist found":"Aucun artiste trouvé",
 "No entries found":"Aucun élément trouvé",
 "No fade":"Pas de fondu",
 "No repeat":"Pas de répétition",
@@ -566,5 +565,8 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Internet/Other":"",
+"Local":"",
+"Source":""
 }

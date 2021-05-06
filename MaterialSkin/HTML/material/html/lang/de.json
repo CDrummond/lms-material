@@ -254,7 +254,6 @@
 "Next track":"Nächster Titel",
 "No Player":"Kein Player",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"Es wurden keine Alben für diesen Interpreten als Favorit gespeichert. Bitte die untenstehenden Einträge verwenden, um in eingerichteten Online-Diensten nach Alben dieses Interpreten zu suchen.",
-"No artist found":"Es wurde kein Interpret gefunden",
 "No entries found":"Keine Einträge gefunden",
 "No fade":"Kein Überblenden",
 "No repeat":"Kein Wiederholen",
@@ -566,5 +565,8 @@
 "Alt+%1":"",
 "Alt+(N)":"",
 "Details":"",
-"Player":""
+"Internet/Other":"",
+"Local":"",
+"Player":"",
+"Source":""
 }

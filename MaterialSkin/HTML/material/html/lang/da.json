@@ -256,7 +256,6 @@
 "Next track":"Næste nummer",
 "No Player":"Ingen afspiller",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"Ingen favorit-albums for denne kunstner. Brug et af punkterne nedenfor for at lede efter albums på dine online tjenester.",
-"No artist found":"Ingen kunstner fundet",
 "No entries found":"Ingen elementer fundet",
 "No fade":"Ingen glidende overgang",
 "No repeat":"Ingen gentagelser",
@@ -566,5 +565,8 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Fade in alarms when starting.":""
+"Fade in alarms when starting.":"",
+"Internet/Other":"",
+"Local":"",
+"Source":""
 }

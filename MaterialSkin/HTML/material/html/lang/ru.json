@@ -257,7 +257,6 @@
 "Next track":"Следующий трек",
 "No Player":"Отсутствует проигрыватель",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"Для этого исполнителя не было добавлено ни одного альбома. Пожалуйста, используйте записи ниже для поиска альбомов в ваших онлайн-сервисах.",
-"No artist found":"Исполнитель не найден",
 "No entries found":"Записей не найдено",
 "No fade":"Не скрывать",
 "No repeat":"Не повторять",
@@ -566,5 +565,8 @@
 "1 Year":"1 Год",
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
-"%1 days":"%1 дней"
+"%1 days":"%1 дней",
+"Internet/Other":"",
+"Local":"",
+"Source":""
 }

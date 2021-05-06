@@ -51,7 +51,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, appDownload:false, css:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, nativeDownload:false, appSettings:undefined, appQuit:undefined, css:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -93,8 +93,8 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("appQuit"==kv[0]) {
             resp.appQuit=kv[1];
-        } else if ("appDownload"==kv[0]) {
-            resp.appDownload=true;
+        } else if ("nativeDownload"==kv[0]) {
+            resp.nativeDownload=true;
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {
@@ -1159,15 +1159,6 @@ function openServerSettings(serverName, showHome) {
              {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
 }
 
-function downloadJson(obj, name){
-    var node = document.createElement('a');
-    node.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj)));
-    node.setAttribute("download", name);
-    document.body.appendChild(node);
-    node.click();
-    node.remove();
-}
-
 function download(item) {
     confirm(item.title, ACTIONS[DOWNLOAD_ACTION].title).then(res => {
         if (res) {
@@ -1188,7 +1179,10 @@ function download(item) {
                     }
                 }
                 if (tracks.length>0) {
-                    downloadJson({tracks:tracks, playlist:isPlaylist ? item.title: undefined}, "download.json");
+                    try {
+                        NativeReceiver.download(JSON.stringify({tracks:tracks, playlist:isPlaylist ? item.title: undefined}));
+                    } catch (e) {
+                    }
                 }
             }).catch(err => {
                 logError(err);

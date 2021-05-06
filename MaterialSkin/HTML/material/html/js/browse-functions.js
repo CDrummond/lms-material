@@ -89,7 +89,7 @@ function browseActions(view, item, args, count) {
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
-            if (DOWNLOAD_ACTION==loop[i] && !queryParams.appDownload) {
+            if (DOWNLOAD_ACTION==loop[i] && !queryParams.nativeDownload) {
                 continue;
             }
             if (ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) {

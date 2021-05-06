@@ -105,7 +105,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               key: i.id+"."+index,
                               album_id: i.album_id,
                               url: i.url,
-                              downloadable: undefined!=queryParams.appDownload && i.id>=0
+                              downloadable: queryParams.appDownload && i.id>=0
                           });
                 index++;
             }

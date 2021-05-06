@@ -51,7 +51,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, nativeDownload:false, appSettings:undefined, appQuit:undefined, css:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -93,8 +93,6 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("appQuit"==kv[0]) {
             resp.appQuit=kv[1];
-        } else if ("nativeDownload"==kv[0]) {
-            resp.nativeDownload=true;
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {
@@ -1159,34 +1157,3 @@ function openServerSettings(serverName, showHome) {
              {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'replay', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
 }
 
-function download(item) {
-    confirm(item.title, ACTIONS[DOWNLOAD_ACTION].title).then(res => {
-        if (res) {
-            var isPlaylist = item.id.startsWith("playlist_id:");
-            lmsCommand("", isPlaylist ? ["playlists", "tracks", 0, 1000, "tags:cluA", item.id] : ["tracks", 0, 1000, "tags:cluA", originalId(item.id)]).then(({data})=>{
-                var tracks = [];
-                if (data && data.result && (isPlaylist ? data.result.playlisttracks_loop : data.result.titles_loop)) {
-                    for (var i=0, loop=isPlaylist ? data.result.playlisttracks_loop : data.result.titles_loop, loopLen=loop.length; i<loopLen; ++i) {
-                        if (loop[i].url) {
-                            tracks.push({name:decodeURIComponent(loop[i].url.substring(loop[i].url.lastIndexOf('/')+1)),
-                                              id:loop[i].id,
-                                              artist:loop[i].artist,
-                                              album:loop[i].album,
-                                              albumartist:loop[i].albumartist,
-                                              title:loop[i].title,
-                                              coverid:loop[i].coverid});
-                        }
-                    }
-                }
-                if (tracks.length>0) {
-                    try {
-                        NativeReceiver.download(JSON.stringify({tracks:tracks, playlist:isPlaylist ? item.title: undefined}));
-                    } catch (e) {
-                    }
-                }
-            }).catch(err => {
-                logError(err);
-            });
-        }
-    });
-}

@@ -98,14 +98,13 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, DOWNLOAD_ACTION, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, DOWNLOAD_ACTION, MORE_ACTION],
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
                               album_id: i.album_id,
-                              url: i.url,
-                              downloadable: queryParams.nativeDownload && i.id>=0
+                              url: i.url
                           });
                 index++;
             }
@@ -231,7 +230,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? customSkipPlugin : action==DOWNLOAD_ACTION ? menu.item.downloadable && selection.size==0 : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex)" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? customSkipPlugin : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex)" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -741,8 +740,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('dlg.open', 'addtoplaylist', [item], []);
             } else if (PQ_COPY_ACTION==act) {
                 bus.$emit('browseQueueDrop', -1, index, this.listSize);
-            } else if (DOWNLOAD_ACTION==act) {
-                download(item);
             }
         },
         headerAction(act) {

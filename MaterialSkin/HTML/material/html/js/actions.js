@@ -63,8 +63,6 @@ const PQ_COPY_ACTION          = 49;
 const ADV_SEARCH_ACTION       = 50;
 const SAVE_VLIB_ACTION        = 51;
 
-const DOWNLOAD_ACTION         = 52;
-
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
     {cmd:"play_album",   icon:"album"},
@@ -123,9 +121,7 @@ var ACTIONS=[
     {cmd:"copy-here",    icon:"content_copy"},
     {cmd:"copy-here",    icon:"content_copy"},
     {cmd:"adv-search",   svg:"text-search"},
-    {cmd:"save-vlib",    icon:"library_add"},
-
-    {cmd:"download",     icon:"file_download"}
+    {cmd:"save-vlib",    icon:"library_add"}
 ];
 
 function updateActionStrings() {
@@ -191,7 +187,5 @@ function updateActionStrings() {
     ACTIONS[PQ_COPY_ACTION].title=i18n("Copy browse selection here");
     ACTIONS[ADV_SEARCH_ACTION].title=i18n("Advanced search");
     ACTIONS[SAVE_VLIB_ACTION].title=i18n("Save as virtual library");
-
-    ACTIONS[DOWNLOAD_ACTION].title=i18n("Download");
 }
 

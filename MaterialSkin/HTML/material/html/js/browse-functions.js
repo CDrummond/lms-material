@@ -89,9 +89,6 @@ function browseActions(view, item, args, count) {
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
-            if (DOWNLOAD_ACTION==loop[i] && !queryParams.nativeDownload) {
-                continue;
-            }
             if (ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) {
                 actions.push({action:loop[i], weight:300+i});
             }
@@ -924,8 +921,6 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, item.id);
-    } else if (DOWNLOAD_ACTION==act) {
-        download(item);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {

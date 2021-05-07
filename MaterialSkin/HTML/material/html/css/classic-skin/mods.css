@@ -265,7 +265,7 @@ input[type=checkbox], input[type=radio] {
  margin-bottom:-8px;
  margin-right:8px;
  -webkit-appearance: none;
- width:170px;
+ width:150px;
  height: 2px !important;
  min-height: 2px !important;
  line-height: 1!important;
@@ -274,6 +274,17 @@ input[type=checkbox], input[type=radio] {
  outline: none;
  -webkit-transition: .2s;
  transition: opacity .2s;
+}
+
+@media screen and (min-width: 350px) {
+ .msk-slider {
+  width:180px;
+ }
+}
+@media screen and (min-width: 370px) {
+ .msk-slider {
+  width:200px;
+ }
 }
 
 .msk-slider::-moz-range-thumb {

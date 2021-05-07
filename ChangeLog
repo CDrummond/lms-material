@@ -15,6 +15,7 @@
     relevant section instead of error message.
 11. Show 'Source' in track details.
 12. Long-press on back button goes home, even if home button shown.
+13. Fix showing of player volume level in group volume dialog.
 
 2.4.0
 -----

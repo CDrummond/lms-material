@@ -246,7 +246,7 @@ Vue.component('lms-groupvolume', {
     },
     filters: {
         displayVolume: function (value, dvc) {
-            return VOL_FIXED==dvc ? ': ' +value+'%' : '';
+            return VOL_FIXED!=dvc ? ': ' +value+'%' : '';
         },
     }
 })

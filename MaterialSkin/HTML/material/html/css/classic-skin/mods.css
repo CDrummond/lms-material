@@ -6,23 +6,12 @@
  display:none;
 }
 
-/* -- Advanced search mods...--  */
-#advSearchForm {
- margin-top:-32px;
-}
-#advSearchForm > table > tbody > tr > td:nth-of-type(1) {
- text-align:right !important;
- padding-right:8px !important;
-}
-#advSearchForm > table > tbody > tr > td {
- padding-bottom:8px;
-}
+/* Advanced search - has been removed, but these used elsewhere?*/
 div#browsedbList {
  margin-left:-8px;
  margin-right:-8px;
 }
-
-#advSearchForm, #browsedbHeader, #browsedbList {
+#browsedbHeader, #browsedbList {
  width:100%!important;
  max-width:var(--dialog-list-max-width)!important;
  margin-left:auto!important;
@@ -35,8 +24,8 @@ div#browsedbList {
  width:24px!important;
  height:24px!important;
 }
+
 #statusarea {
- padding-top:52px;
  font-weight:bold;
 }
 
@@ -107,7 +96,7 @@ td input { /* Fix entry/combo alignment in additional browse modes */
  padding-bottom:0px;
 }
 
-/* Advanced search */
+/* Advanced search - has been removed, but these used elsewhere?*/
 .border tbody tr td input[type=text] {
  padding-bottom:1px;
 }

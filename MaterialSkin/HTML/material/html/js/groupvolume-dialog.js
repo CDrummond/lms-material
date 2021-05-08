@@ -27,19 +27,19 @@ Vue.component('lms-groupvolume', {
  <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
    <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
-    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 style="height:8px"></v-flex>
-    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 class="vol-label link-item" v-bind:class="{'pulse':0==player.volume && player.isplaying}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
+    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:8px"></v-flex>
+    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 class="vol-label" v-bind:class="{'pulse':0==player.volume && player.isplaying, 'link-item':VOL_STD==player.dvc}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
      {{player.name}}{{player.volume|displayVolume(player.dvc)}}
     </v-flex>
-    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 style="height:16px"></v-flex>
-    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12>
+    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:16px"></v-flex>
+    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12>
      <v-layout>
       <v-btn flat icon class="vol-btn vol-left" @click="adjustVolume(player, false)"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-      <v-slider :disabled="VOL_FIXED==player.dvc" @change="volumeChanged(player)" @wheel.native="volWheel(player, $event)"  step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
+      <v-slider :readonly="VOL_STD!=player.dvc" :disabled="VOL_STD!=player.dvc" @change="volumeChanged(player)" @wheel.native="volWheel(player, $event)"  step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
       <v-btn flat icon @click="adjustVolume(player, true)" class="vol-btn vol-right"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
      </v-layout>
     </v-flex>
-    <v-flex v-if="VOL_HIDDEN!=player.dvc" xs12 style="height:16px"></v-flex>
+    <v-flex xs12 style="height:16px"></v-flex>
    </div>
   </v-layout>
  </v-container>
@@ -173,7 +173,7 @@ Vue.component('lms-groupvolume', {
             this.players[idx].isplaying = player.isplaying;
         },
         adjustVolume(player, inc) {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
+            if (!this.show || this.$store.state.visibleMenus.size>0 || VOL_HIDDEN==player.dvc) {
                 return;
             }
             this.resetCloseTimer();
@@ -192,6 +192,10 @@ Vue.component('lms-groupvolume', {
             if (!this.show) {
                 return;
             }
+            if (VOL_STD!=player.dvc) {
+                player.volume = 100;
+                return;
+            }
             this.resetCloseTimer();
             lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
                 player.volume = vol;
@@ -200,6 +204,9 @@ Vue.component('lms-groupvolume', {
             });
         },
         volWheel(player, event) {
+            if (VOL_HIDDEN==player.dvc) {
+                return;
+            }
             if (event.deltaY<0) {
                 this.adjustVolume(player, true);
             } else if (event.deltaY>0) {
@@ -207,6 +214,9 @@ Vue.component('lms-groupvolume', {
             }
         },
         toggleMute(player) {
+            if (VOL_STD!=player.dvc) {
+                return;
+            }
             this.resetCloseTimer();
             lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
                 this.refreshAll();
@@ -220,7 +230,7 @@ Vue.component('lms-groupvolume', {
             let idx = parseInt(el.id.split("-")[0]);
             if (idx>=0 && idx<=this.players.length) {
                 let player = this.players[idx];
-                if (longPress || player.muted) {
+                if (VOL_STD==player.dvc && (longPress || player.muted)) {
                     this.toggleMute(player);
                 }
             }

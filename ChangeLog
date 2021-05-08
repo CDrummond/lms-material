@@ -2,6 +2,8 @@
 -----
 1. If valume adjusted via javascript (e.g. from Material APK) then have volume
    dialogs update.
+2. Show fixed volume players (even if set to hide) as disabled in group volume
+   dialog.
 
 2.4.1
 -----

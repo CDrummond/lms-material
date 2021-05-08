@@ -128,6 +128,12 @@ Vue.component('lms-groupvolume', {
         bus.$on('otherPlayerStatus', function(player) {
             this.updatePlayer(player);
         }.bind(this));
+        bus.$on('adjustVolume', function() {
+            if (this.show) {
+                this.cancelUpdateTimer();
+                this.updateTimer = setTimeout(function() { this.refreshAll(); }.bind(this), 100);
+            }
+        }.bind(this));
     },
     beforeDestroy() {
         this.cancelCloseTimer();
@@ -230,12 +236,19 @@ Vue.component('lms-groupvolume', {
             this.closeTimer = setTimeout(function () {
                 this.show = false;
             }.bind(this), LMS_VOLUME_CLOSE_TIMEOUT);
+        },
+        cancelUpdateTimer() {
+            if (undefined!==this.updateTimer) {
+                clearTimeout(this.updateTimer);
+                this.updateTimer = undefined;
+            }
         }
     },
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'groupvolume', shown:val});
             this.resetCloseTimer();
+            this.cancelUpdateTimer();
             bus.$emit('subscribeAll', val);
         }
     },

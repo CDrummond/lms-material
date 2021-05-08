@@ -314,6 +314,13 @@ Vue.component('lms-manage-players', {
                 }
             }
         }.bind(this));
+
+        bus.$on('adjustVolume', function() {
+            if (this.show) {
+                this.cancelUpdateTimer();
+                this.updateTimer = setTimeout(function() { this.updateAll(); }.bind(this), 100);
+            }
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -789,6 +796,12 @@ Vue.component('lms-manage-players', {
                     }
                 });
             }
+        },
+        cancelUpdateTimer() {
+            if (undefined!==this.updateTimer) {
+                clearTimeout(this.updateTimer);
+                this.updateTimer = undefined;
+            }
         }
     },
     computed: {
@@ -830,6 +843,7 @@ Vue.component('lms-manage-players', {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'manage', shown:val});
             bus.$emit('subscribeAll', val);
+            this.cancelUpdateTimer();
         },
         'menu.show': function(val) {
             this.$store.commit('menuVisible', {name:'manage', shown:val});

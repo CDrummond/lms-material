@@ -1,3 +1,8 @@
+2.4.2
+-----
+1. If valume adjusted via javascript (e.g. from Material APK) then have volume
+   dialogs update.
+
 2.4.1
 -----
  1. Ensure sliders are re-added when settings saved.

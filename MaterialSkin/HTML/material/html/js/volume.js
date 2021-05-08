@@ -82,6 +82,12 @@ Vue.component('lms-volume', {
         bus.$on('menuOpen', function() {
             this.close();
         }.bind(this));
+        bus.$on('adjustVolume', function() {
+            if (this.show) {
+                this.cancelUpdateTimer();
+                this.updateTimer = setTimeout(function() { bus.$emit('refreshStatus'); }.bind(this), 100);
+            }
+        }.bind(this));
     },
     beforeDestroy() {
         this.cancelCloseTimer();
@@ -169,6 +175,12 @@ Vue.component('lms-volume', {
             this.sendVolumeTimer = setTimeout(function () {
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             }.bind(this), LMS_VOLUME_DEBOUNCE);
+        },
+        cancelUpdateTimer() {
+            if (undefined!==this.updateTimer) {
+                clearTimeout(this.updateTimer);
+                this.updateTimer = undefined;
+            }
         }
     },
     watch: {
@@ -184,6 +196,7 @@ Vue.component('lms-volume', {
             this.$store.commit('dialogOpen', {name:'volume', shown:val});
             this.resetCloseTimer();
             this.cancelSendVolumeTimer();
+            this.cancelUpdateTimer();
         }
     },
     filters: {

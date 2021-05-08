@@ -1,10 +1,10 @@
 2.4.2
 -----
-1. If valume adjusted via javascript (e.g. from Material APK) then have volume
+1. If volume adjusted via javascript (e.g. from Material APK) then have volume
    dialogs update.
 2. Show fixed volume players (even if set to hide) as disabled in group volume
    dialog.
-3. If current player is no longer synced the close group volume dialog.
+3. If current player is no longer synced then close group volume dialog.
 4. Add support for Group players' 'Always synchronize all members' option.
 
 2.4.1

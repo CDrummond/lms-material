@@ -4,6 +4,7 @@
    dialogs update.
 2. Show fixed volume players (even if set to hide) as disabled in group volume
    dialog.
+3. If current player is no longer synced the close group volume dialog.
 
 2.4.1
 -----

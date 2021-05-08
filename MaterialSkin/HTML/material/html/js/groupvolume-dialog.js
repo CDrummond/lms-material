@@ -167,6 +167,10 @@ Vue.component('lms-groupvolume', {
             if (undefined==idx) {
                 return;
             }
+            if (this.$store.state.player && this.$store.state.player.id==player.id && !player.synced) {
+                // Current player no longer is sync group? Then close dialog.
+                this.show = false;
+            }
             this.players[idx].dvc = player.dvc;
             this.players[idx].muted = player.muted;
             this.players[idx].volume = player.volume;

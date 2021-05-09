@@ -67,6 +67,8 @@ my @ADV_SEARCH_OPS = ('album_titlesearch', 'bitrate', 'comments_value', 'contrib
 my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contributor_namesearch.active2', 'contributor_namesearch.active3', 'contributor_namesearch.active4',
                         'contributor_namesearch.active5', 'genre', 'genre_name' );
 
+my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
+
 sub initPlugin {
     my $class = shift;
 
@@ -188,9 +190,11 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'add-podcast', 'edit-podcast', 'delete-podcast', 'podcast-url',
-                                                  'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'add-podcast',
+                                                  'edit-podcast', 'delete-podcast', 'podcast-url', 'plugins', 'plugins-status',
+                                                  'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
+                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers',
+                                                  'urls', 'adv-search', 'adv-search-params', 'protocols']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1007,6 +1011,28 @@ sub _cliCommand {
             $count++;
         }
         $request->addResult('statistics', $params->{'statistics'});
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'protocols') {
+        my $allPlugs =  Slim::Utils::PluginManager->allPlugins();
+        my %handlers = Slim::Player::ProtocolHandlers->registeredHandlers();
+        my $count = 0;
+        foreach my $prot (keys %handlers) {
+            if (not exists($IGNORE_PROTOCOLS{$prot})) {
+                my $handler = Slim::Player::ProtocolHandlers->handlerForProtocol($prot);
+                if ($handler) {
+                    my $str = "" . $handler;
+                    my @list = split(/::/, $str);
+                    if (scalar(@list)>=2 && $list[0] eq 'Plugins') {
+                        $request->addResultLoop('protocols_loop', $count, 'scheme', $prot);
+                        $request->addResultLoop('protocols_loop', $count, 'plugin', string($allPlugs->{$list[1]}{'name'}));
+                        $count++;
+                    }
+                }
+            }
+        }
         $request->setStatusDone();
         return;
     }

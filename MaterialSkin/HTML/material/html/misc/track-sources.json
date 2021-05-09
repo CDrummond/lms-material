@@ -4,11 +4,13 @@
     "spotify:":"Spotify",
     "wimp:":"Tidal",
     "youtube:":"YouTube",
+    "ytplaylist:":"YouTube",
     "soundcloud:":"SoundCloud",
     "times:":"Times Radio",
     "virgin:":"Virgin Radio",
     "radioparadise:":"Radio Paradise",
     "sounds:":"BBC Sounds",
+    "globalplayer:":"Global Player",
     "https://media-ssl.musicradio.com/":"Global Player",
     "https://stream.radiofrance.fr/":"Radio France"
   },

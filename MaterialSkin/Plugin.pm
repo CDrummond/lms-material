@@ -1025,7 +1025,7 @@ sub _cliCommand {
                 if ($handler) {
                     my $str = "" . $handler;
                     my @list = split(/::/, $str);
-                    if (scalar(@list)>=2 && $list[0] eq 'Plugins') {
+                    if (scalar(@list)>=2 && ($list[0] eq 'Plugins') || ($list[0] eq 'Plugin')) {
                         $request->addResultLoop('protocols_loop', $count, 'scheme', $prot);
                         $request->addResultLoop('protocols_loop', $count, 'plugin', string($allPlugs->{$list[1]}{'name'}));
                         $count++;

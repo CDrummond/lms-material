@@ -1,16 +1,19 @@
 {
   "prefix":{
-    "times:":"Times Radio",
-    "virgin:":"Virgin Radio",
-    "https://media-ssl.musicradio.com/":"Global Player",
+    "deezer:":"Deezer",
+    "spotify:":"Spotify",
+    "wimp:":"Tidal",
+    "qobuz:":"Qobuz",
+    "bandcamp:":"Bandcamp",
+    "https://media-ssl.musicradio.com/":"Global Player (UK)",
     "https://stream.radiofrance.fr/":"Radio France"
   },
   "includes":{
     ".radioparadise.com/":"Radio Paradise",
     ".planetradio.co.uk":"Planet Radio",
-    ".bandcamp.com":"Band's Campout"
+    ".bandcamp.com":"Bandcamp"
   },
   "album":{
-    ".bandcamp.com":"Band's Campout"
+    ".bandcamp.com":"Bandcamp"
   }
 }

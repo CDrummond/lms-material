@@ -26,13 +26,13 @@ function getTrackSource(track) {
         if (track.url.startsWith("file:") && !track.url.startsWith("tmp:")) {
             return i18n("Local");
         }
-        for (const [key, value] of Object.entries(lmsProtocols)) {
-            if (track.url.startsWith(key+":")) {
+        for (const [key, value] of Object.entries(trackSources["prefix"])) {
+            if (track.url.startsWith(key)) {
                 return value;
             }
         }
-        for (const [key, value] of Object.entries(trackSources["prefix"])) {
-            if (track.url.startsWith(key)) {
+        for (const [key, value] of Object.entries(lmsProtocols)) {
+            if (track.url.startsWith(key+":")) {
                 return value;
             }
         }

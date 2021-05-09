@@ -7,6 +7,8 @@
 3. If current player is no longer synced then close group volume dialog.
 4. Add support for Group players' 'Always synchronize all members' option.
 5. Use track's URL to determine 'Source' for MAI track info.
+6. Add more track source mappings - Radio France, Radio Paradise, SoundCloud,
+   Times Radio, Virgin Radion, etc.
 
 2.4.1
 -----

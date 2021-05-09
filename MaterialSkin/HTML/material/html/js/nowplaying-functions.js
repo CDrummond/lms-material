@@ -423,17 +423,10 @@ function nowplayingFetchTrackInfo(view) {
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
     }
 
-    var source = "Local";
-    if (undefined!=trk.url && !trk.url.startsWith("file:") && !trk.url.startsWith("tmp:")) {
-        if (trk.url.startsWith("deezer:")) { source = "Deezer" }
-        else if (trk.url.startsWith("qobuz:")) { source = "Qobuz" }
-        else if (trk.url.startsWith("spotify:")) { source = "Spotify" }
-        else if (trk.url.startsWith("wimp:")) { source = "Tidal" }
-        else if (trk.url.startsWith("youtube:")) { source = "YouTube" }
-        else if (trk.url.startsWith("https:") && trk.album && trk.album.includes(".bandcamp.com")) { source = "Bandcamp" }
-        else { source = i18n("Internet/Other") }
+    var source = getTrackSource(trk);
+    if (undefined!=source) {
+        html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+source+"</td></tr>";
     }
-    html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+source+"</td></tr>";
     if (html.length>0) {
         view.info.tabs[TRACK_TAB].sections[0].html = "<table class=\"np-html-sect\">" + html + "</table>";
     } else {

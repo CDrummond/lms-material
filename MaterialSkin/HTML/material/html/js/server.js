@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegiloqrstyAABEKNST";
+const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABKNST";
 
 function updateNative(status) {
     if (queryParams.nativeStatus) {

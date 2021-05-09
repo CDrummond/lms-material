@@ -17,6 +17,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.duration!=view.playerStatus.current.duration) {
         view.playerStatus.current.duration = playerStatus.current.duration;
     }
+    if (playerStatus.current.url!=view.playerStatus.current.url) {
+        view.playerStatus.current.url = playerStatus.current.url;
+    }
     if (playerStatus.current.time!=view.playerStatus.current.time || playStateChanged) {
         view.playerStatus.current.time = playerStatus.current.time;
         view.playerStatus.current.updated = new Date();
@@ -419,10 +422,17 @@ function nowplayingFetchTrackInfo(view) {
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
     }
-    var source = undefined==trk.emblem
-                    ? parseInt(trk.id)<0
-                        ? i18n("Internet/Other") : i18n("Local")
-                    : trk.emblem.name[0].toUpperCase()+trk.emblem.name.substring(1);
+
+    var source = "Local";
+    if (undefined!=trk.url && !trk.url.startsWith("file:") && !trk.url.startsWith("tmp:")) {
+        if (trk.url.startsWith("deezer:")) { source = "Deezer" }
+        else if (trk.url.startsWith("qobuz:")) { source = "Qobuz" }
+        else if (trk.url.startsWith("spotify:")) { source = "Spotify" }
+        else if (trk.url.startsWith("wimp:")) { source = "Tidal" }
+        else if (trk.url.startsWith("youtube:")) { source = "YouTube" }
+        else if (trk.url.startsWith("https:") && trk.album && trk.album.includes(".bandcamp.com")) { source = "Bandcamp" }
+        else { source = i18n("Internet/Other") }
+    }
     html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+source+"</td></tr>";
     if (html.length>0) {
         view.info.tabs[TRACK_TAB].sections[0].html = "<table class=\"np-html-sect\">" + html + "</table>";

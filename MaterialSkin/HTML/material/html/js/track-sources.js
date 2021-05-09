@@ -13,7 +13,6 @@ function initTrackSources() {
 
 function getTrackSource(track) {
     if (undefined!=track.url) {
-    console.log(track.url);
         if (track.url.startsWith("file:") && !track.url.startsWith("tmp:")) {
             return i18n("Local");
         }

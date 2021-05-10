@@ -510,6 +510,7 @@ function nowplayingFetchArtistInfo(view) {
                     if (data && data.result && view.isCurrent(data, ARTIST_TAB) && (data.result.biography || data.result.error)) {
                         // If failed with artist, try albumartist (if view is within artist)
                         if (undefined==data.result.biography && view.info.tabs[ARTIST_TAB].albumartist &&
+                            view.info.tabs[ARTIST_TAB].artist!=view.info.tabs[ARTIST_TAB].albumartist &&
                             view.info.tabs[ARTIST_TAB].artist.indexOf(view.info.tabs[ARTIST_TAB].albumartist)>=0) {
                             var command = ["musicartistinfo", "biography", "html:1"];
                             if (view.infoTrack.albumartist_ids!=undefined) {
@@ -525,7 +526,7 @@ function nowplayingFetchArtistInfo(view) {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
                                         view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : view.infoTrack.artist;
-                                        view.info.tabs[ARTIST_TAB].image=data.result.biography || view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE);
+                                        view.info.tabs[ARTIST_TAB].image=view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE);
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
                                 }).catch(error => {
@@ -534,6 +535,7 @@ function nowplayingFetchArtistInfo(view) {
                             }
                         } else {
                             view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : view.infoTrack.artist;
+                            view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE);
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
                     }

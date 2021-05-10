@@ -2253,16 +2253,24 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .np-html-sect {
  text-align:left;
  margin-top:8px;
- width:100%;
 }
 
 .np-html-sect table {
  border-collapse: collapse;
 }
 
+.np-html-sect tr td:last-of-type {
+ width:100%;
+}
+
+.np-html-sect tr td:first-of-type {
+ min-width:100px;
+ opacity:var(--sub-opacity);
+}
+
 .np-html-sect td {
  vertical-align:top;
- border-bottom: 1px solid var(--list-item-border-color);
+ padding-bottom:8px;
 }
 
 .np-grid-sect {

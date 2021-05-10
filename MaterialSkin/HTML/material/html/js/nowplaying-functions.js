@@ -488,6 +488,7 @@ function nowplayingFetchArtistInfo(view) {
                         view.info.tabs[ARTIST_TAB].count--;
                         if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
                             view.info.tabs[ARTIST_TAB].text = view.infoTrack.artists.join();
+                            view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE;
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
                         }

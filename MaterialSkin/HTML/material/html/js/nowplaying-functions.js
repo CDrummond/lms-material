@@ -453,6 +453,7 @@ function nowplayingFetchArtistInfo(view) {
         view.info.tabs[ARTIST_TAB].sections[0].more=undefined;
         view.info.tabs[ARTIST_TAB].sections[1].html=undefined;
         view.info.tabs[ARTIST_TAB].text=i18n("Fetching...");
+        view.info.tabs[ARTIST_TAB].image=undefined;
         view.info.tabs[ARTIST_TAB].isMsg=true;
         view.info.tabs[ARTIST_TAB].artist=view.infoTrack.artist;
         view.info.tabs[ARTIST_TAB].artist_id=view.infoTrack.artist_id;
@@ -523,6 +524,7 @@ function nowplayingFetchArtistInfo(view) {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
                                         view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : view.infoTrack.artist;
+                                        view.info.tabs[ARTIST_TAB].image=data.result.biography || view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE);
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
                                 }).catch(error => {
@@ -583,6 +585,7 @@ function nowplayingFetchAlbumInfo(view) {
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
         view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
         view.info.tabs[ALBUM_TAB].text=i18n("Fetching...");
+        view.info.tabs[ALBUM_TAB].image=undefined;
         view.info.tabs[ALBUM_TAB].isMsg=true;
         view.info.tabs[ALBUM_TAB].albumartist=view.infoTrack.albumartist;
         view.info.tabs[ALBUM_TAB].artist_id=view.infoTrack.artist_id;
@@ -616,6 +619,7 @@ function nowplayingFetchAlbumInfo(view) {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : view.infoTrack.album;
+                    view.info.tabs[ALBUM_TAB].image=data.result.albumreview ? undefined : view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {

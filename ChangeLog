@@ -9,6 +9,8 @@
 5. Use track's URL to determine 'Source' for MAI track info.
 6. Add more track source mappings - Radio France, Radio Paradise, SoundCloud,
    Times Radio, Virgin Radion, etc.
+7. If no MAI album review then show album cover.
+8. If no MAI biography then show artist image.
 
 2.4.1
 -----

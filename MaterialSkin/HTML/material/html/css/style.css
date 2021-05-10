@@ -838,6 +838,15 @@ div.v-subheader {
  margin-right:auto;
 }
 
+.np-no-meta-img {
+ object-fit:contain;
+ object-position:50% 50%;
+ width:300px;
+ padding:16px;
+ margin-left:auto;
+ margin-right:auto;
+}
+
 .np-portrait-song-info {
  display: flex;
  display: -webkit-flex;

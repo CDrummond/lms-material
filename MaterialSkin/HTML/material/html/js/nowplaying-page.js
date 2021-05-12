@@ -134,6 +134,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          </div>
          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
+        <div class="np-spacer"></div>
        </v-card-text>
       </v-card>
      </v-tab-item>
@@ -182,6 +183,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
           </div>
           <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
          </template>
+         <div class="np-spacer"></div>
         </v-card-text>
        </v-card>
       </v-flex>
@@ -248,6 +250,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          </div>
          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
+        <div class="np-spacer"></div>
        </v-card-text>
       </v-card>
      </v-tab-item>

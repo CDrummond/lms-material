@@ -820,6 +820,10 @@ div.v-subheader {
  padding:8px!important;
 }
 
+.np-spacer {
+ height:var(--fade-size);
+}
+
 .np-bgnd {
  position:fixed;
  top:var(--main-toolbar-height);

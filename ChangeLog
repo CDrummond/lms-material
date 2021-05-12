@@ -1,17 +1,19 @@
 2.4.2
 -----
-1. If volume adjusted via javascript (e.g. from Material APK) then have volume
-   dialogs update.
-2. Show fixed volume players (even if set to hide) as disabled in group volume
-   dialog.
-3. If current player is no longer synced then close group volume dialog.
-4. Add support for Group players' 'Always synchronize all members' option.
-5. Use track's URL to determine 'Source' for MAI track info.
-6. Add more track source mappings - Radio France, Radio Paradise, SoundCloud,
-   Times Radio, Virgin Radion, etc.
-7. If no MAI album review then show album cover.
-8. If no MAI biography then show artist image.
-9. Better track details spacing.
+ 1. If volume adjusted via javascript (e.g. from Material APK) then have volume
+    dialogs update.
+ 2. Show fixed volume players (even if set to hide) as disabled in group volume
+    dialog.
+ 3. If current player is no longer synced then close group volume dialog.
+ 4. Add support for Group players' 'Always synchronize all members' option.
+ 5. Use track's URL to determine 'Source' for MAI track info.
+ 6. Add more track source mappings - Radio France, Radio Paradise, SoundCloud,
+    Times Radio, Virgin Radion, etc.
+ 7. If no MAI album review then show album cover.
+ 8. If no MAI biography then show artist image.
+ 9. Better track details spacing.
+10. Don't show player menu if set for single player and power buton shown in
+    toolbar.
 
 2.4.1
 -----

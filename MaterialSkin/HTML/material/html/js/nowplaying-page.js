@@ -143,9 +143,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-layout row>
      <template v-for="(tab, index) in info.tabs">
       <v-flex xs4>
-       <v-card flat class="np-info-card-cover fade-both">
+       <v-card flat class="np-info-card-cover">
         <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
-        <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+        <v-card-text :class="['np-info-text-full-desktop', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
          <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
          <template v-for="(sect, sindex) in tab.sections">

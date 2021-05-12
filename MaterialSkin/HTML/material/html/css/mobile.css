@@ -163,6 +163,7 @@
  display:flex;
  justify-content:center;
  flex-direction:column;
+ padding-top:10px;
 }
 
 /* Adjust link/more/close buttons in now-playing page up a little */

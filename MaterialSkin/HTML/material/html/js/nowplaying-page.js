@@ -96,7 +96,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-      <v-card flat class="np-info-card-cover">
+      <v-card flat class="np-info-card-cover fade-both">
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
@@ -143,7 +143,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-layout row>
      <template v-for="(tab, index) in info.tabs">
       <v-flex xs4>
-       <v-card flat class="np-info-card-cover">
+       <v-card flat class="np-info-card-cover fade-both">
         <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
         <v-card-text :class="['np-info-text-full-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
          <div v-html="tab.text"></div>
@@ -210,7 +210,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
      <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
-      <v-card flat class="np-info-card-cover">
+      <v-card flat class="np-info-card-cover fade-both">
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
         <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
@@ -270,7 +270,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape">
 
-     <div class="np-landscape-song-info hide-scrollbar fade-bottom">
+     <div class="np-landscape-song-info hide-scrollbar fade-both">
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></p>
@@ -338,7 +338,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/radio.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
-    <div class="np-portrait-song-info hide-scrollbar fade-bottom">
+    <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></p>

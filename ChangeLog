@@ -14,6 +14,7 @@
  9. Better track details spacing.
 10. Don't show player menu if set for single player and power buton shown in
     toolbar.
+11. Fade top/bottom of now-playing (info and MAI) details.
 
 2.4.1
 -----

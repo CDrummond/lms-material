@@ -12,7 +12,7 @@
  7. If no MAI album review then show album cover.
  8. If no MAI biography then show artist image.
  9. Better track details spacing.
-10. Don't show player menu if set for single player and power buton shown in
+10. Don't show player menu if set for single player and power button shown in
     toolbar.
 11. Fade top/bottom of now-playing (info and MAI) details.
 12. Move 'Changes have been saved' from settings pages to bottom left.

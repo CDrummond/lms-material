@@ -18,6 +18,7 @@
 12. Move 'Changes have been saved' from settings pages to bottom left.
 13. Don't show menu if click on header item in now-playing track list.
 14. Show album and track counds in now-playing.
+15. Only list first 50 tracks of album in now-playing.
 
 2.4.1
 -----

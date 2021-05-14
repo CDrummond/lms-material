@@ -637,8 +637,14 @@ function nowplayingFetchAlbumInfo(view) {
                     var resp = parseBrowseResp(data);
                     view.info.tabs[ALBUM_TAB].sections[0].items = resp.items.slice(0, NP_MAX_TRACKS);
                     view.info.tabs[ALBUM_TAB].sections[0].title = resp.subtitle;
-                    if (data.result.count>NP_MAX_TRACKS) {
-                        view.info.tabs[ALBUM_TAB].sections[0].more=i18n("+ %1 more", data.result.count-NP_MAX_TRACKS);
+                    var count = view.info.tabs[ALBUM_TAB].sections[0].items.length;
+                    // If last shown is a header, remove
+                    if (view.info.tabs[ALBUM_TAB].sections[0].items[count-1].header) {
+                        view.info.tabs[ALBUM_TAB].sections[0].items.pop();
+                        count--;
+                    }
+                    if (data.result.count>count) {
+                        view.info.tabs[ALBUM_TAB].sections[0].more=i18n("+ %1 more", data.result.count-count);
                     }
                 }
             });

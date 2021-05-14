@@ -649,6 +649,9 @@ function nowplayingFetchAlbumInfo(view) {
 }
 
 function nowplayingItemClicked(view, tab, section, index, event) {
+    if (view.info.tabs[tab].sections[section].items[index].header) {
+        return;
+    }
     view.menu.items=[{title:ACTIONS[PLAY_ACTION].title, icon:ACTIONS[PLAY_ACTION].icon, act:NP_ITEM_ACT+PLAY_ACTION},
                      {title:ACTIONS[INSERT_ACTION].title, svg:ACTIONS[INSERT_ACTION].svg, act:NP_ITEM_ACT+INSERT_ACTION},
                      {title:ACTIONS[ADD_ACTION].title, icon:ACTIONS[ADD_ACTION].icon, act:NP_ITEM_ACT+ADD_ACTION}];

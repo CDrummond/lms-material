@@ -16,6 +16,7 @@
     toolbar.
 11. Fade top/bottom of now-playing (info and MAI) details.
 12. Move 'Changes have been saved' from settings pages to bottom left.
+13. Don't show menu if click on header item in now-playing track list.
 
 2.4.1
 -----

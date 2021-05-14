@@ -439,6 +439,7 @@ function nowPlayingGetArtistAlbums(view, artist_id) {
         logJsonMessage("RESP", data);
         if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
             view.info.tabs[ARTIST_TAB].sections[0].items = parseBrowseResp(data).items;
+            view.info.tabs[ARTIST_TAB].sections[0].title = i18np("1 Album", "%1 Albums", data.result.count);
             if (data.result.count>NP_MAX_ALBUMS) {
                 view.info.tabs[ARTIST_TAB].sections[0].more=i18n("+ %1 more", data.result.count-NP_MAX_ALBUMS);
             }
@@ -630,10 +631,12 @@ function nowplayingFetchAlbumInfo(view) {
             });
         }
         if (view.infoTrack.album_id!=undefined && view.infoTrack.album_id>=0) {
-            lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], 0, NP_MAX_TRACKS, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
+            lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], 0, 1000, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    view.info.tabs[ALBUM_TAB].sections[0].items = parseBrowseResp(data).items;
+                    var resp = parseBrowseResp(data);
+                    view.info.tabs[ALBUM_TAB].sections[0].items = resp.items.slice(0, NP_MAX_TRACKS);
+                    view.info.tabs[ALBUM_TAB].sections[0].title = resp.subtitle;
                     if (data.result.count>NP_MAX_TRACKS) {
                         view.info.tabs[ALBUM_TAB].sections[0].more=i18n("+ %1 more", data.result.count-NP_MAX_TRACKS);
                     }

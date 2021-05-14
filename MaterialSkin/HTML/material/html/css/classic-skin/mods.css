@@ -26,7 +26,9 @@ div#browsedbList {
 }
 
 #statusarea {
- font-weight:bold;
+ position:fixed;
+ bottom:0px;
+ left:8px;
 }
 
 #choose_setting {

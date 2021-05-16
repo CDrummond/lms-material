@@ -1,3 +1,7 @@
+2.4.3
+-----
+1. Show server/player settings 'statusarea' messages in a toast.
+
 2.4.2
 -----
  1. If volume adjusted via javascript (e.g. from Material APK) then have volume

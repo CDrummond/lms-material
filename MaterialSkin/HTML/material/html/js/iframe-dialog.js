@@ -257,6 +257,13 @@ function hideClassicSkinElems(page, textCol) {
                 }
             }
         }
+        if ('player'==page || 'server'==page) {
+            var statusarea = content.getElementById('statusarea');
+            var msg = undefined!=statusarea && undefined!=statusarea.firstChild ? statusarea.firstChild.data : undefined;
+            if (msg!=undefined && msg.length>0) {
+                bus.$emit('showMessage', msg);
+            }
+        }
     }
     bus.$emit('iframe-loaded');
 }

@@ -26,9 +26,7 @@ div#browsedbList {
 }
 
 #statusarea {
- position:fixed;
- bottom:0px;
- left:8px;
+ display:none;
 }
 
 #choose_setting {

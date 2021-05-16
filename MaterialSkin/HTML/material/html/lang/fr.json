@@ -46,9 +46,9 @@
 "Already in favorites":"Déjà présent dans les favoris",
 "Alt+%1":"Alt+%1",
 "Alt+(N)":"Alt+(N)",
-"Always force members synchronization.":"Force toujours la synchronization",
+"Always force members synchronization.":"Toujours forcer la synchronisation.",
 "Always show menu":"Toujours afficher le menu",
-"Always synchronize all members":"Synchronize toujours tous les membres",
+"Always synchronize all members":"Toujours synchroniser tous les membres",
 "Append random album to queue":"Ajouter un album aléatoire à la liste de lecture",
 "Append to queue":"Ajouter à la liste de lecture",
 "Appended '%1' to the play queue":"'%1' ajouté à la liste de lecture",
@@ -567,7 +567,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Internet/Other":"",
-"Local":"",
-"Source":""
+"Internet/Other":"Internet/Autre",
+"Local":"Local",
+"Source":"Source"
 }

@@ -74,6 +74,12 @@ function doReplacements(string, player, item) {
         if (undefined!=item.year) {
             val=val.replace("$YEAR", item.year);
         }
+        if (undefined!=item.tracknum) {
+            val=val.replace("$TRACKNUM", item.tracknum);
+        }
+        if (undefined!=item.disc) {
+            val=val.replace("$DISC", item.disc);
+        }
         if (undefined!=item.id) {
             let id = ''+item.id;
             if (id.startsWith("artist_id:")) {

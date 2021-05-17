@@ -2,6 +2,7 @@
 -----
 1. Show server/player settings 'statusarea' messages in a toast.
 2. Set max-width of toolbar title when showing clock.
+3. Slightly adjust clock position.
 
 2.4.2
 -----

@@ -2082,7 +2082,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .toolbar-clock {
  position:fixed;
- top:0px;
+ top:2px;
  left:calc((100vw - 200px) / 2);
  width:200px;
  text-align:center;

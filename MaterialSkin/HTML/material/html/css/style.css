@@ -501,6 +501,10 @@ div.v-subheader {
  min-width:160px;
 }
 
+.maintoolbar-title-clock {
+ max-width:calc(50vw - 40px);
+}
+
 .maintoolbar-subtitle {
  padding-left:58px;
  margin-top:calc(14px - var(--small-font-size));

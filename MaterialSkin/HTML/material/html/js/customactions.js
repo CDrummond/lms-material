@@ -56,6 +56,8 @@ function performCustomAction(obj, action, player, item) {
     }
 }
 
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER'];
+
 function doReplacements(string, player, item) {
     let val = ''+string;
     if (undefined!=player) {
@@ -100,6 +102,9 @@ function doReplacements(string, player, item) {
         if (undefined!=item.album_id) {
             val=val.replace("$ALBUMNAME", item.album);
         }
+        if (undefined!=item.composer) {
+            val=val.replace("$COMPOSER", item.composer);
+        }
         if (undefined!=item.title) {
             if (undefined!=item.id) {
                 let id = ''+item.id;
@@ -116,9 +121,9 @@ function doReplacements(string, player, item) {
                 val=val.replace("$TRACKNAME", item.title);
             }
         }
-        if (undefined!=item.composer) {
-            val=val.replace("$COMPOSER", item.composer);
-        }
+    }
+    for (var i=0, len=ACTION_KEYS.length; i<len; ++i) {
+        val = val.replace("+$"+ACTION_KEYS[i], "").replace("$"+ACTION_KEYS[i]+"+", "").replace("$"+ACTION_KEYS[i], "");
     }
     return val;
 }

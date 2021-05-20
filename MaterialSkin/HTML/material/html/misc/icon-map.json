@@ -92,7 +92,8 @@
     "PLUGIN_TRACKSTAT":{"icon":"bar_chart"},
     "PLUGIN_DYNAMICPLAYLIST":{"svg":"dice-list"},
     "PLUGIN_SYNCHRONIZER_NAME":{"icon":"sync"},
-    "MUSICSOURCE":{"svg":"music"}
+    "MUSICSOURCE":{"svg":"music"},
+    "/zenradio.png":{"svg":"radio"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

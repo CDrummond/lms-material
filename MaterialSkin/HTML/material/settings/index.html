@@ -1,0 +1,130 @@
+<!--
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2021 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+-->
+ 
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>Settings</title>
+  <link href="/material/icon.png" rel="icon shortcut" sizes="128x128">
+  <link href="/material/icon.png" rel="apple-touch-icon" sizes="128x128">
+  <link href="../html/font/font.css?r=49" rel="stylesheet">
+  <link href="../html/css/themes/dark.css" rel="stylesheet">
+  <link href="../html/css/colors/blue.css" rel="stylesheet">
+  <link href="../html/css/style.css" rel="stylesheet">
+  <style>
+   *, body {
+   font-size:16px !important;
+   font-family:Roboto,sans-serif !important;
+   text-rendering: optimizeLegibility;
+   line-height: 1.5;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+  }
+  html, body {
+   background-color:var(--background-color) !important;
+  }
+  input[type="submit"] {
+   color: var(--text-color) !important;
+   background-color: transparent;
+   border:none;
+   -webkit-appearance: none;
+   appearance: none;
+   border-radius: 3px;
+   text-transform: uppercase;
+   padding:5px 8px 5px 8px;
+   outline: none;
+  }
+  input[type="submit"]:hover {
+   background-color:var(--btn-hover-color);
+  }
+  input[type="submit"]:active {
+   background-color:var(--active-color);
+  }
+  </style>
+ </head>
+ <body style="margin:32px; color:var(--text-color)">
+  <script>
+    var query = window.location.href.indexOf('?');
+    var havePlayer = window.location.href.indexOf('player=');
+    var serverUrl = window.location.protocol+"//"+window.location.host+"/material/settings/server/basic.html";
+    var playerUrl = window.location.protocol+"//"+window.location.host+"/material/settings/player/basic.html" + window.location.href.substring(query);
+    if (havePlayer<0) {
+      window.location.href = serverUrl;
+    } else {
+      // Set theme...
+      let theme = window.localStorage.getItem("lms-material::theme");
+      if (undefined==theme) {
+        theme='dark';
+      }
+      let t = theme.split('-');
+      let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
+      let themeName = t.join('-');
+
+      if (undefined!=theme && (theme.startsWith('light') || theme.indexOf("/light/")>=0)) {
+        document.querySelector("link[href='../html/css/themes/dark.css']").href = "../html/css/themes/light.css";
+      } else if (undefined!=themeName && themeName!='dark') {
+        if (themeName.startsWith("user:")) {
+          document.querySelector("link[href='../html/css/themes/dark.css']").href = "/material/usertheme/" + themeName.substring(5) + "";
+        } else {
+          document.querySelector("link[href='../html/css/themes/dark.css']").href = "../html/css/themes/"+themeName+".css";
+       }
+     }
+
+     let col = window.localStorage.getItem("lms-material::color");
+     if ('blue'!=col && undefined!=col) {
+       if (col.startsWith("user:")) {
+         document.querySelector("link[href='../html/css/colors/blue.css']").href = "/material/usercolor/" + col.substring(5) + "";
+       } else {
+         document.querySelector("link[href='../html/css/colors/blue.css']").href = "../html/css/colors/"+col+".css";
+       }
+     }
+
+     // Translate strings...
+     let translation = window.localStorage.getItem("lms-material::translation");
+     if (translation!=undefined) {
+       translation=JSON.parse(translation);
+       let playerTrans = translation["Player settings"];
+       let serverTrans = translation["Server settings"];
+       let settingsTrans = translation["Settings"];
+       if (undefined!=playerTrans && undefined!=serverTrans && undefined!=settingsTrans) {
+         function updateStrings() {
+           let elem = document.getElementById("player");
+           if (undefined!=elem) {
+             elem.value = playerTrans;
+           }
+           elem = document.getElementById("server");
+           if (undefined!=elem) {
+             elem.value = serverTrans;
+           }
+           elem = document.getElementById("title");
+           if (undefined!=elem) {
+             elem.innerHTML = settingsTrans;
+           }
+           document.title = settingsTrans;
+         }
+         if (window.addEventListener) {
+           window.addEventListener("load", updateStrings, false);
+         } else if (window.attachEvent) {
+            window.attachEvent("onload", updateStrings);
+         } else {
+            window.onload = updateStrings;
+         }
+       }
+     }
+   }
+  </script>
+  <div>
+   <h2 id="title">Settings</h2>
+   <input id="player" value="Player settings" type="submit" onclick="window.location.href = playerUrl"></input>
+   <div style="height:16px"></div>
+   <input id="server" value="Server settings" type="submit" onclick="window.location.href = serverUrl"></input>
+  </div>
+ </body>
+</html>
+

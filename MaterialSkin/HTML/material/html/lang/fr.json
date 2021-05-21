@@ -215,6 +215,7 @@
 "Insufficient metadata to fetch information.":"Métadonnées insuffisantes pour récupérer des informations.",
 "Interface":"Interface",
 "Interface settings":"Paramètres d'interface",
+"Internet/Other":"Internet/Autre",
 "Invalid URL":"URL invalide",
 "Invert selection":"Inverser la sélection",
 "Keyboard shortcuts":"Raccourcis clavier",
@@ -226,6 +227,7 @@
 "Library":"Bibliothèque",
 "Light":"Clair",
 "Loading...":"Chargement...",
+"Local":"Local",
 "Local files":"Fichiers locaux",
 "Lyrics":"Paroles",
 "MAC Address: %1":"Adresse MAC : %1",
@@ -417,6 +419,7 @@
 "Sort favorites list":"Trier les favoris",
 "Sort home screen":"Trier les éléments de l'écran d'accueil",
 "Sound":"Son",
+"Source":"Source",
 "Spacebar":"Barre d'espace",
 "Standard Players":"Platines standard",
 "Standard font size":"Police de taille standard",
@@ -566,8 +569,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Internet/Other":"Internet/Autre",
-"Local":"Local",
-"Source":"Source"
+"%1 days":"%1 jours"
 }

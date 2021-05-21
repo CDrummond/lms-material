@@ -77,6 +77,7 @@ var app = new Vue({
                 if (lang == 'en' || lang == 'en-us') {
                     if (storedTrans!=undefined) {
                         removeLocalStorage('translation');
+                        removeLocalStorage('lang');
                         setTranslation(undefined);
                         bus.$emit('langChanged');
                     }

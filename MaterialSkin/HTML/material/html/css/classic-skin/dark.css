@@ -17,4 +17,5 @@ input[type="submit"]:active, input[type="button"]:active {
 
 :root {
  --range-trough-color:#5a5a5a;
+ --border-color:#5a5a5a;
 }

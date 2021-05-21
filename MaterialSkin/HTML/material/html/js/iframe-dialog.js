@@ -261,7 +261,7 @@ function hideClassicSkinElems(page, textCol) {
             var statusarea = content.getElementById('statusarea');
             var msg = undefined!=statusarea && undefined!=statusarea.firstChild ? statusarea.firstChild.data : undefined;
             if (msg!=undefined && msg.length>0) {
-                bus.$emit('showMessage', msg);
+                bus.$emit('showMessage', msg.replace(/(<([^>]+)>)/gi, ""));
             }
         }
     }

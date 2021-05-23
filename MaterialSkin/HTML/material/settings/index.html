@@ -86,36 +86,40 @@
      }
 
      // Translate strings...
-     let translation = window.localStorage.getItem("lms-material::translation");
-     if (translation!=undefined) {
-       translation=JSON.parse(translation);
-       let playerTrans = translation["Player settings"];
-       let serverTrans = translation["Server settings"];
-       let settingsTrans = translation["Settings"];
-       if (undefined!=playerTrans && undefined!=serverTrans && undefined!=settingsTrans) {
-         function updateStrings() {
+     function updateStrings() {
+       let translation = window.localStorage.getItem("lms-material::translation");
+       if (translation!=undefined) {
+         translation=JSON.parse(translation);
+         let playerTrans = translation["Player settings"];
+         let serverTrans = translation["Server settings"];
+         let settingsTrans = translation["Settings"];
+         if (undefined!=playerTrans && playerTrans.length>0) {
            let elem = document.getElementById("player");
            if (undefined!=elem) {
              elem.value = playerTrans;
            }
-           elem = document.getElementById("server");
+         }
+         if (undefined!=serverTrans && serverTrans.length>0) {
+           let elem = document.getElementById("server");
            if (undefined!=elem) {
              elem.value = serverTrans;
            }
-           elem = document.getElementById("title");
+         }
+         if (undefined!=settingsTrans && settingsTrans.length>0) {
+           let elem = document.getElementById("title");
            if (undefined!=elem) {
              elem.innerHTML = settingsTrans;
            }
            document.title = settingsTrans;
          }
-         if (window.addEventListener) {
-           window.addEventListener("load", updateStrings, false);
-         } else if (window.attachEvent) {
-            window.attachEvent("onload", updateStrings);
-         } else {
-            window.onload = updateStrings;
-         }
        }
+     }
+     if (window.addEventListener) {
+       window.addEventListener("load", updateStrings, false);
+     } else if (window.attachEvent) {
+        window.attachEvent("onload", updateStrings);
+     } else {
+        window.onload = updateStrings;
      }
    }
   </script>

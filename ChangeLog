@@ -2,6 +2,7 @@
 -----
 1. If statusarea message is rescan or restart then show in dialog.
 2. Use innerText to get statusarea text to show.
+3. Minor tweak to players list in 'Information' dialog.
 
 2.4.3
 -----

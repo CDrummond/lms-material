@@ -68,17 +68,14 @@ Vue.component('lms-information-dialog', {
    <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Players')}}</p>
-   <ul>
-    <template v-for="(item, index) in players">
-     <li>
-      <v-icon v-if="item.icon.icon" style="margin-top:-4px">{{item.icon.icon}}</v-icon><img v-else class="svg-img" style="margin-top:-4px" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}
-      <ul>
-       <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
-      </ul>
-     </li>
-     <v-btn @click="openPlayerSettings(item)" flat><img class="btn-icon svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_PLAYER_SETTINGS.title}}</v-btn>
-    </template>
-   </ul>
+   <div v-for="(item, index) in players">
+    <v-icon v-if="item.icon.icon" style="margin-top:-4px">{{item.icon.icon}}</v-icon><img v-else class="svg-img" style="margin-top:-4px" :src="item.icon.svg | svgIcon(darkUi)"></img> {{item.name}}
+    <ul>
+     <template v-for="(info, index) in item.info"><li v-if="info!=''">{{info}}</li></template>
+    </ul>
+   </li>
+   <v-btn @click="openPlayerSettings(item)" flat><img class="btn-icon svg-img" :src="TB_PLAYER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_PLAYER_SETTINGS.title}}</v-btn>
+  </div>
 
    <div class="dialog-padding"></div>
 

@@ -262,19 +262,35 @@ function hideClassicSkinElems(page, textCol) {
             if (undefined!=statusarea) {
                 var rescanWarning = content.getElementById('rescanWarning');
                 var restartWarning = content.getElementById('restartWarning');
+                var msg = undefined;
+                var href = undefined;
+                var doBtn = undefined;
                 if (undefined!=rescanWarning || undefined!=restartWarning) {
                     var elem = undefined!=rescanWarning ? rescanWarning : restartWarning;
                     var parts = elem.innerHTML.split("<a");
                     if (parts.length>1) {
-                        var href = undefined!=elem.firstElementChild ? elem.firstElementChild.href : undefined;
+                        href = undefined!=elem.firstElementChild ? elem.firstElementChild.href : undefined;
+                        msg = parts[0];
+                        doBtn = undefined!=rescanWarning ? i18n("Rescan") : i18n("Restart");
+                    }
+                } else if (undefined!=content.querySelector('[name="checkForUpdateNow"]')) { // Handle new LMS version...
+                    var parts = statusarea.innerHTML.split("<a");
+                    if (2==parts.length) {
+                        href = undefined!=statusarea.firstElementChild ? statusarea.firstElementChild.href : undefined;
+                        msg = parts[0];
                         if (undefined!=href) {
-                            confirm(parts[0], undefined!=rescanWarning ? i18n("Rescan") : i18n("Restart")).then(res => {
-                                bus.$emit('iframe-href', href, false);
-                            });
-                            return;
+                            doBtn = i18n("Download");
                         }
                     }
                 }
+
+                if (undefined!=msg && undefined!=href && undefined!=doBtn) {
+                    confirm(msg, doBtn).then(res => {
+                        bus.$emit('iframe-href', href, false);
+                    });
+                    return;
+                }
+
                 var msg = statusarea.innerText;
                 if (msg!=undefined && msg.length>0) {
                     bus.$emit('showMessage', msg);

@@ -3,6 +3,8 @@
 1. If statusarea message is rescan or restart then show in dialog.
 2. Use innerText to get statusarea text to show.
 3. Minor tweak to players list in 'Information' dialog.
+4. Fix scrolling entry field into view when using desktop layout on mobile
+   devices.
 
 2.4.3
 -----

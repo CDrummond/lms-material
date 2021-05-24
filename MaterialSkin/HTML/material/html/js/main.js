@@ -178,25 +178,6 @@ var app = new Vue({
                         lmsApp.desktop=lmsApp.$store.state.desktopLayout;
                     }
                     var keyboardShown = 0==widthChange && heightChange>100;
-                    if (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
-                        let elem = document.activeElement;
-                        let found = false;
-                        let makeVisible = true;
-                        for (let i=0; i<10 && !found && elem; ++i) {
-                            if (elem.classList.contains("lms-list-item")) {
-                                found = true;
-                            } else if (elem.classList.contains("subtoolbar")) {
-                                // No need to scroll an input field in subtoolbar into view - see #342
-                                found = true;
-                                makeVisible = false;
-                            } else {
-                                elem = elem.parentElement;
-                            }
-                        }
-                        if (makeVisible) {
-                            ensureVisible(found ? elem : document.activeElement);
-                        }
-                    }
                     if (keyboardShown == lmsApp.bottomBar.shown) {
                         var elem = document.getElementById('np-bar');
                         if (!elem) {
@@ -206,6 +187,42 @@ var app = new Vue({
                             elem.style.display = keyboardShown ? 'none' : 'block';
                             document.documentElement.style.setProperty('--bottom-toolbar-height', keyboardShown ? '0px' : lmsApp.bottomBar.height);
                             lmsApp.bottomBar.shown = !keyboardShown;
+                        }
+                    }
+                    if (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+                        let elem = document.activeElement;
+                        let found = false;
+                        let foundListItem = false;
+                        let makeVisible = true;
+                        for (let i=0; i<10 && !found && elem; ++i) {
+                            if (elem.classList.contains("lms-list-item")) {
+                                found = foundListItem = true;
+                            } else if (elem.classList.contains("subtoolbar")) {
+                                // No need to scroll an input field in subtoolbar into view - see #342
+                                found = true;
+                                makeVisible = false;
+                            } else {
+                                elem = elem.parentElement;
+                            }
+                        }
+                        if (makeVisible) {
+                            window.requestAnimationFrame(function () {
+                                if (lmsApp.$store.state.desktopLayout && foundListItem) {
+                                    if (isVisible(elem)) {
+                                        return;
+                                    }
+                                    let list = elem.parentElement;
+                                    while (undefined!=list) {
+                                        if (list.classList.contains("lms-list")) {
+                                            list.scrollTop = elem.offsetTop - list.offsetTop;
+                                            return;
+                                        } else {
+                                            list = list.parentElement;
+                                        }
+                                    }
+                                }
+                                ensureVisible(found ? elem : document.activeElement);
+                            });
                         }
                     }
                 }

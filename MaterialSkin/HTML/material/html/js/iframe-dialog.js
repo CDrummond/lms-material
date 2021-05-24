@@ -286,7 +286,11 @@ function hideClassicSkinElems(page, textCol) {
 
                 if (undefined!=msg && undefined!=href && undefined!=doBtn) {
                     confirm(msg, doBtn).then(res => {
-                        bus.$emit('iframe-href', href, false);
+                        if (href.startsWith("http://") || href.startsWith("https://")) {
+                            openWindow(href);
+                        } else {
+                            bus.$emit('iframe-href', href, false);
+                        }
                     });
                     return;
                 }
@@ -380,7 +384,7 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
         }.bind(this));
-        bus.$on('iframe-href', function(ref, addToHistory) {
+        bus.$on('ic', function(ref, addToHistory) {
             if (undefined==addToHistory || addToHistory) {
                 this.history.push(this.src);
             }

@@ -1,3 +1,8 @@
+2.4.4
+-----
+1. If statusarea message is rescan or restart then show in dialog.
+2. Use innerText to get statusarea text to show.
+
 2.4.3
 -----
 1. Show server/player settings 'statusarea' messages in a toast.

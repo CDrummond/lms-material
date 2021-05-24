@@ -259,9 +259,26 @@ function hideClassicSkinElems(page, textCol) {
         }
         if ('player'==page || 'server'==page) {
             var statusarea = content.getElementById('statusarea');
-            var msg = undefined!=statusarea && undefined!=statusarea.firstChild ? statusarea.firstChild.data : undefined;
-            if (msg!=undefined && msg.length>0) {
-                bus.$emit('showMessage', msg.replace(/(<([^>]+)>)/gi, ""));
+            if (undefined!=statusarea) {
+                var rescanWarning = content.getElementById('rescanWarning');
+                var restartWarning = content.getElementById('restartWarning');
+                if (undefined!=rescanWarning || undefined!=restartWarning) {
+                    var elem = undefined!=rescanWarning ? rescanWarning : restartWarning;
+                    var parts = elem.innerHTML.split("<a");
+                    if (parts.length>1) {
+                        var href = undefined!=elem.firstElementChild ? elem.firstElementChild.href : undefined;
+                        if (undefined!=href) {
+                            confirm(parts[0], undefined!=rescanWarning ? i18n("Rescan") : i18n("Restart")).then(res => {
+                                bus.$emit('iframe-href', href, false);
+                            });
+                            return;
+                        }
+                    }
+                }
+                var msg = statusarea.innerText;
+                if (msg!=undefined && msg.length>0) {
+                    bus.$emit('showMessage', msg);
+                }
             }
         }
     }
@@ -347,8 +364,10 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
         }.bind(this));
-        bus.$on('iframe-href', function(ref) {
-            this.history.push(this.src);
+        bus.$on('iframe-href', function(ref, addToHistory) {
+            if (undefined==addToHistory || addToHistory) {
+                this.history.push(this.src);
+            }
             this.src = ref;
         }.bind(this));
         bus.$on('noPlayers', function() {

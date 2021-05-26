@@ -5,6 +5,7 @@
 3. Minor tweak to players list in 'Information' dialog.
 4. Fix scrolling entry field into view when using desktop layout on mobile
    devices.
+5. Treat all biographies, and album reviews, as HTML to preseve formatting.
 
 2.4.3
 -----

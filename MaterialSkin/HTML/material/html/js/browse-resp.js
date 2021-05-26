@@ -871,13 +871,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.canUseGrid = resp.forceGrid = true;
             }
         } else if (data.result.biography) {
-            resp.items.push({   title: data.result.biography,
-                                type: data.result.biography.startsWith("<") || data.result.biography.indexOf("<br/>")>0 ? "html" : "text",
+            resp.items.push({   title: replaceNewLines(data.result.biography),
+                                type: "html",
                                 id: parent.id+".0"
                             });
         } else if (data.result.albumreview) {
-            resp.items.push({   title: data.result.albumreview,
-                                type: data.result.albumreview.startsWith("<") || data.result.albumreview.indexOf("<br/>")>0 ? "html" : "text",
+            resp.items.push({   title: replaceNewLines(data.result.albumreview),
+                                type: "html",
                                 id: parent.id+".0"
                             });
         } else if (data.result.loop_loop) {

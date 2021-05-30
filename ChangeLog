@@ -6,6 +6,7 @@
    if 'Download'/'Restart' button is clicked, just close dialog on 'Cancel'
 3. Add click handler to close server/player settings menus when clicking within
    iframe.
+4. If status message is all in 'a' elem, then use its text.
 
 2.4.4
 -----

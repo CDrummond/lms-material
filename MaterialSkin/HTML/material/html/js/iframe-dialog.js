@@ -273,7 +273,7 @@ function hideClassicSkinElems(page, textCol) {
                         msg = parts[0];
                         var dotPos = msg.lastIndexOf('.');
                         if (dotPos>10) {
-                            msg = msg.substring(0, dotPos);
+                            msg = msg.substring(0, dotPos+1);
                         }
                         doBtn = undefined!=rescanWarning ? i18n("Rescan") : i18n("Restart");
                     }
@@ -284,7 +284,7 @@ function hideClassicSkinElems(page, textCol) {
                         msg = parts[0];
                         var dotPos = msg.lastIndexOf('.');
                         if (dotPos>10) {
-                            msg = msg.substring(0, dotPos);
+                            msg = msg.substring(0, dotPos+1);
                         }
                         if (undefined!=href) {
                             doBtn = i18n("Download");

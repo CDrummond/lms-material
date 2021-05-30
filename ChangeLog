@@ -1,6 +1,8 @@
 2.4.5
 -----
 1. Try to remove haning 'Click' on server update message.
+2. When showing software updates dialog, only go to download link if 'Download'
+   button is pressed, not on 'Cancel'
 
 2.4.4
 -----

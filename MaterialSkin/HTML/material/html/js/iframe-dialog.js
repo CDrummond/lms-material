@@ -294,10 +294,12 @@ function hideClassicSkinElems(page, textCol) {
 
                 if (undefined!=msg && undefined!=href && undefined!=doBtn) {
                     confirm(msg, doBtn).then(res => {
-                        if (href.startsWith("http://") || href.startsWith("https://")) {
-                            openWindow(href);
-                        } else {
-                            bus.$emit('iframe-href', href, false);
+                        if (res) {
+                            if (href.startsWith("http://") || href.startsWith("https://")) {
+                                openWindow(href);
+                            } else {
+                                bus.$emit('iframe-href', href, false);
+                            }
                         }
                     });
                     return;

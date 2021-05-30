@@ -290,7 +290,7 @@ function hideClassicSkinElems(page, textCol) {
                                  ? restartWarning
                                  : undefined!=content.querySelector('[name="checkForUpdateNow"]') // Handle new LMS version...
                                    ? statusarea
-                                   : undefinedl
+                                   : undefined;
                 if (undefined!=elem) {
                     var parts = elem.innerHTML.split("<a");
                     if (parts.length>1) {

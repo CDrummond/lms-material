@@ -1,8 +1,9 @@
 2.4.5
 -----
-1. Try to remove haning 'Click' on server update message.
-2. When showing software updates dialog, only go to download link if 'Download'
-   button is pressed, not on 'Cancel'
+1. Try to remove hanging 'Click' on server update message - this is with older
+   versions of LMS.
+2. When showing update/restart dialog due to status message, only go to link
+   if 'Download'/'Restart' button is clicked, just close dialog on 'Cancel'
 
 2.4.4
 -----

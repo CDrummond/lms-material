@@ -13,6 +13,7 @@
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" type="text/css" href="[% webroot %]mobile.css"/>
 [% END %]
+<script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
 <script>
  let theme = window.localStorage.getItem("lms-material::theme");
  if (undefined==theme) {
@@ -41,5 +42,6 @@
     document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
   }
  }
+ Mousetrap.bind('esc', function() { document.bus.$emit('esc') });
 </script>
 

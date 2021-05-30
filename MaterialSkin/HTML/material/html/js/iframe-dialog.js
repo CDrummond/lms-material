@@ -49,6 +49,13 @@ function fixClassicSkinRefs(doc) {
     }
 }
 
+var iframeMenuOpen = false;
+function iframeClickHandler(e) {
+    if (iframeMenuOpen) {
+        bus.$emit('hideMenu', 'iframe');
+    }
+}
+
 function otherClickHandler(e) {
     var target = e.target || e.srcElement;
     var href = undefined;
@@ -60,6 +67,7 @@ function otherClickHandler(e) {
     if (href && !href.startsWith('#')) {
         bus.$emit('iframe-href', href);
     }
+    iframeClickHandler(e);
 }
 
 function clickDirSelect(elem) {
@@ -238,15 +246,16 @@ function hideClassicSkinElems(page, textCol) {
                 selector.addEventListener("change", selectChanged);
                 selectChanged();
             }
-        } else if ('other'==page || 'lms'==page) {
-            if (content) {
-                if (content.addEventListener) {
-                    content.addEventListener('click', otherClickHandler);
-                } else if (content.attachEvent) {
-                    content.attachEvent('onclick', otherClickHandler);
-                }
+        }
+
+        if (content) {
+            if (content.addEventListener) {
+                content.addEventListener('click', 'other'==page || 'lms'==page ? otherClickHandler : iframeClickHandler);
+            } else if (content.attachEvent) {
+                content.attachEvent('onclick', 'other'==page || 'lms'==page ? otherClickHandler : iframeClickHandler);
             }
         }
+
         if (undefined!=toHide) {
             var select = content.getElementById("choose_setting");
             if (undefined!=select) {
@@ -489,6 +498,7 @@ Vue.component('lms-iframe-dialog', {
             this.$store.commit('dialogOpen', {name:'iframe', shown:val});
         },
         'showMenu': function(val) {
+            iframeMenuOpen = val;
             this.$store.commit('menuVisible', {name:'iframe', shown:val});
         }
     }

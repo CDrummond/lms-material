@@ -4,6 +4,8 @@
    versions of LMS.
 2. When showing update/restart dialog due to status message, only go to link
    if 'Download'/'Restart' button is clicked, just close dialog on 'Cancel'
+3. Add click handler to close server/player settings menus when clicking within
+   iframe.
 
 2.4.4
 -----

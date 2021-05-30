@@ -282,30 +282,31 @@ function hideClassicSkinElems(page, textCol) {
                     var parts = elem.innerHTML.split("<a");
                     if (parts.length>1) {
                         var href = undefined!=elem.firstElementChild ? elem.firstElementChild.href : undefined;
-                        var msg = parts[0];
-                        var doBtn = undefined;
-                        if (undefined==msg || msg.trim().length<2) {
-                            msg = undefined!=elem.firstElementChild ? elem.firstElementChild.innerHTML : undefined;
-                        }
-                        if (undefined!=msg) {
-                            var dotPos = msg.lastIndexOf('.');
-                            if (dotPos>10) {
-                                msg = msg.substring(0, dotPos+1);
+                        if (undefined!=href) {
+                            var msg = parts[0];
+                            var doBtn = undefined;
+                            if (undefined==msg || msg.trim().length<2) {
+                                msg = undefined!=elem.firstElementChild ? elem.firstElementChild.innerHTML : undefined;
                             }
-                            doBtn = undefined!=rescanWarning ? i18n("Rescan") : undefined!=restartWarning ? i18n("Restart") : i18n("Download");
-                        }
-
-                        if (undefined!=msg && undefined!=href && undefined!=doBtn) {
-                            confirm(msg, doBtn).then(res => {
-                                if (res) {
-                                    if (href.startsWith("http://") || href.startsWith("https://")) {
-                                        openWindow(href);
-                                    } else {
-                                        bus.$emit('iframe-href', href, false);
-                                    }
+                            if (undefined!=msg) {
+                                var dotPos = msg.lastIndexOf('. ');
+                                if (dotPos>10) {
+                                    msg = msg.substring(0, dotPos+1);
                                 }
-                            });
-                            return;
+                                doBtn = undefined!=rescanWarning ? i18n("Rescan") : undefined!=restartWarning ? i18n("Restart") : i18n("Download");
+                                if (undefined!=doBtn) {
+                                    confirm(msg, doBtn).then(res => {
+                                        if (res) {
+                                            if (href.startsWith("http://") || href.startsWith("https://")) {
+                                                openWindow(href);
+                                            } else {
+                                                bus.$emit('iframe-href', href, false);
+                                            }
+                                        }
+                                    });
+                                    return;
+                                }
+                            }
                         }
                     }
                 }

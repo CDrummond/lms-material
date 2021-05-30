@@ -180,6 +180,7 @@ function addSliders(doc) {
 }
 
 var iframeInfo = {
+  content:undefined,
   action:undefined,
   actionCheckInterval: undefined,
   actionChecks: 0
@@ -231,9 +232,11 @@ function hideClassicSkinElems(page, textCol) {
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
         var content = iframe.contentDocument;
+        iframeInfo.content = content;
         if (undefined==content) {
             return;
         }
+
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
 
@@ -267,6 +270,16 @@ function hideClassicSkinElems(page, textCol) {
             }
         }
         if ('player'==page || 'server'==page) {
+            // Set --vh as this is used to fix size of main settings frame, so that we can
+            // correctly set its position, etc, to be consistent between mobile and desktop.
+            // Previously desktop had a big padding above view selector.
+
+            // Work-around 100vh behaviour in mobile chrome
+            // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+            let vh = window.innerHeight * 0.01;
+            content.documentElement.style.setProperty('--vh', `${vh}px`);
+
+            // Look for any status message that needs to be shown in a toast or dialog (if there is an action)
             var statusarea = content.getElementById('statusarea');
             if (undefined!=statusarea) {
                 var rescanWarning = content.getElementById('rescanWarning');
@@ -421,6 +434,12 @@ Vue.component('lms-iframe-dialog', {
                 this.showMenu= false;
             }
         }.bind(this));
+        bus.$on('windowHeightChanged', function() {
+            if (this.show && undefined!=iframeInfo.content) {
+                let vh = window.innerHeight * 0.01;
+                iframeInfo.content.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+        }.bind(this));
     },
     methods: {
         goBack(longpress) {
@@ -450,6 +469,7 @@ Vue.component('lms-iframe-dialog', {
             this.show=0;
             this.showMenu = false;
             this.history=[];
+            iframeInfo.content=undefined;
             bus.$emit('iframeClosed', this.isPlayer);
         },
         i18n(str, arg) {

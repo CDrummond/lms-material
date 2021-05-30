@@ -114,7 +114,12 @@ table {
 
 div#innerSettingsBlock {
  width:calc(100vw - 36px)!important;
+ height:calc((var(--vh, 1vh)*100) - 160px)!important;
  padding: 0px 21px 0px 7px;
+}
+
+div#topGraphicMenu3 #statusMessage {
+ font-size:0px!important;
 }
 
 @media screen and (min-width: 1300px) {

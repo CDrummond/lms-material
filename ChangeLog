@@ -7,6 +7,8 @@
 3. Add click handler to close server/player settings menus when clicking within
    iframe.
 4. If status message is all in 'a' elem, then use its text.
+5. Remove extra padding above settings selector in server/player settings on
+   desktop.
 
 2.4.4
 -----

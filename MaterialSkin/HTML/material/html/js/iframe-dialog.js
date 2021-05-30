@@ -271,6 +271,10 @@ function hideClassicSkinElems(page, textCol) {
                     if (parts.length>1) {
                         href = undefined!=elem.firstElementChild ? elem.firstElementChild.href : undefined;
                         msg = parts[0];
+                        var dotPos = msg.lastIndexOf('.');
+                        if (dotPos>10) {
+                            msg = msg.substring(0, dotPos);
+                        }
                         doBtn = undefined!=rescanWarning ? i18n("Rescan") : i18n("Restart");
                     }
                 } else if (undefined!=content.querySelector('[name="checkForUpdateNow"]')) { // Handle new LMS version...
@@ -278,6 +282,10 @@ function hideClassicSkinElems(page, textCol) {
                     if (2==parts.length) {
                         href = undefined!=statusarea.firstElementChild ? statusarea.firstElementChild.href : undefined;
                         msg = parts[0];
+                        var dotPos = msg.lastIndexOf('.');
+                        if (dotPos>10) {
+                            msg = msg.substring(0, dotPos);
+                        }
                         if (undefined!=href) {
                             doBtn = i18n("Download");
                         }

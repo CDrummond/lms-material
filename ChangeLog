@@ -1,3 +1,7 @@
+2.4.5
+-----
+1. Try to remove haning 'Click' on server update message.
+
 2.4.4
 -----
 1. If statusarea message is rescan or restart then show in dialog.

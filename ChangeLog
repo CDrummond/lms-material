@@ -9,6 +9,7 @@
 4. If status message is all in 'a' elem, then use its text.
 5. Remove extra padding above settings selector in server/player settings on
    desktop.
+6. Close iframe on 'esc' - depending upon which input has focus.
 
 2.4.4
 -----

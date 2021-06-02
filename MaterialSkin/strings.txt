@@ -11,14 +11,17 @@ PLUGIN_MATERIAL_SKIN
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
 	FR	REMARQUE : Dans les listes de genres ci-dessous, pour cibler tous les genres, utiliser le caractère générique astérisque (*). Pour ne cibler aucun genre, saisir une chaîne de caractères qui ne correspond à aucun de vos genres (par exemple, «N/A»).
+	NL	OPMERKING: Gebruik in de genrelijsten hieronder een enkele asterisk (*) om op alle genres van toepassing te zijn. Om op geen enkel genre toe te passen, gebruik een tekenreeks (bijv. 'N/A') die niet overeenkomt met een van de genres.
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	EN	Band genres
 	FR	Genres concernés par le tag "band" (groupe/orchestre)
+	NL	Band genres
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	EN	Comma-separated list of genres supporting band. When entering one of these genres, you will be asked if you wish to browse by band.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par groupe/orchestre.
+	NL	Komma gescheiden lijst van band genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op band.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	DE	Komponisten Stilrichtungen
@@ -59,31 +62,38 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	EN	N/A
 	FR	N/A
+	NL	N/A
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	EN	Show composer
 	FR	Afficher le compositeur
+	NL	Toon componist
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	EN	If a song's genre matches the list above and it has a composer tag, then show this in the queue and now-playing.
 	FR	Si le tag "genre" d'un morceau apartient à la liste ci-dessus et que le morceau a un tag "composer", afficher le compositeur dans la liste de lecture et la vue "lecture en cours".
+	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een componist tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	EN	Show conductor
 	FR	Afficher le chef d'orchestre
+	NL	Toon dirigent
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	EN	If a song's genre matches the list above and it has a conductor tag, then show this in the queue and now-playing.
 	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "conductor", afficher le chef d'orchestre dans la liste de lecture et la vue "lecture en cours".
+	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een dirigent tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	EN	Show band
 	FR	Afficher le groupe/orchestre
+	NL	Toon band
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	EN	If a song's genre matches the list above and it has a band tag, then show this in the queue and now-playing.
 	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "band", afficher le groupe/orchestre dans la liste de lecture et la vue "lecture en cours".
-
+	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een band tag, toon dit bij het afspelen en in de afspeellijst.
+	
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	EN	Password
 	FR	Mot de passe
@@ -97,30 +107,37 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	EN	Fixed volume players
 	FR	Platines à volume fixe
+	NL	Vast volume muziekspelers
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	EN	How should player's with a fixed volume be controlled?
 	FR	Comment contrôler les platines à volume fixe ?
+	NL	Hoe moet een muziekspeler met een vast volume worden geregeld? 
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_HIDE
 	EN	Hide volume control
 	FR	Masquer le contrôle du volume
+	NL	Verberg volumeregeling
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_SPECIAL
 	EN	Disable volume slider, and hide volume level
 	FR	Désactiver le curseur du volume et masquer le niveau du volume
+	NL	Volumeregelaar uitschakelen en volumeniveau verbergen
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_NORMAL
 	EN	Display standard volume control
 	FR	Afficher et permettre le contrôle du volume
+	NL	Toon standaard volumeregeling
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	EN	Show artist first in now-playing and queue
 	FR	Afficher l'artiste en premier dans la vue 'lecture en cours' et la liste de lecture
+	NL	Toon artiest als eerste in 'Speelt nu' en afspeellijst
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	EN	If a track has composer, conductor, or band, and these are configured to be shown, then show artist before these, otherwise show after.
 	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés pour être affichés, choisir de montrer l'artiste en premier ou pas.
+	NL	Als een nummer een componist, dirigent of band tag heeft, en deze zijn geconfigureerd om te worden getoond, toon dan eerst de artiest, anders erna.
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	EN	Show all artists

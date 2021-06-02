@@ -10,6 +10,8 @@
 5. Remove extra padding above settings selector in server/player settings on
    desktop.
 6. Close iframe on 'esc' - depending upon which input has focus.
+7. Allow to add a track to (and remove from) favourites via now-playing
+   context menu.
 
 2.4.4
 -----

@@ -701,28 +701,33 @@ function updateItemFavorites(item) {
         return;
     }
 
-    var favTitle = item.origTitle ? item.origTitle : item.title;
-    if (item.id.startsWith("genre_id:")) {
-        item.favUrl="db:genre.name="+encodeURIComponent(favTitle);
-        item.favIcon="html/images/genres.png";
-    } else if (item.id.startsWith("artist_id:")) {
-        item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
-        item.favIcon=changeImageSizing(item.image);
-    } else if (item.id.startsWith("album_id:")) {
-        item.favUrl="db:album.title="+encodeURIComponent(favTitle);
-        item.favIcon=changeImageSizing(item.image);
-    } else if (item.id.startsWith("year:")) {
-        item.favUrl="db:year.id="+encodeURIComponent(favTitle);
-        item.favIcon="html/images/years.png";
-    } else if (item.id.startsWith("playlist:")) {
-        item.favIcon="html/images/playlists.png";
-    } else if (item.stdItem==STD_ITEM_MUSICIP_MOOD) {
-        item.favUrl=item.id;
-        item.favIcon="plugins/MusicMagic/html/images/icon.png";
-    }
+    try {
+        var favTitle = item.origTitle ? item.origTitle : item.title;
+        if (item.id!=undefined && item.album_id!=undefined) {
+            item.favIcon="music/"+item.album_id+"/cover.png";
+        } else if (item.id.startsWith("genre_id:")) {
+            item.favUrl="db:genre.name="+encodeURIComponent(favTitle);
+            item.favIcon="html/images/genres.png";
+        } else if (item.id.startsWith("artist_id:")) {
+            item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
+            item.favIcon=changeImageSizing(item.image);
+        } else if (item.id.startsWith("album_id:")) {
+            item.favUrl="db:album.title="+encodeURIComponent(favTitle);
+            item.favIcon=changeImageSizing(item.image);
+        } else if (item.id.startsWith("year:")) {
+            item.favUrl="db:year.id="+encodeURIComponent(favTitle);
+            item.favIcon="html/images/years.png";
+        } else if (item.id.startsWith("playlist:")) {
+            item.favIcon="html/images/playlists.png";
+        } else if (item.stdItem==STD_ITEM_MUSICIP_MOOD) {
+            item.favUrl=item.id;
+            item.favIcon="plugins/MusicMagic/html/images/icon.png";
+        }
 
-    item.favUrl = item.favUrl ? item.favUrl : item.url;
-    item.favIcon = item.favIcon ? item.favIcon : item.image
+        item.favUrl = item.favUrl ? item.favUrl : item.url;
+        item.favIcon = item.favIcon ? item.favIcon : item.image
+    } catch(e) {
+    }
 }
 
 function isInFavorites(item) {

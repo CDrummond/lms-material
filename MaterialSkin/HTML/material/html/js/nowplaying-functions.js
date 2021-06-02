@@ -241,6 +241,10 @@ function nowplayingShowMenu(view, event) {
             if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
                 view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:view.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
             }
+            let act = isInFavorites(view.playerStatus.current) ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION;
+            if (undefined!=view.playerStatus.current.favUrl && undefined!=view.playerStatus.current.favIcon) {
+                view.menu.items.push({title:ACTIONS[act].title, act:NP_ITEM_ACT+act, svg:ACTIONS[act].svg});
+            }
             if (undefined!=view.playerStatus.current.title) {
                 view.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
             }
@@ -282,9 +286,32 @@ function nowplayingMenuAction(view, item) {
         bus.$emit('browse-search', item.text, NP_INFO);
         view.close();
     } else if (item.act>=NP_ITEM_ACT) {
-        if (undefined!=view.menu.tab && undefined!=view.menu.index && undefined!=view.info.tabs[view.menu.tab].sections[0].items &&
+        let act = item.act - NP_ITEM_ACT;
+        if (ADD_TO_FAV_ACTION==act || REMOVE_FROM_FAV_ACTION==act) {
+            let add = ADD_TO_FAV_ACTION==act;
+            let litem = view.playerStatus.current;
+            lmsCommand(view.$store.state.player.id, ["favorites", "exists", litem.favUrl]).then(({data})=> {
+                logJsonMessage("RESP", data);
+                if (data && data.result && data.result.exists==(add ? 0 : 1)) {
+                    if (!add) {
+                        confirm(i18n("Remove '%1' from favorites?", litem.title), i18n('Remove')).then(res => {
+                            lmsCommand(view.$store.state.player.id, ["material-skin", "delete-favourite", "url:"+litem.favUrl]).then(({data})=> {
+                                logJsonMessage("RESP", data);
+                                bus.$emit('refreshFavorites');
+                            }).catch(err => {
+                            });
+                        });
+                    } else {
+                        lmsCommand(view.$store.state.player.id, ["favorites", "add", "url:"+litem.favUrl, "title:"+litem.title, "icon:"+litem.favIcon]).then(({data})=> {
+                            logJsonMessage("RESP", data);
+                            bus.$emit('refreshFavorites');
+                        }).catch(err => {
+                        });
+                    }
+                }
+            });
+        } else if (undefined!=view.menu.tab && undefined!=view.menu.index && undefined!=view.info.tabs[view.menu.tab].sections[0].items &&
             view.info.tabs[view.menu.tab].sections[0].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].sections[0].items.length) {
-            let act = item.act - NP_ITEM_ACT;
             let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
                 bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);

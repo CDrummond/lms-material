@@ -4,6 +4,8 @@
    list via artist.
 2. Fix navigating back to now-playing if click on browse link in now-playing
    info using mobile layout.
+3. Fix browse incorrectly navigating back if main menu is closed with 'esc'
+   event.
 
 2.4.5
 -----

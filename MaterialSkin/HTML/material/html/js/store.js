@@ -646,11 +646,18 @@ const store = new Vuex.Store({
         menuVisible(state, val) {
             if (val.shown) {
                 state.visibleMenus.add(val.name);
+                lmsNumVisibleMenus = state.visibleMenus.size;
                 bus.$emit('menuOpen');
             } else {
-                state.visibleMenus.delete(val.name);
+                // Delay handling of menu being closed by 1/4 second. If a menu is closed
+                // by 'esc' the 'esc' also falls through to the browse page. If we decrement
+                // the number of open menus browse thinks none are open so processes the 'esc'
+                // event!
+                setTimeout(function() {
+                    state.visibleMenus.delete(val.name);
+                    lmsNumVisibleMenus = state.visibleMenus.size;
+                }, 250);
             }
-            lmsNumVisibleMenus = state.visibleMenus.size;
         },
         dialogOpen(state, val) {
             if (val.shown) {

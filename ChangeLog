@@ -1,3 +1,8 @@
+2.4.6
+-----
+1. Don't add sort field when adding an album to queue after navigating to album
+   list via artist.
+
 2.4.5
 -----
 1. Try to remove hanging 'Click' on server update message - this is with older

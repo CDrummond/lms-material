@@ -1679,7 +1679,7 @@ function browseBuildFullCommand(view, item, act) {
                         if (!item.id.startsWith("artist_id:") || !loop[i].startsWith("artist_id:")) {
                             command.command.push(loop[i]);
                         }
-                        if (loop[i].startsWith("artist_id:")) {
+                        if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
                         }
                     }

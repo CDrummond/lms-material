@@ -1496,11 +1496,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.nowPlayingExpanded = val;
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0) {
                 this.menu.show = false;
                 if (this.menu.inMainMenu) {
                     bus.$emit('showMainMenu');
                 }
+            } else if (this.$store.state.openDialogs.length>1 ||
+                       (this.$store.state.openDialogs.length==1 && (this.$store.state.desktopLayout || this.$store.state.openDialogs[0]!='info-dialog'))) {
+                ; // Ignore 'esc' when dialog open. *Ecept* if only 'dialog' is now-playing ifo-dialog in mobile
             } else if ( (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') &&
                         // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
                         (undefined==this.$store.state.lastDialogClose || (new Date().getTime()-this.$store.state.lastDialogClose)>250) ) {

@@ -2,6 +2,8 @@
 -----
 1. Don't add sort field when adding an album to queue after navigating to album
    list via artist.
+2. Fix navigating back to now-playing if click on browse link in now-playing
+   info using mobile layout.
 
 2.4.5
 -----

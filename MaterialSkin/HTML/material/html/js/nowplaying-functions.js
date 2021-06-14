@@ -501,7 +501,7 @@ function nowplayingFetchArtistInfo(view) {
                 lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
-                        if (data.result && data.result.biograph) {
+                        if (data.result && data.result.biography) {
                             if (data.result.artist) {
                                 view.info.tabs[ARTIST_TAB].found = true;
                                 if (view.info.tabs[ARTIST_TAB].first) {
@@ -515,7 +515,7 @@ function nowplayingFetchArtistInfo(view) {
                         }
                         view.info.tabs[ARTIST_TAB].count--;
                         if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
-                            view.info.tabs[ARTIST_TAB].text = view.infoTrack.artists.join();
+                            view.info.tabs[ARTIST_TAB].text = view.infoTrack.artist;
                             view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE;
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;

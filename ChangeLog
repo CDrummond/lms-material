@@ -6,6 +6,7 @@
    info using mobile layout.
 3. Fix browse incorrectly navigating back if main menu is closed with 'esc'
    event.
+4. Fix show artist biography for tracks with multiple artists.
 
 2.4.5
 -----

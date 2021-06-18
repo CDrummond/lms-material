@@ -1,3 +1,8 @@
+2.4.7
+-----
+1. Fix text colour of album and track listings in now-playing if using a light
+   theme with coloured toolbars.
+
 2.4.6
 -----
 1. Don't add sort field when adding an album to queue after navigating to album

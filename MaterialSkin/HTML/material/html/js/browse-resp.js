@@ -57,7 +57,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
-            var isMusicMix = (command == "musicip" || command == "musicsimilarity") && data.params[1].length>0 && data.params[1][1]=="mix";
+            var isMusicMix = (command == "musicsimilarity") || (command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix");
             var isDynamicPlaylist = command == "dynamicplaylist";
             var haveWithIcons = false;
             var haveWithoutIcons = false;

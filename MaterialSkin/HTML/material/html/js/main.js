@@ -17,6 +17,13 @@ var app = new Vue({
                             icon: false, prompt:false, addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false } }
     },
     created() {
+        if (IS_MOBILE) {
+            // Disable hover effects for buttons in mobile, as these can get 'stuck'. This /should/ be automatic, but
+            // is failing. Placing in "@media (hover: none)" did not seem to work. So, apply here for just mobile...
+            var s = document.createElement("style");
+            s.innerHTML = ".v-btn:hover:before { background-color:transparent!important; }";
+            document.getElementsByTagName("head")[0].appendChild(s);
+        }
         this.autoLayout = true;
         this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
         this.splitter = this.splitterPercent;

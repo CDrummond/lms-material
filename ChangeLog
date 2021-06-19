@@ -5,6 +5,8 @@
 2. Don't allow to select sub-toolbar text, fixes odd issue on Android Chrome
    where pressing back button from seach field causes 'Music' to be selected!
 3. Disable ripple effects on subtoolbar buttons only.
+4. Disable button hover via setting CSS from javascript for mobile. Should not
+   be required, but seems buttons remain stuck in hover after pressing.
 
 2.4.6
 -----

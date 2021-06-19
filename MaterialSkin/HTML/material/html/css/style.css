@@ -1792,7 +1792,7 @@ div.v-subheader {
 }
 
 /* Long press on buttons sometimes causes select? */
-.v-btn--icon, .v-btn__content, .v-btn__content i {
+.v-btn--icon, .v-btn__content, .v-btn__content i, .noselect {
  -webkit-touch-callout:none;
  -webkit-user-select:none;
  -khtml-user-select:none;
@@ -2229,7 +2229,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  }
 }
 
-/* Disable ripple fade-out animation, as on mobiel if clicking a button causes it to disappear the animation goes to another button! */
+/* Disable ripple fade-out animation, as on mobile if clicking a button causes it to disappear the animation goes to another button! */
 .v-ripple__animation--out {
  display:none !important;
 }

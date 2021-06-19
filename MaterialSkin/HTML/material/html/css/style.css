@@ -2230,7 +2230,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 /* Disable ripple fade-out animation, as on mobile if clicking a button causes it to disappear the animation goes to another button! */
-.v-ripple__animation--out {
+.subtoolbar .toolbar-button .v-ripple__animation--in, .subtoolbar .toolbar-button .v-ripple__animation--out {
  display:none !important;
 }
 

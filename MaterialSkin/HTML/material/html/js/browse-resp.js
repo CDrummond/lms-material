@@ -527,7 +527,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items = resp.items.concat(feeds);
                 resp.items = resp.items.concat(after);
                 // If we only have 1 (non-search) action, assume its the 'Recenlty played' action and give it a better icon
-                if (1==actions.length) {
+                if (1==actions.length && (undefined!=resp.items[actions[0]].icon || undefined!=resp.items[actions[0]].svg)) {
+                    resp.items[actions[0]].svg=undefined;
                     resp.items[actions[0]].icon='history';
                 }
             } else if (isFavorites) {

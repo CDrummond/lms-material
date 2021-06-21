@@ -7,6 +7,8 @@
 3. Disable ripple effects on subtoolbar buttons only.
 4. Disable button hover via setting CSS from javascript for mobile. Should not
    be required, but seems buttons remain stuck in hover after pressing.
+5. Only sort podcast feeds.
+6. Give 'Recently played' podcast enty a different icon.
 
 2.4.6
 -----

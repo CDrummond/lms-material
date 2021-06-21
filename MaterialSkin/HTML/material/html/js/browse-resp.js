@@ -54,7 +54,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
             var isApps = parent && parent.id == TOP_APPS_ID;
-            var isPodcastList = command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
+            console.log(parent.id);
+            var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isMusicMix = (command == "musicsimilarity") || (command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix");
@@ -277,12 +278,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    i.menu.push(EDIT_ACTION);
-                    i.menu.push(REMOVE_PODCAST_ACTION);
-                    i.section=SECTION_PODCASTS;
-                    i.index=resp.items.length;
-                    if ("link"==i.type) {
-                        i.menu = [];
+                    if (i.type==undefined) {
+                        i.menu.push(EDIT_ACTION);
+                        i.menu.push(REMOVE_PODCAST_ACTION);
+                        i.section=SECTION_PODCASTS;
+                        i.index=resp.items.length;
                     }
                 }
 
@@ -499,7 +499,37 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (isApps) {
                 resp.items.sort(titleSort);
             } else if (isPodcastList) {
-                resp.items.sort(podcastSort);
+                /* Only want to sort podcast feeds, and not actions. So create lists for:
+                   - actions before feeds
+                   - feeds
+                   - actions after feeds
+                   ...then sort feeds, and recombine lists */
+                var before=[];
+                var feeds=[];
+                var after=[];
+                var actions=[];
+                for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    if (undefined==loop[i].type) {
+                        feeds.push(loop[i]);
+                    } else {
+                        if (feeds.length>0) {
+                            after.push(loop[i]);
+                        } else {
+                            before.push(loop[i]);
+                        }
+                        if ('search'!=loop[i].type) {
+                            actions.push(i);
+                        }
+                    }
+                }
+                feeds.sort(titleSort);
+                resp.items=before;
+                resp.items = resp.items.concat(feeds);
+                resp.items = resp.items.concat(after);
+                // If we only have 1 (non-search) action, assume its the 'Recenlty played' action and give it a better icon
+                if (1==actions.length) {
+                    resp.items[actions[0]].icon='history';
+                }
             } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }

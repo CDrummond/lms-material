@@ -55,7 +55,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
             var isApps = parent && parent.id == TOP_APPS_ID;
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
-            var isPodcastSearch = command == "podcasts" && undefined!=getIndex(data.params[1], "search:");
+            var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isMusicMix = (command == "musicsimilarity") || (command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix");
@@ -99,7 +99,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     continue;
                 }
-                console.log(JSON.stringify(i));
+
                 if (resp.items.length==data.result.count-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
                     // Remove 'All Songs' entry
                     data.result.count--;
@@ -376,7 +376,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
                         i.id = "item_id:"+i.actions.go.params.item_id;
                     }
-                    mapIcon(i, command);
+                    if (!isPodcastList) {
+                        mapIcon(i, command);
+                    }
                 }
 
                 if (!i.id || isFavorites) {
@@ -518,6 +520,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         loop[i].index=feeds.length;
                         feeds.push(loop[i]);
                     } else {
+                        mapIcon(loop[i], 'podcasts', 'rss_feed');
                         if ('podcast'==loop[i].svg) {
                             loop[i].svg=undefined;
                             loop[i].icon='rss_feed';

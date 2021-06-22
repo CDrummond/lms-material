@@ -511,6 +511,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     if (undefined==loop[i].type) {
                         feeds.push(loop[i]);
                     } else {
+                        if ('podcast'==loop[i].svg) {
+                            loop[i].svg=undefined;
+                            loop[i].icon='rss_feed';
+                        }
                         if (feeds.length>0) {
                             after.push(loop[i]);
                         } else {

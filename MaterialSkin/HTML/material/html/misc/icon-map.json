@@ -42,7 +42,7 @@
     "/playall.png":{"icon":"playlist_play"},
     "/LastMix/html/icon.png":{"svg":"lastfm"},
     "/WalkWithMe/html/images/icon.png":{"icon":"directions_walk"},
-    "/Podcast/html/images/icon.png":{"icon":"rss_feed"},
+    "/Podcast/html/images/icon.png":{"svg":"podcast", "myapps":{"icon":"rss_feed"}},
     "/qobuz.png":{"svg":"qobuz"},
     "/RadioParadise/html/icon.png":{"svg":"radioparadise"},
     "/PlayHistory/html/images/icon.png":{"icon":"history"},

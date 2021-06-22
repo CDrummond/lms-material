@@ -288,7 +288,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.index=resp.items.length;
                     }
                 } else if (isPodcastSearch && 0==i.menu.length) {
-                    i.menu=[/*ADD_PODCAST_ACTION, */MORE_ACTION];
+                    i.menu=[/*ADD_PODCAST_ACTION, */ADD_TO_FAV_ACTION, MORE_ACTION];
                     i.section=SECTION_PODCASTS;
                 }
 

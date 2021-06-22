@@ -713,10 +713,13 @@ function updateItemFavorites(item) {
         } else if (item.stdItem==STD_ITEM_MUSICIP_MOOD) {
             item.favUrl=item.id;
             item.favIcon="plugins/MusicMagic/html/images/icon.png";
+        } else if (undefined!=item.infoParams && undefined!=item.infoParams.url) {
+            item.favUrl=item.infoParams.url;
+            item.favIcon=item.infoParams.image;
         }
 
         item.favUrl = item.favUrl ? item.favUrl : item.url;
-        item.favIcon = item.favIcon ? item.favIcon : item.image
+        item.favIcon = item.favIcon ? item.favIcon : item.image ? item.image : item.icon;
     } catch(e) {
     }
 }

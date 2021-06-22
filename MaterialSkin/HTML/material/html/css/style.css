@@ -2315,3 +2315,33 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .np-sect-toggle {
  margin-left:16px;
 }
+
+/* Material Design 2 changes */
+.v-dialog:not(.v-dialog--fullscreen) {
+ border-radius:12px;
+}
+.v-btn:not(.v-btn--icon) {
+ text-transform:none!important;
+ border-radius:4px;
+}
+.v-btn--active:not(.v-btn--icon)::before, .v-btn:not(.v-btn--icon):focus::before, .v-btn:not(.v-btn--icon):hover::before {
+ background-color:var(--active-color)!important;
+}
+.v-btn__content {
+ font-weight:var(--bold-weight)!important;
+ color:var(--active-color)!important;
+}
+.v-dialog--fullscreen .v-btn__content {
+ color:var(--text-color)!important;
+}
+.v-tabs__div, .np-info .v-card__title p {
+ text-transform:none!important;
+ font-weight:var(--bold-weight)!important;
+ font-size:var(--std-font-size)!important;
+}
+.v-menu__content {
+ border-radius:8px;
+}
+.v-autocomplete__content.v-menu__content, .v-autocomplete__content.v-menu__content .v-card, .v-menu__content .v-card {
+ border-radius:4px;
+}

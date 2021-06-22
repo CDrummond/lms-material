@@ -1,4 +1,4 @@
-2.4.7
+2.5.0
 -----
 1. Fix text colour of album and track listings in now-playing if using a light
    theme with coloured toolbars.
@@ -11,6 +11,7 @@
 6. Give 'Recently played' podcast enty a different icon.
 7. Show menu button, in 'Manage players' dialog, for fixed volume players where
    volume control is hidden.
+8. Minor tweaks for more Material Design 2 appearance.
 
 2.4.6
 -----

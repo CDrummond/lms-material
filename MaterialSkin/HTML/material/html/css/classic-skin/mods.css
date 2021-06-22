@@ -1,5 +1,6 @@
 :root {
  --dialog-list-max-width:900px;
+ --bold-weight:500;
 }
 
 #sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon, .largeAttribute {
@@ -211,9 +212,10 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:fo
 input[type="submit"], input[type="button"] {
  border: none;
  border-radius: 3px;
- text-transform: uppercase;
  padding:5px 8px 5px 8px;
  outline: none;
+ color: var(--text-color) !important;
+ background-color: transparent;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -447,12 +449,6 @@ select:-webkit-autofill:focus {
  transition: background-color 5000s ease-in-out 0s;
 }
 
-input[type="submit"], input[type="button"] {
- color: var(--text-color) !important;
- background-color: transparent;
- border:none;
-}
-
 input[type=checkbox]:before, input[type=radio]:before {
  color:var(--text-color);
 }
@@ -538,4 +534,11 @@ hr.main-sep {
 hr.sub-sep {
  opacity:0.2!important;
  border:0.25px solid var(--text-color)!important;
+}
+
+/* Material Design 2 changes */
+input[type="submit"], input[type="button"] {
+ border-radius: 4px;
+ font-weight:var(--bold-weight)!important;
+ color:var(--active-color)!important;
 }

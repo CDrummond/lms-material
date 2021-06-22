@@ -7,10 +7,10 @@
 3. Disable ripple effects on subtoolbar buttons only.
 4. Disable button hover via setting CSS from javascript for mobile. Should not
    be required, but seems buttons remain stuck in hover after pressing.
-5. Only sort podcast feeds.
-6. Show menu button, in 'Manage players' dialog, for fixed volume players where
+5. Show menu button, in 'Manage players' dialog, for fixed volume players where
    volume control is hidden.
-7. Minor tweaks for more Material Design 2 appearance.
+6. Minor tweaks for more Material Design 2 appearance.
+7. Better support for LM 8.2 podcasts plugin.
 
 2.4.6
 -----

@@ -871,17 +871,20 @@ function arrayMove(arr, from, to) {
     return arr;
 }
 
-function getField(item, field) {
-    if (undefined==item.params || item.params.length<1) {
+function getIndex(list, field) {
+    if (undefined==list || list.length<1) {
         return -1;
     }
-    for (var i=0, len=item.params.length; i<len; ++i) {
-        // Can't pin an item with genre_id, as this can change on rescan
-        if (item.params[i].startsWith(field)) {
+    for (var i=0, len=list.length; i<len; ++i) {
+        if ((""+list[i]).startsWith(field)) {
             return i
         }
     }
     return -1;
+}
+
+function getField(item, field) {
+    return getIndex(item.params, field);
 }
 
 function addAndPlayAllActions(cmd) {

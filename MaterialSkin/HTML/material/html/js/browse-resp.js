@@ -54,8 +54,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
             var isApps = parent && parent.id == TOP_APPS_ID;
-            console.log(parent.id);
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
+            var isPodcastSearch = command == "podcasts" && undefined!=getIndex(data.params[1], "search:");
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isMusicMix = (command == "musicsimilarity") || (command == "musicip" && data.params[1].length>0 && data.params[1][1]=="mix");
@@ -99,6 +99,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     continue;
                 }
+                console.log(JSON.stringify(i));
                 if (resp.items.length==data.result.count-1 && i.type=="playlist" && i['icon-id']=='html/images/albums.png' && !isFavorites) {
                     // Remove 'All Songs' entry
                     data.result.count--;
@@ -279,11 +280,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         addedDivider = true;
                     }
                     if (i.type==undefined) {
-                        i.menu.push(EDIT_ACTION);
+                        if (resp.items.length==0 || resp.items[0].type!='search') {
+                            i.menu.push(EDIT_ACTION);
+                        }
                         i.menu.push(REMOVE_PODCAST_ACTION);
                         i.section=SECTION_PODCASTS;
                         i.index=resp.items.length;
                     }
+                } else if (isPodcastSearch && 0==i.menu.length) {
+                    i.menu=[/*ADD_PODCAST_ACTION, */MORE_ACTION];
+                    i.section=SECTION_PODCASTS;
                 }
 
                 if (!i.type && i.actions && i.actions.go && i.actions.go.params) {

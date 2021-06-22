@@ -100,6 +100,13 @@ function browseActions(view, item, args, count) {
 
 function browseHandleListResponse(view, item, command, resp, prevPage) {
     if (resp && resp.items) {
+        if (0==resp.items.length && command.command.length>1 && "podcasts"==command.command[0] && ("addshow"==command.command[1] || "delshow"==command.command[1])) {
+            bus.$emit('showMessage', item.title);
+            view.history[view.history.length-2].needsRefresh = true;
+            view.fetchingItem = undefined;
+            view.goBack();
+            return;
+        }
         // Only add history if view is not a search response replacing a search response...
         if ((SEARCH_ID!=item.id && ADV_SEARCH_ID!=item.id) || undefined==view.current || (SEARCH_ID!=view.current.id && ADV_SEARCH_ID!=view.current.id)) {
             view.addHistory();
@@ -215,7 +222,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
-            view.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
+            if (resp.items.length==0 || resp.items[0].type!='search') {
+                view.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
+            }
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:")) {
             view.tbarActions=[REMOVE_DUPES_ACTION, PLAY_ACTION, ADD_ACTION];
         } else if (view.allSongsItem) {
@@ -853,7 +862,7 @@ function browseItemAction(view, act, item, index, event) {
                 view.history[view.history.length-1].needsRefresh = true;
                 bus.$emit('showMessage', i18n("Added '%1'", item.title));
             }).catch(err => {
-                logAndShowError(err, i18n("Failed to remove favorite!"), command);
+                logAndShowError(err, i18n("Failed to add podcast!"), command);
             });
         } else {
             bus.$emit('dlg.open', 'podcast', 'add');
@@ -961,7 +970,7 @@ function browseItemMenu(view, item, index, event) {
         }
         return;
     }
-    if (1==item.menu.length && MORE_ACTION==item.menu[0]) {
+    if (1==item.menu.length && MORE_ACTION==item.menu[0] && SECTION_PODCASTS!=item.section) {
         if (item.moremenu) {
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});
         } else {

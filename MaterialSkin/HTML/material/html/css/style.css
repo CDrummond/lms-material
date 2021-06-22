@@ -2324,7 +2324,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  text-transform:none!important;
  border-radius:4px;
 }
-.v-btn--active:not(.v-btn--icon)::before, .v-btn:not(.v-btn--icon):focus::before, .v-btn:not(.v-btn--icon):hover::before {
+.v-btn--active:not(.v-btn--icon):not(.lms-bottom-nav-button)::before, .v-btn:not(.v-btn--icon):not(.lms-bottom-nav-button):focus::before, .v-btn:not(.v-btn--icon):not(.lms-bottom-nav-button):hover::before {
  background-color:var(--active-color)!important;
 }
 .v-btn__content {

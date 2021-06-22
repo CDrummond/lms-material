@@ -507,7 +507,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var before=[];
                 var feeds=[];
                 var after=[];
-                var actions=[];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (undefined==loop[i].type) {
                         feeds.push(loop[i]);
@@ -517,20 +516,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             before.push(loop[i]);
                         }
-                        if ('search'!=loop[i].type) {
-                            actions.push(i);
-                        }
                     }
                 }
                 feeds.sort(titleSort);
                 resp.items=before;
                 resp.items = resp.items.concat(feeds);
                 resp.items = resp.items.concat(after);
-                // If we only have 1 (non-search) action, assume its the 'Recenlty played' action and give it a better icon
-                if (1==actions.length && (undefined!=resp.items[actions[0]].icon || undefined!=resp.items[actions[0]].svg)) {
-                    resp.items[actions[0]].svg=undefined;
-                    resp.items[actions[0]].icon='history';
-                }
             } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             }

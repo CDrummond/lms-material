@@ -212,6 +212,9 @@ Vue.component('lms-information-dialog', {
             return false;
         },
         update() {
+            if (!this.show) {
+                return;
+            }
             lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
                 if (data && data.result) {
                     var status='idle';

@@ -9,6 +9,8 @@
    be required, but seems buttons remain stuck in hover after pressing.
 5. Only sort podcast feeds.
 6. Give 'Recently played' podcast enty a different icon.
+7. Show menu button, in 'Manage players' dialog, for fixed volume players where
+   volume control is hidden.
 
 2.4.6
 -----

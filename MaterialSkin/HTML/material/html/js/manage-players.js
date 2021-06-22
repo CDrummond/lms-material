@@ -144,6 +144,10 @@ Vue.component('lms-manage-players', {
         <p v-else class="pmgr-vol" v-bind:class="{'pmgr-vol-small':!showAllButtons}"></p>
         <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
        </v-layout>
+       <v-layout v-else>
+        <v-spacer></v-spacer>
+        <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
+       </v-layout>
       </v-flex>
       <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0 && (!player.syncmaster || player.syncmaster.length<1)">
        <div class="pmgr-member-list ellipsis">

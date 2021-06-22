@@ -509,6 +509,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var after=[];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (undefined==loop[i].type) {
+                        loop[i].index=feeds.length;
                         feeds.push(loop[i]);
                     } else {
                         if ('podcast'==loop[i].svg) {

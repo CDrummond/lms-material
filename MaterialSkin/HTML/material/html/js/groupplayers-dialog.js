@@ -8,10 +8,10 @@
 
 Vue.component('lms-groupplayers-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent scrollable width="600" class="lms-dialog">
  <v-card>
   <v-card-title>{{player ? i18n("Edit group player") : i18n("Create group player")}}</v-card-title>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <v-card-text>
    <v-list two-line>
     <v-list-tile>
      <v-list-tile-content>
@@ -50,8 +50,7 @@ Vue.component('lms-groupplayers-dialog', {
      <v-list-tile-action><v-switch v-model="options.greedy"></v-switch></v-list-tile-action>
     </v-list-tile>
    </v-list>
-  </v-form>
-  <div class="dialog-padding"></div>
+  </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
@@ -64,7 +63,6 @@ Vue.component('lms-groupplayers-dialog', {
     props: [],
     data() {
         return {
-            valid: false,
             show: false,
             player: undefined,
             name: undefined,

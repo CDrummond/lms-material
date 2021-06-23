@@ -2317,8 +2317,18 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 /* Material Design 2 changes */
-.v-dialog:not(.v-dialog--fullscreen) {
+.v-dialog:not(.v-dialog--fullscreen), .vol-sheet {
  border-radius:12px;
+}
+.vol-sheet {
+ border:1px solid var(--dialog-border-color);
+ right:4px;
+ top:calc(var(--main-toolbar-height) - 4px);
+}
+@media only screen and (max-width:500px) {
+.vol-sheet {
+  max-width:calc(100vw - 8px);
+ }
 }
 .v-btn:not(.v-btn--icon) {
  text-transform:none!important;

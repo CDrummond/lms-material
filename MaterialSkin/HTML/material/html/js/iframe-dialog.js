@@ -231,20 +231,6 @@ function hideClassicSkinElems(page, textCol) {
     }
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
-        iframe.contentWindow.alert = function(msg) {
-            var statusarea = iframeInfo.content.getElementById('statusarea');
-            console.log('STATUS', statusarea);
-            if (undefined!=statusarea && undefined!=statusarea.innerText) {
-                console.log('MSG', msg);
-                console.log('SA', statusarea.innerText);
-                if (msg==statusarea.innerText) {
-                    return;
-                }
-            }
-            console.log('show');
-            bus.$emit('showMessage', msg);
-        }
-
         iframe.contentDocument.bus = bus;
         var content = iframe.contentDocument;
         iframeInfo.content = content;

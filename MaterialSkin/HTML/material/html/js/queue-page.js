@@ -682,7 +682,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (item.title.indexOf("<i class=\"rstar\">")>0) { // Need to remove ratings stars...
                     let clone = JSON.parse(JSON.stringify(item));
                     clone.title = item.title.split(SEPARATOR+"<i class=\"rstar\">")[0];
-                    console.log(item.title, clone.title);
                     bus.$emit('trackInfo', clone, index, 'queue');
                 } else {
                     bus.$emit('trackInfo', item, index, 'queue');

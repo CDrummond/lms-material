@@ -12,6 +12,8 @@
 6. Minor tweaks for more Material Design 2 appearance.
 7. Better support for LM 8.2 podcasts plugin.
 8. Make contents of create/edit group dialog scrollable.
+9. Try not to show server/player settins page status messages in a toast if
+   these have already been shown in an alert.
 
 2.4.6
 -----

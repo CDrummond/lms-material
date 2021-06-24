@@ -231,6 +231,20 @@ function hideClassicSkinElems(page, textCol) {
     }
     var iframe = document.getElementById("embeddedIframe");
     if (iframe) {
+        iframe.contentWindow.alert = function(msg) {
+            var statusarea = iframeInfo.content.getElementById('statusarea');
+            console.log('STATUS', statusarea);
+            if (undefined!=statusarea && undefined!=statusarea.innerText) {
+                console.log('MSG', msg);
+                console.log('SA', statusarea.innerText);
+                if (msg==statusarea.innerText) {
+                    return;
+                }
+            }
+            console.log('show');
+            bus.$emit('showMessage', msg);
+        }
+
         iframe.contentDocument.bus = bus;
         var content = iframe.contentDocument;
         iframeInfo.content = content;
@@ -325,9 +339,20 @@ function hideClassicSkinElems(page, textCol) {
                     }
                 }
 
+                // Show statusarea messages in a toast, if different to any popupWarning (which will have been shown in an alert)
                 var msg = statusarea.innerText;
-                if (msg!=undefined && msg.length>0) {
-                    bus.$emit('showMessage', msg);
+                if (msg!=undefined) {
+                    msg = msg.trim();
+
+                    var popupWarning = iframeInfo.content.getElementById('popupWarning');
+                    var popupMsg = undefined;
+                    if (undefined!=popupWarning) {
+                        popupMsg = popupWarning.innerHTML.replace(/<br\/?>/ig, ' \n').trim();
+                    }
+
+                    if (msg.length>0 && popupMsg!=msg) {
+                        bus.$emit('showMessage', msg);
+                    }
                 }
             }
         }

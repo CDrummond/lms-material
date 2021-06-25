@@ -1,19 +1,20 @@
 2.5.0
 -----
-1. Fix text colour of album and track listings in now-playing if using a light
-   theme with coloured toolbars.
-2. Don't allow to select sub-toolbar text, fixes odd issue on Android Chrome
-   where pressing back button from seach field causes 'Music' to be selected!
-3. Disable ripple effects on subtoolbar buttons only.
-4. Disable button hover via setting CSS from javascript for mobile. Should not
-   be required, but seems buttons remain stuck in hover after pressing.
-5. Show menu button, in 'Manage players' dialog, for fixed volume players where
-   volume control is hidden.
-6. Minor tweaks for more Material Design 2 appearance.
-7. Better support for LM 8.2 podcasts plugin.
-8. Make contents of create/edit group dialog scrollable.
-9. Try not to show server/player settins page status messages in a toast if
-   these have already been shown in an alert.
+ 1. Fix text colour of album and track listings in now-playing if using a light
+    theme with coloured toolbars.
+ 2. Don't allow to select sub-toolbar text, fixes odd issue on Android Chrome
+    where pressing back button from seach field causes 'Music' to be selected!
+ 3. Disable ripple effects on subtoolbar buttons only.
+ 4. Disable button hover via setting CSS from javascript for mobile. Should not
+    be required, but seems buttons remain stuck in hover after pressing.
+ 5. Show menu button, in 'Manage players' dialog, for fixed volume players where
+    volume control is hidden.
+ 6. Minor tweaks for more Material Design 2 appearance.
+ 7. Better support for LM 8.2 podcasts plugin.
+ 8. Make contents of create/edit group dialog scrollable.
+ 9. Try not to show server/player settins page status messages in a toast if
+    these have already been shown in an alert.
+10. Fix showing multiple artists, etc, in track details.
 
 2.4.6
 -----

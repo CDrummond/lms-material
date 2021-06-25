@@ -54,17 +54,23 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     var artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;
     var artist_ids = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids : playerStatus.current.artist_ids;
     if (view.playerStatus.current.artist!=artist ||
+        view.playerStatus.current.artists!=artists ||
         view.playerStatus.current.artist_id!=artist_id ||
         view.playerStatus.current.artist_ids!=artist_ids) {
         view.playerStatus.current.artist = artist;
+        view.playerStatus.current.artists = artists;
         view.playerStatus.current.artist_id = artist_id;
         view.playerStatus.current.artist_ids = artist_ids;
         trackChanged = true;
     }
     var albumartist = playerStatus.current.albumartist ? playerStatus.current.albumartist : playerStatus.current.band;
     var albumartist_ids = playerStatus.current.albumartist_ids ? playerStatus.current.albumartist_ids : playerStatus.current.band_ids;
-    if (albumartist!=view.playerStatus.current.albumartist || albumartist_ids!=view.playerStatus.current.albumartist_ids) {
+    var albumartists = playerStatus.current.albumartists ? playerStatus.current.albumartists : playerStatus.current.bands;
+    if (albumartist!=view.playerStatus.current.albumartist ||
+        albumartists!=view.playerStatus.current.albumartists || 
+        albumartist_ids!=view.playerStatus.current.albumartist_ids) {
         view.playerStatus.current.albumartist = albumartist;
+        view.playerStatus.current.albumartists = albumartists;
         view.playerStatus.current.albumartist_ids = albumartist_ids;
         trackChanged = true;
     }
@@ -98,11 +104,20 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.composer!=view.playerStatus.current.composer) {
         view.playerStatus.current.composer = playerStatus.current.composer;
     }
+    if (playerStatus.current.composers!=view.playerStatus.current.composers) {
+        view.playerStatus.current.composers = playerStatus.current.composers;
+    }
     if (playerStatus.current.conductor!=view.playerStatus.current.conductor) {
         view.playerStatus.current.conductor = playerStatus.current.conductor;
     }
+    if (playerStatus.current.conductors!=view.playerStatus.current.conductors) {
+        view.playerStatus.current.conductors = playerStatus.current.conductors;
+    }
     if (playerStatus.current.band!=view.playerStatus.current.band) {
         view.playerStatus.current.band = playerStatus.current.band;
+    }
+    if (playerStatus.current.bands!=view.playerStatus.current.bands) {
+        view.playerStatus.current.bands = playerStatus.current.bands;
     }
     let composer_id = useComposerTag
                         ? playerStatus.current.composer_id
@@ -354,6 +369,7 @@ function nowplayingArtistEntry(trk, key, role, used) {
                 html+="<obj class=\"link-item\" onclick=\"nowplayingBrowse('"+role+"', "+trk[key+'_ids'][i]+", \'"+escape(trk[key+'s'][i])+"\')\">"+trk[key+'s'][i]+"</obj>";
             }
         }
+        return html;
     } else if (undefined!=trk[key] && !used.has(trk[key])) {
         used.add(trk[key]);
         if (undefined!=trk[key+'_id']) {

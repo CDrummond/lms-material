@@ -33,10 +33,9 @@ This guide is on a separate github page, and is authored by Jim Gooch.
 16. Pin apps, etc., to main screen
 17. Swipe left/right to change views with mobile layout
 18. Integrated support for "Music and Artist Information" plugin
-19. Search for podcasts on iTunes or GPodder
-20. Move queue between players
-21. Add tracks to playlists
-22. Remove duplicates from playlists
+21. Move queue between players
+22. Add tracks to playlists
+23. Remove duplicates from playlists
 
 ## Detailed information
 

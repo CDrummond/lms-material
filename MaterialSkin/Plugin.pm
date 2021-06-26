@@ -190,11 +190,10 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'add-podcast',
-                                                  'edit-podcast', 'delete-podcast', 'podcast-url', 'plugins', 'plugins-status',
-                                                  'plugins-update', 'extras', 'delete-vlib', 'pass-isset', 'pass-check', 'browsemodes',
-                                                  'geturl', 'command', 'scantypes', 'server', 'themes', 'playericons', 'activeplayers',
-                                                  'urls', 'adv-search', 'adv-search-params', 'protocols']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'delete-podcast',
+                                                  'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
+                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
+                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -452,42 +451,6 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'add-podcast') {
-        my $name = $request->getParam('name');
-        my $url = $request->getParam('url');
-        if ($name && $url) {
-            my $podPrefs = preferences('plugin.podcast');
-            my $feeds = $podPrefs->get('feeds');
-            push @{$feeds}, { 'name' => $name, 'value' => $url };
-            $podPrefs->set(feeds => $feeds);
-            $request->setStatusDone();
-            return;
-        }
-    }
-
-    if ($cmd eq 'edit-podcast') {
-        my $pos = $request->getParam('pos');
-        my $name = $request->getParam('newname');
-        my $origName = $request->getParam('oldname');
-        my $url = $request->getParam('newurl');
-        my $origUrl = $request->getParam('oldurl');
-        if (defined $pos && $name && $origName && $url && $origUrl) {
-            my $podPrefs = preferences('plugin.podcast');
-            my $feeds = $podPrefs->get('feeds');
-            if ($pos < scalar @{$feeds}) {
-                if (@{$feeds}[$pos]->{'name'} eq $origName && @{$feeds}[$pos]->{'value'} eq $origUrl) {
-                    @{$feeds}[$pos]->{'name'}=$name;
-                    @{$feeds}[$pos]->{'value'}=$url;
-                    $podPrefs->set(feeds => $feeds);
-                    $request->setStatusDone();
-                } else {
-                    $request->setStatusBadParams();
-                }
-                return;
-            }
-        }
-    }
-
     if ($cmd eq 'delete-podcast') {
         my $pos = $request->getParam('pos');
         my $name = $request->getParam('name');
@@ -498,24 +461,6 @@ sub _cliCommand {
                 if (@{$feeds}[$pos]->{'name'} eq $name) {
                     splice @{$feeds}, $pos, 1;
                     $podPrefs->set(feeds => $feeds);
-                    $request->setStatusDone();
-                } else {
-                    $request->setStatusBadParams();
-                }
-                return;
-            }
-        }
-    }
-
-    if ($cmd eq 'podcast-url') {
-        my $pos = $request->getParam('pos');
-        my $name = $request->getParam('name');
-        if (defined $pos && $name) {
-            my $podPrefs = preferences('plugin.podcast');
-            my $feeds = $podPrefs->get('feeds');
-            if ($pos < scalar @{$feeds}) {
-                if (@{$feeds}[$pos]->{'name'} eq $name) {
-                    $request->addResult("url", @{$feeds}[$pos]->{'value'});
                     $request->setStatusDone();
                 } else {
                     $request->setStatusBadParams();

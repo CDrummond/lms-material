@@ -36,32 +36,30 @@ const ADD_FAV_FOLDER_ACTION   = 25;
 const DELETE_FAV_FOLDER_ACTION= 26;
 const MOVE_FAV_TO_PARENT_ACTION=27;
 const VLIB_ACTION             = 28;
-const ADD_PODCAST_ACTION      = 29;
-const REMOVE_PODCAST_ACTION   = 30;
-const SEARCH_PODCAST_ACTION   = 31;
-const MOVE_HERE_ACTION        = 32;
+const REMOVE_PODCAST_ACTION   = 29;
+const MOVE_HERE_ACTION        = 30;
 
-const PQ_PLAY_NOW_ACTION      = 33;
-const PQ_PLAY_NEXT_ACTION     = 34;
-const PQ_SCROLL_ACTION        = 35;
-const PQ_ADD_URL_ACTION       = 36;
-const PQ_MOVE_QUEUE_ACTION    = 37;
-const PQ_REMOVE_ALBUM_ACTION  = 38;
-const PQ_ZAP_ACTION           = 39;
+const PQ_PLAY_NOW_ACTION      = 31;
+const PQ_PLAY_NEXT_ACTION     = 32;
+const PQ_SCROLL_ACTION        = 33;
+const PQ_ADD_URL_ACTION       = 34;
+const PQ_MOVE_QUEUE_ACTION    = 35;
+const PQ_REMOVE_ALBUM_ACTION  = 36;
+const PQ_ZAP_ACTION           = 37;
 
-const INSERT_ALL_ACTION       = 40;
-const GOTO_ARTIST_ACTION      = 41;
-const GOTO_ALBUM_ACTION       = 42;
-const ADD_TO_PLAYLIST_ACTION  = 43;
-const REMOVE_DUPES_ACTION     = 44;
+const INSERT_ALL_ACTION       = 38;
+const GOTO_ARTIST_ACTION      = 39;
+const GOTO_ALBUM_ACTION       = 40;
+const ADD_TO_PLAYLIST_ACTION  = 41;
+const REMOVE_DUPES_ACTION     = 42;
 
-const FOLLOW_LINK_ACTION      = 45;
-const SEARCH_TEXT_ACTION      = 46;
-const RELOAD_ACTION           = 47;
-const BR_COPY_ACTION          = 48;
-const PQ_COPY_ACTION          = 49;
-const ADV_SEARCH_ACTION       = 50;
-const SAVE_VLIB_ACTION        = 51;
+const FOLLOW_LINK_ACTION      = 43;
+const SEARCH_TEXT_ACTION      = 44;
+const RELOAD_ACTION           = 45;
+const BR_COPY_ACTION          = 46;
+const PQ_COPY_ACTION          = 47;
+const ADV_SEARCH_ACTION       = 48;
+const SAVE_VLIB_ACTION        = 49;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -93,9 +91,7 @@ var ACTIONS=[
     {cmd:"del-favdir",   icon:"delete_outline"},
     {cmd:"move-fav-parent", svg:"folder-up"},
     {cmd:"vlib",         icon:"library_music"},
-    {cmd:"add-podcast",  icon:"add_box"},
     {cmd:"remove-podcast",icon:"remove_circle_outline"},
-    {cmd:"search-podcast",icon:"search"},
     {cmd:"move-here",    icon:"format_indent_increase"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
@@ -155,11 +151,7 @@ function updateActionStrings() {
     ACTIONS[ADD_FAV_FOLDER_ACTION].skey=LMS_CREATE_FAV_FOLDER_KEYBOARD;
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");
     ACTIONS[VLIB_ACTION].title=i18n("Change library");
-    ACTIONS[ADD_PODCAST_ACTION].title=i18n("Add podcast");
-    ACTIONS[ADD_PODCAST_ACTION].skey=LMS_ADD_ITEM_ACTION_KEYBOARD
     ACTIONS[REMOVE_PODCAST_ACTION].title=i18n("Remove");
-    ACTIONS[SEARCH_PODCAST_ACTION].title=i18n("Search for podcasts");
-    ACTIONS[SEARCH_PODCAST_ACTION].key=LMS_SEARCH_KEYBOARD;
     ACTIONS[MOVE_HERE_ACTION].title=i18n("Move selection here");
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");

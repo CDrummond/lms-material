@@ -130,6 +130,7 @@
 "Don't shuffle":"Bland ikke",
 "Don't update information when song changes":"Opdater ikke informationen når nummeret skifter",
 "Donate":"Donér",
+"Download":"Hent",
 "Downloading plugin updates":"Hent opdateringer til plugins",
 "Draw background":"Vis baggrund",
 "Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)":"Vis et stort bogstav øverst når der køres hurtigt igennem visse lister (fx kunstnere, albums)",
@@ -552,7 +553,6 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Download":"",
 "Failed to unsubscribe podcast!":"",
 "Unsubscribe":"",
 "Unubscribe from '%1'?":""

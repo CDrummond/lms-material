@@ -130,6 +130,7 @@
 "Don't shuffle":"Ne pas jouer en ordre aléatoire",
 "Don't update information when song changes":"Ne pas mettre à jour les informations lorsque le morceau change",
 "Donate":"Faire un don",
+"Download":"Télécharger",
 "Downloading plugin updates":"Téléchargement des mises à jour des plugins",
 "Draw background":"Générer un arrière plan",
 "Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)":"Générer des grosses lettres lors du défilement de certaines listes triées (artistes, albums...)",
@@ -554,6 +555,5 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Download":"",
 "Failed to unsubscribe podcast!":""
 }

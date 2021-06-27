@@ -36,7 +36,7 @@ const ADD_FAV_FOLDER_ACTION   = 25;
 const DELETE_FAV_FOLDER_ACTION= 26;
 const MOVE_FAV_TO_PARENT_ACTION=27;
 const VLIB_ACTION             = 28;
-const REMOVE_PODCAST_ACTION   = 29;
+const UNSUB_PODCAST_ACTION    = 29;
 const MOVE_HERE_ACTION        = 30;
 
 const PQ_PLAY_NOW_ACTION      = 31;
@@ -91,7 +91,7 @@ var ACTIONS=[
     {cmd:"del-favdir",   icon:"delete_outline"},
     {cmd:"move-fav-parent", svg:"folder-up"},
     {cmd:"vlib",         icon:"library_music"},
-    {cmd:"remove-podcast",icon:"remove_circle_outline"},
+    {cmd:"unsub-podcast",icon:"remove_circle_outline"},
     {cmd:"move-here",    icon:"format_indent_increase"},
 
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
@@ -151,7 +151,7 @@ function updateActionStrings() {
     ACTIONS[ADD_FAV_FOLDER_ACTION].skey=LMS_CREATE_FAV_FOLDER_KEYBOARD;
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");
     ACTIONS[VLIB_ACTION].title=i18n("Change library");
-    ACTIONS[REMOVE_PODCAST_ACTION].title=i18n("Remove");
+    ACTIONS[UNSUB_PODCAST_ACTION].title=i18n("Unsubscribe");
     ACTIONS[MOVE_HERE_ACTION].title=i18n("Move selection here");
 
     ACTIONS[PQ_PLAY_NOW_ACTION].title=i18n("Play now");

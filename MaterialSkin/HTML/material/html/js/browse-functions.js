@@ -844,13 +844,13 @@ function browseItemAction(view, act, item, index, event) {
         }
         view.doList(itemList, PLAY_ACTION, index);
         bus.$emit('showMessage', i18n("Adding tracks..."));
-    }*/ else if (REMOVE_PODCAST_ACTION==act) {
-        confirm(i18n("Remove '%1'?", item.title), i18n("Remove")).then(res => {
+    }*/ else if (UNSUB_PODCAST_ACTION==act) {
+        confirm(i18n("Unubscribe from '%1'?", item.title), i18n("Unsubscribe")).then(res => {
             if (res) {
                 lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.index, "name:"+item.title]).then(({data}) => {
                     view.refreshList();
                 }).catch(err => {
-                    logAndShowError(err, i18n("Failed to remove podcast!"), command);
+                    logAndShowError(err, i18n("Failed to unsubscribe podcast!"), command);
                     view.refreshList();
                 });
             }

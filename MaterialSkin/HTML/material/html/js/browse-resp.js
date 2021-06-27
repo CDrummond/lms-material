@@ -283,7 +283,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (resp.items.length==0 || resp.items[0].type!='search') {
                             i.menu.push(EDIT_ACTION);
                         }
-                        i.menu.push(REMOVE_PODCAST_ACTION);
+                        i.menu.push(UNSUB_PODCAST_ACTION);
                         i.section=SECTION_PODCASTS;
                     }
                 } else if (isPodcastSearch && 0==i.menu.length) {

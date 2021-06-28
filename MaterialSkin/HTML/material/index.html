@@ -77,6 +77,10 @@
     <lms-search-dialog v-if="dialogs.search"></lms-search-dialog>
     <lms-movequeue-dialog v-if="dialogs.movequeue"></lms-movequeue-dialog>
     <lms-info-dialog v-if="dialogs.iteminfo"></lms-info-dialog>
+    <!--  TODO Remove after LMS8.2 released... -->
+    <lms-podcast-dialog v-if="dialogs.podcast"></lms-podcast-dialog>
+    <lms-podcast-search-dialog v-if="dialogs.podcastsearch"></lms-podcast-search-dialog>
+    <!-- ... TODO Remove after LMS8.2 released -->
     <lms-iframe-dialog v-if="dialogs.iframe"></lms-iframe-dialog>
     <lms-dstm-dialog v-if="dialogs.dstm"></lms-dstm-dialog>
     <lms-savequeue v-if="dialogs.savequeue"></lms-savequeue>
@@ -182,7 +186,8 @@
      }
    }
    function loadOtherFiles() {
-     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog"],
+     // TODO Remove podcast-dialog and podcast-search-dialog after LMS8.2 released...
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "podcast-dialog", "podcast-search-dialog"],
      [% PERL %]
      my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
      print("                \"$version\", )");

@@ -452,6 +452,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
                             this.itemAction(SEARCH_LIB_ACTION);
                         }
+                        // TODO Remove after LMS8.2 released...
+                        else if (this.current && this.current.id==PODCASTS_ID) {
+                            bus.$emit('dlg.open', 'podcastsearch');
+                        }
+                        // ...TODO Remove after LMS8.2 released
                     } else if ('left'==key) {
                         this.goBack();
                     } else {
@@ -615,6 +620,27 @@ var lmsBrowse = Vue.component("lms-browse", {
                 logError(err, command.command, command.params, 0, count);
             });
         },
+        // TODO Remove after LMS8.2 released...
+        fetchUrlItems(url, provider, item) {
+            if (this.fetchingItem!=undefined) {
+                return;
+            }
+
+            this.fetchingItem = item ? item.id : url;
+            let cmd = ["material-skin", "geturl", "url:"+url];
+            if (undefined==item) {
+                cmd.push("format:json");
+            }
+            lmsCommand("", cmd).then(({data}) => {
+                this.fetchingItem = undefined;
+                this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, parseBrowseUrlResp(data, provider));
+            }).catch(err => {
+                this.fetchingItem = undefined;
+                this.handleListResponse(item ? item : {title:i18n("Search"), type:'search', id:"search-resp"}, {command:[], params:[]}, {items: []});
+                logError(err);
+            });
+        },
+        // ...TODO Remove after LMS8.2 released
         handleListResponse(item, command, resp, prevPage) {
             browseHandleListResponse(this, item, command, resp, prevPage);
         },
@@ -1574,6 +1600,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('closeLibSearch', function() {
             this.goBack();
         }.bind(this));
+        // TODO Remove after LMS8.2 released...
+        bus.$on('searchPodcasts', function(url, term, provider) {
+            this.enteredTerm = term;
+            this.fetchUrlItems(url, provider);
+        }.bind(this));
+        // ...TODO Remove after LMS8.2 released
         bus.$on('showLinkMenu.browse', function(x, y, menu) {
             showMenu(this, {linkItems: menu, x:x, y:y, show:true});
         }.bind(this));

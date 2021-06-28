@@ -2,6 +2,7 @@
 -----
 1. Ensure no volume commands are shown unless relevant dialog open.
 2. Re-add podcast searching, will be removed once LMS8.2 is released.
+3. Fix addig (LMS 8.2) podcast feed to favourites.
 
 2.5.0
 -----

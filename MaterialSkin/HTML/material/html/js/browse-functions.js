@@ -668,7 +668,7 @@ function browseItemAction(view, act, item, index, event) {
         updateItemFavorites(item);
         var favUrl = item.favUrl ? item.favUrl : item.url;
         var favIcon = item.favIcon;
-        var favType = "audio";
+        var favType = SECTION_PODCASTS==item.section ? "link" : "audio";
         var favTitle = item.origTitle ? item.origTitle : item.title;
 
         if (item.presetParams && item.presetParams.favorites_url) {

@@ -1,3 +1,7 @@
+2.5.1
+-----
+1. Ensure no volume commands are shown unless relevant dialog open.
+
 2.5.0
 -----
  1. Fix text colour of album and track listings in now-playing if using a light

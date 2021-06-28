@@ -107,6 +107,9 @@ Vue.component('lms-volume', {
             this.resetCloseTimer();
         },
         setVolume() {
+            if (!this.show) {
+                return;
+            }
             // Prevent large volume jumps
             if (this.lmsVol<=70 && this.playerVolume>=90) {
                 this.playerVolume = this.lmsVol;
@@ -116,6 +119,9 @@ Vue.component('lms-volume', {
             this.resetCloseTimer();
         },
         toggleMute() {
+            if (!this.show) {
+                return;
+            }
             bus.$emit('playerCommand', ['mixer', 'muting', this.muted ? 0 : 1]);
             this.resetCloseTimer();
         },

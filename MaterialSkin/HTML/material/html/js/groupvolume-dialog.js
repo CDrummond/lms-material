@@ -155,6 +155,9 @@ Vue.component('lms-groupvolume', {
             bus.$emit('refreshStatus', player.id);
         },
         refreshAll() {
+            if (!this.show) {
+                return;
+            }
             for (var i=0, len=this.players.length; i<len; ++i) {
                 this.refreshPlayer(this.players[i]);
             }
@@ -218,7 +221,7 @@ Vue.component('lms-groupvolume', {
             }
         },
         toggleMute(player) {
-            if (VOL_STD!=player.dvc) {
+            if (VOL_STD!=player.dvc || !this.show) {
                 return;
             }
             this.resetCloseTimer();

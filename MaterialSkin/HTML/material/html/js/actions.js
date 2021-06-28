@@ -62,7 +62,7 @@ const ADV_SEARCH_ACTION       = 48;
 const SAVE_VLIB_ACTION        = 49;
 
 // TODO Remove after LMS8.2 released
-const REMOVE_PODCAST_ACTION   = 50;
+const ADD_PODCAST_ACTION      = 50;
 const SEARCH_PODCAST_ACTION   = 51;
 
 var ACTIONS=[

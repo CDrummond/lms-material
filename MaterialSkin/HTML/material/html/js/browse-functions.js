@@ -674,7 +674,9 @@ function browseItemAction(view, act, item, index, event) {
         if (item.presetParams && item.presetParams.favorites_url) {
             favUrl = item.presetParams.favorites_url;
             favIcon = item.presetParams.icon;
-            favType = item.presetParams.favorites_type;
+            if (SECTION_PODCASTS!=item.section) {
+                favType = item.presetParams.favorites_type;
+            }
             if (item.presetParams.favorites_title) {
                 favTitle = item.presetParams.favorites_title;
             }

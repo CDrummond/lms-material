@@ -743,6 +743,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems({command: ["trackinfo", "items"], params: params}, item, page);
                 } else if (item.id.startsWith("genre_id:")) {
                     this.fetchItems({command: ["genreinfo", "items"], params: params}, item, page);
+                } else if (item.id.startsWith("year:")) {
+                    this.fetchItems({command: ["yearinfo", "items"], params: params}, item, page);
+                } else if (item.id.startsWith("playlist_id:")) {
+                    this.fetchItems({command: ["playlistinfo", "items"], params: params}, item, page);
                 }
             }
         },

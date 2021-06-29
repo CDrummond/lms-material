@@ -3,6 +3,7 @@
 1. Ensure no volume commands are performed unless relevant dialog open.
 2. Re-add podcast searching, will be removed once LMS8.2 is released.
 3. Fix adding (LMS 8.2) podcast feed to favourites.
+4. Add 'More' menu to playlists and years.
 
 2.5.0
 -----

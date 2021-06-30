@@ -1,6 +1,7 @@
 :root {
  --dialog-list-max-width:900px;
  --bold-weight:500;
+ scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
 }
 
 #sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon, .largeAttribute {
@@ -370,11 +371,6 @@ input[type=radio]:checked:before {
  opacity:0.8;
 }
 
-::-webkit-scrollbar {
- max-height:10px;
- max-width:10px;
-}
-
 html, body {
  overflow: unset!important;
 }
@@ -464,6 +460,8 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
 
 ::-webkit-scrollbar {
  background:var(--scrollbar-track-color);
+ max-height:10px;
+ max-width:10px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -474,6 +472,13 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
  background:var(--scrollbar-corner-color);
 }
 
+::-webkit-scrollbar-thumb:vertical {
+ min-height:64px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+ min-width:64px;
+}
 /* Progress bars (e.g. scan) */
 img[src*="bar_small_empty.gif"] {
  border:1px solid var(--active-color);

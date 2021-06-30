@@ -4,6 +4,7 @@
 2. Re-add podcast searching, will be removed once LMS8.2 is released.
 3. Fix adding (LMS 8.2) podcast feed to favourites.
 4. Add 'More' menu to playlists and years.
+5. Fix scrollbar themeing in server/player settings.
 
 2.5.0
 -----

@@ -85,6 +85,8 @@
 
 ::-webkit-scrollbar {
  background:var(--scrollbar-track-color);
+ max-height:10px;
+ max-width:10px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -93,6 +95,14 @@
 
 ::-webkit-scrollbar-corner {
  background:var(--scrollbar-corner-color);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+ min-height:64px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+ min-width:64px;
 }
 
 html, .mini-player {
@@ -174,19 +184,6 @@ html, .mini-player {
 
 .v-chip__content {
  font-size:var(--small-font-size);
-}
-
-::-webkit-scrollbar {
- max-height:10px;
- max-width:10px;
-}
-
-::-webkit-scrollbar-thumb:vertical {
- min-height:64px;
-}
-
-::-webkit-scrollbar-thumb:horizontal {
- min-width:64px;
 }
 
 html { 

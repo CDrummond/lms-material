@@ -44,7 +44,6 @@ function downloadNative(tracks) {
 }
 
 function getTracksForDownload(item) {
-console.log(JSON.stringify(item));
     var cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     if (item.artist_id) {
         cmd.push('artist_id:'+item.artist_id);

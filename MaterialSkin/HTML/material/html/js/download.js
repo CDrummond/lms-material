@@ -36,7 +36,15 @@ function downloadViaBrowser(items) {
     }
 }
 
+function downloadNative(tracks) {
+    try {
+        NativeReceiver.download(JSON.stringify(tracks));
+    } catch (e) {
+    }
+}
+
 function getTracksForDownload(item) {
+console.log(JSON.stringify(item));
     var cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     if (item.artist_id) {
         cmd.push('artist_id:'+item.artist_id);
@@ -59,9 +67,22 @@ function getTracksForDownload(item) {
                     disc: item.disc,
                     album_id: item.album_id});
             }
-            if (queryParams.download=='browser') {
-               downloadViaBrowser(tracks);
-            } else if (queryParams.download=='native') {
+            if (tracks.length>1) {
+                confirm(i18n('Download %1 tracks?', tracks.length), i18n('Download')).then(res => {
+                    if (1==res) {
+                        if (queryParams.download=='browser') {
+                           downloadViaBrowser(tracks);
+                        } else if (queryParams.download=='native') {
+                            downloadNative(tracks);
+                        }
+                    }
+                });
+            } else {
+                if (queryParams.download=='browser') {
+                   downloadViaBrowser(tracks);
+                } else if (queryParams.download=='native') {
+                    downloadNative(tracks);
+                }
             }
         }
     }).catch(err => {

@@ -1,3 +1,7 @@
+2.6.0
+-----
+1. Add ability to download tracks.
+
 2.5.1
 -----
 1. Ensure no volume commands are performed unless relevant dialog open.

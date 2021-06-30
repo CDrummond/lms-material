@@ -51,7 +51,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined, download:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser' };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -103,8 +103,8 @@ function parseQueryParams() {
             }
         } else if ("single"==kv[0]) {
             resp.single=true;
-        } else if ("download"==kv[0]) {
-            resp.download=kv.length>1 ? kv[1] : "browser";
+        } else if ("download"==kv[0] && kv.length>1) {
+            resp.download=kv[1]=='false' ? undefined : kv[1];
         }
     }
     return resp;

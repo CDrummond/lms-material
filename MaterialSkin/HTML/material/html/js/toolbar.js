@@ -77,8 +77,9 @@ Vue.component('lms-toolbar', {
   </v-list>
  </v-menu>
  <v-spacer></v-spacer>
- <div v-if="updateProgress.show && showUpdateProgress" class="ellipsis subtext">{{updateProgress.text}}</div>
- <v-btn v-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
+ <div v-if="updateProgress.show && showUpdateProgress && downloadCount<=0" class="ellipsis subtext">{{updateProgress.text}}</div>
+ <v-btn v-if="downloadCount>0" icon flat @click="bus.$emit('dlg.open', 'downloadstatus')" :title="trans.downloading"><v-icon class="pulse">cloud_download</v-icon></v-btn>
+ <v-btn v-else-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
  <v-btn v-show="playerStatus.synced && showVolumeSlider" icon flat class="toolbar-button hide-for-mini" id="vol-group-btn" :title="trans.groupVol" @click="bus.$emit('dlg.open', 'groupvolume', playerStatus)"><v-icon>speaker_group</v-icon></v-btn>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button vol-left" v-longpress:repeat="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <div v-show="showVolumeSlider">
@@ -227,7 +228,7 @@ Vue.component('lms-toolbar', {
                  otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
-                        otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
+                        otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined, downloading:undefined,
                         mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appQuit:undefined, toggleQueue:undefined,
                         toggleQueueShortcut:undefined, groupVol:undefined},
                  infoOpen: false,
@@ -510,7 +511,7 @@ Vue.component('lms-toolbar', {
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
-                          appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'),
+                          appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
                           toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
         },
         setPlayer(id) {
@@ -826,6 +827,9 @@ Vue.component('lms-toolbar', {
         },
         useSettingsMenu() {
             return this.$store.state.player || this.$store.state.unlockAll || queryParams.appSettings || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0)
+        },
+        downloadCount() {
+            return this.$store.state.downloadStatus.length
         }
     },
     filters: {

@@ -43,6 +43,13 @@ function downloadNative(tracks) {
     }
 }
 
+function cancelDownloadNative(ids) {
+    try {
+        NativeReceiver.cancelDownload(JSON.stringify(ids));
+    } catch (e) {
+    }
+}
+
 function getTracksForDownload(item) {
     var cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     if (item.artist_id) {
@@ -98,3 +105,113 @@ function download(item) {
     }
 }
 
+function downloadStatus(str) {
+    try {
+        var status = JSON.parse(str);
+        if (Array.isArray(status)) {
+            bus.$store.commit('setDownloadStatus', status);
+        }
+    } catch(e) { }
+}
+
+Vue.component('lms-downloadstatus', {
+    template: `
+<v-dialog v-model="show" v-if="show" persistent scrollable width="600" class="lms-dialog">
+ <v-card>
+ <v-card-title>{{i18n('Downloading')}}</v-card-title>
+  <v-card-text style="padding-top:0px">
+   <v-container grid-list-md style="padding:0px">
+    <v-layout wrap>
+     <v-flex xs12>
+      <v-list class="lms-list" style="padding-top:0px">
+       <template v-for="(item, index) in items">
+        <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': undefined!=item.progress && item.progress>0}">
+         <v-list-tile-content>
+          <v-list-tile-title>{{item | formatTitle}}</v-list-tile-title>
+          <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+         </v-list-tile-content>
+         <v-list-tile-action @click.stop="abort(item)">
+          <v-btn icon flat><v-icon>cancel</v-icon></v-btn>
+         </v-list-tile-action>
+        </v-list-tile>
+       </template>
+      </v-list>
+     </v-flex>
+    </v-layout>
+   </v-container>
+  </v-card-text>
+  <v-card-actions>
+   <v-btn v-if="items.length>1" flat @click.native="abortAll()">{{i18n('Abort all')}}</v-btn>
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
+  </v-card-actions>
+ </v-card>
+</v-dialog>
+`,
+    props: [],
+    data() {
+        return {
+            show: false
+        }
+    },
+    mounted() {
+        bus.$on('downloadstatus.open', function() {
+            this.show = true;
+        }.bind(this));
+        bus.$on('esc', function() {
+            if (this.$store.state.activeDialog == 'downloadstatus') {
+                this.cancel();
+            }
+        }.bind(this));
+    },
+    methods: {
+        close() {
+            this.show=false;
+        },
+        abort(track) {
+            if (this.$store.state.downloadStatus.length==1) {
+                this.close();
+            }
+            cancelDownloadNative([track.id]);
+        },
+        abortAll() {
+            confirm(i18n('Abort all downloads?'), i18n('Abort'), i18n('No')).then(res => {
+                if (1==res) {
+                    var ids = [];
+                    for (var i=0, loop=this.$store.state.downloadStatus, len=loop.length; i<len; ++i) {
+                        ids.push(loop[i].id);
+                    }
+                    cancelDownloadNative(ids);
+                    this.close();
+                }
+            });
+        },
+        i18n(str, arg) {
+            if (this.show) {
+                return i18n(str, arg);
+            } else {
+                return str;
+            }
+        }
+    },
+    computed: {
+        items () {
+            return this.$store.state.downloadStatus
+        }
+    },
+    watch: {
+        'show': function(val) {
+            this.$store.commit('dialogOpen', {name:'downloadstatus', shown:val});
+        },
+        '$store.state.downloadStatus' : function() {
+            if (this.$store.state.downloadStatus.length<1) {
+                this.close();
+            }
+        }
+    },
+    filters: {
+        formatTitle: function (item) {
+            return item.title + (undefined!=item.progress && item.progress>0 ? SEPARATOR + item.progress + "%" : "");
+        },
+    }
+})

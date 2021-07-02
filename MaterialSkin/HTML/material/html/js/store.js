@@ -282,7 +282,8 @@ const store = new Vuex.Store({
         homeButton: false,
         lang: 'en-US',
         twentyFourHour: false,
-        powerButton: false
+        powerButton: false,
+        downloadStatus: []
     },
     mutations: {
         setPlayers(state, players) {
@@ -749,6 +750,9 @@ const store = new Vuex.Store({
                 bus.$emit('showQueue', val);
                 document.documentElement.style.setProperty('--splitter-width', val ? '3px' : '0px');
             }
+        },
+        setDownloadStatus(state, val) {
+            state.downloadStatus = val;
         }
     }
 })

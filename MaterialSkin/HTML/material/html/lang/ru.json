@@ -564,13 +564,13 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней",
-"Always force members synchronization.":"",
-"Always synchronize all members":"",
-"Failed to add podcast!":"",
-"Failed to unsubscribe podcast!":"",
-"Internet/Other":"",
-"Local":"",
-"Source":"",
-"Unsubscribe":"",
-"Unubscribe from '%1'?":""
+"Always force members synchronization.":"Принудительно синхронизировать учетные записи",
+"Always synchronize all members":"Принудительно синхронизировать все учетные записи",
+"Failed to add podcast!":"Не возможно добавить подкаст",
+"Failed to unsubscribe podcast!":"Не возможно отписаться от подкаста",
+"Internet/Other":"Интернет/Другое",
+"Local":"Локальное",
+"Source":"Источник",
+"Unsubscribe":"Отписаться",
+"Unubscribe from '%1'?":"Отписаться от '%1'"
 }

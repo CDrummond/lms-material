@@ -163,6 +163,7 @@
 "Fade out":"Sænk gradvist lydstyrke",
 "Failed":"Mislykket",
 "Failed edit podcast":"Kunne ikke ændre podcasten",
+"Failed to add podcast!":"Kunne ikke tilføje podcast!",
 "Failed to add to favorites!":"Kunne ikke tilføje til favoritter!",
 "Failed to add to playlist!":"Kunne ikke tilføje til afspilningskøen!",
 "Failed to delete playlist!":"Kunne ikke slette afspilningslisten!",
@@ -178,6 +179,7 @@
 "Failed to retrieve listing. (%1)":"Kunne ikke hente listen. (%1)",
 "Failed to save play queue!":"Kunne ikke gemme afspilningskøen!",
 "Failed to save virtual library!":"Kunne ikke gemme det virtuelle bibliotek",
+"Failed to unsubscribe podcast!":"Kunne ikke afmelde podcast!",
 "Favorites":"Favoritter",
 "Fetching...":"Henter...",
 "File":"Fil",
@@ -482,6 +484,8 @@
 "Unknown":"Ukendt",
 "Unknown genre":"Ukendt genre",
 "Unmute":"Slå lyden til",
+"Unsubscribe":"Afmeld",
+"Unubscribe from '%1'?":"Afmeld '%1'?",
 "Upcoming track count":"Numre tilbage",
 "Update":"Opdater",
 "Update information":"Opdatér information",
@@ -568,9 +572,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Failed to add podcast!":"",
-"Failed to unsubscribe podcast!":"",
-"Unsubscribe":"",
-"Unubscribe from '%1'?":""
+"%1 days":"%1 dage"
 }

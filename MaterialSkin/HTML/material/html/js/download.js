@@ -123,7 +123,7 @@ Vue.component('lms-downloadstatus', {
    <v-container grid-list-md style="padding:0px">
     <v-layout wrap>
      <v-flex xs12>
-      <v-list class="lms-list" style="padding-top:0px:position:unset;top:unset;height:100%">
+      <v-list class="lms-list" style="padding-top:0px;position:unset;top:unset;height:100%!important;width:100%!important">
        <template v-for="(item, index) in items">
         <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': undefined!=item.progress && item.progress>0}">
          <v-list-tile-content>

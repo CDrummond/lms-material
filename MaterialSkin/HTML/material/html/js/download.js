@@ -120,14 +120,20 @@ function downloadStatus(str) {
 
 Vue.component('lms-downloadstatus', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent scrollable width="600" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card>
- <v-card-title>{{i18n('Downloading')}}</v-card-title>
+  <v-card-title class="settings-title">
+   <v-toolbar app-data class="dialog-toolbar">
+    <v-btn flat icon v-longpress:stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-toolbar-title>{{i18n('Downloading')}}</v-toolbar-title>
+   </v-toolbar>
+  </v-card-title>
   <v-card-text style="padding-top:0px">
    <v-container grid-list-md style="padding:0px">
     <v-layout wrap>
      <v-flex xs12>
       <v-list class="lms-list" style="padding-top:0px;position:unset;top:unset;height:100%!important;width:100%!important">
+       <div class="dialog-padding"></div>
        <template v-for="(item, index) in items">
         <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': item.downloading}">
          <v-list-tile-content>
@@ -141,14 +147,13 @@ Vue.component('lms-downloadstatus', {
        </template>
       </v-list>
      </v-flex>
+     <div class="dialog-padding"></div>
+     <v-flex xs23 v-if="items.length>1">
+      <v-btn flat @click.native="abortAll()" style="float:right"><v-icon style="padding-right:8px">cancel</v-icon>{{i18n('Abort all')}}</v-btn>
+     </v-flex>
     </v-layout>
    </v-container>
   </v-card-text>
-  <v-card-actions>
-   <v-btn v-if="items.length>1" flat @click.native="abortAll()">{{i18n('Abort all')}}</v-btn>
-   <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Close')}}</v-btn>
-  </v-card-actions>
  </v-card>
 </v-dialog>
 `,
@@ -164,7 +169,7 @@ Vue.component('lms-downloadstatus', {
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'downloadstatus') {
-                this.cancel();
+                this.close();
             }
         }.bind(this));
     },

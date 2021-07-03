@@ -128,7 +128,7 @@ Vue.component('lms-downloadstatus', {
         <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': undefined!=item.progress && item.progress>0}">
          <v-list-tile-content>
           <v-list-tile-title>{{item | formatTitle}}</v-list-tile-title>
-          <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+          <v-list-tile-sub-title class="ellipsis">{{item.subtitle}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action @click.stop="abort(item)">
           <v-btn icon flat><v-icon>cancel</v-icon></v-btn>

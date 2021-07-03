@@ -15,10 +15,12 @@ function downloadViaBrowser(items) {
     if (undefined!=item) {
         let name = (item.artist ? item.artist + ' - ' : '') +
                    (item.album ? item.album + ' - ' : '') +
-                   (item.disc && item.disc>0 ? item.disc+'.' : '') + 
-                   (item.tracknum ? item.tracknum+' ' : '') +
-                   item.title +
-                   (item.ext ? '.'+item.ext : '');
+                   (undefined==item.filename || item.filename.length<1
+                     ? ( (item.disc && item.disc>0 ? item.disc+'.' : '') +
+                         (item.tracknum ? item.tracknum+' ' : '') +
+                          item.title +
+                         (item.ext ? '.'+item.ext : ''))
+                     : item.filename);
 
         downloadElem = document.createElement('a');
         downloadElem.download = name;

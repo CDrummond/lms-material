@@ -127,9 +127,9 @@ Vue.component('lms-downloadstatus', {
      <v-flex xs12>
       <v-list class="lms-list" style="padding-top:0px;position:unset;top:unset;height:100%!important;width:100%!important">
        <template v-for="(item, index) in items">
-        <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': undefined!=item.progress && item.progress>0}">
+        <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': item.downloading}">
          <v-list-tile-content>
-          <v-list-tile-title>{{item | formatTitle}}</v-list-tile-title>
+          <v-list-tile-title>{{item.title}}</v-list-tile-title>
           <v-list-tile-sub-title class="ellipsis">{{item.subtitle}}</v-list-tile-sub-title>
          </v-list-tile-content>
          <v-list-tile-action @click.stop="abort(item)">
@@ -210,10 +210,5 @@ Vue.component('lms-downloadstatus', {
                 this.close();
             }
         }
-    },
-    filters: {
-        formatTitle: function (item) {
-            return item.title + (undefined!=item.progress && item.progress>0 ? SEPARATOR + item.progress + "%" : "");
-        },
     }
 })

@@ -11,9 +11,9 @@ const DOWNLOAD_TAGS = 'tags:aAeiltuyK';
 var downloadElem = undefined;
 
 function downloadViaBrowser(items) {
-    var item = items.shift();
+    let item = items.shift();
     if (undefined!=item) {
-        var name = (item.artist ? item.artist + ' - ' : '') +
+        let name = (item.artist ? item.artist + ' - ' : '') +
                    (item.album ? item.album + ' - ' : '') +
                    (item.disc && item.disc>0 ? item.disc+'.' : '') + 
                    (item.tracknum ? item.tracknum+' ' : '') +
@@ -51,27 +51,29 @@ function cancelDownloadNative(ids) {
 }
 
 function getTracksForDownload(item) {
-    var cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
+    let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     if (item.artist_id) {
         cmd.push('artist_id:'+item.artist_id);
     }
     lmsCommand('', cmd).then(({data})=>{
         if (data && data.result && data.result.titles_loop) {
-            var tracks = [];
-            for (var i=0, loop=data.result.titles_loop, len=loop.length; i<len; ++i) {
-                var item = loop[i];
-                var uparts=item.url.split('.');
-                splitMultiples(item);
-                var tracknum = undefined==item.tracknum ? 0 : parseInt(item.tracknum);
-                
-                tracks.push({id: item.id,
-                    title: item.title,
-                    ext: uparts[uparts.length-1],
-                    artist: item.albumartist ? item.albumartist : item.artist,
-                    album: item.album,
-                    tracknum: tracknum>0 ? (tracknum>9 ? tracknum : ('0' + tracknum)) : undefined,
-                    disc: item.disc,
-                    album_id: item.album_id});
+            let tracks = [];
+            for (let i=0, loop=data.result.titles_loop, len=loop.length; i<len; ++i) {
+                let item = loop[i];
+                if (/^file:\/\//.test(item.url)) {
+                    let uparts=item.url.split('.');
+                    splitMultiples(item);
+                    let tracknum = undefined==item.tracknum ? 0 : parseInt(item.tracknum);
+                    tracks.push({id: item.id,
+                        title: item.title,
+                        filename: decodeURIComponent(item.url.substring(item.url.lastIndexOf('/')+1)),
+                        ext: uparts[uparts.length-1],
+                        artist: item.albumartist ? item.albumartist : item.artist,
+                        album: item.album,
+                        tracknum: tracknum>0 ? (tracknum>9 ? tracknum : ('0' + tracknum)) : undefined,
+                        disc: item.disc,
+                        album_id: item.album_id});
+                }
             }
             if (tracks.length>1) {
                 confirm(i18n('Download %1 tracks?', tracks.length), i18n('Download')).then(res => {
@@ -107,7 +109,7 @@ function download(item) {
 
 function downloadStatus(str) {
     try {
-        var status = JSON.parse(str);
+        let status = JSON.parse(str);
         if (Array.isArray(status)) {
             bus.$store.commit('setDownloadStatus', status);
         }
@@ -177,8 +179,8 @@ Vue.component('lms-downloadstatus', {
         abortAll() {
             confirm(i18n('Abort all downloads?'), i18n('Abort'), i18n('No')).then(res => {
                 if (1==res) {
-                    var ids = [];
-                    for (var i=0, loop=this.$store.state.downloadStatus, len=loop.length; i<len; ++i) {
+                    let ids = [];
+                    for (let i=0, loop=this.$store.state.downloadStatus, len=loop.length; i<len; ++i) {
                         ids.push(loop[i].id);
                     }
                     cancelDownloadNative(ids);

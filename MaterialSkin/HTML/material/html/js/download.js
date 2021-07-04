@@ -53,14 +53,18 @@ function cancelDownloadNative(ids) {
 }
 
 function getTracksForDownload(item) {
+    let lkey = item.id.startsWith("playlist_id:") ? "playlisttracks_loop" : "titles_loop";
     let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     if (item.artist_id) {
         cmd.push('artist_id:'+item.artist_id);
     }
+    if (item.id.startsWith("playlist_id:")) {
+        cmd.unshift("playlists");
+    }
     lmsCommand('', cmd).then(({data})=>{
-        if (data && data.result && data.result.titles_loop) {
+        if (data && data.result && data.result[lkey]) {
             let tracks = [];
-            for (let i=0, loop=data.result.titles_loop, len=loop.length; i<len; ++i) {
+            for (let i=0, loop=data.result[lkey], len=loop.length; i<len; ++i) {
                 let item = loop[i];
                 if (/^file:\/\//.test(item.url)) {
                     let uparts=item.url.split('.');

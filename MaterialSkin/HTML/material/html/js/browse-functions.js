@@ -845,25 +845,7 @@ function browseItemAction(view, act, item, index, event) {
         }).catch(err => {
             logAndShowError(err, undefined, command.command);
         });
-    } /*else if (PLAY_DISC_ACTION==act) {
-        // TODO: Need to re-add 'index' to doList if enable view action
-        var itemList = [];
-        var index = undefined;
-        for (var i=0, len=view.items.length; i<len; ++i) {
-            if (view.items[i].filter==item.filter) {
-                if (!view.items[i].header) {
-                    itemList.push(view.items[i]);
-                    if (index==undefined && view.items[i].id==item.id) {
-                        index=i-1; // Skip header
-                    }
-                }
-            } else if (view.items[i].header && itemList.length>0) {
-                break;
-            }
-        }
-        view.doList(itemList, PLAY_ACTION, index);
-        bus.$emit('showMessage', i18n("Adding tracks..."));
-    }*/
+    }
     // TODO Remove after LMS8.2 released...
     else if (SEARCH_PODCAST_ACTION==act) {
         bus.$emit('dlg.open', 'podcastsearch');

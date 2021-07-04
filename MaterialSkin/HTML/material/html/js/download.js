@@ -52,7 +52,7 @@ function cancelDownloadNative(ids) {
     }
 }
 
-function getTracksForDownload(item) {
+function download(item) {
     let lkey = item.id.startsWith("playlist_id:") ? "playlisttracks_loop" : "titles_loop";
     let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     if (item.artist_id) {
@@ -90,18 +90,18 @@ function getTracksForDownload(item) {
             } else if (tracks.length>1) {
                 confirm(i18n('Download %1 tracks?', tracks.length), i18n('Download')).then(res => {
                     if (1==res) {
-                        if (queryParams.download=='browser') {
-                           downloadViaBrowser(tracks);
-                        } else if (queryParams.download=='native') {
+                        if (queryParams.download=='native') {
                             downloadNative(tracks);
+                        } else {
+                           downloadViaBrowser(tracks);
                         }
                     }
                 });
             } else {
-                if (queryParams.download=='browser') {
-                   downloadViaBrowser(tracks);
-                } else if (queryParams.download=='native') {
+                if (queryParams.download=='native') {
                     downloadNative(tracks);
+                } else {
+                   downloadViaBrowser(tracks);
                 }
             }
         }
@@ -109,14 +109,6 @@ function getTracksForDownload(item) {
         bus.$emit('showError', err, i18n('Failed to add to playlist!'));
         logError(err);
     });
-}
-
-function download(item) {
-    if (queryParams.download=='browser' || queryParams.download=='native') {
-        getTracksForDownload(item);
-    } else {
-        bus.$emit('showError', undefined, i18n('Unknown download method'));
-    }
 }
 
 function downloadStatus(str) {

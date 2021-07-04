@@ -125,7 +125,7 @@ var app = new Vue({
                         }
                     }
                 }
-                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst'];
+                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', 'allowDownload'];
                 for (var i=0, len=BOOL_OPTS.length; i<len; ++i) {
                     if (undefined!=data.result[BOOL_OPTS[i]]) {
                         lmsOptions[BOOL_OPTS[i]] = 1 == parseInt(data.result[BOOL_OPTS[i]]);

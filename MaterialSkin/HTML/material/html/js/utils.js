@@ -104,7 +104,7 @@ function parseQueryParams() {
         } else if ("single"==kv[0]) {
             resp.single=true;
         } else if ("download"==kv[0] && kv.length>1) {
-            resp.download=kv[1]=='false' ? undefined : kv[1];
+            resp.download=kv[1];
         }
     }
     return resp;

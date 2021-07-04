@@ -101,7 +101,8 @@ sub initPlugin {
         respectFixedVol => '1',
         showAllArtists => '1',
         artistFirst => '1',
-        password => ''
+        password => '',
+        downloading => '0'
     });
 
     if (main::WEBUI) {
@@ -211,6 +212,7 @@ sub _cliCommand {
         $request->addResult('respectFixedVol', $prefs->get('respectFixedVol'));
         $request->addResult('showAllArtists', $prefs->get('showAllArtists'));
         $request->addResult('artistFirst', $prefs->get('artistFirst'));
+        $request->addResult('allowDownload', $prefs->get('allowDownload'));
         $request->setStatusDone();
         return;
     }

@@ -1,6 +1,7 @@
 2.6.0
 -----
-1. Add ability to download tracks.
+1. Add ability to download tracks - must be enabled in MaterialSkin's server
+   side settings.
 
 2.5.1
 -----

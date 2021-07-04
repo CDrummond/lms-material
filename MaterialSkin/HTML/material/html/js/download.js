@@ -77,7 +77,13 @@ function getTracksForDownload(item) {
                         album_id: item.album_id});
                 }
             }
-            if (tracks.length>1) {
+            if (tracks.length==0) {
+                if (item.id.startsWith("track_id:")) {
+                    bus.$emit('showError', undefined, i18n("Track is not downloadable."));
+                } else {
+                    bus.$emit('showError', undefined, i18n("No downloadable tracks."));
+                }
+            } else if (tracks.length>1) {
                 confirm(i18n('Download %1 tracks?', tracks.length), i18n('Download')).then(res => {
                     if (1==res) {
                         if (queryParams.download=='browser') {

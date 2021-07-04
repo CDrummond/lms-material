@@ -228,7 +228,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             }
         // ...TODO Remove after LMS8.2 released
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:")) {
-            view.tbarActions=[REMOVE_DUPES_ACTION, PLAY_ACTION, ADD_ACTION];
+            view.tbarActions=[PLAY_ACTION, ADD_ACTION];
+            view.currentActions={show:true, items: browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length)};
         } else if (view.allSongsItem) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {

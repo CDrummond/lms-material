@@ -2,6 +2,7 @@
 -----
 1. Add ability to download tracks - must be enabled in MaterialSkin's server
    side settings.
+2. Add 'More' action to subtoolbar when listing playlist contents.
 
 2.5.1
 -----

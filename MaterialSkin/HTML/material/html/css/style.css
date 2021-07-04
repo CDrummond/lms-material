@@ -12,6 +12,8 @@
  --sub-opacity:0.7;
  --bold-weight:500;
  --std-weight:400;
+ --main-toolbar-height:48px;
+ --sub-toolbar-height:48px;
  --list-elem-height:48px;
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);

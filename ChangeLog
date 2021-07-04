@@ -1,3 +1,7 @@
+2.5.2
+-----
+1. Enable 'More' menu action in year entry of song info list.
+
 2.5.1
 -----
 1. Ensure no volume commands are performed unless relevant dialog open.

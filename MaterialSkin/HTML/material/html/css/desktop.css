@@ -70,6 +70,16 @@
  width:var(--splitter-width)!important;
 }
 
+.vue-splitter .splitter:before {
+ position: absolute;
+ content: '';
+ top: var(--main-toolbar-height);
+ width: 12px;
+ height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ margin-left:-2px;
+ z-index: 40;
+}
+
 @media (hover: hover) and (pointer: fine) {
  .vue-splitter .splitter:hover {
   border:none;

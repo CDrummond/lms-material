@@ -414,8 +414,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 //    'more' is in item's actions. #57
                 if ( !isFavorites &&
                      ( (i.commonParams && (i.commonParams.artist_id || i.commonParams.album_id || i.commonParams.track_id)) ||
-                       ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) || (i.actions && i.actions.more && i.actions.more.cmd)) &&
-                         !(i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.year))) ) {
+                       ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) || (i.actions && i.actions.more && i.actions.more.cmd)))) ) {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;

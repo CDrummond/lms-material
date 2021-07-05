@@ -2097,6 +2097,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  text-overflow:ellipsis;
 }
 
+.toolbar-clock .maintoolbar-title, .toolbar-clock .maintoolbar-subtitle {
+ padding-left:0px!important;
+ min-width:unset!important;
+}
+
 .highlight-drop {
  border-radius:4px;
  background-color:var(--drop-target-color)!important;

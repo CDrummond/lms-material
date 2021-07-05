@@ -14,7 +14,9 @@ var app = new Vue({
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, movequeue: false,
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
-                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false } }
+                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
+                            podcast: false, podcastsearch: false // TODO Remove after LMS8.2 released.
+                          } }
     },
     created() {
         if (IS_MOBILE) {

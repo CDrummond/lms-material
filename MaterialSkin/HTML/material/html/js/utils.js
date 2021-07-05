@@ -931,7 +931,6 @@ function isAudioTrack(item) {
 function setFontSize(sz) {
     let std = 16;
     let small = 14;
-    let tbSize = 48;
     switch(sz) {
     case 'l':
         std = 19;
@@ -940,8 +939,8 @@ function setFontSize(sz) {
     case 'r':
         break;
     case 's':
-        std = 12.5;
-        small = 10;
+        std = 14;
+        small = 12;
         break;
     }
 

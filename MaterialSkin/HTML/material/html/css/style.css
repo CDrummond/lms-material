@@ -1526,17 +1526,9 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon):not(.shuffle-albums) {
- width:var(--icon-size);
- height:var(--icon-size);
- font-size:var(--icon-size);
- vertical-align:middle;
- border-radius:unset !important;
-}
-.svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon):not(.shuffle-albums), .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
- font-size:var(--icon-size) !important;
  vertical-align:middle !important;
  border-radius:unset !important;
 }

@@ -138,6 +138,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="largeCovers = !largeCovers" class="switch-label">
+      <v-list-tile-title>{{i18n('Large covers')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("When possible, allow the grid view to show larger covers.")}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="largeCovers"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==ratingsPlugin  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
@@ -411,6 +420,7 @@ Vue.component('lms-ui-settings', {
             showRating: false,
             homeButton: false,
             powerButton: false,
+            largeCovers: false,
             width: 500
         }
     },
@@ -571,6 +581,7 @@ Vue.component('lms-ui-settings', {
             this.screensaver = this.$store.state.screensaver;
             this.homeButton = this.$store.state.homeButton;
             this.powerButton = this.$store.state.powerButton;
+            this.largeCovers = this.$store.state.largeCovers;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
@@ -638,6 +649,7 @@ Vue.component('lms-ui-settings', {
                                                   screensaver:this.screensaver,
                                                   homeButton:this.homeButton,
                                                   powerButton:this.powerButton,
+                                                  largeCovers:this.largeCovers,
                                                   showRating:this.showRating
                                                 } );
 
@@ -685,6 +697,7 @@ Vue.component('lms-ui-settings', {
                                      screensaver:this.screensaver,
                                      homeButton:this.homeButton,
                                      powerButton:this.powerButton,
+                                     largeCovers:this.largeCovers,
                                      showRating:this.showRating
                                    };
                     for (var key in window.localStorage) {

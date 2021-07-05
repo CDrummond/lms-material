@@ -1201,12 +1201,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        calcSizes(quantity, listWidth) {
+        calcSizes(quantity, listWidth, maxItemWidth) {
             var width = GRID_MIN_WIDTH;
             var height = GRID_MIN_HEIGHT;
             var steps = 0;
             if (0!=quantity) {
-                while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=GRID_MAX_WIDTH) {
+                while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=maxItemWidth) {
                     width += GRID_STEP;
                     height += GRID_STEP;
                     steps++;
@@ -1231,8 +1231,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             // Calculate what grid item size we should use...
             var sz = undefined;
-            for (var i=4; i>=1; --i) {
-                sz = this.calcSizes(i, listWidth);
+            var preferredColumns = (this.$store.state.largeCovers && listWidth>750) ? 3 : 4;
+            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (this.$store.state.largeCovers ? 1.5 : 1.0));
+            for (var i=preferredColumns; i>=1; --i) {
+                sz = this.calcSizes(i, listWidth, maxItemWidth);
                 if (sz.mc>=i) {
                     break;
                 }

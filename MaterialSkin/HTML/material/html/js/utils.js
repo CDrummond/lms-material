@@ -928,11 +928,25 @@ function isAudioTrack(item) {
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"));
 }
 
-function setElemSizes(larger) {
-    document.documentElement.style.setProperty('--std-font-size', larger ? '19px' : '16px');
-    document.documentElement.style.setProperty('--small-font-size', larger ? '18px' : '14px');
-    document.documentElement.style.setProperty('--icon-size', larger ? '28px' : '24px');
-    document.documentElement.style.setProperty('--toolbar-button-margin', larger ? '2px' : '4px');
+function setFontSize(sz) {
+    let std = 16;
+    let small = 14;
+    let tbSize = 48;
+    switch(sz) {
+    case 'l':
+        std = 19;
+        small = 18;
+        break;
+    case 'r':
+        break;
+    case 's':
+        std = 12.5;
+        small = 10;
+        break;
+    }
+
+    document.documentElement.style.setProperty('--std-font-size', std+'px');
+    document.documentElement.style.setProperty('--small-font-size', small+'px');
 }
 
 var lastShortcut={key:undefined, modifier:undefined, time:undefined};

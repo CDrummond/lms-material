@@ -64,14 +64,10 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
-    <v-list-tile v-if="showScale">
-     <v-list-tile-content @click="largerElements = !largerElements" class="switch-label">
-      <v-list-tile-title>{{i18n('Larger fonts and icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use larger font sizes and larger icons.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="largerElements"></v-switch></v-list-tile-action>
+    <v-list-tile>
+     <v-select :items="fontSizes" :label="i18n('Font size')" v-model="fontSize" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-divider v-if="showScale"></v-divider>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
@@ -367,7 +363,8 @@ Vue.component('lms-ui-settings', {
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,
-            largerElements: false,
+            fontSize: 'r',
+            fontSizes: [ ],
             letterOverlay:false,
             showMenuAudio:true,
             sortFavorites:true,
@@ -410,7 +407,6 @@ Vue.component('lms-ui-settings', {
             },
             screensaver: false,
             showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
-            showScale: !queryParams.hide.has('scale'),
             serverName: "",
             showRating: false,
             homeButton: false,
@@ -547,7 +543,7 @@ Vue.component('lms-ui-settings', {
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
-            this.largerElements = this.$store.state.largerElements;
+            this.fontSize = this.$store.state.fontSize;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -605,13 +601,16 @@ Vue.component('lms-ui-settings', {
                                { value: 15, label: i18n("%1 seconds", 15)},
                                { value: 30, label: i18n("%1 seconds", 30)}
                              ];
+            this.fontSizes = [ { key: 'l',  label: i18n("Large") },
+                               { key: 'r',  label: i18n("Regular") },
+                               { key: 's',  label: i18n("Small") } ];
         },
         close() {
             this.show=false;
             this.showMenu = false;
             this.$store.commit('setUiSettings', { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                                   color:this.color,
-                                                  largerElements:this.largerElements,
+                                                  fontSize:this.fontSize,
                                                   autoScrollQueue:this.autoScrollQueue,
                                                   letterOverlay:this.letterOverlay,
                                                   sortFavorites:this.sortFavorites,
@@ -658,7 +657,7 @@ Vue.component('lms-ui-settings', {
                 if (res) {
                     var settings = { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                                      color:this.color,
-                                     largerElements:this.largerElements,
+                                     fontSize:this.fontSize,
                                      autoScrollQueue:this.autoScrollQueue,
                                      letterOverlay:this.letterOverlay,
                                      sortFavorites:this.sortFavorites,

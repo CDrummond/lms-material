@@ -3,7 +3,7 @@
 1. Add ability to download tracks - must be enabled in MaterialSkin's server
    side settings.
 2. Add 'More' action to subtoolbar when listing playlist contents.
-3. Make font size configurable; Large, Regular, Small
+3. Make font size configurable; Large, Regular, Small.
 4. Add setting to allow larger covers in grid view - up to 312px.
 
 2.5.2

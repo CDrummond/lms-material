@@ -931,21 +931,25 @@ function isAudioTrack(item) {
 function setFontSize(sz) {
     let std = 16;
     let small = 14;
+    let icon = 24;
     switch(sz) {
     case 'l':
         std = 19;
         small = 18;
+        icon = 26;
         break;
     case 'r':
         break;
     case 's':
-        std = 14;
-        small = 12;
+        std = 13;
+        small = 11;
+        icon = 22;
         break;
     }
 
     document.documentElement.style.setProperty('--std-font-size', std+'px');
     document.documentElement.style.setProperty('--small-font-size', small+'px');
+    document.documentElement.style.setProperty('--icon-size', icon+'px');
 }
 
 var lastShortcut={key:undefined, modifier:undefined, time:undefined};

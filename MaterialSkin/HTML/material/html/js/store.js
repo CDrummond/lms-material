@@ -16,6 +16,7 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
+    var relayoutGrid = false;
     var themeChanged = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
         state.theme = val.theme;
@@ -155,6 +156,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.largeCovers && state.largeCovers!=val.largeCovers) {
         state.largeCovers = val.largeCovers;
         setLocalStorageVal('largeCovers', state.largeCovers);
+        relayoutGrid = true;
     }
     if (undefined!=val.showRating && state.showRating!=val.showRating) {
         state.showRating = val.showRating;
@@ -173,6 +175,8 @@ function updateUiSettings(state, val) {
     lmsOptions.infoPlugin = state.infoPlugin;
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
+    } else if (relayoutGrid) {
+        bus.$emit('relayoutGrid');
     }
     if (val.sorts) {
         for (let [key, value] of Object.entries(val.sorts)) {

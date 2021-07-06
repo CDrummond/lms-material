@@ -1672,6 +1672,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('splitterChanged', function() {
             this.layoutGrid();
         }.bind(this));
+        bus.$on('relayoutGrid', function() {
+            this.layoutGrid();
+        }.bind(this));
         bus.$on('layoutChanged', function() {
             this.$nextTick(function () {
                 this.layoutGrid(true);

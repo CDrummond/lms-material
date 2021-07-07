@@ -5,6 +5,7 @@
 3. Fix broken revert of Podcast search.
 4. Fix clock position.
 5. Re-implement splitter to (hopefully) work-around issues.
+6. Fix rating alignment in portrait view.
 
 2.5.1
 -----

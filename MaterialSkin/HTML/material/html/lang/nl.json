@@ -569,8 +569,8 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Failed to add podcast!":"",
-"Failed to unsubscribe podcast!":"",
-"Unsubscribe":"",
-"Unubscribe from '%1'?":""
+"Failed to add podcast!":"Toevoegen podcast mislukt!",
+"Failed to unsubscribe podcast!":"Afmelden podcast mislukt!",
+"Unsubscribe":"Afmelden",
+"Unubscribe from '%1'?":"Afmelden van '%1'?"
 }

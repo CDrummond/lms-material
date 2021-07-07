@@ -76,6 +76,10 @@ function parseQueryParams() {
         } else if("css"==kv[0]) {
             resp.css = kv[1];
             changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
+        } else if("js"==kv[0]) {
+            var element = document.createElement("script");
+            element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
+            document.body.appendChild(element);
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
         } else if ("nativeStatus"==kv[0]) {

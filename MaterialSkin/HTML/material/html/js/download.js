@@ -52,6 +52,21 @@ function cancelDownloadNative(ids) {
     }
 }
 
+function isCueTrack(filename) {
+    let parts = filename.split('#');
+    if (parts.length<2) {
+        return false;
+    }
+    let positions = parts[parts.length-1].split('-');
+    if (positions.length!=2) {
+        return false;
+    }
+    if ( (isNaN(positions[0]) && isNaN(parseFloat(positions[0]))) || (isNaN(positions[1]) && isNaN(parseFloat(positions[1]))) ) {
+        return false;
+    }
+    return true;
+}
+
 function download(item) {
     let lkey = item.id.startsWith("playlist_id:") ? "playlisttracks_loop" : "titles_loop";
     let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
@@ -67,18 +82,22 @@ function download(item) {
             for (let i=0, loop=data.result[lkey], len=loop.length; i<len; ++i) {
                 let item = loop[i];
                 if (/^file:\/\//.test(item.url)) {
-                    let uparts=item.url.split('.');
-                    splitMultiples(item);
-                    let tracknum = undefined==item.tracknum ? 0 : parseInt(item.tracknum);
-                    tracks.push({id: item.id,
-                        title: item.title,
-                        filename: decodeURIComponent(item.url.substring(item.url.lastIndexOf('/')+1)),
-                        ext: uparts[uparts.length-1],
-                        artist: item.albumartist ? item.albumartist : item.artist,
-                        album: item.album,
-                        tracknum: tracknum>0 ? (tracknum>9 ? tracknum : ('0' + tracknum)) : undefined,
-                        disc: item.disc,
-                        album_id: item.album_id});
+                    let filename=decodeURIComponent(item.url.substring(item.url.lastIndexOf('/')+1));
+                    if (!isCueTrack(filename)) {
+                        let uparts=item.url.split('.');
+                        let ext=uparts[uparts.length-1];
+                        splitMultiples(item);
+                        let tracknum = undefined==item.tracknum ? 0 : parseInt(item.tracknum);
+                        tracks.push({id: item.id,
+                            title: item.title,
+                            filename: filename,
+                            ext: ext,
+                            artist: item.albumartist ? item.albumartist : item.artist,
+                            album: item.album,
+                            tracknum: tracknum>0 ? (tracknum>9 ? tracknum : ('0' + tracknum)) : undefined,
+                            disc: item.disc,
+                            album_id: item.album_id});
+                    }
                 }
             }
             if (tracks.length==0) {
